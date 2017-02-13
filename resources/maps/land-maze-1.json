@@ -1,0 +1,42 @@
+{ "height":9,
+ "layers":[
+        {
+         "data":[94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 0, 94, 94, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 94, 1, 94, 94, 0, 94, 94, 94, 94, 94, 94, 94, 94, 0, 94, 94, 94, 94, 94, 94, 94, 0, 94, 94, 1, 0, 1, 0, 1, 0, 1, 0, 94, 1, 94, 1, 0, 1, 0, 1, 0, 1, 94, 94, 0, 94, 94, 94, 94, 94, 94, 1, 94, 0, 94, 94, 94, 94, 94, 94, 94, 0, 94, 94, 1, 0, 1, 0, 1, 0, 1, 0, 94, 1, 0, 1, 0, 1, 0, 1, 0, 1, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94],
+         "height":9,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "renderorder":"right-down",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"..\/tilesets\/land-map-city-tiles.png",
+         "imageheight":160,
+         "imagewidth":256,
+         "margin":0,
+         "name":"land-map-city-tiles",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tilecount":160,
+         "tileheight":16,
+         "tilewidth":16
+        }],
+ "tilewidth":16,
+ "version":1,
+ "width":20
+}
