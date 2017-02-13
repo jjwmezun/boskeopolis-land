@@ -1,0 +1,44 @@
+
+
+
+// Name
+//===================================
+//
+// CloudPlatformSprite
+//
+
+#ifndef CLOUD_PLATFORM_SPRITE_H
+#define CLOUD_PLATFORM_SPRITE_H
+
+
+// FORWARD DECLARATIONS
+//===================================
+
+    class Block;
+    class Input;
+
+
+// DEPENDENCIES
+//===================================
+
+    #include "sprite.h"
+    #include "timers/timer_simple.h"
+
+
+// CLASS
+//===================================
+
+    class CloudPlatformSprite : public Sprite
+    {
+        public:
+            CloudPlatformSprite( int x, int y );
+            ~CloudPlatformSprite();
+            void customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites );
+            void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites );
+
+        private:
+            bool started_;
+    };
+
+
+#endif // CLOUD_PLATFORM_SPRITE_H
