@@ -18,12 +18,6 @@ Any others will require compilation.
 
 ### Compilation
 
-Unfortunately, as o' now, you need the latest version o' Code::Blocks to compile straight 'way from the project file. Otherwise, you'll have to create a new project in 'nother program & import the files or create a makefile.
-
-I'm planning to make a makefile once I figure out all the kinks.
-
-Also required:
-
 ```
 SDL2 with SDL_image
 C++ 11 or higher
