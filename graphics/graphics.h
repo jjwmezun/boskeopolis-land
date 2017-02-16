@@ -24,6 +24,7 @@
     #include <SDL2/SDL.h>
     #include "timers/timer_repeat.h"
     #include <map>
+	#include <vector>
 
 
 // CLASS

@@ -28,7 +28,6 @@
         if ( !initSDL() )
             running_ = false;
 
-        // Processing console/terminal arguments.
         if ( args.size() >= 4 )
         {
             if ( args.at( 3 ).compare( "no-save" ) == 0 )
@@ -138,6 +137,7 @@
     void Game::pushState  ( std::unique_ptr<GameState> state )
     {
         states_.push_back( move(state) );
+        //graphics_->newPalette( states_.back()->palette() );
         states_.back()->changePalette( *graphics_ );
         states_.back()->init( *this, *graphics_ );
         state_changed_ = true;
@@ -167,8 +167,6 @@
         pushState( std::unique_ptr<GameState> ( new TitleState() ) );
     };
 
-
-    // For timing. Hits yes every [interval] frames for [duration] frames after.
     bool Game::nextFrame( int interval, int duration )
     {
         for ( int i = 0; i < duration; ++i )
@@ -193,15 +191,10 @@
             path_divider_ = "\\";
         #endif
 
-        // For some reason, SDL treats bin/Debug or bin/Release as the default resource directory.
-        // Thus, we'll search for the name o' the base directory & slice off the directories afterward,
-        // & then add the proper resource directory.
         const std::string BASE_DIR = "boskeopolis-land";
         const std::string RES_SUB_DIR = pathDivider() + "resources/";
         std::string path = SDL_GetBasePath();
-
-        // Find the last instance o' the BASE_DIR name, in case someone silly puts it in 'nother folder with the same name.
-        size_t pos = path.rfind( BASE_DIR );
+        size_t pos = path.find( BASE_DIR );
         path.replace( pos + BASE_DIR.length(), path.length() - pos - BASE_DIR.length(), RES_SUB_DIR );
         resource_path_ = path;
     };

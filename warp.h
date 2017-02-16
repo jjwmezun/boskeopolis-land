@@ -76,7 +76,7 @@
                 return camera_y_;
             };
 
-            constexpr bool inInterval( int x_sub_pixels, int y_sub_pixels )
+            constexpr bool inInterval( int x_sub_pixels, int y_sub_pixels ) const
             {
                 return
                 (

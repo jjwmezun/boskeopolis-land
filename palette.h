@@ -72,13 +72,13 @@
                         bg_ ( bg )
                     {};
 
-                    constexpr bool operator!= ( const PaletteSet& p )
+                    constexpr bool operator!= ( const PaletteSet& p ) const
                     {
                         return ( type_ != p.type() || bg_ != p.bg() );
                     };
 
-                    constexpr PaletteType type() { return type_; };
-                    constexpr int bg() { return bg_; };
+                    constexpr PaletteType type() const { return type_; };
+                    constexpr int bg() const { return bg_; };
             };
 
             //Palette( PaletteType p = PaletteType::GRAYSCALE, unsigned int bg = PaletteType::GRAYSCALE );
