@@ -13,6 +13,7 @@
 // DEPENDENCIES
 //===================================
 
+	#include "camera.h"
     #include "input.h"
     #include "overworld_player_sprite.h"
     #include "player_graphics.h"
@@ -27,7 +28,7 @@
 
     OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new PlayerGraphics() ), x, y, 14, 15, SpriteType::HERO, 160, 2000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true )
+        Sprite( std::unique_ptr<SpriteGraphics> ( new PlayerGraphics() ), x, y, 14, 15, { SpriteType::HERO }, 160, 2000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true )
     {};
 
     OverworldPlayerSprite::~OverworldPlayerSprite() {};
@@ -44,7 +45,7 @@
         }
         else
         {
-            //stop();
+            stopX();
         }
 
         if ( input.held( Input::Action::MOVE_UP ) )
@@ -57,8 +58,10 @@
         }
         else
         {
-            //stopY();
+            stopY();
         }
+		
+		camera.adjust( *this, lvmap );
     };
 
     void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )

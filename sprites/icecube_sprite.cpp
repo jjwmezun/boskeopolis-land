@@ -26,7 +26,7 @@
 
     IceCubeSprite::IceCubeSprite( int x, int y, Direction::Horizontal direction, bool start_moving )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_ICECUBE ) ), x, y, 32, 32, SpriteType::ENEMY, 400, 1200, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, true, true, true ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_ICECUBE ) ), x, y, 32, 32, {}, 400, 1200, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, true, true, true ),
         start_moving_ ( start_moving ),
         start_moving_orig_ ( start_moving ),
         changed_ ( false )

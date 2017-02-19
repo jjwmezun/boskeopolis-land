@@ -88,6 +88,7 @@
                 LVSPRITES_CLOUD_PLATFORM,
                 LVSPRITES_EGGNON,
                 LVSPRITES_EGG,
+                LVSPRITES_EYEBALL,
                 LIMIT
             };
 
@@ -170,7 +171,8 @@
                 "sprites_level_sillyfish.png",
                 "sprites_level_cloud_platform.png",
                 "sprites_level_eggnon.png",
-                "sprites_level_egg.png"
+                "sprites_level_egg.png",
+                "sprites_level_eyeball.png"
             };
 
             const std::string IMG_RELATIVE_DIR = "img";

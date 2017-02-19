@@ -29,7 +29,7 @@
 
     PlayerSpriteFluttering::PlayerSpriteFluttering( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_AUTUMN_CART, 0, 0, false, false, 0, false, -2, -2, 4, 4 ) ), x, y, 28, 28, SpriteType::HERO, 160, 2000, 4000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::PERMANENT, false )
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_AUTUMN_CART, 0, 0, false, false, 0, false, -2, -2, 4, 4 ) ), x, y, 28, 28, { SpriteType::HERO }, 160, 2000, 4000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::PERMANENT, false )
     {
     };
 

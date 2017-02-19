@@ -95,7 +95,7 @@
     {
         if ( type_ != nullptr )
         {
-            Collision collision = sprite.collide( this );
+            Collision collision = sprite.testCollision( *this );
             type_->interact( collision, sprite, *this, level, events, inventory, camera );
         }
     };

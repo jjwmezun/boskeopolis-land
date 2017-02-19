@@ -26,7 +26,7 @@
 
     PenguinSprite::PenguinSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new PenguinGraphics() ), x, y, 16, 24, SpriteType::ENEMY, 1200, 4000, 0, 0, Direction::Horizontal::LEFT ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new PenguinGraphics() ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1200, 4000, 0, 0, Direction::Horizontal::LEFT ),
         turning_ ( false ),
         delay_ ( 48, false )
     {};
@@ -85,20 +85,4 @@
 
     void PenguinSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
     {
-        if ( them.hasType( SpriteType::HERO ) )
-        {
-            if ( them.collideBottom( their_collision, this ) )
-            {
-                kill();
-                them.bounce();
-            }
-            else if ( their_collision.collideAny() && them.isSlidingPrev() )
-            {
-                kill();
-            }
-            else if ( their_collision.collideAny() && !isDead() )
-            {
-                them.hurt();
-            }
-        }
     };

@@ -49,6 +49,7 @@
                 // CYCLE 2
                 LV_CITY_4,
                 LV_WOODS_3,
+                LV_MINES_2,
                 LV_SEWER_1,
                 LV_DESERT_2,
                 LV_SNOW_2,

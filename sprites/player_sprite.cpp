@@ -56,7 +56,7 @@
         bool permanent
     )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new PlayerGraphics( texture ) ), x, y, 14, 23, type, start_speed, top_speed, jump_start_speed, jump_top_speed, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::PERMANENT, false, true, true, false, .2, max_hp, hp ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new PlayerGraphics( texture ) ), x, y, 14, 23, { type }, start_speed, top_speed, jump_start_speed, jump_top_speed, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::PERMANENT, false, true, true, false, .2, max_hp, hp ),
         input_ ( std::move( input ) )
     {};
 
@@ -261,6 +261,32 @@
 
     void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
     {
+        if ( them.hasType( SpriteType::ENEMY ) )
+		{
+			if ( them.hasType( SpriteType::BOPPABLE ) )
+			{
+				if ( collideBottomOnly( my_collision, them ) )
+				{
+					them.kill();
+					bounce();
+				}
+				else if ( my_collision.collideAny() && isSlidingPrev() )
+				{
+					them.kill();
+				}
+				else if ( my_collision.collideAny() && !them.isDead() )
+				{
+					hurt();
+				}
+			}
+			else
+			{
+				if ( my_collision.collideAny() && !them.isDead() )
+				{
+					hurt();
+				}
+			}
+		}
     };
 
     void PlayerSprite::duck()

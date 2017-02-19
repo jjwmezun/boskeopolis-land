@@ -32,7 +32,7 @@
         oxygen_meter_ ( OXYGEN_LIMIT )
     {};
 
-    void SpriteStatus::update( Sprite* sprite, SpriteGraphics* graphics )
+    void SpriteStatus::update( Sprite& sprite, SpriteGraphics& graphics )
     {
         if ( invincible_ )
         {
@@ -41,23 +41,20 @@
             if ( invincibility_timer_.done() )
             {
                 invincible_ = false;
-                graphics->visible_ = true;
+                graphics.visible_ = true;
             }
             // If invincible, make sprite flash by having it invisible for every 4th frame o' invincibility.
             else if ( invincibility_timer_.counter() % 4 == 1 )
             {
-                if ( graphics != nullptr )
-                {
-                    graphics->visible_ = false;
-                }
+				graphics.visible_ = false;
             }
             else
             {
-                graphics->visible_ = true;
+                graphics.visible_ = true;
             }
         }
 
-        if ( sprite->in_water_ )
+        if ( sprite.in_water_ )
         {
             --oxygen_meter_;
         }

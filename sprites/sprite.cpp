@@ -46,7 +46,7 @@
         int y,
         int width,
         int height,
-        SpriteType type,
+		std::vector<SpriteType> type,
         int start_speed,
         int top_speed,
         int jump_start_speed,
@@ -67,7 +67,7 @@
     :
         Object( x, y, width, height ),
         graphics_ ( std::move( graphics ) ),
-        type_ ( type ),
+        types_ ( type ),
         jump_start_speed_ ( jump_start_speed ),
         jump_top_speed_normal_ ( jump_top_speed ),
         jump_top_speed_ ( jump_top_speed ),
@@ -111,7 +111,7 @@
                 component_->update( *this, *graphics_ );
             }
             customUpdate( input, camera, lvmap, game, events, sprites );
-            status_.update( this, graphics_.get() );
+            status_.update( *this, *graphics_ );
         }
         else
         {
@@ -182,7 +182,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->moveLeft( this );
+            movement_->moveLeft( *this );
         }
     };
 
@@ -190,7 +190,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->moveRight( this );
+            movement_->moveRight( *this );
         }
     };
 
@@ -258,7 +258,7 @@
         y_prev_ = hit_box_.y;
 
         if ( movement_ != nullptr )
-            movement_->position( this );
+            movement_->position( *this );
 
         positionX();
         positionY();
@@ -313,7 +313,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->collideStopXLeft( this, overlap );
+            movement_->collideStopXLeft( *this, overlap );
         }
     };
 
@@ -321,7 +321,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->collideStopXRight( this, overlap );
+            movement_->collideStopXRight( *this, overlap );
         }
     };
 
@@ -329,7 +329,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->collideStopYBottom( this, overlap );
+            movement_->collideStopYBottom( *this, overlap );
         }
     };
 
@@ -337,7 +337,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->collideStopYTop( this, overlap );
+            movement_->collideStopYTop( *this, overlap );
         }
     };
 
@@ -359,13 +359,13 @@
     void Sprite::jump()
     {
         if ( movement_ != nullptr )
-            movement_->jump( this );
+            movement_->jump( *this );
     };
 
     void Sprite::bounce( int amount )
     {
         if ( movement_ != nullptr )
-            movement_->bounce( this, amount );
+            movement_->bounce( *this, amount );
     };
 
     void Sprite::slowFall()
@@ -401,8 +401,8 @@
 
     void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
     {
-        Collision my_collision = collide( &them );
-        Collision their_collision = them.collide( this );
+        Collision my_collision = testCollision( them );
+        Collision their_collision = them.testCollision( *this );
 
         customInteract( my_collision, their_collision, them, blocks, sprites );
     };
@@ -477,7 +477,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->moveUp( this );
+            movement_->moveUp( *this );
         }
     };
 
@@ -485,7 +485,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->moveDown( this );
+            movement_->moveDown( *this );
         }
     };
 
@@ -522,7 +522,12 @@
 
     bool Sprite::hasType( Sprite::SpriteType type ) const
     {
-        return type == type_;
+		for ( auto& t : types_ )
+		{
+			if ( type == t ) return true;
+		}
+		
+		return false;
     };
 
     void Sprite::hurt( int amount )
@@ -548,7 +553,7 @@
     {
         if ( movement_ != nullptr )
         {
-            movement_->collideStopAny( this, collision );
+            movement_->collideStopAny( *this, collision );
         }
     };
 
@@ -656,9 +661,9 @@
         return status_;
     };
 
-    bool Sprite::collideBottom( const Collision& collision, Object* other ) const
+    bool Sprite::collideBottomOnly( const Collision& collision, const Object& other ) const
     {
-        return collision.collideBottom() && prevBottomSubPixels() <= other->ySubPixels() + 1000;
+        return collision.collideBottom() && prevBottomSubPixels() <= other.ySubPixels() + 1000;
     };
 
     void Sprite::swim()
@@ -704,3 +709,11 @@
     {
         return is_sliding_prev_;
     };
+
+	const Collision Sprite::testCollision( const Object& them ) const
+	{
+        if ( movement_ != nullptr )
+        {
+            return movement_->testCollision( *this, them );
+        }	
+	};

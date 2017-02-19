@@ -31,8 +31,8 @@
         public:
             SwimmingSpriteMovement();
 
-            void jump( Sprite* sprite );
-            void position( Sprite* sprite );
+            void jump( Sprite& sprite );
+            void position( Sprite& sprite );
 
         private:
             static const int SWIM_START_SPEED = 5000;

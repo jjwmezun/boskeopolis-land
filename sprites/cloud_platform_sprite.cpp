@@ -26,7 +26,7 @@
 
     CloudPlatformSprite::CloudPlatformSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_CLOUD_PLATFORM, 0, 0, false, false, 0, true, 0, -6, 0, 10 ) ), x, y, 64, 8, SpriteType::ENEMY, 800, 1200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_CLOUD_PLATFORM, 0, 0, false, false, 0, true, 0, -6, 0, 10 ) ), x, y, 64, 8, {}, 800, 1200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
         started_ ( false )
     {};
 

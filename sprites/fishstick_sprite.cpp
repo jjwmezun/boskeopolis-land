@@ -29,7 +29,7 @@
 
     FishstickSprite::FishstickSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_FISHSTICK, 0, 0, false, false, 0, false, -2, -2, 4, 4 ) ), x, y, 20, 12, SpriteType::NOTYPE, 600, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_FISHSTICK, 0, 0, false, false, 0, false, -2, -2, 4, 4 ) ), x, y, 20, 12, { SpriteType::ENEMY }, 600, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
         move_timer_ ( { 16, true } ),
         pause_timer_ ( { 8, false } )
     {};

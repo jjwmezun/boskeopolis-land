@@ -25,7 +25,7 @@
 
     BuzzSawSprite::BuzzSawSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_BUZZSAW, 0, 0, false, false, 0, true, -16, -16, 32, 32 ) ), x, y, 32, 32, SpriteType::ENEMY, 100, 1500, 3000, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false, true, false )
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_BUZZSAW, 0, 0, false, false, 0, true, -16, -16, 32, 32 ) ), x, y, 32, 32, { SpriteType::ENEMY }, 100, 1500, 3000, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false, true, false )
     {};
 
     BuzzSawSprite::~BuzzSawSprite() {};

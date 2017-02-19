@@ -140,6 +140,23 @@
                 };
             break;
 
+            case ( LV_MINES_2 ):
+                return
+                {
+                    lvname,
+                    {
+                        Map::mapFromPath
+                        (
+                            "mines-2",
+                            { Palette::PaletteType::CEMENT_GRAY, 4 }
+                        )
+                    },
+                    std::unique_ptr<Goal> ( new Goal() ),
+                    3*16,
+                    0
+                };
+            break;
+
             case ( LV_MINES_4 ):
                 return
                 {
@@ -148,7 +165,7 @@
                         Map::mapFromPath
                         (
                             "mines-4",
-                            { Palette::PaletteType::SUNNY_YELLOW, 4 }
+                            { Palette::PaletteType::GOLDEN_YELLOW, 4 }
                         )
                     },
                     std::unique_ptr<Goal> ( new AvoidMoneyGoal() ),
@@ -186,7 +203,7 @@
                         Map::mapFromPath
                         (
                             "woods-2",
-                            { Palette::PaletteType::SUNNY_YELLOW, 2 },
+                            { Palette::PaletteType::GOLDEN_YELLOW, 2 },
                             {
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS, 256, 256, 0, 0, .25 ),
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS2, 640, 256, 0, 0, .5 )
@@ -320,8 +337,8 @@
                         )
                     },
                     std::unique_ptr<Goal> ( new Goal() ),
-                    160,
-                    48
+                    19*16,
+                    19*16
                 };
             break;
 
@@ -373,7 +390,7 @@
                         Map::mapFromPath
                         (
                             "sky-1",
-                            { Palette::PaletteType::MUSTARD_ORANGE, 3 },
+                            { Palette::PaletteType::TRISTE_BLUE, 5 },
                             {
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1, 1, true, true, 1 ),
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -1 ),
@@ -381,8 +398,8 @@
                         )
                     },
                     std::unique_ptr<Goal> ( new Goal( "By the way, Autumn's an owl now." ) ),
-                    247*16,
-                    -32
+                    142*16,
+                    32
                 };
             break;
 
@@ -510,7 +527,7 @@
                         Map::mapFromPath
                         (
                             "city-1-2",
-                            { Palette::PaletteType::SUNNY_YELLOW, 4 },
+                            { Palette::PaletteType::GOLDEN_YELLOW, 4 },
                             {
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_1, 360, 229, 0, -16, 0, 0 )
                             },
@@ -645,6 +662,9 @@
                 break;
             case ( LevelName::LV_MINES_1 ):
                 return "Minty Mines";
+                break;
+            case ( LevelName::LV_MINES_2 ):
+                return "Curse o' the Ladder-Splayed Caves";
                 break;
             case ( LevelName::LV_FACTORY_1 ):
                 return "Steam Engenius";

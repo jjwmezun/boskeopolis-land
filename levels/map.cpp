@@ -108,29 +108,6 @@
             {
                 std::string name = prop.name.GetString();
 
-                /*
-                if ( name.compare( "bg_color" ) == 0 )
-                {
-                    if ( prop.value.IsInt() )
-                    {
-                        bg_color = prop.value.GetInt();
-                    }
-                    else if ( prop.value.IsString() )
-                    {
-                        bg_color = std::stoi( prop.value.GetString() );
-                    }
-                }
-
-                if ( name.compare( "palette" ) == 0 )
-                {
-                    if ( prop.value.IsString() )
-                    {
-                        const std::string p_type = prop.value.GetString();
-                        palette_type = Palette::PaletteConversion.at( p_type );
-                    }
-                }
-                */
-
                 if ( name.compare( "slippery" ) == 0 )
                 {
                     if ( prop.value.IsBool() )
@@ -227,7 +204,6 @@
                     }
                 }
             }
-
         }
 
         return Map

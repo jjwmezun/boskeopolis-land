@@ -48,8 +48,6 @@
             void addToX ( int addition_x_pixels );
             void addToY ( int addition_y_pixels );
 
-            const Collision collide( Object* other ) const;
-
             const sdl2::SDLRect& hitBox();
             const sdl2::SDLRect& originalHitBox();
 

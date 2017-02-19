@@ -25,7 +25,7 @@
 
     SewerMonsterSprite::SewerMonsterSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SewerMonsterGraphics() ), x+16, y+16, 48, 48, SpriteType::ENEMY, 100, 1500, 3000, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SewerMonsterGraphics() ), x+16, y+16, 48, 48, {}, 100, 1500, 3000, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
         awake_ ( false ),
         attacking_ ( false ),
         after_attack_ ( false ),

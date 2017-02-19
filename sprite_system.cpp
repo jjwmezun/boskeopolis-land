@@ -30,6 +30,7 @@
     #include "icecube_sprite.h"
     #include "level.h"
     #include "map.h"
+    #include "maze_chaser_sprite.h"
     #include "overworld_player_sprite.h"
     #include "penguin_sprite.h"
     #include "platform_sprite.h"
@@ -147,6 +148,9 @@
             case ( 25 ):
                 return std::unique_ptr<Sprite> ( new EggnonSprite( x, y ) );
             break;
+            case ( 26 ):
+                return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y ) );
+            break;
             case ( 62 ):
                 return std::unique_ptr<Sprite> ( new CloudPlatformSprite( x, y ) );
             break;
@@ -228,7 +232,6 @@
         {
             case ( HeroType::NORMAL ):
                 hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY(), 2, hero_->hp() ) );
-                //hero_.reset( new RacerSprite( level.entranceX(), level.entranceY() ) );
             break;
             case ( HeroType::OVERWORLD ):
                 hero_.reset( new OverworldPlayerSprite( level.entranceX(), level.entranceY() ) );
@@ -391,6 +394,10 @@
         else if ( property.compare( "FLUTTERING" ) == 0 )
         {
             return HeroType::FLUTTERING;
+        }
+        else if ( property.compare( "OVERWORLD" ) == 0 )
+        {
+            return HeroType::OVERWORLD;
         }
 
         return HeroType::NORMAL;

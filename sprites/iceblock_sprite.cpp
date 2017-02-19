@@ -25,7 +25,7 @@
 
     IceBlockSprite::IceBlockSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_ICEBLOCK ) ), x, y, 16, 16, SpriteType::NOTYPE, 400, 1200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false, true, true ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_ICEBLOCK ) ), x, y, 16, 16, {}, 400, 1200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false, true, true ),
         crack_state_ ( CrackState::NORMAL ),
         delay_ ( { 16, false } ),
         grow_delay_ ( { 64, false } )

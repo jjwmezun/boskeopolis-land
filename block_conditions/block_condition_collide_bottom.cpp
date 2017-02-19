@@ -31,7 +31,7 @@
 
     bool BlockConditionCollideBottom::condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events )
     {
-        if ( sprite.collideBottom( collision, &block ) )
+        if ( sprite.collideBottomOnly( collision, block ) )
         {
             return true;
         }

@@ -29,7 +29,7 @@
 
     PufferbeeSprite::PufferbeeSprite( int x, int y, std::unique_ptr<SpriteComponent> component )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new PufferbeeGraphics() ), x, y, 20, 20, SpriteType::ENEMY, 600, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, std::move( component ), SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
+        Sprite( std::unique_ptr<SpriteGraphics> ( new PufferbeeGraphics() ), x, y, 20, 20, { SpriteType::ENEMY }, 600, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, std::move( component ), SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
     {};
 
     PufferbeeSprite::~PufferbeeSprite() {};
@@ -81,13 +81,6 @@
 
     void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
     {
-        if ( them.hasType( SpriteType::HERO ) )
-        {
-            if ( their_collision.collideAny() )
-            {
-                them.hurt();
-            }
-        }
     };
 
     Direction::Rotation PufferbeeSprite::randomDirection() const

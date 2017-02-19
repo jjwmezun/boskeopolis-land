@@ -32,7 +32,7 @@
 
             static const int OXYGEN_LIMIT = 720;
 
-            void update( Sprite* sprite, SpriteGraphics* graphics );
+            void update( Sprite& sprite, SpriteGraphics& graphics );
             void reset();
 
             void kill();

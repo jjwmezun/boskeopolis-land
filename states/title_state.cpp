@@ -31,6 +31,17 @@
 
     void TitleState::update( Game& game, Input& input, Graphics& graphics )
     {
+        if ( input.pressed( Input::Action::MOVE_UP ) )
+        {
+            --selection_;
+        }
+        else if ( input.pressed( Input::Action::MOVE_DOWN ) )
+        {
+            ++selection_;
+        }
+
+        highlight_rect_.y = OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( selection_.value() );
+		
         if ( input.pressed( Input::Action::CONFIRM ) )
         {
             switch( (Option)selection_.value() )
@@ -49,17 +60,6 @@
                 break;
             }
         }
-
-        if ( input.pressed( Input::Action::MOVE_UP ) )
-        {
-            --selection_;
-        }
-        else if ( input.pressed( Input::Action::MOVE_DOWN ) )
-        {
-            ++selection_;
-        }
-
-        highlight_rect_.y = OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( selection_.value() );
     };
 
     void TitleState::stateRender( Graphics& graphics )

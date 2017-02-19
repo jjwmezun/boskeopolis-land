@@ -58,7 +58,8 @@
                 NOTYPE,
                 HERO,
                 ENEMY,
-                RIVAL
+                RIVAL,
+				BOPPABLE
             };
 
             enum class CameraMovement
@@ -76,7 +77,7 @@
                 int y = 0,
                 int width = 16,
                 int height = 16,
-                SpriteType type = SpriteType::NOTYPE,
+                std::vector<SpriteType> type = {},
                 int start_speed = 160,
                 int top_speed = 2000,
                 int jump_start_speed = 1000,
@@ -94,6 +95,7 @@
                 int max_hp = 3,
                 int hp = 3
             );
+			
             virtual ~Sprite();
             Sprite( const Sprite& ) = delete;
             Sprite& operator=( const Sprite& ) = delete;
@@ -175,13 +177,14 @@
             void bounceDownward( int overlap );
             virtual void swim();
 
+			const Collision testCollision( const Object& them ) const;
             void collideStopAny( Collision& collision );
             void collideStopXLeft( int overlap );
             void collideStopXRight( int overlap );
             void collideStopYBottom( int overlap );
             void collideStopYTop( int overlap );
 
-            bool collideBottom( const Collision& collision, Object* other ) const;
+            bool collideBottomOnly( const Collision& collision, const Object& other ) const;
 
             void slowFall();
             void fastFall();
@@ -220,7 +223,7 @@
             static const int JUMP_DUCK_TOP_SPEED = 5500;
             static const int LADDER_SPEED = 1000;
 
-            const SpriteType type_;
+            const std::vector<SpriteType> types_;
             const CameraMovement camera_movement_;
             const bool despawn_when_dead_;
             std::unique_ptr<SpriteGraphics> graphics_;

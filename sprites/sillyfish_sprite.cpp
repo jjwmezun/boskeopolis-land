@@ -27,7 +27,7 @@
 
     SillyfishSprite::SillyfishSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SillyfishGraphics() ), x, y, 16, 32, SpriteType::NOTYPE, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SillyfishGraphics() ), x, y, 16, 32, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
         start_ground_lock_ ( false ),
         switch_lock_ ( { 4, false } )
     {};
@@ -78,20 +78,4 @@
 
     void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
     {
-        if ( them.hasType( SpriteType::HERO ) )
-        {
-            if ( them.collideBottom( their_collision, this ) )
-            {
-                kill();
-                them.bounce();
-            }
-            else if ( their_collision.collideAny() && them.is_sliding_ )
-            {
-                kill();
-            }
-            else if ( their_collision.collideAny() && !isDead() )
-            {
-                them.hurt();
-            }
-        }
     };

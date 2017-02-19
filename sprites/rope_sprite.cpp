@@ -25,7 +25,7 @@
 
     RopeSprite::RopeSprite( int x, int y, int height, int distance, int speed )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new RopeGraphics() ), x, y, 8, Unit::BlocksToPixels( height ), SpriteType::NOTYPE, speed, speed, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
+        Sprite( std::unique_ptr<SpriteGraphics> ( new RopeGraphics() ), x, y, 8, Unit::BlocksToPixels( height ), {}, speed, speed, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
         on_ ( false ),
         action_ ( distance )
     {};

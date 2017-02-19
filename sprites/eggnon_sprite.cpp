@@ -96,7 +96,7 @@
 
     EggnonSprite::EggnonSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_EGGNON, 0, 0, false, false, 0, true ) ), x, y, 16, 24, SpriteType::ENEMY, 80, 500, 200, 500, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true )
+        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_EGGNON, 0, 0, false, false, 0, true ) ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 80, 500, 200, 500, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true )
     {
         jump_lock_ = false;
     };
@@ -142,20 +142,4 @@
 
     void EggnonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
     {
-        if ( them.hasType( SpriteType::HERO ) )
-        {
-            if ( them.collideBottom( their_collision, this ) )
-            {
-                kill();
-                them.bounce();
-            }
-            else if ( their_collision.collideAny() && them.is_sliding_ )
-            {
-                kill();
-            }
-            else if ( their_collision.collideAny() && !isDead() )
-            {
-                them.hurt();
-            }
-        }
     };
