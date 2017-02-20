@@ -113,6 +113,7 @@
             int vx_ = 0;
             int vy_ = 0;
 
+            Direction::Simple direction_;
             Direction::Horizontal direction_x_;
             Direction::Vertical direction_y_;
 
@@ -123,11 +124,11 @@
             bool in_water_ = false;
             Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
-            void update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites );
+            void update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void render( Graphics& graphics, Camera& camera, bool priority = false );
             void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites );
 
-            virtual void customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites ) = 0;
+            virtual void customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks ) = 0;
             virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites ) = 0;
             virtual void reset();
 

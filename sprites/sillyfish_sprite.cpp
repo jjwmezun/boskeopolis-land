@@ -34,7 +34,7 @@
 
     SillyfishSprite::~SillyfishSprite() {};
 
-    void SillyfishSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void SillyfishSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( directionX() == Direction::Horizontal::RIGHT )
         {

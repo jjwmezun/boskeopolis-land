@@ -39,7 +39,7 @@
 
     PlayerCartSprite::~PlayerCartSprite() {};
 
-    void PlayerCartSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void PlayerCartSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( direction_x_ == Direction::Horizontal::RIGHT )
         {

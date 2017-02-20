@@ -30,7 +30,7 @@
     PlayerGraphics::~PlayerGraphics() {};
 
     void PlayerGraphics::update( Sprite& sprite )
-    {
+    {		
         if ( sprite.directionX() == Direction::Horizontal::RIGHT )
         {
             flip_x_ = true;

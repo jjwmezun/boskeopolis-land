@@ -45,6 +45,7 @@
         if ( hit )
         {
             hit_ = true;
+			++num_o_hits_;
             restartCounter();
         }
         else
@@ -54,3 +55,5 @@
     };
 
     bool TimerRepeat::hit() const { return hit_; };
+
+	int TimerRepeat::numOHits() const { return num_o_hits_; };

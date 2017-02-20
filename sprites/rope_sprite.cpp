@@ -32,7 +32,7 @@
 
     RopeSprite::~RopeSprite() {};
 
-    void RopeSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void RopeSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( on_ )
         {

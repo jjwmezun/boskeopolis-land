@@ -28,10 +28,13 @@
     {
 
         public:
-            CollectGoal( int amount_needed = 100 );
+            CollectGoal( int amount_needed, std::string message = "" );
             ~CollectGoal();
 
             void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+			
+		private:
+			const std::string collectMessage( int amount_needed, std::string message ) const;
     };
 
 #endif // COLLECT_GOAL_H

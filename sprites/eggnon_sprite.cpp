@@ -103,7 +103,7 @@
 
     EggnonSprite::~EggnonSprite() {};
 
-    void EggnonSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void EggnonSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         // INIT
         if ( !state_ )

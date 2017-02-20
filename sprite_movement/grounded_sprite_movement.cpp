@@ -268,6 +268,7 @@
         int overlap_y_top    = 0;
         int overlap_y_bottom = 0;
 		
+		// Keep character from catching on walls moving vertically.
         if
         (
             me.leftSubPixels() + 4000 < them.rightSubPixels() &&
@@ -282,6 +283,7 @@
                 overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
         }
 
+		// But allow character to stand on the tip-ends o' blocks.
         if
         (
             me.leftSubPixels() + 1000 < them.rightSubPixels() &&
@@ -299,7 +301,7 @@
             me.leftSubPixels() < them.rightSubPixels() &&
             me.rightSubPixels() > them.leftSubPixels() &&
             me.topSubPixels() < them.bottomSubPixels() &&
-            me.bottomSubPixels() - 4000 > them.topSubPixels()
+            me.bottomSubPixels() - 4000 > them.topSubPixels() // Keep character from getting caught on sides o' floor blocks.
         )
         {
             if ( me.centerXSubPixels() < them.centerXSubPixels() )

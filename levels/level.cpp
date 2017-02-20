@@ -333,12 +333,12 @@
                         Map::mapFromPath
                         (
                             "maze-1",
-                            { Palette::PaletteType::MOUNTAIN_RED, 6 }
+                            { Palette::PaletteType::BABY_BLUE, 6 }
                         )
                     },
-                    std::unique_ptr<Goal> ( new Goal() ),
+                    std::unique_ptr<Goal> ( new CollectGoal( 65700, "¡Collect everything & don't get caught!" ) ),
                     19*16,
-                    19*16
+                    17*16
                 };
             break;
 

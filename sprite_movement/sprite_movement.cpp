@@ -39,24 +39,28 @@
     {
         sprite.acceleration_x_ = -sprite.start_speed_;
         sprite.direction_x_ = Direction::Horizontal::LEFT;
+        sprite.direction_ = Direction::Simple::LEFT;
     };
 
     void SpriteMovement::moveRight( Sprite& sprite )
     {
         sprite.acceleration_x_ = sprite.start_speed_;
         sprite.direction_x_ = Direction::Horizontal::RIGHT;
+        sprite.direction_ = Direction::Simple::RIGHT;
     };
 
     void SpriteMovement::moveUp( Sprite& sprite )
     {
         sprite.acceleration_y_ = -sprite.start_speed_;
         sprite.direction_y_ = Direction::Vertical::UP;
+        sprite.direction_ = Direction::Simple::UP;
     };
 
     void SpriteMovement::moveDown( Sprite& sprite )
     {
         sprite.acceleration_y_ = sprite.start_speed_;
         sprite.direction_y_ = Direction::Vertical::DOWN;
+        sprite.direction_ = Direction::Simple::DOWN;
     };
 
     void SpriteMovement::jump( Sprite& sprite )
@@ -146,7 +150,6 @@
         }
     };
 
-
     const Collision SpriteMovement::testCollision( const Sprite& me, const Object& them ) const
     {
         int overlap_x_left   = 0;
@@ -154,70 +157,34 @@
         int overlap_y_top    = 0;
         int overlap_y_bottom = 0;
 		
-		if ( me.vx_ < 0 || 0 < me.vx_ )
+		if
+		(
+			// Allows sprite to still move vertically, e'en if colliding with a block horizontally.
+			me.leftSubPixels() + SMOOTH_MOVEMENT_PADDING < them.rightSubPixels() &&
+			me.rightSubPixels() - SMOOTH_MOVEMENT_PADDING  > them.leftSubPixels() &&
+			me.topSubPixels() < them.bottomSubPixels() &&
+			me.bottomSubPixels() > them.topSubPixels()
+		)
 		{
-			if
-			(
-				me.leftSubPixels() + 4000 < them.rightSubPixels() &&
-				me.rightSubPixels() - 4000  > them.leftSubPixels() &&
-				me.topSubPixels() < them.bottomSubPixels() &&
-				me.bottomSubPixels() > them.topSubPixels()
-			)
-			{
-				if ( me.centerYSubPixels() > them.centerYSubPixels() )
-					overlap_y_top = them.bottomSubPixels() - me.topSubPixels();
-				else
-					overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
-			}
-		}
-		else
-		{
-			if
-			(
-				me.leftSubPixels() < them.rightSubPixels() &&
-				me.rightSubPixels() > them.leftSubPixels() &&
-				me.topSubPixels() < them.bottomSubPixels() &&
-				me.bottomSubPixels() > them.topSubPixels()
-			)
-			{
-				if ( me.centerYSubPixels() > them.centerYSubPixels() )
-					overlap_y_top = them.bottomSubPixels() - me.topSubPixels();
-				else
-					overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
-			}
+			if ( me.centerYSubPixels() > them.centerYSubPixels() )
+				overlap_y_top = them.bottomSubPixels() - me.topSubPixels();
+			else
+				overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
 		}
 		
-		if ( me.vy_ < 0 || 0 < me.vy_ )
-		{
-			if
-			(
-				me.leftSubPixels() < them.rightSubPixels() &&
-				me.rightSubPixels() > them.leftSubPixels() &&
-				me.topSubPixels() + 4000 < them.bottomSubPixels() &&
-				me.bottomSubPixels() - 4000 > them.topSubPixels()
-			)
-			{	
-				if ( me.centerXSubPixels() < them.centerXSubPixels() )
-					overlap_x_right = them.rightSubPixels() - me.leftSubPixels();
-				else if ( me.centerXSubPixels() > them.centerXSubPixels() )
-					overlap_x_left = me.rightSubPixels() - them.leftSubPixels();
-			}
-		}
-		else
-		{
-			if
-			(
-				me.leftSubPixels() < them.rightSubPixels() &&
-				me.rightSubPixels() > them.leftSubPixels() &&
-				me.topSubPixels() < them.bottomSubPixels() &&
-				me.bottomSubPixels() > them.topSubPixels()
-			)
-			{	
-				if ( me.centerXSubPixels() < them.centerXSubPixels() )
-					overlap_x_right = them.rightSubPixels() - me.leftSubPixels();
-				else if ( me.centerXSubPixels() > them.centerXSubPixels() )
-					overlap_x_left = me.rightSubPixels() - them.leftSubPixels();
-			}
+		if
+		(
+			me.leftSubPixels() < them.rightSubPixels() &&
+			me.rightSubPixels() > them.leftSubPixels() &&
+			// Allows sprite to still move horizontally, e'en if colliding with a block vertically.
+			me.topSubPixels() + SMOOTH_MOVEMENT_PADDING < them.bottomSubPixels() &&
+			me.bottomSubPixels() - SMOOTH_MOVEMENT_PADDING > them.topSubPixels()
+		)
+		{	
+			if ( me.centerXSubPixels() < them.centerXSubPixels() )
+				overlap_x_right = them.rightSubPixels() - me.leftSubPixels();
+			else if ( me.centerXSubPixels() > them.centerXSubPixels() )
+				overlap_x_left = me.rightSubPixels() - them.leftSubPixels();
 		}
 		
         return Collision( overlap_x_left, overlap_x_right, overlap_y_top, overlap_y_bottom );

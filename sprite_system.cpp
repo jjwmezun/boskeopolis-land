@@ -149,7 +149,16 @@
                 return std::unique_ptr<Sprite> ( new EggnonSprite( x, y ) );
             break;
             case ( 26 ):
-                return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y ) );
+                return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::SHADOW ) );
+            break;
+            case ( 27 ):
+                return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::AMBUSH ) );
+            break;
+            case ( 28 ):
+                return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::RANDO ) );
+            break;
+            case ( 29 ):
+                return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::OBFUSCATING ) );
             break;
             case ( 62 ):
                 return std::unique_ptr<Sprite> ( new CloudPlatformSprite( x, y ) );
@@ -259,7 +268,7 @@
         }
     };
 
-    void SpriteSystem::update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events )
+    void SpriteSystem::update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks )
     {
         for ( int i = 0; i < sprites_.size(); ++i )
         {
@@ -271,18 +280,18 @@
                     case ( Sprite::CameraMovement::PAUSE_OFFSCREEN ):
                         if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
                         {
-                            sprites_.at( i )->update( input, camera, lvmap, game, events, *this );
+                            sprites_.at( i )->update( input, camera, lvmap, game, events, *this, blocks );
                         }
                     break;
 
                     case ( Sprite::CameraMovement::PERMANENT ):
-                        sprites_.at( i )->update( input, camera, lvmap, game, events, *this );
+                        sprites_.at( i )->update( input, camera, lvmap, game, events, *this, blocks );
                     break;
 
                     case ( Sprite::CameraMovement::RESET_INSTANTLY_OFFSCREEN ):
                         if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
                         {
-                            sprites_.at( i )->update( input, camera, lvmap, game, events, *this );
+                            sprites_.at( i )->update( input, camera, lvmap, game, events, *this, blocks );
                         }
                         else
                         {
@@ -296,7 +305,7 @@
                     case ( Sprite::CameraMovement::RESET_OFFSCREEN_AND_AWAY ):
                         if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
                         {
-                            sprites_.at( i )->update( input, camera, lvmap, game, events, *this );
+                            sprites_.at( i )->update( input, camera, lvmap, game, events, *this, blocks );
                         }
                         else
                         {
@@ -317,7 +326,7 @@
                 }
             }
         }
-        hero_->update( input, camera, lvmap, game, events, *this );
+        hero_->update( input, camera, lvmap, game, events, *this, blocks );
 
         if ( hero_->deathFinished() )
         {
@@ -331,7 +340,7 @@
         {
             if ( sprites_.at( i ) != nullptr )
             {
-                if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
+                if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) || sprites_.at( i )->cameraMovement() == Sprite::CameraMovement::PERMANENT )
                 {
                     if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
                     {

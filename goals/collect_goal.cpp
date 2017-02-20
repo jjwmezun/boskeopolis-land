@@ -23,12 +23,10 @@
 // METHODS
 //===================================
 
-    CollectGoal::CollectGoal( int amount_needed )
+    CollectGoal::CollectGoal( int amount_needed, std::string message )
     :
-        Goal( (std::string)"¡Collect " + Text::formatNumCommas( Text::stringifyNum( amount_needed ) ) + (std::string)"\t!", GoalType::COLLECT, amount_needed )
-    {
-        //message_ = ;
-    };
+        Goal( collectMessage( amount_needed, message ), GoalType::COLLECT, amount_needed )
+    {};
 
     CollectGoal::~CollectGoal() {};
 
@@ -37,3 +35,8 @@
         if ( inventory.funds() >= value() )
             events.won_ = true;
     };
+
+	const std::string CollectGoal::collectMessage( int amount_needed, std::string message ) const
+	{
+		return ( message.compare( "" ) == 0 ) ? (std::string)"¡Collect " + Text::formatNumCommas( Text::stringifyNum( amount_needed ) ) + (std::string)"\t!" : message;
+	};

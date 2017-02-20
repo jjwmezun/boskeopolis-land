@@ -46,7 +46,7 @@
         blocks_.update( events_ );
         events_.update();
         level_.currentMap().update();
-        sprites_.update( input, camera_, level_.currentMap(), game, events_ );
+        sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
         sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
         sprites_.effects( level_.currentMap().effect() );
         sprites_.spriteInteraction( camera_, blocks_ );

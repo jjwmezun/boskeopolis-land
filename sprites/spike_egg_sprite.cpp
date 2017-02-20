@@ -31,7 +31,7 @@
 
     SpikeEggSprite::~SpikeEggSprite() {};
 
-    void SpikeEggSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void SpikeEggSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         graphics_->rotation_ -= 5;
     };

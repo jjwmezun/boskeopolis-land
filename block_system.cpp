@@ -185,16 +185,16 @@
         }
     };
 
-    bool BlockSystem::blocksInTheWay( int left, int right, int top, int bottom, std::vector<int> type_ids ) const
+    bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, const std::vector<int>& type_ids ) const
     {
         for ( auto& b : blocks_ )
         {
             if
             (
-                b.rightSubPixels() > left &&
-                b.leftSubPixels() < right &&
-                b.topSubPixels() < bottom &&
-                b.bottomSubPixels() > top
+                b.rightSubPixels() > r.x &&
+                b.leftSubPixels() < r.right() &&
+                b.topSubPixels() < r.bottom() &&
+                b.bottomSubPixels() > r.y
             )
             {
                 if ( !type_ids.empty() )

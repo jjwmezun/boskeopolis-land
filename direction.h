@@ -43,6 +43,7 @@
             DOWN,
             LEFT
         };
+		static constexpr int SIMPLE_SIZE = (int)Simple::LEFT + 1;
 
         enum class Rotation
         {
@@ -67,7 +68,7 @@
         };
 
 
-        inline Simple horizontalToSimple( Horizontal d )
+        constexpr Simple horizontalToSimple( Horizontal d )
         {
             switch ( d )
             {
@@ -82,7 +83,7 @@
             }
         };
 
-        inline Simple verticalToSimple( Vertical d )
+        constexpr Simple verticalToSimple( Vertical d )
         {
             switch ( d )
             {
@@ -97,7 +98,7 @@
             }
         };
 
-        inline Horizontal simpleToHorizontal( Simple d )
+        constexpr Horizontal simpleToHorizontal( Simple d )
         {
             switch ( d )
             {
@@ -112,7 +113,7 @@
             }
         };
 
-        inline Vertical simpleToVertical( Simple d )
+        constexpr Vertical simpleToVertical( Simple d )
         {
             switch ( d )
             {
@@ -127,7 +128,7 @@
             }
         };
 
-        inline Horizontal switchHorizontal( Horizontal d )
+        constexpr Horizontal switchHorizontal( Horizontal d )
         {
             switch ( d )
             {
@@ -142,7 +143,7 @@
             }
         };
 
-        inline Vertical switchVertical( Vertical d )
+        constexpr Vertical switchVertical( Vertical d )
         {
             switch ( d )
             {
@@ -157,7 +158,7 @@
             }
         };
 
-        inline Type SimpleIsOfWhatType( Simple d )
+        constexpr Type SimpleIsOfWhatType( Simple d )
         {
             switch ( d )
             {
@@ -188,6 +189,37 @@
                 return (Horizontal)MezunMath::randInt( 2, 1 );
             }
         };
+
+        inline Simple randomSimple( bool allow_null = true )
+        {
+            if ( allow_null )
+            {
+                return ( Simple )MezunMath::randInt( 4, 0 );
+            }
+            else
+            {
+                return ( Simple )MezunMath::randInt( 4, 1 );
+            }
+        };
+		
+		constexpr Simple oppositeSimple( Simple d )
+		{
+			switch( d )
+			{
+				case ( Simple::UP ):
+					return Simple::DOWN;
+				break;
+				case ( Simple::DOWN ):
+					return Simple::UP;
+				break;
+				case ( Simple::LEFT ):
+					return Simple::RIGHT;
+				break;
+				case ( Simple::RIGHT ):
+					return Simple::LEFT;
+				break;
+			}
+		};
 
     }
 

@@ -41,10 +41,13 @@
             void event( bool hit );
 
             bool hit() const;
+			
+			int numOHits() const;
 
 
         protected:
             bool hit_ = false;
+			int num_o_hits_ = 0;
     };
 
 #endif // TIMER_REPEAT_H

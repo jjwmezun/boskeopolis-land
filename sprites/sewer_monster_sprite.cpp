@@ -36,7 +36,7 @@
 
     SewerMonsterSprite::~SewerMonsterSprite() {};
 
-    void SewerMonsterSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void SewerMonsterSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( !attacking_ )
         {

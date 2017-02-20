@@ -32,7 +32,7 @@
 
     CloudPlatformSprite::~CloudPlatformSprite() {};
 
-    void CloudPlatformSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void CloudPlatformSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( started_ )
         {

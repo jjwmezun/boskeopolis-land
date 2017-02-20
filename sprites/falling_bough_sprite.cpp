@@ -44,7 +44,7 @@
 
     FallingBoughSprite::~FallingBoughSprite() {};
 
-    void FallingBoughSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void FallingBoughSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( falling_timer_.on() )
             falling_timer_.update();

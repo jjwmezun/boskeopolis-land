@@ -37,7 +37,7 @@
 
     GuardSprite::~GuardSprite() {};
 
-    void GuardSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void GuardSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( direction_x_ == Direction::Horizontal::RIGHT )
         {
@@ -98,10 +98,10 @@
                     (
                         !blocks.blocksInTheWay
                         (
-                            rightSubPixels(),
-                            them.leftSubPixels(),
+							{ rightSubPixels(),
                             them.topSubPixels(),
-                            them.bottomSubPixels(),
+                            them.leftSubPixels() - rightSubPixels(),
+                            them.heightSubPixels() },
                             { 90 }
                         )
                     )
@@ -124,10 +124,10 @@
                     (
                         !blocks.blocksInTheWay
                         (
-                            them.rightSubPixels(),
-                            leftSubPixels(),
+							{ them.rightSubPixels(),
                             them.topSubPixels(),
-                            them.bottomSubPixels(),
+                            leftSubPixels() - them.rightSubPixels(),
+                            them.heightSubPixels() },
                             { 90 }
                         )
                     )

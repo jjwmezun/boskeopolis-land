@@ -60,7 +60,7 @@
             SpriteSystem( const SpriteSystem& ) = delete;
             SpriteSystem& operator= ( const SpriteSystem& ) = delete;
 
-            void update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events );
+            void update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks );
             void render( Graphics& graphics, Camera& camera, bool priority = false );
             void interact( BlockSystem& blocks, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
             void spriteInteraction( Camera& camera, BlockSystem& blocks );

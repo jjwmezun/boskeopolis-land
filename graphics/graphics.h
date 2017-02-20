@@ -42,6 +42,7 @@
                 LVTILESET_UNIVERSAL,
                 LVTILESET_CITY,
                 LVSPRITES_AUTUMN,
+                LVSPRITES_AUTUMN_OVERWORLD,
                 LVSPRITES_AUTUMN_CART,
                 LVSPRITES_HYDRANT,
                 LVBG_CITY,
@@ -89,6 +90,9 @@
                 LVSPRITES_EGGNON,
                 LVSPRITES_EGG,
                 LVSPRITES_EYEBALL,
+                LVSPRITES_EYEBALL2,
+                LVSPRITES_EYEBALL3,
+                LVSPRITES_EYEBALL4,
                 LIMIT
             };
 
@@ -126,6 +130,7 @@
                 "tileset_level_universal.png",
                 "tileset_level_city.png",
                 "sprites_level_autumn.png",
+                "sprites_level_autumn_overworld.png",
                 "sprites_level_autumn_cart.png",
                 "sprites_level_hydrant.png",
                 "bg_level_city.png",
@@ -172,7 +177,10 @@
                 "sprites_level_cloud_platform.png",
                 "sprites_level_eggnon.png",
                 "sprites_level_egg.png",
-                "sprites_level_eyeball.png"
+                "sprites_level_eyeball.png",
+                "sprites_level_eyeball_2.png",
+                "sprites_level_eyeball_3.png",
+                "sprites_level_eyeball_4.png"
             };
 
             const std::string IMG_RELATIVE_DIR = "img";

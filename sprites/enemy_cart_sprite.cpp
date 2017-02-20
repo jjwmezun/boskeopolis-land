@@ -31,7 +31,7 @@
 
     EnemyCartSprite::~EnemyCartSprite() {};
 
-    void EnemyCartSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void EnemyCartSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         moveLeft();
     };

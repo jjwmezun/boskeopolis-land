@@ -33,7 +33,7 @@
 
     IceBlockSprite::~IceBlockSprite() {};
 
-    void IceBlockSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void IceBlockSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         switch ( crack_state_ )
         {

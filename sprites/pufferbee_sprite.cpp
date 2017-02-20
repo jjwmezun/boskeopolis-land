@@ -34,7 +34,7 @@
 
     PufferbeeSprite::~PufferbeeSprite() {};
 
-    void PufferbeeSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void PufferbeeSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( component_ == nullptr )
         {

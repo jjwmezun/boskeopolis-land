@@ -36,7 +36,7 @@
 
     FishstickSprite::~FishstickSprite() {};
 
-    void FishstickSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void FishstickSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( move_timer_.hit() )
         {

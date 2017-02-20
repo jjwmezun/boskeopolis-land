@@ -44,7 +44,7 @@
 
     PlatformSprite::~PlatformSprite() {};
 
-    void PlatformSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void PlatformSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
     };
 

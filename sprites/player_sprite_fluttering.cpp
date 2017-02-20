@@ -35,7 +35,7 @@
 
     PlayerSpriteFluttering::~PlayerSpriteFluttering() {};
 
-    void PlayerSpriteFluttering::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void PlayerSpriteFluttering::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
 
         if ( input.held( Input::Action::RUN ) )

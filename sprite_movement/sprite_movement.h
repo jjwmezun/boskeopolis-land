@@ -21,6 +21,8 @@
 // DEPENDENCIES
 //===================================
 
+	#include "unit.h"
+
 
 // CLASS
 //===================================
@@ -56,6 +58,9 @@
 
         protected:
             const Type type_;
+
+		private:
+			const int SMOOTH_MOVEMENT_PADDING = Unit::PixelsToSubPixels( 4 );
     };
 
 #endif // SPRITE_MOVEMENT_H

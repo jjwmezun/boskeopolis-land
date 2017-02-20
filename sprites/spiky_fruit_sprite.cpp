@@ -34,7 +34,7 @@
 
     SpikyFruitSprite::~SpikyFruitSprite() {};
 
-    void SpikyFruitSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void SpikyFruitSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( movement_->hasType( SpriteMovement::Type::GROUNDED ) )
             if ( graphics_ != nullptr )

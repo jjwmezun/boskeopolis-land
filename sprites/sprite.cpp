@@ -90,7 +90,8 @@
         sprite_interact_ ( sprite_interact ),
         impervious_ ( impervious ),
         bounce_ ( bounce ),
-        on_ground_padding_ ( { 4, false } )
+        on_ground_padding_ ( { 4, false } ),
+		direction_ ( Direction::Simple::__NULL )
     {};
 
     Sprite::~Sprite()
@@ -102,7 +103,7 @@
         return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
     };
 
-    void Sprite::update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites )
+    void Sprite::update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( !isDead() )
         {
@@ -110,7 +111,7 @@
             {
                 component_->update( *this, *graphics_ );
             }
-            customUpdate( input, camera, lvmap, game, events, sprites );
+            customUpdate( input, camera, lvmap, game, events, sprites, blocks );
             status_.update( *this, *graphics_ );
         }
         else
@@ -145,7 +146,7 @@
 
         position();
 
-        if ( graphics_ )
+        if ( interactsWithBlocks() && movement_->type() == SpriteMovement::Type::GROUNDED && graphics_ )
         {
             switch ( on_slope_ )
             {
@@ -159,9 +160,9 @@
                     graphics_->rotation_ = 0;
                 break;
             }
-
-            graphics_->update( *this );
         }
+		
+		graphics_->update( *this );
 
         in_water_prev_ = in_water_;
         in_water_ = false;
