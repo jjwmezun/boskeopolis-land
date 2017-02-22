@@ -34,6 +34,13 @@
             ~OverworldPlayerSprite();
             void customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites );
+			
+		protected:
+			void deathAction( Camera& camera );
+			
+		private:
+			static constexpr int DEATH_SPIN_SPEED = 20;
+			int death_spins_;
     };
 
 
