@@ -38,6 +38,7 @@
 
         private:
             bool started_;
+			int map_width_;
     };
 
 
