@@ -36,7 +36,8 @@
         bool repeat_y,
         int move_speed_x,
         int move_speed_y,
-        int animation_speed
+        int animation_speed,
+		bool flip
     )
     :
         texture_ ( texture ),
@@ -53,15 +54,39 @@
         movement_position_x_ ( 0 ),
         movement_position_y_ ( 0 ),
         animation_speed_ ( animation_speed ),
-        current_frame_ ( Counter( 0, num_o_frames - 1, 0, true ) ),
-        animation_timer_ ( {} )
+        current_frame_ ( Counter( 0, num_o_frames - 1, 0, !flip ) ),
+        animation_timer_ ( {} ),
+		frame_dir_ ( ( flip ) ? Direction::Vertical::UP : Direction::Vertical::__NULL )
     {};
 
     void MapLayerImage::update()
     {
         if ( Game::nextFrame( 8 / animation_speed_ ) )
         {
-            ++current_frame_;
+			switch( frame_dir_ )
+			{
+				case ( Direction::Vertical::UP ):
+					++current_frame_;
+					
+					if ( current_frame_.hitLimit() )
+					{
+						frame_dir_ = Direction::switchVertical( frame_dir_ );
+					}
+				break;
+					
+				case ( Direction::Vertical::DOWN ):
+					--current_frame_;
+					
+					if ( current_frame_.hitLimit() )
+					{
+						frame_dir_ = Direction::switchVertical( frame_dir_ );
+					}
+				break;
+					
+				case ( Direction::Vertical::__NULL ):
+					++current_frame_;
+				break;
+			}
         }
         source_.x = source_.w * current_frame_();
 

@@ -21,7 +21,9 @@
 
     TimerRepeat::TimerRepeat( int limit, bool starts_on, int start_count, Direction::Vertical direction )
     :
-        Timer( limit, starts_on, start_count, direction )
+        Timer( limit, starts_on, start_count, direction ),
+		hit_ ( false ),
+		num_o_hits_ ( 0 )
     {};
 
     TimerRepeat::~TimerRepeat() {};

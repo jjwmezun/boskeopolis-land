@@ -70,6 +70,8 @@
                 LVBG_CLOUDS_2,
                 LVBG_MINTLINES,
                 LVBG_CONSTELLATION,
+                LVBG_GRILL,
+                LVBG_FIREGLOW,
                 LVSPRITES_SAW,
                 LVSPRITES_EYEGUARD,
                 LVSPRITES_PLATFORM,
@@ -93,6 +95,7 @@
                 LVSPRITES_EYEBALL2,
                 LVSPRITES_EYEBALL3,
                 LVSPRITES_EYEBALL4,
+				LVSPRITES_HEATBEAM,
                 LIMIT
             };
 
@@ -158,6 +161,8 @@
                 "bg_level_clouds_2.png",
                 "bg_level_mintlines.png",
                 "bg_level_constellation.png",
+                "bg_level_grill.png",
+                "bg_level_fireglow.png",
                 "sprites_level_saw.png",
                 "sprites_level_eyeguard.png",
                 "sprites_level_platform.png",
@@ -180,7 +185,8 @@
                 "sprites_level_eyeball.png",
                 "sprites_level_eyeball_2.png",
                 "sprites_level_eyeball_3.png",
-                "sprites_level_eyeball_4.png"
+                "sprites_level_eyeball_4.png",
+                "sprites_level_heatbeam.png"
             };
 
             const std::string IMG_RELATIVE_DIR = "img";

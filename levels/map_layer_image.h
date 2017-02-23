@@ -44,7 +44,8 @@
                 bool repeat_y = true,
                 int move_speed_x = 0,
                 int move_speed_y = 0,
-                int animation_speed = 1
+                int animation_speed = 1,
+				bool flip = false
             );
             void update();
             void render( Graphics& graphics, Camera& camera );
@@ -66,6 +67,7 @@
             int movement_position_y_;
             Counter current_frame_;
             TimerRepeat animation_timer_;
+			Direction::Vertical frame_dir_;
 
             void renderY( Graphics& graphics, Camera& camera ) const;
             void renderX( Graphics& graphics, Camera& camera, sdl2::SDLRect& dest ) const;

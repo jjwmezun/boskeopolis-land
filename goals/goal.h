@@ -38,6 +38,7 @@
                 NORMAL,
                 COLLECT,
                 TIMED,
+				SURVIVE_TIME,
                 STARVING,
                 AVOID_MONEY,
                 AVOID_WALLS,

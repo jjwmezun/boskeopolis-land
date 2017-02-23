@@ -21,7 +21,8 @@
 
     TimerSimple::TimerSimple( int limit, bool starts_on, int start_count, Direction::Vertical direction )
     :
-        Timer( limit, starts_on, start_count, direction )
+        Timer( limit, starts_on, start_count, direction ),
+		done_ ( false )
     {};
 
     TimerSimple::~TimerSimple() {};
@@ -33,9 +34,9 @@
         done_ = false;
     };
 
-    void TimerSimple::event( bool e )
+    void TimerSimple::event( bool hit )
     {
-        if ( e )
+        if ( hit )
         {
             done_ = true;
             on_ = false;

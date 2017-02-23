@@ -31,7 +31,10 @@
     Timer::~Timer() {};
 
     void Timer::pause() { on_ = false; };
+
     void Timer::resume() { on_ = true; };
+
+	void Timer::restart() { start(); };
 
     void Timer::start()
     {

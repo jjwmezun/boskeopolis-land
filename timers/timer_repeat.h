@@ -46,8 +46,8 @@
 
 
         protected:
-            bool hit_ = false;
-			int num_o_hits_ = 0;
+            bool hit_;
+			int num_o_hits_;
     };
 
 #endif // TIMER_REPEAT_H

@@ -187,3 +187,18 @@
     {
         value_ = init_value_;
     };
+
+	int Counter::upperLimit() const
+	{
+		return upper_limit_;
+	};
+
+	int Counter::lowerLimit() const
+	{
+		return lower_limit_;
+	};
+
+	bool Counter::hitLimit() const
+	{
+		return value_ == lower_limit_ || value_ == upper_limit_;
+	};

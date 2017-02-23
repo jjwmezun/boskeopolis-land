@@ -37,13 +37,13 @@
 
             void start();
 
-            void event( bool e );
+            void event( bool hit );
             bool done() const;
             bool hit() const;
             void stop();
 
         protected:
-            bool done_ = false;
+            bool done_;
     };
 
 #endif // TIMER_SIMPLE_H

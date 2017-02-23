@@ -24,6 +24,7 @@
     #include "sprite.h"
     #include "sprite_system.h"
     #include "starving_goal.h"
+    #include "survive_time_goal.h"
     #include "timed_goal.h"
     #include "windy_goal.h"
 
@@ -336,7 +337,7 @@
                             { Palette::PaletteType::BABY_BLUE, 6 }
                         )
                     },
-                    std::unique_ptr<Goal> ( new CollectGoal( 65700, "¡Collect everything & don't get caught!" ) ),
+                    std::unique_ptr<Goal> ( new CollectGoal( 66900, "¡Collect everything & dodge the eyes!" ) ),
                     19*16,
                     17*16
                 };
@@ -356,6 +357,27 @@
                     std::unique_ptr<Goal> ( new Goal() ),
                     16*3,
                     16*14
+                };
+            break;
+
+            case ( LV_FACTORY_2 ):
+                return
+                {
+                    lvname,
+                    {
+                        Map::mapFromPath
+                        (
+                            "factory-2",
+                            { Palette::PaletteType::FIERY_RED, 6 },
+							{
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_FIREGLOW, 16, 32, 0, 7*16, 1, 1, 6, true, false, 0, 0, 1, true ),
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_GRILL, 8, 8 )
+							}
+                        )
+                    },
+                    std::unique_ptr<Goal> ( new SurviveTimeGoal( 30, "¡Last 30 seconds without being cooked!" ) ),
+                    16*5,
+                    -24
                 };
             break;
 
@@ -389,7 +411,7 @@
                     {
                         Map::mapFromPath
                         (
-                            "sky-1",
+                            "sky-3",
                             { Palette::PaletteType::TRISTE_BLUE, 5 },
                             {
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1, 1, true, true, 1 ),
@@ -398,8 +420,8 @@
                         )
                     },
                     std::unique_ptr<Goal> ( new Goal( "By the way, Autumn's an owl now." ) ),
-                    142*16,
-                    32
+                    58*16,
+                    40*16
                 };
             break;
 
@@ -669,6 +691,9 @@
             case ( LevelName::LV_FACTORY_1 ):
                 return "Steam Engenius";
                 break;
+            case ( LevelName::LV_FACTORY_2 ):
+                return "Warm Up";
+                break;
             case ( LevelName::LV_MINES_4 ):
                 return "The Minus Touch";
                 break;
@@ -712,7 +737,7 @@
                 return "Frigid Frigates";
                 break;
             case ( LevelName::LV_MAZE_1 ):
-                return "Mazy Haze Cave";
+                return "Maybe I'm a Maze";
                 break;
             case ( LevelName::LV_CART ):
                 return "HOT SHOP";

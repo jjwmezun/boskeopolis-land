@@ -60,6 +60,9 @@
             bool operator>= ( const Counter& other ) const;
 
             int value() const;
+			int upperLimit() const;
+			int lowerLimit() const;
+			bool hitLimit() const;
 
             void reset();
 

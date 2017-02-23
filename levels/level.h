@@ -55,6 +55,7 @@
                 LV_SNOW_2,
                 LV_CART,
                 LV_SKY_2,
+                LV_FACTORY_2,
 
                 // CYCLE 3
                 LV_PYRAMID_1,
@@ -69,7 +70,7 @@
                 LV_SAW,
                 LV_SNEAK
             };
-            static const int NUM_O_LEVELS = LV_SNEAK + 1;
+            static constexpr int NUM_O_LEVELS = LV_SNEAK + 1;
 
             static Level makeLevel( LevelName level = LevelName::LV_CITY_1 );
             Level( Level&& m );
