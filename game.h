@@ -55,7 +55,11 @@
 
         private:
             Input input_;
-            bool state_changed_ = false;
+            bool running_ = true;
+            bool state_change_ = false;
+			bool state_is_new_ = false;
+			bool state_pop_    = false;
+			
             int ticks_ = 0;
             int graphics_ticks_ = 0;
             static int frames_;
@@ -63,7 +67,7 @@
             static std::string path_divider_;
             static bool SAVING_ALLOWED;
 
-            bool running_ = true;
+			std::unique_ptr<GameState> new_state_;
             std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
             std::unique_ptr<Graphics> graphics_; // Must be allocated @ runtime, thus must be a pointer.
 
@@ -72,6 +76,9 @@
             void setResourcePath();
             void render();
             void firstState();
+
+            void changeStateSafe();
+            void popStateSafe();
     };
 
 #endif // GAME_H

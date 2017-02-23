@@ -92,7 +92,16 @@
         bounce_ ( bounce ),
         on_ground_padding_ ( { 4, false } ),
 		direction_ ( Direction::Simple::__NULL )
-    {};
+    {
+		if ( physics_state == SpriteMovement::Type::GROUNDED )
+		{
+			//top_speed_upward_ = -jump_top_speed_;
+		}
+		else
+		{
+			//top_speed_upward_ = -top_speed_;
+		}
+	};
 
     Sprite::~Sprite()
     {

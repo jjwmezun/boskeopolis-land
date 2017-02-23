@@ -3,6 +3,7 @@
 // DEPENDENCIES
 //===================================
 
+	#include <cassert>
     #include "game.h"
     #include "title_state.h"
     #include <SDL2/SDL.h>
@@ -83,10 +84,19 @@
                     running_ = false;
                 }
 
-                if ( state_changed_ )
+				if ( state_is_new_ )
+				{
+					changeStateSafe();
+				}
+				else if ( state_pop_ )
+				{
+					popStateSafe();
+				}
+				
+                if ( state_change_ )
                 {
                     input_.reset();
-                    state_changed_ = false;
+                    state_change_ = false;
                 }
 
                 states_.back()->update( *this, input_, *graphics_ );
@@ -128,30 +138,48 @@
     };
 
     void Game::changeState( std::unique_ptr<GameState> state )
+	{
+		new_state_.reset( state.release() );
+		state_change_ = true;
+		state_is_new_ = true;
+	};
+
+    void Game::changeStateSafe()
     {
+		assert( new_state_ );
+		
         states_.clear();
-        pushState( move( state ) );
+        pushState( move( new_state_ ) );
         graphics_->clearSurfaces();
+		state_is_new_ = false;
     };
 
     void Game::pushState  ( std::unique_ptr<GameState> state )
     {
         states_.push_back( move(state) );
-        //graphics_->newPalette( states_.back()->palette() );
         states_.back()->changePalette( *graphics_ );
         states_.back()->init( *this, *graphics_ );
-        state_changed_ = true;
+        state_change_ = true;
     };
 
     void Game::popState()
+	{
+		state_change_ = true;
+		state_pop_    = true;
+	};
+
+    void Game::popStateSafe()
     {
-        if ( !states_.empty() )
-        {
-            states_.pop_back();
-        }
+        assert ( !states_.empty() );
+		
+		states_.pop_back();
+		
+        assert ( !states_.empty() );
+		
         states_.back()->backFromPop( *this, *graphics_ );
         states_.back()->changePalette( *graphics_ );
-        state_changed_ = true;
+		
+		state_pop_ = false;
     };
 
     int Game::fpsMilliseconds() const

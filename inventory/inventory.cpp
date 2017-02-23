@@ -32,38 +32,10 @@
     :
         funds_ ( Counter( 0, FUNDS_MAX, 0 ) ),
         total_funds_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
-        //victories_ ( { DEFAULT_VICTORY } ),
-        //diamonds_ ( { DEFAULT_DIAMOND } ),
-        //gem_scores_ ( { DEFAULT_GEM_SCORE-1 } ),
-        //time_scores_ ( { DEFAULT_TIME_SCORE } ),
 		funds_shown_ ( Counter( 0, FUNDS_MAX, 0 ) ),
 		total_funds_shown_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) )
 	{
-        /*
-        // DUMB WAY TO INIT IF NOT ALREADY INIT, 'CAUSE STD::ARRAY IS FUCKING STUPID.
-        if ( gem_scores_.at( 0 ) == DEFAULT_GEM_SCORE-1 )
-        {
-            for ( auto& v : victories_ )
-            {
-                v = DEFAULT_VICTORY;
-            }
-
-            for ( auto& d : diamonds_ )
-            {
-                d = DEFAULT_DIAMOND;
-            }
-
-            for ( auto& g : gem_scores_ )
-            {
-                g = DEFAULT_GEM_SCORE;
-            }
-
-            for ( auto& t : time_scores_ )
-            {
-                t = DEFAULT_TIME_SCORE;
-            }
-        }*/
-
+		
         if ( victories_.empty() )
         {
             for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
@@ -269,56 +241,63 @@
     {
         std::ofstream binofs( Game::savePath(), std::ios::out | std::ios::binary );
 
-            int32_t total_funds_block = total_funds_();
-            binofs.write( (char*)&total_funds_block, sizeof( int32_t ) );
+			// Save total gems as 1st 4 bytes.
+				int32_t total_funds_block = total_funds_();
+				binofs.write( (char*)&total_funds_block, sizeof( int32_t ) );
 
-            std::vector<bool> bools;
+			// Align level victories & diamonds in 1 straight list o' bools,
+		    // victories followed straight after diamonds.
+		    // Then pack them into chars (single bytes) & save these.
+				std::vector<bool> bools;
 
-            for ( int vi = 0; vi < victories_.size(); ++vi )
-            {
-                bool vb = victories_.at( vi );
-                bools.push_back( vb );
-                //binofs.write( (char*)&vb, sizeof( vb ) );
-            }
+				for ( int vi = 0; vi < victories_.size(); ++vi )
+				{
+					bool vb = victories_.at( vi );
+					bools.push_back( vb );
+				}
 
-            for ( int di = 0; di < diamonds_.size(); ++di )
-            {
-                bool db = diamonds_.at( di );
-                bools.push_back( db );
-                //binofs.write( (char*)&db, sizeof( db ) );
-            }
+				for ( int di = 0; di < diamonds_.size(); ++di )
+				{
+					bool db = diamonds_.at( di );
+					bools.push_back( db );
+				}
 
-            for ( int bi = 0; bi < bools.size(); bi += 8 )
-            {
-                unsigned char c = 0;
+				// Packs 8 bools into single byte.
+				// Though this saves a few measely bytes,
+				// the true reason for this is simply to make editing the save file a li'l harder.
+				for ( int bi = 0; bi < bools.size(); bi += 8 )
+				{
+					unsigned char c = 0;
 
-                for ( int bit = 0; bit < 8; ++bit )
-                {
-                    int i = bi + bit;
+					for ( int bit = 0; bit < 8; ++bit )
+					{
+						int i = bi + bit;
 
-                    if ( i < bools.size() )
-                    {
-                        if ( bools.at ( i ) )
-                        {
-                            c |= 1 << bit;
-                        }
-                    }
-                }
+						if ( i < bools.size() )
+						{
+							if ( bools.at ( i ) )
+							{
+								c |= 1 << bit;
+							}
+						}
+					}
 
-                binofs.write( (char*)&c, sizeof( unsigned char ) );
-            }
+					binofs.write( (char*)&c, sizeof( unsigned char ) );
+				}
 
-            for ( int gi = 0; gi < gem_scores_.size(); ++gi )
-            {
-                int32_t gb = gem_scores_.at( gi )();
-                binofs.write( (char*)&gb, sizeof( gb ) );
-            }
+			// Save gem scores as 4-byte ints each.
+				for ( int gi = 0; gi < gem_scores_.size(); ++gi )
+				{
+					int32_t gb = gem_scores_.at( gi )();
+					binofs.write( (char*)&gb, sizeof( gb ) );
+				}
 
-            for ( int ti = 0; ti < time_scores_.size(); ++ti )
-            {
-                int32_t tb = time_scores_.at( ti )();
-                binofs.write( (char*)&tb, sizeof( tb ) );
-            }
+			// Save time scores as 4-byte ints each.
+				for ( int ti = 0; ti < time_scores_.size(); ++ti )
+				{
+					int32_t tb = time_scores_.at( ti )();
+					binofs.write( (char*)&tb, sizeof( tb ) );
+				}
 
         binofs.close();
     };
@@ -386,7 +365,26 @@
 
 
     void Inventory::loadBinary()
-    {
+    {	
+		// Sorry this code is messy: I'm still working on it.
+		// Also note that trying to load a save from a time when there were fewer levels than now will cause the program to crash due to the assertions.
+		// Since levels are added & rearranged not in the order I add them, adding levels will mess up save files, anyway,
+		// so there's no elegant fix to this.
+		
+		// It'd be better to try understanding this function as a whole than trying to litter it with confusing comments.
+		// Basically, this game saves & loads 4 types o' data:
+		// * Total gem count
+		// * Levels beaten
+		// * Levels where you collected a diamond.
+		// * Gem high scores for each level.
+		// * Time (low) scores for each level.
+		//
+		// This method starts by getting the save binary as 1 big clump o' data & gets its size.
+		// It then goes clumps o' data it expects to extract from the save data,
+		// marked off by "current_block_start" & "current_block_end".
+		// For each new clump, "current_block_start" is set to the previous "current_block_end",
+		// while "current_block_end" is set to where I calculate the new clump to end.
+		
         std::ifstream binifs ( Game::savePath(), std::ios::in | std::ios::binary | std::ios::ate );
 
             if ( binifs.is_open() )
@@ -397,134 +395,100 @@
                 binifs.seekg ( 0, std::ios::beg );
                 binifs.read ( bindata, binsize );
 
-                int current_block_start = 0;
-                int current_block_end = sizeof( int32_t );
+				
+				// TOTAL GEM CLUMP ( 0 - 4 bytes )
+					int current_block_start = 0;
+					int current_block_end = sizeof( int32_t );
+
+					assert( binsize >= current_block_end );
+
+					int32_t total_funds_block;
+					std::memcpy( &total_funds_block, bindata, sizeof( int32_t ) );
+					total_funds_ = total_funds_block;
 
 
-                assert( binsize >= current_block_end );
+				// VICTORIES & DIAMONDS CLUMP.
+					current_block_start = current_block_end;
+					// Space for 2x bools for levels (victories & diamonds).
+					// 8 bool (bits) fit in a byte--hence dividing by 8, rounding up to ensure there's always the minimum space needed.
+					// C++ oddly makes int / int output an auto-floored int rather than a double, so a val needs to be forced as a double.
+					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUM_O_LEVELS * 2 ) ) ) / 8 );
+					current_block_end += blocks_for_bools;
 
-                int32_t* total_funds_block = new int32_t;
-                std::memcpy( total_funds_block, bindata, sizeof( int32_t ) );
-                int tf = *total_funds_block;
-                delete total_funds_block;
-                total_funds_ = tf;
+					assert( binsize >= current_block_end );
 
+					std::vector<bool> v;
+					std::vector<bool> d;
 
-                current_block_start = current_block_end;
-                int blocks_for_bools = floor( ( Level::NUM_O_LEVELS * 2 ) / 8 ) + 1;
-                current_block_end += blocks_for_bools;
+					for ( int i = 0; i < blocks_for_bools; ++i )
+					{
+						unsigned char c;
+						std::memcpy( &c, &bindata[ 4 + i ], sizeof( unsigned char ) );
 
-                assert( binsize >= current_block_end );
+						for ( int bit = 0; bit < 8; ++bit )
+						{
+							int b = ( i * 8 ) + bit;
+							bool val = ( c & ( 1 << bit ) ) != 0;
 
-                std::vector<bool> v;
-                std::vector<bool> d;
+							if ( b < Level::NUM_O_LEVELS )
+							{
+								v.push_back( val );
+							}
+							else if ( b < Level::NUM_O_LEVELS * 2 )
+							{
+								d.push_back( val );
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
 
-                for ( int i = 0; i < blocks_for_bools; ++i )
-                {
-                    unsigned char c;
-                    std::memcpy( &c, &bindata[ 4 + i ], sizeof( unsigned char ) );
-                    //std::cout<<(int)c<<std::endl;
-
-                    for ( int bit = 0; bit < 8; ++bit )
-                    {
-                        int b = ( i * 8 ) + bit;
-                        bool val = ( c & ( 1 << bit ) ) != 0;
-
-                        if ( b < Level::NUM_O_LEVELS )
-                        {
-                            v.push_back( val );
-                        }
-                        else if ( b < Level::NUM_O_LEVELS * 2 )
-                        {
-                            d.push_back( val );
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-
-//                std::cout<<std::endl;
-//                std::cout<<"VICTORIES:"<<std::endl;
-//                std::cout<<std::endl;
-//
-//                    for ( auto vi : v )
-//                    {
-//                        std::cout<<vi<<",";
-//                    }
-
-//                std::cout<<std::endl;
-//                std::cout<<"DIAMONDS:"<<std::endl;
-//                std::cout<<std::endl;
-//
-//                    for ( auto di : d )
-//                    {
-//                        std::cout<<di<<",";
-//                    }
-
-                    victories_ = v;
-                    diamonds_ = d;
+					victories_ = v;
+					diamonds_ = d;
 
 
-                current_block_start = current_block_end;
-                const int NUM_O_GEM_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUM_O_LEVELS;
-                current_block_end += NUM_O_GEM_SCORE_BLOCKS;
+				// GEM SCORE CLUMP
+					current_block_start = current_block_end;
+					const int NUM_O_GEM_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUM_O_LEVELS;
+					current_block_end += NUM_O_GEM_SCORE_BLOCKS;
 
-                assert( binsize >= current_block_end );
+					assert( binsize >= current_block_end );
 
-                std::vector<Counter> glist;
+					std::vector<Counter> glist;
 
-                for ( int gi = 0; gi < Level::NUM_O_LEVELS; ++gi )
-                {
-                    int32_t* gblock = new int32_t;
-                    std::memcpy( gblock, &bindata[ current_block_start + ( gi * sizeof( int32_t ) ) ], sizeof( int32_t ) );
-                    int gdata = *gblock;
-                    delete gblock;
-                    glist.push_back( { gdata, FUNDS_MAX, -1 } );
-                }
+					for ( int gi = 0; gi < Level::NUM_O_LEVELS; ++gi )
+					{
+						int32_t gblock;
+						std::memcpy( &gblock, &bindata[ current_block_start + ( gi * sizeof( int32_t ) ) ], sizeof( int32_t ) );
+						glist.push_back( { gblock, FUNDS_MAX, -1 } );
+					}
 
-//                std::cout<<std::endl;
-//                std::cout<<"GEM_SCORES:"<<std::endl;
-//                std::cout<<std::endl;
-//
-//                    for ( auto gem : glist )
-//                    {
-//                        std::cout<<gem()<<",";
-//                    }
+					gem_scores_ = glist;
 
-                gem_scores_ = glist;
+				
+				// TIME SCORE CLUMP
+					current_block_start = current_block_end;
+					const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUM_O_LEVELS;
+					current_block_end += NUM_O_TIME_SCORE_BLOCKS;
 
-                current_block_start = current_block_end;
-                const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUM_O_LEVELS;
-                current_block_end += NUM_O_TIME_SCORE_BLOCKS;
+					assert( binsize >= current_block_end );
 
-                assert( binsize >= current_block_end );
+					std::vector<Counter> tlist;
 
-                std::vector<Counter> tlist;
+					for ( int ti = 0; ti < Level::NUM_O_LEVELS; ++ti )
+					{
+						int32_t tblock;
+						std::memcpy( &tblock, &bindata[ current_block_start + ( ti * sizeof( int32_t ) ) ], sizeof( int32_t ) );
+						tlist.push_back( { tblock, TIME_MAX, -1 } );
+					}
 
-                for ( int ti = 0; ti < Level::NUM_O_LEVELS; ++ti )
-                {
-                    int32_t* tblock = new int32_t;
-                    std::memcpy( tblock, &bindata[ current_block_start + ( ti * sizeof( int32_t ) ) ], sizeof( int32_t ) );
-                    int tdata = *tblock;
-                    delete tblock;
-                    tlist.push_back( { tdata, TIME_MAX, -1 } );
-                }
+					time_scores_ = tlist;
 
-//                std::cout<<std::endl;
-//                std::cout<<"TIME_SCORES:"<<std::endl;
-//                std::cout<<std::endl;
-//
-//                    for ( auto time : tlist )
-//                    {
-//                        std::cout<<time()<<",";
-//                    }
-
-                time_scores_ = tlist;
-
-                delete[] bindata;
-
+				
+				// Clean up time.
+                	delete[] bindata;
             }
             else
             {
