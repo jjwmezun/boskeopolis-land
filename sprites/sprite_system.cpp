@@ -24,6 +24,7 @@
     #include "fishstick_sprite.h"
     #include "guard_sprite.h"
     #include "handgun_sprite.h"
+    #include "heat_beam_sprite.h"
     #include "hydrant_graphics.h"
     #include "hydrant_sprite.h"
     #include "iceblock_sprite.h"
@@ -159,6 +160,12 @@
             break;
             case ( 29 ):
                 return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::OBFUSCATING ) );
+            break;
+            case ( 30 ):
+                return std::unique_ptr<Sprite> ( new HeatBeamSprite( x, y, HeatBeamSprite::Type::ODD ) );
+            break;
+            case ( 31 ):
+                return std::unique_ptr<Sprite> ( new HeatBeamSprite( x, y, HeatBeamSprite::Type::EVEN ) );
             break;
             case ( 62 ):
                 return std::unique_ptr<Sprite> ( new CloudPlatformSprite( x, y ) );
