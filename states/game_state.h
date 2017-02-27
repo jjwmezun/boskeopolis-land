@@ -50,7 +50,7 @@
 
             void render( Graphics& graphics );
 
-            virtual void update( Game& game, Input& input, Graphics& graphics ) = 0;
+            virtual void update( Game& game, const Input& input, Graphics& graphics ) = 0;
             virtual void stateRender( Graphics& graphics ) = 0;
             virtual void init( Game& game, Graphics& graphics ) = 0;
             virtual void backFromPop( Game& game, Graphics& graphics ) = 0;

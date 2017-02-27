@@ -77,6 +77,7 @@
             Level( Level&& m );
             ~Level();
             Map& currentMap();
+            const Map& currentMap() const;
 
             int entranceX() const;
             int entranceY() const;
@@ -111,7 +112,7 @@
                 std::string message = ""
             );
 
-            int testCurrentMap();
+            int testCurrentMap() const;
     };
 
 #endif // LEVEL_H

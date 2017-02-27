@@ -32,7 +32,7 @@
             SurviveTimeGoal( int wait_time = 30, std::string message = "" );
             ~SurviveTimeGoal();
 
-            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
 			
 		private:
 			const std::string surviveMessage( int wait_time, std::string message ) const;

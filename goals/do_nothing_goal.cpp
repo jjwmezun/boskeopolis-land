@@ -32,7 +32,7 @@
 
     DoNothingGoal::~DoNothingGoal() {};
 
-    void DoNothingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input )
+    void DoNothingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input )
     {
         if ( input.pressed( Input::Action::JUMP ) || input.pressed( Input::Action::MOVE_DOWN ) || input.pressed( Input::Action::MOVE_LEFT ) || input.pressed( Input::Action::MOVE_RIGHT ) )
             events.failed_ = true;

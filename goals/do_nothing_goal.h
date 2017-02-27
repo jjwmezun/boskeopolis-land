@@ -34,7 +34,7 @@
             ~DoNothingGoal();
 
             void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
-            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
     };
 
 #endif // DO_NOTHING_GOAL_H

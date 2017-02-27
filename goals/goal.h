@@ -49,7 +49,7 @@
             Goal( std::string message = "¡Get the Keycane!", GoalType type = GoalType::NORMAL, int value = 0 );
             virtual ~Goal();
 
-            virtual void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            virtual void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
             virtual void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
 
             std::string message();

@@ -32,9 +32,9 @@
         public:
             MapLayerImage
             (
-                Graphics::SpriteSheet texture = Graphics::SpriteSheet::LIMIT,
-                int width = -1,
-                int height = -1,
+                Graphics::SpriteSheet texture,
+                int width,
+                int height,
                 int offset_x = 0,
                 int offset_y = 0,
                 double scroll_speed_x = 1,
@@ -48,7 +48,7 @@
 				bool flip = false
             );
             void update();
-            void render( Graphics& graphics, Camera& camera );
+            void render( Graphics& graphics, Camera& camera ) const;
 
         private:
             const Graphics::SpriteSheet texture_;

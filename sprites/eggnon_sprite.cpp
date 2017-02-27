@@ -103,7 +103,7 @@
 
     EggnonSprite::~EggnonSprite() {};
 
-    void EggnonSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void EggnonSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         // INIT
         if ( !state_ )
@@ -140,6 +140,6 @@
         }
     };
 
-    void EggnonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void EggnonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
     };

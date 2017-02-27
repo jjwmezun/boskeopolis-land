@@ -60,12 +60,12 @@
             SpriteSystem( const SpriteSystem& ) = delete;
             SpriteSystem& operator= ( const SpriteSystem& ) = delete;
 
-            void update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks );
+            void update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks );
             void render( Graphics& graphics, Camera& camera, bool priority = false );
             void interact( BlockSystem& blocks, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
-            void spriteInteraction( Camera& camera, BlockSystem& blocks );
+            void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap );
             void effects( WaterEffect* water_effect );
-            void reset( Level& level, InventoryLevel& inventory );
+            void reset( const Level& level, const InventoryLevel& inventory );
             void spawn( SpawnSprite type, int x, int y );
             Sprite& hero();
 
@@ -78,8 +78,8 @@
 
             void clearSprites();
             void destroySprite( int n );
-            void spritesFromMap( Map& lvmap );
-            std::unique_ptr<Sprite> spriteType( int type, int x, int y );
+            void spritesFromMap( const Map& lvmap );
+            std::unique_ptr<Sprite> spriteType( int type, int x, int y, const Map& lvmap );
     };
 
 #endif // SPRITE_SYSTEM_H

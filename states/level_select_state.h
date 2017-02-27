@@ -44,7 +44,7 @@
             static LevelSelectState* loadLevelSelect();
             ~LevelSelectState();
 
-            void update( Game& game, Input& input, Graphics& graphics );
+            void update( Game& game, const Input& input, Graphics& graphics );
             void stateRender( Graphics& graphics );
             void init( Game& game, Graphics& graphics );
             void backFromPop( Game& game, Graphics& graphics );

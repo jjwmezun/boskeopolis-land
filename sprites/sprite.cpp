@@ -112,7 +112,7 @@
         return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
     };
 
-    void Sprite::update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void Sprite::update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( !isDead() )
         {
@@ -409,12 +409,12 @@
         start_speed_ = start_speed_walk_;
     };
 
-    void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         Collision my_collision = testCollision( them );
         Collision their_collision = them.testCollision( *this );
 
-        customInteract( my_collision, their_collision, them, blocks, sprites );
+        customInteract( my_collision, their_collision, them, blocks, sprites, lvmap );
     };
 
     bool Sprite::canJump() const

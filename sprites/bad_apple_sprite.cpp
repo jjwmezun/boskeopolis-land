@@ -35,7 +35,7 @@
 
     BadAppleSprite::~BadAppleSprite() {};
 
-    void BadAppleSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void BadAppleSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( isDead() )
             block_interact_ = false;
@@ -59,6 +59,6 @@
         }
     };
 
-    void BadAppleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void BadAppleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
     };

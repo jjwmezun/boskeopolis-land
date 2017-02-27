@@ -30,7 +30,7 @@
     {
         public:
             virtual void update() = 0;
-            virtual void render( Graphics& graphics, Camera& camera ) = 0;
+            virtual void render( Graphics& graphics, Camera& camera ) const = 0;
     };
 
 #endif // MAP_LAYER_IMAGE_H

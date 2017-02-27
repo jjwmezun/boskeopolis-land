@@ -32,10 +32,16 @@
     class PufferbeeSprite : public Sprite
     {
         public:
-            PufferbeeSprite( int x, int y, std::unique_ptr<SpriteComponent> component = nullptr );
+            PufferbeeSprite
+			(
+				int x,
+				int y,
+				std::unique_ptr<SpriteComponent> component = nullptr,
+				bool map_looping = false
+			);
             ~PufferbeeSprite();
-            void customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
-            void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites );
+            void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 
         private:
             Direction::Rotation randomDirection() const;

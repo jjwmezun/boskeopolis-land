@@ -67,7 +67,7 @@
 
     void MazeChaserSprite::customUpdate
 	(
-		Input& input,
+		const Input& input,
 		Camera& camera,
 		Map& lvmap,
 		Game& game,
@@ -224,7 +224,7 @@
 		}
     };
 
-    void MazeChaserSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void MazeChaserSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
 	{	
 		if ( them.hasType( SpriteType::HERO ) )
 		{

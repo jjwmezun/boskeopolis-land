@@ -30,7 +30,7 @@
 
     StarvingGoal::~StarvingGoal() {};
 
-    void StarvingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input )
+    void StarvingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input )
     {
         if ( !started_ )
         {

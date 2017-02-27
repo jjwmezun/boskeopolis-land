@@ -53,7 +53,7 @@
 
     PauseState::~PauseState() {};
 
-    void PauseState::update( Game& game, Input& input, Graphics& graphics )
+    void PauseState::update( Game& game, const Input& input, Graphics& graphics )
     {
         if ( input.pressed( Input::Action::MOVE_UP ) || input.pressed( Input::Action::MOVE_DOWN ) )
         {

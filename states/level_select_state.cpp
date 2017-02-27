@@ -76,7 +76,7 @@
         );
     };
 
-    void LevelSelectState::update( Game& game, Input& input, Graphics& graphics )
+    void LevelSelectState::update( Game& game, const Input& input, Graphics& graphics )
     {
         highlight_dest_.y = ( 8 * selection_() );
 

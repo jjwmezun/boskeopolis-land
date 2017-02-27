@@ -29,17 +29,17 @@
     {
         public:
             void update();
-            bool action1( Input& input );
-            bool action2( Input& input );
-            bool action3( Input& input );
-            bool up( Input& input );
-            bool down( Input& input );
-            bool left( Input& input );
-            bool right( Input& input );
-            bool cUp( Input& input );
-            bool cDown( Input& input );
-            bool cLeft( Input& input );
-            bool cRight( Input& input );
+            bool action1( const Input& input );
+            bool action2( const Input& input );
+            bool action3( const Input& input );
+            bool up( const Input& input );
+            bool down( const Input& input );
+            bool left( const Input& input );
+            bool right( const Input& input );
+            bool cUp( const Input& input );
+            bool cDown( const Input& input );
+            bool cLeft( const Input& input );
+            bool cRight( const Input& input );
     };
 
 

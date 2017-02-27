@@ -36,7 +36,7 @@
 
     HandgunSprite::~HandgunSprite() {};
 
-    void HandgunSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void HandgunSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( shooting_ )
         {
@@ -53,7 +53,7 @@
         can_shoot_ = true;
     };
 
-    void HandgunSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void HandgunSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( SpriteType::HERO ) )
         {

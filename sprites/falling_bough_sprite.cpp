@@ -44,7 +44,7 @@
 
     FallingBoughSprite::~FallingBoughSprite() {};
 
-    void FallingBoughSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void FallingBoughSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( falling_timer_.on() )
             falling_timer_.update();
@@ -53,7 +53,7 @@
             movement_ = MOVEMENTS[ SpriteMovement::Type::GROUNDED ];
     };
 
-    void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( Sprite::SpriteType::HERO ) )
         {

@@ -17,6 +17,7 @@
     #include "map_layer_constellation.h"
     #include "map_layer_image.h"
     #include "camera.h"
+	#include <cassert>
     #include "collect_goal.h"
     #include "do_nothing_goal.h"
     #include "game_state.h"
@@ -435,13 +436,13 @@
                             "sky-2",
                             { Palette::PaletteType::PEARL_PINK, 3 },
                             {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1, 1, true, true, 1 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -1 ),
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1, 1, true, true, 100, 50 ),
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -400, -100 ),
                             }
                         )
                     },
-                    std::unique_ptr<Goal> ( new CollectGoal( 50000 ) ),
-                    3*16,
+                    std::unique_ptr<Goal> ( new CollectGoal( 15000 ) ),
+                    10*16,
                     4*16
                 };
             break;
@@ -606,13 +607,17 @@
 
     Map& Level::currentMap()
     {
-        return maps_[ testCurrentMap() ];
+        return maps_.at( testCurrentMap() );
     };
 
-    int Level::testCurrentMap()
+    const Map& Level::currentMap() const
     {
-        if ( current_map_ < 0 || current_map_ > maps_.size() )
-            current_map_ = 0;
+        return maps_.at( testCurrentMap() );
+    };
+
+    int Level::testCurrentMap() const
+    {
+        assert ( current_map_ >= 0 && current_map_ < maps_.size() );
 
         return current_map_;
     };

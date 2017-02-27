@@ -35,7 +35,7 @@
 
     OverworldPlayerSprite::~OverworldPlayerSprite() {};
 
-    void OverworldPlayerSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void OverworldPlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( input.held( Input::Action::MOVE_LEFT ) )
         {
@@ -66,7 +66,7 @@
 		camera.adjustCart( *this, lvmap );
     };
 
-    void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
     };
 

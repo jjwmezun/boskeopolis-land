@@ -23,7 +23,7 @@
 
     Goal::~Goal() {};
 
-    void Goal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input )
+    void Goal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input )
     {
     };
 

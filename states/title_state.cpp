@@ -31,7 +31,7 @@
 
     TitleState::~TitleState() {};
 
-    void TitleState::update( Game& game, Input& input, Graphics& graphics )
+    void TitleState::update( Game& game, const Input& input, Graphics& graphics )
     {
         if ( input.pressed( Input::Action::MOVE_UP ) )
         {

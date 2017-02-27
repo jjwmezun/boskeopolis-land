@@ -30,7 +30,7 @@
 
     CollectGoal::~CollectGoal() {};
 
-    void CollectGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input )
+    void CollectGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input )
     {
         if ( inventory.funds() >= value() )
             events.won_ = true;

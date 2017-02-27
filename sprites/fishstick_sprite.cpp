@@ -36,7 +36,7 @@
 
     FishstickSprite::~FishstickSprite() {};
 
-    void FishstickSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void FishstickSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( move_timer_.hit() )
         {
@@ -77,7 +77,7 @@
         }
     };
 
-    void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
         {

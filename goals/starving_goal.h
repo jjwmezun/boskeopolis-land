@@ -33,7 +33,7 @@
             StarvingGoal( int amount_lost_per_frame = 50 );
             ~StarvingGoal();
 
-            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
 
         private:
             TimerRepeat timer_ = TimerRepeat( 16 );

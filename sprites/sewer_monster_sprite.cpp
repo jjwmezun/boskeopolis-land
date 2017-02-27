@@ -36,7 +36,7 @@
 
     SewerMonsterSprite::~SewerMonsterSprite() {};
 
-    void SewerMonsterSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void SewerMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( !attacking_ )
         {
@@ -103,7 +103,7 @@
         }
     };
 
-    void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( SpriteType::HERO ) )
         {

@@ -61,7 +61,7 @@
 
     RacerSprite::~RacerSprite() {};
 
-    void RacerSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void RacerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         actions( input );
         //std::cout<<"( X: "<<Unit::PixelsToBlocks( xPixels() )<<"; Y: "<<yPixels()<<std::endl;
@@ -88,7 +88,7 @@
         }
     };
 
-    void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( SpriteType::HERO ) )
         {

@@ -32,7 +32,7 @@
 
     HydrantSprite::~HydrantSprite() {};
 
-    void HydrantSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void HydrantSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( isDead() )
             block_interact_ = false;
@@ -63,7 +63,7 @@
         }
     };
 
-    void HydrantSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void HydrantSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( Sprite::SpriteType::HERO ) )
         {

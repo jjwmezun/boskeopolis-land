@@ -33,7 +33,7 @@
             AvoidMoneyGoal();
             ~AvoidMoneyGoal();
 
-            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
     };
 
 #endif // AVOID_MONEY_GOAL_H

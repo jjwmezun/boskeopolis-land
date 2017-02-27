@@ -31,7 +31,7 @@
 
     TimedGoal::~TimedGoal() {};
 
-    void TimedGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input )
+    void TimedGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input )
     {
         if ( inventory.clockTime() >= value() )
             events.failed_ = true;

@@ -13,8 +13,10 @@
 
     #include "bad_apple_sprite.h"
     #include "block_system.h"
+    #include "bouncy_cloud_block_sprite.h"
     #include "buzz_saw_sprite.h"
     #include "camera.h"
+    #include "cloud_block_sprite.h"
     #include "cloud_platform_sprite.h"
     #include "direction.h"
     #include "eggnon_sprite.h"
@@ -67,7 +69,7 @@
 
     SpriteSystem::~SpriteSystem() {};
 
-    std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y )
+    std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const Map& lvmap )
     {
         x = Unit::SubPixelsToPixels( x );
         y = Unit::SubPixelsToPixels( y );
@@ -99,7 +101,7 @@
                 return std::unique_ptr<Sprite> ( new FallingBoughSprite( x, y, Direction::Horizontal::RIGHT ) );
             break;
             case ( 9 ):
-                return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y ) );
+                return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, nullptr, lvmap.scrollLoop() ) );
             break;
             case ( 10 ):
                 return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentUpAndDown( 4 ) ) ) );
@@ -108,7 +110,7 @@
                 return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentRightAndLeft( 6 ) ) ) );
             break;
             case ( 12 ):
-                return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ) ) );
+                return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ), lvmap.scrollLoop() ) );
             break;
             case ( 13 ):
                 return std::unique_ptr<Sprite> ( new RopeSprite( x, y ) );
@@ -167,8 +169,17 @@
             case ( 31 ):
                 return std::unique_ptr<Sprite> ( new HeatBeamSprite( x, y, HeatBeamSprite::Type::EVEN ) );
             break;
-            case ( 62 ):
-                return std::unique_ptr<Sprite> ( new CloudPlatformSprite( x, y ) );
+            case ( 32 ):
+                return std::unique_ptr<Sprite> ( new CloudPlatformSprite( x, y, Direction::Horizontal::RIGHT ) );
+            break;
+            case ( 33 ):
+                return std::unique_ptr<Sprite> ( new CloudPlatformSprite( x, y, Direction::Horizontal::LEFT ) );
+            break;
+            case ( 34 ):
+                return std::unique_ptr<Sprite> ( new CloudBlockSprite( x, y ) );
+            break;
+            case ( 35 ):
+                return std::unique_ptr<Sprite> ( new BouncyCloudBlockSprite( x, y ) );
             break;
             case ( 63 ):
                 return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );
@@ -188,7 +199,7 @@
         }
     };
 
-    void SpriteSystem::spritesFromMap( Map& lvmap )
+    void SpriteSystem::spritesFromMap( const Map& lvmap )
     {
         int x = 0;
         int y = 0;
@@ -202,7 +213,7 @@
 
             if ( type > -1 )
             {
-                sprites_.emplace_back( std::move( spriteType( type, x, y ) ) );
+                sprites_.emplace_back( std::move( spriteType( type, x, y, lvmap ) ) );
             }
         }
     };
@@ -233,16 +244,20 @@
         }
     };
 
-    void SpriteSystem::reset( Level& level, InventoryLevel& inventory )
+    void SpriteSystem::reset( const Level& level, const InventoryLevel& inventory )
     {
         clearSprites();
         Sprite::resistance_x_ = Sprite::RESISTANCE_X_NORMAL;
         spritesFromMap( level.currentMap() );
 
         if ( level.currentMap().slippery() )
+		{
             Sprite::traction_ = Sprite::TRACTION_ICY;
+		}
         else
+		{
             Sprite::traction_ = Sprite::TRACTION_NORMAL;
+		}
 
         switch( level.currentMap().heroType() )
         {
@@ -275,7 +290,7 @@
         }
     };
 
-    void SpriteSystem::update( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks )
+    void SpriteSystem::update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks )
     {
         for ( int i = 0; i < sprites_.size(); ++i )
         {
@@ -341,7 +356,7 @@
         }
     };
 
-    void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks )
+    void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap )
     {
         for ( int i = 0; i < sprites_.size(); ++i )
         {
@@ -351,8 +366,8 @@
                 {
                     if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
                     {
-                        sprites_.at( i )->interact( *hero_, blocks, *this );
-                        hero_->interact( *sprites_.at( i ), blocks, *this );
+                        sprites_.at( i )->interact( *hero_, blocks, *this, lvmap );
+                        hero_->interact( *sprites_.at( i ), blocks, *this, lvmap );
                     }
 
                     for ( int j = 0; j < sprites_.size(); ++j )
@@ -361,7 +376,7 @@
                             if ( i != j )
                                 if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) )
                                     if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
-                                        sprites_.at( i )->interact( *sprites_[ j ], blocks, *this );
+                                        sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap );
                     }
                 }
             }

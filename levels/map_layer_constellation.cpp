@@ -44,7 +44,7 @@
     {
     };
 
-    void MapLayerConstellation::render( Graphics& graphics, Camera& camera )
+    void MapLayerConstellation::render( Graphics& graphics, Camera& camera ) const
     {
 		sdl2::SDLRect source = { 0, 0, TILE_SIZE, TILE_SIZE };
 		sdl2::SDLRect dest = { 0, 0, TILE_SIZE, TILE_SIZE };

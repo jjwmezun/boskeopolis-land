@@ -42,7 +42,7 @@
 
     MessageState::~MessageState() {};
 
-    void MessageState::update( Game& game, Input& input, Graphics& graphics )
+    void MessageState::update( Game& game, const Input& input, Graphics& graphics )
     {
         if ( input.pressedMain() )
         {

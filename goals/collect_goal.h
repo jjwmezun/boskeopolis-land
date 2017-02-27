@@ -32,7 +32,7 @@
             CollectGoal( int amount_needed, std::string message = MezunHelpers::emptyString() );
             ~CollectGoal();
 
-            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
 			
 		private:
 			const std::string collectMessage( int amount_needed, std::string message ) const;

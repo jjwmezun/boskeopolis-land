@@ -33,7 +33,7 @@
 
     SawSprite::~SawSprite() {};
 
-    void SawSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void SawSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         moveRight();
 
@@ -51,7 +51,7 @@
             hit_box_.y+=1000;
     };
 
-    void SawSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void SawSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( their_collision.collideAny() && them.hasType( SpriteType::HERO ) )
         {

@@ -54,19 +54,19 @@
             );
             ~PlayerSprite();
 
-            virtual void customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
-            virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites );
+            virtual void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
             void duck();
             void unduck();
 
         protected:
             void deathAction( Camera& camera );
-            void actions( Input& input );
+            void actions( const Input& input );
             static bool recording_;
             std::unique_ptr<InputComponent> input_;
             //InputComponent& input_;
             static std::string input_record_;
-            void recordInput( Input& input );
+            void recordInput( const Input& input );
             void printInputRecord();
     };
 

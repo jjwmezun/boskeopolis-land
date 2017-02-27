@@ -45,7 +45,7 @@
 
     LevelMessageState::~LevelMessageState() {};
 
-    void LevelMessageState::update( Game& game, Input& input, Graphics& graphics )
+    void LevelMessageState::update( Game& game, const Input& input, Graphics& graphics )
     {
         if ( input.pressedMain() )
         {

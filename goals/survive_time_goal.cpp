@@ -31,7 +31,7 @@
 
     SurviveTimeGoal::~SurviveTimeGoal() {};
 
-    void SurviveTimeGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input )
+    void SurviveTimeGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input )
     {
         if ( inventory.clockTime() >= value() )
             events.won_ = true;

@@ -2,15 +2,14 @@
 
 
 
-
 // Name
 //===================================
 //
-// FishstickSprite
+// CloudBlockSprite
 //
 
-#ifndef FISHSTICK_SPRITE_H
-#define FISHSTICK_SPRITE_H
+#ifndef CLOUD_SPRITE_H
+#define CLOUD_SPRITE_H
 
 
 // FORWARD DECLARATIONS
@@ -29,19 +28,17 @@
 // CLASS
 //===================================
 
-    class FishstickSprite : public Sprite
+    class CloudBlockSprite : public Sprite
     {
         public:
-            FishstickSprite( int x, int y );
-            ~FishstickSprite();
+            CloudBlockSprite( int x, int y );
+            ~CloudBlockSprite();
             void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
-            void swim();
-
-        private:
-            TimerSimple move_timer_;
-            TimerSimple pause_timer_;
+			
+		private:
+			int loop_;
     };
 
 
-#endif // FISHSTICK_SPRITE_H
+#endif // CLOUD_SPRITE_H

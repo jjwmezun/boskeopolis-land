@@ -38,7 +38,7 @@
             );
             ~MapLayerConstellation();
             void update();
-            void render( Graphics& graphics, Camera& camera );
+            void render( Graphics& graphics, Camera& camera ) const;
 
         private:
             enum class StarType

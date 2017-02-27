@@ -24,7 +24,7 @@
 // METHODS
 //===================================
 
-    BlockComponentBouncy::BlockComponentBouncy() {};
+    BlockComponentBouncy::BlockComponentBouncy( int strength ) : strength_ ( strength ) {};
 
     BlockComponentBouncy::~BlockComponentBouncy() {};
 
@@ -32,7 +32,7 @@
     {
         if ( collision.collideBottom() )
         {
-            sprite.bounce( 24 );
+            sprite.bounce( strength_ );
         }
         else if ( collision.collideLeft() )
         {

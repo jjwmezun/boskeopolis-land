@@ -94,18 +94,15 @@
         movement_position_y_ += move_speed_y_;
     };
 
-    void MapLayerImage::render( Graphics& graphics, Camera& camera )
+    void MapLayerImage::render( Graphics& graphics, Camera& camera ) const
     {
-        if ( (int)texture_ >= 0 && (int)texture_ < (int)Graphics::SpriteSheet::LIMIT )
-        {
-            renderY( graphics, camera );
-        }
+		renderY( graphics, camera );
     };
 
     void MapLayerImage::renderY( Graphics& graphics, Camera& camera ) const
     {
-        int dy = offset_y_ - ( (int)( camera.y() * scroll_speed_y_ ) ) + movement_position_y_;
-        int dl = offset_x_ - ( (int)( camera.x() * scroll_speed_x_ ) ) + ( source_.w * current_frame_.value() ) + movement_position_x_;
+        int dy = offset_y_ - ( (int)( camera.y() * scroll_speed_y_ ) ) + Unit::SubPixelsToPixels( movement_position_y_ );
+        int dl = offset_x_ - ( (int)( camera.x() * scroll_speed_x_ ) ) + ( source_.w * current_frame_.value() ) + Unit::SubPixelsToPixels(  movement_position_x_ );
 
         if ( repeat_y_ )
         {

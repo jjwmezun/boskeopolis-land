@@ -32,7 +32,7 @@
             TimedGoal( int time_limit = 120 );
             ~TimedGoal();
 
-            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
+            void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );
     };
 
 #endif // TIMED_GOAL_H

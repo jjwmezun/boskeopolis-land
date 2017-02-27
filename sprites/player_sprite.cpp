@@ -68,7 +68,7 @@
         }
     };
 
-    void PlayerSprite::customUpdate( Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( !input_ )
         {
@@ -113,7 +113,7 @@
         }
     };
 
-    void PlayerSprite::actions( Input& input )
+    void PlayerSprite::actions( const Input& input )
     {
         if ( input_->down( input ) )
         {
@@ -259,7 +259,7 @@
         input_->update();
     };
 
-    void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites )
+    void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
         if ( them.hasType( SpriteType::ENEMY ) )
 		{
@@ -322,7 +322,7 @@
         hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 1 );
     };
 
-    void PlayerSprite::recordInput( Input& input )
+    void PlayerSprite::recordInput( const Input& input )
     {
         input_record_ += "{";
 

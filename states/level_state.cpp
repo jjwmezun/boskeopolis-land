@@ -40,7 +40,7 @@
 
     LevelState::~LevelState() {};
 
-    void LevelState::update( Game& game, Input& input, Graphics& graphics )
+    void LevelState::update( Game& game, const Input& input, Graphics& graphics )
     {
         blocks_.blocksFromMap( level_.currentMap(), camera_ );
         blocks_.update( events_ );
@@ -49,7 +49,7 @@
         sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
         sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
         sprites_.effects( level_.currentMap().effect() );
-        sprites_.spriteInteraction( camera_, blocks_ );
+        sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
         inventory_.update( events_, sprites_.hero() );
 
         if ( level_.goal() != nullptr )
