@@ -37,12 +37,40 @@
 
     void TextComponentMarquee::update( Text& text )
     {
+		overrideLineLimit( text );
+		
         if ( direction_ == Direction::Horizontal::RIGHT )
         {
-            text.moveRight( speed_ );
+            moveRight( text );
         }
         else
         {
-            text.moveLeft( speed_ );
+            moveLeft( text );
         }
     };
+
+    void TextComponentMarquee::moveLeft( Text& text )
+    {
+        text.x_ -= speed_;
+
+        if ( text.right() < 0 )
+        {
+            text.x_ = Unit::WINDOW_WIDTH_PIXELS;
+        }
+    };
+
+    void TextComponentMarquee::moveRight( Text& text )
+    {
+        text.x_ += speed_;
+
+        if ( text.x_ > Unit::WINDOW_WIDTH_PIXELS )
+        {
+            text.x_ = -text.right();
+        }
+    };
+
+
+	void TextComponentMarquee::overrideLineLimit( Text& text )
+	{
+		text.line_limit_ = text.words_.length();
+	};

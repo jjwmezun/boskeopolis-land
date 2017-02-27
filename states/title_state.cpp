@@ -21,6 +21,8 @@
 // STATIC PROPERTIES
 //===================================
 
+	constexpr sdl2::SDLRect TitleState::logo_rect_;
+
 
 // METHODS
 //===================================
@@ -79,7 +81,7 @@
                 shade = Text::FontShade::WHITE;
             }
 
-            Text::renderText( graphics, option_text_.at( i ), 0, OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( i ), nullptr, shade, -1, Text::FontAlign::CENTER );
+            Text::renderText( graphics, option_text_.at( i ), 0, OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( i ), nullptr, shade, NULL, Text::FontAlign::CENTER );
         }
 
         logo_gfx_.render( graphics, logo_rect_, nullptr );

@@ -20,32 +20,50 @@
 // METHODS
 //===================================
 
+	Input::Input()
+	{
+		reset();
+	};
+
     void Input::reset()
     {
-        keys_pressed_.clear();
-        keys_released_.clear();
-        keys_held_.clear();
+		resetList( keys_pressed_ );
+		resetList( keys_released_ );
+		resetList( keys_held_ );
     };
 
     void Input::update()
     {
-        keys_pressed_.clear();
-        keys_released_.clear();
+		resetList( keys_pressed_ );
+		resetList( keys_released_ );
     };
 
-    bool Input::pressed( Action action )
+	void Input::resetList( std::map<SDL_Keycode, bool>& list )
+	{
+		for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+		{
+			list[ buttons_.at( ( Action )i ) ] = false;
+		}
+	};
+
+    bool Input::pressed( Action action ) const
     {
-        return keys_pressed_[ buttons_[ action ] ];
+		return keys_pressed_.at( ( buttons_.at( action ) ) );
     };
 
-    bool Input::released( Action action )
+    bool Input::pressedMain() const
     {
-        return keys_released_[ buttons_[ action ] ];
+        return pressed( Action::CONFIRM ) || pressed( Action::CANCEL ) || pressed( Action::MENU );
     };
 
-    bool Input::held( Action action )
+    bool Input::released( Action action ) const
     {
-        return keys_held_[ buttons_[ action ] ];
+        return keys_released_.at( buttons_.at( action ) );
+    };
+
+    bool Input::held( Action action ) const
+    {
+        return keys_held_.at( buttons_.at( action ) );
     };
 
     void Input::keyPress( SDL_Keycode key )

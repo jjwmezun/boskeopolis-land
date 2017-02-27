@@ -28,7 +28,7 @@
     #include <memory>
     #include <SDL2/SDL.h>
     #include <string>
-    #include "text_component.h"
+    #include "text_component_marquee.h"
     #include "timers/timer_repeat.h"
     #include "unit.h"
 
@@ -39,6 +39,8 @@
     class Text
     {
         public:
+			friend class TextComponentMarquee;
+		
             enum class FontShade
             {
                 BLACK = 0,
@@ -64,9 +66,9 @@
                 int y = 0,
                 FontShade shade = FontShade::BLACK,
                 FontAlign align = FontAlign::LEFT,
-                bool blink = false,
-                std::unique_ptr<TextComponent> component = nullptr,
-                unsigned int line_limit = Unit::WINDOW_WIDTH_MINIBLOCKS
+				bool center_y = false,
+                unsigned int line_limit = DEFAULT_LINE_LENGTH,
+                std::unique_ptr<TextComponent> component = nullptr
             );
             ~Text() noexcept;
             Text( Text&& m ) noexcept;
@@ -74,20 +76,43 @@
             Text( const Text& ) = delete;
             Text& operator= ( const Text& ) = delete;
 
-            std::string words_;
-            int x_ = 0;
-            int y_ = 0;
-
             void update();
-            void render( Graphics& graphics, Camera* camera = nullptr, FontShade shade = FontShade::__NULL ) const;
-            void moveLeft( int n = 1 );
-            void moveRight( int n = 1 );
+			
+            void render
+			(
+				Graphics& graphics,
+				Camera* camera = nullptr,
+				FontShade shade = FontShade::__NULL
+			) const;
+			
             int right() const;
+			int width() const;
             int x() const;
-            bool flipped() const;
 
-            static void renderNumber( Graphics& graphics, int n, int x, int y, int digits = -1, FontShade shade = FontShade::BLACK, Camera* camera = nullptr );
-            static void renderText( Graphics& graphics, const std::string& text, int x, int y, Camera* camera = nullptr, FontShade shade = FontShade::BLACK, int line_limit = Unit::WINDOW_WIDTH_MINIBLOCKS, FontAlign align = FontAlign::LEFT );
+            static void renderNumber
+			(
+				Graphics& graphics,
+				int n,
+				int x,
+				int y,
+				int digits = -1,
+				FontShade shade = FontShade::BLACK,
+				Camera* camera = nullptr
+			);
+			
+            static void renderText
+			(
+				Graphics& graphics,
+				const std::string& text,
+				int x,
+				int y,
+				Camera* camera = nullptr,
+				FontShade shade = FontShade::BLACK,
+				unsigned int line_limit = DEFAULT_LINE_LENGTH,
+				FontAlign align = FontAlign::LEFT,
+				bool center_y = false
+			);
+			
             static std::string stringifyNum( int n );
             static std::string formatNumCommas( int n );
             static std::string formatNumDigitPadding( int n, int digits );
@@ -95,27 +120,34 @@
             static std::string timeToString( int seconds, int minutes, int minutes_padding = 1 );
             static int getDigit( int n, int d, int remain = 10 );
             static int numODigits( int n );
-            static int centerX( const std::string& words );
+            static int centerX( int line_length );
+            static int centerY( int text_length, int line_limit );
+
+
+		protected:
+            std::string words_;
+            int x_ = 0;
+            int y_ = 0;
+
 
         private:
-            static const int CHAR_SIZE_PIXELS = 8;
-            static const int NUM_OF_FONT_SHADES = 6;
-            static const int CHARSET_WIDTH_MINI_BLOCKS = 32;
+            static constexpr int CHAR_SIZE_PIXELS           = 8;
+            static constexpr int NUM_OF_FONT_SHADES         = 6;
+            static constexpr int CHARSET_WIDTH_MINI_BLOCKS  = 32;
+            static constexpr int CHARSET_HEIGHT_MINI_BLOCKS = 32;
+			static constexpr int DEFAULT_LINE_LENGTH        = Unit::WINDOW_WIDTH_MINIBLOCKS;
             static std::map<char, int> char_conversion_;
 
             FontShade shade_;
             FontAlign align_;
-            bool blink_;
-            Counter blink_counter_ = Counter( 0, NUM_OF_FONT_SHADES-1, 0, true );
-            TimerRepeat blink_timer_;
-            Direction::Vertical blink_dir_ = Direction::Vertical::UP;
             std::unique_ptr<TextComponent> component_;
-            bool flipped_ = false;
             int line_limit_;
+			bool center_y_;
 
             static int frameX( int n );
             static int frameY( int n, FontShade shade );
             static int shadeOffset( FontShade shade );
+			static int testLineLength( const std::string& text, int line_length, int letters_so_far );
 
             int shadeNum() const;
     };

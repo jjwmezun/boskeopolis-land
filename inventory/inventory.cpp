@@ -14,6 +14,7 @@
 //===================================
 
     #include "clock.h"
+    #include "corrupt_save_exception.h"
     #include "game.h"
     #include "inventory.h"
     #include <fstream>
@@ -389,7 +390,7 @@
 
             if ( binifs.is_open() )
             {
-                std::streampos binsize = binifs.tellg();
+                int binsize = binifs.tellg();
 
                 char* bindata = new char [ binsize ];
                 binifs.seekg ( 0, std::ios::beg );
@@ -473,7 +474,14 @@
 					const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUM_O_LEVELS;
 					current_block_end += NUM_O_TIME_SCORE_BLOCKS;
 
-					assert( binsize >= current_block_end );
+					try
+					{
+						BoskCorruptSave::testSaveSize( binsize, current_block_end );
+					}
+					catch( const BoskCorruptSave::InvalidSaveSizeException& e )
+					{
+						throw;
+					}
 
 					std::vector<Counter> tlist;
 

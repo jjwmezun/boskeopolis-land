@@ -35,10 +35,15 @@
             );
             ~TextComponentMarquee();
             void update( Text& text );
+			
 
         private:
             const Direction::Horizontal direction_;
             const int speed_;
+			
+			void moveLeft( Text& text );
+			void moveRight( Text& text );
+			void overrideLineLimit( Text& text );
     };
 
 #endif // TEXT_COMPONENT_MARQUEE_H

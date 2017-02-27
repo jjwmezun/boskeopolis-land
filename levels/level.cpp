@@ -694,6 +694,9 @@
             case ( LevelName::LV_FACTORY_2 ):
                 return "Warm Up";
                 break;
+            case ( LevelName::LV_FACTORY_3 ):
+                return "Level Industries";
+                break;
             case ( LevelName::LV_MINES_4 ):
                 return "The Minus Touch";
                 break;

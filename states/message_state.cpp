@@ -32,28 +32,32 @@
         Text::FontShade font_color
     )
     :
-        message_ ( Text( message, 0, floor( Unit::WINDOW_HEIGHT_PIXELS / 2 ) - 4, Text::FontShade::BLACK, Text::FontAlign::CENTER )  ),
+        GameState( StateID::MESSAGE_STATE, palette ),
+        message_ ( Text( message, 0, 0, Text::FontShade::BLACK, Text::FontAlign::CENTER, true )  ),
         next_state_ ( move( next_state ) ),
         pop_ ( pop ),
         push_ ( push ),
-        font_color_ ( font_color ),
-        GameState( StateID::MESSAGE_STATE, palette )
+        font_color_ ( font_color )
     {};
 
     MessageState::~MessageState() {};
 
     void MessageState::update( Game& game, Input& input, Graphics& graphics )
     {
-        if ( input.pressed( Input::Action::CONFIRM ) || input.pressed( Input::Action::CANCEL ) || input.pressed( Input::Action::MENU ) )
+        if ( input.pressedMain() )
         {
             if ( pop_ )
             {
                 game.popState();
             }
             else if ( push_ )
+			{
                 game.pushState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
+			}
             else
+			{
                 game.changeState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
+			}
         }
     };
 
@@ -63,8 +67,6 @@
         message_.render( graphics, nullptr, font_color_ );
     };
 
-    void MessageState::init( Game& game, Graphics& graphics )
-    {
-    };
+    void MessageState::init( Game& game, Graphics& graphics ) {};
 
     void MessageState::backFromPop( Game& game, Graphics& graphics ) {};

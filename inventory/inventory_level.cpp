@@ -44,29 +44,11 @@
     void InventoryLevel::init()
     {
         clock_.reset();
-        marquee_.x_ = Unit::WINDOW_WIDTH_PIXELS;
-        marquee_.words_ = randomMarqueeMessage();
         inventory_.funds_ = 0;
     };
 
     void InventoryLevel::update( EventSystem& events, Sprite& hero )
     {
-        marquee_.update();
-
-        if ( marquee_.flipped() )
-		{
-            marquee_.words_ = randomMarqueeMessage();
-		}
-
-        if ( events.switchOn() )
-        {
-            switch_.words_ = "ON";
-        }
-        else
-        {
-            switch_.words_ = "OFF";
-        }
-
         if ( hearts_shown_ > hero.status().hp() )
         {
             --hearts_shown_;
@@ -86,6 +68,7 @@
 
 		inventory_.update();
         clock_.update();
+		ticker_.updateTicker();
 
     };
 
@@ -104,8 +87,6 @@
         }
         HEART_ICON_DEST.x = heart_x_mem;
 
-        marquee_.render( graphics );
-
         clock_.render( graphics, CLOCK_X, VERTICAL_POS, nullptr, Text::FontShade::DARK_GRAY );
         clock_gfx_.render( graphics, CLOCK_ICON_DEST, nullptr );
 
@@ -114,7 +95,16 @@
             key_gfx_.render( graphics, KEY_ICON_DEST, nullptr );
         }
 
-        switch_.render( graphics );
+        if ( events.switchOn() )
+		{
+			switch_on_.render( graphics );
+		}
+		else
+		{
+			switch_off_.render( graphics );
+		}
+		
+		ticker_.render( graphics );
 
         if ( inventory_.haveDiamond( level ) )
         {
@@ -140,18 +130,6 @@
     int InventoryLevel::funds() const
     {
         return inventory_.funds_();
-    };
-
-    std::string InventoryLevel::randomMarqueeMessage() const
-    {
-        int n = -1;
-        do
-        {
-            n = rand() * marquee_messages_.size() / RAND_MAX;
-        }
-        while ( n >= marquee_messages_.size() );
-
-        return marquee_messages_[ n ];
     };
 
     int InventoryLevel::clockTime() const

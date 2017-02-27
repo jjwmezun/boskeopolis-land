@@ -1,0 +1,6 @@
+bin/
+bkup/
+gmon.out
+obj/
+resources/input_data/
+resources/saves/

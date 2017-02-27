@@ -50,11 +50,11 @@
             void backFromPop( Game& game, Graphics& graphics );
 
         private:
+            const Text message_;
             const bool pop_;
+            std::unique_ptr<GameState> next_state_;
             const bool push_;
             const Text::FontShade font_color_;
-            const Text message_;
-            std::unique_ptr<GameState> next_state_;
     };
 
 #endif // MESSAGE_STATE_H

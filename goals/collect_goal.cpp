@@ -38,5 +38,8 @@
 
 	const std::string CollectGoal::collectMessage( int amount_needed, std::string message ) const
 	{
-		return ( message.compare( "" ) == 0 ) ? (std::string)"¡Collect " + Text::formatNumCommas( Text::stringifyNum( amount_needed ) ) + (std::string)"\t!" : message;
+		return
+			( MezunHelpers::isStringEmpty( message ) )
+				? (std::string)"¡Collect " + Text::formatNumCommas( Text::stringifyNum( amount_needed ) ) + (std::string)"\t!"
+				: message;
 	};

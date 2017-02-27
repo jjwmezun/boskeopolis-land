@@ -27,7 +27,19 @@
 
     LevelMessageState::LevelMessageState( Palette::PaletteSet palette, std::string message )
     :
-        message_ ( Text( message, TEXT_X, TEXT_Y, Text::FontShade::WHITE, Text::FontAlign::LEFT, false, nullptr, LINE_LIMIT ) ),
+        message_
+		(
+			Text
+			(
+				message,
+				TEXT_X,
+				TEXT_Y,
+				Text::FontShade::WHITE,
+				Text::FontAlign::LEFT,
+				false,
+				LINE_LIMIT 
+			)
+		),
         GameState( StateID::PAUSE_STATE, palette )
     {};
 
@@ -35,7 +47,7 @@
 
     void LevelMessageState::update( Game& game, Input& input, Graphics& graphics )
     {
-        if ( input.pressed( Input::Action::CONFIRM ) || input.pressed( Input::Action::MENU ) || input.pressed( Input::Action::CANCEL ) )
+        if ( input.pressedMain() )
         {
             game.popState();
         }
@@ -47,8 +59,6 @@
         message_.render( graphics );
     };
 
-    void LevelMessageState::init( Game& game, Graphics& graphics )
-    {
-    };
+    void LevelMessageState::init( Game& game, Graphics& graphics ) {};
 
     void LevelMessageState::backFromPop( Game& game, Graphics& graphics ) {};

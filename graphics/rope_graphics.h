@@ -35,7 +35,7 @@
             ~RopeGraphics();
 
             void update( Sprite& sprite );
-            void render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera = nullptr, bool priority = false );
+            void render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera = nullptr, bool priority = false ) const;
 
         private:
             static constexpr std::pair<int, int> frame_body_ = { 200, 112 };

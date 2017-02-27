@@ -61,6 +61,7 @@
                 LV_PYRAMID_1,
                 LV_MAZE_1,
                 LV_SKY_1,
+				LV_FACTORY_3,
 
                 // CYCLE 4
                 LV_CITY_2,

@@ -59,9 +59,10 @@
             virtual ~SpriteGraphics();
             virtual void update( Sprite& sprite );
             virtual void update();
-            virtual void render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera = nullptr, bool priority = false );
-            sdl2::SDLRect adjustBoundBox( sdl2::SDLRect& r ) const;
+            virtual void render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera = nullptr, bool priority = false ) const;
+            sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
             bool visible_ = true;
+
 
         protected:
             static const int X_INDEX = 0;
@@ -80,7 +81,7 @@
             int cutoffTop   ( sdl2::SDLRect& obj_r, Camera& c ) const;
             int cutoffRight ( sdl2::SDLRect& obj_r, Camera& c ) const;
             int cutoffBottom( sdl2::SDLRect& obj_r, Camera& c ) const;
-            void masterRender( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority );
+            void masterRender( Graphics& graphics, sdl2::SDLRect bound_box, int current_frame_x, int current_frame_y, Camera* camera, bool priority ) const;
     };
 
 

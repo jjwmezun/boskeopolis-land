@@ -1,8 +1,5 @@
 
 
-
-
-
 // Name
 //===================================
 //
@@ -13,9 +10,11 @@
 // DEPENDENCIES
 //===================================
 
+	#include <algorithm>
     #include "camera.h"
     #include "graphics.h"
     #include <sstream>
+	#include <stdexcept>
     #include "text.h"
 
 
@@ -120,7 +119,7 @@
         { '|', 66 },
         { '+', 67 },
         { 'í', 74 },
-        { '\t', 68 },
+        { '\t', 68 }, // Use this for PTS char.
         { ' ', 127 }
     };
 
@@ -135,9 +134,9 @@
         int y,
         FontShade shade,
         FontAlign align,
-        bool blink,
-        std::unique_ptr<TextComponent> component,
-        unsigned int line_limit
+		bool center_y,
+        unsigned int line_limit,
+        std::unique_ptr<TextComponent> component
     )
     :
         words_ ( words ),
@@ -145,9 +144,9 @@
         y_ ( y ),
         shade_ ( shade ),
         align_ ( align ),
-        blink_ ( blink ),
         component_ ( std::move( component ) ),
-        line_limit_ ( line_limit )
+        line_limit_ ( ( line_limit == NULL ) ? Unit::WINDOW_WIDTH_MINIBLOCKS : line_limit ),
+		center_y_ ( center_y )
     {
     };
 
@@ -160,100 +159,128 @@
         y_ ( m.y_ ),
         shade_ ( m.shade_ ),
         align_ ( m.align_ ),
-        blink_ ( m.blink_ ),
         component_ ( std::move( m.component_ ) ),
-        line_limit_ ( m.line_limit_ )
+        line_limit_ ( m.line_limit_ ),
+		center_y_ ( m.center_y_ )
     {};
 
-    /*Text& Text::operator=( Text&& m ) noexcept
-    :
-        Text( m )
+    void Text::renderText
+	(
+		Graphics& graphics,
+		const std::string& text,
+		int x,
+		int y,
+		Camera* camera,
+		FontShade shade,
+		unsigned int line_limit,
+		FontAlign align,
+		bool center_y
+	)
     {
-        //return ( m.words_, m.x_, m.y_, m.shade_, m.align_, m.blink_, std::move( m.component_ ), m.line_limit_ );
-    };*/
-
-    void Text::renderText( Graphics& graphics, const std::string& text, int x, int y, Camera* camera, FontShade shade, int line_limit, FontAlign align )
-    {
-
-        if ( align == FontAlign::CENTER )
+		if ( line_limit == NULL )
+		{
+			line_limit = DEFAULT_LINE_LENGTH;
+		}
+		
+        if ( center_y )
         {
-            x = centerX( text );
+            y = centerY( text.length(), line_limit );
         }
 
-        //int char_y = y;
         int line = 0;
-        int chars_on_this_line = 0;
+		int letters_so_far = 0;
+		
+		while ( letters_so_far < text.length() )
+		{
+			const int line_length = testLineLength( text, line_limit, letters_so_far );
+			const int absolute_line_limit = line_length + letters_so_far;
+			
+			if ( align == FontAlign::CENTER )
+			{
+				x = centerX( line_length );
+			}
+				
+			for ( int c = letters_so_far; c < absolute_line_limit; ++c )
+			{
+				// Newline
+				if ( text.at( c ) == '\n' )
+				{
+					break;
+				}
+				// Character quirk: function treats characters below 0 as 2 chars with 0 as the 1st. This skips the 0.
+				else if ( text.at( c ) < 0 )
+				{
+					++c;
+				}
 
-        for ( int i = 0; i < text.length(); ++i )
-        {
+				const int frame = char_conversion_[ text.at( c ) ];
+				const int char_x = ( CHAR_SIZE_PIXELS * ( c - letters_so_far ) ) + x;
+				const int char_y = ( CHAR_SIZE_PIXELS * line ) + y;
 
+				sdl2::SDLRect dest =
+				{
+					char_x,
+					char_y,
+					CHAR_SIZE_PIXELS,
+					CHAR_SIZE_PIXELS
+				};
 
-            // For some reason, extended ASCII that are numerically below 0 are 2 chars, the 1st coming out as a tacked-on 0 beforehand..
-            // Skipping to the 2nd half o' the ASCII fixes this.
-            if ( text[ i ] < 0 )
-                ++i;
+				if ( camera != nullptr )
+				{
+					dest.x = camera->relativeX( dest );
+					dest.y = camera->relativeY( dest );
+				}
 
-            const int frame = char_conversion_[ text.at( i ) ];
-            //int char_x = x + ( CHAR_SIZE_PIXELS * i );
-
-            //char_x = ( ( i % line_limit ) * CHAR_SIZE_PIXELS ) + x;
-            //char_y = ( floor( i / line_limit ) * CHAR_SIZE_PIXELS ) + y;
-
-            if ( chars_on_this_line == line_limit || text.at( i ) == '\n' )
-            {
-                ++line;
-                chars_on_this_line = 0;
-            }
-
-            if ( text.at( i ) == '\n' )
-            {
-                continue;
-            }
-
-            const int char_x = ( CHAR_SIZE_PIXELS * chars_on_this_line ) + x;
-            const int char_y = ( CHAR_SIZE_PIXELS * line ) + y;
-
-            ++chars_on_this_line;
-
-            sdl2::SDLRect dest =
-            {
-                char_x,
-                char_y,
-                CHAR_SIZE_PIXELS,
-                CHAR_SIZE_PIXELS
-            };
-
-            if ( camera != nullptr )
-            {
-                dest.x = camera->relativeX( dest );
-                dest.y = camera->relativeY( dest );
-            }
-
-            graphics.renderObject
-            (
-                Graphics::SpriteSheet::CHARSET,
-                {
-                frameX( frame ),
-                frameY( frame, shade ),
-                CHAR_SIZE_PIXELS,
-                CHAR_SIZE_PIXELS
-                },
-                dest
-            );
-        }
+				graphics.renderObject
+				(
+					Graphics::SpriteSheet::CHARSET,
+					{
+						frameX( frame ),
+						frameY( frame, shade ),
+						CHAR_SIZE_PIXELS,
+						CHAR_SIZE_PIXELS
+					},
+					dest
+				);
+			}
+			
+			++line;
+			letters_so_far += line_length;
+		}
+		
     };
 
     void Text::render( Graphics& graphics, Camera* camera, FontShade shade ) const
     {
         if ( shade == FontShade::__NULL )
+		{
             shade = shade_;
+		}
 
-        renderText( graphics, words_, x_, y_, camera, shade, line_limit_, align_ );
+        renderText( graphics, words_, x_, y_, camera, shade, line_limit_, align_, center_y_ );
     };
 
-    int Text::centerX( const std::string& words )
+    int Text::centerX( int line_length )
+    {	
+		// Center = half o' line length left o' middle (half window width), half on right.
+		// [     *    |    )     ]
+		// * is left-most point we want to return.
+        return Unit::MiniBlocksToPixels
+		(
+			floor ( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) -
+			floor ( line_length / 2 )
+		);
+    };
+
+    int Text::centerY( int text_length, int line_limit )
     {
-        return Unit::MiniBlocksToPixels( floor ( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( words.length() / 2 ) );
+		const int text_height = floor ( text_length / line_limit );
+		
+        return Unit::MiniBlocksToPixels
+		(
+			floor ( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) -
+			floor ( text_height / 2 )
+		);
     };
 
     int Text::shadeOffset( FontShade shade )
@@ -264,7 +291,7 @@
         }
         else
         {
-            return (int)shade * 32;
+            return ( int )shade * CHARSET_HEIGHT_MINI_BLOCKS;
         }
     };
 
@@ -295,26 +322,33 @@
         renderText( graphics, formatNumDigitPadding( n, digits ), x, y, camera, shade );
     };
 
+	// Get d digit place for n #.
     int Text::getDigit( int n, int d, int remain )
     {
-        return int( floor( n / pow( 10, d-1 ) ) ) % remain;
+        return int( floor( n / pow( 10, d - 1 ) ) ) % remain;
     };
 
+	// Determine how many digit places n # has.
     int Text::numODigits( int n )
     {
+		const int LOOP_LIMIT = 99; // Prevent endless loops.
+		
         if ( n == 0 )
         {
             return 1;
         }
         else
         {
-            for ( int i = 0; i < 99; ++i )
+            for ( int i = 0; i < LOOP_LIMIT; ++i )
             {
                 if ( abs( n ) < pow( 10, i ) )
                 {
                     return i;
                 }
             }
+			
+			// Loop shouldn't reach limit.
+			throw std::logic_error( "Text::numODigits loop doesn't end." );
         }
 
         return -1;
@@ -322,37 +356,9 @@
 
     void Text::update()
     {
-        flipped_ = false;
-
         if ( component_ )
         {
             component_->update( *this );
-        }
-
-        if ( blink_ )
-        {
-            if ( blink_timer_.hit() )
-            {
-                if ( blink_dir_ == Direction::Vertical::DOWN )
-                {
-                    --blink_counter_;
-
-                    if ( blink_counter_.value() == 0 )
-                        blink_dir_ = Direction::Vertical::UP;
-                }
-                else
-                {
-                    ++blink_counter_;
-
-                    if ( blink_counter_.value() == NUM_OF_FONT_SHADES-1 )
-                        blink_dir_ = Direction::Vertical::DOWN;
-                }
-            }
-
-            blink_timer_.update();
-
-            if ( blink_counter_.value() >= 0 && blink_counter_.value() < NUM_OF_FONT_SHADES )
-                shade_ = (FontShade)blink_counter_.value();
         }
     };
 
@@ -360,25 +366,25 @@
     {
         return formatNumCommas( stringifyNum( n ) );
     };
-/*
-    std::string Text::formatNumDigitPadding( int n, int digits )
-    {
-        return formatNumDigitPadding( stringifyNum( n ), digits );
-    };*/
 
+	// Add commas to # string 'tween every 3 digits.
     std::string Text::formatNumCommas( std::string text )
     {
-        int difference = text.size() - 3;
+		const int NUM_O_NUMS_TWEEN_COMMAS = 3;
+		
+        int difference = text.length() - NUM_O_NUMS_TWEEN_COMMAS;
 
         while ( difference > 0 )
         {
             text.insert( difference, "," );
-            difference -= 3;
+            difference -= NUM_O_NUMS_TWEEN_COMMAS;
         }
 
         return text;
     };
 
+	// Pad # n to given digits so that # string is always a consistent length,
+	// filling leading space with 0s.
     std::string Text::formatNumDigitPadding( int n, int digits )
     {
         std::string text = stringifyNum( std::abs( n ) );
@@ -387,11 +393,15 @@
         {
             int difference = digits - text.size();
 
+			// If n is negative, leave 1 char space for - sign.
             if ( n < 0 )
+			{
                 --difference;
+			}
 
             if ( difference > 0 )
             {
+				// For every extra digit, add a leading 0 as padding.
                 for ( int i = 0; i < difference; ++i )
                 {
                     text.insert( 0, "0" );
@@ -399,8 +409,11 @@
             }
         }
 
+		// If n is negative, add - sign before everything.
         if ( n < 0 )
+		{
             text.insert( 0, "-" );
+		}
 
         return text;
     };
@@ -413,50 +426,49 @@
         return text;
     };
 
-    void Text::moveLeft( int n )
-    {
-        x_ -= n;
-
-        if ( right() < 0 )
-        {
-            x_ = Unit::WINDOW_WIDTH_PIXELS;
-            flipped_ = true;
-        }
-    };
-
-    void Text::moveRight( int n )
-    {
-        x_ += n;
-
-        if ( x_ > Unit::WINDOW_WIDTH_PIXELS )
-        {
-            flipped_ = true;
-            x_ = -( words_.size() * CHAR_SIZE_PIXELS );
-        }
-    };
-
     int Text::right() const
     {
-        return x_ + ( words_.size() * CHAR_SIZE_PIXELS );
+        return x_ + width();
     };
+
+	int Text::width() const
+	{
+		return words_.size() * CHAR_SIZE_PIXELS;
+	};
 
     int Text::x() const
     {
         return x_;
     };
 
-    bool Text::flipped() const
-    {
-        return flipped_;
-    };
-
-    /*std::string Text::timeToString( std::string seconds, std::string minutes, int minutes_padding )
-    {
-        return formatNumDigitPadding( minutes, minutes_padding ) + ":" + formatNumDigitPadding( seconds, 2 );
-    };*/
-
     std::string Text::timeToString( int seconds, int minutes, int minutes_padding )
     {
         return formatNumDigitPadding( minutes, minutes_padding ) + ":" + formatNumDigitPadding( seconds, 2 );
-        //return timeToString( stringifyNum( seconds ), stringifyNum( minutes ), minutes_padding );
     };
+
+	int Text::testLineLength( const std::string& text, int line_length, int letters_so_far )
+	{		
+		int limit = std::min( line_length, ( int )text.length() - letters_so_far );
+
+		for( int line_letter = 0; line_letter < limit; ++line_letter )
+		{
+			const int absolute_letter = letters_so_far + line_letter;
+
+			if ( text[ absolute_letter ] == '\n' )
+			{
+				// While it may seem simpler to just return the line_letter & not test for new line in rendering code,
+				// this causes a ne'er-ending loop if a line starts with \n,
+				// since the character is ne'er passed, & thus the code keeps testing for it fore'er.
+				return line_letter + 1;
+			}
+			else if ( text[ absolute_letter ] < 0 )
+			{
+				//++limit;
+				// This code causes program to crash with out_of_range exception,
+				// but it may still offset text if special characters are used.
+				// Further testing needed.
+			}
+		}
+
+		return limit;
+	};

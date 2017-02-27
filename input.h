@@ -44,17 +44,20 @@
                 CAMERA_DOWN,
                 ESCAPE
             };
-            static const int NUM_O_ACTIONS = (int)Action::ESCAPE;
+            static constexpr int NUM_O_ACTIONS = (int)Action::ESCAPE + 1;
 
+			Input();
             void update();
             void reset();
-            bool pressed( Action action );
-            bool released( Action action );
-            bool held( Action action );
+            bool pressed( Action action ) const;
+			bool pressedMain() const;
+            bool released( Action action ) const;
+            bool held( Action action ) const;
 
             void keyPress( SDL_Keycode key );
             void keyRelease( SDL_Keycode key );
             void keyHold( SDL_Keycode key );
+
 
         private:
             std::map<Action, SDL_Keycode> buttons_ =
@@ -78,6 +81,8 @@
             std::map<SDL_Keycode, bool> keys_pressed_before_released_;
             std::map<SDL_Keycode, bool> keys_released_;
             std::map<SDL_Keycode, bool> keys_held_;
+			
+			void resetList( std::map<SDL_Keycode, bool>& list );
     };
 
 #endif // INPUT_H

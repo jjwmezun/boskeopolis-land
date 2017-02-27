@@ -39,12 +39,9 @@
     {
     };
 
-    void RopeGraphics::render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority )
+    void RopeGraphics::render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority ) const
     {
         const int LAST_BLOCK = bound_box.h - 8;
-
-        current_frame_x_ = std::get<X_INDEX> ( frame_body_ );
-        current_frame_y_ = std::get<Y_INDEX> ( frame_body_ );
 
         for ( int i = 0; i < LAST_BLOCK; i += 8 )
         {
@@ -56,11 +53,8 @@
                 8
             };
 
-            masterRender( graphics, dest, camera, priority );
+            masterRender( graphics, dest, std::get<X_INDEX> ( frame_body_ ), std::get<Y_INDEX> ( frame_body_ ), camera, priority );
         }
-
-        current_frame_x_ = std::get<X_INDEX> ( frame_end_ );
-        current_frame_y_ = std::get<Y_INDEX> ( frame_end_ );
 
         const sdl2::SDLRect dest =
         {
@@ -70,6 +64,6 @@
             8
         };
 
-        masterRender( graphics, dest, camera, priority );
+		masterRender( graphics, dest, std::get<X_INDEX> ( frame_end_ ), std::get<Y_INDEX> ( frame_end_ ), camera, priority );
     };
 

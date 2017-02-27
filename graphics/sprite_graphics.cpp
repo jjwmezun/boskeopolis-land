@@ -60,12 +60,12 @@
     {
     };
 
-    void SpriteGraphics::render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority )
+    void SpriteGraphics::render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority ) const
     {
-        masterRender( graphics, bound_box, camera, priority );
+        masterRender( graphics, bound_box, current_frame_x_, current_frame_y_, camera, priority );
     };
 
-    void SpriteGraphics::masterRender( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority )
+    void SpriteGraphics::masterRender( Graphics& graphics, sdl2::SDLRect bound_box, int current_frame_x, int current_frame_y, Camera* camera, bool priority ) const
     {
         if ( visible_ && ( ( priority && priority_ ) || ( !priority && !priority_ ) ) )
         {
@@ -73,8 +73,8 @@
 
             sdl2::SDLRect source =
             {
-                current_frame_x_,
-                current_frame_y_,
+                current_frame_x,
+                current_frame_y,
                 dest.w,
                 dest.h
             };
@@ -93,8 +93,8 @@
 
                     source =
                     {
-                        current_frame_x_,// + cutoffLeft( bound_box, *camera ),
-                        current_frame_y_,// + cutoffTop ( bound_box, *camera ),
+                        current_frame_x,// + cutoffLeft( bound_box, *camera ),
+                        current_frame_y,// + cutoffTop ( bound_box, *camera ),
                         dest.w,
                         dest.h
                     };
@@ -171,7 +171,7 @@
         return cutoffBottom( obj_r.y, c.y(), obj_r.h, c.heightPixels() );
     };
 
-    sdl2::SDLRect SpriteGraphics::adjustBoundBox( sdl2::SDLRect& r ) const
+    sdl2::SDLRect SpriteGraphics::adjustBoundBox( const sdl2::SDLRect& r ) const
     {
         return
         {

@@ -11,11 +11,13 @@
 // DEPENDENCIES
 //===================================
 
+    #include "corrupt_save_exception.h"
     #include "game.h"
     #include "input.h"
     #include "level.h"
     #include "level_state.h"
     #include "level_select_state.h"
+	#include "message_state.h"
     #include "title_state.h"
 
 
@@ -175,7 +177,31 @@
         switch ( status_ )
         {
             case ( Status::LOAD ):
-                inventory_.load();
+				try
+				{
+                	inventory_.load();
+				}
+				catch( const BoskCorruptSave::InvalidSaveSizeException& e )
+				{	
+					game.pushState
+					(
+						std::unique_ptr<GameState>
+						(
+							new MessageState
+							(
+								( std::string )e.what(),
+								false,
+								std::unique_ptr<GameState>
+								(
+									new TitleState()
+								),
+								false,
+								{ Palette::PaletteType::GRAYSCALE, 6 },
+								Text::FontShade::WHITE
+							)
+						)
+					);
+				}
             break;
         }
 

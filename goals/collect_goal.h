@@ -19,6 +19,7 @@
 //===================================
 
     #include "goal.h"
+	#include "mezun_helpers.h"
 
 
 // CLASS
@@ -28,7 +29,7 @@
     {
 
         public:
-            CollectGoal( int amount_needed, std::string message = "" );
+            CollectGoal( int amount_needed, std::string message = MezunHelpers::emptyString() );
             ~CollectGoal();
 
             void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, Input& input );
