@@ -77,7 +77,7 @@
 
     void Block::render( Graphics& graphics, Camera& camera, bool priority )
     {
-        if ( type_ != nullptr )
+        if ( hasType() )
             type_->render( graphics, camera, *this, priority );
     };
 
@@ -93,7 +93,7 @@
 
     void Block::interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
     {
-        if ( type_ != nullptr )
+        if ( hasType() )
         {
             Collision collision = sprite.testCollision( *this );
             type_->interact( collision, sprite, *this, level, events, inventory, camera );
@@ -104,3 +104,16 @@
     {
         return type_id_;
     };
+
+	bool Block::hasComponentType( BlockComponent::Type type ) const
+	{
+		if ( hasType() )
+		{
+			return type_->hasComponentType( type );
+		}
+	};
+
+	bool Block::hasType() const
+	{
+		return type_ != nullptr;
+	};

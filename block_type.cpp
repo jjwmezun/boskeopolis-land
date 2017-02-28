@@ -126,3 +126,15 @@
             }
         }
     };
+
+	bool BlockType::hasComponentType( BlockComponent::Type type ) const
+	{
+		for ( auto& t : components_ )
+		{
+			// True if a'least 1 component has type.
+			if ( t->type() == type ) return true;
+		}
+		
+		// If all don't, false.
+		return false;
+	};

@@ -198,9 +198,9 @@
             {
                 if ( !type_ids.empty() )
                 {
-                    for ( int j = 0; j < type_ids.size(); ++j )
+                    for ( auto t : type_ids )
                     {
-                        if ( b.typeID() == type_ids.at( j ) )
+                        if ( b.typeID() == t )
                         {
                             return true;
                         }
@@ -211,6 +211,28 @@
                 {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    };
+
+    bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const
+    {
+        for ( auto& b : blocks_ )
+        {
+            if
+            (
+                b.rightSubPixels() > r.x &&
+                b.leftSubPixels() < r.right() &&
+                b.topSubPixels() < r.bottom() &&
+                b.bottomSubPixels() > r.y
+            )
+            {
+				if ( b.hasComponentType( type ) )
+				{
+					return true;
+				}
             }
         }
 

@@ -44,6 +44,8 @@
             void interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
             void blocksFromMap( Map& lvmap, Camera& camera );
             bool blocksInTheWay( const sdl2::SDLRect& r, const std::vector<int>& type_ids = {} ) const;
+            bool blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const;
+
 
         private:
             static constexpr int CAMERA_PADDING = 4;

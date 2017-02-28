@@ -21,7 +21,10 @@
 // METHODS
 //===================================
 
-    BlockComponentSolid::BlockComponentSolid(){};
+    BlockComponentSolid::BlockComponentSolid()
+	:
+		BlockComponent( Type::SOLID )
+	{};
 
     BlockComponentSolid::~BlockComponentSolid() {};
 

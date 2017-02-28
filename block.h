@@ -46,12 +46,15 @@
             int location() const;
             int typeID() const;
             void destroy();
+			bool hasComponentType( BlockComponent::Type type ) const;
 
         private:
-            BlockType* type_ = nullptr; // COPY; owned by other object.
+            BlockType* type_; // COPY; owned by other object.
             int location_;
             int type_id_;
             bool destroyed_;
+			
+			bool hasType() const;
     };
 
 #endif // BLOCK_H

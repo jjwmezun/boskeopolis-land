@@ -34,10 +34,20 @@
     class BlockComponent
     {
         public:
-            BlockComponent();
+			enum class Type
+			{
+				NOTYPE,
+				SOLID
+			};
+		
+            BlockComponent( Type type = Type::NOTYPE );
             virtual ~BlockComponent();
             virtual void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera ) = 0;
             virtual void update( EventSystem& events, BlockType& type );
+			Type type() const;
+			
+		protected:
+			const Type type_;
     };
 
 #endif // BLOCK_COMPONENT_H

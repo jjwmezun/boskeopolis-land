@@ -13,6 +13,8 @@
 // DEPENDENCIES
 //===================================
 
+    #include "block_component.h"
+    #include "block_system.h"
     #include "collision.h"
     #include "sillyfish_sprite.h"
     #include "sillyfish_graphics.h"
@@ -36,44 +38,80 @@
 
     void SillyfishSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
-        if ( directionX() == Direction::Horizontal::RIGHT )
-        {
-            moveRight();
-        }
-        else
-        {
-            moveLeft();
-        }
-
-        if ( !onGround() && !onGroundPrev() )
-        {
-            if ( start_ground_lock_ )
-            {
-                on_ground_ = true;
-                fullStopY();
-
-                if ( !switch_lock_.on() )
-                {
-                    stopX();
-                    direction_x_ = Direction::switchHorizontal( direction_x_ );
-                    switch_lock_.start();
-                }
-            }
-        }
-
-        if ( onGround() )
-        {
-            start_ground_lock_ = true;
-        }
-
-        if ( switch_lock_.done() )
-        {
-            switch_lock_.stop();
-        }
-        else if ( switch_lock_.on() )
-        {
-            switch_lock_.update();
-        }
+		switch ( directionX() )
+		{
+			case ( Direction::Horizontal::LEFT ):
+				
+				if( !blocks.blocksInTheWay
+				(
+					{
+						leftSubPixels() - Unit::BlocksToSubPixels( 1 ),
+						bottomSubPixels(),
+						Unit::BlocksToSubPixels( 1 ),
+						Unit::BlocksToSubPixels( 1 )
+						
+					},
+					BlockComponent::Type::SOLID 
+				))
+				{
+					direction_x_ = Direction::Horizontal::RIGHT;
+				}
+				
+				if ( collidedLeft() )
+				{
+					direction_x_ = Direction::Horizontal::RIGHT;
+				}
+				
+			break;
+				
+			case ( Direction::Horizontal::RIGHT ):
+				
+				if( !blocks.blocksInTheWay
+				(
+					{
+						rightSubPixels(),
+						bottomSubPixels(),
+						Unit::BlocksToSubPixels( 1 ),
+						Unit::BlocksToSubPixels( 1 )
+						
+					},
+					BlockComponent::Type::SOLID 
+				))
+				{
+					direction_x_ = Direction::Horizontal::LEFT;
+				}
+				
+				if ( collidedRight() )
+				{
+					direction_x_ = Direction::Horizontal::LEFT;
+				}
+				
+			break;
+				
+			case ( Direction::Horizontal::__NULL ):
+				std::cout<<"ERROR: Sillyfish has invalid direction."<<std::endl;
+			break;
+		}
+		
+		switch ( directionX() )
+		{
+			case ( Direction::Horizontal::LEFT ):
+				
+				moveLeft();
+				
+			break;
+				
+			case ( Direction::Horizontal::RIGHT ):
+				
+				moveRight();
+				
+			break;
+				
+			case ( Direction::Horizontal::__NULL ):
+				std::cout<<"ERROR: Sillyfish has invalid direction."<<std::endl;
+			break;
+		}
+		
     };
 
     void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )

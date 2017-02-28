@@ -13,6 +13,7 @@
 // DEPENDENCIES
 //===================================
 
+    #include "block_component.h"
     #include "block_system.h"
     #include "camera.h"
     #include "collision.h"
@@ -102,7 +103,7 @@
                             them.topSubPixels(),
                             them.leftSubPixels() - rightSubPixels(),
                             them.heightSubPixels() },
-                            { 90 }
+                            BlockComponent::Type::SOLID
                         )
                     )
                     {
@@ -128,7 +129,7 @@
                             them.topSubPixels(),
                             leftSubPixels() - them.rightSubPixels(),
                             them.heightSubPixels() },
-                            { 90 }
+                            BlockComponent::Type::SOLID
                         )
                     )
                     {

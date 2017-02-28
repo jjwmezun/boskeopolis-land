@@ -15,7 +15,6 @@
 //===================================
 
     class Block;
-    class BlockComponent;
     class BlockCondition;
     class Collision;
     class EventSystem;
@@ -29,6 +28,7 @@
 // DEPENDENCIES
 //===================================
 
+	#include "block_component.h"
     #include <map>
     #include "object.h"
     #include <vector>
@@ -61,12 +61,14 @@
             void update( EventSystem& events );
             void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
             void render( Graphics& graphics, Camera& camera, Block& block, bool priority );
+			
+			bool hasComponentType( BlockComponent::Type type ) const;
 
 
         private:
-            static const int BLOCK_SIZE = 16;
-            static const int MINI_BLOCK_SIZE = 8;
-            static const int NUM_O_MINI_BLOCKS = 4;
+            static constexpr int BLOCK_SIZE = 16;
+            static constexpr int MINI_BLOCK_SIZE = 8;
+            static constexpr int NUM_O_MINI_BLOCKS = 4;
 
             std::shared_ptr<SpriteGraphics> graphics_[ NUM_O_MINI_BLOCKS ];
             std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
