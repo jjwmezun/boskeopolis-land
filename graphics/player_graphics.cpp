@@ -24,7 +24,12 @@
 
     PlayerGraphics::PlayerGraphics( Graphics::SpriteSheet texture )
     :
-        SpriteGraphics ( texture, 0, 0, false, false, 0, false, -1, -2, 2, 4 )
+        SpriteGraphics ( texture, 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
+		walk_counter_  ( 0, 3, 0, true ),
+		climb_counter_ ( 0, 1, 0, true ),
+		blink_counter_ ( 0, 11, 0, true ),
+		swim_counter_  ( 0, 2, 0, true ),
+		swim_timer_    ( NULL, false )
     {};
 
     PlayerGraphics::~PlayerGraphics() {};
@@ -40,12 +45,8 @@
             flip_x_ = false;
         }
 
-        if ( sprite.isDead() )
-        {
-            current_frame_x_ = 16;
-            current_frame_y_ = 26;
-        }
-        else if ( sprite.onLadder() )
+
+        if ( sprite.onLadder() )
         {
             if ( sprite.isMoving() )
             {
@@ -146,5 +147,66 @@
 
             current_frame_y_ = 0;
         }
+		
+        if ( sprite.hasMovementType( SpriteMovement::Type::SWIMMING ) && !sprite.onGroundPrev() )
+        {
+			switch ( swim_counter_() )
+			{
+				case ( 0 ):			
+					current_frame_x_ = 64;
+					current_frame_y_ = 26;		
+				break;
+					
+				case ( 1 ):			
+					current_frame_x_ = 80;
+					current_frame_y_ = 26;		
+				break;
+					
+				case ( 2 ):			
+					current_frame_x_ = 96;
+					current_frame_y_ = 26;		
+				break;
+			}
+			
+			if ( swim_timer_.hit() )
+			{
+				++swim_counter_;
+				
+				if ( swim_counter_ != 0 )
+				{
+					swim_timer_.start();
+				}
+				else
+				{
+					swim_timer_.restart();
+					swim_timer_.stop();
+				}
+			}
+			
+			if ( swim_timer_.on() )
+			{
+				swim_timer_.update();
+			}
+			
+			if ( sprite.isJumpingPrev() )
+			{
+				if ( !swim_timer_.on() )
+				{
+					swim_timer_.start();
+				}
+			}
+        }
+		else
+		{
+			swim_timer_.restart();
+			swim_timer_.stop();
+			swim_counter_.reset();
+		}
+
+		if ( sprite.isDead() )
+		{
+			current_frame_x_ = 16;
+			current_frame_y_ = 26;
+		}
     };
 

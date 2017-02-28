@@ -13,6 +13,7 @@
     #include <iostream>
     #include <fstream>
     #include "game.h"
+	#include "mezun_helpers.h"
     #include "map.h"
     #include "rapidjson/document.h"
     #include "rapidjson/istreamwrapper.h"
@@ -35,199 +36,226 @@
         std::vector<MapLayer*> foregrounds
     )
     {
-        std::vector<int> blocks = {};
-        std::vector<int> sprites = {};
+	
+		// Setup
+		//=============================================================
+		
+			std::vector<int> blocks = {};
+			std::vector<int> sprites = {};
 
-        const std::string MAPS_DIR = Game::resourcePath() + "maps" + Game::pathDivider();
-        const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
+			const std::string MAPS_DIR = Game::resourcePath() + "maps" + Game::pathDivider();
+			const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
 
-        std::ifstream map_stream( MAP_PATH );
+			std::ifstream map_stream( MAP_PATH );
 
-        assert( map_stream.is_open() );
+			assert( map_stream.is_open() );
 
-        rapidjson::IStreamWrapper map_stream_wrapper( map_stream );
-        rapidjson::Document map_data;
-        map_data.ParseStream( map_stream_wrapper );
+			rapidjson::IStreamWrapper map_stream_wrapper( map_stream );
+			rapidjson::Document map_data;
+			map_data.ParseStream( map_stream_wrapper );
 
-        assert( map_data.IsObject() );
-        assert( map_data.HasMember("layers") );
-        assert( map_data[ "layers" ].IsArray() );
+			assert( map_data.IsObject() );
 
-        int i = 0;
-        for ( auto& v : map_data[ "layers" ].GetArray() )
-        {
-            if ( v.HasMember("data") )
-            {
-                if ( v[ "data" ].IsArray() )
-                {
-                    for ( auto& n : v[ "data" ].GetArray() )
-                    {
-                        if ( 0 == i )
-                        {
-                            blocks.push_back( n.GetInt() );
-                        }
-                        else if ( 1 == i )
-                        {
-                            sprites.push_back( n.GetInt() );
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-            ++i;
-        }
 
-        assert( map_data.HasMember( "width" ) );
-        assert( map_data[ "width" ].IsInt() );
-        const int width = map_data[ "width" ].GetInt();
 
-        assert( map_data.HasMember( "height" ) );
-        assert( map_data[ "height" ].IsInt() );
-        const int height = map_data[ "height" ].GetInt();
+		// Get Blocks & Sprites
+		//=============================================================
+		
+			assert( map_data.HasMember("layers") );
+			assert( map_data[ "layers" ].IsArray() );
+		
+			constexpr int BLOCKS_INDEX = 0;
+			constexpr int SPRITES_INDEX = 1;
 
-        //Palette::PaletteType palette_type = Palette::PaletteType::GRAYSCALE;
-        //int bg_color = 0;
-        bool slippery = false;
-        int camera_limit_top = -1;
-        int camera_limit_bottom = -1;
-        int camera_limit_left = -1;
-        int camera_limit_right = -1;
-        int water_effect_height_blocks = -1;
-        bool scroll_loop = false;
-        SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
-        Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
-        Camera::YPriority camera_y_priority = Camera::YPriority::__NULL;
-		bool blocks_work_offscreen = false;
+			int i = 0;
+			for ( auto& v : map_data[ "layers" ].GetArray() )
+			{
+				if ( v.HasMember("data") )
+				{
+					if ( v[ "data" ].IsArray() )
+					{
+						for ( auto& n : v[ "data" ].GetArray() )
+						{
+							if ( i == BLOCKS_INDEX )
+							{
+								blocks.push_back( n.GetInt() );
+							}
+							else if ( i == SPRITES_INDEX )
+							{
+								sprites.push_back( n.GetInt() );
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+				}
+				++i;
+			}
 
-        if ( map_data.HasMember( "properties" ) )
-        {
-            for ( auto& prop : map_data[ "properties" ].GetObject() )
-            {
-                std::string name = prop.name.GetString();
 
-                if ( name.compare( "slippery" ) == 0 )
-                {
-                    if ( prop.value.IsBool() )
-                    {
-                        slippery = prop.value.GetBool();
-                    }
-                }
 
-                if ( name.compare( "camera_limit_top" ) == 0 )
-                {
-                    if ( prop.value.IsInt() )
-                    {
-                        camera_limit_top = prop.value.GetInt();
-                    }
-                }
+		// Get Map Sizes
+		//=============================================	
+		
+			assert( map_data.HasMember( "width" ) );
+			assert( map_data[ "width" ].IsInt() );
+			const int width = map_data[ "width" ].GetInt();
 
-                if ( name.compare( "camera_limit_bottom" ) == 0 )
-                {
-                    if ( prop.value.IsInt() )
-                    {
-                        camera_limit_bottom = prop.value.GetInt();
-                    }
-                }
+			assert( map_data.HasMember( "height" ) );
+			assert( map_data[ "height" ].IsInt() );
+			const int height = map_data[ "height" ].GetInt();
 
-                if ( name.compare( "camera_limit_left" ) == 0 )
-                {
-                    if ( prop.value.IsInt() )
-                    {
-                        camera_limit_left = prop.value.GetInt();
-                    }
-                }
 
-                if ( name.compare( "camera_limit_right" ) == 0 )
-                {
-                    if ( prop.value.IsInt() )
-                    {
-                        camera_limit_right = prop.value.GetInt();
-                    }
-                }
 
-                if ( name.compare( "water_effect_height" ) == 0 )
-                {
-                    if ( prop.value.IsInt() )
-                    {
-                        water_effect_height_blocks = prop.value.GetInt();
-                    }
-                }
+		// Misc. Features
+		//=============================================		
+			// Defaults
+			bool slippery = false;
+			int camera_limit_top = -1;
+			int camera_limit_bottom = -1;
+			int camera_limit_left = -1;
+			int camera_limit_right = -1;
+			int water_effect_height_blocks = -1;
+			int scroll_loop_width = 0;
+			SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
+			Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
+			Camera::YPriority camera_y_priority = Camera::YPriority::__NULL;
+			bool blocks_work_offscreen = false;
 
-                if ( name.compare( "scroll_loop" ) == 0 )
-                {
-                    if ( prop.value.IsBool() )
-                    {
-                        scroll_loop = prop.value.GetBool();
-                    }
-                }
+			// Test for features.
+			if ( map_data.HasMember( "properties" ) )
+			{
+				for ( auto& prop : map_data[ "properties" ].GetObject() )
+				{
+					std::string name = prop.name.GetString();
 
-                if ( name.compare( "hero_type" ) == 0 )
-                {
-                    if ( prop.value.IsString() )
-                    {
-                        hero_type = SpriteSystem::heroType( prop.value.GetString() );
-                    }
-                }
+					if ( MezunHelpers::areStringsEqual( name, "slippery" ) )
+					{
+						if ( prop.value.IsBool() )
+						{
+							slippery = prop.value.GetBool();
+						}
+					}
 
-                if ( name.compare( "camera_priority_x" ) == 0 )
-                {
-                    if ( prop.value.IsString() )
-                    {
-                        const std::string camera_priority_x_string = prop.value.GetString();
-                        if ( camera_priority_x_string.compare( "CENTER" ) == 0 )
-                        {
-                            camera_x_priority = Camera::XPriority::CENTER;
-                        }
-                    }
-                }
+					if ( MezunHelpers::areStringsEqual( name, "camera_limit_top" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							camera_limit_top = prop.value.GetInt();
+						}
+					}
 
-                if ( name.compare( "camera_priority_y" ) == 0 )
-                {
-                    if ( prop.value.IsString() )
-                    {
-                        const std::string camera_priority_y_string = prop.value.GetString();
-                        if ( camera_priority_y_string.compare( "CENTER" ) == 0 )
-                        {
-                            camera_y_priority = Camera::YPriority::CENTER;
-                        }
-                    }
-                }
+					if ( MezunHelpers::areStringsEqual( name, "camera_limit_bottom" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							camera_limit_bottom = prop.value.GetInt();
+						}
+					}
 
-                if ( name.compare( "blocks_work_offscreen" ) == 0 )
-                {
-                    if ( prop.value.IsBool() )
-                    {
-                        blocks_work_offscreen = prop.value.GetBool();
-                    }
-                }
-            }
-        }
+					if ( MezunHelpers::areStringsEqual( name, "camera_limit_left" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							camera_limit_left = prop.value.GetInt();
+						}
+					}
 
-        return Map
-        (
-            blocks,
-            sprites,
-            width,
-            height,
-            palette,
-            backgrounds,
-            warps,
-            foregrounds,
-            slippery,
-            camera_limit_top,
-            camera_limit_bottom,
-            camera_limit_left,
-            camera_limit_right,
-            hero_type,
-            water_effect_height_blocks,
-            scroll_loop,
-            camera_x_priority,
-            camera_y_priority,
-            blocks_work_offscreen
-        );
+					if ( MezunHelpers::areStringsEqual( name, "camera_limit_right" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							camera_limit_right = prop.value.GetInt();
+						}
+					}
+
+					if ( MezunHelpers::areStringsEqual( name, "water_effect_height" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							water_effect_height_blocks = prop.value.GetInt();
+						}
+					}
+
+					if ( MezunHelpers::areStringsEqual( name, "scroll_loop_width" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							scroll_loop_width = prop.value.GetInt();
+						}
+					}
+
+					if ( MezunHelpers::areStringsEqual( name, "hero_type" ) )
+					{
+						if ( prop.value.IsString() )
+						{
+							hero_type = SpriteSystem::heroType( prop.value.GetString() );
+						}
+					}
+
+					if ( MezunHelpers::areStringsEqual( name, "camera_priority_x" ) )
+					{
+						if ( prop.value.IsString() )
+						{
+							const std::string camera_priority_x_string = prop.value.GetString();
+							if ( camera_priority_x_string.compare( "CENTER" ) == 0 )
+							{
+								camera_x_priority = Camera::XPriority::CENTER;
+							}
+						}
+					}
+
+					if ( MezunHelpers::areStringsEqual( name, "camera_priority_y" ) )
+					{
+						if ( prop.value.IsString() )
+						{
+							const std::string camera_priority_y_string = prop.value.GetString();
+							if ( camera_priority_y_string.compare( "CENTER" ) == 0 )
+							{
+								camera_y_priority = Camera::YPriority::CENTER;
+							}
+						}
+					}
+
+					if ( MezunHelpers::areStringsEqual( name, "blocks_work_offscreen" ) )
+					{
+						if ( prop.value.IsBool() )
+						{
+							blocks_work_offscreen = prop.value.GetBool();
+						}
+					}
+				}
+			}
+
+
+
+		// Send all data
+		//=============================================	
+		
+			return Map
+			(
+				blocks,
+				sprites,
+				width,
+				height,
+				palette,
+				backgrounds,
+				warps,
+				foregrounds,
+				slippery,
+				camera_limit_top,
+				camera_limit_bottom,
+				camera_limit_left,
+				camera_limit_right,
+				hero_type,
+				water_effect_height_blocks,
+				scroll_loop_width,
+				camera_x_priority,
+				camera_y_priority,
+				blocks_work_offscreen
+			);
     };
 
     Map::Map
@@ -247,7 +275,7 @@
         int right_limit,
         SpriteSystem::HeroType hero_type,
         int water_effect_height_blocks,
-        bool scroll_loop,
+        int scroll_loop_width,
         Camera::XPriority camera_x_priority,
         Camera::YPriority camera_y_priority,
         bool blocks_work_offscreen
@@ -266,7 +294,7 @@
         right_limit_ ( right_limit ),
         hero_type_ ( hero_type ),
         water_effect_ ( testWaterEffect( water_effect_height_blocks ) ),
-        scroll_loop_ ( scroll_loop ),
+        scroll_loop_width_ ( scroll_loop_width ),
         changed_ ( true ),
         camera_x_priority_ ( camera_x_priority ),
         camera_y_priority_ ( camera_y_priority ),
@@ -301,7 +329,7 @@
         right_limit_ ( m.right_limit_ ),
         hero_type_ ( m.hero_type_ ),
         water_effect_ ( std::move( m.water_effect_ ) ),
-        scroll_loop_ ( m.scroll_loop_ ),
+        scroll_loop_width_ ( m.scroll_loop_width_ ),
         camera_x_priority_ ( m.camera_x_priority_ ),
         camera_y_priority_ ( m.camera_y_priority_ ),
 		blocks_work_offscreen_ ( m.blocks_work_offscreen_ )
@@ -347,7 +375,7 @@
         left_limit_ ( c.left_limit_ ),
         right_limit_ ( c.right_limit_ ),
         hero_type_ ( c.hero_type_ ),
-        scroll_loop_ ( c.scroll_loop_ ),
+        scroll_loop_width_ ( c.scroll_loop_width_ ),
         camera_x_priority_ ( c.camera_x_priority_ ),
         camera_y_priority_ ( c.camera_y_priority_ ),
 		blocks_work_offscreen_ ( c.blocks_work_offscreen_ )
@@ -515,6 +543,11 @@
             foregrounds_[ i ]->update();
         }
         changed_ = false;
+		
+		if ( water_effect_ )
+		{
+			water_effect_->update();
+		}
     };
 
     Palette::PaletteSet Map::palette() const
@@ -584,7 +617,7 @@
         return hero_type_;
     };
 
-    WaterEffect* Map::effect()
+    const WaterEffect* Map::effect()
     {
         return water_effect_.get();
     };
@@ -596,7 +629,12 @@
 
     bool Map::scrollLoop() const
     {
-        return scroll_loop_;
+        return scroll_loop_width_ != 0;
+    };
+
+    int Map::scrollLoopWidth() const
+    {
+        return scroll_loop_width_;
     };
 
     Camera::XPriority Map::cameraXPriority() const

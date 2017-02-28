@@ -23,6 +23,8 @@
 // DEPENDENCIES
 //===================================
 
+	#include "animated_graphics.h"
+	#include "counter.h"
 	#include "unit.h"
 
 
@@ -32,17 +34,26 @@
     class WaterEffect
     {
         public:
+			/*
 			constexpr WaterEffect( int y_blocks )
 			:
 				y_ ( Unit::BlocksToSubPixels( y_blocks ) )
-			{};
+			{};*/
+			
+			WaterEffect( int y_blocks );
 
-			void testSprite( Sprite* sprite );
+			void update();
 			void render( Graphics& graphics, Camera& camera );
             int yBlocks() const;
+			void testSprite( Sprite* sprite ) const;
+
 
 		private:
 			const int y_;
+			AnimatedGraphics surface_;
+			SpriteGraphics body_;
+			Counter x_offset_;
+			TimerRepeat move_speed_;
     };
 
 

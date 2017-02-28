@@ -54,6 +54,7 @@
 
         sprite.on_ground_prev_ = sprite.on_ground_;
         sprite.on_ground_ = false;
+		sprite.is_jumping_prev_ = sprite.is_jumping_;
         sprite.is_jumping_ = false;
 
         // If not moving anymo', start slowing down.

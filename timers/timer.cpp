@@ -21,7 +21,7 @@
 
     Timer::Timer( int limit, bool starts_on, int start_count, Direction::Vertical direction )
     :
-        limit_ ( limit ),
+        limit_ ( ( limit != NULL ) ? limit : NORMAL_FRAMES ), // Treat NULL as default.
         on_ ( starts_on ),
         starts_on_ ( starts_on ),
         counter_ ( start_count ),

@@ -22,6 +22,7 @@
     #include "counter.h"
     #include <map>
     #include "sprite_graphics.h"
+	#include "timer_simple.h"
 
 
 // CLASS
@@ -37,9 +38,11 @@
 
 
         private:
-            Counter walk_counter_ = Counter( 0, 3, 0, true );
-            Counter climb_counter_ = Counter( 0, 1, 0, true );
-            Counter blink_counter_ = Counter( 0, 11, 0, true );
+            Counter walk_counter_;
+            Counter climb_counter_;
+            Counter blink_counter_;
+			Counter swim_counter_;
+			TimerSimple swim_timer_;
     };
 
 

@@ -44,37 +44,44 @@
             );
             ~Map() noexcept;
             Map( Map&& m ) noexcept;
-            //Map& operator= ( Map&& m ) = delete;
+            Map& operator= ( Map&& m ) = delete;
             Map( const Map& c );
-            //Map& operator= ( const Map& c ) = delete;
+            Map& operator= ( const Map& c ) = delete;
 
+            void update();
+            void renderBG( Graphics& graphics, Camera& camera );
+            void renderFG( Graphics& graphics, Camera& camera );
+			
+            Palette::PaletteSet palette() const;
+            const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
+			
             int widthBlocks() const;
             int heightBlocks() const;
             int widthPixels() const;
             int heightPixels() const;
+			
             int blocksSize() const;
             int spritesSize() const;
             int block( int n ) const;
             int sprite( int n ) const;
+			
             int mapX( int n ) const;
             int mapY( int n ) const;
             int indexFromXAndY( int x, int y ) const;
-            bool slippery() const;
+			
             const bool changed() const;
             void changeBlock( int where, int value );
             void deleteBlock( int where );
-            void update();
-            Palette::PaletteSet palette() const;
-            void renderBG( Graphics& graphics, Camera& camera );
-            void renderFG( Graphics& graphics, Camera& camera );
-            WaterEffect* effect();
-            const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
+			
+            bool slippery() const;
+            const WaterEffect* effect();
             int topLimit() const;
             int bottomLimit() const;
             int leftLimit() const;
             int rightLimit() const;
-            SpriteSystem::HeroType heroType() const;
             bool scrollLoop() const;
+			int scrollLoopWidth() const;
+            SpriteSystem::HeroType heroType() const;
             Camera::XPriority cameraXPriority() const;
             Camera::YPriority cameraYPriority() const;
             bool blocksWorkOffscreen() const;
@@ -88,21 +95,21 @@
                 std::vector<int> sprites,
                 int width,
                 int height,
-                Palette::PaletteSet palette = { Palette::PaletteType::CLASSIC_GREEN, 2 },
-                std::vector<MapLayer*> backgrounds = {},
-                std::vector<Warp> warps = {},
-                std::vector<MapLayer*> foregrounds = {},
-                bool slippery = false,
-                int top_limit = -1,
-                int bottom_limit = -1,
-                int left_limit = -1,
-                int right_limit = -1,
-                SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL,
-                int water_effect_height_blocks = -1,
-                bool scroll_loop = false,
-                Camera::XPriority camera_x_priority = Camera::XPriority::__NULL,
-                Camera::YPriority camera_y_priority = Camera::YPriority::__NULL,
-                bool blocks_work_offscreen = false
+                Palette::PaletteSet palette,
+                std::vector<MapLayer*> backgrounds,
+                std::vector<Warp> warps,
+                std::vector<MapLayer*> foregrounds,
+                bool slippery,
+                int top_limit,
+                int bottom_limit,
+                int left_limit,
+                int right_limit,
+                SpriteSystem::HeroType hero_type,
+                int water_effect_height_blocks,
+                int scroll_loop_width,
+                Camera::XPriority camera_x_priority,
+                Camera::YPriority camera_y_priority,
+                bool blocks_work_offscreen
             );
             std::vector<int> blocks_;
             std::vector<int> sprites_;
@@ -120,7 +127,7 @@
             const SpriteSystem::HeroType hero_type_;
             std::unique_ptr<WaterEffect> water_effect_;
             bool changed_;
-            const bool scroll_loop_;
+            const int scroll_loop_width_;
             const Camera::XPriority camera_x_priority_;
             const Camera::YPriority camera_y_priority_;
             const bool blocks_work_offscreen_;

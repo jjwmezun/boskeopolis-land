@@ -60,12 +60,12 @@
     {
     };
 
-    void SpriteGraphics::render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority ) const
+    void SpriteGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, Camera* camera, bool priority ) const
     {
         masterRender( graphics, bound_box, current_frame_x_, current_frame_y_, camera, priority );
     };
 
-    void SpriteGraphics::masterRender( Graphics& graphics, sdl2::SDLRect bound_box, int current_frame_x, int current_frame_y, Camera* camera, bool priority ) const
+    void SpriteGraphics::masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, Camera* camera, bool priority ) const
     {
         if ( visible_ && ( ( priority && priority_ ) || ( !priority && !priority_ ) ) )
         {

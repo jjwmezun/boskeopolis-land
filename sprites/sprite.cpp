@@ -366,6 +366,11 @@
         return is_jumping_;
     };
 
+    bool Sprite::isJumpingPrev() const
+    {
+        return is_jumping_prev_;
+    };
+
     void Sprite::jump()
     {
         if ( movement_ != nullptr )
@@ -726,4 +731,14 @@
         {
             return movement_->testCollision( *this, them );
         }	
+	};
+
+	SpriteMovement::Type Sprite::movementType() const
+	{
+		return movement_->type();
+	};
+
+	bool Sprite::hasMovementType( SpriteMovement::Type type ) const
+	{
+		return type == movement_->type();
 	};

@@ -50,7 +50,6 @@
     #include "graphics.h"
     #include <iostream>
     #include "map.h"
-    #include "rotating_graphics.h"
     #include "sprite.h"
     #include "sprite_graphics.h"
     #include <utility>
@@ -1008,8 +1007,22 @@
             new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 40, 16 ),
             { new BlockComponentSolid() }
         ));
-        block_types_.push_back( nullptr );
-        block_types_.push_back( nullptr );
+        block_types_.push_back( new BlockType
+        (
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 40, 24 ),
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 24, 24 ),
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 40, 24 ),
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 24, 24 ),
+            { new BlockComponentSolid() }
+        ));
+        block_types_.push_back( new BlockType
+        (
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 32, 24 ),
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 40, 24 ),
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 32, 24 ),
+            new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 40, 24 ),
+            { new BlockComponentSolid() }
+        ));
         block_types_.push_back( new BlockType
         (
             new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 7*8, 16 ),

@@ -27,12 +27,14 @@
  "properties":
     {
      "camera_priority_x":"CENTER",
-     "scroll_loop":true
+     "scroll_loop":true,
+     "scroll_loop_width":178
     },
  "propertytypes":
     {
      "camera_priority_x":"string",
-     "scroll_loop":"bool"
+     "scroll_loop":"bool",
+     "scroll_loop_width":"int"
     },
  "renderorder":"right-down",
  "tileheight":16,

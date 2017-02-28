@@ -501,7 +501,9 @@
                             "sewer-1-2",
                             { Palette::PaletteType::BABY_BLUE, 2 },
                             {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_1, 320, 160, 0, 0, 0, 0 ),
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -50 ),
+                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_GRADIENT, 8, 160, 0, 0, 0, 0 ),
+                                //new MapLayerConstellation( 20, 9 ),
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, 0 )
                             },
                             { Warp( 1, 80, -32, 0, 20, 0, 16 ) }
@@ -519,14 +521,15 @@
                             "sewer-1-3",
                             { Palette::PaletteType::POISON_PURPLE, 5 },
                             {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_1, 320, 160, 0, 0, 0, 0 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, 0 )
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_GRADIENT, 8, 160, 0, 0, 0, 0 ),
+                                new MapLayerConstellation( 128, 16 ),
+                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, .25 ),
                             }
                         )
                     },
                     std::unique_ptr<Goal> ( new Goal() ),
                     16*5,
-                    16*11
+                    16*5
                 };
             break;
 
@@ -540,7 +543,6 @@
                             "city-1",
                             { Palette::PaletteType::MIDNIGHT_BLUE, 4 },
                             {
-                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_1, 384, 256, 0, 0, .1, .1 ),
                                 new MapLayerConstellation( 224, 16 ),
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, .25 ),
                                 new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_3, 48, 32, 0, 176, 1, 1, 1, true, false )

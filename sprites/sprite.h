@@ -137,6 +137,7 @@
             bool onGroundPadding() const;
             bool canJump() const;
             bool isJumping() const;
+            bool isJumpingPrev() const;
             bool isDucking() const;
             bool onLadder() const;
             bool onLadderPrev() const;
@@ -147,6 +148,8 @@
             bool isMoving() const;
             bool isRunning() const;
             bool isSlidingPrev() const;
+			SpriteMovement::Type movementType() const;
+			bool hasMovementType( SpriteMovement::Type type ) const;
 
             bool isDead() const;
             int hp() const;
@@ -258,6 +261,7 @@
             bool on_ground_prev_ = false;
             bool can_jump_ = false;
             bool is_jumping_ = false;
+			bool is_jumping_prev_ = false;
             bool jump_start_ = false;
             bool jump_end_ = false;
             bool is_bouncing_ = false;

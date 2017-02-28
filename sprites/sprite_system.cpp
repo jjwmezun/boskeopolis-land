@@ -404,7 +404,7 @@
         return *hero_;
     };
 
-    void SpriteSystem::effects( WaterEffect* water_effect )
+    void SpriteSystem::effects( const WaterEffect* water_effect )
     {
         if ( water_effect != nullptr )
         {
