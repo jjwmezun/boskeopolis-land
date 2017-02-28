@@ -651,3 +651,8 @@
     {
         return blocks_work_offscreen_;
     };
+
+	void Map::setChanged()
+	{
+		changed_ = true;
+	};

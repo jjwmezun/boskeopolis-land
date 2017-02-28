@@ -93,8 +93,8 @@
             const Level::LevelName id_;
             std::vector<Map> maps_;
             std::unique_ptr<Goal> goal_;
-            const int entrance_x_;
-            const int entrance_y_;
+            int entrance_x_;
+            int entrance_y_;
             const int camera_x_;
             const int camera_y_;
             const std::string message_;

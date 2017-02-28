@@ -70,6 +70,7 @@
             int indexFromXAndY( int x, int y ) const;
 			
             const bool changed() const;
+			void setChanged();
             void changeBlock( int where, int value );
             void deleteBlock( int where );
 			

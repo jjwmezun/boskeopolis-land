@@ -257,6 +257,7 @@
         }
 
         input_->update();
+		
     };
 
     void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )

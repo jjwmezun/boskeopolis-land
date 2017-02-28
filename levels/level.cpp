@@ -651,8 +651,12 @@
         if ( warp != nullptr )
         {
             current_map_ = warp->mapNum();
+			
+			entrance_x_ = warp->entranceX();
+			entrance_y_ = warp->entranceY();
+			
             sprites.reset( *this, inventory );
-            sprites.hero().setPosition( warp->entranceX(), warp->entranceY() );
+            //sprites.hero().setPosition( warp->entranceX(), warp->entranceY() );
 
             int camera_x = camera.x();
             int camera_y = camera.y();
@@ -671,6 +675,8 @@
             camera.adjust( sprites.hero(), currentMap() );
 
             state->newPalette( graphics, currentMap().palette() );
+			
+			currentMap().setChanged();
         }
     };
 
