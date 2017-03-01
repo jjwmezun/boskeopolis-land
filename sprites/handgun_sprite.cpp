@@ -85,7 +85,7 @@
 
     void HandgunSprite::testIfItShouldShoot()
     {
-        shooting_ = MezunMath::testRandomWithinPercentage( SHOOT_CHANCE_PERCENT );
+        shooting_ = mezun::testRandomWithinPercentage( SHOOT_CHANCE_PERCENT );
     };
 
     void HandgunSprite::reset()

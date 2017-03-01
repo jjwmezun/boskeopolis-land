@@ -49,7 +49,7 @@
 
     EggnonSprite::MovingState::MovingState()
     :
-        State( MezunMath::randInt( 128, 16 ), Type::MOVING )
+        State( mezun::randInt( 128, 16 ), Type::MOVING )
     {};
 
     void EggnonSprite::MovingState::update( EggnonSprite& e )

@@ -102,9 +102,9 @@
 				return *this;
 			};
 
-			constexpr Counter& operator++ () { *this += 1; };
+			constexpr Counter& operator++ () { return *this += 1; };
 
-			constexpr Counter& operator-- () { *this -= 1; };
+			constexpr Counter& operator-- () { return *this -= 1; };
 
 			constexpr bool operator== ( int n ) const
 			{

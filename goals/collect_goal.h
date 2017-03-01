@@ -29,7 +29,7 @@
     {
 
         public:
-            CollectGoal( int amount_needed, std::string message = MezunHelpers::emptyString() );
+            CollectGoal( int amount_needed, std::string message = mezun::emptyString() );
             ~CollectGoal();
 
             void update( SpriteSystem& sprites, InventoryLevel& inventory, EventSystem& events, const Input& input );

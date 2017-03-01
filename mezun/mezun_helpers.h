@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace MezunHelpers
+namespace mezun
 {
 	inline std::string emptyString()
 	{
@@ -18,7 +18,7 @@ namespace MezunHelpers
 	template<typename T>
 	T randomListItem( const std::vector<T>& list )
 	{
-		const int r = MezunMath::randInt( list.size() - 1, 0 );
+		const int r = mezun::randInt( list.size() - 1, 0 );
 		
 		try
 		{

@@ -58,7 +58,7 @@
 	std::string NewsTicker::newMessage() const
 	{
 		// Slight Bug: 1st message always seems to be the same.
-		return MezunHelpers::randomListItem( strings_ );
+		return mezun::randomListItem( strings_ );
 	};
 
 	void NewsTicker::changeMessage()

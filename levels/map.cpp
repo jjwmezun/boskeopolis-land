@@ -131,7 +131,7 @@
 				{
 					std::string name = prop.name.GetString();
 
-					if ( MezunHelpers::areStringsEqual( name, "slippery" ) )
+					if ( mezun::areStringsEqual( name, "slippery" ) )
 					{
 						if ( prop.value.IsBool() )
 						{
@@ -139,7 +139,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "camera_limit_top" ) )
+					if ( mezun::areStringsEqual( name, "camera_limit_top" ) )
 					{
 						if ( prop.value.IsInt() )
 						{
@@ -147,7 +147,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "camera_limit_bottom" ) )
+					if ( mezun::areStringsEqual( name, "camera_limit_bottom" ) )
 					{
 						if ( prop.value.IsInt() )
 						{
@@ -155,7 +155,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "camera_limit_left" ) )
+					if ( mezun::areStringsEqual( name, "camera_limit_left" ) )
 					{
 						if ( prop.value.IsInt() )
 						{
@@ -163,7 +163,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "camera_limit_right" ) )
+					if ( mezun::areStringsEqual( name, "camera_limit_right" ) )
 					{
 						if ( prop.value.IsInt() )
 						{
@@ -171,7 +171,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "water_effect_height" ) )
+					if ( mezun::areStringsEqual( name, "water_effect_height" ) )
 					{
 						if ( prop.value.IsInt() )
 						{
@@ -179,7 +179,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "scroll_loop_width" ) )
+					if ( mezun::areStringsEqual( name, "scroll_loop_width" ) )
 					{
 						if ( prop.value.IsInt() )
 						{
@@ -187,7 +187,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "hero_type" ) )
+					if ( mezun::areStringsEqual( name, "hero_type" ) )
 					{
 						if ( prop.value.IsString() )
 						{
@@ -195,7 +195,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "camera_priority_x" ) )
+					if ( mezun::areStringsEqual( name, "camera_priority_x" ) )
 					{
 						if ( prop.value.IsString() )
 						{
@@ -207,7 +207,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "camera_priority_y" ) )
+					if ( mezun::areStringsEqual( name, "camera_priority_y" ) )
 					{
 						if ( prop.value.IsString() )
 						{
@@ -219,7 +219,7 @@
 						}
 					}
 
-					if ( MezunHelpers::areStringsEqual( name, "blocks_work_offscreen" ) )
+					if ( mezun::areStringsEqual( name, "blocks_work_offscreen" ) )
 					{
 						if ( prop.value.IsBool() )
 						{

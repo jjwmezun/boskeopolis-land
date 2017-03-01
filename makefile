@@ -6,7 +6,7 @@ AR = ar
 LD = g++
 WINDRES = windres
 
-INC = -Igraphics -Itimers -Istates -Isprites -Isprite_components -Isprite_movement -Itext -Igoals -Iblock_conditions -Iblock_components -I/home/jjwmezun/Documents/cpp-projects/boskeopolis-land/ -Ilevels -Iinventory -Iexceptions
+INC = -Igraphics -Itimers -Istates -Isprites -Isprite_components -Isprite_movement -Itext -Igoals -Iblock_conditions -Iblock_components -I/home/jjwmezun/Documents/cpp-projects/boskeopolis-land/ -Ilevels -Iinventory -Iexceptions -Imezun
 CFLAGS = -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Wswitch-enum -Wswitch-default -Weffc++ -Wmain -Wfatal-errors -Wextra -Wall -std=c++14 -g
 RESINC = 
 LIBDIR = 
@@ -46,6 +46,7 @@ before_debug:
 	test -d $(OBJDIR_DEBUG)/block_conditions || mkdir -p $(OBJDIR_DEBUG)/block_conditions
 	test -d $(OBJDIR_DEBUG)/goals || mkdir -p $(OBJDIR_DEBUG)/goals
 	test -d $(OBJDIR_DEBUG)/exceptions || mkdir -p $(OBJDIR_DEBUG)/exceptions
+	test -d $(OBJDIR_DEBUG)/mezun || mkdir -p $(OBJDIR_DEBUG)/mezun
 
 after_debug: 
 
@@ -485,5 +486,6 @@ clean_debug:
 	rm -rf $(OBJDIR_DEBUG)/block_conditions
 	rm -rf $(OBJDIR_DEBUG)/goals
 	rm -rf $(OBJDIR_DEBUG)/exceptions
+	rm -rf $(OBJDIR_DEBUG)/mezun
 
 .PHONY: before_debug after_debug clean_debug

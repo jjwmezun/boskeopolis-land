@@ -43,7 +43,7 @@
             DOWN,
             LEFT
         };
-		static constexpr int SIMPLE_SIZE = (int)Simple::LEFT + 1;
+		static constexpr int SIMPLE_SIZE = ( int )Simple::LEFT + 1;
 
         enum class Rotation
         {
@@ -182,11 +182,11 @@
         {
             if ( allow_null )
             {
-                return (Horizontal)MezunMath::randInt( 2, 0 );
+                return static_cast<Horizontal> ( mezun::randInt( 2, 0 ) );
             }
             else
             {
-                return (Horizontal)MezunMath::randInt( 2, 1 );
+                return static_cast<Horizontal> ( mezun::randInt( 2, 1 ) );
             }
         };
 
@@ -194,11 +194,11 @@
         {
             if ( allow_null )
             {
-                return ( Simple )MezunMath::randInt( 4, 0 );
+                return static_cast<Simple> ( mezun::randInt( 4, 0 ) );
             }
             else
             {
-                return ( Simple )MezunMath::randInt( 4, 1 );
+                return static_cast<Simple> ( mezun::randInt( 4, 1 ) );
             }
         };
 		

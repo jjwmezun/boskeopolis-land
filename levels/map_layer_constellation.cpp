@@ -86,12 +86,12 @@
 		{
 			for ( int x = 0; x < width_; ++x )
 			{
-				bool draw_star = MezunMath::testRandomWithinPercentage( STAR_CHANCE );
+				bool draw_star = mezun::testRandomWithinPercentage( STAR_CHANCE );
 
 				if ( draw_star )
 				{
-					int star_type_percent = MezunMath::randPercent();
-                    bool bright_star = MezunMath::testRandomWithinPercentage( BRIGHT_STAR_CHANCE );
+					int star_type_percent = mezun::randPercent();
+                    bool bright_star = mezun::testRandomWithinPercentage( BRIGHT_STAR_CHANCE );
 
                     int star_type = -1;
 

@@ -417,7 +417,7 @@
 	const std::pair<int, int> MazeChaserSprite::randomTile() const
 	{
 		// Note: Impractical to get map width, so it's hard-coded in as the "40."
-		return std::make_pair<int, int> ( MezunMath::randInt( 40, 0 ), MezunMath::randInt( 40, 0 ) );
+		return std::make_pair<int, int> ( mezun::randInt( 40, 0 ), mezun::randInt( 40, 0 ) );
 	};
 
 	std::array<bool, Direction::SIMPLE_SIZE> MazeChaserSprite::defaultPossibleDirections() const
