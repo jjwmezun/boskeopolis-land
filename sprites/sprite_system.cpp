@@ -52,7 +52,6 @@
     #include "sprite_component_right_and_left.h"
     #include "sprite_component_up_and_down.h"
     #include "sprite_system.h"
-    #include "water_effect.h"
 
 
 // STATIC PROPERTIES
@@ -404,18 +403,6 @@
         return *hero_;
     };
 
-    void SpriteSystem::effects( const WaterEffect* water_effect )
-    {
-        if ( water_effect != nullptr )
-        {
-            for ( int i = 0; i < sprites_.size(); ++i )
-            {
-                water_effect->testSprite( sprites_.at( i ).get() );
-            }
-            water_effect->testSprite( hero_.get() );
-        }
-    };
-
     SpriteSystem::HeroType SpriteSystem::heroType( std::string property )
     {
         if ( property.compare( "CART" ) == 0 )
@@ -433,3 +420,19 @@
 
         return HeroType::NORMAL;
     };
+
+	void SpriteSystem::interactWithMap( MapLayer& map_layer )
+	{
+		for ( auto& s : sprites_ )
+		{
+			if ( s->interactsWithBlocks() )
+			{
+				map_layer.interact( *s );
+			}
+		}
+				
+		if ( hero_->interactsWithBlocks() )
+		{
+			map_layer.interact( *hero_ );
+		}
+	};

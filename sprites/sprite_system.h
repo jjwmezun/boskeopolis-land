@@ -21,7 +21,7 @@
     class Graphics;
     class Input;
     class InventoryLevel;
-    class WaterEffect;
+	class MapLayer;
 
 
 // DEPENDENCIES
@@ -64,14 +64,14 @@
             void render( Graphics& graphics, Camera& camera, bool priority = false );
             void interact( BlockSystem& blocks, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
             void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap );
-            void effects( const WaterEffect* water_effect );
             void reset( const Level& level, const InventoryLevel& inventory );
             void spawn( SpawnSprite type, int x, int y );
             Sprite& hero();
+			void interactWithMap( MapLayer& map_layer );
 
 
         private:
-            static const int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
+            static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
 
             std::vector<std::unique_ptr<Sprite>> sprites_;
             std::unique_ptr<Sprite> hero_;

@@ -32,7 +32,7 @@
         GameState ( StateID::LEVEL_STATE ),
         events_ ( events ),
         inventory_ ( inventory ),
-        level_ ( Level::makeLevel( lvname ) ),
+        level_ ( std::move( Level::makeLevel( lvname ) ) ),
         camera_ ( { level_.cameraX(), level_.cameraY() } ),
         sprites_ ( level_.entranceX(), level_.entranceY() )
     {
@@ -48,8 +48,8 @@
         level_.currentMap().update();
         sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
         sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
-        sprites_.effects( level_.currentMap().effect() );
         sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
+		level_.interact( sprites_ );
         inventory_.update( events_, sprites_.hero() );
 
         if ( level_.goal() != nullptr )

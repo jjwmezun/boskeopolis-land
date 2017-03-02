@@ -17,6 +17,7 @@
 
     class Camera;
     class Graphics;
+	class Sprite;
 
 
 // DEPENDENCIES
@@ -31,6 +32,7 @@
         public:
             virtual void update() = 0;
             virtual void render( Graphics& graphics, Camera& camera ) const = 0;
+			virtual void interact( Sprite& sprite ) {};
     };
 
 #endif // MAP_LAYER_IMAGE_H
