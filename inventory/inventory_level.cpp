@@ -12,7 +12,6 @@
 //===================================
 
     #include "event_system.h"
-    #include "game.h"
     #include "inventory_level.h"
 
 
@@ -34,6 +33,7 @@
 		inventory_ ( {} ),
 		health_ ( VERTICAL_POS ),
         clock_ ( {} ),
+		oxygen_meter_ ( VERTICAL_POS ),
 		ticker_ ( VERTICAL_POS + 16 )
     {};
 
@@ -42,6 +42,7 @@
 		health_ ( VERTICAL_POS ),
 		inventory_ ( c.inventory_ ),
         clock_ ( {} ),
+		oxygen_meter_ ( VERTICAL_POS ),
 		ticker_ ( VERTICAL_POS + 16 )
     {};
 
@@ -50,6 +51,7 @@
 		health_ ( VERTICAL_POS ),
 		inventory_ ( c ),
         clock_ ( {} ),
+		oxygen_meter_ ( VERTICAL_POS ),
 		ticker_ ( VERTICAL_POS + 16 )
 	{};
 
@@ -61,8 +63,7 @@
 
     void InventoryLevel::update( EventSystem& events, Sprite& hero )
     {
-        adjustOxygen( hero );
-
+        oxygen_meter_.update( hero );
 		inventory_.update();
 		health_.update( hero );
         clock_.update();
@@ -111,10 +112,7 @@
         }
 
 		// OXYGEN
-        if ( show_oxygen_ )
-        {
-            graphics.renderRect( OXYGEN_METER_DEST, oxygen_color_ );
-        }
+		oxygen_meter_.render( graphics );
     };
 
     void InventoryLevel::addFunds( int n )
@@ -135,29 +133,6 @@
     int InventoryLevel::clockTime() const
     {
         return clock_.totalSeconds();
-    };
-
-    void InventoryLevel::adjustOxygen( Sprite& hero )
-    {
-        if ( hero.in_water_ )
-        {
-            show_oxygen_ = true;
-            OXYGEN_METER_DEST.w = round( OXYGEN_METER_WIDTH_PIXELS * hero.status().oxygenPercent() );
-
-            oxygen_color_ = 5;
-
-            if ( hero.status().oxygenPercent() < .25 )
-            {
-                if ( Game::nextFrame( 2 ) )
-                {
-                    oxygen_color_ = 2;
-                }
-            }
-        }
-        else
-        {
-            show_oxygen_ = false;
-        }
     };
 
     bool InventoryLevel::haveDiamond( Level::LevelName level ) const
