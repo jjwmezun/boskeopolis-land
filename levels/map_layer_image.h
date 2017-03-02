@@ -47,8 +47,8 @@
                 int animation_speed = 1,
 				bool flip = false
             );
-            void update();
-            void render( Graphics& graphics, Camera& camera ) const;
+            void update( EventSystem& events ) override;
+            void render( Graphics& graphics, Camera& camera ) const override;
 
         private:
             const Graphics::SpriteSheet texture_;

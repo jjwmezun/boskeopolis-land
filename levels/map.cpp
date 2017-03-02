@@ -18,7 +18,6 @@
     #include "rapidjson/document.h"
     #include "rapidjson/istreamwrapper.h"
     #include "unit.h"
-    #include "water_effect.h"
 
 
 // STATIC PROPERTIES
@@ -117,7 +116,6 @@
 			int camera_limit_bottom = -1;
 			int camera_limit_left = -1;
 			int camera_limit_right = -1;
-			int water_effect_height_blocks = -1;
 			int scroll_loop_width = 0;
 			SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
 			Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
@@ -168,14 +166,6 @@
 						if ( prop.value.IsInt() )
 						{
 							camera_limit_right = prop.value.GetInt();
-						}
-					}
-
-					if ( mezun::areStringsEqual( name, "water_effect_height" ) )
-					{
-						if ( prop.value.IsInt() )
-						{
-							water_effect_height_blocks = prop.value.GetInt();
 						}
 					}
 
@@ -250,7 +240,6 @@
 				camera_limit_left,
 				camera_limit_right,
 				hero_type,
-				water_effect_height_blocks,
 				scroll_loop_width,
 				camera_x_priority,
 				camera_y_priority,
@@ -274,7 +263,6 @@
         int left_limit,
         int right_limit,
         SpriteSystem::HeroType hero_type,
-        int water_effect_height_blocks,
         int scroll_loop_width,
         Camera::XPriority camera_x_priority,
         Camera::YPriority camera_y_priority,
@@ -293,7 +281,6 @@
         left_limit_ ( left_limit ),
         right_limit_ ( right_limit ),
         hero_type_ ( hero_type ),
-        water_effect_ ( testWaterEffect( water_effect_height_blocks ) ),
         scroll_loop_width_ ( scroll_loop_width ),
         changed_ ( true ),
         camera_x_priority_ ( camera_x_priority ),
@@ -328,7 +315,6 @@
         left_limit_ ( m.left_limit_ ),
         right_limit_ ( m.right_limit_ ),
         hero_type_ ( m.hero_type_ ),
-        water_effect_ ( std::move( m.water_effect_ ) ),
         scroll_loop_width_ ( m.scroll_loop_width_ ),
         camera_x_priority_ ( m.camera_x_priority_ ),
         camera_y_priority_ ( m.camera_y_priority_ ),
@@ -379,12 +365,7 @@
         camera_x_priority_ ( c.camera_x_priority_ ),
         camera_y_priority_ ( c.camera_y_priority_ ),
 		blocks_work_offscreen_ ( c.blocks_work_offscreen_ )
-    {
-        if ( c.water_effect_ )
-        {
-            water_effect_.reset( new WaterEffect( c.water_effect_->yBlocks() ) );
-        }
-    };
+    {};
 /*
     Map& Map::operator= ( const Map& c )
     {
@@ -532,22 +513,17 @@
         return n > 0 && n < blocks_.size();
     };
 
-    void Map::update()
+    void Map::update( EventSystem& events )
     {
         for ( int i = 0; i < backgrounds_.size(); ++i )
         {
-            backgrounds_[ i ]->update();
+            backgrounds_[ i ]->update( events );
         }
         for ( int i = 0; i < foregrounds_.size(); ++i )
         {
-            foregrounds_[ i ]->update();
+            foregrounds_[ i ]->update( events );
         }
         changed_ = false;
-		
-		if ( water_effect_ )
-		{
-			water_effect_->update();
-		}
     };
 
     Palette::PaletteSet Map::palette() const
@@ -565,11 +541,6 @@
 
     void Map::renderFG( Graphics& graphics, Camera& camera )
     {
-        if ( water_effect_ )
-        {
-            water_effect_->render( graphics, camera );
-        }
-
         for ( int i = 0; i < foregrounds_.size(); ++i )
         {
             foregrounds_[ i ]->render( graphics, camera );
@@ -617,16 +588,6 @@
         return hero_type_;
     };
 
-    const WaterEffect* Map::effect()
-    {
-        return water_effect_.get();
-    };
-
-    WaterEffect* Map::testWaterEffect( int n ) const
-    {
-        return ( n > -1 ) ? new WaterEffect( n ) : nullptr;
-    };
-
     bool Map::scrollLoop() const
     {
         return scroll_loop_width_ != 0;
@@ -655,4 +616,17 @@
 	void Map::setChanged()
 	{
 		changed_ = true;
+	};
+
+	void Map::interact( SpriteSystem& sprites )
+	{
+		for ( auto b : backgrounds_ )
+		{
+			sprites.interactWithMap( *b );
+		}
+
+		for ( auto f : foregrounds_ )
+		{
+			sprites.interactWithMap( *f );
+		}
 	};

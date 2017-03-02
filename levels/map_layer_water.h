@@ -5,11 +5,11 @@
 // Name
 //===================================
 //
-// WaterEffect
+// MapLayerWater
 //
 
-#ifndef WATER_EFFECT_H
-#define WATER_EFFECT_H
+#ifndef MAP_LAYER_WATER_H
+#define MAP_LAYER_WATER_H
 
 
 // FORWARD DECLARATIONS
@@ -25,36 +25,30 @@
 
 	#include "animated_graphics.h"
 	#include "counter.h"
+	#include "map_layer.h"
 	#include "unit.h"
 
 
 // CLASS
 //===================================
 
-    class WaterEffect
+    class MapLayerWater : public MapLayer
     {
         public:
-			/*
-			constexpr WaterEffect( int y_blocks )
-			:
-				y_ ( Unit::BlocksToSubPixels( y_blocks ) )
-			{};*/
-			
-			WaterEffect( int y_blocks );
+			MapLayerWater( int y_blocks );
 
-			void update();
-			void render( Graphics& graphics, Camera& camera );
-            int yBlocks() const;
-			void testSprite( Sprite* sprite ) const;
+			void update( EventSystem& events ) override;
+			void render( Graphics& graphics, Camera& camera ) const override;
+			void interact( Sprite& sprite ) override;
 
 
 		private:
-			const int y_;
+			int y_;
 			AnimatedGraphics surface_;
-			SpriteGraphics body_;
+			const SpriteGraphics body_;
 			Counter x_offset_;
 			TimerRepeat move_speed_;
     };
 
 
-#endif // WATER_EFFECT_H
+#endif // MAP_LAYER_WATER_H

@@ -14,7 +14,6 @@
 //===================================
 
     class SpriteSystem;
-    class WaterEffect;
 
 
 // DEPENDENCIES
@@ -48,7 +47,7 @@
             Map( const Map& c );
             Map& operator= ( const Map& c ) = delete;
 
-            void update();
+            void update( EventSystem& events );
             void renderBG( Graphics& graphics, Camera& camera );
             void renderFG( Graphics& graphics, Camera& camera );
 			
@@ -75,7 +74,6 @@
             void deleteBlock( int where );
 			
             bool slippery() const;
-            const WaterEffect* effect();
             int topLimit() const;
             int bottomLimit() const;
             int leftLimit() const;
@@ -86,6 +84,7 @@
             Camera::XPriority cameraXPriority() const;
             Camera::YPriority cameraYPriority() const;
             bool blocksWorkOffscreen() const;
+			void interact( SpriteSystem& sprites );
 
 
         private:
@@ -106,7 +105,6 @@
                 int left_limit,
                 int right_limit,
                 SpriteSystem::HeroType hero_type,
-                int water_effect_height_blocks,
                 int scroll_loop_width,
                 Camera::XPriority camera_x_priority,
                 Camera::YPriority camera_y_priority,
@@ -126,7 +124,6 @@
             const int left_limit_;
             const int right_limit_;
             const SpriteSystem::HeroType hero_type_;
-            std::unique_ptr<WaterEffect> water_effect_;
             bool changed_;
             const int scroll_loop_width_;
             const Camera::XPriority camera_x_priority_;
@@ -134,7 +131,6 @@
             const bool blocks_work_offscreen_;
 
             bool inBounds( int n ) const;
-            WaterEffect* testWaterEffect( int n ) const;
     };
 
 #endif // MAP_H

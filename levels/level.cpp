@@ -16,6 +16,7 @@
     #include "avoid_money_goal.h"
     #include "map_layer_constellation.h"
     #include "map_layer_image.h"
+    #include "map_layer_water.h"
     #include "camera.h"
 	#include <cassert>
     #include "collect_goal.h"
@@ -512,9 +513,9 @@
                         (
                             "sewer-1",
                             { Palette::PaletteType::SEWER_GREEN, 3 },
-                            //{ new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_1, 360, 229, 0, 0, 0, 0 ) },
                             { new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_2, 320, 160, 0, 0, .5, .5 ) },
-                            { Warp( 2, 80, 160, 0, 300, 0, 64 ) }
+                            { Warp( 2, 80, 160, 0, 300, 0, 64 ) },
+                            { new MapLayerWater( 18 ) }
                         ),
                         Map::mapFromPath
                         (
@@ -779,3 +780,13 @@
     {
         return id_;
     };
+
+	void Level::interact( SpriteSystem& sprites )
+	{
+		currentMap().interact( sprites );
+	};
+
+	void Level::update( EventSystem& events )
+	{
+		currentMap().update( events );
+	};

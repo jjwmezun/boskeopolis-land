@@ -40,10 +40,6 @@
 		star_pattern_ ( generateStarPattern() )
     {};
 
-    void MapLayerConstellation::update()
-    {
-    };
-
     void MapLayerConstellation::render( Graphics& graphics, Camera& camera ) const
     {
 		sdl2::SDLRect source = { 0, 0, TILE_SIZE, TILE_SIZE };

@@ -88,6 +88,8 @@
             static std::string NameOLevel( int n );
             std::string message() const;
             LevelName id() const;
+			void update( EventSystem& events );
+			void interact( SpriteSystem& sprites );
 
         private:
             const Level::LevelName id_;

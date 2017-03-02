@@ -37,8 +37,7 @@
                 double scroll_speed_y = .1
             );
             ~MapLayerConstellation();
-            void update();
-            void render( Graphics& graphics, Camera& camera ) const;
+            void render( Graphics& graphics, Camera& camera ) const override;
 
         private:
             enum class StarType

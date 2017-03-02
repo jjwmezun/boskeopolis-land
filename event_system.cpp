@@ -21,12 +21,14 @@
 // METHODS
 //===================================
 
-    EventSystem::EventSystem
-    (
-    )
+    EventSystem::EventSystem()
+	:
+		switch_ (false ),
+		switch_changed_ (false ),
+		new_palette_ ( Palette::PaletteType::__NULL, 0 ),
+		palette_changed_ ( false ),
+		move_water_ ( -1 )
     {};
-
-    EventSystem::~EventSystem() {};
 
     void EventSystem::reset()
     {
@@ -85,3 +87,8 @@
     {
         switch_changed_ = false;
     };
+
+	bool EventSystem::waterShouldMove() const
+	{
+		return move_water_ != WATER_NULL;
+	};

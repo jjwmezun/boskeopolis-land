@@ -16,6 +16,7 @@
 //===================================
 
     class Camera;
+	class EventSystem;
     class Graphics;
 	class Sprite;
 
@@ -30,7 +31,7 @@
     class MapLayer
     {
         public:
-            virtual void update() = 0;
+            virtual void update( EventSystem& events ) {};
             virtual void render( Graphics& graphics, Camera& camera ) const = 0;
 			virtual void interact( Sprite& sprite ) {};
     };

@@ -28,7 +28,6 @@
     {
         public:
             EventSystem();
-            ~EventSystem();
 
             bool won_ = false;
             bool failed_ = false;
@@ -47,13 +46,19 @@
             bool switchOn() const;
             bool switchChanged() const;
             void flipSwitch();
+			
+			int move_water_ = -1;
+			bool waterShouldMove() const;
 
 
        private:
+	   		static constexpr int WATER_NULL = -1;
+	   
             bool switch_ = false;
             bool switch_changed_ = false;
             Palette::PaletteSet new_palette_ = { Palette::PaletteType::__NULL, 0 };
             bool palette_changed_ = false;
+			
             void resetPalette();
 
     };

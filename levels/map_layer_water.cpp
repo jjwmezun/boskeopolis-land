@@ -3,7 +3,7 @@
 // Name
 //===================================
 //
-// WaterEffect
+// MapLayerWater
 //
 
 
@@ -11,8 +11,9 @@
 //===================================
 
     #include "camera.h"
+	#include "event_system.h"
     #include "sprite.h"
-    #include "water_effect.h"
+    #include "map_layer_water.h"
 
 
 // STATIC PROPERTIES
@@ -21,7 +22,7 @@
 // METHODS
 //===================================
 
-	WaterEffect::WaterEffect( int y_blocks )
+	MapLayerWater::MapLayerWater( int y_blocks )
 	:
 		y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
 		surface_
@@ -44,18 +45,15 @@
 		move_speed_ ( 16 )
 	{};
 
-    void WaterEffect::testSprite( Sprite* sprite ) const
+    void MapLayerWater::interact( Sprite& sprite )
     {
-        if ( sprite != nullptr )
-        {
-            if ( sprite->bottomSubPixels() > y_ )
-            {
-                sprite->swim();
-            }
-        }
+		if ( sprite.bottomSubPixels() > y_ )
+		{
+			sprite.swim();
+		}
     };
 
-    void WaterEffect::render( Graphics& graphics, Camera& camera )
+    void MapLayerWater::render( Graphics& graphics, Camera& camera ) const
     {
         if ( Unit::SubPixelsToPixels( y_ ) < camera.bottom() )
         {
@@ -78,12 +76,7 @@
         }
     };
 
-    int WaterEffect::yBlocks() const
-    {
-        return Unit::SubPixelsToBlocks( y_ );
-    };
-
-	void WaterEffect::update()
+	void MapLayerWater::update( EventSystem& events )
 	{
 		surface_.update();
 		
@@ -93,4 +86,16 @@
 		}
 
 		move_speed_.update();
+		
+		if ( events.waterShouldMove() )
+		{
+			if ( events.move_water_ < y_ )
+			{
+				--y_;
+			}
+			else if ( events.move_water_ > y_ )
+			{
+				++y_;
+			}
+		}
 	};

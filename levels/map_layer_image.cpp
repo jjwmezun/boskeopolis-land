@@ -59,7 +59,7 @@
 		frame_dir_ ( ( flip ) ? Direction::Vertical::UP : Direction::Vertical::__NULL )
     {};
 
-    void MapLayerImage::update()
+    void MapLayerImage::update( EventSystem& events )
     {
         if ( Game::nextFrame( 8 / animation_speed_ ) )
         {
