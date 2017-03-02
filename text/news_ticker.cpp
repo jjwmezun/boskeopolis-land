@@ -31,7 +31,7 @@
 			"",
 			Unit::WINDOW_WIDTH_PIXELS,
 			y,
-			FontShade::BLACK,
+			FontShade::DARK_GRAY,
 			FontAlign::LEFT,
 			false,
 			NULL, 
