@@ -44,17 +44,14 @@
 
             BlockType
             (
-                SpriteGraphics* g1 = nullptr,
-                SpriteGraphics* g2 = nullptr,
-                SpriteGraphics* g3 = nullptr,
-                SpriteGraphics* g4 = nullptr,
-                std::vector<BlockComponent*> components = {},
-                std::vector<std::vector<BlockCondition*>> conditions = {}
+                std::unique_ptr<SpriteGraphics> = nullptr,
+                std::vector<std::unique_ptr<BlockComponent>> components = {},
+                std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions = {}
             );
 
             ~BlockType();
             BlockType( const BlockType& ) = delete;
-            BlockType( BlockType&& ) = delete;
+            BlockType( BlockType&& ) = default;
             const BlockType& operator= ( const BlockType& ) = delete;
             const BlockType&& operator= ( BlockType&& ) = delete;
 
@@ -70,9 +67,9 @@
             static constexpr int MINI_BLOCK_SIZE = 8;
             static constexpr int NUM_O_MINI_BLOCKS = 4;
 
-            std::shared_ptr<SpriteGraphics> graphics_[ NUM_O_MINI_BLOCKS ];
-            std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
+			std::unique_ptr<SpriteGraphics> graphics_;
             std::vector<std::unique_ptr<BlockComponent>> components_;
+            std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
     };
 
 #endif // BLOCK_TYPE_H

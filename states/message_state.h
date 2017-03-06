@@ -39,10 +39,21 @@
                 bool pop = false,
                 std::unique_ptr<GameState> next_state = nullptr,
                 bool push = false,
-                Palette::PaletteSet palette = { Palette::PaletteType::GRAYSCALE, 1 },
+                const Palette& palette = { "Grayscale", 1 },
                 Text::FontShade font_color = Text::FontShade::BLACK
             );
+			
+			static std::unique_ptr<MessageState> error
+			(
+				std::string message,
+				bool pop,
+				std::unique_ptr<GameState> next_state,
+				bool push
+			);
+			
             ~MessageState();
+			MessageState( const MessageState& c ) = delete;
+			const MessageState& operator=( const MessageState& c ) = delete;
 
             void update( Game& game, const Input& input, Graphics& graphics );
             void stateRender( Graphics& graphics );

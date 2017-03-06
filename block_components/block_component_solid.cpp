@@ -10,6 +10,7 @@
 //===================================
 
     #include "block_component_solid.h"
+	#include "block_type.h"
     #include "collision.h"
     #include "sprite.h"
 

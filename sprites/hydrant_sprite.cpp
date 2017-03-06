@@ -25,7 +25,7 @@
 
     HydrantSprite::HydrantSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new HydrantGraphics() ), x, y, 14, 14, {}, 100, 1500, 3000, 3000 )
+        Sprite( std::make_unique<HydrantGraphics> (), x, y, 14, 14, {}, 100, 1500, 3000, 3000 )
     {
         jump_lock_ = false;
     };

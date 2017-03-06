@@ -47,7 +47,7 @@
         int max_hp,
         int hp,
         std::unique_ptr<InputComponent> input,
-        Graphics::SpriteSheet texture,
+        std::string&& texture,
         SpriteType type,
         int start_speed,
         int top_speed,
@@ -56,7 +56,7 @@
         bool permanent
     )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new PlayerGraphics( texture ) ), x, y, 14, 23, { type }, start_speed, top_speed, jump_start_speed, jump_top_speed, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::PERMANENT, false, true, true, false, .2, max_hp, hp ),
+        Sprite( std::make_unique<PlayerGraphics> ( std::forward<std::string> ( texture ) ), x, y, 14, 23, { type }, start_speed, top_speed, jump_start_speed, jump_top_speed, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::PERMANENT, false, true, true, false, .2, max_hp, hp ),
         input_ ( std::move( input ) )
     {};
 
@@ -235,8 +235,9 @@
         if ( !in_water_ && in_water_prev_ )
         {
             changeMovement( SpriteMovement::Type::GROUNDED );
-            //hit_box_.y -= jump_top_speed_normal_*8;
-            bounce();
+			
+			if ( input_->action1( input ) )
+            	bounce();
         }
 
         if ( isDucking() )

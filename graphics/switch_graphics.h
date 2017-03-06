@@ -33,7 +33,7 @@
         public:
             SwitchGraphics
             (
-                Graphics::SpriteSheet texture,
+                std::string&& texture,
                 std::pair<int, int> frames_on,
                 std::pair<int, int> frames_off,
                 bool flip_x = false,

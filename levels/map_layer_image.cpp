@@ -24,7 +24,7 @@
 
     MapLayerImage::MapLayerImage
     (
-        Graphics::SpriteSheet texture,
+        std::string&& texture,
         int width,
         int height,
         int offset_x,

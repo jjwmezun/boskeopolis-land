@@ -24,7 +24,7 @@
 
     OverworldPlayerGraphics::OverworldPlayerGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVSPRITES_AUTUMN_OVERWORLD, 0, 0, false, false, 0, false, -2, -1, 3, 2, 8 )
+        SpriteGraphics ( "sprites/autumn_overworld.png", 0, 0, false, false, 0, false, -2, -1, 3, 2, 8 )
     {};
 
     OverworldPlayerGraphics::~OverworldPlayerGraphics() {};

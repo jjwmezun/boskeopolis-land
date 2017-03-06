@@ -25,8 +25,9 @@
 // METHODS
 //===================================
 
-    LevelMessageState::LevelMessageState( Palette::PaletteSet palette, std::string message )
+    LevelMessageState::LevelMessageState( const Palette& palette, std::string message )
     :
+        GameState( StateID::PAUSE_STATE, palette ),
         message_
 		(
 			Text
@@ -39,8 +40,7 @@
 				false,
 				LINE_LIMIT 
 			)
-		),
-        GameState( StateID::PAUSE_STATE, palette )
+		)
     {};
 
     LevelMessageState::~LevelMessageState() {};

@@ -36,7 +36,7 @@
             void update( Sprite& sprite );
 			
 		private:
-			const Graphics::SpriteSheet typeGraphics( MazeChaserSprite::Type type ) const;
+			int typesImgXFrame( MazeChaserSprite::Type type ) const;
     };
 
 

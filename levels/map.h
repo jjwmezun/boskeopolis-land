@@ -36,10 +36,9 @@
             static Map mapFromPath
             (
                 std::string path,
-                Palette::PaletteSet palette = { Palette::PaletteType::CLASSIC_GREEN, 2 },
-                std::vector<MapLayer*> backgrounds = {},
+                std::vector<std::unique_ptr<MapLayer>> backgrounds = {},
                 std::vector<Warp> warps = {},
-                std::vector<MapLayer*> foregrounds = {}
+                std::vector<std::unique_ptr<MapLayer>> foregrounds = {}
             );
             ~Map() noexcept;
             Map( Map&& m ) noexcept;
@@ -51,7 +50,7 @@
             void renderBG( Graphics& graphics, Camera& camera );
             void renderFG( Graphics& graphics, Camera& camera );
 			
-            Palette::PaletteSet palette() const;
+            Palette palette() const;
             const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
 			
             int widthBlocks() const;
@@ -68,6 +67,7 @@
             int mapY( int n ) const;
             int indexFromXAndY( int x, int y ) const;
 			
+			const std::string& tileset() const;
             const bool changed() const;
 			void setChanged();
             void changeBlock( int where, int value );
@@ -95,10 +95,11 @@
                 std::vector<int> sprites,
                 int width,
                 int height,
-                Palette::PaletteSet palette,
-                std::vector<MapLayer*> backgrounds,
+				std::string tileset,
+                Palette palette,
+                std::vector<std::unique_ptr<MapLayer>> backgrounds,
                 std::vector<Warp> warps,
-                std::vector<MapLayer*> foregrounds,
+                std::vector<std::unique_ptr<MapLayer>> foregrounds,
                 bool slippery,
                 int top_limit,
                 int bottom_limit,
@@ -115,9 +116,10 @@
             const std::vector<Warp> warps_;
             std::vector<std::shared_ptr<MapLayer>> backgrounds_;
             std::vector<std::shared_ptr<MapLayer>> foregrounds_;
-            const Palette::PaletteSet palette_;
+            const Palette palette_;
             const int width_;
             const int height_;
+			const std::string tileset_;
             const bool slippery_;
             const int top_limit_;
             const int bottom_limit_;

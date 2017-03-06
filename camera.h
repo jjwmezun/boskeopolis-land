@@ -219,7 +219,8 @@
             bool onscreenPixels( const sdl2::SDLRect& r, int padding = 0 )  const;
             bool offscreen( const sdl2::SDLRect& r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
 
-            bool changed();
+            bool changed() const;
+			void update();
 
             void adjust( Sprite& o, Map& m );
             void adjustCart( Sprite& o, Map& m );

@@ -29,7 +29,7 @@
 
     PlatformSprite::PlatformSprite( int x, int y, Direction::Simple direction, int move_space_before_change )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_PLATFORM ) ), x, y, 32, 8, {}, 800, 800, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/platform.png" ), x, y, 32, 8, {}, 800, 800, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
     {
         switch ( Direction::SimpleIsOfWhatType( direction ) )
         {

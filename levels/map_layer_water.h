@@ -43,6 +43,7 @@
 
 
 		private:
+			static constexpr int MOVE_SPEED = 500;
 			int y_;
 			AnimatedGraphics surface_;
 			const SpriteGraphics body_;

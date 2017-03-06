@@ -96,7 +96,7 @@
 
     EggnonSprite::EggnonSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_EGGNON, 0, 0, false, false, 0, true ) ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 80, 500, 200, 500, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true )
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/eggnon.png", 0, 0, false, false, 0, true ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 80, 500, 200, 500, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true )
     {
         jump_lock_ = false;
     };

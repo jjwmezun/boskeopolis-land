@@ -35,7 +35,7 @@
     {
 
         public:
-            LevelState( EventSystem events, InventoryLevel inventory, Level::LevelName lvname );
+            LevelState( EventSystem events, InventoryLevel inventory, int lvname, Game& game );
             ~LevelState();
 
             void update( Game& game, const Input& input, Graphics& graphics );
@@ -44,12 +44,12 @@
             void backFromPop( Game& game, Graphics& graphics );
 
         private:
+            InventoryLevel inventory_;
+            EventSystem events_;
             Level level_;
             Camera camera_;
-            EventSystem events_;
-            InventoryLevel inventory_;
-            BlockSystem blocks_;
             SpriteSystem sprites_;
+            BlockSystem blocks_;
     };
 
 #endif // LEVEL_STATE_H

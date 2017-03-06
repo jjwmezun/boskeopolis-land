@@ -28,7 +28,7 @@
 
     OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new OverworldPlayerGraphics() ), x, y, 12, 14, { SpriteType::HERO }, 800, 3000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true, true, false, 0, 2, 2 ),
+        Sprite( std::make_unique<OverworldPlayerGraphics> (), x, y, 12, 14, { SpriteType::HERO }, 800, 3000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true, true, false, 0, 2, 2 ),
 		death_spins_ ( 0 )
     {
 	};

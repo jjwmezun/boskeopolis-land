@@ -35,11 +35,11 @@
             ~RopeGraphics();
 
             void update( Sprite& sprite );
-            void render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera = nullptr, bool priority = false ) const;
+            void render( Graphics& graphics, const sdl2::SDLRect& bound_box, Camera* camera = nullptr, bool priority = false ) const override;
 
         private:
-            static constexpr std::pair<int, int> frame_body_ = { 200, 112 };
-            static constexpr std::pair<int, int> frame_end_ = { 208, 112 };
+            static constexpr std::pair<int, int> frame_body_ = { 112, 16 };
+            static constexpr std::pair<int, int> frame_end_ = { 120, 16 };
     };
 
 

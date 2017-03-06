@@ -26,7 +26,7 @@
 
     PenguinSprite::PenguinSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new PenguinGraphics() ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1200, 4000, 0, 0, Direction::Horizontal::LEFT ),
+        Sprite( std::make_unique<PenguinGraphics> (), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1200, 4000, 0, 0, Direction::Horizontal::LEFT ),
         turning_ ( false ),
         delay_ ( 48, false )
     {};

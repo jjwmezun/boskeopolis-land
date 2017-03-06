@@ -27,9 +27,9 @@
 
 	OxygenMeter::OxygenMeter( int y )
 	:		
-		gfx_left_bar_ ( Graphics::SpriteSheet::LVTILESET_UNIVERSAL, 0, 16 ),
-		gfx_middle_bar_ ( Graphics::SpriteSheet::LVTILESET_UNIVERSAL, 8, 16 ),
-		gfx_right_bar_ ( Graphics::SpriteSheet::LVTILESET_UNIVERSAL, 0, 16, true ),
+		gfx_left_bar_ ( "tilesets/universal.png", 0, 16 ),
+		gfx_middle_bar_ ( "tilesets/universal.png", 8, 16 ),
+		gfx_right_bar_ ( "tilesets/universal.png", 0, 16, true ),
 		meter_bar_
 		({
 			X_PIXELS,

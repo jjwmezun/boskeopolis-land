@@ -24,7 +24,7 @@
 
     MazeChaserGraphics::MazeChaserGraphics( MazeChaserSprite::Type type )
     :
-        SpriteGraphics ( typeGraphics( type ), 0, 0, false, false, 0, false, -1, -1, 2, 2 )
+        SpriteGraphics ( "sprites/eyeball.png", typesImgXFrame( type ), 0, false, false, 0, false, -1, -1, 2, 2 )
     {};
 
     MazeChaserGraphics::~MazeChaserGraphics() {};
@@ -52,21 +52,7 @@
 		}
     };
 
-	const Graphics::SpriteSheet MazeChaserGraphics::typeGraphics( MazeChaserSprite::Type type ) const
+	int MazeChaserGraphics::typesImgXFrame( MazeChaserSprite::Type type ) const
 	{
-		switch( type )
-		{
-			case ( MazeChaserSprite::Type::SHADOW ):
-				return Graphics::SpriteSheet::LVSPRITES_EYEBALL;
-			break;
-			case ( MazeChaserSprite::Type::AMBUSH ):
-				return Graphics::SpriteSheet::LVSPRITES_EYEBALL2;
-			break;
-			case ( MazeChaserSprite::Type::RANDO ):
-				return Graphics::SpriteSheet::LVSPRITES_EYEBALL3;
-			break;
-			case ( MazeChaserSprite::Type::OBFUSCATING ):
-				return Graphics::SpriteSheet::LVSPRITES_EYEBALL4;
-			break;
-		}
+		return ( int )type * 16;
 	};

@@ -29,13 +29,10 @@
     :
         Sprite
 		(
-			std::unique_ptr<SpriteGraphics>
+			std::make_unique<SpriteGraphics>
 			(
-				new SpriteGraphics
-				(
-					Graphics::SpriteSheet::LVSPRITES_CLOUD_BLOCK,
-					64
-				)
+				"sprites/cloud_block.png",
+				64
 			),
 			x,
 			y,

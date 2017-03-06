@@ -39,8 +39,8 @@
 
             void update();
             void reset();
-            void changePalette( Palette::PaletteSet new_palette );
-            Palette::PaletteSet getPalette();
+            void changePalette( const Palette& new_palette );
+            Palette getPalette();
             bool paletteChanged() const;
 
             bool switchOn() const;
@@ -54,10 +54,10 @@
        private:
 	   		static constexpr int WATER_NULL = -1;
 	   
-            bool switch_ = false;
-            bool switch_changed_ = false;
-            Palette::PaletteSet new_palette_ = { Palette::PaletteType::__NULL, 0 };
-            bool palette_changed_ = false;
+            bool switch_;
+            bool switch_changed_;
+            Palette new_palette_;
+            bool palette_changed_;
 			
             void resetPalette();
 

@@ -1,0 +1,33 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 2, "y": 0 },
+			{ "x": 2, "y": 1 },
+			{ "x": 2, "y": 2 },
+			{ "x": 2, "y": 3 }
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		},
+		{
+			"component":
+			{
+				"type": "conveyor",
+				"direction": "right"
+			},
+			"conditions":
+			[
+				{ "type": "collide_bottom" }
+			]
+		}
+	]
+}

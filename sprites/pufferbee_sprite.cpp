@@ -38,7 +38,7 @@
     :
         Sprite
 		(
-			std::unique_ptr<SpriteGraphics> ( new PufferbeeGraphics() ),
+			std::make_unique<PufferbeeGraphics> (),
 			x,
 			y,
 			20,

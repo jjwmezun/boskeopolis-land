@@ -24,7 +24,7 @@
     GameState::GameState
     (
         StateID id,
-        Palette::PaletteSet palette
+        const Palette& palette
     )
     :
         id_ ( id ),
@@ -43,7 +43,7 @@
         graphics.newPalette( palette_ );
     };
 
-    void GameState::newPalette( Graphics& graphics, Palette::PaletteSet palette )
+    void GameState::newPalette( Graphics& graphics, const Palette& palette )
     {
         if ( palette_ != palette )
         {

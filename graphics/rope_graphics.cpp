@@ -30,7 +30,7 @@
 
     RopeGraphics::RopeGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVTILESET_CITY, 200, 112 )
+        SpriteGraphics ( "tilesets/woods.png", 112, 16 )
     {};
 
     RopeGraphics::~RopeGraphics() {};
@@ -39,7 +39,7 @@
     {
     };
 
-    void RopeGraphics::render( Graphics& graphics, sdl2::SDLRect bound_box, Camera* camera, bool priority ) const
+    void RopeGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, Camera* camera, bool priority ) const
     {
         const int LAST_BLOCK = bound_box.h - 8;
 

@@ -23,7 +23,7 @@
 // METHODS
 //===================================
 
-    BlockComponentChangePalette::BlockComponentChangePalette( Palette::PaletteSet palette ) : palette_ ( palette ), used_ ( false ) {};
+    BlockComponentChangePalette::BlockComponentChangePalette( const Palette& palette ) : palette_ ( palette ), used_ ( false ) {};
 
     BlockComponentChangePalette::~BlockComponentChangePalette() {};
 

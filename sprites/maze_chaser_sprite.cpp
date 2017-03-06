@@ -31,7 +31,7 @@
     :
         Sprite
 		(
-			std::unique_ptr<SpriteGraphics>( new MazeChaserGraphics( type ) ),
+			std::make_unique<MazeChaserGraphics> ( type ),
 			x,
 			y,
 			14,
@@ -329,7 +329,7 @@
 		
 		const sdl2::SDLRect r = { x, y, Unit::BlocksToSubPixels( 1 ) - 4000, Unit::BlocksToSubPixels( 1 ) - 4000 };
 		
-		return blocks.blocksInTheWay( r, { 93 } );
+		return blocks.blocksInTheWay( r, BlockComponent::Type::SOLID );
 	};
 	
 	int MazeChaserSprite::distanceOfCoordinates( const std::pair<int, int>& one, const std::pair<int, int>& two ) const

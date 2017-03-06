@@ -25,7 +25,7 @@
 
     HydrantGraphics::HydrantGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVSPRITES_HYDRANT, 0, 0, false, false, 0, false, -1, -1, 2, 2 )
+        SpriteGraphics ( "sprites/hydrant.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 )
     {};
 
     HydrantGraphics::~HydrantGraphics() {};

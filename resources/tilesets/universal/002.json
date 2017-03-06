@@ -1,0 +1,45 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 5,
+		"y": 0
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "money",
+				"amount": 500
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "rival" }
+			]
+		}
+	]
+}

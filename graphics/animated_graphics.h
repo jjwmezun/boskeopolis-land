@@ -32,7 +32,7 @@
         public:
             AnimatedGraphics
             (
-                Graphics::SpriteSheet texture,
+        		std::string&& texture,
                 std::vector<std::pair<int, int>> frames,
                 bool flip_x = false,
                 bool flip_y = false,

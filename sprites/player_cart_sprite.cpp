@@ -31,7 +31,7 @@
 
     PlayerCartSprite::PlayerCartSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_AUTUMN_CART ) ), x, y, 32, 40, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png" ), x, y, 32, 40, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
     {
         run();
         direction_x_ = Direction::Horizontal::RIGHT;

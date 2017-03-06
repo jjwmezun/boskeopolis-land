@@ -32,7 +32,7 @@
         public:
             MapLayerImage
             (
-                Graphics::SpriteSheet texture,
+                std::string&& texture,
                 int width,
                 int height,
                 int offset_x = 0,
@@ -51,7 +51,7 @@
             void render( Graphics& graphics, Camera& camera ) const override;
 
         private:
-            const Graphics::SpriteSheet texture_;
+            const std::string texture_;
             sdl2::SDLRect source_;
             const int offset_x_;
             const int offset_y_;

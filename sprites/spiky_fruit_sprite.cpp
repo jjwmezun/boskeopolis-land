@@ -29,7 +29,7 @@
 
     SpikyFruitSprite::SpikyFruitSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_SPIKYFRUIT ) ), x, y, 16, 16, { SpriteType::ENEMY }, 10, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false )
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/spikyfruit.png" ), x, y, 16, 16, { SpriteType::ENEMY }, 10, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false )
     {};
 
     SpikyFruitSprite::~SpikyFruitSprite() {};

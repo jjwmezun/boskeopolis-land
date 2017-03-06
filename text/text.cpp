@@ -233,7 +233,7 @@
 
 				graphics.renderObject
 				(
-					Graphics::SpriteSheet::CHARSET,
+					"charset.png",
 					{
 						frameX( frame ),
 						frameY( frame, shade ),

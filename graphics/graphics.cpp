@@ -30,7 +30,7 @@
     Graphics::Graphics( Game& game, std::vector<std::string>& args  )
     :
         img_path_ ( setImgPath( game ) ),
-        palette_ ( new Palette() )
+        palette_ ( std::make_unique<Palette> ( "Grayscale", 1 ) )
     {
 
         if ( args.size() >= 2 )
@@ -70,40 +70,39 @@
         return img_path_ + relative_path;
     };
 
-    void Graphics::loadTexture( SpriteSheet sheet )
+    void Graphics::loadTexture( const std::string& sheet )
     {
-        if ( textures_.find( sheet ) == textures_.end() )
-        {
-            SDL_RWops* rwop = SDL_RWFromFile( imgAddress( graphic_addresses_[ (int)sheet ] ).c_str(), "rb" );
+		SDL_RWops* rwop = SDL_RWFromFile( imgAddress( sheet ).c_str(), "rb" );
 
-            if ( rwop == nullptr )
-            {
-                SDL_Log( "SDL_RWFromFile failed: %s", SDL_GetError() );
-            }
+		if ( rwop == nullptr )
+		{
+			SDL_Log( "SDL_RWFromFile failed: %s", SDL_GetError() );
+		}
 
-            if ( surfaces_.find( sheet ) == surfaces_.end() )
-            {
-                surfaces_.insert( std::make_pair( sheet, sdl2::SDLSurface( IMG_LoadPNG_RW( rwop ) ) ) );
+		if ( surfaces_.find( sheet ) == surfaces_.end() )
+		{
+			surfaces_.insert( std::make_pair( sheet, sdl2::SDLSurface( IMG_LoadPNG_RW( rwop ) ) ) );
 
-                if ( surfaces_.at( sheet ) == nullptr )
-                {
-                    SDL_Log( "SDL_Surface failed: %s", SDL_GetError() );
-                }
-            }
+			if ( surfaces_.at( sheet ) == nullptr )
+			{
+				SDL_Log( "SDL_Surface failed: %s", SDL_GetError() );
+			}
+		}
 
-            if ( surfaces_.at( sheet ) != nullptr )
-            {
-                if ( palette_ != nullptr )
-                    palette_->applyPalette( surfaces_.at( sheet ).get() );
+		if ( surfaces_.at( sheet ) != nullptr )
+		{
+			if ( palette_ )
+			{
+				palette_->applyPalette( surfaces_.at( sheet ).get() );
+			}
 
-                textures_.insert( std::make_pair( sheet, sdl2::SDLTexture( SDL_CreateTextureFromSurface( renderer_.get(), surfaces_.at( sheet ).get() ) ) ) );
+			textures_.insert( std::make_pair( sheet, sdl2::SDLTexture( SDL_CreateTextureFromSurface( renderer_.get(), surfaces_.at( sheet ).get() ) ) ) );
 
-                if ( textures_.at( sheet ).get() == nullptr )
-                {
-                    SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
-                }
-            }
-        }
+			if ( textures_.at( sheet ).get() == nullptr )
+			{
+				SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
+			}
+		}
     };
 
     bool Graphics::createRenderer()
@@ -162,7 +161,8 @@
         int g = 255;
         int b = 255;
 
-        if ( palette_.get() != nullptr )
+		
+        if ( palette_ )
         {
             r = palette_->bgR();
             g = palette_->bgG();
@@ -196,22 +196,19 @@
         SDL_RenderPresent( renderer_.get() );
     };
 
-    void Graphics::renderObject( SpriteSheet sheet, sdl2::SDLRect source, sdl2::SDLRect dest, SDL_RendererFlip flip, double rotation )
+    void Graphics::renderObject( const std::string& sheet, sdl2::SDLRect source, sdl2::SDLRect dest, SDL_RendererFlip flip, double rotation )
     {
-        if ( sheet < SpriteSheet::LIMIT )
-        {
-            if ( textures_.find( sheet ) == textures_.end() )
-            {
-                loadTexture( sheet );
-            }
+		if ( textures_.find( sheet ) == textures_.end() )
+		{
+			loadTexture( sheet );
+		}
 
-            if ( textures_.find( sheet ) != textures_.end() )
-            {
-                dest = sourceRelativeToScreen( dest );
-                if ( SDL_RenderCopyEx( renderer_.get(), textures_.at( sheet ).get(), &source, &dest, rotation, 0, flip ) != 0 )
-                    printf( "Render failure: %s\n", SDL_GetError() );
-            }
-        }
+		if ( textures_.find( sheet ) != textures_.end() )
+		{
+			dest = sourceRelativeToScreen( dest );
+			if ( SDL_RenderCopyEx( renderer_.get(), textures_.at( sheet ).get(), &source, &dest, rotation, 0, flip ) != 0 )
+				printf( "Render failure: %s\n", SDL_GetError() );
+		}
     };
 
     int Graphics::magnified( int n ) const
@@ -297,9 +294,9 @@
 
         if ( palette_ != nullptr )
         {
-            r = palette_->getColor( color ).r;
-            g = palette_->getColor( color ).g;
-            b = palette_->getColor( color ).b;
+            r = palette_->color( color ).r;
+            g = palette_->color( color ).g;
+            b = palette_->color( color ).b;
         }
 
         sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
@@ -307,19 +304,14 @@
         SDL_RenderFillRect( renderer_.get(), &box_relative );
     };
 
-    void Graphics::newPalette( Palette::PaletteSet palette )
+    void Graphics::newPalette( Palette palette )
     {
-        palette_.reset( new Palette( palette ) );
+        palette_ = std::make_unique<Palette> ( palette );
         clearTextures();
     };
 
     void Graphics::update() { animation_frame_.update(); };
     bool Graphics::nextFrame() { return animation_frame_.hit(); };
-
-    int Graphics::fpsMilliseconds() const
-    {
-        return floor( 1000 / FPS );
-    };
 
     const std::string Graphics::setImgPath( Game& game )
     {

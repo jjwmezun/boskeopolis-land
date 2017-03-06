@@ -15,6 +15,7 @@
     #include "game.h"
 	#include "mezun_helpers.h"
     #include "map.h"
+	#include "map_layer_water.h"
     #include "rapidjson/document.h"
     #include "rapidjson/istreamwrapper.h"
     #include "unit.h"
@@ -29,10 +30,9 @@
     Map Map::mapFromPath
     (
         std::string path,
-        Palette::PaletteSet palette,
-        std::vector<MapLayer*> backgrounds,
+        std::vector<std::unique_ptr<MapLayer>> backgrounds,
         std::vector<Warp> warps,
-        std::vector<MapLayer*> foregrounds
+        std::vector<std::unique_ptr<MapLayer>> foregrounds
     )
     {
 	
@@ -111,6 +111,10 @@
 		// Misc. Features
 		//=============================================		
 			// Defaults
+			
+			std::string palette = "Grayscale";
+			int bg_color = 1;
+			std::string tileset = "urban";
 			bool slippery = false;
 			int camera_limit_top = -1;
 			int camera_limit_bottom = -1;
@@ -128,6 +132,30 @@
 				for ( auto& prop : map_data[ "properties" ].GetObject() )
 				{
 					std::string name = prop.name.GetString();
+
+					if ( mezun::areStringsEqual( name, "tileset" ) )
+					{
+						if ( prop.value.IsString() )
+						{
+							tileset = prop.value.GetString();
+						}
+					}
+
+					if ( mezun::areStringsEqual( name, "palette" ) )
+					{
+						if ( prop.value.IsString() )
+						{
+							palette = prop.value.GetString();
+						}
+					}
+
+					if ( mezun::areStringsEqual( name, "bg_color" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							bg_color = prop.value.GetInt();
+						}
+					}
 
 					if ( mezun::areStringsEqual( name, "slippery" ) )
 					{
@@ -216,6 +244,14 @@
 							blocks_work_offscreen = prop.value.GetBool();
 						}
 					}
+
+					if ( mezun::areStringsEqual( name, "water_effect_height" ) )
+					{
+						if ( prop.value.IsInt() )
+						{
+							foregrounds.emplace_back( std::make_unique<MapLayerWater> ( prop.value.GetInt() ) );
+						}
+					}
 				}
 			}
 
@@ -230,10 +266,11 @@
 				sprites,
 				width,
 				height,
-				palette,
-				backgrounds,
+				tileset,
+				{ palette, bg_color },
+				std::move( backgrounds ),
 				warps,
-				foregrounds,
+				std::move( foregrounds ),
 				slippery,
 				camera_limit_top,
 				camera_limit_bottom,
@@ -253,10 +290,11 @@
         std::vector<int> sprites,
         int width,
         int height,
-        Palette::PaletteSet palette,
-        std::vector<MapLayer*> backgrounds,
+		std::string tileset,
+        Palette palette,
+        std::vector<std::unique_ptr<MapLayer>> backgrounds,
         std::vector<Warp> warps,
-        std::vector<MapLayer*> foregrounds,
+        std::vector<std::unique_ptr<MapLayer>> foregrounds,
         bool slippery,
         int top_limit,
         int bottom_limit,
@@ -273,6 +311,7 @@
         sprites_ ( sprites ),
         width_ ( width ),
         height_ ( height ),
+		tileset_ ( tileset ),
         palette_ ( palette ),
         warps_ ( warps ),
         slippery_ ( slippery ),
@@ -289,11 +328,11 @@
     {
         for ( auto& b : backgrounds )
         {
-            backgrounds_.emplace_back( std::shared_ptr<MapLayer>( b ) );
+            backgrounds_.emplace_back( std::shared_ptr<MapLayer>( b.release() ) );
         }
         for ( auto& f : foregrounds )
         {
-            foregrounds_.emplace_back( std::shared_ptr<MapLayer>( f ) );
+            foregrounds_.emplace_back( std::shared_ptr<MapLayer>( f.release() ) );
         }
     };
 
@@ -305,6 +344,7 @@
         sprites_ ( m.sprites_ ),
         width_ ( m.width_ ),
         height_ ( m.height_ ),
+		tileset_ ( m.tileset_ ),
         palette_ ( m.palette_ ),
         backgrounds_ ( std::move( m.backgrounds_ ) ),
         warps_ ( m.warps_ ),
@@ -321,36 +361,13 @@
 		blocks_work_offscreen_ ( m.blocks_work_offscreen_ )
     {};
 
-/*
-    Map& Map::operator= ( Map&& m )
-    {
-        if ( this != &m )
-        {
-            water_effect_.reset( m.water_effect_.release() );
-            blocks_ = m.blocks_;
-            sprites_ = m.sprites_;
-            width_ = m.width_;
-            height_ = m.height_;
-            palette_ = m.palette_;
-            backgrounds_ = m.backgrounds_;
-            warps_ = m.warps_;
-            foregrounds_ = m.foregrounds_;
-            slippery_ = m.slippery_;
-            top_limit_ = m.top_limit_;
-            bottom_limit_ = m.bottom_limit_;
-            left_limit_ = m.left_limit_;
-            right_limit_ = m.right_limit_;
-            hero_type_ = m.hero_type_;
-        }
-    };*/
-
-
     Map::Map( const Map& c )
     :
         blocks_ ( c.blocks_ ),
         sprites_ ( c.sprites_ ),
         width_ ( c.width_ ),
         height_ ( c.height_ ),
+		tileset_ ( c.tileset_ ),
         palette_ ( c.palette_ ),
         backgrounds_ ( c.backgrounds_ ),
         foregrounds_ ( c.foregrounds_ ),
@@ -366,32 +383,6 @@
         camera_y_priority_ ( c.camera_y_priority_ ),
 		blocks_work_offscreen_ ( c.blocks_work_offscreen_ )
     {};
-/*
-    Map& Map::operator= ( const Map& c )
-    {
-        if ( this != &c )
-        {
-            if ( c.water_effect_ )
-            {
-                water_effect_.reset( new WaterEffect( c.water_effect_->yBlocks() ) );
-            }
-
-            blocks_ = c.blocks_;
-            sprites_ = c.sprites_;
-            width_ = c.width_;
-            height_ = c.height_;
-            palette_ = c.palette_;
-            backgrounds_ = c.backgrounds_;
-            warps_ = c.warps_;
-            foregrounds_ = c.foregrounds_;
-            slippery_ = c.slippery_;
-            top_limit_ = c.top_limit_;
-            bottom_limit_ = c.bottom_limit_;
-            left_limit_ = c.left_limit_;
-            right_limit_ = c.right_limit_;
-            hero_type_ = c.hero_type_;
-        }
-    };*/
 
     int Map::widthBlocks() const
     {
@@ -465,26 +456,6 @@
 
             x = x % widthBlocks();
         }
-        else
-        {
-            if ( x < 0 )
-            {
-                x = 0;
-            }
-            if ( x >= widthBlocks() )
-            {
-                x = widthBlocks() - 1;
-            }
-        }
-
-        if ( y < 0 )
-        {
-            y = 0;
-        }
-        if ( y >= heightBlocks() )
-        {
-            y = heightBlocks() - 1;
-        }
 
         return ( y * widthBlocks() ) + x;
     };
@@ -526,7 +497,7 @@
         changed_ = false;
     };
 
-    Palette::PaletteSet Map::palette() const
+    Palette Map::palette() const
     {
         return palette_;
     };
@@ -629,4 +600,9 @@
 		{
 			sprites.interactWithMap( *f );
 		}
+	};
+
+	const std::string& Map::tileset() const
+	{
+		return tileset_;
 	};

@@ -20,9 +20,14 @@
     #include "camera.h"
 	#include <cassert>
     #include "collect_goal.h"
+	#include <dirent.h>
     #include "do_nothing_goal.h"
+    #include <fstream>
+	#include "game.h"
     #include "game_state.h"
     #include "level.h"
+	#include "mezun_exceptions.h"
+    #include "rapidjson/istreamwrapper.h"
     #include "sprite.h"
     #include "sprite_system.h"
     #include "starving_goal.h"
@@ -34,541 +39,12 @@
 // STATIC PROPERTIES
 //===================================
 
+	std::vector<std::string> Level::level_list_;
+	unsigned int Level::real_level_num_ = 0;
+
+
 // METHODS
 //===================================
-
-    Level Level::makeLevel( LevelName lvname )
-    {
-        switch( lvname )
-        {
-            case ( LV_SNEAK ):
-                return
-                {
-                    lvname,
-                    {
-                        std::move( Map::mapFromPath
-                        (
-                            "sneak-1",
-                            { Palette::PaletteType::SHADOW, 7 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_MOON, 32, 32, 240, 32, 0, 0, 1, false, false ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_RAIN_2, 8, 8, 0, 0, 0, 0, 16, true, true, 0, 0, 4 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_DARKROOM, 128, 160, 0, -72, .5, .8 )
-                            }
-                        ) )
-                    },
-                    std::unique_ptr<Goal> ( new Goal( "!Don't let the guards see you!" ) ),
-                    16,
-                    26*16,
-                    0,
-                    0,
-                    "Guards can see 'bout 8 blocks\n'head, 1 block 'bove if you're  on the ground, & a li'l higher\nif you're in the air.\n\nBut they can't see you if part\no' you is covered by a solid\nblock."
-                };
-            break;
-
-            case ( LV_CITY_4 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "city-4",
-                            { Palette::PaletteType::GRAYSCALE, 7 },
-                            { new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY, 264, 144, 0, 0, .5, 0 ) },
-                            {},
-                            { new MapLayerImage( Graphics::SpriteSheet::LVBG_RAIN, 8, 8, 0, 0, 0, 0, 2 ) }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16,
-                    48
-                };
-            break;
-            case ( LV_DESERT_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "desert-1",
-                            { Palette::PaletteType::MIDNIGHT_BLUE, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_GRADIENT, 8, 160, 0, 0, 0, 0 ),
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new DoNothingGoal() ),
-                    144,
-                    90
-                };
-            break;
-
-
-            case ( LV_DESERT_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "desert-2",
-                            { Palette::PaletteType::MUSTARD_ORANGE, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_GRADIENT, 8, 160, 0, 0, 0, 0 ),
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new StarvingGoal() ),
-                    80,
-                    14*16
-                };
-            break;
-
-            case ( LV_MINES_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "mines-1",
-                            { Palette::PaletteType::SUBTERRANEAN_TEAL, 4 }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    71*16,
-                    19*16
-                };
-            break;
-
-            case ( LV_MINES_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "mines-2",
-                            { Palette::PaletteType::CEMENT_GRAY, 4 }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    3*16,
-                    0
-                };
-            break;
-
-            case ( LV_MINES_4 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "mines-4",
-                            { Palette::PaletteType::GOLDEN_YELLOW, 4 }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new AvoidMoneyGoal() ),
-                    153*16,
-                    32
-                };
-            break;
-
-            case ( LV_SNOW_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "snow-1",
-                            { Palette::PaletteType::ICY_BLUE, 0 },
-                            {
-                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_SNOWFIRS, 256, 256, 0, 64, .25, 1, 1, true, false )
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_SNOWFIRS2, 164, 256, 0, 16, .5, .5, 1, true, false )
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16,
-                    176
-                };
-            break;
-
-            case ( LV_WOODS_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "woods-2",
-                            { Palette::PaletteType::GOLDEN_YELLOW, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS, 256, 256, 0, 0, .25 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS2, 640, 256, 0, 0, .5 )
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new WindyGoal() ),
-                    80,
-                    27*16
-                };
-            break;
-
-            case ( LV_WOODS_3 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "woods-3",
-                            { Palette::PaletteType::MUSTARD_ORANGE, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_FIRS, 461, 256, 0, -24, .1, .5 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS, 256, 256, 0, 0, .25 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS2, 640, 256, 0, 0, .5 )
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16,
-                    15*16
-                };
-            break;
-
-            case ( LV_SAW ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "saw-1",
-                            { Palette::PaletteType::ICY_BLUE, 5 },
-                            { new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY, 264, 144, 0, 0, .5, 0 ) }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal( "¡Get 'way from the saw!" ) ),
-                    14*16,
-                    176
-                };
-            break;
-
-            case ( LV_MOUNTAIN_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "mountain-1",
-                            { Palette::PaletteType::DUSTY_BROWN, 2 },
-                            { new MapLayerImage( Graphics::SpriteSheet::LVBG_MOUNTAIN_3, 256, 160, 0, 32, .5, .5, 1, true, false ) }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    32,
-                    7*16
-                };
-            break;
-
-            case ( LV_CITY_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "city-2",
-                            { Palette::PaletteType::MIDNIGHT_RED, 7 },
-                            {
-                                new MapLayerConstellation( 330, 16 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .25, 0 ),
-                            },
-                            {},
-                            { new MapLayerImage( Graphics::SpriteSheet::LVBG_RAIN, 8, 8, 0, 0, 0, 0, 16, true, true, 0, 0, 4 ) }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal( "¡Get to the Keycane before \"Dagny\"!" ) ),
-                    //30*16,
-                    //32*16,
-                    //180*16,
-                    23*16,
-                    8*16,
-                    //313*16,2*16,
-                    //162*16,4*16,
-                    Unit::BlocksToPixels( 17 )
-                };
-            break;
-
-            case ( LV_WOODS_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "woods-1",
-                            { Palette::PaletteType::CLASSIC_GREEN, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_FIRS, 461, 256, 0, -64, .1, .25 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS, 256, 256, 0, 0, .25 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_WOODS2, 640, 256, 0, 0, .5 )
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16,
-                    208
-                };
-            break;
-
-            case ( LV_MAZE_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "maze-1",
-                            { Palette::PaletteType::BABY_BLUE, 6 }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new CollectGoal( 66900, "¡Collect everything & dodge the eyes!" ) ),
-                    19*16,
-                    17*16
-                };
-            break;
-
-            case ( LV_FACTORY_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "factory-1",
-                            { Palette::PaletteType::DUSTY_BROWN, 3 }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16*3,
-                    16*14
-                };
-            break;
-
-            case ( LV_FACTORY_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "factory-2",
-                            { Palette::PaletteType::FIERY_RED, 6 },
-							{
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_FIREGLOW, 16, 32, 0, 7*16, 1, 1, 6, true, false, 0, 0, 1, true ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_GRILL, 8, 8 )
-							}
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new SurviveTimeGoal( 30, "¡Last 30 seconds without being cooked!" ) ),
-                    16*5,
-                    -24
-                };
-            break;
-
-            case ( LV_SNOW_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "snow-2",
-                            { Palette::PaletteType::TRISTE_BLUE, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_MINTLINES, 8, 8, 0, 0, 0, 0 )
-                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1 ),
-                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25 ),
-                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_MOUNTAIN_2, 128, 96, 0, 96, .25, .25, 1, true, false )
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16*1,
-                    16*15
-                };
-            break;
-
-            case ( LV_SKY_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "sky-3",
-                            { Palette::PaletteType::TRISTE_BLUE, 5 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1, 1, true, true, 1 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -1 ),
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal( "By the way, Autumn's an owl now." ) ),
-                    58*16,
-                    40*16
-                };
-            break;
-
-            case ( LV_SKY_2 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "sky-2",
-                            { Palette::PaletteType::PEARL_PINK, 3 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS_2, 128, 128, 0, 0, .1, .1, 1, true, true, 100, 50 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -400, -100 ),
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new CollectGoal( 15000 ) ),
-                    10*16,
-                    4*16
-                };
-            break;
-
-            case ( LV_PYRAMID_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "pyramid-1",
-                            { Palette::PaletteType::MUSTARD_ORANGE, 2 }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    80,
-                    16*91
-                };
-            break;
-
-            case ( LV_CART ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "cart-1",
-                            { Palette::PaletteType::PEARL_PINK, 2 },
-                            {
-
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_SHOP, 37, 16 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_2, 320, 160, 0, 80*16, 1, 1, 1, true, false ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_2, 320, 160, 0, 90*16, 1, 1, 1, true, false ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, 1, 1, 1, true, false ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 8*16, 1, 1, 1, true, false ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 16*16, 1, 1, 1, true, false ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 24*16, 1, 1, 1, true, false )
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal( "¡Catch the sale on rare collectibles!" ) ),
-                    -32,
-                    16*/*49*/68
-                };
-            break;
-
-            case ( LV_SEWER_1 ):
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "sewer-1-2",
-                            { Palette::PaletteType::BABY_BLUE, 2 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CLOUDS, 128, 128, 0, 0, .25, .25, 1, true, true, -50 ),
-                                //new MapLayerImage( Graphics::SpriteSheet::LVBG_GRADIENT, 8, 160, 0, 0, 0, 0 ),
-                                //new MapLayerConstellation( 20, 9 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, 0 )
-                            },
-                            { Warp( 1, 80, -32, 0, 20, 0, 16 ) }
-                        ),
-                        Map::mapFromPath
-                        (
-                            "sewer-1",
-                            { Palette::PaletteType::SEWER_GREEN, 3 },
-                            { new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_2, 320, 160, 0, 0, .5, .5 ) },
-                            { Warp( 2, 80, 160, 0, 300, 0, 64 ) },
-                            { new MapLayerWater( 18 ) }
-                        ),
-                        Map::mapFromPath
-                        (
-                            "sewer-1-3",
-                            { Palette::PaletteType::POISON_PURPLE, 5 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_GRADIENT, 8, 160, 0, 0, 0, 0 ),
-                                new MapLayerConstellation( 128, 16 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, .25 ),
-                            }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new Goal() ),
-                    16*5,
-                    16*5
-                };
-            break;
-
-            default:
-                return
-                {
-                    lvname,
-                    {
-                        Map::mapFromPath
-                        (
-                            "city-1",
-                            { Palette::PaletteType::MIDNIGHT_BLUE, 4 },
-                            {
-                                new MapLayerConstellation( 224, 16 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_2, 264, 160, 0, 0, .5, .25 ),
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_CITY_3, 48, 32, 0, 176, 1, 1, 1, true, false )
-                            },
-                            { Warp( 1, 32, 32, 140, 160, 0, 16 ), Warp( 1, 17*16, 32, 170, 200, 0, 16 ) }
-                        ),
-                        Map::mapFromPath
-                        (
-                            "city-1-2",
-                            { Palette::PaletteType::GOLDEN_YELLOW, 4 },
-                            {
-                                new MapLayerImage( Graphics::SpriteSheet::LVBG_SEWER_1, 360, 229, 0, -16, 0, 0 )
-                            },
-                            { Warp( 0, 153*16, 11*16, 0, 5, 0, 16 ), Warp( 0, 181*16, 11*16, 15, 20, 0, 16, 176*16 ) }
-                        )
-                    },
-                    std::unique_ptr<Goal> ( new CollectGoal( 10000 ) ),
-                    12*16,
-                    11*16,
-                    10 * 16,
-                    0,
-                    "Gems o' average brightness are\nworth 100\t, particularly bright gems are worth 250\t, & particu-\nlarly dark gems are worth 500\t."
-                };
-        }
-    };
 
     Level::Level ( Level&& m )
     :
@@ -584,7 +60,7 @@
 
     Level::Level
     (
-        LevelName id,
+        int id,
         const std::vector<Map>& maps,
         std::unique_ptr<Goal> goal,
         int entrance_x,
@@ -605,8 +81,7 @@
         current_map_ ( 0 )
     {};
 
-    Level::~Level()
-    {};
+    Level::~Level() {};
 
     Map& Level::currentMap()
     {
@@ -657,7 +132,6 @@
 			entrance_y_ = warp->entranceY();
 			
             sprites.reset( *this, inventory );
-            //sprites.hero().setPosition( warp->entranceX(), warp->entranceY() );
 
             int camera_x = camera.x();
             int camera_y = camera.y();
@@ -686,89 +160,16 @@
         return goal_.get();
     }
 
-    std::string Level::NameOLevel( int n )
+    const std::string& Level::NameOLevel( unsigned int n )
     {
-        switch ( n )
-        {
-            case ( LevelName::LV_CITY_1 ):
-                return "Blueberry Burroughs";
-                break;
-            case ( LevelName::LV_CITY_2 ):
-                return "Rooftop Rumble";
-                break;
-            case ( LevelName::LV_MINES_1 ):
-                return "Minty Mines";
-                break;
-            case ( LevelName::LV_MINES_2 ):
-                return "Curse o' the Ladder-Splayed Caves";
-                break;
-            case ( LevelName::LV_FACTORY_1 ):
-                return "Steam Engenius";
-                break;
-            case ( LevelName::LV_FACTORY_2 ):
-                return "Warm Up";
-                break;
-            case ( LevelName::LV_FACTORY_3 ):
-                return "Level Industries";
-                break;
-            case ( LevelName::LV_MINES_4 ):
-                return "The Minus Touch";
-                break;
-            case ( LevelName::LV_CITY_4 ):
-                return "The Streets o' Storms";
-                break;
-            case ( LevelName::LV_SEWER_1 ):
-                return "Soupy Sewers";
-                break;
-            case ( LevelName::LV_SNEAK ):
-                return "Golden Gear Solid";
-                break;
-            case ( LevelName::LV_MOUNTAIN_1 ):
-                return "Mustard Mountain";
-                break;
-            case ( LevelName::LV_DESERT_2 ):
-                return "Dry Drought Desert";
-                break;
-            case ( LevelName::LV_SAW ):
-                return "Sawdust Crush";
-                break;
-            case ( LevelName::LV_WOODS_1 ):
-                return "Wasabi Woods";
-                break;
-            case ( LevelName::LV_PYRAMID_1 ):
-                return "Pepperoncini Pyramid";
-                break;
-            case ( LevelName::LV_WOODS_2 ):
-                return "Windy Woods";
-                break;
-            case ( LevelName::LV_WOODS_3 ):
-                return "Bough Down";
-                break;
-            case ( LevelName::LV_DESERT_1 ):
-                return "Desert Dare";
-                break;
-            case ( LevelName::LV_SNOW_1 ):
-                return "Snowy Slopes";
-                break;
-            case ( LevelName::LV_SNOW_2 ):
-                return "Frigid Frigates";
-                break;
-            case ( LevelName::LV_MAZE_1 ):
-                return "Maybe I'm a Maze";
-                break;
-            case ( LevelName::LV_CART ):
-                return "HOT SHOP";
-                break;
-            case ( LevelName::LV_SKY_1 ):
-                return "OWL";
-                break;
-            case ( LevelName::LV_SKY_2 ):
-                return "Value Valhalla";
-                break;
-            default:
-                return "MISSINGNAME";
-                break;
-        }
+		if ( level_list_.empty() )
+		{
+			buildLevelList();
+		}
+		
+		assert( n < level_list_.size() );
+		
+		return level_list_.at( n );
     };
 
     std::string Level::message() const
@@ -776,7 +177,7 @@
         return message_;
     };
 
-    Level::LevelName Level::id() const
+    int Level::id() const
     {
         return id_;
     };
@@ -790,3 +191,472 @@
 	{
 		currentMap().update( events );
 	};
+	
+	unsigned int Level::realLevelNum()
+	{
+		if ( real_level_num_ == 0 )
+		{
+			buildLevelList();
+		}
+		
+		return real_level_num_;
+	};
+
+
+    Level Level::getLevel( int id )
+    {
+		const std::string file_path = Game::resourcePath() + "levels" + Game::pathDivider() + Text::formatNumDigitPadding( id, 3 ) + ".json";
+	
+		std::ifstream ifs( file_path );
+
+		if ( ifs.is_open() )
+		{
+			rapidjson::IStreamWrapper ifs_wrap( ifs );
+			rapidjson::Document lv;
+			lv.ParseStream( ifs_wrap );
+
+			if ( lv.IsObject() )
+			{
+				auto lvobj = lv.GetObject();
+
+				/* MAP
+				==============================================================*/
+				
+					if ( lvobj.HasMember( "maps" ) && lvobj[ "maps" ].IsArray() )
+					{
+						std::vector<Map> maps;
+						std::string slug = "";
+
+						for ( auto& m : lvobj[ "maps" ].GetArray() )
+						{
+							if ( m.IsObject() )
+							{
+								auto mobj = m.GetObject();
+
+								if ( mobj.HasMember( "slug" ) && mobj[ "slug" ].IsString() )
+								{
+									slug = mobj[ "slug" ].GetString();
+								}
+								
+
+					/* WARPS
+					==============================================================*/
+
+								std::vector<Warp> warps;
+								
+								if ( mobj.HasMember( "warps" ) && mobj[ "warps" ].IsArray() )
+								{
+									for ( auto& w : mobj[ "warps" ].GetArray() )
+									{
+										if ( w.IsObject() )
+										{
+											auto wo = w.GetObject();
+
+											int map = 0;
+											int entrance_x = 0;
+											int entrance_y = 0;
+											int location[ 4 ] = { 0 };
+											int camera_x = -1;
+											int camera_y = -1;
+
+											if ( wo.HasMember( "map" ) && wo[ "map" ].IsInt() )
+											{
+												map = wo[ "map" ].GetInt();
+											}
+
+											if ( wo.HasMember( "entrance_x" ) && wo[ "entrance_x" ].IsInt() )
+											{
+												entrance_x = Unit::BlocksToPixels( wo[ "entrance_x" ].GetInt() );
+											}
+
+											if ( wo.HasMember( "entrance_y" ) && wo[ "entrance_y" ].IsInt() )
+											{
+												entrance_y = Unit::BlocksToPixels( wo[ "entrance_y" ].GetInt() );
+											}
+
+											if ( wo.HasMember( "location" ) && wo[ "location" ].IsArray() )
+											{
+												int li = 0;
+												for ( auto& l : wo[ "location" ].GetArray() )
+												{
+													if ( l.IsInt() )
+													{
+														if ( li > 4 ) break;
+
+														location[ li ] = l.GetInt();
+
+														++li;
+													}
+												}
+											}
+
+											if ( wo.HasMember( "camera_x" ) && wo[ "camera_x" ].IsInt() )
+											{
+												camera_x = wo[ "camera_x" ].GetInt();
+											}
+
+											if ( wo.HasMember( "camera_y" ) && wo[ "camera_y" ].IsInt() )
+											{
+												camera_y = wo[ "camera_y" ].GetInt();
+											}
+											
+											warps.emplace_back( map, entrance_x, entrance_y, location[ 0 ], location[ 1 ], location[ 2 ], location[ 3 ], camera_x, camera_y );
+										}
+									}
+									
+								}
+
+
+								
+					/* LAYERS
+					==============================================================*/
+								
+						// Can't rapidjson object to function, so we have to use dumb loops.								
+						std::vector<std::string> map_layer_group_types = { "backgrounds", "foregrounds" };
+						std::map<std::string, std::vector<std::unique_ptr<MapLayer>>> map_layer_groups;
+
+						for ( auto& mlg : map_layer_group_types )
+						{
+							std::vector<std::unique_ptr<MapLayer>> group;
+							const char* mlgc = mlg.c_str();
+
+							if ( mobj.HasMember( mlgc ) && mobj[ mlgc ].IsArray() )
+							{
+
+								for ( auto& bgitem : mobj[ mlgc ].GetArray() )
+								{
+
+									if ( bgitem.IsObject() )
+									{
+										auto bg = bgitem.GetObject();
+
+										if ( bg.HasMember( "type" ) && bg[ "type" ].IsString() )
+										{
+
+											auto bgtype = bg[ "type" ].GetString();
+
+											int bgw = 128;
+											int bgh = 128;
+											double bgxscroll = 1;
+											double bgyscroll = 1;
+
+
+											if ( bg.HasMember( "width" ) && bg[ "width" ].IsInt() )
+											{
+												bgw = bg[ "width" ].GetInt();
+											}
+											if ( bg.HasMember( "height" ) && bg[ "height" ].IsInt() )
+											{
+												bgh = bg[ "height" ].GetInt();
+											}
+
+											if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsDouble() )
+											{
+												bgxscroll = bg[ "x_scroll" ].GetDouble();
+											}
+											else if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsInt() )
+											{
+												bgxscroll = ( double )bg[ "x_scroll" ].GetInt();
+											}
+
+											if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsDouble() )
+											{
+												bgyscroll = bg[ "y_scroll" ].GetDouble();
+											}
+											else if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsInt() )
+											{
+												bgxscroll = ( double )bg[ "y_scroll" ].GetInt();
+											}
+
+											if ( mezun::areStringsEqual( bgtype, "image" ) )
+											{
+												std::string img = "clouds.png";
+												int bgxoffset = 0;
+												int bgyoffset = 0;
+												int bgframes  = 1;
+												bool bgxrepeat = true;
+												bool bgyrepeat = true;
+												int bgxspeed  = 0;
+												int bgyspeed  = 0;
+												int bganimspeed = 1;
+												bool bganimflip = false;
+
+
+												if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
+												{
+													img = "bg" + Game::pathDivider() + bg[ "img" ].GetString();
+												}
+												if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
+												{
+													bgframes = bg[ "frames" ].GetInt();
+												}
+												if ( bg.HasMember( "x_offset" ) && bg[ "x_offset" ].IsInt() )
+												{
+													bgxoffset = bg[ "x_offset" ].GetInt();
+												}
+												if ( bg.HasMember( "y_offset" ) && bg[ "y_offset" ].IsInt() )
+												{
+													bgyoffset = bg[ "y_offset" ].GetInt();
+												}
+												if ( bg.HasMember( "x_repeat" ) && bg[ "x_repeat" ].IsBool() )
+												{
+													bgxrepeat = bg[ "x_repeat" ].GetBool();
+												}
+												if ( bg.HasMember( "y_repeat" ) && bg[ "y_repeat" ].IsBool() )
+												{
+													bgyrepeat = bg[ "y_repeat" ].GetBool();
+												}
+												if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
+												{
+													bgframes = bg[ "frames" ].GetInt();
+												}
+												if ( bg.HasMember( "x_speed" ) && bg[ "x_speed" ].IsInt() )
+												{
+													bgxspeed = bg[ "x_speed" ].GetInt();
+												}
+												if ( bg.HasMember( "y_speed" ) && bg[ "y_speed" ].IsInt() )
+												{
+													bgyspeed = bg[ "y_speed" ].GetInt();
+												}
+												if ( bg.HasMember( "animation_speed" ) && bg[ "animation_speed" ].IsInt() )
+												{
+													bganimspeed = bg[ "animation_speed" ].GetInt();
+												}
+												if ( bg.HasMember( "animation_flip" ) && bg[ "animation_flip" ].IsBool() )
+												{
+													bganimflip = bg[ "animation_flip" ].GetBool();
+												}
+
+
+												group.emplace_back
+												(
+													std::make_unique<MapLayerImage>
+													(
+														std::forward<std::string> ( img ),
+														bgw,
+														bgh,
+														bgxoffset,
+														bgyoffset,
+														bgxscroll,
+														bgyscroll,
+														bgframes,
+														bgxrepeat,
+														bgyrepeat,
+														bgxspeed,
+														bgyspeed,
+														bganimspeed,
+														bganimflip
+													)
+												);
+
+											}
+											else if ( mezun::areStringsEqual( bgtype, "constellation" ) )
+											{
+												group.emplace_back
+												(
+													std::make_unique<MapLayerConstellation>
+													(
+														bgw,
+														bgh,
+														.1,
+														.1
+													)
+												);
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							map_layer_groups.insert( std::make_pair ( mlg, std::move( group ) ) );
+						}
+								
+								
+								
+								
+			maps.push_back
+			(
+				Map::mapFromPath
+				(
+					slug,
+					std::move( map_layer_groups.at( "backgrounds" ) ),
+					warps,
+					std::move( map_layer_groups.at( "foregrounds" ) )
+				)
+			);
+								
+								
+								
+							}
+						}
+					
+
+
+				/* GOAL
+				==============================================================*/
+
+					std::unique_ptr<Goal> goal;
+
+					if ( lvobj.HasMember( "goal" ) && lvobj[ "goal" ].IsObject() )
+					{
+						auto lvg = lvobj[ "goal" ].GetObject();
+
+						if ( lvg.HasMember( "type" ) && lvg[ "type" ].IsString() )
+						{
+							auto goaltype = lvg[ "type" ].GetString();
+
+							if ( mezun::areStringsEqual( goaltype, "collect" ) )
+							{
+								int amount = 10000;
+								std::string message = mezun::emptyString();
+								
+								if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+								{
+									amount = lvg[ "amount" ].GetInt();
+								}
+								
+								if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+								{
+									message = lvg[ "message" ].GetString();
+								}
+								
+								goal = std::make_unique<CollectGoal> ( amount, message );
+							}
+							else if ( mezun::areStringsEqual( goaltype, "survive_time" ) )
+							{
+								int amount = 60;
+								std::string message = mezun::emptyString();
+								
+								if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+								{
+									amount = lvg[ "amount" ].GetInt();
+								}
+								
+								if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+								{
+									message = lvg[ "message" ].GetString();
+								}
+								
+								goal = std::make_unique<SurviveTimeGoal> ( amount, message );
+							}
+						}
+					}
+					else
+					{
+						goal = std::make_unique<Goal> ();
+					}
+
+
+
+				/* ENTRANCES
+				==============================================================*/
+
+					int entrance_x = 0;
+					int entrance_y = 0;
+						
+					if ( lvobj.HasMember( "entrance_x" ) && lvobj[ "entrance_x" ].IsInt() )
+					{
+						entrance_x = Unit::BlocksToPixels( lvobj[ "entrance_x" ].GetInt() );
+					}
+					if ( lvobj.HasMember( "entrance_y" ) && lvobj[ "entrance_y" ].IsInt() )
+					{
+						entrance_y = Unit::BlocksToPixels( lvobj[ "entrance_y" ].GetInt() );
+					}
+					
+
+						
+				/* CAMERA
+				==============================================================*/
+
+					int camera_x = 0;
+					int camera_y = 0;
+						
+					if ( lvobj.HasMember( "camera_x" ) && lvobj[ "camera_x" ].IsInt() )
+					{
+						camera_x = Unit::BlocksToPixels( lvobj[ "camera_x" ].GetInt() );
+					}
+					if ( lvobj.HasMember( "camera_y" ) && lvobj[ "camera_y" ].IsInt() )
+					{
+						camera_y = Unit::BlocksToPixels( lvobj[ "camera_y" ].GetInt() );
+					}	
+
+						
+						
+				/* CAMERA
+				==============================================================*/
+
+					std::string message = "";
+						
+					if ( lvobj.HasMember( "message" ) && lvobj[ "message" ].IsString() )
+					{
+						message = lvobj[ "message" ].GetString();
+					}
+						
+						
+						
+				/* SEND
+				==============================================================*/
+
+					return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message );
+
+				}
+			}
+			else
+			{
+			}
+
+			ifs.close();
+		}
+		
+		
+    };
+
+	void Level::buildLevelList()
+	{
+
+		const std::string path = Game::resourcePath() + "levels" + Game::pathDivider();
+		
+		if ( !mezun::checkDirectory( path ) )
+		{
+			throw mezun::CantLoadLevels();
+		}
+		
+		for ( int i = 0; i < NUM_O_LEVELS; ++i )
+		{
+			
+			const std::string file_path = path + Text::formatNumDigitPadding( i, 3 ) + ".json";
+			
+			std::ifstream ifs( file_path );
+			
+			if ( ifs.is_open() )
+			{
+				rapidjson::IStreamWrapper ifs_wrap( ifs );
+				rapidjson::Document lv;
+				lv.ParseStream( ifs_wrap );
+				
+				if ( lv.IsObject() && lv.HasMember( "name" ) && lv[ "name" ].IsString() )
+				{
+					level_list_.emplace_back( lv[ "name" ].GetString() );
+					
+					++real_level_num_;
+				}
+				else
+				{
+					level_list_.emplace_back( "" );
+				}
+				
+				ifs.close();
+			}
+			else
+			{
+				level_list_.emplace_back( "" );
+			}
+			
+		}
+	
+	};
+

@@ -26,7 +26,7 @@
 
     SawGraphics::SawGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVSPRITES_SAW, 0, 0, false, false, 0, true, 0, 0, 16, 0 )
+        SpriteGraphics ( "sprites/saw.png", 0, 0, false, false, 0, true, 0, 0, 16, 0 )
     {};
 
     SawGraphics::~SawGraphics() {};

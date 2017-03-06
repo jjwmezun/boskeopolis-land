@@ -70,7 +70,7 @@
 		ticker_.updateTicker();
     };
 
-    void InventoryLevel::render( Graphics& graphics, Level::LevelName level, EventSystem& events )
+    void InventoryLevel::render( Graphics& graphics, int level, EventSystem& events )
     {
 		// BG
         graphics.renderRect( BG_DEST, 1 );
@@ -135,12 +135,12 @@
         return clock_.totalSeconds();
     };
 
-    bool InventoryLevel::haveDiamond( Level::LevelName level ) const
+    bool InventoryLevel::haveDiamond( int level ) const
     {
         return inventory_.haveDiamond( level );
     };
 
-    void InventoryLevel::getDiamond( Level::LevelName level )
+    void InventoryLevel::getDiamond( int level )
     {
         inventory_.getDiamond( level );
     };
@@ -160,7 +160,7 @@
         return inventory_;
     };
 
-    void InventoryLevel::won( Level::LevelName level )
+    void InventoryLevel::won( int level )
     {
         inventory_.victories_.at( level ) = true;
         inventory_.setGemScore( level );
@@ -177,7 +177,7 @@
         inventory_.save();
     };
 
-    void InventoryLevel::quit( Level::LevelName level )
+    void InventoryLevel::quit( int level )
     {
         if ( !inventory_.victories_.at( level ) )
         {

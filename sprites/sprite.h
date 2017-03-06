@@ -122,6 +122,7 @@
             bool on_ground_ = false;
             bool is_sliding_ = false;
             bool in_water_ = false;
+			bool submerged_in_water_ = false;
             Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
             void update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );

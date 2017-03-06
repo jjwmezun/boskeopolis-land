@@ -24,7 +24,7 @@
 
     SillyfishGraphics::SillyfishGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVSPRITES_SILLYFISH ),
+        SpriteGraphics ( "sprites/sillyfish.png" ),
         animation_frame_ ( { 0, NUM_O_FRAMES-1, 0, true } )
     {};
 

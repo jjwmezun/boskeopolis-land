@@ -54,7 +54,7 @@
             }
         }
 
-        if ( sprite.in_water_ )
+        if ( sprite.submerged_in_water_ )
         {
             --oxygen_meter_;
         }

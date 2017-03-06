@@ -36,15 +36,16 @@
         off_component_ ( std::move( off_component ) ),
         on_component_  ( std::move( on_component ) )
     {
+		/*
         for ( int i = 0; i < off_graphics.size(); ++i )
         {
-            off_graphics_.push_back( std::shared_ptr<SpriteGraphics> ( off_graphics.at( i ) ) );
+            off_graphics_.push_back( std::unique_ptr<SpriteGraphics> ( off_graphics.at( i ) ) );
         }
 
         for ( int j = 0; j < on_graphics.size(); ++j )
         {
-            on_graphics_.push_back( std::shared_ptr<SpriteGraphics> ( on_graphics.at( j ) ) );
-        }
+            on_graphics_.push_back( std::unique_ptr<SpriteGraphics> ( on_graphics.at( j ) ) );
+        }*/
     };
 
     BlockComponentSwitch::~BlockComponentSwitch() {};
@@ -101,16 +102,16 @@
     };
 
     void BlockComponentSwitch::changeGraphics( BlockType& type, std::vector<std::shared_ptr<SpriteGraphics>>& graphics )
-    {
+    {/*
         for ( int i = 0; i < graphics.size() && i < BlockType::NUM_O_MINI_BLOCKS; ++i )
         {
             if ( graphics.at( i ) )
             {
-                type.graphics_[ i ] = graphics.at( i );
+                type.graphics_.at( i ) = graphics.at( i );
             }
             else
             {
-                type.graphics_[ i ] = nullptr;
+                type.graphics_.at( i ) = nullptr;
             }
-        }
+        }*/
     };

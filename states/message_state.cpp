@@ -22,13 +22,35 @@
 // METHODS
 //===================================
 
+	std::unique_ptr<MessageState> MessageState::error
+	(
+        std::string message,
+        bool pop,
+        std::unique_ptr<GameState> next_state,
+        bool push
+	)
+    {
+		return std::unique_ptr<MessageState>
+		(
+			new MessageState
+			(
+				message,
+				pop,
+				std::move( next_state ),
+				push,
+				{ "Grayscale", 6 },
+				Text::FontShade::WHITE
+			)
+		);
+	};
+
     MessageState::MessageState
     (
         std::string message,
         bool pop,
         std::unique_ptr<GameState> next_state,
         bool push,
-        Palette::PaletteSet palette,
+        const Palette& palette,
         Text::FontShade font_color
     )
     :

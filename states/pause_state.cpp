@@ -25,7 +25,7 @@
 // METHODS
 //===================================
 
-    PauseState::PauseState( Palette::PaletteSet palette, EventSystem& events, bool beaten )
+    PauseState::PauseState( const Palette& palette, EventSystem& events, bool beaten )
     :
         GameState( StateID::PAUSE_STATE, palette ),
 		option_text_ ( optionText( beaten ) ),

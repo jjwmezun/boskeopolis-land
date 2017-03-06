@@ -36,7 +36,9 @@
 				double scroll_speed_x = .1,
                 double scroll_speed_y = .1
             );
+			
             ~MapLayerConstellation();
+			
             void render( Graphics& graphics, Camera& camera ) const override;
 
         private:
@@ -56,7 +58,6 @@
             };
             static constexpr int BRIGHT_STAR_MODIFIER = 3;
 
-            static constexpr Graphics::SpriteSheet texture_ = Graphics::SpriteSheet::LVBG_CONSTELLATION;
 			static constexpr int TILE_SIZE = Unit::PIXELS_PER_MINIBLOCK;
 			static constexpr int STAR_CHANCE = 25;
 			static constexpr int BIG_STAR_CHANCE = 10;
@@ -64,6 +65,7 @@
 			static constexpr int BRIGHT_STAR_CHANCE = 25;
 
 			// KEEP THESE MEMBERS IN THIS ORDER FOR CONSTRUCTOR INITIALIZER:
+            const std::string texture_;
 			const double scroll_speed_x_;
 			const double scroll_speed_y_;
 			const int height_;

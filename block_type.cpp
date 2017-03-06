@@ -28,39 +28,15 @@
 
     BlockType::BlockType
     (
-        SpriteGraphics* g1,
-        SpriteGraphics* g2,
-        SpriteGraphics* g3,
-        SpriteGraphics* g4,
-        std::vector<BlockComponent*> components,
-        std::vector<std::vector<BlockCondition*>> conditions
+        std::unique_ptr<SpriteGraphics> graphics,
+        std::vector<std::unique_ptr<BlockComponent>> components,
+        std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions
     )
     :
-        graphics_
-        (
-            {
-                std::unique_ptr<SpriteGraphics>( g1 ),
-                std::unique_ptr<SpriteGraphics>( g2 ),
-                std::unique_ptr<SpriteGraphics>( g3 ),
-                std::unique_ptr<SpriteGraphics>( g4 )
-            }
-        )
-    {
-        for ( int i = 0; i < components.size(); ++i )
-        {
-            components_.push_back( std::unique_ptr<BlockComponent> ( components.at( i ) ) );
-        }
-
-        for ( int j = 0; j < conditions.size(); ++j )
-        {
-            conditions_.push_back( {} );
-
-            for ( int k = 0; k < conditions.at( j ).size(); ++k )
-            {
-                conditions_.at( j ).push_back( std::unique_ptr<BlockCondition> ( conditions.at( j ).at( k ) ) );
-            }
-        }
-    };
+        graphics_   ( std::move( graphics ) ),
+		components_ ( std::move( components ) ),
+		conditions_ ( std::move( conditions ) )
+	{};
 
     BlockType::~BlockType() {};
 
@@ -93,38 +69,24 @@
 
     void BlockType::render( Graphics& graphics, Camera& camera, Block& block, bool priority )
     {
-        sdl2::SDLRect r = { 0, 0, 8, 8 };
-
-        for ( int i = 0; i < NUM_O_MINI_BLOCKS; ++i )
-        {
-            int x = ( ( i % 2 ) * 8 );
-            int y = ( floor( i / 2 ) * 8 );
-
-            r.x = block.xPixels() + x;
-            r.y = block.yPixels() + y;
-
-            if ( graphics_[i] )
-                graphics_[i]->render( graphics, r, &camera, priority );
-        }
+		if ( graphics_ )
+		{
+			graphics_->render( graphics, Unit::SubPixelsToPixels( block.hitBox() ), &camera, priority );
+		}
     };
 
     void BlockType::update( EventSystem& events )
     {
-        for ( int j = 0; j < components_.size(); ++j )
+        for ( auto& c : components_ )
         {
-            if ( components_.at( j ) )
-            {
-                components_.at( j )->update( events, *this );
-            }
+			c->update( events, *this );
         }
 
-        for ( int i = 0; i < NUM_O_MINI_BLOCKS; ++i )
-        {
-            if ( graphics_[ i ].get() != nullptr )
-            {
-                graphics_[ i ]->update();
-            }
-        }
+		if ( graphics_ )
+		{
+			graphics_->update();
+		}
+
     };
 
 	bool BlockType::hasComponentType( BlockComponent::Type type ) const

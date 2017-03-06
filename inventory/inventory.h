@@ -35,23 +35,23 @@
 			static constexpr bool DEFAULT_DIAMOND    = false;
 			static constexpr int  DEFAULT_GEM_SCORE  = -1;
 			static constexpr int  DEFAULT_TIME_SCORE = -1;
-            static constexpr int  PRICE_OF_DEATH = 2500;
+            static constexpr int  PRICE_OF_DEATH     = 2500;
 
 			// Methods
             Inventory();
             Inventory( const Inventory& c );
 
-            bool haveDiamond( Level::LevelName level ) const;
-            void getDiamond( Level::LevelName level );
+            bool haveDiamond( int level ) const;
+            void getDiamond( int level );
 
-			std::string gemScore( Level::LevelName level ) const;
-			void setGemScore( Level::LevelName level );
+			std::string gemScore( int level ) const;
+			void setGemScore( int level );
 
-			std::string timeScore( Level::LevelName level ) const;
-			void setTimeScore( Level::LevelName level, int time );
+			std::string timeScore( int level ) const;
+			void setTimeScore( int level, int time );
 
             std::vector<bool> victories_;
-            bool victory( Level::LevelName level ) const;
+            bool victory( int level ) const;
 
 			int fundsShown() const;
 			int totalFundsShown() const;
@@ -71,14 +71,14 @@
 
 
         private:
-            static constexpr int FUNDS_MAX       = 99999;
-            static constexpr int TIME_MAX = ( 60 * 9 ) + 59;
-            static constexpr int TOTAL_FUNDS_MAX = 999999999;
-            static constexpr int TOTAL_FUNDS_MIN = -99999999;
-			static constexpr int FUNDS_MAX_DIGITS = 5;
+            static constexpr int FUNDS_MAX              = 99999;
+            static constexpr int TIME_MAX               = ( 60 * 9 ) + 59;
+            static constexpr int TOTAL_FUNDS_MAX        = 999999999;
+            static constexpr int TOTAL_FUNDS_MIN        = -99999999;
+			static constexpr int FUNDS_MAX_DIGITS       = 5;
 			static constexpr int TOTAL_FUNDS_MAX_DIGITS = 9;
-            static constexpr int FUNDS_SPEED = 25;
-            static constexpr int TOTAL_FUNDS_SPEED = 100;
+            static constexpr int FUNDS_SPEED            = 25;
+            static constexpr int TOTAL_FUNDS_SPEED      = 100;
 
             std::vector<bool> diamonds_;
             std::vector<Counter> gem_scores_;

@@ -28,7 +28,7 @@
 
     SawSprite::SawSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SawGraphics() ), x, y, 64, 256, {}, 1500, 1500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, true, true )
+        Sprite( std::make_unique<SawGraphics> (), x, y, 64, 256, {}, 1500, 1500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, true, true )
     {};
 
     SawSprite::~SawSprite() {};

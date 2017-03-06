@@ -24,7 +24,7 @@
 
     SwitchGraphics::SwitchGraphics
     (
-        Graphics::SpriteSheet texture,
+        std::string&& texture,
         std::pair<int, int> frames_on,
         std::pair<int, int> frames_off,
         bool flip_x,
@@ -37,7 +37,7 @@
         int h_adjustment
     )
     :
-        SpriteGraphics( { texture, 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment } )
+        SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment )
     {};
 
     SwitchGraphics::~SwitchGraphics() {};

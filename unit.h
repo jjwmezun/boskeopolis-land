@@ -2,7 +2,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "bosk_sdl2.h"
+#include "mezun_sdl2.h"
 #include <cmath>
 #include <SDL2/SDL.h>
 

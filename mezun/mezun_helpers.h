@@ -2,6 +2,7 @@
 #ifndef MEZUN_HELPERS_H
 #define MEZUN_HELPERS_H
 
+#include <dirent.h>
 #include "mezun_math.h"
 #include <iostream>
 #include <stdexcept>
@@ -40,6 +41,23 @@ namespace mezun
 	{
 		return areStringsEqual( text, "" );
 	}
+	
+	inline bool checkDirectory( const std::string& path )
+	{
+		const auto cpath = path.c_str();
+	
+		bool test = false;
+	
+		DIR* dir = opendir( cpath );
+
+		if ( dir )
+		{
+			test = true;
+			closedir( dir );
+		}
+		
+		return test;
+	};
 };
 
 #endif // MEZUN_HELPERS_H

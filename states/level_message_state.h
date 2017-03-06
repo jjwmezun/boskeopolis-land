@@ -31,7 +31,7 @@
     {
 
         public:
-            LevelMessageState( Palette::PaletteSet palette, std::string message );
+            LevelMessageState( const Palette& palette, std::string message );
             ~LevelMessageState();
 
             void update( Game& game, const Input& input, Graphics& graphics );

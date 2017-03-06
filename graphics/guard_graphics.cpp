@@ -27,7 +27,7 @@
 
     GuardGraphics::GuardGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVSPRITES_EYEGUARD, 0, 0, false, false, 0, false, 0, 0, 0, 0, 16 ),
+        SpriteGraphics ( "sprites/guard.png", 0, 0, false, false, 0, false, 0, 0, 0, 0, 16 ),
         animation_frame_ ( { 0, 1, 0, true } )
     {};
 

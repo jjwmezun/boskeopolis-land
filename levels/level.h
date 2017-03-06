@@ -27,6 +27,7 @@
 
     #include "goal.h"
     #include "map.h"
+    #include "rapidjson/document.h"
     #include <vector>
 
 
@@ -36,46 +37,16 @@
     class Level
     {
         public:
-            enum LevelName
-            {
-                // CYCLE 1
-                LV_CITY_1,
-                LV_WOODS_1,
-                LV_MINES_1,
-                LV_MOUNTAIN_1,
-                LV_SNOW_1,
-                LV_FACTORY_1,
-
-                // CYCLE 2
-                LV_CITY_4,
-                LV_WOODS_3,
-                LV_MINES_2,
-                LV_SEWER_1,
-                LV_DESERT_2,
-                LV_SNOW_2,
-                LV_CART,
-                LV_SKY_2,
-                LV_FACTORY_2,
-
-                // CYCLE 3
-                LV_PYRAMID_1,
-                LV_MAZE_1,
-                LV_SKY_1,
-				LV_FACTORY_3,
-
-                // CYCLE 4
-                LV_CITY_2,
-                LV_WOODS_2,
-                LV_MINES_4,
-                LV_DESERT_1,
-                LV_SAW,
-                LV_SNEAK
-            };
-            static constexpr int NUM_O_LEVELS = LV_SNEAK + 1;
-
-            static Level makeLevel( LevelName level = LevelName::LV_CITY_1 );
-            Level( Level&& m );
+			static constexpr int NUM_O_LEVELS = 64;
+			
+            static Level getLevel( int id );
+			
             ~Level();
+            Level( Level&& m );
+			Level( const Level& ) = delete;
+			Level&& operator=( Level&& ) = delete;
+			const Level& operator=( const Level& ) = delete;
+			
             Map& currentMap();
             const Map& currentMap() const;
 
@@ -85,14 +56,20 @@
             int cameraY() const;
             void warp( SpriteSystem& sprites, Camera& camera, GameState* state, Graphics& graphics, InventoryLevel& inventory );
             Goal* goal() const;
-            static std::string NameOLevel( int n );
             std::string message() const;
-            LevelName id() const;
+            int id() const;
+			
 			void update( EventSystem& events );
 			void interact( SpriteSystem& sprites );
+			
+            static const std::string& NameOLevel( unsigned int n );
+			static unsigned int realLevelNum();
 
         private:
-            const Level::LevelName id_;
+			static std::vector<std::string> level_list_;
+			static unsigned int real_level_num_;
+			
+            const int id_;
             std::vector<Map> maps_;
             std::unique_ptr<Goal> goal_;
             int entrance_x_;
@@ -104,7 +81,7 @@
 
             Level
             (
-                LevelName id,
+                int id,
                 const std::vector<Map>& maps,
                 std::unique_ptr<Goal> goal,
                 int entrance_x = 0,
@@ -115,6 +92,8 @@
             );
 
             int testCurrentMap() const;
+			
+			static void buildLevelList();
     };
 
 #endif // LEVEL_H

@@ -13,6 +13,7 @@
 
     #include "camera.h"
     #include <cassert>
+	#include "game.h"
     #include "graphics.h"
     #include <iostream>
     #include "map_layer_constellation.h"
@@ -33,12 +34,15 @@
 		double scroll_speed_y
     )
     :
+		texture_ ( "bg" + Game::pathDivider() + "constellation.png" ),
 		scroll_speed_x_ ( scroll_speed_x ),
 		scroll_speed_y_ ( scroll_speed_y ),
 		height_ ( calculateWidth( map_height_blocks ) ),
 		width_ ( calculateWidth( map_width_blocks ) ),
 		star_pattern_ ( generateStarPattern() )
     {};
+
+	MapLayerConstellation::~MapLayerConstellation() {};
 
     void MapLayerConstellation::render( Graphics& graphics, Camera& camera ) const
     {

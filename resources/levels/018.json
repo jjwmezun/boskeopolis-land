@@ -1,0 +1,24 @@
+{
+	"name": "Porcelain Dreams",
+	
+	"maps":
+	[
+		{
+			"slug": "sewer-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "pipeline.png",
+					"width": 360,
+					"height": 160,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 106,
+	"entrance_y": -2
+}

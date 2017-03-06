@@ -40,12 +40,12 @@
     class BlockComponentChangePalette : public BlockComponent
     {
         public:
-            BlockComponentChangePalette( Palette::PaletteSet palette );
+            BlockComponentChangePalette( const Palette& palette );
             ~BlockComponentChangePalette();
             void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
 
         private:
-            Palette::PaletteSet palette_;
+            const Palette palette_;
             bool used_;
     };
 

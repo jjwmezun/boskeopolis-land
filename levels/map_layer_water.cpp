@@ -27,19 +27,19 @@
 		y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
 		surface_
 		(
-			Graphics::SpriteSheet::LVTILESET_CITY,
+			"tilesets/urban.png",
 			{
-				std::make_pair<int, int> ( 144, 120 ),
-				std::make_pair<int, int> ( 152, 120 ),
-				std::make_pair<int, int> ( 160, 120 ),
-				std::make_pair<int, int> ( 168, 120 )
+				std::make_pair<int, int> ( 32, 48 ),
+				std::make_pair<int, int> ( 40, 48 ),
+				std::make_pair<int, int> ( 48, 48 ),
+				std::make_pair<int, int> ( 56, 48 ),
 			}
 		),
 		body_
 		(
-			Graphics::SpriteSheet::LVTILESET_CITY,
-			8,
-			88
+			"tilesets/urban.png",
+			32,
+			56
 		),
 		x_offset_ ( -8, 0, -8, true ),
 		move_speed_ ( 16 )
@@ -47,6 +47,11 @@
 
     void MapLayerWater::interact( Sprite& sprite )
     {
+		if ( sprite.centerYSubPixels() > y_ )
+		{
+			sprite.submerged_in_water_ = true;
+		}
+		
 		if ( sprite.bottomSubPixels() > y_ )
 		{
 			sprite.swim();
@@ -91,11 +96,11 @@
 		{
 			if ( events.move_water_ < y_ )
 			{
-				--y_;
+				y_ -= MOVE_SPEED;
 			}
 			else if ( events.move_water_ > y_ )
 			{
-				++y_;
+				y_ += MOVE_SPEED;
 			}
 		}
 	};

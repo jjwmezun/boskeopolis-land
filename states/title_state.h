@@ -53,7 +53,7 @@
             static constexpr int OPTIONS_SIZE = ( int )Option::__END;
             static constexpr int OPTIONS_TOP_Y = 64;
 
-            SpriteGraphics logo_gfx_ = SpriteGraphics( Graphics::SpriteSheet::BOSKO_LOGO );
+            SpriteGraphics logo_gfx_ = SpriteGraphics( "bosko_logo.png" );
             static constexpr sdl2::SDLRect logo_rect_ = { 0, 0, 320, 48 };
             sdl2::SDLRect highlight_rect_ = { 16, OPTIONS_TOP_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 };
 

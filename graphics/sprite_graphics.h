@@ -31,7 +31,7 @@
         public:
             SpriteGraphics
             (
-                Graphics::SpriteSheet texture = Graphics::SpriteSheet::LIMIT,
+                std::string&& texture,
                 int current_frame_x = 0,
                 int current_frame_y = 0,
                 bool flip_x = false,
@@ -69,9 +69,9 @@
             static constexpr int Y_INDEX = 1;
 
             TimerRepeat animation_timer_;
-            Graphics::SpriteSheet texture_ = Graphics::SpriteSheet::LIMIT;
-            int prev_frame_x_ = 0;
-            int prev_frame_y_ = 0;
+            std::string texture_;
+            int prev_frame_x_;
+            int prev_frame_y_;
 
             int cutoffLeft  ( int object_x, int camera_x ) const;
             int cutoffTop   ( int object_y, int camera_y ) const;

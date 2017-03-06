@@ -31,7 +31,7 @@
     class PlayerGraphics : public SpriteGraphics
     {
         public:
-            PlayerGraphics( Graphics::SpriteSheet texture = Graphics::SpriteSheet::LVSPRITES_AUTUMN );
+            PlayerGraphics( std::string&& texture = "sprites/autumn.png" );
             ~PlayerGraphics();
 
             void update( Sprite& sprite );

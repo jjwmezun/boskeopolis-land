@@ -227,12 +227,12 @@
         resource_path_ = path;
     };
 
-    const std::string Game::resourcePath()
+    std::string Game::resourcePath()
     {
         return resource_path_;
     };
 
-    const std::string Game::pathDivider()
+    std::string Game::pathDivider()
     {
         return path_divider_;
     };
@@ -242,7 +242,7 @@
         return SAVING_ALLOWED;
     };
 
-    const std::string Game::savePath()
+    std::string Game::savePath()
     {
         return resourcePath() + "saves" + pathDivider() + "save.bin";
     };

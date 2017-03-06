@@ -22,7 +22,7 @@
 
     SpriteGraphics::SpriteGraphics
     (
-        Graphics::SpriteSheet texture,
+        std::string&& texture,
         int current_frame_x,
         int current_frame_y,
         bool flip_x,
@@ -36,7 +36,6 @@
         int animation_speed
     )
     :
-        texture_ ( texture ),
         current_frame_x_ ( current_frame_x ),
         current_frame_y_ ( current_frame_y ),
         flip_x_ ( flip_x ),
@@ -47,7 +46,10 @@
         y_adjustment_ ( y_adjustment ),
         w_adjustment_ ( w_adjustment ),
         h_adjustment_ ( h_adjustment ),
-        animation_timer_ ( { animation_speed } )
+        texture_ ( texture ),
+        animation_timer_ ( { animation_speed } ),
+		prev_frame_x_ ( 0 ),
+		prev_frame_y_ ( 0 )
     {};
 
     SpriteGraphics::~SpriteGraphics() {};

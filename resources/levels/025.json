@@ -1,0 +1,22 @@
+{
+	"name": "Frigid Frigates",
+	
+	"maps":
+	[
+		{
+			"slug": "snow-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "mintlines.png",
+					"width": 64,
+					"height": 64
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 1,
+	"entrance_y": 15
+}

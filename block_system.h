@@ -26,6 +26,7 @@
 //===================================
 
     #include "block.h"
+	#include "tileset.h"
     #include "unit.h"
     #include <vector>
 
@@ -36,25 +37,32 @@
     class BlockSystem
     {
         public:
-            BlockSystem();
-            ~BlockSystem();
-
+			BlockSystem( const Map& lvmap );
+			
             void update( EventSystem& events );
             void render( Graphics& graphics, Camera& camera, bool priority = false );
             void interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
-            void blocksFromMap( Map& lvmap, Camera& camera );
+			
+			void changeTileset( std::string new_tileset );
+			
+            void blocksFromMap( const Map& lvmap, const Camera& camera );
+			
             bool blocksInTheWay( const sdl2::SDLRect& r, const std::vector<int>& type_ids = {} ) const;
             bool blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const;
 
 
         private:
             static constexpr int CAMERA_PADDING = 4;
+			
 			std::vector<Block> blocks_;
-            std::vector<BlockType*> block_types_;
+			
+			std::map<std::string, Tileset> tilesets_;
+			std::string current_tileset_;
 
+			Tileset& getTileset();
 			void addBlock( int x, int y, int i, int type );
-            BlockType* blockType( int n ) const;
-            void clearBlockTypes();
+			
+			int debug_num_ = 0;
     };
 
 #endif // BLOCK_SYSTEM_H

@@ -26,7 +26,7 @@
 	InventoryHealth::InventoryHealth( int y )
 	:
 		dest_ ( { 64, y, 8, 8 } ),
-		gfx_ ( Graphics::SpriteSheet::LVTILESET_UNIVERSAL, 32, 8 ),
+		gfx_ ( "tilesets/universal.png", 32, 8 ),
 		hearts_shown_ ( 0 )
 	{};
 

@@ -29,22 +29,19 @@
     :
         Sprite
 		(
-			std::unique_ptr<SpriteGraphics>
+			std::make_unique<SpriteGraphics>
 			(
-				new SpriteGraphics
-				(
-					Graphics::SpriteSheet::LVSPRITES_CLOUD_PLATFORM,
-					0,
-					0,
-					false,
-					false,
-					0,
-					true,
-					0,
-					-6,
-					0,
-					10
-				)
+				"sprites/cloud_platform.png",
+				0,
+				0,
+				false,
+				false,
+				0,
+				true,
+				0,
+				-6,
+				0,
+				10
 			),
 			x,
 			y,

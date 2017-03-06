@@ -31,7 +31,7 @@
 
     GuardSprite::GuardSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new GuardGraphics() ), x, y, 16, 24, { SpriteType::ENEMY }, 400, 1200 )
+        Sprite( std::make_unique<GuardGraphics> (), x, y, 16, 24, { SpriteType::ENEMY }, 400, 1200 )
     {
         direction_x_ = Direction::Horizontal::LEFT;
     };

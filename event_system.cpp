@@ -13,6 +13,7 @@
 //===================================
 
     #include "event_system.h"
+	#include "mezun_helpers.h"
 
 
 // STATIC PROPERTIES
@@ -25,7 +26,7 @@
 	:
 		switch_ (false ),
 		switch_changed_ (false ),
-		new_palette_ ( Palette::PaletteType::__NULL, 0 ),
+		new_palette_ ( mezun::emptyString(), 0 ),
 		palette_changed_ ( false ),
 		move_water_ ( -1 )
     {};
@@ -39,19 +40,20 @@
         message_lock_ = false;
         key_ = false;
         switch_ = false;
+		move_water_ = -1;
 
         resetPalette();
     };
 
-    void EventSystem::changePalette( Palette::PaletteSet new_palette )
+    void EventSystem::changePalette( const Palette& new_palette )
     {
         new_palette_ = new_palette;
         palette_changed_ = true;
     };
 
-    Palette::PaletteSet EventSystem::getPalette()
+    Palette EventSystem::getPalette()
     {
-        const Palette::PaletteSet temp = new_palette_;
+        const auto temp = new_palette_;
         resetPalette();
         return temp;
     };
@@ -63,7 +65,7 @@
 
     void EventSystem::resetPalette()
     {
-        new_palette_ = { Palette::PaletteType::__NULL, 0 };
+        new_palette_ = { mezun::emptyString(), 0 };
         palette_changed_ = false;
     };
 

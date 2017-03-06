@@ -21,7 +21,6 @@
 // DEPENDENCIES
 //===================================
 
-	#include "bosk_sdl2.h"
 	#include "sprite_graphics.h"
 
 

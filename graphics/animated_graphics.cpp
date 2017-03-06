@@ -23,7 +23,7 @@
 
     AnimatedGraphics::AnimatedGraphics
     (
-        Graphics::SpriteSheet texture,
+        std::string&& texture,
         std::vector<std::pair<int, int>> frames,
         bool flip_x,
         bool flip_y,
@@ -35,9 +35,9 @@
         int h_adjustment
     )
     :
-        SpriteGraphics( { texture, 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment } ),
+        SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment ),
         frames_ ( frames ),
-        current_frame_index_ ( { 0, frames.size() - 1, 0, true } )
+        current_frame_index_ ( 0, frames.size() - 1, 0, true )
     {
         setFrames();
     };

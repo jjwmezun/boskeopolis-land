@@ -14,10 +14,10 @@
 //===================================
 
     #include "clock.h"
-    #include "corrupt_save_exception.h"
     #include "game.h"
     #include "inventory.h"
     #include <fstream>
+    #include "mezun_exceptions.h"
     #include "rapidjson/document.h"
     #include "rapidjson/istreamwrapper.h"
     #include "text.h"
@@ -62,18 +62,18 @@
 		total_funds_shown_ ( c.total_funds_shown_ )
     {};
 
-	bool Inventory::haveDiamond( Level::LevelName level ) const
+	bool Inventory::haveDiamond( int level ) const
 	{
 		return diamonds_.at( level );
 	};
 
-	void Inventory::getDiamond( Level::LevelName level )
+	void Inventory::getDiamond( int level )
 	{
 		diamonds_.at( level ) = true;
 		save();
 	};
 
-	std::string Inventory::gemScore( Level::LevelName level ) const
+	std::string Inventory::gemScore( int level ) const
 	{
 		if ( gem_scores_.at( level ) > DEFAULT_GEM_SCORE )
 		{
@@ -85,7 +85,7 @@
 		}
 	};
 
-	void Inventory::setGemScore( Level::LevelName level )
+	void Inventory::setGemScore( int level )
 	{
 		if ( funds_ >= gem_scores_.at( level ) )
 		{
@@ -93,7 +93,7 @@
 		}
 	};
 
-	std::string Inventory::timeScore( Level::LevelName level ) const
+	std::string Inventory::timeScore( int level ) const
 	{
 		if ( time_scores_.at( level ) > DEFAULT_GEM_SCORE )
 		{
@@ -105,7 +105,7 @@
 		}
 	};
 
-	void Inventory::setTimeScore( Level::LevelName level, int time )
+	void Inventory::setTimeScore( int level, int time )
 	{
 		if ( time_scores_.at( level ) < 0 || time <= time_scores_.at( level )() )
 		{
@@ -113,7 +113,7 @@
 		}
 	};
 
-    bool Inventory::victory( Level::LevelName level ) const
+    bool Inventory::victory( int level ) const
     {
         return victories_.at( level );
     };
@@ -476,9 +476,9 @@
 
 					try
 					{
-						BoskCorruptSave::testSaveSize( binsize, current_block_end );
+						mezun::testSaveSize( binsize, current_block_end );
 					}
-					catch( const BoskCorruptSave::InvalidSaveSizeException& e )
+					catch( const mezun::InvalidSaveSizeException& e )
 					{
 						throw;
 					}
@@ -497,6 +497,7 @@
 				
 				// Clean up time.
                 	delete[] bindata;
+					binifs.close();
             }
             else
             {

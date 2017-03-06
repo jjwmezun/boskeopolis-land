@@ -25,7 +25,7 @@
 
     PenguinGraphics::PenguinGraphics()
     :
-        SpriteGraphics ( Graphics::SpriteSheet::LVSPRITES_PENGUIN ),
+        SpriteGraphics ( "sprites/penguin.png" ),
         animation_frame_ ( { 0, NUM_O_FRAMES-1, 0, true } )
     {};
 

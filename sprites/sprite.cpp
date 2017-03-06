@@ -168,6 +168,7 @@
 
         in_water_prev_ = in_water_;
         in_water_ = false;
+		submerged_in_water_ = false;
         on_slope_ = Direction::Horizontal::__NULL;
         is_sliding_prev_ = is_sliding_;
         is_sliding_ = false;

@@ -28,7 +28,7 @@
     :
         Sprite
 		(
-			std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_HEATBEAM, 0, 0, false, false, 0, false, -2, 0, 4, 0 ) ),
+			std::make_unique<SpriteGraphics> ( "sprites/heatbeam.png", 0, 0, false, false, 0, false, -2, 0, 4, 0 ),
 			x+2,
 			y,
 			12,

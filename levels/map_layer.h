@@ -31,6 +31,7 @@
     class MapLayer
     {
         public:
+			virtual ~MapLayer() {};
             virtual void update( EventSystem& events ) {};
             virtual void render( Graphics& graphics, Camera& camera ) const = 0;
 			virtual void interact( Sprite& sprite ) {};

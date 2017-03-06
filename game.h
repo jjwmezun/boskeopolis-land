@@ -47,9 +47,10 @@
 
             static bool nextFrame( int interval = 8, int duration = 1 );
             static int frame();
-            static const std::string resourcePath();
-            static const std::string pathDivider();
-            static const std::string savePath();
+            static std::string resourcePath();
+            static std::string pathDivider();
+            static std::string savePath();
+			
             static bool savingAllowed();
 
 

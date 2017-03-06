@@ -15,6 +15,7 @@
     #include "goal.h"
     #include "level_state.h"
     #include "message_state.h"
+	#include "mezun_exceptions.h"
     #include "pause_state.h"
     #include "level_message_state.h"
     #include "level_select_state.h"
@@ -27,23 +28,55 @@
 // METHODS
 //===================================
 
-    LevelState::LevelState( EventSystem events, InventoryLevel inventory, Level::LevelName lvname )
-    :
+    LevelState::LevelState( EventSystem events, InventoryLevel inventory, int lvname, Game& game )
+    try :
         GameState ( StateID::LEVEL_STATE ),
-        events_ ( events ),
         inventory_ ( inventory ),
-        level_ ( Level::makeLevel( lvname ) ),
+        events_ ( events ),
+        level_ ( Level::getLevel( lvname ) ),
         camera_ ( { level_.cameraX(), level_.cameraY() } ),
-        sprites_ ( level_.entranceX(), level_.entranceY() )
+        sprites_ ( level_.entranceX(), level_.entranceY() ),
+		blocks_ ( level_.currentMap() )
     {
-    };
+    }
+	catch ( const mezun::CantLoadTileset& e )
+	{
+		game.pushState
+		(
+			std::move( MessageState::error
+			(
+				e.what(),
+				false,
+				std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ),
+				false
+			) )
+		);
+	};
 
     LevelState::~LevelState() {};
 
     void LevelState::update( Game& game, const Input& input, Graphics& graphics )
     {
-        blocks_.blocksFromMap( level_.currentMap(), camera_ );
+		try
+		{
+        	blocks_.blocksFromMap( level_.currentMap(), camera_ );
+		}
+		catch ( const mezun::InvalidBlockType& e )
+		{
+            game.pushState
+			(
+				std::move( MessageState::error
+				(
+					e.what(),
+					false,
+					std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ),
+					false
+				) )
+			);
+		}
+		
         blocks_.update( events_ );
+		camera_.update();
         events_.update();
         level_.update( events_ );
         sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
@@ -89,12 +122,12 @@
         if ( events_.failed_ )
         {
             inventory_.failed();
-            game.pushState( std::unique_ptr<GameState> ( new MessageState( "¡Failure!", false, std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ), false, { Palette::PaletteType::MOUNTAIN_RED, 2 }, Text::FontShade::DARK_GRAY ) ) );
+            game.pushState( std::unique_ptr<GameState> ( new MessageState( "¡Failure!", false, std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ), false, { "Mountain Red", 2 }, Text::FontShade::DARK_GRAY ) ) );
         }
         else if ( events_.won_ )
         {
             inventory_.won( level_.id() );
-            game.pushState( std::unique_ptr<GameState> ( new MessageState( "¡Success!", false, std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ), false, { Palette::PaletteType::CLASSIC_GREEN, 2 }, Text::FontShade::DARK_GRAY ) ) );
+            game.pushState( std::unique_ptr<GameState> ( new MessageState( "¡Success!", false, std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ), false, { "Classic Green", 2 }, Text::FontShade::DARK_GRAY ) ) );
         }
 
         if ( events_.quit_level_ )
@@ -120,7 +153,7 @@
         newPalette( graphics, level_.currentMap().palette() );
         if ( level_.goal() != nullptr )
         {
-            game.pushState( std::unique_ptr<GameState> ( new MessageState( level_.goal()->message(), true, nullptr, false, { Palette::PaletteType::SUNNY_YELLOW, 2 }, Text::FontShade::DARK_GRAY ) ) );
+            game.pushState( std::unique_ptr<GameState> ( new MessageState( level_.goal()->message(), true, nullptr, false, { "Sunny Yellow", 2 }, Text::FontShade::DARK_GRAY ) ) );
         }
 
         sprites_.reset( level_, inventory_ );

@@ -29,7 +29,7 @@
 
     FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal direction )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVTILESET_CITY, 128, 40 ) ), x, y, 24, 8, {}, 10, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
+        Sprite( std::make_unique<SpriteGraphics> ( "tilesets/woods.png", 104, 32 ), x, y, 24, 8, {}, 10, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
     {
         if ( direction == Direction::Horizontal::LEFT )
         {

@@ -44,8 +44,10 @@
 
             GameState
             (
-                StateID id = __NULL, Palette::PaletteSet palette = { Palette::PaletteType::GRAYSCALE, 1 }
+                StateID id = __NULL,
+				const Palette& palette = { "Grayscale", 1 }
             );
+			
             virtual ~GameState();
 
             void render( Graphics& graphics );
@@ -55,14 +57,14 @@
             virtual void init( Game& game, Graphics& graphics ) = 0;
             virtual void backFromPop( Game& game, Graphics& graphics ) = 0;
             void changePalette( Graphics& graphics );
-            void newPalette( Graphics& graphics, Palette::PaletteSet pallete );
+            void newPalette( Graphics& graphics, const Palette& pallete );
             StateID id() const;
 
         protected:
             const StateID id_;
 
         private:
-            Palette::PaletteSet palette_;
+            Palette palette_;
     };
 
 #endif // GAME_STATE_H

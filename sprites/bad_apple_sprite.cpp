@@ -15,8 +15,8 @@
 //===================================
 
     #include "collision.h"
+    #include "bad_apple_graphics.h"
     #include "bad_apple_sprite.h"
-    #include "sprite_graphics.h"
 
 
 // STATIC PROPERTIES
@@ -28,7 +28,7 @@
 
     BadAppleSprite::BadAppleSprite( int x, int y )
     :
-        Sprite( std::unique_ptr<SpriteGraphics> ( new SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_BADAPPLE ) ), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 100, 600, 1000, 1000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
+        Sprite( std::make_unique<BadAppleGraphics> (), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 100, 600, 1000, 1000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
     {
         direction_x_ = Direction::Horizontal::LEFT;
     };

@@ -22,16 +22,15 @@
 // METHODS
 //===================================
 
-    bool Camera::changed()
+    bool Camera::changed() const
     {
-        if ( changed_ )
-        {
-            changed_ = false;
-            return true;
-        }
-        else
-            return false;
+		return changed_;
     };
+	
+	void Camera::update()
+	{
+		changed_ = false;
+	};
 
     void Camera::adjust( Sprite& o, Map& m )
     {

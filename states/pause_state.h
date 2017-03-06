@@ -31,7 +31,7 @@
     {
 
         public:
-            PauseState( Palette::PaletteSet palette, EventSystem& events, bool beaten );
+            PauseState( const Palette& palette, EventSystem& events, bool beaten );
             ~PauseState();
 
             void update( Game& game, const Input& input, Graphics& graphics );

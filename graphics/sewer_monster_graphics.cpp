@@ -27,7 +27,7 @@
 
     SewerMonsterGraphics::SewerMonsterGraphics()
     :
-        SpriteGraphics( Graphics::SpriteSheet::LVSPRITES_SEWER_MONSTER, 0, 0, false, false, 0, false, -16, -16, 32, 32 )
+        SpriteGraphics( "sprites/sewer_monster.png", 0, 0, false, false, 0, false, -16, -16, 32, 32 )
     {};
 
     SewerMonsterGraphics::~SewerMonsterGraphics() {};
