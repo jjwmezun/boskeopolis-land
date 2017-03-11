@@ -37,7 +37,7 @@
 		private:
 			static constexpr int EMPTY_BLOCK = -1;
 			static constexpr int UNIVERSAL_TILESET_SIZE = 64;
-			static constexpr int TILESET_LIMIT = 64;
+			static constexpr int TILESET_LIMIT = 400 - 64;
 			
 			const std::string name_;
 			std::vector<std::unique_ptr<BlockType>> universal_block_types_;

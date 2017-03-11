@@ -4,7 +4,8 @@
 		"type": "sprite",
 		"x": 4,
 		"y": 4,
-		"rotation": -90
+		"rotation": -90,
+		"priority": true
 	},
 	"behavior":
 	[

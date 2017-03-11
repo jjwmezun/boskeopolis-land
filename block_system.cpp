@@ -131,39 +131,6 @@
 		}
 	}
 
-    bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, const std::vector<int>& type_ids ) const
-    {
-        for ( auto& b : blocks_ )
-        {
-            if
-            (
-                b.rightSubPixels() > r.x &&
-                b.leftSubPixels() < r.right() &&
-                b.topSubPixels() < r.bottom() &&
-                b.bottomSubPixels() > r.y
-            )
-            {
-                if ( !type_ids.empty() )
-                {
-                    for ( auto t : type_ids )
-                    {
-                        if ( b.typeID() == t )
-                        {
-                            return true;
-                        }
-                    }
-                }
-				// If type_ids empty, treat as "wildcard" wherein any blocks apply.
-                else
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    };
-
     bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const
     {
         for ( auto& b : blocks_ )
@@ -188,9 +155,10 @@
 
 	void BlockSystem::changeTileset( std::string new_tileset )
 	{
-		// If Tileset doesn't already exist, try making 1.
+		// See if tileset already exists.
 		auto i = tilesets_.find( new_tileset );
-		
+	
+		// If Tileset doesn't already exist, try making 1.	
 		if ( i == tilesets_.end() )
 		{
 			tilesets_.insert( std::make_pair( new_tileset, ( new_tileset ) ) );

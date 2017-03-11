@@ -48,6 +48,12 @@
         restartCounter();
     };
 
+    void Timer::forceUpdate()
+	{
+		on_ = true;
+		update();
+	};
+
     void Timer::update()
     {
         bool hit = false;
@@ -109,3 +115,8 @@
     {
         return direction_ == Direction::Vertical::DOWN;
     };
+
+	double Timer::countPercent() const
+	{
+		return ( ( double ) counter_ / ( double ) limit_ );
+	};

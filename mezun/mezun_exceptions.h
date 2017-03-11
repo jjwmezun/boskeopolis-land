@@ -19,14 +19,28 @@
 
 	#include <iostream>
 	#include <stdexcept>
+	#include <SDL2/SDL.h>
 	#include "text.h"
 
 
 // CLASS
 //===================================
 	namespace mezun
-	{
-	
+	{	
+		class SDLWindowFailure : public std::runtime_error
+		{
+			public:
+				SDLWindowFailure() :
+					std::runtime_error( "SDL_Window failed to load: " + std::string( SDL_GetError() ) ) {};
+		};
+		
+		class SDLRendererFailure : public std::runtime_error
+		{
+			public:
+				SDLRendererFailure() :
+					std::runtime_error( "SDL_Renderer failed to load: " + std::string( SDL_GetError() ) ) {};
+		};
+
 		class InvalidSaveSizeException : public std::runtime_error
 		{
 			public:

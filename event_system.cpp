@@ -88,9 +88,19 @@
     void EventSystem::update()
     {
         switch_changed_ = false;
+		
+		if ( waterShouldStop() )
+		{
+			move_water_ = WATER_NULL;
+		}
     };
 
 	bool EventSystem::waterShouldMove() const
 	{
 		return move_water_ != WATER_NULL;
+	};
+
+	bool EventSystem::waterShouldStop() const
+	{
+		return move_water_ == current_water_;
 	};

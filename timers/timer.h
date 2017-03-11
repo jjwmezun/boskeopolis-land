@@ -41,6 +41,8 @@
             virtual void start();
             virtual void stop();
             void update();
+            void forceUpdate();
+			double countPercent() const;
 
             bool on()     const;
             int counter() const;

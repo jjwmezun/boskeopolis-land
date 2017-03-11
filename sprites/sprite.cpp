@@ -164,7 +164,10 @@
             }
         }
 		
-		graphics_->update( *this );
+		if ( graphics_ )
+		{
+			graphics_->update( *this );
+		}
 
         in_water_prev_ = in_water_;
         in_water_ = false;

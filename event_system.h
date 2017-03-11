@@ -48,7 +48,9 @@
             void flipSwitch();
 			
 			int move_water_ = -1;
+			int current_water_ = -1;
 			bool waterShouldMove() const;
+			bool waterShouldStop() const;
 
 
        private:

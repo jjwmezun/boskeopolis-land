@@ -26,7 +26,7 @@
 
     EnemyCartSprite::EnemyCartSprite( int x, int y )
     :
-        Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png" ), x, y-16, 32, 32, { SpriteType::ENEMY }, 150, 3000, 3000 )
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 144, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 150, 3000, 3000 )
     {};
 
     EnemyCartSprite::~EnemyCartSprite() {};
@@ -38,15 +38,4 @@
 
     void EnemyCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
-        if ( them.hasType( SpriteType::HERO ) )
-        {
-            if ( their_collision.collideBottom() && !them.onGround() )
-            {
-                kill();
-            }
-            else if ( their_collision.collideAny() )
-            {
-                them.hurt();
-            }
-        }
     };

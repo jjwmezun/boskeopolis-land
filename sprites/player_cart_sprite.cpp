@@ -14,12 +14,13 @@
 //===================================
 
     #include "camera.h"
+	#include "collision.h"
     #include "event_system.h"
     #include "graphics.h"
     #include "input.h"
     #include "map.h"
     #include "player_cart_sprite.h"
-    #include "sprite_graphics.h"
+    #include "player_cart_graphics.h"
 
 
 // STATIC PROPERTIES
@@ -29,9 +30,9 @@
 // METHODS
 //===================================
 
-    PlayerCartSprite::PlayerCartSprite( int x, int y )
+    PlayerCartSprite::PlayerCartSprite( int x, int y, int max_hp, int hp )
     :
-        Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png" ), x, y, 32, 40, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
+        Sprite( std::make_unique<PlayerCartGraphics> (), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8, max_hp, hp )
     {
         run();
         direction_x_ = Direction::Horizontal::RIGHT;
@@ -44,6 +45,11 @@
         if ( direction_x_ == Direction::Horizontal::RIGHT )
         {
             if ( collide_right_ )
+            {
+                status_.hurt();
+            }
+			
+            if ( collide_bottom_ )
             {
                 status_.hurt();
             }
@@ -63,6 +69,11 @@
         else if ( direction_x_ == Direction::Horizontal::LEFT )
         {
             if ( collide_left_ )
+            {
+                status_.hurt();
+            }
+			
+            if ( collide_bottom_ )
             {
                 status_.hurt();
             }
@@ -108,10 +119,19 @@
         {
             jump();
             jump_lock_ = true;
-        }
 
-        if ( input.released( Input::Action::JUMP ) )
+            if ( is_bouncing_ )
+            {
+                bounce();
+            }
+        }
+		else
         {
+            if ( is_bouncing_prev_ )
+            {
+                is_bouncing_ = false;
+            }
+			
             if ( !isDucking() )
             {
                 jump_lock_ = false;
@@ -148,6 +168,25 @@
 
     void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
+        if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
+		{
+			if ( them.hasType( SpriteType::BOPPABLE ) )
+			{
+				if ( bottomSubPixels() < them.centerYSubPixels() )
+				{
+					them.kill();
+					bounce();
+				}
+				else if ( !them.isDead() )
+				{
+					hurt();
+				}
+			}
+			else if ( !them.isDead() )
+			{
+				hurt();
+			}
+		}
     };
 
     void PlayerCartSprite::duck()

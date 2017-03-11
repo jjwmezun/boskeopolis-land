@@ -1,0 +1,24 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 5,
+		"y": 0,
+		"priority": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "kill",
+				"animation": false
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		}
+	]
+}

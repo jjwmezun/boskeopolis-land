@@ -5,6 +5,7 @@
 
 	#include <cassert>
     #include "game.h"
+	#include "mezun_helpers.h"
     #include "title_state.h"
     #include <SDL2/SDL.h>
     #include <iostream>
@@ -26,19 +27,18 @@
     :
         input_ ( Input() )
     {
-        if ( !initSDL() )
-            running_ = false;
+        initSDL();
 
         if ( args.size() >= 4 )
         {
-            if ( args.at( 3 ).compare( "no-save" ) == 0 )
+            if ( mezun::areStringsEqual( args.at( 3 ), "no-save" ) )
             {
                 SAVING_ALLOWED = false;
             }
         }
 
         setResourcePath();
-        graphics_.reset( new Graphics( *this, args ) );
+        graphics_ = std::make_unique<Graphics> ( *this, args );
         firstState();
     };
 
@@ -76,9 +76,7 @@
             }
 
             if ( SDL_GetTicks() - ticks_ >= fpsMilliseconds() )
-            //if ( SDL_GetTicks() % fpsMilliseconds() == 0 )
             {
-
                 if ( input_.pressed( Input::Action::ESCAPE ) )
                 {
                     running_ = false;
@@ -100,9 +98,10 @@
                 }
 
                 states_.back()->update( *this, input_, *graphics_ );
-                Graphics::update();
-                ticks_ = SDL_GetTicks();
+				
                 ++frames_;
+                ticks_ = SDL_GetTicks();
+				
                 input_.update();
                 render();
             }
@@ -113,7 +112,7 @@
     {
         graphics_->clearScreen();
         graphics_->colorCanvas();
-        for ( auto &st : states_ )
+        for ( auto& st : states_ )
         {
             st->render( *graphics_ );
         }
@@ -126,15 +125,13 @@
         running_ = false;
     };
 
-    bool Game::initSDL()
+    void Game::initSDL()
     {
         if ( SDL_Init( SDL_INIT_VIDEO ) != 0 )
         {
             SDL_Log( "SDL_Initialization failed: %s", SDL_GetError() );
-            return false;
+			quit();
         }
-
-        return true;
     };
 
     void Game::changeState( std::unique_ptr<GameState> state )
@@ -150,8 +147,10 @@
 		
         states_.clear();
         pushState( move( new_state_ ) );
-        graphics_->clearSurfaces();
 		state_is_new_ = false;
+		
+		// This is a mo' important state change from the others, so we should clear out surfaces.
+        graphics_->clearSurfaces();
     };
 
     void Game::pushState  ( std::unique_ptr<GameState> state )

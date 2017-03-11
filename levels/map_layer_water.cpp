@@ -103,4 +103,6 @@
 				y_ += MOVE_SPEED;
 			}
 		}
+		
+		events.current_water_ = y_;
 	};

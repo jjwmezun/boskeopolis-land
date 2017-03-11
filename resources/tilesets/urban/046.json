@@ -5,7 +5,8 @@
 		"x": 5,
 		"y": 1,
 		"flip_y": true,
-		"rotation": 90
+		"rotation": 90,
+		"priority": true
 	},
 	"behavior":
 	[

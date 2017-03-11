@@ -24,6 +24,11 @@ namespace mezun
         // 100 or mo' always true; 0 or less always false.
         return randPercent() <= percent_interval;
     };
+	
+	inline bool isAtRightAngle( int value )
+	{
+		return value % 90 == 0;
+	};
 };
 
 #endif // MEZUN_MATH_H

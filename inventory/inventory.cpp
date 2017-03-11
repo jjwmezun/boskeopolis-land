@@ -161,7 +161,7 @@
         if ( Game::savingAllowed() )
         {
             //saveJSON();
-            saveBinary();
+            //saveBinary();
         }
 	};
 

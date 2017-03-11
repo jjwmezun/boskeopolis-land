@@ -416,10 +416,6 @@
 
     int Map::block( int n ) const
     {
-        if ( scrollLoop() )
-        {
-        }
-
         if ( n < 0 || n >= blocks_.size() )
         {
             return 0;

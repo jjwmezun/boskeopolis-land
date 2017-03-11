@@ -1,0 +1,13 @@
+{
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "change_palette",
+				"palette": "Sunny Yellow",
+				"bg_color": 1
+			}
+		}
+	]
+}

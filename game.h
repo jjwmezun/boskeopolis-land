@@ -37,6 +37,9 @@
             ~Game();
             Game( const Game& ) = delete;
             Game& operator=( const Game& ) = delete;
+            Game( Game&& ) = delete;
+            Game&& operator=( Game&& ) = delete;
+			
             bool running() const;
             void execute();
             void quit();
@@ -73,7 +76,7 @@
             std::unique_ptr<Graphics> graphics_; // Must be allocated @ runtime, thus must be a pointer.
 
             int fpsMilliseconds() const;
-            bool initSDL();
+            void initSDL();
             void setResourcePath();
             void render();
             void firstState();

@@ -40,6 +40,10 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ### Basic Code
 * Fix glitch wherein Autumn can't move upward on a ladder after a map transition.
+* Fix glitch wherein one character's bouncing affects 'nother character's bouncing ( in "Rooftop Rumble" Autumn can mess up "Dagny"'s movements & cause her to fall into a hole by bouncing on the spring as "Dagny"'s doing so ). This is caused by a bounce variable being held & saved in the GroundedMovement component, which is also shared as a static instance 'mong all sprites. Either make instance non-static or save bounce variable in sprite.
+* Sprite class still a mess--look into organizing states ( isJumping, isDucking, onLadder, etc. ) into finite state machine ).
+* Timers kinda wonky. In particular, I want to find a way to encapsulate common "if hit; else if on, update; else, start" pattern in the class itself so I don't have to keep typing it. Sometimes the stopping mechanism for TimerSimple is wonky ( see SewerMonster class ).
+* "full" console argument is bugged for some reason.
 
 
 ### Levels

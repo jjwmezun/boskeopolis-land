@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include "mezun_math.h"
 #include <iostream>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -30,6 +31,12 @@ namespace mezun
 			std::cout<<"SIZE: "<<list.size()<<std::endl;
 			std::cout<<"R: "<<r<<std::endl;
 		}
+	};
+	
+	template<typename K, typename V>
+	bool notInMap( const std::map<K, V>& container, const K& item )
+	{
+		return container.find( item ) == container.end();
 	};
 	
 	inline bool areStringsEqual( const std::string& one, const std::string& two )

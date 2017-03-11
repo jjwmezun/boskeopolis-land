@@ -17,6 +17,7 @@
     #include "block_type.h"
     #include "collision.h"
     #include <iostream>
+	#include "mezun_math.h"
     #include "sprite_graphics.h"
 
 
@@ -35,7 +36,8 @@
     :
         graphics_   ( std::move( graphics ) ),
 		components_ ( std::move( components ) ),
-		conditions_ ( std::move( conditions ) )
+		conditions_ ( std::move( conditions ) ),
+		prev_direction_ ( prev_direction_ = Direction::Clockwise::__NULL )
 	{};
 
     BlockType::~BlockType() {};
@@ -99,4 +101,32 @@
 		
 		// If all don't, false.
 		return false;
+	};
+
+	void BlockType::rotate( Direction::Clockwise direction )
+	{
+		if ( graphics_ )
+		{
+			int amount = 5;
+			
+			if ( direction == Direction::Clockwise::COUNTERCLOCKWISE )
+			{
+				amount *= -1;
+			}
+			
+			graphics_->rotation_ += amount;
+		}
+		
+		prev_direction_ = direction;
+	};
+
+	void BlockType::readjust()
+	{
+		if ( graphics_ )
+		{
+			if ( !mezun::isAtRightAngle( ( int )graphics_->rotation_ ) )
+			{
+				rotate( prev_direction_ );
+			}
+		}
 	};

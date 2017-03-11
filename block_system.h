@@ -47,7 +47,6 @@
 			
             void blocksFromMap( const Map& lvmap, const Camera& camera );
 			
-            bool blocksInTheWay( const sdl2::SDLRect& r, const std::vector<int>& type_ids = {} ) const;
             bool blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const;
 
 

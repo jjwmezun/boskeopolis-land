@@ -1,131 +1,163 @@
+#include "collision.h"
+#include "sewer_monster_sprite.h"
+#include "sprite_graphics.h"
 
+constexpr int SewerMonsterSprite::WAKING_FRAMES[];
+constexpr int SewerMonsterSprite::FALLING_ASLEEP_FRAMES[];
 
-// Name
-//===================================
-//
-// SewerMonsterSprite
-//
+SewerMonsterSprite::SewerMonsterSprite( int x, int y )
+:
+	Sprite
+	(
+		std::make_unique<SpriteGraphics> ( "sprites/sewer_monster.png", 0, 0, false, false, 0, false, -16, -16, 32, 32 ),
+		x+16,
+		y+16,
+		48,
+		48,
+		{},
+		100,
+		1500,
+		3000,
+		0,
+		Direction::Horizontal::__NULL,
+		Direction::Vertical::__NULL,
+		nullptr,
+		SpriteMovement::Type::FLOATING,
+		CameraMovement::RESET_OFFSCREEN_AND_AWAY,
+		false,
+		false,
+		true,
+		true
+	),
+	state_ ( MonsterState::SLEEPING ),
+	waking_timer_ ( NUM_O_WAKING_FRAMES * FRAME_SPEED, false ),
+	attack_timer_ ( NUM_O_ATTACK_FRAMES * FRAME_SPEED, false ),
+	falling_asleep_timer_ ( NUM_O_FALLING_ASLEEP_FRAMES * FRAME_SPEED, false )
+{};
 
+SewerMonsterSprite::~SewerMonsterSprite() {};
 
-// DEPENDENCIES
-//===================================
+void SewerMonsterSprite::stateGraphics()
+{
+	switch( state_ )
+	{
+		case ( MonsterState::SLEEPING ):
+			graphics_->current_frame_x_ = 0;
+			graphics_->priority_ = false;
+		break;
+			
+		case ( MonsterState::WAKING ):
+			graphics_->current_frame_x_ = getXImg( WAKING_FRAMES[ getFrame( waking_timer_.counter() ) ] );
+			graphics_->priority_ = true;
+		break;
 
-    #include "collision.h"
-    #include "sewer_monster_graphics.h"
-    #include "sewer_monster_sprite.h"
-    #include "sprite_graphics.h"
+		case ( MonsterState::ATTACK ):
+			graphics_->current_frame_x_ = 10*80;
+			graphics_->priority_ = true;
+		break;
+			
+		case ( MonsterState::FALLING_ASLEEP ):
+			graphics_->priority_ = true;
+			graphics_->current_frame_x_ = getXImg( FALLING_ASLEEP_FRAMES[ getFrame( falling_asleep_timer_.counter() ) ] );
+		break;
+	}
+};
 
+void SewerMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+{
+	
+	switch( state_ )
+	{
+		case ( MonsterState::SLEEPING ):
+		break;
+			
+		case ( MonsterState::WAKING ):
+			if ( waking_timer_.done() )
+			{
+				state_ = MonsterState::ATTACK;
+				waking_timer_.stop(); // BUG ( also applies to other 2 cases ).
+				// I shouldn't have to do this. Either this isn't stopping the timer for some reason, e'en though the code clearly says it does,
+				// or for some reason this case is running after stopping, which causes it to start 'gain, e'en though state_ is changed.
+			}
+			else if ( waking_timer_.on() )
+			{
+				waking_timer_.update();
+			}
+			else
+			{
+				waking_timer_.start();
+			}
+		break;
 
-// STATIC PROPERTIES
-//===================================
+		case ( MonsterState::ATTACK ):
+			if ( attack_timer_.done() )
+			{
+				state_ = MonsterState::FALLING_ASLEEP;
+				attack_timer_.stop();
+			}
+			else if ( attack_timer_.on() )
+			{
+				attack_timer_.update();
+			}
+			else
+			{
+				attack_timer_.start();
+			}
+		break;
+			
+		case ( MonsterState::FALLING_ASLEEP ):
+			if ( falling_asleep_timer_.done() )
+			{
+				state_ = MonsterState::SLEEPING;
+				falling_asleep_timer_.stop();
+			}
+			else if ( falling_asleep_timer_.on() )
+			{
+				falling_asleep_timer_.update();
+			}
+			else
+			{
+				falling_asleep_timer_.start();
+			}
+		break;
+	}
 
+	stateGraphics();	
+};
 
-// METHODS
-//===================================
+void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+{
+	if ( them.hasType( SpriteType::HERO ) )
+	{
+		if ( their_collision.collideAny() )
+		{
+			switch( state_ )
+			{
+				case ( MonsterState::SLEEPING ):
+					state_ = MonsterState::WAKING;
+				break;
 
-    SewerMonsterSprite::SewerMonsterSprite( int x, int y )
-    :
-        Sprite( std::make_unique<SewerMonsterGraphics> (), x+16, y+16, 48, 48, {}, 100, 1500, 3000, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
-        awake_ ( false ),
-        attacking_ ( false ),
-        after_attack_ ( false ),
-        delay_ ( { 64, false } ),
-        attack_length_ ( { 32, false } ),
-        after_attack_delay_ ( { 32, false } )
-    {};
+				case ( MonsterState::ATTACK ):
+					them.killNoAnimation();
+					them.changeX( centerXSubPixels() - them.halfWidthSubPixels() );
+					them.changeY( centerYSubPixels() - them.halfHeightSubPixels() );
+				break;
+			}
+		}
+		
+		if ( them.isDead() )
+		{
+			attack_timer_.stop(); // Don't reopen mouth.
+		}
+	}
+};
 
-    SewerMonsterSprite::~SewerMonsterSprite() {};
+int SewerMonsterSprite::getFrame( int tick ) const
+{
+	return floor( tick / FRAME_SPEED );
+};
 
-    void SewerMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
-    {
-        if ( !attacking_ )
-        {
-            if ( delay_.done() )
-            {
-                attacking_ = true;
-            }
-            else if ( delay_.on() )
-            {
-                delay_.update();
-            }
-            else if ( awake_ )
-            {
-                graphics_->current_frame_x_ = 80;
-
-                if ( !delay_.on() )
-                {
-                    delay_.start();
-                }
-            }
-            else
-            {
-                graphics_->current_frame_x_ = 0;
-
-                if ( after_attack_ )
-                {
-                    if ( after_attack_delay_.done() )
-                    {
-                        after_attack_ = false;
-                        after_attack_delay_.stop();
-                    }
-                    else if ( after_attack_delay_.on() )
-                    {
-                        after_attack_delay_.update();
-                    }
-                    else
-                    {
-                        after_attack_delay_.start();
-                    }
-                }
-            }
-        }
-        else
-        {
-            if ( attack_length_.done() )
-            {
-                attacking_ = false;
-                awake_ = false;
-
-                attack_length_.stop();
-                delay_.stop();
-
-                after_attack_ = true;
-            }
-            else if ( attack_length_.on() )
-            {
-                attack_length_.update();
-            }
-            else
-            {
-                attack_length_.start();
-                graphics_->current_frame_x_ = 160;
-            }
-        }
-    };
-
-    void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
-    {
-        if ( them.hasType( SpriteType::HERO ) )
-        {
-            if ( attacking_ )
-            {
-                if ( their_collision.collideAny() )
-                {
-                    them.hurt();
-                }
-            }
-            else if ( !after_attack_ )
-            {
-                if
-                (
-                    them.rightSubPixels() > leftSubPixels() - Unit::BlocksToSubPixels( 2 ) &&
-                    them.leftSubPixels() < rightSubPixels() + Unit::BlocksToSubPixels( 2 ) &&
-                    !awake_
-                )
-                {
-                    awake_ = true;
-                }
-            }
-        }
-    };
-
+int SewerMonsterSprite::getXImg( int frame ) const
+{
+	return frame * GRAPHIC_WIDTH;
+};

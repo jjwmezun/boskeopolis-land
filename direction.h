@@ -57,6 +57,13 @@
             LEFT,
             UP_LEFT
         };
+		
+		enum class Clockwise
+		{
+			__NULL,
+			CLOCKWISE,
+			COUNTERCLOCKWISE
+		};
 
         enum class Justify
         {

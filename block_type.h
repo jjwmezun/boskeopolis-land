@@ -60,6 +60,8 @@
             void render( Graphics& graphics, Camera& camera, Block& block, bool priority );
 			
 			bool hasComponentType( BlockComponent::Type type ) const;
+			void rotate( Direction::Clockwise direction );
+			void readjust();
 
 
         private:
@@ -70,6 +72,8 @@
 			std::unique_ptr<SpriteGraphics> graphics_;
             std::vector<std::unique_ptr<BlockComponent>> components_;
             std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
+			
+			Direction::Clockwise prev_direction_;
     };
 
 #endif // BLOCK_TYPE_H
