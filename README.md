@@ -47,10 +47,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 
 ### Levels
-* Soupy Sewers
-	* Fix buggy, crappy ending o' sewer map.
-	* Finish sewer-monster graphics.
-	* Improve fish graphics.
 * Porcelain Dreams
 	* Think o' enemies to add.
 * Value Valhalla
@@ -59,11 +55,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 * Owl Level
 	* Finish map.
 	* Draw owl.
-* Hot Shop
-	* Fix bug where cart gets stuck inside ground on mountain just before long drop.
-	* Add graphics for player & enemy carts.
-	* Improve spring graphics.
-	* Fix cloudy background so shelves don't appear 'hind it.
 * Minty Mines
 	* Figure out what I want to do with this level.
 * Mustard Mountain
