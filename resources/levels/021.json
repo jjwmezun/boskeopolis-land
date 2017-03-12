@@ -1,0 +1,42 @@
+{
+	"name": "Value Valhalla",
+	
+	"maps":
+	[
+		{
+			"slug": "sky-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "dim_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": 100,
+					"y_speed": 50
+				},
+				{
+					"type": "image",
+					"img": "bright_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25,
+					"x_speed": -400,
+					"y_speed": -100
+				}
+			]
+		}
+	],
+	
+	"goal":
+	{
+		"type": "collect",
+		"amount": 15000
+	},
+	
+	"entrance_x": 10,
+	"entrance_y": 4
+}
