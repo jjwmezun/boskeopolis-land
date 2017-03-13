@@ -40,7 +40,8 @@ class Sprite : public Object
 			HERO,
 			ENEMY,
 			RIVAL,
-			BOPPABLE
+			BOPPABLE,
+			CLOUD_PLATFORM
 		};
 
 		enum class CameraMovement

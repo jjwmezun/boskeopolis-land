@@ -84,7 +84,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const 
 			return std::unique_ptr<Sprite> ( new FallingBoughSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 9 ):
-			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, nullptr, lvmap.scrollLoop() ) );
+			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 10 ):
 			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentUpAndDown( 4 ) ) ) );
@@ -93,7 +93,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const 
 			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentRightAndLeft( 6 ) ) ) );
 		break;
 		case ( SPRITE_INDEX_START + 12 ):
-			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ), lvmap.scrollLoop() ) );
+			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ) ) );
 		break;
 		case ( SPRITE_INDEX_START + 13 ):
 			return std::unique_ptr<Sprite> ( new RopeSprite( x, y ) );
@@ -413,18 +413,12 @@ SpriteSystem::HeroType SpriteSystem::heroType( std::string property )
 	return HeroType::NORMAL;
 };
 
-void SpriteSystem::interactWithMap( MapLayer& map_layer )
+void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera )
 {
 	for ( auto& s : sprites_ )
 	{
-		if ( s->interactsWithBlocks() )
-		{
-			map_layer.interact( *s );
-		}
+		lvmap.interact( *s, camera );
 	}
 
-	if ( hero_->interactsWithBlocks() )
-	{
-		map_layer.interact( *hero_ );
-	}
+	lvmap.interact( *hero_, camera );
 };

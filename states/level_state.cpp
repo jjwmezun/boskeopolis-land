@@ -78,11 +78,11 @@
         blocks_.update( events_ );
 		camera_.update();
         events_.update();
-        level_.update( events_ );
+        level_.update( events_, sprites_ );
         sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
         sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
+		sprites_.interactWithMap( level_.currentMap(), camera_ );
         sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
-		level_.interact( sprites_ );
         inventory_.update( events_, sprites_.hero() );
 
         if ( level_.goal() != nullptr )

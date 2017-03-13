@@ -172,7 +172,12 @@
 		{
 			if ( them.hasType( SpriteType::BOPPABLE ) )
 			{
-				if ( bottomSubPixels() < them.centerYSubPixels() )
+				if ( them.on_slope_ == Direction::Horizontal::LEFT && bottomSubPixels() < them.bottomSubPixels() )
+				{
+					them.kill();
+					bounce();
+				}
+				else if ( bottomSubPixels() < them.centerYSubPixels() )
 				{
 					them.kill();
 					bounce();

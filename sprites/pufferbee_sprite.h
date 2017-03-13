@@ -36,8 +36,7 @@
 			(
 				int x,
 				int y,
-				std::unique_ptr<SpriteComponent> component = nullptr,
-				bool map_looping = false
+				std::unique_ptr<SpriteComponent> component = nullptr
 			);
             ~PufferbeeSprite();
             void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );

@@ -32,8 +32,7 @@
 	(
 		int x,
 		int y,
-		std::unique_ptr<SpriteComponent> component,
-		bool map_looping
+		std::unique_ptr<SpriteComponent> component
 	)
     :
         Sprite
@@ -52,7 +51,7 @@
 			Direction::Vertical::__NULL,
 			std::move( component ),
 			SpriteMovement::Type::FLOATING,
-			( map_looping ) ? CameraMovement::PERMANENT : CameraMovement::RESET_OFFSCREEN_AND_AWAY,
+			CameraMovement::RESET_OFFSCREEN_AND_AWAY,
 			false,
 			false
 		)
@@ -106,23 +105,7 @@
     };
 
     void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
-	{
-		if ( lvmap.scrollLoop() )
-		{
-			if ( them.hasType( SpriteType::HERO ) )
-			{
-				int player_loop = floor( them.xPixels() / lvmap.widthPixels() );
-
-				if ( them.xPixels() < 0 )
-				{
-					--player_loop;
-				}
-				
-				hit_box_.x += ( Unit::PixelsToSubPixels( lvmap.widthPixels() ) * player_loop );
-			}
-		}
-		
-    };
+	{};
 
     Direction::Rotation PufferbeeSprite::randomDirection() const
     {

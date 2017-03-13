@@ -47,7 +47,7 @@ class SpriteSystem
 		void reset( const Level& level, const InventoryLevel& inventory );
 		void spawn( SpawnSprite type, int x, int y );
 		Sprite& hero();
-		void interactWithMap( MapLayer& map_layer );
+		void interactWithMap( Map& lvmap, Camera& camera );
 
 
 	private:

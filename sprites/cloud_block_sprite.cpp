@@ -47,8 +47,7 @@
 			nullptr,
 			SpriteMovement::Type::FLOATING,
 			CameraMovement::PERMANENT
-		),
-		loop_ ( 0 )
+		)
     {
     };
 
@@ -56,26 +55,14 @@
 
     void CloudBlockSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
+		// For map loop
+		hit_box_.x = original_hit_box_.x;
     };
 
     void CloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
     {
 		if ( them.hasType( SpriteType::HERO ) )
 		{
-			if ( lvmap.scrollLoop() )
-			{
-				int player_loop = floor( them.xPixels() / lvmap.widthPixels() );
-
-				if ( them.xPixels() < 0 )
-					--player_loop;
-					
-				if ( loop_ != player_loop )
-				{
-					hit_box_.x = original_hit_box_.x + ( Unit::PixelsToSubPixels( lvmap.widthPixels() ) * player_loop );
-					loop_ = player_loop;
-				}
-			}
-
 			if ( them.collideBottomOnly( their_collision, *this ) )
 			{
 				them.collideStopYBottom( their_collision.overlapYBottom() );
