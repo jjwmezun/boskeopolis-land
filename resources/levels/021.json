@@ -9,6 +9,12 @@
 			[
 				{
 					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144
+				},
+				{
+					"type": "image",
 					"img": "dim_clouds.png",
 					"width": 128,
 					"height": 128,
@@ -38,5 +44,8 @@
 	},
 	
 	"entrance_x": 10,
-	"entrance_y": 4
+	"entrance_y": 4,
+	
+	"gem_challenge": 15000,
+	"time_challenge": 50
 }

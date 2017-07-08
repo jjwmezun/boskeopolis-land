@@ -1,0 +1,34 @@
+{
+	"name": "Dry, Drought Desert",
+	
+	"maps":
+	[
+		{
+			"slug": "desert-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0
+				},
+				{
+					"type": "image",
+					"img": "canyon_2.png",
+					"width": 256,
+					"height": 111,
+					"x_scroll": 0.5,
+					"y_scroll": 0.0,
+					"y_offset": 32,
+					"y_repeat": false
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 5,
+	"entrance_y": 9
+}

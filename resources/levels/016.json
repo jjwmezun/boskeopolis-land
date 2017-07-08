@@ -35,5 +35,8 @@
 	],
 	
 	"entrance_x": 1,
-	"entrance_y": 15
+	"entrance_y": 15,
+	
+	"gem_challenge": 14650,
+	"time_challenge": 28
 }

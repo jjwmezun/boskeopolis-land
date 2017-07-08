@@ -2,31 +2,32 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 6,
-		"y": 1
+		"x": 0,
+		"y": 2
 	},
 	"behavior":
 	[
 		{
 			"component":
 			{
-				"type": "climb"
+				"type": "solid"
 			},
 			"conditions":
 			[
-				{ "type": "collide_any" },
-				{ "type": "hero" }
+				{ "type": "collide_any" }
 			]
 		},
 		{
 			"component":
 			{
-				"type": "warp"
+				"type": "change_block",
+				"value": 8
 			},
 			"conditions":
 			[
-				{ "type": "collide_bottom" },
-				{ "type": "hero" }
+				{ "type": "collide_any" },
+				{ "type": "hero" },
+				{ "type": "key" }
 			]
 		}
 	]

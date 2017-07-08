@@ -1,0 +1,48 @@
+{
+	"name": "Cotton Candy Clouds",
+	
+	"maps":
+	[
+		{
+			"slug": "sky-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_offset": -144
+				},
+				{
+					"type": "image",
+					"img": "dim_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": 40,
+					"y_speed": 40
+				},
+				{
+					"type": "image",
+					"img": "bright_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25,
+					"x_speed": -80,
+					"y_speed": -80
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 3,
+	"entrance_y": 34,
+	
+	"gem_challenge": 16950,
+	"time_challenge": 45
+}

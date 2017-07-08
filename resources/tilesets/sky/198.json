@@ -1,0 +1,9 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 6,
+		"y": 13,
+		"priority": true
+	}
+}

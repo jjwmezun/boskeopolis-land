@@ -37,9 +37,13 @@
 	
 	"goal":
 	{
+		"type": "past_right_edge",
 		"message": "¡Catch the sale on rare collectibles!"
 	},
 	
 	"entrance_x": -2,
-	"entrance_y": 68
+	"entrance_y": 68,
+	
+	"gem_challenge": 15000,
+	"time_challenge": 30
 }

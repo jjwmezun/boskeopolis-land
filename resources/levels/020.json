@@ -44,5 +44,8 @@
 	},
 	
 	"entrance_x": 5,
-	"entrance_y": -2
+	"entrance_y": -2,
+	
+	"gem_challenge": 3000,
+	"time_challenge": 30
 }
