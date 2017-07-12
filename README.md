@@ -57,8 +57,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 * Curse o' the Ladder-Splayed Caves
 	* Figure out what else to do with this level.
 	* Fix level-select screen so this level name doesn't splay out into the scores (should make level names take up a'least 2 miniblocks o' vertical space & have them have a line-limit set).
-* Dry Drought Desert
-	* Think o' something to do with this level.
 * Pepperoncini Pyramid
 	* Make a map.
 * Level Industries
