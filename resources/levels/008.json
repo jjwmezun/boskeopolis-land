@@ -1,45 +1,27 @@
 {
-	"name": "Crying Lightning",
+	"name": "Porcelain Dreams",
 	
 	"maps":
 	[
 		{
-			"slug": "sky-4",
+			"slug": "sewer-2",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "dim_clouds.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.1,
-					"y_scroll": 0.1,
-					"x_speed": 800
-				},
-				{
-					"type": "image",
-					"img": "bright_clouds.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25,
-					"x_speed": -1600
-				}
-			],
-			"foregrounds":
-			[
-				{
-					"type": "image",
-					"img": "rain.png",
-					"width": 8,
-					"height": 8,
-					"frames": 16,
-					"animation_speed": 4
+					"img": "pipeline.png",
+					"width": 360,
+					"height": 160,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
 				}
 			]
 		}
 	],
 	
-	"entrance_x": 7,
-	"entrance_y": 33
+	"entrance_x": 106,
+	"entrance_y": -2,
+	
+	"gem_challenge": 6000,
+	"time_challenge": 15
 }

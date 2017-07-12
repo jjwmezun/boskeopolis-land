@@ -572,6 +572,10 @@ Level Level::getLevel( int id )
 						{
 							goal = std::make_unique<AvoidMoneyGoal> ();
 						}
+						else if ( mezun::areStringsEqual( goaltype, "starving" ) )
+						{
+							goal = std::make_unique<StarvingGoal> ();
+						}
 					}
 					else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
 					{

@@ -1,20 +1,29 @@
 {
-	"name": "Maybe I'm a Maze",
+	"name": "The Minus Touch",
 	
 	"maps":
 	[
 		{
-			"slug": "maze-1"
+			"slug": "mines-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "mines-bg-2.png",
+					"width": 114,
+					"height": 112,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			]
 		}
 	],
 	
+	"entrance_x": 99,
+	"entrance_y": 48,
+
 	"goal":
 	{
-		"type": "collect",
-		"amount": 66900,
-		"message": "¡Collect everything & dodge the eyes!"
-	},
-	
-	"entrance_x": 19,
-	"entrance_y": 17
+		"type": "avoid_money"
+	}
 }

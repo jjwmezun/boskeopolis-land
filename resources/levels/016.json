@@ -1,34 +1,17 @@
 {
-	"name": "Bough Down",
+	"name": "Frigid Frigates",
 	
 	"maps":
 	[
 		{
-			"slug": "woods-2",
+			"slug": "snow-2",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "shady_firs.png",
-					"width": 461,
-					"height": 256,
-					"y_offset": -24,
-					"x_scroll": 0.1,
-					"y_scroll": 0.5
-				},
-				{
-					"type": "image",
-					"img": "thin_boughs.png",
-					"width": 256,
-					"height": 256,
-					"x_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "thick_boughs.png",
-					"width": 640,
-					"height": 256,
-					"x_scroll": 0.5
+					"img": "mintlines.png",
+					"width": 64,
+					"height": 64
 				}
 			]
 		}
@@ -37,6 +20,6 @@
 	"entrance_x": 1,
 	"entrance_y": 15,
 	
-	"gem_challenge": 14650,
-	"time_challenge": 28
+	"gem_challenge": 8000,
+	"time_challenge": 35
 }
