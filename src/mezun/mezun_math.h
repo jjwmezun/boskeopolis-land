@@ -1,8 +1,7 @@
-
-#ifndef MEZUN_MATH_H
-#define MEZUN_MATH_H
+#pragma once
 
 #include <algorithm>
+#include <cmath>
 #include <cstdlib>
 
 namespace mezun
@@ -29,6 +28,19 @@ namespace mezun
 	{
 		return value % 90 == 0;
 	};
+	
+	static constexpr int xOfN( int n, int w )
+	{
+		return n % w;
+	};
+	
+	static constexpr int yOfN( int n, int w )
+	{
+		return floor( n / w );
+	};
+	
+	static constexpr int nOfXY( int x, int y, int w )
+	{
+		return ( y * w ) + x;
+	};
 };
-
-#endif // MEZUN_MATH_H

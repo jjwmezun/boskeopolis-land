@@ -49,7 +49,7 @@
 
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
-	hero_ ( new PlayerSprite( entrance_x, entrance_y ) )
+	hero_ ( new OverworldPlayerSprite( entrance_x, entrance_y ) )
 {};
 
 SpriteSystem::~SpriteSystem() {};

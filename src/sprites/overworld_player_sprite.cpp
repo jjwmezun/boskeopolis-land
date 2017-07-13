@@ -1,98 +1,112 @@
+#include "camera.h"
+#include "input.h"
+#include "overworld_player_sprite.h"
+#include "animated_graphics.h"
 
+OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
+:
+	Sprite
+	(
+		std::unique_ptr<SpriteGraphics>
+		( new AnimatedGraphics(
+			"sprites/autumn_maze.png",
+			{ std::make_pair( 0, 0 ), std::make_pair( 15, 0 ) },
+			false,
+			false,
+			0,
+			false,
+			-2,
+			-1,
+			3,
+			2
+		)),
+		x,
+		y,
+		12,
+		14,
+		{ SpriteType::HERO },
+		800, 3000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true, true, false, 0, 2, 2
+	),
+	death_spins_ ( 0 )
+{
+};
 
+OverworldPlayerSprite::~OverworldPlayerSprite() {};
 
+void OverworldPlayerSprite::sharedMovement( const Input& input, Camera& camera, Map& lvmap )
+{
+	if ( input.held( Input::Action::MOVE_LEFT ) )
+	{
+		moveLeft();
+	}
+	else if ( input.held( Input::Action::MOVE_RIGHT ) )
+	{
+		moveRight();
+	}
+	else
+	{
+		stopX();
+	}
 
+	if ( input.held( Input::Action::MOVE_UP ) )
+	{
+		moveUp();
+	}
+	else if ( input.held( Input::Action::MOVE_DOWN ) )
+	{
+		moveDown();
+	}
+	else
+	{
+		stopY();
+	}
 
-// Name
-//===================================
-//
-// OverworldPlayerSprite
-//
+	camera.adjustCart( *this, lvmap );
+};
 
+void OverworldPlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+{
+	sharedMovement( input, camera, lvmap );
+};
 
-// DEPENDENCIES
-//===================================
+void OverworldPlayerSprite::OWUpdate( const Input& input, Camera& camera, Map& lvmap )
+{
+	sharedMovement( input, camera, lvmap );
+	position();
 
-	#include "camera.h"
-    #include "input.h"
-    #include "overworld_player_sprite.h"
-    #include "overworld_player_graphics.h"
+	if ( graphics_ )
+	{
+		graphics_->update( *this );
+	}
+};
 
+void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+{
+};
 
-// STATIC PROPERTIES
-//===================================
+void OverworldPlayerSprite::deathAction( Camera& camera )
+{	
+	block_interact_ = false;
 
+	if ( camera.offscreen( hit_box_ ) )
+	{
+		death_finished_ = true;
+	}
 
-// METHODS
-//===================================
+	if ( death_spins_ > 3 )
+	{
+		changeMovement( SpriteMovement::Type::GROUNDED );
+	}
+	else
+	{
+		fullStopX();
+		fullStopY();
 
-    OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
-    :
-        Sprite( std::make_unique<OverworldPlayerGraphics> (), x, y, 12, 14, { SpriteType::HERO }, 800, 3000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true, true, false, 0, 2, 2 ),
-		death_spins_ ( 0 )
-    {
-	};
+		graphics_->rotation_ += DEATH_SPIN_SPEED;
 
-    OverworldPlayerSprite::~OverworldPlayerSprite() {};
-
-    void OverworldPlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
-    {
-        if ( input.held( Input::Action::MOVE_LEFT ) )
-        {
-            moveLeft();
-        }
-        else if ( input.held( Input::Action::MOVE_RIGHT ) )
-        {
-            moveRight();
-        }
-        else
-        {
-            stopX();
-        }
-
-        if ( input.held( Input::Action::MOVE_UP ) )
-        {
-            moveUp();
-        }
-        else if ( input.held( Input::Action::MOVE_DOWN ) )
-        {
-            moveDown();
-        }
-        else
-        {
-            stopY();
-        }
-		
-		camera.adjustCart( *this, lvmap );
-    };
-
-    void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
-    {
-    };
-
-	void OverworldPlayerSprite::deathAction( Camera& camera )
-	{	
-		block_interact_ = false;
-		
-        if ( camera.offscreen( hit_box_ ) )
-        {
-            death_finished_ = true;
-        }
-		
-		if ( death_spins_ > 3 )
+		if ( ( int )graphics_->rotation_ % 360 == 0 )
 		{
-			changeMovement( SpriteMovement::Type::GROUNDED );
+			++death_spins_;
 		}
-		else
-		{
-			fullStopX();
-			fullStopY();
-
-			graphics_->rotation_ += DEATH_SPIN_SPEED;
-
-			if ( ( int )graphics_->rotation_ % 360 == 0 )
-			{
-				++death_spins_;
-			}
-		}
-	};
+	}
+};

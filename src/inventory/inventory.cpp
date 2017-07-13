@@ -67,7 +67,7 @@ std::string Inventory::gemScore( int level ) const
 	}
 	else
 	{
-		return "-";
+		return "-----";
 	}
 };
 
@@ -92,7 +92,7 @@ std::string Inventory::timeScore( int level ) const
 	}
 	else
 	{
-		return "-";
+		return "----";
 	}
 };
 

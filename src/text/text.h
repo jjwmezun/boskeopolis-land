@@ -40,6 +40,8 @@
     {
         public:
 			friend class TextComponentMarquee;
+
+			static constexpr int DEFAULT_LINE_LENGTH = Unit::WINDOW_WIDTH_MINIBLOCKS;
 		
             enum class FontShade
             {
@@ -135,7 +137,6 @@
             static constexpr int NUM_OF_FONT_SHADES         = 6;
             static constexpr int CHARSET_WIDTH_MINI_BLOCKS  = 32;
             static constexpr int CHARSET_HEIGHT_MINI_BLOCKS = 32;
-			static constexpr int DEFAULT_LINE_LENGTH        = Unit::WINDOW_WIDTH_MINIBLOCKS;
             static std::map<char, int> char_conversion_;
 
             FontShade shade_;

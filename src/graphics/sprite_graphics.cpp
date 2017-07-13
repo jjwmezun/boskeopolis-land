@@ -37,6 +37,7 @@ SpriteGraphics::~SpriteGraphics() {};
 
 void SpriteGraphics::update( Sprite& sprite )
 {
+	update();
 };
 
 void SpriteGraphics::update()

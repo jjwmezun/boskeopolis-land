@@ -2,9 +2,9 @@
 #include "game.h"
 #include "inventory_level.h"
 #include "level_message_state.h"
-#include "level_select_state.h"
 #include "message_state.h"
 #include "mezun_helpers.h"
+#include "overworld_state.h"
 
 EventSystem::EventSystem()
 :
@@ -179,15 +179,7 @@ void EventSystem::failEvent( Level& level, InventoryLevel& inventory, Game& game
 			(
 				"¡Failure!",
 				false,
-				std::unique_ptr<GameState>
-				(
-					LevelSelectState::continueLevelSelect
-					(
-						*this,
-						inventory,
-						level.id()
-					)
-				),
+				std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ),
 				false,
 				{ "Mountain Red", 2 },
 				Text::FontShade::DARK_GRAY
@@ -208,15 +200,7 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory, Game& game 
 			(
 				"¡Success!",
 				false,
-				std::unique_ptr<GameState>
-				(
-					LevelSelectState::continueLevelSelect
-					(
-						*this,
-						inventory,
-						level.id()
-					)
-				),
+				std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ),
 				false,
 				{ "Classic Green", 2 },
 				Text::FontShade::DARK_GRAY
@@ -228,7 +212,7 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory, Game& game 
 void EventSystem::quitEvent( Level& level, InventoryLevel& inventory, Game& game )
 {	
 	inventory.quit( level.id() );
-	game.changeState( std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( *this, inventory, level.id() ) ) );
+	game.changeState( std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ) );
 };
 
 bool EventSystem::waterShouldMove() const

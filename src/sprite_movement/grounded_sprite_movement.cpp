@@ -300,7 +300,7 @@
         (
             me.leftSubPixels() < them.rightSubPixels() &&
             me.rightSubPixels() > them.leftSubPixels() &&
-            me.topSubPixels() < them.bottomSubPixels() &&
+            me.topSubPixels() + 8000 < them.bottomSubPixels() &&
             me.bottomSubPixels() - 4000 > them.topSubPixels() // Keep character from getting caught on sides o' floor blocks.
         )
         {
