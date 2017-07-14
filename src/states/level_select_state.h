@@ -1,5 +1,4 @@
-#ifndef LEVEL_SELECT_STATE_H
-#define LEVEL_SELECT_STATE_H
+#pragma once
 
 #include "event_system.h"
 #include "game_state.h"
@@ -12,16 +11,7 @@ class LevelSelectState : public GameState
 {
 
 	public:
-		enum class Status
-		{
-			NEW,
-			LOAD,
-			CONTINUE
-		};
-
-		static LevelSelectState* continueLevelSelect( EventSystem events, InventoryLevel inventory, int level );
-		static LevelSelectState* newLevelSelect();
-		static LevelSelectState* loadLevelSelect();
+		LevelSelectState( const EventSystem& events, const Inventory& inventory, int level );
 		~LevelSelectState();
 
 		void update( Game& game, const Input& input, Graphics& graphics );
@@ -30,8 +20,6 @@ class LevelSelectState : public GameState
 
 
 	private:
-		LevelSelectState( Status status, EventSystem events, Inventory inventory, int level );
-
 		static constexpr int DEFAULT_LEVEL = 0;
 		static constexpr int FUNDS_X = 32;
 		static constexpr int BG_COLOR = 1;
@@ -72,7 +60,4 @@ class LevelSelectState : public GameState
 		int prev_level_;
 		Counter selection_;
 		Camera camera_;
-		Status status_;
 };
-
-#endif // LEVEL_SELECT_STATE_H

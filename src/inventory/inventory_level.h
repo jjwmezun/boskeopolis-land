@@ -51,6 +51,7 @@
             int clockTime() const;
             Clock& clock();
 
+			void registerBeenToLevel( int level );
             bool haveDiamond( int level ) const;
             void getDiamond( int level );
             void won( int level );

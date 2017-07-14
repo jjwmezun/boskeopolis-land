@@ -4,10 +4,12 @@
 
 constexpr sdl2::SDLRect OverworldMenuState::bg_;
 
-OverworldMenuState::OverworldMenuState()
+OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal )
 :
-	GameState( StateID::OVERWORLD_MENU_STATE ),
-	option_selection_ ( ( int )( Option::CONTINUE ) )
+	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
+	option_selection_ ( ( int )( Option::CONTINUE ) ),
+	go_to_list_ ( go_to_list ),
+	camera_mode_ ( camera_mode )
 {};
 
 OverworldMenuState::~OverworldMenuState() {};
@@ -44,6 +46,17 @@ void OverworldMenuState::update( Game& game, const Input& input, Graphics& graph
 			case ( ( int )( Option::CONTINUE ) ):
 				game.popState();
 			break;
+
+			case ( ( int )( Option::LIST ) ):
+				go_to_list_ = true;
+				game.popState();
+			break;
+
+			case ( ( int )( Option::CAMERA ) ):
+				camera_mode_ = true;
+				game.popState();
+			break;
+
 			case ( ( int )( Option::QUIT ) ):
 				game.changeState( std::make_unique<TitleState> () );
 			break;

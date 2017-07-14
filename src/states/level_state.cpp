@@ -2,6 +2,7 @@
 #include "level_state.h"
 #include "message_state.h"
 #include "mezun_exceptions.h"
+#include "overworld_state.h"
 #include "pause_state.h"
 #include "level_select_state.h"
 
@@ -15,6 +16,7 @@ try :
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
 	blocks_ ( level_.currentMap() )
 {
+	inventory_.registerBeenToLevel( lvname );
 }
 catch ( const mezun::CantLoadTileset& e )
 {
@@ -24,7 +26,7 @@ catch ( const mezun::CantLoadTileset& e )
 		(
 			e.what(),
 			false,
-			std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ),
+			std::make_unique<OverworldState> ( events_, inventory_.inventory(), level_.id() ),
 			false
 		) )
 	);
@@ -64,7 +66,7 @@ void LevelState::update( Game& game, const Input& input, Graphics& graphics )
 			(
 				e.what(),
 				false,
-				std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ),
+				std::make_unique<OverworldState> ( events_, inventory_.inventory(), level_.id() ),
 				false
 			) )
 		);
@@ -98,7 +100,7 @@ void LevelState::init( Game& game, Graphics& graphics )
 			(
 				e.what(),
 				false,
-				std::unique_ptr<GameState> ( LevelSelectState::continueLevelSelect( events_, inventory_, level_.id() ) ),
+				std::make_unique<OverworldState> ( events_, inventory_.inventory(), level_.id() ),
 				false
 			) )
 		);

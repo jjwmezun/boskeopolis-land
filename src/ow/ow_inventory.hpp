@@ -14,6 +14,7 @@ class OWInventory
 		OWInventory( const Inventory& inventory );
 		void update( const Input& input, int lv_select );
 		void render( Graphics& graphics, int lv_select );
+		void load();
 		const Inventory& inventory() const;
 
 	private:

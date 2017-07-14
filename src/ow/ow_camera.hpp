@@ -2,20 +2,27 @@
 
 #include "unit.h"
 
+class Input;
+
 class OWCamera
 {
 	public:
 		static constexpr int W = Unit::WINDOW_WIDTH_PIXELS;
 		static constexpr int H = Unit::WINDOW_HEIGHT_PIXELS - 32;
+		static constexpr int NORMAL_SPEED = 5;
+		static constexpr int FAST_SPEED = 10;
 
 		constexpr OWCamera()
 		:
 			x_ ( 0 ),
-			y_ ( 0 )
+			y_ ( 0 ),
+			speed_ ( 5 )
 		{};
 
 		void adjust( int x, int y, int w, int h, int map_w, int map_h );
 		void center( int x, int y, int w, int h, int map_w, int map_h );
+		bool backToHero( int x, int y, int w, int h, int map_w, int map_h );
+		void move( const Input& input, int map_w, int map_h );
 
 		constexpr sdl2::SDLRect relative( const sdl2::SDLRect& r ) const
 		{
@@ -34,6 +41,7 @@ class OWCamera
 	private:
 		int x_;
 		int y_;
+		int speed_;
 
 		constexpr int leftBoundary()   const { return ( int )( W * 0.25 ) + x_; };
 		constexpr int rightBoundary()  const { return ( int )( W * 0.75 ) + x_; };

@@ -16,8 +16,8 @@ class Collision;
 class OverworldState : public GameState
 {
 	public:
-		OverworldState();
-		OverworldState( const EventSystem& events, const Inventory& inventory, int level );
+		OverworldState( bool load, Graphics& graphics );
+		OverworldState( const EventSystem& events, const Inventory& inventory, int level = NULL );
 		~OverworldState();
 
 		void update( Game& game, const Input& input, Graphics& graphics ) override;
@@ -39,6 +39,9 @@ class OverworldState : public GameState
 		int level_selection_;
 		AnimatedGraphics water_gfx_;
 		AnimatedGraphics lv_gfx_;
+		bool go_to_list_;
+		bool camera_mode_;
+		bool camera_trans_;
 
 		void mapData();
 		void interactions( Graphics& graphics );
@@ -47,4 +50,5 @@ class OverworldState : public GameState
 		void eventByID( int id );
 		void menu( Game& game, const Input& input );
 		static Palette lvPal( int id );
+		void renderCameraArrows( Graphics& graphics );
 };

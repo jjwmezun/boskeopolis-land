@@ -1,7 +1,6 @@
 #include "game.h"
 #include "input.h"
 #include <fstream>
-#include "level_select_state.h"
 #include "overworld_state.h"
 #include "title_state.h"
 
@@ -29,11 +28,11 @@ void TitleState::update( Game& game, const Input& input, Graphics& graphics )
 		switch( (Option)selection_.value() )
 		{
 			case ( Option::NEW ):
-				game.changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+				game.changeState( std::unique_ptr<GameState> ( new OverworldState( false, graphics ) ) );
 			break;
 
 			case ( Option::LOAD ):
-				game.changeState( std::unique_ptr<GameState> ( LevelSelectState::newLevelSelect() ) );
+				game.changeState( std::unique_ptr<GameState> ( new OverworldState( true, graphics ) ) );
 			break;
 
 			case ( Option::QUIT ):

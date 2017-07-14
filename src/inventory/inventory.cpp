@@ -2,6 +2,7 @@
 #include "game.h"
 #include "inventory.h"
 #include <fstream>
+#include "level.h"
 #include "mezun_exceptions.h"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
@@ -12,13 +13,15 @@ Inventory::Inventory()
 	funds_ ( Counter( 0, FUNDS_MAX, 0 ) ),
 	total_funds_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
 	funds_shown_ ( Counter( 0, FUNDS_MAX, 0 ) ),
-	total_funds_shown_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) )
+	total_funds_shown_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
+	recent_level_ ( NULL )
 {
 
 	if ( victories_.empty() )
 	{
 		for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
 		{
+			been_to_level_.push_back( false );
 			victories_.push_back( DEFAULT_VICTORY );
 			diamonds_.push_back( DEFAULT_DIAMOND );
 			gem_scores_.push_back( { DEFAULT_GEM_SCORE, FUNDS_MAX, -1 } );
@@ -32,13 +35,38 @@ Inventory::Inventory( const Inventory& c )
 :
 	funds_ ( c.funds_ ),
 	total_funds_ ( c.total_funds_ ),
+	been_to_level_ ( c.been_to_level_ ),
 	victories_ ( c.victories_ ),
 	diamonds_ ( c.diamonds_ ),
 	gem_scores_ ( c.gem_scores_ ),
 	time_scores_ ( c.time_scores_ ),
 	funds_shown_ ( { 0, FUNDS_MAX, 0 } ),
-	total_funds_shown_ ( c.total_funds_shown_ )
+	total_funds_shown_ ( c.total_funds_shown_ ),
+	recent_level_ ( c.recent_level_ )
 {};
+
+std::string Inventory::levelName( int level ) const
+{
+	const std::string name = Level::NameOLevel( level );
+	
+	if ( name != "" )
+	{
+		if ( beenToLevel( level ) )
+		{
+			return Level::NameOLevel( level );
+		}
+		else
+		{
+			return "????????????????????";
+		}
+	}
+	else
+	{
+		return "";
+	}
+};
+		
+int Inventory::recentLevel() const { return recent_level_; };
 
 bool Inventory::levelComplete( int level ) const
 {
@@ -112,6 +140,18 @@ bool Inventory::timeChallengeBeaten( int level ) const
 bool Inventory::victory( int level ) const
 {
 	return victories_.at( level );
+};
+		
+bool Inventory::beenToLevel( int level ) const
+{
+	return been_to_level_.at( level );
+};
+
+void Inventory::registerBeenToLevel( int level )
+{
+	been_to_level_.at( level ) = true;
+	recent_level_ = level;
+	save();
 };
 
 int Inventory::fundsShown() const
@@ -273,7 +313,7 @@ void Inventory::save()
 {
 	if ( Game::savingAllowed() )
 	{
-		//saveBinary();
+		saveBinary();
 	}
 };
 
@@ -294,6 +334,12 @@ void Inventory::saveBinary()
 			{
 				bool vb = victories_.at( vi );
 				bools.push_back( vb );
+			}
+
+			for ( int li = 0; li < been_to_level_.size(); ++li )
+			{
+				bool lb = been_to_level_.at( li );
+				bools.push_back( lb );
 			}
 
 			for ( int di = 0; di < diamonds_.size(); ++di )
@@ -338,6 +384,10 @@ void Inventory::saveBinary()
 				int32_t tb = time_scores_.at( ti )();
 				binofs.write( (char*)&tb, sizeof( tb ) );
 			}
+	
+		// Save last level entered.
+			int32_t rl = recent_level_;
+			binofs.write( (char*)&rl, sizeof( rl ) );
 
 	binofs.close();
 };
@@ -389,19 +439,21 @@ void Inventory::loadBinary()
 				int32_t total_funds_block;
 				std::memcpy( &total_funds_block, bindata, sizeof( int32_t ) );
 				total_funds_ = total_funds_block;
+				total_funds_shown_ = total_funds_;
 
 
-			// VICTORIES & DIAMONDS CLUMP.
+			// VICTORIES, BEEN_TO_LEVEL, & DIAMONDS CLUMP.
 				current_block_start = current_block_end;
 				// Space for 2x bools for levels (victories & diamonds).
 				// 8 bool (bits) fit in a byte--hence dividing by 8, rounding up to ensure there's always the minimum space needed.
 				// C++ oddly makes int / int output an auto-floored int rather than a double, so a val needs to be forced as a double.
-				int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUM_O_LEVELS * 2 ) ) ) / 8 );
+				int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUM_O_LEVELS * 3 ) ) ) / 8 );
 				current_block_end += blocks_for_bools;
 
 				assert( binsize >= current_block_end );
 
 				std::vector<bool> v;
+				std::vector<bool> l;
 				std::vector<bool> d;
 
 				for ( int i = 0; i < blocks_for_bools; ++i )
@@ -420,6 +472,10 @@ void Inventory::loadBinary()
 						}
 						else if ( b < Level::NUM_O_LEVELS * 2 )
 						{
+							l.push_back( val );
+						}
+						else if ( b < Level::NUM_O_LEVELS * 3 )
+						{
 							d.push_back( val );
 						}
 						else
@@ -430,6 +486,7 @@ void Inventory::loadBinary()
 				}
 
 				victories_ = v;
+				been_to_level_ = l;
 				diamonds_ = d;
 
 
@@ -476,6 +533,23 @@ void Inventory::loadBinary()
 				}
 
 				time_scores_ = tlist;
+			
+			// RECENT LEVEL
+				current_block_start = current_block_end;
+				current_block_end += sizeof( int32_t );
+
+				try
+				{
+					mezun::testSaveSize( binsize, current_block_end );
+				}
+				catch( const mezun::InvalidSaveSizeException& e )
+				{
+					throw;
+				}
+			
+				int32_t recent_level;
+				std::memcpy( &recent_level, &bindata[ current_block_start ], sizeof( int32_t ) );
+				recent_level_ = recent_level;
 
 
 			// Clean up time.

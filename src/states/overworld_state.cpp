@@ -1,6 +1,7 @@
 #include "collision.h"
 #include "game.h"
 #include <fstream>
+#include "level_select_state.h"
 #include "level_state.h"
 #include "mezun_math.h"
 #include "overworld_state.h"
@@ -9,7 +10,7 @@
 #include "rapidjson/istreamwrapper.h"
 #include "unit.h"
 
-OverworldState::OverworldState()
+OverworldState::OverworldState( bool load, Graphics& graphics )
 :
 	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),
 	camera_ (),
@@ -51,10 +52,31 @@ OverworldState::OverworldState()
 			std::make_pair( Unit::BlocksToPixels( 9 ), Unit::BlocksToPixels( 6 ) ),
 			std::make_pair( Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 6 ) )
 		}
-	)
+	),
+	go_to_list_ ( false ),
+	camera_mode_ ( false ),
+	camera_trans_ ( false )
 {
 	mapData();
+	if ( load )
+	{
+		inventory_.load();
+		int level = inventory_.inventory().recentLevel();
+
+		if ( level != NULL )
+		{
+			for ( auto& l : level_tiles_ )
+			{
+				if ( l.lv() == level )
+				{
+					hero_.placeOnLv( l );
+					newPalette( graphics, lvPal( level ) );
+				}
+			}
+		}
+	}
 	camera_.center( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
+	mapEvents();
 };
 
 OverworldState::OverworldState( const EventSystem& events, const Inventory& inventory, int level )
@@ -99,16 +121,24 @@ OverworldState::OverworldState( const EventSystem& events, const Inventory& inve
 			std::make_pair( Unit::BlocksToPixels( 9 ), Unit::BlocksToPixels( 6 ) ),
 			std::make_pair( Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 6 ) )
 		}
-	)
+	),
+	go_to_list_ ( false ),
+	camera_mode_ ( false ),
+	camera_trans_ ( false )
 {
 	mapData();
-	for ( auto& l : level_tiles_ )
+	
+	if ( level != NULL )
 	{
-		if ( l.lv() == level )
+		for ( auto& l : level_tiles_ )
 		{
-			hero_.placeOnLv( l );
+			if ( l.lv() == level )
+			{
+				hero_.placeOnLv( l );
+			}
 		}
 	}
+
 	camera_.center( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
 	mapEvents();
 };
@@ -117,21 +147,41 @@ OverworldState::~OverworldState() {};
 
 void OverworldState::update( Game& game, const Input& input, Graphics& graphics )
 {
-	level_selection_ = NULL;
-	water_gfx_.update();
-	hero_.update( input );
-	camera_.adjust( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
-	inventory_.update( input, level_selection_ );
-	
-	interactions( graphics );
-	lv_gfx_.update();
-	
-	menu( game, input );
-	if ( level_selection_ > 0 )
+	if ( camera_mode_ )
 	{
-		if ( input.pressed( Input::Action::CONFIRM ) )
+		if ( input.pressed( Input::Action::MENU ) )
 		{
-			game.changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_.inventory(), level_selection_, game ) ) );
+			camera_mode_ = false;
+			camera_trans_ = true;
+		}
+		
+		camera_.move( input, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
+	}
+	else if ( camera_trans_ )
+	{
+		if ( camera_.backToHero( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) ) )
+		{
+			camera_trans_ = false;
+		}
+	}
+	else
+	{
+		level_selection_ = NULL;
+		water_gfx_.update();
+		hero_.update( input );
+		camera_.adjust( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
+		interactions( graphics );
+		lv_gfx_.update();
+
+		inventory_.update( input, level_selection_ );
+
+		menu( game, input );
+		if ( level_selection_ > 0 )
+		{
+			if ( input.pressed( Input::Action::CONFIRM ) )
+			{
+				game.changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_.inventory(), level_selection_, game ) ) );
+			}
 		}
 	}
 };
@@ -167,9 +217,16 @@ void OverworldState::stateRender( Graphics& graphics )
 
 	hero_.render( graphics, camera_ );
 	inventory_.render( graphics, level_selection_ );
+	
+	if ( camera_mode_ )
+	{
+		renderCameraArrows( graphics );
+	}
 };
 
-void OverworldState::init( Game& game, Graphics& graphics ) {};
+void OverworldState::init( Game& game, Graphics& graphics )
+{
+};
 
 void OverworldState::mapData()
 {
@@ -375,14 +432,20 @@ void OverworldState::eventByID( int id )
 
 void OverworldState::menu( Game& game, const Input& input )
 {
-	if ( input.pressed( Input::Action::MENU ) )
+	if ( go_to_list_ )
+	{
+		go_to_list_ = false;
+		
+		game.pushState
+		(
+			std::make_unique<LevelSelectState> ( events_, inventory_.inventory(), level_selection_ )
+		);
+	}
+	else if ( input.pressed( Input::Action::MENU ) )
 	{
 		game.pushState
 		(
-			std::unique_ptr<GameState>
-			(
-				new OverworldMenuState()
-			)
+			std::make_unique<OverworldMenuState> ( go_to_list_, camera_mode_, palette() )
 		);
 	}
 };
@@ -403,4 +466,12 @@ Palette OverworldState::lvPal( int id )
 	}
 	
 	return { pal, 2 };
+};
+
+void OverworldState::renderCameraArrows( Graphics& graphics )
+{
+	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, 16, 16, 16 }, SDL_FLIP_NONE, 0.0 );
+	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS - 32, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 90.0 );
+	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, camera_.H - 32, 16, 16 }, SDL_FLIP_VERTICAL, 0.0 );
+	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { 16, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 270.0 );
 };

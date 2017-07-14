@@ -19,6 +19,10 @@ class Inventory
 		Inventory();
 		Inventory( const Inventory& c );
 
+		std::string levelName( int level ) const;
+		
+		int recentLevel() const;
+
 		bool levelComplete( int level ) const;
 
 		bool haveDiamond( int level ) const;
@@ -34,6 +38,9 @@ class Inventory
 
 		std::vector<bool> victories_;
 		bool victory( int level ) const;
+		
+		bool beenToLevel( int level ) const;
+		void registerBeenToLevel( int level );
 
 		int fundsShown() const;
 		int totalFundsShown() const;
@@ -64,12 +71,14 @@ class Inventory
 		static constexpr int FUNDS_SPEED            = 25;
 		static constexpr int TOTAL_FUNDS_SPEED      = 100;
 
+		std::vector<bool> been_to_level_;
 		std::vector<bool> diamonds_;
 		std::vector<Counter> gem_scores_;
 		std::vector<Counter> time_scores_;
 		Counter funds_shown_;
 		Counter total_funds_shown_;
-		
+		int recent_level_;
+
 		double percentPerLevel() const;
 		double percentPerVictory() const;
 		double percentPerDiamond() const;

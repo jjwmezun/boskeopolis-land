@@ -55,7 +55,7 @@ void Graphics::consoleArguments( const std::vector<std::string>& args )
 
 void Graphics::createRenderer()
 {
-	renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_PRESENTVSYNC );
+	renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_ACCELERATED );
 
 	if ( !renderer_ )
 	{

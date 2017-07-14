@@ -16,6 +16,11 @@ OWInventory::OWInventory( const Inventory& inventory )
 	inventory_ ( inventory )
 {};
 
+void OWInventory::load()
+{
+	inventory_.load();
+};
+
 void OWInventory::update( const Input& input, int lv_select )
 {
 	inventory_.update();
@@ -133,7 +138,15 @@ void OWInventory::render( Graphics& graphics, int lv_select )
 	}
 
 	gem_icon_gfx_.render( graphics, { LEFT_EDGE, ROW_2, 8, 8 } );
-	Text::renderNumber( graphics, inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9 );
+	
+	if ( inventory_.totalFundsShown() < 0 )
+	{
+		Text::renderNumber( graphics, inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontShade::DARK_MID_GRAY );
+	}
+	else
+	{
+		Text::renderNumber( graphics, inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9 );
+	}
 };
 
 const Inventory& OWInventory::inventory() const

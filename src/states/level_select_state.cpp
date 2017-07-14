@@ -6,55 +6,21 @@
 #include "message_state.h"
 #include "mezun_exceptions.h"
 #include "mezun_helpers.h"
+#include "overworld_state.h"
 #include "title_state.h"
 
-LevelSelectState::LevelSelectState( Status status, EventSystem events, Inventory inventory, int level )
+LevelSelectState::LevelSelectState( const EventSystem& events, const Inventory& inventory, int level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Level Select", 1 } ),
 	events_ ( events ),
 	inventory_ ( inventory ),
 	prev_level_ ( level ),
 	selection_ ( Counter( level, Level::realLevelNum()-1, 0 ) ),
-	camera_ ( { 0, 0, Unit::WINDOW_WIDTH_BLOCKS, 7, 0, START_Y } ),
-	status_ ( status )
+	camera_ ( { 0, 0, Unit::WINDOW_WIDTH_BLOCKS, 7, 0, START_Y } )
 {
 };
 
 LevelSelectState::~LevelSelectState() {};
-
-LevelSelectState* LevelSelectState::continueLevelSelect( EventSystem events, InventoryLevel inventory, int level )
-{
-	return new LevelSelectState
-	(
-		Status::CONTINUE,
-		events,
-		inventory.inventory(),
-		level
-	);
-};
-
-LevelSelectState* LevelSelectState::newLevelSelect()
-{
-	return new LevelSelectState
-	(
-		Status::NEW,
-		{},
-		{},
-		DEFAULT_LEVEL
-		//Level::LevelName::LV_CITY_2
-	);
-};
-
-LevelSelectState* LevelSelectState::loadLevelSelect()
-{
-	return new LevelSelectState
-	(
-		Status::LOAD,
-		{},
-		{},
-		DEFAULT_LEVEL
-	);
-};
 
 void LevelSelectState::update( Game& game, const Input& input, Graphics& graphics )
 {
@@ -97,8 +63,8 @@ void LevelSelectState::update( Game& game, const Input& input, Graphics& graphic
 	else
 	{
 		delay_length_ = 8;
-		
-		if ( input.held( Input::Action::CANCEL ) )
+
+		if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && input.held( Input::Action::CANCEL ) )
 		{
 			show_challenges_ = true;
 		}
@@ -106,18 +72,19 @@ void LevelSelectState::update( Game& game, const Input& input, Graphics& graphic
 
 	inventory_.update();
 
-	if ( input.pressed( Input::Action::CONFIRM ) )
+	if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && input.pressed( Input::Action::CONFIRM ) )
 	{
-		game.changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_, level_ids_.at( selection_() ), game ) ) );
+		game.changeState( std::make_unique<OverworldState> ( events_, inventory_, level_ids_.at( selection_() ) ) );
 	}
 	else if ( input.pressed( Input::Action::MENU ) )
 	{
-		game.changeState( std::unique_ptr<GameState> ( new TitleState() ) );
+		game.popState();
 	}
 };
 
 void LevelSelectState::stateRender( Graphics& graphics )
 {
+	graphics.colorCanvas();
 	graphics.renderRect( highlight_dest_, 6 );
 
 	for ( int i = 0; i < level_ids_.size(); ++i )
@@ -223,29 +190,6 @@ void LevelSelectState::stateRender( Graphics& graphics )
 
 void LevelSelectState::init( Game& game, Graphics& graphics )
 {
-	switch ( status_ )
-	{
-		case ( Status::LOAD ):
-			try
-			{
-				inventory_.load();
-			}
-			catch( const mezun::InvalidSaveSizeException& e )
-			{	
-				game.pushState
-				(
-					std::move( MessageState::error
-					(
-						e.what(),
-						false,
-						std::make_unique<TitleState> (),
-						false
-					) )
-				);
-			}
-		break;
-	}
-
 	constexpr int X = 24;
 
 	try
@@ -255,7 +199,7 @@ void LevelSelectState::init( Game& game, Graphics& graphics )
 
 		for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
 		{
-			const std::string lvname = Level::NameOLevel( i );
+			const std::string lvname = inventory_.levelName( i );
 
 			if ( !mezun::isStringEmpty( lvname ) )
 			{				

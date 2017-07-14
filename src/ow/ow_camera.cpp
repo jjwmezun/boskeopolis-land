@@ -1,3 +1,4 @@
+#include "input.h"
 #include <iostream>
 #include "ow_camera.hpp"
 
@@ -29,6 +30,72 @@ void OWCamera::center( int x, int y, int w, int h, int map_w, int map_h )
 {
 	x_ = x - ( W / 2 ) - ( w / 2 );
 	y_ = y - ( H / 2 ) - ( h / 2 );
+	bounds( map_w, map_h );
+};
+
+bool OWCamera::backToHero( int x, int y, int w, int h, int map_w, int map_h )
+{
+	bool close_nough_x = false;
+	bool close_nough_y = false;
+
+	if ( x_ < x - ( W / 2 ) - ( w / 2 ) - FAST_SPEED )
+	{
+		x_ += FAST_SPEED;
+	}
+	else if ( x_ > x - ( W / 2 ) - ( w / 2 ) + FAST_SPEED )
+	{
+		x_ -= FAST_SPEED;
+	}
+	else
+	{
+		close_nough_x = true;
+	}
+
+	if ( y_ < y - ( H / 2 ) - ( h / 2 ) - FAST_SPEED )
+	{
+		y_ += FAST_SPEED;
+	}
+	else if ( y_ > y - ( H / 2 ) - ( h / 2 ) + FAST_SPEED )
+	{
+		y_ -= FAST_SPEED;
+	}
+	else
+	{
+		close_nough_y = true;
+	}
+	
+	return close_nough_x && close_nough_y;
+};
+
+void OWCamera::move( const Input& input, int map_w, int map_h )
+{
+	if ( input.held( Input::Action::RUN) )
+	{
+		speed_ = FAST_SPEED;
+	}
+	else
+	{
+		speed_ = NORMAL_SPEED;
+	}
+
+	if ( input.held( Input::Action::MOVE_LEFT ) )
+	{
+		x_ -= speed_;
+	}
+	else if ( input.held( Input::Action::MOVE_RIGHT ) )
+	{
+		x_ += speed_;
+	}
+
+	if ( input.held( Input::Action::MOVE_UP ) )
+	{
+		y_ -= speed_;
+	}
+	else if ( input.held( Input::Action::MOVE_DOWN ) )
+	{
+		y_ += speed_;
+	}
+	
 	bounds( map_w, map_h );
 };
 

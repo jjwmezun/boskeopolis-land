@@ -163,3 +163,8 @@ void InventoryLevel::quit( int level )
 		failed();
 	}
 };
+
+void InventoryLevel::registerBeenToLevel( int level )
+{
+	inventory_.registerBeenToLevel( level );
+};
