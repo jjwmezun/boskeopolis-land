@@ -46,14 +46,14 @@
         if ( them.hasType( SpriteType::HERO ) )
         {
             if ( them.rightSubPixels() > leftSubPixels() - 16000 && them.leftSubPixels() < rightSubPixels() + 16000 )
-                movement_ = MOVEMENTS[ SpriteMovement::Type::GROUNDED ];
+                changeMovement( SpriteMovement::Type::GROUNDED );
         }
     };
 
     void SpikyFruitSprite::reset()
     {
         resetPosition();
-        movement_ = MOVEMENTS[ SpriteMovement::Type::FLOATING ];
+        changeMovement( SpriteMovement::Type::FLOATING );
         vy_ = 0;
         acceleration_y_ = 0;
 

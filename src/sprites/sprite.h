@@ -199,6 +199,7 @@ class Sprite : public Object
 		void boundaries( Camera& camera, Map& lvmap );
 		void setPosition( int x, int y );
 		void changeMovement( SpriteMovement::Type type );
+		static std::unique_ptr<SpriteMovement> getMovement( SpriteMovement::Type type );
 
 		Direction::Horizontal directionX() const;
 		Direction::Vertical directionY() const;
@@ -207,8 +208,6 @@ class Sprite : public Object
 
 
 	protected:
-		static std::map<SpriteMovement::Type, SpriteMovement*> MOVEMENTS;
-
 		static const int GRAVITY_START_SPEED = 500;
 		static const int GRAVITY_TOP_SPEED = 4000;
 		static const int JUMP_DUCK_TOP_SPEED = 5500;
@@ -220,7 +219,7 @@ class Sprite : public Object
 		const bool despawn_when_dead_;
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::unique_ptr<SpriteComponent> component_;
-		SpriteMovement* movement_;
+		std::unique_ptr<SpriteMovement> movement_;
 		SpriteStatus status_;
 
 		const Direction::Horizontal direction_x_orig_;

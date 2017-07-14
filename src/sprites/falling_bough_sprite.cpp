@@ -50,7 +50,7 @@
             falling_timer_.update();
 
         if ( falling_timer_.done() )
-            movement_ = MOVEMENTS[ SpriteMovement::Type::GROUNDED ];
+            changeMovement( SpriteMovement::Type::GROUNDED );
     };
 
     void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
@@ -71,7 +71,7 @@
     void FallingBoughSprite::reset()
     {
         hit_box_.y = original_hit_box_.y;
-        movement_ = MOVEMENTS[ SpriteMovement::Type::FLOATING ];
+        changeMovement( SpriteMovement::Type::FLOATING );
         vy_ = 0;
         acceleration_y_ = 0;
         falling_timer_.stop();

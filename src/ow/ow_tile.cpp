@@ -10,7 +10,8 @@ OWTile::OWTile( int type, int x, int y, const AnimatedGraphics& gfx )
 :
 	type_ ( type ),
 	x_ ( x ),
-	y_ ( y )
+	y_ ( y ),
+	gfx_ ( nullptr )
 {
 	if ( type == 1 )
 	{
@@ -20,7 +21,7 @@ OWTile::OWTile( int type, int x, int y, const AnimatedGraphics& gfx )
 
 void OWTile::render( Graphics& graphics, const OWCamera& camera ) const
 {
-	if ( gfx_ )
+	if ( gfx_ != nullptr )
 	{
 		gfx_->render( graphics, dest( camera ) );
 	}
@@ -48,8 +49,7 @@ sdl2::SDLRect OWTile::src() const
 
 sdl2::SDLRect OWTile::dest( const OWCamera& camera ) const
 {
-	return
-	camera.relative( coords() );
+	return camera.relative( coords() );
 };
 
 void OWTile::interact( OWHero& hero, const Collision& collision ) const

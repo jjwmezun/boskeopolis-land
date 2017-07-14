@@ -25,13 +25,6 @@
 // STATIC PROPERTIES
 //===================================
 
-    std::map<SpriteMovement::Type, SpriteMovement*> Sprite::MOVEMENTS =
-    {
-        { SpriteMovement::Type::GROUNDED,   new GroundedSpriteMovement() },
-        { SpriteMovement::Type::FLOATING,   new SpriteMovement() },
-        { SpriteMovement::Type::FLUTTERING, new FlutteringSpriteMovement() },
-        { SpriteMovement::Type::SWIMMING,   new SwimmingSpriteMovement() }
-    };
     double Sprite::traction_ = TRACTION_NORMAL;
     int Sprite::resistance_x_ = RESISTANCE_X_NORMAL;
 
@@ -84,7 +77,7 @@
         direction_y_orig_ ( direction_y ),
         component_ ( std::move( component ) ),
         status_ ( max_hp, hp ),
-        movement_ ( MOVEMENTS.at( physics_state ) ),
+        movement_ ( getMovement( physics_state ) ),
         camera_movement_ ( camera_movement ),
         despawn_when_dead_ ( despawn_when_dead ),
         block_interact_ ( block_interact ),
@@ -635,7 +628,7 @@
         vx_ = 0;
         block_interact_ = false;
         sprite_interact_ = false;
-        movement_ = MOVEMENTS[ SpriteMovement::Type::GROUNDED ];
+        movement_ = getMovement( SpriteMovement::Type::GROUNDED );
         on_ladder_ = false;
 
         if ( camera.offscreen( hit_box_ ) )
@@ -651,7 +644,7 @@
 
     void Sprite::changeMovement( SpriteMovement::Type type )
     {
-        movement_ = MOVEMENTS[ type ];
+        movement_ = getMovement( type );
     };
 
     void Sprite::killNoAnimation()
@@ -730,4 +723,23 @@
 	bool Sprite::hasMovementType( SpriteMovement::Type type ) const
 	{
 		return type == movement_->type();
+	};
+
+	std::unique_ptr<SpriteMovement> Sprite::getMovement( SpriteMovement::Type type )
+	{
+		switch ( type )
+		{
+			case ( SpriteMovement::Type::GROUNDED ):
+				return std::make_unique<GroundedSpriteMovement> ();
+			break;
+			case ( SpriteMovement::Type::FLOATING ):
+				return std::make_unique<SpriteMovement> ();
+			break;
+			case ( SpriteMovement::Type::FLUTTERING ):
+				return std::make_unique<FlutteringSpriteMovement> ();
+			break;
+			case ( SpriteMovement::Type::SWIMMING ):
+				return std::make_unique<SwimmingSpriteMovement> ();
+			break;
+		}
 	};

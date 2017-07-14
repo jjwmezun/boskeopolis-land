@@ -27,22 +27,24 @@ class OverworldState : public GameState
 	private:
 		static constexpr int SMOOTH_MOVEMENT_PADDING = 4;
 
-		OWHero hero_;
 		OWCamera camera_;
+		OWHero hero_;
+		int map_width_;
+		int map_height_;
+		OWInventory inventory_;
+		EventSystem events_;
 		std::vector<OWTile> tiles_;
 		std::vector<OWLevel> level_tiles_;
 		std::vector<OWPalChange> pal_change_tiles_;
-		OWInventory inventory_;
-		EventSystem events_;
-		int map_width_;
-		int map_height_;
 		int level_selection_;
 		AnimatedGraphics water_gfx_;
+		AnimatedGraphics lv_gfx_;
 
 		void mapData();
 		void interactions( Graphics& graphics );
-		void testInteractions( Graphics& graphics );
 		Collision testCollision( const sdl2::SDLRect& lhs, const sdl2::SDLRect& rhs );
 		void mapEvents();
 		void eventByID( int id );
+		void menu( Game& game, const Input& input );
+		static Palette lvPal( int id );
 };

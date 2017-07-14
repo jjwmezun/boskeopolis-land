@@ -31,8 +31,9 @@ Game::Game( std::vector<std::string>& args )
 	firstState();
 };
 
-Game::~Game()
+void Game::destruct()
 {
+	graphics_->quit();
 	SDL_Quit();
 };
 
@@ -213,10 +214,13 @@ void Game::setResourcePath()
 
 	const std::string BASE_DIR = "boskeopolis-land";
 	const std::string RES_SUB_DIR = pathDivider() + "resources/";
-	std::string path = SDL_GetBasePath();
+	char* base_path = SDL_GetBasePath();
+	std::string path = base_path;
+	SDL_free( base_path );
 	size_t pos = path.find( BASE_DIR );
 	path.replace( pos + BASE_DIR.length(), path.length() - pos - BASE_DIR.length(), RES_SUB_DIR );
 	resource_path_ = path;
+	resource_path_ = "/home/jjwmezun/Documents/cpp-projects/boskeopolis-land/resources/";
 };
 
 std::string Game::resourcePath()

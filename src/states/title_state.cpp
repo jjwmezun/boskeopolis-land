@@ -33,8 +33,7 @@ void TitleState::update( Game& game, const Input& input, Graphics& graphics )
 			break;
 
 			case ( Option::LOAD ):
-				if ( can_load_ )
-					game.changeState( std::unique_ptr<GameState> ( LevelSelectState::loadLevelSelect() ) );
+				game.changeState( std::unique_ptr<GameState> ( LevelSelectState::newLevelSelect() ) );
 			break;
 
 			case ( Option::QUIT ):

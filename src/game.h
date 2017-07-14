@@ -14,7 +14,6 @@ class Game
 		const char* TITLE = "Boskeopolis Land";
 
 		Game( std::vector<std::string>& args );
-		~Game();
 		Game( const Game& ) = delete;
 		Game& operator=( const Game& ) = delete;
 		Game( Game&& ) = delete;
@@ -23,6 +22,7 @@ class Game
 		bool running() const;
 		void execute();
 		void quit();
+		void destruct();
 
 		void changeState( std::unique_ptr<GameState> state );
 		void pushState( std::unique_ptr<GameState> state );

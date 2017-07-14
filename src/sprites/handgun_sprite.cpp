@@ -63,7 +63,7 @@
                 {
                     them.bounce();
                     kill();
-                    movement_ = MOVEMENTS[ SpriteMovement::Type::GROUNDED ];
+                    changeMovement( SpriteMovement::Type::GROUNDED );
                 }
                 else if ( their_collision.collideAny() )
                 {
@@ -96,6 +96,6 @@
         vx_ = 0;
         acceleration_y_ = 0;
         vy_ = 0;
-        movement_ = MOVEMENTS[ SpriteMovement::Type::FLOATING ];
+        changeMovement( SpriteMovement::Type::FLOATING );
         status_.reset();
     };

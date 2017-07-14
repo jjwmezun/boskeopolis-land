@@ -15,6 +15,7 @@ int main( int argc, char* argv[] )
     // If game starts without running, there was an error.
     if ( !game.running() )
     {
+		game.destruct();
         return 1;
     }
 
@@ -23,5 +24,6 @@ int main( int argc, char* argv[] )
         game.execute();
     }
 
+	game.destruct();
     return 0;
 };

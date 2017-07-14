@@ -1,18 +1,21 @@
+#include "animated_graphics.h"
 #include "graphics.h"
 #include "mezun_math.h"
 #include "ow_camera.hpp"
 #include "ow_level.hpp"
 #include "unit.h"
 
-OWLevel::OWLevel( int type, int x, int y )
+OWLevel::OWLevel( int type, int x, int y, const AnimatedGraphics& gfx )
 :
 	type_ ( type ),
 	x_ ( x ),
-	y_ ( y )
+	y_ ( y ),
+	gfx_ ( &gfx )
 {};
 
 void OWLevel::render( Graphics& graphics, const OWCamera& camera ) const
 {
+	gfx_->render( graphics, dest( camera ) );
 	graphics.renderObject( "tilesets/ow.png", src(), dest( camera ), SDL_FLIP_NONE, 0.0 );
 };
 
