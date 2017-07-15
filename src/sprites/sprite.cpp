@@ -228,9 +228,27 @@
         vx_ += acceleration_x_;
 
         if ( vx_ > top_speed_ )
-            vx_ = top_speed_;
+		{/*
+			if ( vx_ > top_speed_ * 2 )
+			{
+				vx_ = top_speed_ * 2;
+			}
+
+			vx_ -= acceleration_x_;
+			vx_ /= traction_;*/
+			vx_ = top_speed_;
+		}
         if ( vx_ < -top_speed_ )
-            vx_ = -top_speed_;
+		{/*
+			if ( vx_ < -( top_speed_ * 2 ) )
+			{
+				vx_ = -( top_speed_ * 2 );
+			}
+
+			vx_ += acceleration_x_;
+			vx_ /= traction_;*/
+			vx_ = -top_speed_;
+		}
 
         vx_ += resistance_x_;
 
@@ -588,12 +606,16 @@
     void Sprite::slideLeft()
     {
         is_sliding_ = true;
+        top_speed_ = top_speed_run_;
+        start_speed_ = start_speed_run_;
         moveLeft();
     };
 
     void Sprite::slideRight()
     {
         is_sliding_ = true;
+        top_speed_ = top_speed_run_;
+        start_speed_ = start_speed_run_;
         moveRight();
     };
 

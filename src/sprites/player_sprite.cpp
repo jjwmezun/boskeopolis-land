@@ -100,6 +100,25 @@ void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap,
 
 void PlayerSprite::actions( const Input& input )
 {
+	if ( input_->action2( input ) )
+	{
+		run();
+	}
+	else
+	{
+		stopRunning();
+	}
+
+	if ( input_->left( input ) && !input_->right( input ) && ( !isDucking() || !onGround() ) )
+	{
+		moveLeft();
+	}
+
+	if ( input_->right( input ) && !input_->left( input ) && ( !isDucking() || !onGround() ) )
+	{
+		moveRight();
+	}
+
 	if ( input_->down( input ) )
 	{
 		switch ( on_slope_ )
@@ -121,17 +140,7 @@ void PlayerSprite::actions( const Input& input )
 	{
 		unduck();
 	}
-
-	if ( input_->left( input ) && !input_->right( input ) && ( !isDucking() || !onGround() ) )
-	{
-		moveLeft();
-	}
-
-	if ( input_->right( input ) && !input_->left( input ) && ( !isDucking() || !onGround() ) )
-	{
-		moveRight();
-	}
-
+	
 	if ( !is_sliding_ )
 	{
 		if ( !input_->right( input ) && !input_->left( input ))
@@ -143,13 +152,9 @@ void PlayerSprite::actions( const Input& input )
 		}
 	}
 
-	if ( input_->action2( input ) )
+	if ( slide_jump_ )
 	{
-		run();
-	}
-	else
-	{
-		stopRunning();
+		top_speed_ = top_speed_run_;
 	}
 
 	if ( input_->action1( input ) )
@@ -243,6 +248,8 @@ void PlayerSprite::actions( const Input& input )
 	}
 
 	input_->update();
+	
+	std::cout<<top_speed_<<std::endl;
 
 };
 

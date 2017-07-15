@@ -107,11 +107,11 @@
     };
 
     void GroundedSpriteMovement::position( Sprite& sprite )
-    {
+    {/*
         if ( sprite.slide_jump_ )
         {
             sprite.vx_ *= 5;
-        }
+        }*/
 
         if ( !sprite.onGround() )
         {
@@ -190,6 +190,7 @@
         if ( sprite.is_sliding_ )
         {
             sprite.slide_jump_ = true;
+			sprite.vx_ *= 5;
         }
     };
 

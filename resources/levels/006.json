@@ -1,0 +1,24 @@
+{
+	"name": "Sherbert Slopes",
+
+	"maps":
+	[
+		{
+			"slug": "snow-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "snow_firs_2.png",
+					"width": 164,
+					"height": 256,
+					"x_scroll": 0.5,
+					"y_scroll": 0.1
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 1,
+	"entrance_y": 9
+}

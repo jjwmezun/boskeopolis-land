@@ -19,10 +19,12 @@ void BlockComponentHighSlopeLeft::interact( Collision& collision, Sprite& sprite
 			{
 				sprite.changeY( std::min( sprite.ySubPixels(), block.bottomSubPixels() - sprite.heightSubPixels() - ( ( sprite.centerXSubPixels() - block.leftSubPixels() ) / 2 ) - 9000 ) );
 
-				if ( sprite.vx_ >= 0 && !sprite.isDucking() )
+				if ( sprite.vx_ >= 0 )
 					sprite.vx_ /= 1.08;
 				else if ( sprite.vx_ <= 0 )
 					sprite.vx_ *= 1.08;
+
+				sprite.vx_ -= 3;
 			}
 		}
 	}

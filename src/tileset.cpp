@@ -24,6 +24,8 @@
 #include "block_component_single_use.h"
 #include "block_component_sink.h"
 #include "block_component_solid.h"
+#include "block_component_steep_slope_left.h"
+#include "block_component_steep_slope_right.h"
 #include "block_component_swimmable.h"
 #include "block_component_switch.h"
 #include "block_component_switch_flip.h"
@@ -356,6 +358,14 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "slope_low_right" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentLowSlopeRight> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_steep_left" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSteepSlopeLeft> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_steep_right" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSteepSlopeRight> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "conveyor" ) )
 					{
