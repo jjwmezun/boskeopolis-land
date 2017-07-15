@@ -6,6 +6,8 @@ constexpr sdl2::SDLRect InventoryLevel::GEM_ICON_DEST;
 constexpr sdl2::SDLRect InventoryLevel::CLOCK_ICON_DEST;
 constexpr sdl2::SDLRect InventoryLevel::KEY_ICON_DEST;
 constexpr sdl2::SDLRect InventoryLevel::DIAMOND_ICON_DEST;
+constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_DEST;
+constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_CROSS_DEST;
 
 InventoryLevel::InventoryLevel()
 :
@@ -13,25 +15,28 @@ InventoryLevel::InventoryLevel()
 	health_ ( VERTICAL_POS ),
 	clock_ ( {} ),
 	oxygen_meter_ ( VERTICAL_POS ),
-	ticker_ ( VERTICAL_POS + 16 )
+	ticker_ ( VERTICAL_POS + 16 ),
+	show_mcguffins_ ( false )
 {};
 
-InventoryLevel::InventoryLevel( const InventoryLevel& c )
+InventoryLevel::InventoryLevel( const Inventory& c )
 :
-	health_ ( VERTICAL_POS ),
-	inventory_ ( c.inventory_ ),
-	clock_ ( {} ),
-	oxygen_meter_ ( VERTICAL_POS ),
-	ticker_ ( VERTICAL_POS + 16 )
-{};
-
-InventoryLevel::InventoryLevel( const Inventory c )
-:
-	health_ ( VERTICAL_POS ),
 	inventory_ ( c ),
+	health_ ( VERTICAL_POS ),
 	clock_ ( {} ),
 	oxygen_meter_ ( VERTICAL_POS ),
-	ticker_ ( VERTICAL_POS + 16 )
+	ticker_ ( VERTICAL_POS + 16 ),
+	show_mcguffins_ ( false )
+{};
+
+InventoryLevel::InventoryLevel( Inventory&& m )
+:
+	inventory_ ( m ),
+	health_ ( VERTICAL_POS ),
+	clock_ ( {} ),
+	oxygen_meter_ ( VERTICAL_POS ),
+	ticker_ ( VERTICAL_POS + 16 ),
+	show_mcguffins_ ( false )
 {};
 
 void InventoryLevel::init()
@@ -71,6 +76,7 @@ void InventoryLevel::render( Graphics& graphics, int level, EventSystem& events 
 		key_gfx_.render( graphics, KEY_ICON_DEST, nullptr );
 	}
 
+	/*
 	// SWITCH
 	if ( events.switchOn() )
 	{
@@ -79,6 +85,14 @@ void InventoryLevel::render( Graphics& graphics, int level, EventSystem& events 
 	else
 	{
 		switch_off_.render( graphics );
+	}*/
+
+	// McGuffins
+	if ( show_mcguffins_ )
+	{
+		mcguffins_gfx_.render( graphics, MCGUFFIN_DEST, nullptr );
+		mcguffins_cross_.render( graphics, MCGUFFIN_CROSS_DEST, nullptr );
+		Text::renderNumber( graphics, inventory_.McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, VERTICAL_POS, 1, Text::FontShade::DARK_GRAY );
 	}
 
 	// TICKER
@@ -168,3 +182,6 @@ void InventoryLevel::registerBeenToLevel( int level )
 {
 	inventory_.registerBeenToLevel( level );
 };
+
+void InventoryLevel::addMcGuffin() { inventory_.addMcGuffin(); };
+int InventoryLevel::McGuffins() const { return inventory_.McGuffins(); };

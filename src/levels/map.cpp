@@ -1,10 +1,10 @@
-
 #include <algorithm>
 #include <iostream>
 #include <fstream>
 #include "game.h"
 #include "mezun_helpers.h"
 #include "map.h"
+#include "map_layer_tilemap.h"
 #include "map_layer_water.h"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
@@ -24,6 +24,7 @@ Map Map::mapFromPath
 
 		std::vector<int> blocks = {};
 		std::vector<int> sprites = {};
+		std::vector<int> layer2 = {};
 
 		const std::string MAPS_DIR = Game::resourcePath() + "maps" + Game::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -40,6 +41,25 @@ Map Map::mapFromPath
 
 
 
+
+
+
+	// Get Map Sizes
+	//=============================================	
+
+		assert( map_data.HasMember( "width" ) );
+		assert( map_data[ "width" ].IsInt() );
+		const int width = map_data[ "width" ].GetInt();
+
+		assert( map_data.HasMember( "height" ) );
+		assert( map_data[ "height" ].IsInt() );
+		const int height = map_data[ "height" ].GetInt();
+		
+		
+		
+		
+		
+		
 	// Get Blocks & Sprites
 	//=============================================================
 
@@ -48,6 +68,7 @@ Map Map::mapFromPath
 
 		constexpr int BLOCKS_INDEX = 0;
 		constexpr int SPRITES_INDEX = 1;
+		constexpr int LAYER2_INDEX = 2;
 
 		int i = 0;
 		for ( auto& v : map_data[ "layers" ].GetArray() )
@@ -66,6 +87,10 @@ Map Map::mapFromPath
 						{
 							sprites.push_back( n.GetInt() );
 						}
+						else if ( i == LAYER2_INDEX )
+						{
+							layer2.push_back( n.GetInt() );
+						}
 						else
 						{
 							break;
@@ -75,19 +100,11 @@ Map Map::mapFromPath
 			}
 			++i;
 		}
-
-
-
-	// Get Map Sizes
-	//=============================================	
-
-		assert( map_data.HasMember( "width" ) );
-		assert( map_data[ "width" ].IsInt() );
-		const int width = map_data[ "width" ].GetInt();
-
-		assert( map_data.HasMember( "height" ) );
-		assert( map_data[ "height" ].IsInt() );
-		const int height = map_data[ "height" ].GetInt();
+		
+		if ( !layer2.empty() )
+		{
+			backgrounds.emplace_back( new MapLayerTilemap( layer2, width, height ) );
+		}
 
 
 
@@ -472,18 +489,18 @@ void Map::deleteBlock( int where )
 
 bool Map::inBounds( int n ) const
 {
-	return n > 0 && n < blocks_.size();
+	return n >= 0 && n < blocks_.size();
 };
 
-void Map::update( EventSystem& events, SpriteSystem& sprites )
+void Map::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
 {
 	for ( int i = 0; i < backgrounds_.size(); ++i )
 	{
-		backgrounds_[ i ]->update( events );
+		backgrounds_[ i ]->update( events, blocks, camera );
 	}
 	for ( int i = 0; i < foregrounds_.size(); ++i )
 	{
-		foregrounds_[ i ]->update( events );
+		foregrounds_[ i ]->update( events, blocks, camera );
 	}
 
 	changed_ = false;

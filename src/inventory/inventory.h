@@ -46,6 +46,9 @@ class Inventory
 		int totalFundsShown() const;
 		double percent() const;
 		std::string percentShown() const;
+		
+		void addMcGuffin();
+		int McGuffins() const;
 
 		void update();
 		void save();
@@ -78,6 +81,7 @@ class Inventory
 		Counter funds_shown_;
 		Counter total_funds_shown_;
 		int recent_level_;
+		int mcguffins_;
 
 		double percentPerLevel() const;
 		double percentPerVictory() const;

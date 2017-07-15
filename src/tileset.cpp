@@ -6,6 +6,7 @@
 #include "block_component_climbable.h"
 #include "block_component_conveyor.h"
 #include "block_component_diamond.h"
+#include "block_component_door.h"
 #include "block_component_force_upward.h"
 #include "block_component_full_heal.h"
 #include "block_component_goal.h"
@@ -18,6 +19,7 @@
 #include "block_component_lose.h"
 #include "block_component_low_slope_left.h"
 #include "block_component_low_slope_right.h"
+#include "block_component_mcguffin.h"
 #include "block_component_message.h"
 #include "block_component_money.h"
 #include "block_component_move_water.h"
@@ -288,6 +290,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							components.emplace_back( std::make_unique<BlockComponentMoney> () );
 						}
 					}
+					else if ( mezun::areStringsEqual( comp_type, "mcguffin" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentMcGuffin> () );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "single" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSingleUse> () );
@@ -463,6 +469,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "move_water" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentMoveWater> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "door" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentDoor> () );
 					}
 
 				}

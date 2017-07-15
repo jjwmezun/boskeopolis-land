@@ -3,6 +3,7 @@
 
 #include "palette.h"
 
+class BlockSystem;
 class Camera;
 class Game;
 class InventoryLevel;
@@ -14,7 +15,7 @@ class EventSystem
 	public:
 		EventSystem();
 
-		void update( Level& level, InventoryLevel& inventory, Game& game, SpriteSystem& sprites, Camera& camera );
+		void update( Level& level, InventoryLevel& inventory, Game& game, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 		void reset();
 		
 		void win();
@@ -35,10 +36,11 @@ class EventSystem
 		bool switchChanged() const;
 		void flipSwitch();
 
-		int move_water_ = -1;
-		int current_water_ = -1;
+		int move_water_;
+		int current_water_;
 		bool waterShouldMove() const;
 		bool waterShouldStop() const;
+		bool in_front_of_door_;
 
 
    private:
@@ -59,7 +61,7 @@ class EventSystem
 		void resetPalette();
 		
 		void testMessage( Level& level, Game& game );
-		void testWarp( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera );
+		void testWarp( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 		void testWinLoseOrQuit( Level& level, InventoryLevel& inventory, Game& game );
 		void failEvent( Level& level, InventoryLevel& inventory, Game& game );
 		void winEvent( Level& level, InventoryLevel& inventory, Game& game );

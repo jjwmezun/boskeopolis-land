@@ -44,10 +44,9 @@
             void interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
 			
 			void changeTileset( std::string new_tileset );
-			
             void blocksFromMap( const Map& lvmap, const Camera& camera );
-			
             bool blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const;
+			void addBlock( int x, int y, int i, int type, std::vector<Block>& list );
 
 
         private:
@@ -59,7 +58,6 @@
 			std::string current_tileset_;
 
 			Tileset& getTileset();
-			void addBlock( int x, int y, int i, int type );
 			
 			int debug_num_ = 0;
     };

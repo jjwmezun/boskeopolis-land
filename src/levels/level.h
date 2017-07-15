@@ -1,6 +1,6 @@
-#ifndef LEVEL_H
-#define LEVEL_H
+#pragma once
 
+class BlockSystem;
 class Camera;
 class InventoryLevel;
 class Sprite;
@@ -31,12 +31,12 @@ class Level
 		int entranceY() const;
 		int cameraX() const;
 		int cameraY() const;
-		void warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& inventory, EventSystem& events );
+		void warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& inventory, EventSystem& events, BlockSystem& blocks );
 		std::string message() const;
 		int id() const;
 
 		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Game& game );
-		void update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, const Input& input );
+		void update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, const Input& input, BlockSystem& blocks, const Camera& camera );
 
 		static const std::string& NameOLevel( unsigned int n );
 		static unsigned int realLevelNum();
@@ -78,5 +78,3 @@ class Level
 		static void buildLevelList();
 		static void checkLvList();
 };
-
-#endif // LEVEL_H

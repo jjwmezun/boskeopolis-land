@@ -14,7 +14,8 @@ Inventory::Inventory()
 	total_funds_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
 	funds_shown_ ( Counter( 0, FUNDS_MAX, 0 ) ),
 	total_funds_shown_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
-	recent_level_ ( NULL )
+	recent_level_ ( NULL ),
+	mcguffins_ ( 0 )
 {
 
 	if ( victories_.empty() )
@@ -42,7 +43,8 @@ Inventory::Inventory( const Inventory& c )
 	time_scores_ ( c.time_scores_ ),
 	funds_shown_ ( { 0, FUNDS_MAX, 0 } ),
 	total_funds_shown_ ( c.total_funds_shown_ ),
-	recent_level_ ( c.recent_level_ )
+	recent_level_ ( c.recent_level_ ),
+	mcguffins_ ( c.mcguffins_ )
 {};
 
 std::string Inventory::levelName( int level ) const
@@ -151,6 +153,7 @@ void Inventory::registerBeenToLevel( int level )
 {
 	been_to_level_.at( level ) = true;
 	recent_level_ = level;
+	mcguffins_ = 0;
 	save();
 };
 
@@ -563,3 +566,6 @@ void Inventory::loadBinary()
 
 	binifs.close();
 };
+
+void Inventory::addMcGuffin() { ++mcguffins_; };
+int Inventory::McGuffins() const { return mcguffins_; };

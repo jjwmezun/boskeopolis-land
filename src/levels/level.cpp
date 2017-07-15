@@ -1,6 +1,7 @@
 #include "map_layer_constellation.h"
 #include "map_layer_image.h"
 #include "map_layer_water.h"
+#include "block_system.h"
 #include "camera.h"
 #include <cassert>
 #include "clock.h"
@@ -19,6 +20,7 @@
 #include "avoid_money_goal.h"
 #include "collect_goal.h"
 #include "do_nothing_goal.h"
+#include "mcguffin_goal.h"
 #include "past_right_edge_goal.h"
 #include "starving_goal.h"
 #include "survive_time_goal.h"
@@ -104,7 +106,7 @@ int Level::cameraY() const
 	return camera_y_;
 };
 
-void Level::warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& inventory, EventSystem& events )
+void Level::warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& inventory, EventSystem& events, BlockSystem& blocks )
 {
 	const Warp* warp = currentMap().getWarp( sprites.hero().xSubPixels(), sprites.hero().ySubPixels() );
 
@@ -134,6 +136,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& invento
 		camera.adjust( sprites.hero(), currentMap() );
 
 		events.changePalette( currentMap().palette() );
+		blocks.changeTileset( currentMap().tileset() );
 
 		currentMap().setChanged();
 	}
@@ -200,9 +203,9 @@ void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, 
 	goal_->init( hero, inventory, events, game );
 };
 
-void Level::update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, const Input& input )
+void Level::update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, const Input& input, BlockSystem& blocks, const Camera& camera )
 {
-	currentMap().update( events, sprites );
+	currentMap().update( events, sprites, blocks, camera );
 	goal_->update( sprites, inventory, currentMap(), events, input );
 };
 
@@ -539,6 +542,23 @@ Level Level::getLevel( int id )
 							}
 
 							goal = std::make_unique<CollectGoal> ( amount, message );
+						}
+						else if ( mezun::areStringsEqual( goaltype, "mcguffin" ) )
+						{
+							int amount = 3;
+							std::string message = mezun::emptyString();
+
+							if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+							{
+								amount = lvg[ "amount" ].GetInt();
+							}
+
+							if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+							{
+								message = lvg[ "message" ].GetString();
+							}
+
+							goal = std::make_unique<McGuffinGoal> ( amount, message );
 						}
 						else if ( mezun::areStringsEqual( goaltype, "survive_time" ) )
 						{

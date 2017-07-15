@@ -1,6 +1,7 @@
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
+class BlockSystem;
+class Camera;
 class SpriteSystem;
 
 #include "map_layer.h"
@@ -26,7 +27,7 @@ class Map
 		Map( const Map& c );
 		Map& operator= ( const Map& c ) = delete;
 
-		void update( EventSystem& events, SpriteSystem& sprites );
+		void update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
 		void renderBG( Graphics& graphics, Camera& camera );
 		void renderFG( Graphics& graphics, Camera& camera );
 
@@ -131,5 +132,3 @@ class Map
 
 		bool inBounds( int n ) const;
 };
-
-#endif // MAP_H

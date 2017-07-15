@@ -1,5 +1,4 @@
-#ifndef SPRITE_GRAPHICS_H
-#define SPRITE_GRAPHICS_H
+#pragma once
 
 class Camera;
 class Sprite;
@@ -41,7 +40,7 @@ class SpriteGraphics
 		virtual ~SpriteGraphics();
 		virtual void update( Sprite& sprite );
 		virtual void update();
-		virtual void render( Graphics& graphics, const sdl2::SDLRect& bound_box, Camera* camera = nullptr, bool priority = false ) const;
+		virtual void render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const;
 		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
 		bool visible_ = true;
 
@@ -59,11 +58,9 @@ class SpriteGraphics
 		int cutoffTop   ( int object_y, int camera_y ) const;
 		int cutoffRight ( int object_x, int camera_x, int object_w, int camera_w ) const;
 		int cutoffBottom( int object_y, int camera_y, int object_h, int camera_h ) const;
-		int cutoffLeft  ( sdl2::SDLRect& obj_r, Camera& c ) const;
-		int cutoffTop   ( sdl2::SDLRect& obj_r, Camera& c ) const;
-		int cutoffRight ( sdl2::SDLRect& obj_r, Camera& c ) const;
-		int cutoffBottom( sdl2::SDLRect& obj_r, Camera& c ) const;
-		void masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, Camera* camera, bool priority ) const;
+		int cutoffLeft  ( sdl2::SDLRect& obj_r, const Camera& c ) const;
+		int cutoffTop   ( sdl2::SDLRect& obj_r, const Camera& c ) const;
+		int cutoffRight ( sdl2::SDLRect& obj_r, const Camera& c ) const;
+		int cutoffBottom( sdl2::SDLRect& obj_r, const Camera& c ) const;
+		void masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority ) const;
 };
-
-#endif // SPRITE_GRAPHICS_H

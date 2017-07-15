@@ -1,5 +1,4 @@
-#ifndef COLLECT_GOAL_H
-#define COLLECT_GOAL_H
+#pragma once
 
 #include "goal.h"
 #include "mezun_helpers.h"
@@ -17,5 +16,3 @@ class CollectGoal : public Goal
 		
 		const std::string collectMessage( int amount_needed, std::string message ) const;
 };
-
-#endif // COLLECT_GOAL_H

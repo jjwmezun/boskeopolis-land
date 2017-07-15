@@ -15,7 +15,7 @@ class LevelState : public GameState
 {
 
 	public:
-		LevelState( EventSystem events, InventoryLevel inventory, int lvname, Game& game );
+		LevelState( const EventSystem& events, const Inventory& inventory, int lvname, Game& game );
 		~LevelState();
 
 		void update( Game& game, const Input& input, Graphics& graphics );

@@ -1,23 +1,88 @@
 {
-	"name": "Sherbert Slopes",
+	"name": "Sleet Streets",
 
 	"maps":
 	[
 		{
-			"slug": "snow-1",
+			"slug": "snow-3",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "snow_firs_2.png",
+					"img": "snow_firs.png",
 					"width": 164,
 					"height": 256,
 					"x_scroll": 0.5,
-					"y_scroll": 0.1
+					"y_scroll": 0.15
+				},
+				{
+					"type": "image",
+					"img": "fence.png",
+					"width": 48,
+					"height": 32,
+					"y_offset": 704,
+					"y_repeat": false
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 3,
+					"entrance_y": 5,
+					"location": [ 0, 16, 0, 16 ]
+				},
+				{
+					"map": 2,
+					"entrance_x": 16,
+					"entrance_y": 3,
+					"location": [ 80, 100, 0, 16 ]
+				}
+			]
+		},
+		{
+			"slug": "snow-3-2",
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 10,
+					"entrance_y": 15,
+					"location": [ 0, 20, 0, 9 ]
+				}
+			]
+		},
+		{
+			"slug": "snow-3-3",
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 89,
+					"entrance_y": 44,
+					"location": [ 0, 20, 0, 36 ]
 				}
 			]
 		}
 	],
+	
+	"goal":
+	{
+		"type": "mcguffin",
+		"amount": 5,
+		"message": "¡Collect 5 presents!"
+	},
 	
 	"entrance_x": 1,
 	"entrance_y": 9

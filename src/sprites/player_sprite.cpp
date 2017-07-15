@@ -55,7 +55,8 @@ PlayerSprite::PlayerSprite
 		max_hp,
 		hp
 	),
-	input_ ( std::move( input ) )
+	input_ ( std::move( input ) ),
+	door_lock_ ( true )
 {
 	if ( input_ == nullptr )
 	{
@@ -86,6 +87,24 @@ void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap,
 		if ( input_->cDown( input ) )
 		{
 			camera.moveDown();
+		}
+
+		if ( events.in_front_of_door_ && input_->up( input ) && !door_lock_ && on_ground_ )
+		{
+			events.changeMap();
+		}
+		else if ( input_->up( input ) )
+		{
+			door_lock_ = true;
+		}
+		events.in_front_of_door_ = false;
+
+		if ( door_lock_ )
+		{
+			if ( !input_->up( input ) )
+			{
+				door_lock_ = false;
+			}
 		}
 
 		if ( fellInBottomlessPit( lvmap ) )
@@ -248,8 +267,6 @@ void PlayerSprite::actions( const Input& input )
 	}
 
 	input_->update();
-	
-	std::cout<<top_speed_<<std::endl;
 
 };
 

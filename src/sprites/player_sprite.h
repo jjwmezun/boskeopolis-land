@@ -63,6 +63,7 @@
 		private:
 			void testVX();
 			void testFrameRate();
+			bool door_lock_;
     };
 
 

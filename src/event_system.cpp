@@ -19,7 +19,9 @@ EventSystem::EventSystem()
 	switch_changed_ ( false ),
 	new_palette_ ( mezun::emptyString(), 0 ),
 	palette_changed_ ( false ),
-	move_water_ ( -1 )
+	move_water_ ( -1 ),
+	current_water_ ( - 1 ),
+	in_front_of_door_ ( false )
 {};
 
 void EventSystem::reset()
@@ -33,6 +35,8 @@ void EventSystem::reset()
 	key_ = false;
 	switch_ = false;
 	move_water_ = -1;
+	current_water_ = -1;
+	in_front_of_door_ = false;
 
 	resetPalette();
 };
@@ -112,7 +116,7 @@ void EventSystem::flipSwitch()
 	switch_changed_ = true;
 };
 
-void EventSystem::update( Level& level, InventoryLevel& inventory, Game& game, SpriteSystem& sprites, Camera& camera )
+void EventSystem::update( Level& level, InventoryLevel& inventory, Game& game, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
 	switch_changed_ = false;
 
@@ -122,7 +126,7 @@ void EventSystem::update( Level& level, InventoryLevel& inventory, Game& game, S
 	}
 	
 	testMessage( level, game );
-	testWarp( level, inventory, sprites, camera );
+	testWarp( level, inventory, sprites, camera, blocks );
 	testWinLoseOrQuit( level, inventory, game );
 };
 
@@ -142,12 +146,13 @@ void EventSystem::testMessage( Level& level, Game& game )
 	message_ = false;
 };
 
-void EventSystem::testWarp( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera )
+void EventSystem::testWarp( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
 	if ( change_map_ )
 	{
-		level.warp( sprites, camera, inventory, *this );
+		level.warp( sprites, camera, inventory, *this, blocks );
 		change_map_ = false;
+		in_front_of_door_ = false;
 	}
 };
 

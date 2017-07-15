@@ -87,7 +87,7 @@
 						const int i = lvmap.indexFromXAndY( x, y );
 						const int type = lvmap.block( i ) - 1;
 
-						addBlock( xp, yp, i, type );
+						addBlock( xp, yp, i, type, blocks_ );
 					}
 				}
 
@@ -106,7 +106,7 @@
 						const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 						const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
 
-						addBlock( x, y, i, type );
+						addBlock( x, y, i, type, blocks_ );
 
 					}
 				}
@@ -121,15 +121,15 @@
 		}
     };
 
-	void BlockSystem::addBlock( int x, int y, int i, int type )
+	void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& list )
 	{
 		BlockType* block_type = getTileset().blockType( type, x, y );
 
 		if ( block_type != nullptr )
 		{
-			blocks_.emplace_back( x, y, block_type, i, type );
+			list.emplace_back( x, y, block_type, i, type );
 		}
-	}
+	};
 
     bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const
     {
@@ -165,6 +165,7 @@
 		}
 		
 		current_tileset_ = new_tileset;
+		std::cout<<current_tileset_<<std::endl;
 	};
 
 	Tileset& BlockSystem::getTileset()

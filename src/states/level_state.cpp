@@ -6,7 +6,7 @@
 #include "pause_state.h"
 #include "level_select_state.h"
 
-LevelState::LevelState( EventSystem events, InventoryLevel inventory, int lvname, Game& game )
+LevelState::LevelState( const EventSystem& events, const Inventory& inventory, int lvname, Game& game )
 try :
 	GameState ( StateID::LEVEL_STATE ),
 	inventory_ ( inventory ),
@@ -41,14 +41,14 @@ void LevelState::update( Game& game, const Input& input, Graphics& graphics )
 		
 		blocks_.blocksFromMap( level_.currentMap(), camera_ );
 		blocks_.update( events_ );
+		level_.update( events_, sprites_, inventory_, input, blocks_, camera_ );
 		camera_.update();
-		level_.update( events_, sprites_, inventory_, input );
 		sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
 		sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
 		sprites_.interactWithMap( level_.currentMap(), camera_ );
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
 		inventory_.update( events_, sprites_.hero() );
-		events_.update( level_, inventory_, game, sprites_, camera_ );
+		events_.update( level_, inventory_, game, sprites_, camera_, blocks_ );
 
 		if ( events_.paletteChanged() )
 		{

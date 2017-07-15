@@ -44,12 +44,12 @@ void SpriteGraphics::update()
 {
 };
 
-void SpriteGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, Camera* camera, bool priority ) const
+void SpriteGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
 	masterRender( graphics, bound_box, current_frame_x_, current_frame_y_, camera, priority );
 };
 
-void SpriteGraphics::masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, Camera* camera, bool priority ) const
+void SpriteGraphics::masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority ) const
 {
 	if ( visible_ && ( ( priority && priority_ ) || ( !priority && !priority_ ) ) )
 	{
@@ -135,22 +135,22 @@ int SpriteGraphics::cutoffBottom( int object_y, int camera_y, int object_h, int 
 		return 0;
 };
 
-int SpriteGraphics::cutoffLeft( sdl2::SDLRect& obj_r, Camera& c ) const
+int SpriteGraphics::cutoffLeft( sdl2::SDLRect& obj_r, const Camera& c ) const
 {
 	return cutoffLeft( obj_r.x, c.x() );
 };
 
-int SpriteGraphics::cutoffTop( sdl2::SDLRect& obj_r, Camera& c ) const
+int SpriteGraphics::cutoffTop( sdl2::SDLRect& obj_r, const Camera& c ) const
 {
 	return cutoffTop( obj_r.y, c.y() );
 };
 
-int SpriteGraphics::cutoffRight( sdl2::SDLRect& obj_r, Camera& c ) const
+int SpriteGraphics::cutoffRight( sdl2::SDLRect& obj_r, const Camera& c ) const
 {
 	return cutoffRight( obj_r.x, c.x(), obj_r.w, c.widthPixels() );
 };
 
-int SpriteGraphics::cutoffBottom( sdl2::SDLRect& obj_r, Camera& c ) const
+int SpriteGraphics::cutoffBottom( sdl2::SDLRect& obj_r, const Camera& c ) const
 {
 	return cutoffBottom( obj_r.y, c.y(), obj_r.h, c.heightPixels() );
 };
