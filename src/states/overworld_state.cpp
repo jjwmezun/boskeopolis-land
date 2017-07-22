@@ -358,6 +358,10 @@ void OverworldState::interactions( Graphics& graphics )
 				case ( 2 ):
 					pal = "Overworld Yellow";
 				break;
+					
+				case ( 3 ):
+					pal = "Overworld Blue";
+				break;
 			}
 			
 			newPalette( graphics, { pal, 2 } );
@@ -427,6 +431,46 @@ void OverworldState::eventByID( int id )
 		case ( 2 ):
 			tiles_.at( mezun::nOfXY( 36, 139, map_width_ ) ).type_ = 5;
 		break;
+
+		case ( 3 ):
+			for ( int i = 107; i < 121; ++i )
+			{
+				tiles_.at( mezun::nOfXY( 21, i, map_width_ ) ).type_ = 5;
+			}
+		break;
+
+		case ( 4 ):
+			for ( int i = 53; i < 71; ++i )
+			{
+				tiles_.at( mezun::nOfXY( 24, i, map_width_ ) ).type_ = 26;
+			}
+		break;
+
+		case ( 5 ):
+			for ( int i = 36; i < 42; ++i )
+			{
+				tiles_.at( mezun::nOfXY( 29, i, map_width_ ) ).type_ = 26;
+			}
+			for ( int i = 26; i < 37; ++i )
+			{
+				tiles_.at( mezun::nOfXY( 39, i, map_width_ ) ).type_ = 26;
+			}
+			for ( int i = 30; i < 39; ++i )
+			{
+				tiles_.at( mezun::nOfXY( i, 36, map_width_ ) ).type_ = 26;
+			}
+			for ( int i = 40; i < 55; ++i )
+			{
+				tiles_.at( mezun::nOfXY( i, 26, map_width_ ) ).type_ = 26;
+			}
+		break;
+
+		case ( 6 ):
+			for ( int i = 85; i < 95; ++i )
+			{
+				tiles_.at( mezun::nOfXY( i, 23, map_width_ ) ).type_ = 5;
+			}
+		break;
 	}
 };
 
@@ -462,6 +506,18 @@ Palette OverworldState::lvPal( int id )
 
 		case ( 3 ):
 			pal = "Overworld Yellow";
+		break;
+
+		case ( 4 ):
+			pal = "Overworld Yellow";
+		break;
+
+		case ( 5 ):
+			pal = "Overworld Blue";
+		break;
+
+		case ( 6 ):
+			pal = "Overworld Blue";
 		break;
 	}
 	

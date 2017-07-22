@@ -23,7 +23,8 @@ class MapLayerImage : public MapLayer
 			int move_speed_x = 0,
 			int move_speed_y = 0,
 			int animation_speed = 1,
-			bool flip = false
+			bool flip = false,
+			Uint8 alpha = 255
 		);
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) override;
 		void render( Graphics& graphics, Camera& camera ) const override;
@@ -41,6 +42,7 @@ class MapLayerImage : public MapLayer
 		const int move_speed_y_;
 		const int num_o_frames_;
 		const int animation_speed_;
+		const Uint8 alpha_;
 		int movement_position_x_;
 		int movement_position_y_;
 		Counter current_frame_;

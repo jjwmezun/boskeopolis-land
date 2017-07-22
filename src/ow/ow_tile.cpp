@@ -60,6 +60,10 @@ void OWTile::interact( OWHero& hero, const Collision& collision ) const
 		case ( 2 ):
 		case ( 3 ):
 		case ( 6 ):
+		case ( 8 ):
+		case ( 10 ):
+		case ( 21 ):
+		case ( 22 ):
 			hero.collideStop( collision );
 		break;
 	}

@@ -40,6 +40,9 @@
 #include "sewer_monster_sprite.h"
 #include "shroud_sprite.h"
 #include "sillyfish_sprite.h"
+#include "snowball_sprite.h"
+#include "snowboulder_sprite.h"
+#include "snowman_sprite.h"
 #include "spike_egg_sprite.h"
 #include "spiky_fruit_sprite.h"
 #include "sprite_component_circle.h"
@@ -184,6 +187,18 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const 
 		case ( SPRITE_INDEX_START + 40 ):
 			return std::unique_ptr<Sprite> ( new CloudMonsterSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 41 ):
+			return std::unique_ptr<Sprite> ( new SnowmanSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 42 ):
+			return std::unique_ptr<Sprite> ( new SnowboulderSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 43 ):
+			return std::unique_ptr<Sprite> ( new FallingBoughSprite( x, y, Direction::Horizontal::LEFT, false ) );
+		break;
+		case ( SPRITE_INDEX_START + 44 ):
+			return std::unique_ptr<Sprite> ( new FallingBoughSprite( x, y, Direction::Horizontal::RIGHT, false ) );
+		break;
 		case ( SPRITE_INDEX_START + 63 ):
 			return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );
 		break;
@@ -206,6 +221,11 @@ void SpriteSystem::spawn( SpawnSprite type, int x, int y )
 void SpriteSystem::spawnCactooieSpine( int x, int y, Direction::Horizontal direction )
 {
 	sprites_.emplace_back( new CactooieSpineSprite( x, y, direction ) );
+};
+
+void SpriteSystem::spawnSnowball( int x, int y, Direction::Horizontal direction )
+{
+	sprites_.emplace_back( new SnowballSprite( x, y, direction ) );
 };
 
 void SpriteSystem::spritesFromMap( const Map& lvmap )

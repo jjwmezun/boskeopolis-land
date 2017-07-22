@@ -10,18 +10,18 @@ OWHero::OWHero( int x, int y )
 	gfx_ ( "sprites/autumn_overworld.png", { std::make_pair( 0, 0 ), std::make_pair( 15, 0 ) }, false, false, 0, false, -2, -1, 3, 2 ),
 	x_ ( x ),
 	y_ ( y ),
-	speed_ ( 1 )
+	speed_ ( 2 )
 {};
 
 void OWHero::update( const Input& input )
 {
 	if ( input.held( Input::Action::RUN ) )
 	{
-		speed_ = 2;
+		speed_ = 4;
 	}
 	else
 	{
-		speed_ = 1;
+		speed_ = 2;
 	}
 	
 	if ( input.held( Input::Action::MOVE_RIGHT ) )

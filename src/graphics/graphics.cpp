@@ -199,7 +199,7 @@ void Graphics::loadSurface( const std::string& sheet )
 	}
 };
 
-void Graphics::loadTexture( const std::string& sheet )
+void Graphics::loadTexture( const std::string& sheet, Uint8 alpha )
 {
 	if ( mezun::notInMap( surfaces_, sheet ) )
 	{
@@ -304,11 +304,16 @@ sdl2::SDLRect Graphics::sourceRelativeToScreen( const sdl2::SDLRect& source ) co
 	};
 };
 
-void Graphics::renderObject( const std::string& sheet, sdl2::SDLRect source, sdl2::SDLRect dest, SDL_RendererFlip flip, double rotation )
+void Graphics::renderObject( const std::string& sheet, sdl2::SDLRect source, sdl2::SDLRect dest, SDL_RendererFlip flip, double rotation, Uint8 alpha )
 {
 	if ( textures_.find( sheet ) == textures_.end() )
 	{
-		loadTexture( sheet );
+		loadTexture( sheet, alpha );
+	}
+			
+	if ( alpha != 255 )
+	{
+		SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
 	}
 
 	dest = sourceRelativeToScreen( dest );

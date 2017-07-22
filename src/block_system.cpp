@@ -165,7 +165,6 @@
 		}
 		
 		current_tileset_ = new_tileset;
-		std::cout<<current_tileset_<<std::endl;
 	};
 
 	Tileset& BlockSystem::getTileset()

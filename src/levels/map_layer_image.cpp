@@ -17,7 +17,8 @@ MapLayerImage::MapLayerImage
 	int move_speed_x,
 	int move_speed_y,
 	int animation_speed,
-	bool flip
+	bool flip,
+	Uint8 alpha
 )
 :
 	MapLayer(),
@@ -37,7 +38,8 @@ MapLayerImage::MapLayerImage
 	animation_speed_ ( animation_speed ),
 	current_frame_ ( Counter( 0, num_o_frames - 1, 0, !flip ) ),
 	animation_timer_ ( {} ),
-	frame_dir_ ( ( flip ) ? Direction::Vertical::UP : Direction::Vertical::__NULL )
+	frame_dir_ ( ( flip ) ? Direction::Vertical::UP : Direction::Vertical::__NULL ),
+	alpha_ ( alpha )
 {};
 
 void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera )
@@ -141,7 +143,7 @@ void MapLayerImage::renderX( Graphics& graphics, Camera& camera, sdl2::SDLRect& 
 
 			if ( onscreen( dest, camera ) )
 			{
-				graphics.renderObject( texture_, source_, dest );
+				graphics.renderObject( texture_, source_, dest, SDL_FLIP_NONE, 0.0, alpha_ );
 			}
 		}
 	}

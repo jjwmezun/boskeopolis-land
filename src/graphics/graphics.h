@@ -31,12 +31,14 @@ class Graphics
 			sdl2::SDLRect source,
 			sdl2::SDLRect dest,
 			SDL_RendererFlip flip = SDL_FLIP_NONE,
-			double rotation = 0
+			double rotation = 0,
+			Uint8 alpha = 255
 		);
 		void renderRect( const sdl2::SDLRect& box, int color = 1, int alpha = 255 );
 
 		void newPalette( Palette palette );
 		void clearSurfaces();
+		void loadTexture( const std::string& sheet, Uint8 alpha = 255 );
 
 
 	private:
@@ -76,7 +78,6 @@ class Graphics
 		void adjustBorderBars( int monitor_width, int monitor_height );
 
 		void loadSurface( const std::string& sheet );
-		void loadTexture( const std::string& sheet );
 		void clearTextures();
 		void reloadTextures();
 

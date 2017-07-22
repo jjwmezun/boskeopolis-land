@@ -309,7 +309,7 @@ void Inventory::update()
 	{
 		funds_shown_ -= FUNDS_SPEED;
 	}
-
+	
 };
 
 void Inventory::save()

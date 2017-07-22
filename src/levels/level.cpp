@@ -397,11 +397,15 @@ Level Level::getLevel( int id )
 											int bgyspeed  = 0;
 											int bganimspeed = 1;
 											bool bganimflip = false;
-
+											Uint8 alpha = 255;
 
 											if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
 											{
 												img = "bg" + Game::pathDivider() + bg[ "img" ].GetString();
+											}
+											if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
+											{
+												alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
 											}
 											if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
 											{
@@ -462,7 +466,8 @@ Level Level::getLevel( int id )
 													bgxspeed,
 													bgyspeed,
 													bganimspeed,
-													bganimflip
+													bganimflip,
+													alpha
 												)
 											);
 

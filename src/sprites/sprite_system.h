@@ -47,6 +47,7 @@ class SpriteSystem
 		void reset( const Level& level, const InventoryLevel& inventory );
 		void spawn( SpawnSprite type, int x, int y );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
+		void spawnSnowball( int x, int y, Direction::Horizontal direction );
 		Sprite& hero();
 		void interactWithMap( Map& lvmap, Camera& camera );
 
