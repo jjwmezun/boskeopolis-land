@@ -11,9 +11,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "iceblock_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "iceblock_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

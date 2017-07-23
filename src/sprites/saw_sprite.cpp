@@ -12,11 +12,11 @@
 // DEPENDENCIES
 //===================================
 
-    #include "camera.h"
-    #include "collision.h"
-    #include "saw_graphics.h"
-    #include "saw_sprite.h"
-    #include "sprite_graphics.h"
+    #include "camera.hpp"
+    #include "collision.hpp"
+    #include "saw_graphics.hpp"
+    #include "saw_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

@@ -1,14 +1,14 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-#include "main.h"
-#include "mezun_helpers.h"
-#include "map.h"
-#include "map_layer_tilemap.h"
-#include "map_layer_water.h"
+#include "main.hpp"
+#include "mezun_helpers.hpp"
+#include "map.hpp"
+#include "map_layer_tilemap.hpp"
+#include "map_layer_water.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
-#include "unit.h"
+#include "unit.hpp"
 
 Map Map::mapFromPath
 (

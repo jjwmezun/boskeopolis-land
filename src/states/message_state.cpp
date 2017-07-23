@@ -1,7 +1,7 @@
-#include "main.h"
-#include "input.h"
-#include "message_state.h"
-#include "render.h"
+#include "main.hpp"
+#include "input.hpp"
+#include "message_state.hpp"
+#include "render.hpp"
 
 std::unique_ptr<MessageState> MessageState::error
 (

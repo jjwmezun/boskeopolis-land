@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_component_move_water.h"
-#include "collision.h"
-#include "event_system.h"
+#include "block.hpp"
+#include "block_component_move_water.hpp"
+#include "collision.hpp"
+#include "event_system.hpp"
 
 BlockComponentMoveWater::BlockComponentMoveWater() {};
 

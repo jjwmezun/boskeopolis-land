@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "sewer_monster_sprite.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "sewer_monster_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 constexpr int SewerMonsterSprite::WAKING_FRAMES[];
 constexpr int SewerMonsterSprite::FALLING_ASLEEP_FRAMES[];

@@ -1,5 +1,5 @@
-#include "block_component_door.h"
-#include "event_system.h"
+#include "block_component_door.hpp"
+#include "event_system.hpp"
 
 BlockComponentDoor::BlockComponentDoor() {};
 BlockComponentDoor::~BlockComponentDoor() {};

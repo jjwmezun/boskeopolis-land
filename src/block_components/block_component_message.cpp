@@ -1,5 +1,5 @@
-#include "block_component_message.h"
-#include "event_system.h"
+#include "block_component_message.hpp"
+#include "event_system.hpp"
 
 BlockComponentMessage::BlockComponentMessage() {};
 

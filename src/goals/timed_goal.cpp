@@ -1,7 +1,7 @@
-#include "timed_goal.h"
-#include "event_system.h"
-#include "inventory_level.h"
-#include "text.h"
+#include "timed_goal.hpp"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
+#include "text.hpp"
 
 TimedGoal::TimedGoal( int time_limit )
 :

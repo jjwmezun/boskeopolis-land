@@ -1,8 +1,8 @@
 #include <algorithm>
-#include "camera.h"
-#include "collision.h"
-#include "cloud_monster_sprite.h"
-#include "sprite_graphics.h"
+#include "camera.hpp"
+#include "collision.hpp"
+#include "cloud_monster_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 CloudMonsterSprite::CloudMonsterSprite( int x, int y )
 :

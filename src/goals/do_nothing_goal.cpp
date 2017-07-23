@@ -1,7 +1,7 @@
-#include "do_nothing_goal.h"
-#include "event_system.h"
-#include "input.h"
-#include "inventory_level.h"
+#include "do_nothing_goal.hpp"
+#include "event_system.hpp"
+#include "input.hpp"
+#include "inventory_level.hpp"
 
 DoNothingGoal::DoNothingGoal( int wait_time )
 :

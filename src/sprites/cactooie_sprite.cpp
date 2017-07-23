@@ -1,6 +1,6 @@
-#include "cactooie_sprite.h"
-#include "sprite_graphics.h"
-#include "sprite_system.h"
+#include "cactooie_sprite.hpp"
+#include "sprite_graphics.hpp"
+#include "sprite_system.hpp"
 
 CactooieSprite::CactooieSprite( int x, int y )
 :

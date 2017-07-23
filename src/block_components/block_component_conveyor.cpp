@@ -1,5 +1,5 @@
-#include "block_component_conveyor.h"
-#include "sprite.h"
+#include "block_component_conveyor.hpp"
+#include "sprite.hpp"
 
 BlockComponentConveyor::BlockComponentConveyor( Direction::Horizontal direction, int speed )
 :

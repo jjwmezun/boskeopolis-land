@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_type.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block.hpp"
+#include "block_type.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 #include <iostream>
 
 Block::Block

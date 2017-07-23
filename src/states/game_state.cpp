@@ -1,5 +1,5 @@
-#include "game_state.h"
-#include "render.h"
+#include "game_state.hpp"
+#include "render.hpp"
 
 GameState::GameState
 (

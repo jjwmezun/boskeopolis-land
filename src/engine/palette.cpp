@@ -11,11 +11,11 @@
 //===================================
 
     #include <fstream>
-    #include "main.h"
+    #include "main.hpp"
     #include <iostream>
-	#include "mezun_exceptions.h"
-	#include "mezun_helpers.h"
-    #include "palette.h"
+	#include "mezun_exceptions.hpp"
+	#include "mezun_helpers.hpp"
+    #include "palette.hpp"
     #include "rapidjson/document.h"
     #include "rapidjson/istreamwrapper.h"
 

@@ -15,10 +15,10 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-	#include "map.h"
-    #include "pufferbee_sprite.h"
-    #include "pufferbee_graphics.h"
+    #include "collision.hpp"
+	#include "map.hpp"
+    #include "pufferbee_sprite.hpp"
+    #include "pufferbee_graphics.hpp"
 
 
 // STATIC PROPERTIES

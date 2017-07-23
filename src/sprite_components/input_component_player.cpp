@@ -12,8 +12,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "input.h"
-    #include "input_component_player.h"
+    #include "input.hpp"
+    #include "input_component_player.hpp"
 
 
 // STATIC PROPERTIES

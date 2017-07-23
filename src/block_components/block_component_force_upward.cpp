@@ -1,7 +1,7 @@
-#include "block_component_force_upward.h"
-#include "block_type.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block_component_force_upward.hpp"
+#include "block_type.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockComponentForceUpward::BlockComponentForceUpward()
 :

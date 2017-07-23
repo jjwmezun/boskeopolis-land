@@ -1,15 +1,15 @@
-#include "collision.h"
-#include "main.h"
+#include "collision.hpp"
+#include "main.hpp"
 #include <fstream>
-#include "input.h"
-#include "level_select_state.h"
-#include "level_state.h"
-#include "mezun_math.h"
-#include "overworld_state.h"
+#include "input.hpp"
+#include "level_select_state.hpp"
+#include "level_state.hpp"
+#include "mezun_math.hpp"
+#include "overworld_state.hpp"
 #include "overworld_menu_state.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
-#include "unit.h"
+#include "unit.hpp"
 
 OverworldState::OverworldState( bool load )
 :

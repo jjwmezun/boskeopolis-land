@@ -11,8 +11,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "sprite.h"
-    #include "sprite_component_up_and_down.h"
+    #include "sprite.hpp"
+    #include "sprite_component_up_and_down.hpp"
 
 
 // STATIC PROPERTIES

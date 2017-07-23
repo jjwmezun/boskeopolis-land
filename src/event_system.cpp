@@ -1,10 +1,10 @@
-#include "event_system.h"
-#include "main.h"
-#include "inventory_level.h"
-#include "level_message_state.h"
-#include "message_state.h"
-#include "mezun_helpers.h"
-#include "overworld_state.h"
+#include "event_system.hpp"
+#include "main.hpp"
+#include "inventory_level.hpp"
+#include "level_message_state.hpp"
+#include "message_state.hpp"
+#include "mezun_helpers.hpp"
+#include "overworld_state.hpp"
 
 EventSystem::EventSystem()
 :

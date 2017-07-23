@@ -1,9 +1,9 @@
 #include <algorithm>
-#include "camera.h"
-#include "render.h"
+#include "camera.hpp"
+#include "render.hpp"
 #include <sstream>
 #include <stdexcept>
-#include "text.h"
+#include "text.hpp"
 
 std::map<char, int> Text::char_conversion_ =
 {

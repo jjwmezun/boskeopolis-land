@@ -1,5 +1,5 @@
-#include "block_component_money.h"
-#include "inventory_level.h"
+#include "block_component_money.hpp"
+#include "inventory_level.hpp"
 
 BlockComponentMoney::BlockComponentMoney( int amount ) : amount_ ( amount ) {};
 

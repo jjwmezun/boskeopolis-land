@@ -1,11 +1,11 @@
-#include "camera.h"
-#include "collision.h"
-#include "event_system.h"
-#include "render.h"
-#include "input.h"
-#include "map.h"
-#include "player_cart_sprite.h"
-#include "player_cart_graphics.h"
+#include "camera.hpp"
+#include "collision.hpp"
+#include "event_system.hpp"
+#include "render.hpp"
+#include "input.hpp"
+#include "map.hpp"
+#include "player_cart_sprite.hpp"
+#include "player_cart_graphics.hpp"
 
 PlayerCartSprite::PlayerCartSprite( int x, int y, int max_hp, int hp )
 :

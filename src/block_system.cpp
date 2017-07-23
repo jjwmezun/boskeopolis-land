@@ -9,13 +9,13 @@
 // DEPENDENCIES
 //===================================
 
-	#include "block_system.h"
-    #include "camera.h"
-	#include "mezun_exceptions.h"
-    #include "render.h"
+	#include "block_system.hpp"
+    #include "camera.hpp"
+	#include "mezun_exceptions.hpp"
+    #include "render.hpp"
     #include <iostream>
-    #include "map.h"
-    #include "sprite.h"
+    #include "map.hpp"
+    #include "sprite.hpp"
     #include <utility>
 
 

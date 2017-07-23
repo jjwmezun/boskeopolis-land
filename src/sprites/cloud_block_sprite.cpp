@@ -12,10 +12,10 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "cloud_block_sprite.h"
-	#include "map.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "cloud_block_sprite.hpp"
+	#include "map.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

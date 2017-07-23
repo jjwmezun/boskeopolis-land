@@ -1,19 +1,19 @@
-#include "block.h"
-#include "camera.h"
-#include "collision.h"
-#include "main.h"
-#include "event_system.h"
+#include "block.hpp"
+#include "camera.hpp"
+#include "collision.hpp"
+#include "main.hpp"
+#include "event_system.hpp"
 #include <fstream>
-#include "input.h"
-#include "input_component_player.h"
-#include "input_component_sequence.h"
-#include "inventory_level.h"
+#include "input.hpp"
+#include "input_component_player.hpp"
+#include "input_component_sequence.hpp"
+#include "inventory_level.hpp"
 #include <iostream>
-#include "level.h"
-#include "map.h"
-#include "player_sprite.h"
-#include "player_graphics.h"
-#include "racer_sprite.h"
+#include "level.hpp"
+#include "map.hpp"
+#include "player_sprite.hpp"
+#include "player_graphics.hpp"
+#include "racer_sprite.hpp"
 
 PlayerSprite::PlayerSprite
 (

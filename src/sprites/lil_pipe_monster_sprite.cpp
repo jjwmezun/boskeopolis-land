@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "lil_pipe_monster_sprite.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "lil_pipe_monster_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 LilPipeMonsterSprite::LilPipeMonsterSprite( int x, int y, Direction::Vertical direction )
 :

@@ -10,7 +10,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "text_component.h"
+    #include "text_component.hpp"
 
 
 // STATIC PROPERTIES

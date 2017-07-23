@@ -10,9 +10,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "camera.h"
-    #include "map.h"
-    #include "sprite.h"
+    #include "camera.hpp"
+    #include "map.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

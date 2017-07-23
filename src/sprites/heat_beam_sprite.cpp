@@ -12,9 +12,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "heat_beam_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "heat_beam_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

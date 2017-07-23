@@ -1,5 +1,5 @@
-#include "cactooie_spine_sprite.h"
-#include "sprite_graphics.h"
+#include "cactooie_spine_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 CactooieSpineSprite::CactooieSpineSprite( int x, int y, Direction::Horizontal direction )
 :

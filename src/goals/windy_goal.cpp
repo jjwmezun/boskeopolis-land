@@ -1,5 +1,5 @@
-#include "windy_goal.h"
-#include "sprite.h"
+#include "windy_goal.hpp"
+#include "sprite.hpp"
 
 WindyGoal::WindyGoal( int wind_strength, Direction::Horizontal direction )
 :

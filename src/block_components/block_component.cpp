@@ -1,4 +1,4 @@
-#include "block_component.h"
+#include "block_component.hpp"
 
 BlockComponent::BlockComponent
 (

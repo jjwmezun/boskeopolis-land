@@ -1,6 +1,6 @@
-#include "block_component_sink.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block_component_sink.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockComponentSink::BlockComponentSink() {};
 

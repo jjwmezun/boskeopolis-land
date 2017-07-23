@@ -1,5 +1,5 @@
-#include "player_graphics.h"
-#include "sprite.h"
+#include "player_graphics.hpp"
+#include "sprite.hpp"
 
 PlayerGraphics::PlayerGraphics( std::string&& texture )
 :

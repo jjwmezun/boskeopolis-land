@@ -15,9 +15,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "spiky_fruit_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "spiky_fruit_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

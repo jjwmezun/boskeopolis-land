@@ -1,7 +1,7 @@
-#include "camera.h"
-#include "collision.h"
-#include "shroud_sprite.h"
-#include "sprite_graphics.h"
+#include "camera.hpp"
+#include "collision.hpp"
+#include "shroud_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 ShroudSprite::ShroudSprite( int x, int y )
 :

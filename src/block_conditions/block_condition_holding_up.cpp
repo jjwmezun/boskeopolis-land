@@ -1,5 +1,5 @@
-#include "block_condition_holding_up.h"
-#include "sprite.h"
+#include "block_condition_holding_up.hpp"
+#include "sprite.hpp"
 
 BlockConditionHoldingUp::BlockConditionHoldingUp() {};
 

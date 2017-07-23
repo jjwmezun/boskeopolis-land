@@ -1,5 +1,5 @@
-#include "block_condition_not_ducking.h"
-#include "sprite.h"
+#include "block_condition_not_ducking.hpp"
+#include "sprite.hpp"
 
 BlockConditionNotDucking::BlockConditionNotDucking() {};
 

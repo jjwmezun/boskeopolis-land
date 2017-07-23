@@ -1,6 +1,6 @@
-#include "block.h"
-#include "block_component_single_use.h"
-#include "level.h"
+#include "block.hpp"
+#include "block_component_single_use.hpp"
+#include "level.hpp"
 
 BlockComponentSingleUse::BlockComponentSingleUse( int width, int height, int corner )
 :

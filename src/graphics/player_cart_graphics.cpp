@@ -1,5 +1,5 @@
-#include "player_cart_graphics.h"
-#include "sprite.h"
+#include "player_cart_graphics.hpp"
+#include "sprite.hpp"
 
 PlayerCartGraphics::PlayerCartGraphics()
 :

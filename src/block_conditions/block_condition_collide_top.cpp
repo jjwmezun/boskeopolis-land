@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_condition_collide_top.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block.hpp"
+#include "block_condition_collide_top.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockConditionCollideTop::BlockConditionCollideTop() {};
 

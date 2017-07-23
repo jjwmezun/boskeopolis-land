@@ -1,11 +1,11 @@
-#include "input.h"
-#include "main.h"
-#include "level_state.h"
-#include "message_state.h"
-#include "mezun_exceptions.h"
-#include "overworld_state.h"
-#include "pause_state.h"
-#include "level_select_state.h"
+#include "input.hpp"
+#include "main.hpp"
+#include "level_state.hpp"
+#include "message_state.hpp"
+#include "mezun_exceptions.hpp"
+#include "overworld_state.hpp"
+#include "pause_state.hpp"
+#include "level_select_state.hpp"
 
 LevelState::LevelState( const EventSystem& events, const Inventory& inventory, int lvname )
 try :

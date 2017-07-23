@@ -1,7 +1,7 @@
-#include "block_component_solid.h"
-#include "block_type.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block_component_solid.hpp"
+#include "block_type.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockComponentSolid::BlockComponentSolid()
 :

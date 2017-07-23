@@ -1,9 +1,9 @@
-#include "animated_graphics.h"
-#include "render.h"
-#include "mezun_math.h"
+#include "animated_graphics.hpp"
+#include "render.hpp"
+#include "mezun_math.hpp"
 #include "ow_camera.hpp"
 #include "ow_level.hpp"
-#include "unit.h"
+#include "unit.hpp"
 
 OWLevel::OWLevel( int type, int x, int y, const AnimatedGraphics& gfx )
 :

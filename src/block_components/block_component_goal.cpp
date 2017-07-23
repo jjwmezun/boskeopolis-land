@@ -1,5 +1,5 @@
-#include "block_component_goal.h"
-#include "event_system.h"
+#include "block_component_goal.hpp"
+#include "event_system.hpp"
 
 BlockComponentGoal::BlockComponentGoal() {};
 

@@ -1,5 +1,5 @@
-#include "block_component_climbable.h"
-#include "sprite.h"
+#include "block_component_climbable.hpp"
+#include "sprite.hpp"
 
 BlockComponentClimbable::BlockComponentClimbable() {};
 

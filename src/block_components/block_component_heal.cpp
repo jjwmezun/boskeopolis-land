@@ -1,5 +1,5 @@
-#include "block_component_heal.h"
-#include "sprite.h"
+#include "block_component_heal.hpp"
+#include "sprite.hpp"
 
 BlockComponentHeal::BlockComponentHeal( int amount ) : amount_ ( amount ) {};
 

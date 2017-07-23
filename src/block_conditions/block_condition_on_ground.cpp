@@ -1,5 +1,5 @@
-#include "block_condition_on_ground.h"
-#include "sprite.h"
+#include "block_condition_on_ground.hpp"
+#include "sprite.hpp"
 
 BlockConditionOnGround::BlockConditionOnGround() {};
 

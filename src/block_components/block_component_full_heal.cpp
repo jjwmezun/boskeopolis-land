@@ -1,5 +1,5 @@
-#include "block_component_full_heal.h"
-#include "sprite.h"
+#include "block_component_full_heal.hpp"
+#include "sprite.hpp"
 
 BlockComponentFullHeal::BlockComponentFullHeal() {};
 

@@ -10,7 +10,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "sprite_component.h"
+    #include "sprite_component.hpp"
 
 
 // STATIC PROPERTIES

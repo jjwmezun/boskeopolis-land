@@ -1,9 +1,9 @@
-#include "block_system.h"
+#include "block_system.hpp"
 #include <cassert>
-#include "collision.h"
-#include "map.h"
-#include "maze_chaser_sprite.h"
-#include "maze_chaser_graphics.h"
+#include "collision.hpp"
+#include "map.hpp"
+#include "maze_chaser_sprite.hpp"
+#include "maze_chaser_graphics.hpp"
 
 MazeChaserSprite::MazeChaserSprite( int x, int y, Type type )
 :

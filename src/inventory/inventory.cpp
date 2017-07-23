@@ -1,12 +1,12 @@
-#include "clock.h"
-#include "main.h"
-#include "inventory.h"
+#include "clock.hpp"
+#include "main.hpp"
+#include "inventory.hpp"
 #include <fstream>
-#include "level.h"
-#include "mezun_exceptions.h"
+#include "level.hpp"
+#include "mezun_exceptions.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
-#include "text.h"
+#include "text.hpp"
 
 Inventory::Inventory()
 :

@@ -12,9 +12,9 @@
 
 	#include <cassert>
 	#include <iostream>
-	#include "mezun_helpers.h"
-	#include "news_ticker.h"
-	#include "text_component_marquee.h"
+	#include "mezun_helpers.hpp"
+	#include "news_ticker.hpp"
+	#include "text_component_marquee.hpp"
 
 
 // STATIC PROPERTIES

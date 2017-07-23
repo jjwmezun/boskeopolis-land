@@ -1,7 +1,7 @@
-#include "input.h"
-#include "main.h"
+#include "input.hpp"
+#include "main.hpp"
 #include "overworld_menu_state.hpp"
-#include "title_state.h"
+#include "title_state.hpp"
 
 constexpr sdl2::SDLRect OverworldMenuState::bg_;
 

@@ -1,11 +1,11 @@
-#include "block.h"
-#include "block_component.h"
-#include "block_condition.h"
-#include "block_type.h"
-#include "collision.h"
+#include "block.hpp"
+#include "block_component.hpp"
+#include "block_condition.hpp"
+#include "block_type.hpp"
+#include "collision.hpp"
 #include <iostream>
-#include "mezun_math.h"
-#include "sprite_graphics.h"
+#include "mezun_math.hpp"
+#include "sprite_graphics.hpp"
 
 BlockType::BlockType
 (

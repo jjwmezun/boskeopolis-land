@@ -1,5 +1,5 @@
-#include "block_component_hurt.h"
-#include "sprite.h"
+#include "block_component_hurt.hpp"
+#include "sprite.hpp"
 
 BlockComponentHurt::BlockComponentHurt() {};
 

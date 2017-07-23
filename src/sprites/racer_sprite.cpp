@@ -1,8 +1,8 @@
-#include "camera.h"
-#include "collision.h"
-#include "input_component_sequence.h"
+#include "camera.hpp"
+#include "collision.hpp"
+#include "input_component_sequence.hpp"
 #include <iostream>
-#include "racer_sprite.h"
+#include "racer_sprite.hpp"
 
 RacerSprite::RacerSprite( int x, int y )
 :

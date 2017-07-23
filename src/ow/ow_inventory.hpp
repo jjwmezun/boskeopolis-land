@@ -1,8 +1,8 @@
 #pragma once
 
-#include "inventory.h"
-#include "sprite_graphics.h"
-#include "unit.h"
+#include "inventory.hpp"
+#include "sprite_graphics.hpp"
+#include "unit.hpp"
 
 
 

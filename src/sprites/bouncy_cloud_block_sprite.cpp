@@ -1,7 +1,7 @@
-#include "collision.h"
-#include "bouncy_cloud_block_sprite.h"
-#include "map.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "bouncy_cloud_block_sprite.hpp"
+#include "map.hpp"
+#include "sprite_graphics.hpp"
 
 BouncyCloudBlockSprite::BouncyCloudBlockSprite( int x, int y )
 :

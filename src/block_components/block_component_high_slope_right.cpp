@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_component_high_slope_right.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block.hpp"
+#include "block_component_high_slope_right.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockComponentHighSlopeRight::BlockComponentHighSlopeRight(){};
 

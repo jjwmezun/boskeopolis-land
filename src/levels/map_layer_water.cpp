@@ -1,7 +1,7 @@
-#include "camera.h"
-#include "event_system.h"
-#include "sprite.h"
-#include "map_layer_water.h"
+#include "camera.hpp"
+#include "event_system.hpp"
+#include "sprite.hpp"
+#include "map_layer_water.hpp"
 
 MapLayerWater::MapLayerWater( int y_blocks )
 :

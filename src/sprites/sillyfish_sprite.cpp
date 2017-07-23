@@ -1,9 +1,9 @@
-#include "block_component.h"
-#include "block_system.h"
-#include "collision.h"
+#include "block_component.hpp"
+#include "block_system.hpp"
+#include "collision.hpp"
 #include <iostream>
-#include "sillyfish_sprite.h"
-#include "sillyfish_graphics.h"
+#include "sillyfish_sprite.hpp"
+#include "sillyfish_graphics.hpp"
 
 SillyfishSprite::SillyfishSprite( int x, int y )
 :

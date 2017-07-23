@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mezun_sdl2.h"
+#include "mezun_sdl2.hpp"
 
 struct OWPalChange
 {

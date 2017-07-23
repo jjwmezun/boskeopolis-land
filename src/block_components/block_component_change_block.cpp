@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_component_change_block.h"
-#include "level.h"
-#include "map.h"
+#include "block.hpp"
+#include "block_component_change_block.hpp"
+#include "level.hpp"
+#include "map.hpp"
 
 BlockComponentChangeBlock::BlockComponentChangeBlock( int new_block ) : new_block_ ( new_block ) {};
 

@@ -1,9 +1,9 @@
 #include <algorithm>
 #include <iostream>
-#include "block_system.h"
-#include "camera.h"
-#include "map_layer_tilemap.h"
-#include "mezun_math.h"
+#include "block_system.hpp"
+#include "camera.hpp"
+#include "map_layer_tilemap.hpp"
+#include "mezun_math.hpp"
 
 MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height )
 :

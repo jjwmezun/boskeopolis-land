@@ -1,5 +1,5 @@
-#include "block_condition_enemy.h"
-#include "sprite.h"
+#include "block_condition_enemy.hpp"
+#include "sprite.hpp"
 
 BlockConditionEnemy::BlockConditionEnemy() {};
 

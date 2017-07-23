@@ -1,7 +1,7 @@
-#include "main.h"
-#include "input.h"
-#include "pause_state.h"
-#include "level_select_state.h"
+#include "main.hpp"
+#include "input.hpp"
+#include "pause_state.hpp"
+#include "level_select_state.hpp"
 
 constexpr sdl2::SDLRect PauseState::surface_box_;
 

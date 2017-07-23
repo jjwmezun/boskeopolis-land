@@ -1,6 +1,6 @@
-#include "block_component_change_palette.h"
-#include "event_system.h"
-#include "sprite.h"
+#include "block_component_change_palette.hpp"
+#include "event_system.hpp"
+#include "sprite.hpp"
 
 BlockComponentChangePalette::BlockComponentChangePalette( const Palette& palette ) : palette_ ( palette ) {};
 

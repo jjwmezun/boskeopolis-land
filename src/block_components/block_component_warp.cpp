@@ -1,5 +1,5 @@
-#include "block_component_warp.h"
-#include "event_system.h"
+#include "block_component_warp.hpp"
+#include "event_system.hpp"
 
 BlockComponentWarp::BlockComponentWarp() {};
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "animated_graphics.h"
+#include "animated_graphics.hpp"
 
 class Collision;
 

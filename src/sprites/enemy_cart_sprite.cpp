@@ -12,9 +12,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "enemy_cart_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "enemy_cart_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

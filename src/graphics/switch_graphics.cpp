@@ -12,7 +12,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "switch_graphics.h"
+    #include "switch_graphics.hpp"
 
 
 // STATIC PROPERTIES

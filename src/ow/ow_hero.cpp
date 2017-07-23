@@ -1,6 +1,6 @@
-#include "collision.h"
+#include "collision.hpp"
 #include <iostream>
-#include "input.h"
+#include "input.hpp"
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
 #include "ow_level.hpp"

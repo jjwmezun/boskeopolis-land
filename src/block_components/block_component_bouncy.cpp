@@ -1,6 +1,6 @@
-#include "block_component_bouncy.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block_component_bouncy.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockComponentBouncy::BlockComponentBouncy( int strength ) : strength_ ( strength ) {};
 

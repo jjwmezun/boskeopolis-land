@@ -1,5 +1,5 @@
-#include "block_component_kill.h"
-#include "sprite.h"
+#include "block_component_kill.hpp"
+#include "sprite.hpp"
 
 BlockComponentKill::BlockComponentKill() {};
 

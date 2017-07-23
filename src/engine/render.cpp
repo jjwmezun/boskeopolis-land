@@ -1,14 +1,14 @@
 #include <cassert>
 #include <cstdio>
-#include "main.h"
-#include "render.h"
+#include "main.hpp"
+#include "render.hpp"
 #include <iostream>
-#include "mezun_exceptions.h"
-#include "mezun_helpers.h"
-#include "palette.h"
+#include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
+#include "palette.hpp"
 #include <SDL2/SDL_image.h>
-#include "timers/timer_repeat.h"
-#include "unit.h"
+#include "timers/timer_repeat.hpp"
+#include "unit.hpp"
 
 namespace Render
 {

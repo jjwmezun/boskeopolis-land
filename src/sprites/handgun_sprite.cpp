@@ -16,10 +16,10 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "handgun_sprite.h"
-    #include "mezun_math.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "handgun_sprite.hpp"
+    #include "mezun_math.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

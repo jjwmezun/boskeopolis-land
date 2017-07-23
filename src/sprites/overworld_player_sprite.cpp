@@ -1,7 +1,7 @@
-#include "camera.h"
-#include "input.h"
-#include "overworld_player_sprite.h"
-#include "animated_graphics.h"
+#include "camera.hpp"
+#include "input.hpp"
+#include "overworld_player_sprite.hpp"
+#include "animated_graphics.hpp"
 
 OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
 :

@@ -1,7 +1,7 @@
-#include "map_layer_image.h"
-#include "camera.h"
-#include "main.h"
-#include "render.h"
+#include "map_layer_image.hpp"
+#include "camera.hpp"
+#include "main.hpp"
+#include "render.hpp"
 
 MapLayerImage::MapLayerImage
 (

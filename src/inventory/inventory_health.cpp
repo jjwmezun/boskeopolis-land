@@ -1,5 +1,5 @@
-#include "inventory_health.h"
-#include "sprite.h"
+#include "inventory_health.hpp"
+#include "sprite.hpp"
 
 InventoryHealth::InventoryHealth( int y )
 :

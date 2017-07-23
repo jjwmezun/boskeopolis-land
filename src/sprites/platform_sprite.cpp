@@ -13,11 +13,11 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "platform_sprite.h"
-    #include "sprite_graphics.h"
-    #include "sprite_component_right_and_left.h"
-    #include "sprite_component_up_and_down.h"
+    #include "collision.hpp"
+    #include "platform_sprite.hpp"
+    #include "sprite_graphics.hpp"
+    #include "sprite_component_right_and_left.hpp"
+    #include "sprite_component_up_and_down.hpp"
 
 
 // STATIC PROPERTIES

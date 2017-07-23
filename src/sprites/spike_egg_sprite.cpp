@@ -12,9 +12,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "spike_egg_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "spike_egg_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

@@ -1,7 +1,7 @@
-#include "mezun_math.h"
-#include "snowman_sprite.h"
-#include "sprite_graphics.h"
-#include "sprite_system.h"
+#include "mezun_math.hpp"
+#include "snowman_sprite.hpp"
+#include "sprite_graphics.hpp"
+#include "sprite_system.hpp"
 
 SnowmanSprite::SnowmanSprite( int x, int y )
 :

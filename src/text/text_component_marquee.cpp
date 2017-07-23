@@ -11,8 +11,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "text.h"
-    #include "text_component_marquee.h"
+    #include "text.hpp"
+    #include "text_component_marquee.hpp"
     #include <iostream>
 
 

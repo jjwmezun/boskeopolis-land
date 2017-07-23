@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sprite_graphics.h"
+#include "sprite_graphics.hpp"
 
 class AnimatedGraphics;
 

@@ -14,10 +14,10 @@
 // DEPENDENCIES
 //===================================
 
-    #include "camera.h"
-    #include "input.h"
-    #include "player_sprite_fluttering.h"
-    #include "sprite_graphics.h"
+    #include "camera.hpp"
+    #include "input.hpp"
+    #include "player_sprite_fluttering.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "falling_bough_sprite.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "falling_bough_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal direction, bool fall )
 :

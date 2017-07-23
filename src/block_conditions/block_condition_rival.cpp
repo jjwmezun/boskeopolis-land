@@ -1,5 +1,5 @@
-#include "block_condition_rival.h"
-#include "sprite.h"
+#include "block_condition_rival.hpp"
+#include "sprite.hpp"
 
 BlockConditionRival::BlockConditionRival() {};
 

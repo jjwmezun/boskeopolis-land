@@ -1,5 +1,5 @@
-#include "block_component_mcguffin.h"
-#include "inventory_level.h"
+#include "block_component_mcguffin.hpp"
+#include "inventory_level.hpp"
 
 BlockComponentMcGuffin::BlockComponentMcGuffin() {};
 BlockComponentMcGuffin::~BlockComponentMcGuffin() {};

@@ -1,11 +1,11 @@
 #include <cassert>
-#include "input.h"
-#include "main.h"
-#include "message_state.h"
-#include "mezun_helpers.h"
-#include "render.h"
+#include "input.hpp"
+#include "main.hpp"
+#include "message_state.hpp"
+#include "mezun_helpers.hpp"
+#include "render.hpp"
 #include <SDL2/SDL.h>
-#include "title_state.h"
+#include "title_state.hpp"
 #include <vector>
 
 namespace Main

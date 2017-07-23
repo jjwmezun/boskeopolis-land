@@ -1,7 +1,7 @@
-#include "mcguffin_goal.h"
-#include "event_system.h"
-#include "inventory_level.h"
-#include "text.h"
+#include "mcguffin_goal.hpp"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
+#include "text.hpp"
 
 McGuffinGoal::McGuffinGoal( int amount_needed, std::string message )
 :

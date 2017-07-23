@@ -1,7 +1,7 @@
-#include "collision.h"
-#include "cloud_platform_sprite.h"
-#include "map.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "cloud_platform_sprite.hpp"
+#include "map.hpp"
+#include "sprite_graphics.hpp"
 
 CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal direction )
 :

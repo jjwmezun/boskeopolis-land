@@ -1,6 +1,6 @@
-#include "avoid_money_goal.h"
-#include "event_system.h"
-#include "inventory_level.h"
+#include "avoid_money_goal.hpp"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
 
 AvoidMoneyGoal::AvoidMoneyGoal()
 :

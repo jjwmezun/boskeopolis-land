@@ -12,7 +12,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "maze_chaser_graphics.h"
+    #include "maze_chaser_graphics.hpp"
 
 
 // STATIC PROPERTIES

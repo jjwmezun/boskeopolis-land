@@ -1,6 +1,6 @@
-#include "block.h"
-#include "block_component_swimmable.h"
-#include "sprite.h"
+#include "block.hpp"
+#include "block_component_swimmable.hpp"
+#include "sprite.hpp"
 
 BlockComponentSwimmable::BlockComponentSwimmable() {};
 

@@ -1,5 +1,5 @@
-#include "block_component_lose.h"
-#include "event_system.h"
+#include "block_component_lose.hpp"
+#include "event_system.hpp"
 
 BlockComponentLose::BlockComponentLose() {};
 

@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "bad_apple_graphics.h"
-#include "bad_apple_sprite.h"
+#include "collision.hpp"
+#include "bad_apple_graphics.hpp"
+#include "bad_apple_sprite.hpp"
 
 BadAppleSprite::BadAppleSprite( int x, int y )
 :

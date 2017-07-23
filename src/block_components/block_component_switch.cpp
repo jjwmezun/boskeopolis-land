@@ -1,7 +1,7 @@
-#include "animated_graphics.h"
-#include "block_component_switch.h"
-#include "block_type.h"
-#include "event_system.h"
+#include "animated_graphics.hpp"
+#include "block_component_switch.hpp"
+#include "block_type.hpp"
+#include "event_system.hpp"
 
 BlockComponentSwitch::BlockComponentSwitch
 (

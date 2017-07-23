@@ -1,10 +1,10 @@
 #pragma once
 
-#include "event_system.h"
-#include "game_state.h"
-#include "inventory.h"
-#include "mezun_sdl2.h"
-#include "text.h"
+#include "event_system.hpp"
+#include "game_state.hpp"
+#include "inventory.hpp"
+#include "mezun_sdl2.hpp"
+#include "text.hpp"
 #include <vector>
 
 class OverworldMenuState : public GameState

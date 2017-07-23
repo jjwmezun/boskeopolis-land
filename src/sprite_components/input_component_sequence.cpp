@@ -13,8 +13,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "input.h"
-    #include "input_component_sequence.h"
+    #include "input.hpp"
+    #include "input_component_sequence.hpp"
     #include <iostream>
 
 

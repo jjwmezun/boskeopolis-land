@@ -1,7 +1,7 @@
-#include "main.h"
-#include "input.h"
-#include "level_message_state.h"
-#include "render.h"
+#include "main.hpp"
+#include "input.hpp"
+#include "level_message_state.hpp"
+#include "render.hpp"
 
 constexpr sdl2::SDLRect LevelMessageState::backdrop_;
 

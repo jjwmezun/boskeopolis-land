@@ -13,8 +13,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "pufferbee_graphics.h"
-    #include "sprite.h"
+    #include "pufferbee_graphics.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

@@ -1,6 +1,6 @@
-#include "starving_goal.h"
-#include "event_system.h"
-#include "inventory_level.h"
+#include "starving_goal.hpp"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
 
 StarvingGoal::StarvingGoal( int amount_lost_per_frame, int starting_amount )
 :

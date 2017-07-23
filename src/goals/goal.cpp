@@ -1,5 +1,5 @@
-#include "main.h"
-#include "goal.h"
+#include "main.hpp"
+#include "goal.hpp"
 
 Goal::Goal( std::string message ) : message_ ( message ) {};
 Goal::~Goal() {};

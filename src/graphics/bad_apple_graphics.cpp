@@ -14,8 +14,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "bad_apple_graphics.h"
-    #include "sprite.h"
+    #include "bad_apple_graphics.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

@@ -11,9 +11,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "buzz_saw_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "buzz_saw_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

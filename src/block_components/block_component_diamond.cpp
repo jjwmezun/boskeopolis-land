@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_component_diamond.h"
-#include "collision.h"
-#include "inventory_level.h"
+#include "block.hpp"
+#include "block_component_diamond.hpp"
+#include "collision.hpp"
+#include "inventory_level.hpp"
 
 BlockComponentDiamond::BlockComponentDiamond() {};
 

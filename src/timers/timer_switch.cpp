@@ -9,7 +9,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "timer_switch.h"
+    #include "timer_switch.hpp"
 
 
 // STATIC PROPERTIES

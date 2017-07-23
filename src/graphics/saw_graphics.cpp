@@ -13,8 +13,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "saw_graphics.h"
-    #include "sprite.h"
+    #include "saw_graphics.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

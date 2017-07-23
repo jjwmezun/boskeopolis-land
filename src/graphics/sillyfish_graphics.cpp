@@ -11,8 +11,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "sillyfish_graphics.h"
-    #include "sprite.h"
+    #include "sillyfish_graphics.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

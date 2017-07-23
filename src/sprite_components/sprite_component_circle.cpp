@@ -11,8 +11,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "sprite.h"
-    #include "sprite_component_circle.h"
+    #include "sprite.hpp"
+    #include "sprite_component_circle.hpp"
 
 
 // STATIC PROPERTIES

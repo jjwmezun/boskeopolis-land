@@ -1,7 +1,7 @@
-#include "main.h"
-#include "oxygen_meter.h"
-#include "render.h"
-#include "sprite.h"
+#include "main.hpp"
+#include "oxygen_meter.hpp"
+#include "render.hpp"
+#include "sprite.hpp"
 
 OxygenMeter::OxygenMeter( int y )
 :		

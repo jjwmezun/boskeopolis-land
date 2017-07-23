@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "snowboulder_sprite.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "snowboulder_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 SnowboulderSprite::SnowboulderSprite( int x, int y )
 :

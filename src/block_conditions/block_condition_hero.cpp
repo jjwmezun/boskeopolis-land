@@ -1,5 +1,5 @@
-#include "block_condition_hero.h"
-#include "sprite.h"
+#include "block_condition_hero.hpp"
+#include "sprite.hpp"
 
 BlockConditionHero::BlockConditionHero() {};
 

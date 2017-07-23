@@ -11,10 +11,10 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "eggnon_sprite.h"
-    #include "sprite_graphics.h"
-    #include "sprite_system.h"
+    #include "collision.hpp"
+    #include "eggnon_sprite.hpp"
+    #include "sprite_graphics.hpp"
+    #include "sprite_system.hpp"
 
 
 // STATIC PROPERTIES

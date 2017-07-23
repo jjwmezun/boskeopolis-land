@@ -13,13 +13,13 @@
 // DEPENDENCIES
 //===================================
 
-    #include "block_component.h"
-    #include "block_system.h"
-    #include "camera.h"
-    #include "collision.h"
-    #include "guard_graphics.h"
-    #include "guard_sprite.h"
-    #include "sprite_graphics.h"
+    #include "block_component.hpp"
+    #include "block_system.hpp"
+    #include "camera.hpp"
+    #include "collision.hpp"
+    #include "guard_graphics.hpp"
+    #include "guard_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

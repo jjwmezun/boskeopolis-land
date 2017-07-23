@@ -1,8 +1,8 @@
-#include "main.h"
-#include "input.h"
+#include "main.hpp"
+#include "input.hpp"
 #include <fstream>
-#include "overworld_state.h"
-#include "title_state.h"
+#include "overworld_state.hpp"
+#include "title_state.hpp"
 
 constexpr sdl2::SDLRect TitleState::logo_rect_;
 

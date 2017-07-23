@@ -1,8 +1,8 @@
-#include "past_right_edge_goal.h"
-#include "event_system.h"
-#include "map.h"
-#include "sprite.h"
-#include "sprite_system.h"
+#include "past_right_edge_goal.hpp"
+#include "event_system.hpp"
+#include "map.hpp"
+#include "sprite.hpp"
+#include "sprite_system.hpp"
 
 PastRightEdgeGoal::PastRightEdgeGoal( std::string message )
 :

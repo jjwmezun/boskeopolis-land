@@ -1,7 +1,7 @@
-#include "collect_goal.h"
-#include "event_system.h"
-#include "inventory_level.h"
-#include "text.h"
+#include "collect_goal.hpp"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
+#include "text.hpp"
 
 CollectGoal::CollectGoal( int amount_needed, std::string message )
 :

@@ -1,5 +1,5 @@
-#include "block_component_switch_flip.h"
-#include "event_system.h"
+#include "block_component_switch_flip.hpp"
+#include "event_system.hpp"
 
 BlockComponentSwitchFlip::BlockComponentSwitchFlip() {};
 

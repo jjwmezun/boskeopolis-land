@@ -14,8 +14,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "guard_graphics.h"
-    #include "sprite.h"
+    #include "guard_graphics.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

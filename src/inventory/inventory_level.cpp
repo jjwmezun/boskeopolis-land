@@ -1,6 +1,6 @@
-#include "event_system.h"
-#include "inventory_level.h"
-#include "render.h"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
+#include "render.hpp"
 
 constexpr sdl2::SDLRect InventoryLevel::BG_DEST;
 constexpr sdl2::SDLRect InventoryLevel::GEM_ICON_DEST;

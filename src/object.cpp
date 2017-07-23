@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "object.h"
-#include "unit.h"
+#include "collision.hpp"
+#include "object.hpp"
+#include "unit.hpp"
 #include <iostream>
 
 Object::Object

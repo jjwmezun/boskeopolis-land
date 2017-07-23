@@ -1,9 +1,9 @@
-#include "camera.h"
+#include "camera.hpp"
 #include <cassert>
-#include "main.h"
+#include "main.hpp"
 #include <iostream>
-#include "map_layer_constellation.h"
-#include "render.h"
+#include "map_layer_constellation.hpp"
+#include "render.hpp"
 
 MapLayerConstellation::MapLayerConstellation
 (

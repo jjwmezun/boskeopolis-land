@@ -1,8 +1,8 @@
-#include "render.h"
-#include "input.h"
-#include "level.h"
+#include "render.hpp"
+#include "input.hpp"
+#include "level.hpp"
 #include "ow_inventory.hpp"
-#include "text.h"
+#include "text.hpp"
 
 constexpr sdl2::SDLRect OWInventory::AREA;
 

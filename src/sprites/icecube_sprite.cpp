@@ -12,9 +12,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "icecube_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "icecube_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES

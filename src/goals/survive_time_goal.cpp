@@ -1,8 +1,8 @@
-#include "survive_time_goal.h"
-#include "event_system.h"
-#include "inventory_level.h"
-#include "mezun_helpers.h"
-#include "text.h"
+#include "survive_time_goal.hpp"
+#include "event_system.hpp"
+#include "inventory_level.hpp"
+#include "mezun_helpers.hpp"
+#include "text.hpp"
 
 SurviveTimeGoal::SurviveTimeGoal( int wait_time, std::string message )
 :

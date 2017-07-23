@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "fishstick_sprite.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "fishstick_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 FishstickSprite::FishstickSprite( int x, int y )
 :

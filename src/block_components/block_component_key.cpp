@@ -1,5 +1,5 @@
-#include "block_component_key.h"
-#include "event_system.h"
+#include "block_component_key.hpp"
+#include "event_system.hpp"
 
 BlockComponentKey::BlockComponentKey() {};
 

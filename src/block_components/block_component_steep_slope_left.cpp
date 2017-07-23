@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_component_steep_slope_left.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block.hpp"
+#include "block_component_steep_slope_left.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockComponentSteepSlopeLeft::BlockComponentSteepSlopeLeft(){};
 

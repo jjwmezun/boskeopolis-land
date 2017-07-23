@@ -1,6 +1,6 @@
 
-#include "rope_graphics.h"
-#include "sprite.h"
+#include "rope_graphics.hpp"
+#include "sprite.hpp"
 
 constexpr std::pair<int, int> RopeGraphics::frame_body_;
 constexpr std::pair<int, int> RopeGraphics::frame_end_;

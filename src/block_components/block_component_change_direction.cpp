@@ -1,5 +1,5 @@
-#include "block_component_change_direction.h"
-#include "sprite.h"
+#include "block_component_change_direction.hpp"
+#include "sprite.hpp"
 
 BlockComponentChangeDirection::BlockComponentChangeDirection( Direction::Simple direction )
 :

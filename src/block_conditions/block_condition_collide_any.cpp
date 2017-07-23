@@ -1,6 +1,6 @@
-#include "block_condition_collide_any.h"
-#include "collision.h"
-#include "sprite.h"
+#include "block_condition_collide_any.hpp"
+#include "collision.hpp"
+#include "sprite.hpp"
 
 BlockConditionCollideAny::BlockConditionCollideAny() {};
 

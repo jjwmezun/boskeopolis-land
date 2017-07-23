@@ -1,6 +1,6 @@
-#include "collision.h"
-#include "lightning_sprite.h"
-#include "sprite_graphics.h"
+#include "collision.hpp"
+#include "lightning_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 LightningSprite::LightningSprite( int x, int y )
 :

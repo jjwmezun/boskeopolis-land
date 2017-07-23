@@ -12,8 +12,8 @@
 // DEPENDENCIES
 //===================================
 
-    #include "penguin_graphics.h"
-    #include "sprite.h"
+    #include "penguin_graphics.hpp"
+    #include "sprite.hpp"
 
 
 // STATIC PROPERTIES

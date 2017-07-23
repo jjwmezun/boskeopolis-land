@@ -11,7 +11,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "animated_graphics.h"
+    #include "animated_graphics.hpp"
 
 
 // STATIC PROPERTIES

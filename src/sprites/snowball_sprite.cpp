@@ -1,6 +1,6 @@
-#include "mezun_math.h"
-#include "snowball_sprite.h"
-#include "sprite_graphics.h"
+#include "mezun_math.hpp"
+#include "snowball_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 SnowballSprite::SnowballSprite( int x, int y, Direction::Horizontal dir )
 :

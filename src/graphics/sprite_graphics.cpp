@@ -1,5 +1,5 @@
-#include "camera.h"
-#include "sprite_graphics.h"
+#include "camera.hpp"
+#include "sprite_graphics.hpp"
 
 SpriteGraphics::SpriteGraphics
 (

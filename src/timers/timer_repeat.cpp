@@ -9,7 +9,7 @@
 // DEPENDENCIES
 //===================================
 
-    #include "timer_repeat.h"
+    #include "timer_repeat.hpp"
 
 
 // STATIC PROPERTIES

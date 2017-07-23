@@ -11,9 +11,9 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "hydrant_sprite.h"
-    #include "hydrant_graphics.h"
+    #include "collision.hpp"
+    #include "hydrant_sprite.hpp"
+    #include "hydrant_graphics.hpp"
 
 
 // STATIC PROPERTIES

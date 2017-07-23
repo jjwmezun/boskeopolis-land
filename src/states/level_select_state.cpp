@@ -1,13 +1,13 @@
-#include "main.h"
-#include "input.h"
-#include "level.h"
-#include "level_state.h"
-#include "level_select_state.h"
-#include "message_state.h"
-#include "mezun_exceptions.h"
-#include "mezun_helpers.h"
-#include "overworld_state.h"
-#include "title_state.h"
+#include "main.hpp"
+#include "input.hpp"
+#include "level.hpp"
+#include "level_state.hpp"
+#include "level_select_state.hpp"
+#include "message_state.hpp"
+#include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
+#include "overworld_state.hpp"
+#include "title_state.hpp"
 
 LevelSelectState::LevelSelectState( const EventSystem& events, const Inventory& inventory, int level )
 :

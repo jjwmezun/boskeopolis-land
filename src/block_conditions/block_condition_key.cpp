@@ -1,5 +1,5 @@
-#include "block_condition_key.h"
-#include "event_system.h"
+#include "block_condition_key.hpp"
+#include "event_system.hpp"
 
 BlockConditionKey::BlockConditionKey() {};
 BlockConditionKey::~BlockConditionKey() {};

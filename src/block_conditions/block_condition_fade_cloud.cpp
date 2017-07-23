@@ -1,7 +1,7 @@
-#include "block.h"
-#include "block_condition_fade_cloud.h"
-#include "sprite.h"
-#include "sprite_graphics.h"
+#include "block.hpp"
+#include "block_condition_fade_cloud.hpp"
+#include "sprite.hpp"
+#include "sprite_graphics.hpp"
 
 BlockConditionFadeCloud::BlockConditionFadeCloud() {};
 

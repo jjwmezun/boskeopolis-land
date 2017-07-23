@@ -1,6 +1,6 @@
-#include "sprite.h"
-#include "sprite_graphics.h"
-#include "sprite_status.h"
+#include "sprite.hpp"
+#include "sprite_graphics.hpp"
+#include "sprite_status.hpp"
 
 SpriteStatus::SpriteStatus( int max_hp, int hp )
 :

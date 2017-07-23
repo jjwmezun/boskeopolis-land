@@ -11,10 +11,10 @@
 // DEPENDENCIES
 //===================================
 
-    #include "collision.h"
-    #include "penguin_graphics.h"
-    #include "penguin_sprite.h"
-    #include "sprite_graphics.h"
+    #include "collision.hpp"
+    #include "penguin_graphics.hpp"
+    #include "penguin_sprite.hpp"
+    #include "sprite_graphics.hpp"
 
 
 // STATIC PROPERTIES
