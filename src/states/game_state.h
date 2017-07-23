@@ -2,7 +2,7 @@
 #define GAME_STATE_H
 
 class Game;
-class Graphics;
+
 class Input;
 
 #include "camera.h"
@@ -31,13 +31,13 @@ class GameState
 
 		virtual ~GameState();
 
-		void render( Graphics& graphics );
+		void render();
 
-		virtual void update( Game& game, const Input& input, Graphics& graphics ) = 0;
-		virtual void stateRender( Graphics& graphics ) = 0;
-		virtual void init( Game& game, Graphics& graphics ) = 0;
-		void changePalette( Graphics& graphics );
-		void newPalette( Graphics& graphics, const Palette& pallete );
+		virtual void update( Game& game, const Input& input ) = 0;
+		virtual void stateRender() = 0;
+		virtual void init( Game& game ) = 0;
+		void changePalette();
+		void newPalette( const Palette& pallete );
 		StateID id() const;
 		const Palette& palette() const;
 

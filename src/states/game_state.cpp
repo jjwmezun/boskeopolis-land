@@ -1,5 +1,5 @@
 #include "game_state.h"
-#include "graphics.h"
+#include "render.h"
 
 GameState::GameState
 (
@@ -13,22 +13,22 @@ GameState::GameState
 
 GameState::~GameState() {};
 
-void GameState::render( Graphics& graphics )
+void GameState::render()
 {
-	stateRender( graphics );
+	stateRender();
 };
 
-void GameState::changePalette( Graphics& graphics )
+void GameState::changePalette()
 {
-	graphics.newPalette( palette_ );
+	Render::newPalette( palette_ );
 };
 
-void GameState::newPalette( Graphics& graphics, const Palette& palette )
+void GameState::newPalette( const Palette& palette )
 {
 	if ( palette_ != palette )
 	{
 		palette_ = palette;
-		changePalette( graphics );
+		changePalette();
 	}
 };
 

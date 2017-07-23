@@ -40,7 +40,7 @@
 			BlockSystem( const Map& lvmap );
 			
             void update( EventSystem& events );
-            void render( Graphics& graphics, Camera& camera, bool priority = false );
+            void render( Camera& camera, bool priority = false );
             void interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
 			
 			void changeTileset( std::string new_tileset );

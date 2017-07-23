@@ -153,11 +153,11 @@ void Sprite::update( const Input& input, Camera& camera, Map& lvmap, Game& game,
 	is_sliding_ = false;
 };
 
-void Sprite::render( Graphics& graphics, Camera& camera, bool priority )
+void Sprite::render( Camera& camera, bool priority )
 {
 	if ( camera.onscreen( hitBox() ) && graphics_ != nullptr )
 	{
-		graphics_->render( graphics, Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	}
 };
 

@@ -15,14 +15,14 @@ BlockComponentSwitch::BlockComponentSwitch
 	on_component_  ( std::move( on_component ) )
 {
 	/*
-	for ( int i = 0; i < off_graphics.size(); ++i )
+	for ( int i = 0; i < off_Render::size(); ++i )
 	{
-		off_graphics_.push_back( std::unique_ptr<SpriteGraphics> ( off_graphics.at( i ) ) );
+		off_graphics_.push_back( std::unique_ptr<SpriteGraphics> ( off_Render::at( i ) ) );
 	}
 
-	for ( int j = 0; j < on_graphics.size(); ++j )
+	for ( int j = 0; j < on_Render::size(); ++j )
 	{
-		on_graphics_.push_back( std::unique_ptr<SpriteGraphics> ( on_graphics.at( j ) ) );
+		on_graphics_.push_back( std::unique_ptr<SpriteGraphics> ( on_Render::at( j ) ) );
 	}*/
 };
 
@@ -81,11 +81,11 @@ void BlockComponentSwitch::update( EventSystem& events, BlockType& type )
 
 void BlockComponentSwitch::changeGraphics( BlockType& type, std::vector<std::shared_ptr<SpriteGraphics>>& graphics )
 {/*
-	for ( int i = 0; i < graphics.size() && i < BlockType::NUM_O_MINI_BLOCKS; ++i )
+	for ( int i = 0; i < Render::size() && i < BlockType::NUM_O_MINI_BLOCKS; ++i )
 	{
-		if ( graphics.at( i ) )
+		if ( Render::at( i ) )
 		{
-			type.graphics_.at( i ) = graphics.at( i );
+			type.graphics_.at( i ) = Render::at( i );
 		}
 		else
 		{

@@ -35,7 +35,7 @@ class BlockType
 
 		void update( EventSystem& events );
 		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
-		void render( Graphics& graphics, Camera& camera, const Block& block, bool priority ) const;
+		void render( Camera& camera, const Block& block, bool priority ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;
 		void rotate( Direction::Clockwise direction );

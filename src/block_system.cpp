@@ -12,7 +12,7 @@
 	#include "block_system.h"
     #include "camera.h"
 	#include "mezun_exceptions.h"
-    #include "graphics.h"
+    #include "render.h"
     #include <iostream>
     #include "map.h"
     #include "sprite.h"
@@ -44,13 +44,13 @@
 		getTileset().update( events );
     };
 
-    void BlockSystem::render( Graphics& graphics, Camera& camera, bool priority )
+    void BlockSystem::render( Camera& camera, bool priority )
     {
         for ( auto& b : blocks_ )
         {
 			if ( camera.onscreen( b.hitBox() ) )
 			{
-            	b.render( graphics, camera, priority );
+            	b.render( camera, priority );
 			}
         }
     };

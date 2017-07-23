@@ -1,35 +1,9 @@
-
-
-
-
-
-// Name
-//===================================
-//
-// Clock
-//
-
-#ifndef CLOCK_H
-#define CLOCK_H
-
-
-// FORWARD DECLARATIONS
-//===================================
-
-    class Graphics;
-
-
-// DEPENDENCIES
-//===================================
+#pragma once
 
     #include <string>
     #include "text.h"
     #include "timers/timer_repeat.h"
     #include "unit.h"
-
-
-// CLASS
-//===================================
 
     class Clock
     {
@@ -39,8 +13,8 @@
 
             void update();
             void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
-            void render( Graphics& graphics, int x, int y, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK );
-            static void renderTime( Graphics& graphics, int x, int y, int total_seconds, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK );
+            void render( int x, int y, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK );
+            static void renderTime( int x, int y, int total_seconds, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK );
             int secondsFromTotal() const;
             int minutesFromTotalSeconds() const;
             static int secondsFromTotal( int total_seconds );
@@ -58,6 +32,3 @@
             int limit_;
             Direction::Vertical direction_;
     };
-
-#endif // CLOCK_H
-

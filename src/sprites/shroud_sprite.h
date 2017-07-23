@@ -14,7 +14,7 @@ class ShroudSprite : public Sprite
 		~ShroudSprite();
 		void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
-		void render( Graphics& graphics, Camera& camera, bool priority = false );
+		void render( Camera& camera, bool priority = false );
 		
 	private:
 		enum class ShroudState

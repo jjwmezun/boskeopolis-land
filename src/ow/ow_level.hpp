@@ -1,14 +1,14 @@
 #pragma once
 
 class AnimatedGraphics;
-class Graphics;
+
 class OWCamera;
 
 class OWLevel
 {
 	public:
 		OWLevel( int type, int x, int y, const AnimatedGraphics& gfx );
-		void render( Graphics& graphics, const OWCamera& camera ) const;
+		void render( const OWCamera& camera ) const;
 		sdl2::SDLRect coords() const;
 		int lv() const;
 		int x() const;

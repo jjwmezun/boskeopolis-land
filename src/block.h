@@ -20,7 +20,7 @@ class Block : public Object
 		Block& operator=( Block&& m );
 		Block& operator=( const Block& c );
 
-		void render( Graphics& graphics, Camera& camera, bool priority = false ) const;
+		void render( Camera& camera, bool priority = false ) const;
 		void interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
 		int location() const;
 		int typeID() const;

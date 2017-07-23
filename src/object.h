@@ -2,7 +2,7 @@
 
 class Camera;
 class Collision;
-class Graphics;
+
 class Input;
 
 #include "direction.h"

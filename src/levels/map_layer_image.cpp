@@ -1,6 +1,7 @@
 #include "map_layer_image.h"
 #include "camera.h"
 #include "game.h"
+#include "render.h"
 
 MapLayerImage::MapLayerImage
 (
@@ -77,12 +78,12 @@ void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Came
 	movement_position_y_ += move_speed_y_;
 };
 
-void MapLayerImage::render( Graphics& graphics, Camera& camera ) const
+void MapLayerImage::render( Camera& camera ) const
 {
-	renderY( graphics, camera );
+	renderY( camera );
 };
 
-void MapLayerImage::renderY( Graphics& graphics, Camera& camera ) const
+void MapLayerImage::renderY( Camera& camera ) const
 {
 	int dy = offset_y_ - ( (int)( camera.y() * scroll_speed_y_ ) ) + Unit::SubPixelsToPixels( movement_position_y_ );
 	int dl = offset_x_ - ( (int)( camera.x() * scroll_speed_x_ ) ) + ( source_.w * current_frame_.value() ) + Unit::SubPixelsToPixels(  movement_position_x_ );
@@ -115,7 +116,7 @@ void MapLayerImage::renderY( Graphics& graphics, Camera& camera ) const
 
 	sdl2::SDLRect dest = { dl, dy, source_.w, source_.h };
 
-	renderX( graphics, camera, dest );
+	renderX( camera, dest );
 
 	if ( repeat_y_ )
 	{
@@ -123,16 +124,16 @@ void MapLayerImage::renderY( Graphics& graphics, Camera& camera ) const
 		{
 			dest.x = dl;
 			dest.y += source_.h;
-			renderX( graphics, camera, dest );
+			renderX( camera, dest );
 		}
 	}
 };
 
-void MapLayerImage::renderX( Graphics& graphics, Camera& camera, sdl2::SDLRect& dest ) const
+void MapLayerImage::renderX( Camera& camera, sdl2::SDLRect& dest ) const
 {
 	if ( onscreen( dest, camera ) )
 	{
-		graphics.renderObject( texture_, source_, dest );
+		Render::renderObject( texture_, source_, dest );
 	}
 
 	if ( repeat_x_ )
@@ -143,7 +144,7 @@ void MapLayerImage::renderX( Graphics& graphics, Camera& camera, sdl2::SDLRect& 
 
 			if ( onscreen( dest, camera ) )
 			{
-				graphics.renderObject( texture_, source_, dest, SDL_FLIP_NONE, 0.0, alpha_ );
+				Render::renderObject( texture_, source_, dest, SDL_FLIP_NONE, 0.0, alpha_ );
 			}
 		}
 	}

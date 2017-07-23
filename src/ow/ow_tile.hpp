@@ -3,7 +3,7 @@
 #include "sprite_graphics.h"
 
 class AnimatedGraphics;
-class Graphics;
+
 class OWCamera;
 class OWHero;
 
@@ -11,8 +11,8 @@ class OWTile
 {
 	public:
 		OWTile( int type, int x, int y, const AnimatedGraphics& gfx );
-		void render( Graphics& graphics, const OWCamera& camera ) const;
-		void highlight( Graphics& graphics, const OWCamera& camera ) const;
+		void render( const OWCamera& camera ) const;
+		void highlight( const OWCamera& camera ) const;
 
 		void interact( OWHero& hero, const Collision& collision ) const;
 		sdl2::SDLRect coords() const;

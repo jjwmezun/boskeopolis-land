@@ -1,4 +1,4 @@
-#include "graphics.h"
+#include "render.h"
 #include "input.h"
 #include "level.h"
 #include "ow_inventory.hpp"
@@ -71,10 +71,10 @@ void OWInventory::update( const Input& input, int lv_select )
 	}
 };
 
-void OWInventory::render( Graphics& graphics, int lv_select )
+void OWInventory::render( int lv_select )
 {
-	graphics.renderRect( AREA );
-	//Text::renderNumber( graphics, lv_select, LEFT_EDGE, AREA.y + 8 );
+	Render::renderRect( AREA );
+	//Text::renderNumber( lv_select, LEFT_EDGE, AREA.y + 8 );
 	
 	if ( lv_select > 0 )
 	{
@@ -114,38 +114,38 @@ void OWInventory::render( Graphics& graphics, int lv_select )
 			}
 		}
 		
-		Text::renderText( graphics, Level::NameOLevel( ( unsigned int )( lv_select ) ), LEFT_EDGE + 24, ROW_1, nullptr, name_shade );
+		Text::renderText( Level::NameOLevel( ( unsigned int )( lv_select ) ), LEFT_EDGE + 24, ROW_1, nullptr, name_shade );
 
-		gem_icon_gfx_.render( graphics, { RIGHT_EDGE - ( 12 * 8 ), ROW_1, 8, 8 } );
-		Text::renderText( graphics, gem_score, RIGHT_EDGE - ( 11 * 8 ), ROW_1, nullptr, gem_shade );
+		gem_icon_gfx_.render( { RIGHT_EDGE - ( 12 * 8 ), ROW_1, 8, 8 } );
+		Text::renderText( gem_score, RIGHT_EDGE - ( 11 * 8 ), ROW_1, nullptr, gem_shade );
 		
-		time_icon_gfx_.render( graphics, { RIGHT_EDGE - ( 5 * 8 ), ROW_1, 8, 8 } );
-		Text::renderText( graphics, time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1, nullptr, time_shade );
+		time_icon_gfx_.render( { RIGHT_EDGE - ( 5 * 8 ), ROW_1, 8, 8 } );
+		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1, nullptr, time_shade );
 		
 		diamond_gfx_.current_frame_x_ = 56;
 		if ( inventory_.haveDiamond( lv_select ) )
 		{
 			diamond_gfx_.current_frame_x_ = 48;
 		}
-		diamond_gfx_.render( graphics, { LEFT_EDGE, ROW_1, 8, 8 } );
+		diamond_gfx_.render( { LEFT_EDGE, ROW_1, 8, 8 } );
 		
 		win_icon_gfx_.current_frame_x_ = 56;
 		if ( inventory_.victory( lv_select ) )
 		{
 			win_icon_gfx_.current_frame_x_ = 40;
 		}
-		win_icon_gfx_.render( graphics, { LEFT_EDGE + 8, ROW_1, 8, 8 } );
+		win_icon_gfx_.render( { LEFT_EDGE + 8, ROW_1, 8, 8 } );
 	}
 
-	gem_icon_gfx_.render( graphics, { LEFT_EDGE, ROW_2, 8, 8 } );
+	gem_icon_gfx_.render( { LEFT_EDGE, ROW_2, 8, 8 } );
 	
 	if ( inventory_.totalFundsShown() < 0 )
 	{
-		Text::renderNumber( graphics, inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontShade::DARK_MID_GRAY );
+		Text::renderNumber( inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontShade::DARK_MID_GRAY );
 	}
 	else
 	{
-		Text::renderNumber( graphics, inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9 );
+		Text::renderNumber( inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9 );
 	}
 };
 

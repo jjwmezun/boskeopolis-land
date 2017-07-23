@@ -14,7 +14,7 @@ OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, con
 
 OverworldMenuState::~OverworldMenuState() {};
 
-void OverworldMenuState::update( Game& game, const Input& input, Graphics& graphics )
+void OverworldMenuState::update( Game& game, const Input& input )
 {
 	if ( input.pressed( Input::Action::MENU ) )
 	{
@@ -64,9 +64,9 @@ void OverworldMenuState::update( Game& game, const Input& input, Graphics& graph
 	}
 };
 
-void OverworldMenuState::stateRender( Graphics& graphics )
+void OverworldMenuState::stateRender()
 {
-	graphics.renderRect( bg_, 6 );
+	Render::renderRect( bg_, 6 );
 
 	for ( int i = 0; i < NUM_O_OPTIONS; ++i )
 	{
@@ -77,10 +77,10 @@ void OverworldMenuState::stateRender( Graphics& graphics )
 			text_color = Text::FontShade::WHITE;
 		}
 
-		option_text_.at( i ).render( graphics, nullptr, text_color );
+		option_text_.at( i ).render( nullptr, text_color );
 	}
 };
 
-void OverworldMenuState::init( Game& game, Graphics& graphics )
+void OverworldMenuState::init( Game& game )
 {
 };

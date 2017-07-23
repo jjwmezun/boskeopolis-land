@@ -16,13 +16,13 @@ class Collision;
 class OverworldState : public GameState
 {
 	public:
-		OverworldState( bool load, Graphics& graphics );
+		OverworldState( bool load );
 		OverworldState( const EventSystem& events, const Inventory& inventory, int level = NULL );
 		~OverworldState();
 
-		void update( Game& game, const Input& input, Graphics& graphics ) override;
-		void stateRender( Graphics& graphics ) override;
-		void init( Game& game, Graphics& graphics ) override;
+		void update( Game& game, const Input& input ) override;
+		void stateRender() override;
+		void init( Game& game ) override;
 		
 	private:
 		static constexpr int SMOOTH_MOVEMENT_PADDING = 4;
@@ -44,11 +44,11 @@ class OverworldState : public GameState
 		bool camera_trans_;
 
 		void mapData();
-		void interactions( Graphics& graphics );
+		void interactions();
 		Collision testCollision( const sdl2::SDLRect& lhs, const sdl2::SDLRect& rhs );
 		void mapEvents();
 		void eventByID( int id );
 		void menu( Game& game, const Input& input );
 		static Palette lvPal( int id );
-		void renderCameraArrows( Graphics& graphics );
+		void renderCameraArrows();
 };

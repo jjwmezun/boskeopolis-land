@@ -1,6 +1,6 @@
 #pragma once
 
-class Graphics;
+
 
 #include "counter.h"
 #include "level.h"

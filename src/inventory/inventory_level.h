@@ -1,7 +1,5 @@
 #pragma once
 
-class Graphics;
-
 #include "clock.h"
 #include "inventory.h"
 #include "inventory_health.h"
@@ -19,7 +17,7 @@ class InventoryLevel
 		InventoryLevel( Inventory&& m );
 
 		void update( EventSystem& events, Sprite& hero );
-		void render( Graphics& graphics, int level, EventSystem& events );
+		void render( int level, EventSystem& events );
 		void init();
 
 		void addFunds( int n = 100 );

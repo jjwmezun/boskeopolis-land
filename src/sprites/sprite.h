@@ -15,7 +15,7 @@ class SpriteGraphics;
 class SpriteSystem;
 
 #include "direction.h"
-#include "graphics.h"
+#include "render.h"
 #include "grounded_sprite_movement.h"
 #include "memory.h"
 #include "object.h"
@@ -110,7 +110,7 @@ class Sprite : public Object
 		Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
 		void update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
-		virtual void render( Graphics& graphics, Camera& camera, bool priority = false );
+		virtual void render( Camera& camera, bool priority = false );
 		void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 
 		virtual void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks ) = 0;

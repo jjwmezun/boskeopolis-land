@@ -22,7 +22,7 @@ LevelSelectState::LevelSelectState( const EventSystem& events, const Inventory& 
 
 LevelSelectState::~LevelSelectState() {};
 
-void LevelSelectState::update( Game& game, const Input& input, Graphics& graphics )
+void LevelSelectState::update( Game& game, const Input& input )
 {
 	highlight_dest_.y = ( 8 * selection_() );
 
@@ -82,10 +82,10 @@ void LevelSelectState::update( Game& game, const Input& input, Graphics& graphic
 	}
 };
 
-void LevelSelectState::stateRender( Graphics& graphics )
+void LevelSelectState::stateRender()
 {
-	graphics.colorCanvas();
-	graphics.renderRect( highlight_dest_, 6 );
+	Render::colorCanvas();
+	Render::renderRect( highlight_dest_, 6 );
 
 	for ( int i = 0; i < level_ids_.size(); ++i )
 	{
@@ -109,24 +109,24 @@ void LevelSelectState::stateRender( Graphics& graphics )
 
 		if ( i < level_names_.size() )
 		{
-			level_names_[ i ].render( graphics, &camera_, shade );
+			level_names_[ i ].render( &camera_, shade );
 		}
 		
 		if ( i < gem_scores_.size() )
 		{
 			if ( i == selection_.value() && show_challenges_ )
 			{
-				gem_challenges_text_[ i ].render( graphics, &camera_, Text::FontShade::LIGHT_GRAY );
+				gem_challenges_text_[ i ].render( &camera_, Text::FontShade::LIGHT_GRAY );
 			}
 			else
 			{
 				if ( gem_challenges_.at( i ) )
 				{
-					gem_scores_[ i ].render( graphics, &camera_, Text::FontShade::LIGHT_MID_GRAY );
+					gem_scores_[ i ].render( &camera_, Text::FontShade::LIGHT_MID_GRAY );
 				}
 				else
 				{
-					gem_scores_[ i ].render( graphics, &camera_, shade );
+					gem_scores_[ i ].render( &camera_, shade );
 				}
 			}
 		}
@@ -135,17 +135,17 @@ void LevelSelectState::stateRender( Graphics& graphics )
 		{
 			if ( i == selection_.value() && show_challenges_ )
 			{
-				time_challenges_text_[ i ].render( graphics, &camera_, Text::FontShade::LIGHT_GRAY );
+				time_challenges_text_[ i ].render( &camera_, Text::FontShade::LIGHT_GRAY );
 			}
 			else
 			{
 				if ( time_challenges_.at( i ) )
 				{
-					time_scores_[ i ].render( graphics, &camera_, Text::FontShade::LIGHT_MID_GRAY );
+					time_scores_[ i ].render( &camera_, Text::FontShade::LIGHT_MID_GRAY );
 				}
 				else
 				{
-					time_scores_[ i ].render( graphics, &camera_, shade );
+					time_scores_[ i ].render( &camera_, shade );
 				}
 			}
 		}
@@ -153,26 +153,26 @@ void LevelSelectState::stateRender( Graphics& graphics )
 
 	for ( int j = 0; j < win_icon_dests_.size(); ++j )
 	{
-		win_icon_gfx_.render( graphics, win_icon_dests_[ j ], &camera_ );
+		win_icon_gfx_.render( win_icon_dests_[ j ], &camera_ );
 	}
 
 	for ( int i = 0; i < diamond_icon_dests_.size(); ++i )
 	{
-		diamond_gfx_.render( graphics, diamond_icon_dests_[ i ], &camera_ );
+		diamond_gfx_.render( diamond_icon_dests_[ i ], &camera_ );
 	}
 	
 	for ( auto& k : gem_challenge_icon_dests_ )
 	{
-		win_icon_gfx_.render( graphics, k, &camera_ );
+		win_icon_gfx_.render( k, &camera_ );
 	}
 	
 	for ( auto& l : time_challenge_icon_dests_ )
 	{
-		win_icon_gfx_.render( graphics, l, &camera_ );
+		win_icon_gfx_.render( l, &camera_ );
 	}
 
-	graphics.renderRect( INVENTORY_BG_DEST, BG_COLOR );
-	gem_icon_gfx_.render( graphics, GEM_ICON_DEST, nullptr );
+	Render::renderRect( INVENTORY_BG_DEST, BG_COLOR );
+	gem_icon_gfx_.render( GEM_ICON_DEST, nullptr );
 
 	Text::FontShade shade = Text::FontShade::BLACK;
 
@@ -181,14 +181,14 @@ void LevelSelectState::stateRender( Graphics& graphics )
 		shade = Text::FontShade::LIGHT_GRAY;
 	}
 
-	Text::renderNumber( graphics, inventory_.totalFundsShown(), FUNDS_X, INVENTORY_Y + 8, 9, shade );
-	Text::renderText( graphics, inventory_.percentShown(), FUNDS_X + ( 30 * 8 ), INVENTORY_Y + 8 );
+	Text::renderNumber( inventory_.totalFundsShown(), FUNDS_X, INVENTORY_Y + 8, 9, shade );
+	Text::renderText( inventory_.percentShown(), FUNDS_X + ( 30 * 8 ), INVENTORY_Y + 8 );
 
-	graphics.renderRect( HEADER_BG_DEST, BG_COLOR );
-	title_.render( graphics );
+	Render::renderRect( HEADER_BG_DEST, BG_COLOR );
+	title_.render();
 };
 
-void LevelSelectState::init( Game& game, Graphics& graphics )
+void LevelSelectState::init( Game& game )
 {
 	constexpr int X = 24;
 

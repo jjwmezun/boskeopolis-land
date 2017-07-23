@@ -1,5 +1,5 @@
 #include "animated_graphics.h"
-#include "graphics.h"
+#include "render.h"
 #include "mezun_math.h"
 #include "ow_camera.hpp"
 #include "ow_level.hpp"
@@ -13,10 +13,10 @@ OWLevel::OWLevel( int type, int x, int y, const AnimatedGraphics& gfx )
 	gfx_ ( &gfx )
 {};
 
-void OWLevel::render( Graphics& graphics, const OWCamera& camera ) const
+void OWLevel::render( const OWCamera& camera ) const
 {
-	gfx_->render( graphics, dest( camera ) );
-	graphics.renderObject( "tilesets/ow.png", src(), dest( camera ), SDL_FLIP_NONE, 0.0 );
+	gfx_->render( dest( camera ) );
+	Render::renderObject( "tilesets/ow.png", src(), dest( camera ), SDL_FLIP_NONE, 0.0 );
 };
 
 sdl2::SDLRect OWLevel::src() const

@@ -73,7 +73,7 @@ void ShroudSprite::customInteract( Collision& my_collision, Collision& their_col
 	}
 };
 
-void ShroudSprite::render( Graphics& graphics, Camera& camera, bool priority )
+void ShroudSprite::render( Camera& camera, bool priority )
 {
 	if ( priority && state_ != ShroudState::HIDDEN )
 	{
@@ -85,7 +85,7 @@ void ShroudSprite::render( Graphics& graphics, Camera& camera, bool priority )
 		bottom.x = camera.relativeX( bottom );
 		bottom.y = camera.relativeY( bottom );
 		
-		graphics.renderRect( top, COLOR, alpha_() );
-		graphics.renderRect( bottom, COLOR, alpha_() );
+		Render::renderRect( top, COLOR, alpha_() );
+		Render::renderRect( bottom, COLOR, alpha_() );
 	}
 };

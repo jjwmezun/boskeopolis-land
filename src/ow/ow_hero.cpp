@@ -45,9 +45,9 @@ void OWHero::update( const Input& input )
 	gfx_.update();
 };
 
-void OWHero::render( Graphics& graphics, const OWCamera& camera )
+void OWHero::render( const OWCamera& camera )
 {
-	gfx_.render( graphics, camera.relative( coords() ) );
+	gfx_.render( camera.relative( coords() ) );
 };
 
 int OWHero::x() const { return x_; };

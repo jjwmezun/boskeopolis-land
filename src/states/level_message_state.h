@@ -11,10 +11,10 @@ class LevelMessageState : public GameState
 		LevelMessageState( const Palette& palette, std::string message );
 		~LevelMessageState();
 
-		void update( Game& game, const Input& input, Graphics& graphics );
-		void stateRender( Graphics& graphics );
-		void init( Game& game, Graphics& graphics );
-		void backFromPop( Game& game, Graphics& graphics );
+		void update( Game& game, const Input& input );
+		void stateRender();
+		void init( Game& game );
+		void backFromPop( Game& game );
 
 
 	private:

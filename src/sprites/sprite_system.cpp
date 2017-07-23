@@ -21,6 +21,7 @@
 #include "hydrant_sprite.h"
 #include "iceblock_sprite.h"
 #include "icecube_sprite.h"
+#include <iostream>
 #include "level.h"
 #include "lightning_sprite.h"
 #include "lil_pipe_monster_sprite.h"
@@ -417,19 +418,19 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 	}
 };
 
-void SpriteSystem::render( Graphics& graphics, Camera& camera, bool priority )
+void SpriteSystem::render( Camera& camera, bool priority )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i ) != nullptr )
 		{
-			sprites_.at( i )->render( graphics, camera, priority );
+			sprites_.at( i )->render( camera, priority );
 		}
 	}
 
 	if ( !priority )
 	{
-		hero_->render( graphics, camera );
+		hero_->render( camera );
 	}
 };
 

@@ -18,9 +18,9 @@ class LevelState : public GameState
 		LevelState( const EventSystem& events, const Inventory& inventory, int lvname, Game& game );
 		~LevelState();
 
-		void update( Game& game, const Input& input, Graphics& graphics );
-		void stateRender( Graphics& graphics );
-		void init( Game& game, Graphics& graphics );
+		void update( Game& game, const Input& input );
+		void stateRender();
+		void init( Game& game );
 
 	private:
 		InventoryLevel inventory_;

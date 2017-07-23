@@ -14,9 +14,9 @@ class LevelSelectState : public GameState
 		LevelSelectState( const EventSystem& events, const Inventory& inventory, int level );
 		~LevelSelectState();
 
-		void update( Game& game, const Input& input, Graphics& graphics );
-		void stateRender( Graphics& graphics );
-		void init( Game& game, Graphics& graphics );
+		void update( Game& game, const Input& input );
+		void stateRender();
+		void init( Game& game );
 
 
 	private:

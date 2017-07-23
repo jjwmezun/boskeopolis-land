@@ -3,7 +3,7 @@
 class Camera;
 class Sprite;
 
-#include "graphics.h"
+#include "render.h"
 #include "timers/timer_repeat.h"
 
 
@@ -40,7 +40,7 @@ class SpriteGraphics
 		virtual ~SpriteGraphics();
 		virtual void update( Sprite& sprite );
 		virtual void update();
-		virtual void render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false, Uint8 alpha = 255 ) const;
+		virtual void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false, Uint8 alpha = 255 ) const;
 		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
 		bool visible_ = true;
 
@@ -62,5 +62,5 @@ class SpriteGraphics
 		int cutoffTop   ( sdl2::SDLRect& obj_r, const Camera& c ) const;
 		int cutoffRight ( sdl2::SDLRect& obj_r, const Camera& c ) const;
 		int cutoffBottom( sdl2::SDLRect& obj_r, const Camera& c ) const;
-		void masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha = 255 ) const;
+		void masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha = 255 ) const;
 };

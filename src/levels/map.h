@@ -28,8 +28,8 @@ class Map
 		Map& operator= ( const Map& c ) = delete;
 
 		void update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
-		void renderBG( Graphics& graphics, Camera& camera );
-		void renderFG( Graphics& graphics, Camera& camera );
+		void renderBG( Camera& camera );
+		void renderFG( Camera& camera );
 
 		Palette palette() const;
 		const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;

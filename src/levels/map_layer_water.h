@@ -1,7 +1,7 @@
 #pragma once
 
 class Camera;
-class Graphics;
+
 class Sprite;
 
 #include "animated_graphics.h"
@@ -15,7 +15,7 @@ class MapLayerWater : public MapLayer
 		MapLayerWater( int y_blocks );
 
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) override;
-		void render( Graphics& graphics, Camera& camera ) const override;
+		void render( Camera& camera ) const override;
 		void interact( Sprite& sprite ) override;
 
 	private:

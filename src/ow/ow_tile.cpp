@@ -1,5 +1,5 @@
 #include "animated_graphics.h"
-#include "graphics.h"
+#include "render.h"
 #include "mezun_math.h"
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
@@ -19,21 +19,21 @@ OWTile::OWTile( int type, int x, int y, const AnimatedGraphics& gfx )
 	}
 };
 
-void OWTile::render( Graphics& graphics, const OWCamera& camera ) const
+void OWTile::render( const OWCamera& camera ) const
 {
 	if ( gfx_ != nullptr )
 	{
-		gfx_->render( graphics, dest( camera ) );
+		gfx_->render( dest( camera ) );
 	}
 	else
 	{
-		graphics.renderObject( "tilesets/ow.png", src(), dest( camera ), SDL_FLIP_NONE, 0.0 );
+		Render::renderObject( "tilesets/ow.png", src(), dest( camera ), SDL_FLIP_NONE, 0.0 );
 	}
 };
 
-void OWTile::highlight( Graphics& graphics, const OWCamera& camera ) const
+void OWTile::highlight( const OWCamera& camera ) const
 {
-	graphics.renderRect( dest( camera ), 4, 128 );
+	Render::renderRect( dest( camera ), 4, 128 );
 };
 
 sdl2::SDLRect OWTile::src() const

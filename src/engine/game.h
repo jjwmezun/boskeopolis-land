@@ -1,8 +1,6 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include "game_state.h"
-#include "graphics.h"
 #include "input.h"
 #include <memory>
 #include "text.h"
@@ -56,7 +54,6 @@ class Game
 
 		std::unique_ptr<GameState> new_state_;
 		std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
-		std::unique_ptr<Graphics> graphics_; // Must be allocated @ runtime, thus must be a pointer.
 
 		int fpsMilliseconds() const;
 		void initSDL();
@@ -67,5 +64,3 @@ class Game
 		void changeStateSafe();
 		void popStateSafe();
 };
-
-#endif // GAME_H

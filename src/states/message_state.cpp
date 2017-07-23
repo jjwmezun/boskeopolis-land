@@ -1,6 +1,7 @@
 #include "game.h"
 #include "input.h"
 #include "message_state.h"
+#include "render.h"
 
 std::unique_ptr<MessageState> MessageState::error
 (
@@ -44,7 +45,7 @@ MessageState::MessageState
 
 MessageState::~MessageState() {};
 
-void MessageState::update( Game& game, const Input& input, Graphics& graphics )
+void MessageState::update( Game& game, const Input& input )
 {
 	if ( input.pressedMain() )
 	{
@@ -63,10 +64,10 @@ void MessageState::update( Game& game, const Input& input, Graphics& graphics )
 	}
 };
 
-void MessageState::stateRender( Graphics& graphics )
+void MessageState::stateRender()
 {
-	graphics.colorCanvas();
-	message_.render( graphics, nullptr, font_color_ );
+	Render::colorCanvas();
+	message_.render( nullptr, font_color_ );
 };
 
-void MessageState::init( Game& game, Graphics& graphics ) {};
+void MessageState::init( Game& game ) {};

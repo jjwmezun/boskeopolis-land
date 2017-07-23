@@ -10,7 +10,7 @@
 #include "rapidjson/istreamwrapper.h"
 #include "unit.h"
 
-OverworldState::OverworldState( bool load, Graphics& graphics )
+OverworldState::OverworldState( bool load )
 :
 	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),
 	camera_ (),
@@ -70,7 +70,7 @@ OverworldState::OverworldState( bool load, Graphics& graphics )
 				if ( l.lv() == level )
 				{
 					hero_.placeOnLv( l );
-					newPalette( graphics, lvPal( level ) );
+					newPalette( lvPal( level ) );
 				}
 			}
 		}
@@ -145,7 +145,7 @@ OverworldState::OverworldState( const EventSystem& events, const Inventory& inve
 
 OverworldState::~OverworldState() {};
 
-void OverworldState::update( Game& game, const Input& input, Graphics& graphics )
+void OverworldState::update( Game& game, const Input& input )
 {
 	if ( camera_mode_ )
 	{
@@ -170,7 +170,7 @@ void OverworldState::update( Game& game, const Input& input, Graphics& graphics 
 		water_gfx_.update();
 		hero_.update( input );
 		camera_.adjust( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
-		interactions( graphics );
+		interactions();
 		lv_gfx_.update();
 
 		inventory_.update( input, level_selection_ );
@@ -186,7 +186,7 @@ void OverworldState::update( Game& game, const Input& input, Graphics& graphics 
 	}
 };
 
-void OverworldState::stateRender( Graphics& graphics )
+void OverworldState::stateRender()
 {
 	const int y_init = std::max( Unit::PixelsToBlocks( camera_.y() ) - 1, 0 );
 	const int x_init = std::max( Unit::PixelsToBlocks( camera_.x() ) - 1, 0 );
@@ -201,7 +201,7 @@ void OverworldState::stateRender( Graphics& graphics )
 			
 			if ( i < tiles_.size() )
 			{
-				tiles_.at( i ).render( graphics, camera_ );
+				tiles_.at( i ).render( camera_ );
 			}
 			else
 			{
@@ -212,19 +212,19 @@ void OverworldState::stateRender( Graphics& graphics )
 
 	for ( auto& l : level_tiles_ )
 	{
-		l.render( graphics, camera_ );
+		l.render( camera_ );
 	}
 
-	hero_.render( graphics, camera_ );
-	inventory_.render( graphics, level_selection_ );
+	hero_.render( camera_ );
+	inventory_.render( level_selection_ );
 	
 	if ( camera_mode_ )
 	{
-		renderCameraArrows( graphics );
+		renderCameraArrows();
 	}
 };
 
-void OverworldState::init( Game& game, Graphics& graphics )
+void OverworldState::init( Game& game )
 {
 };
 
@@ -308,7 +308,7 @@ void OverworldState::mapData()
 	}
 };
 
-void OverworldState::interactions( Graphics& graphics )
+void OverworldState::interactions()
 {
 	const int y_init = std::max( Unit::PixelsToBlocks( hero_.y() ) - 1, 0 );
 	const int x_init = std::max( Unit::PixelsToBlocks( hero_.x() ) - 1, 0 );
@@ -364,7 +364,7 @@ void OverworldState::interactions( Graphics& graphics )
 				break;
 			}
 			
-			newPalette( graphics, { pal, 2 } );
+			newPalette( { pal, 2 } );
 		}
 	}
 };
@@ -524,10 +524,10 @@ Palette OverworldState::lvPal( int id )
 	return { pal, 2 };
 };
 
-void OverworldState::renderCameraArrows( Graphics& graphics )
+void OverworldState::renderCameraArrows()
 {
-	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, 16, 16, 16 }, SDL_FLIP_NONE, 0.0 );
-	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS - 32, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 90.0 );
-	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, camera_.H - 32, 16, 16 }, SDL_FLIP_VERTICAL, 0.0 );
-	graphics.renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { 16, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 270.0 );
+	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, 16, 16, 16 }, SDL_FLIP_NONE, 0.0 );
+	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS - 32, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 90.0 );
+	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, camera_.H - 32, 16, 16 }, SDL_FLIP_VERTICAL, 0.0 );
+	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { 16, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 270.0 );
 };

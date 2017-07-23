@@ -1,7 +1,7 @@
 #include "camera.h"
 #include "collision.h"
 #include "event_system.h"
-#include "graphics.h"
+#include "render.h"
 #include "input.h"
 #include "map.h"
 #include "player_cart_sprite.h"

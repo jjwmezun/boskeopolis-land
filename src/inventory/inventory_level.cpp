@@ -1,5 +1,6 @@
 #include "event_system.h"
 #include "inventory_level.h"
+#include "render.h"
 
 constexpr sdl2::SDLRect InventoryLevel::BG_DEST;
 constexpr sdl2::SDLRect InventoryLevel::GEM_ICON_DEST;
@@ -54,58 +55,58 @@ void InventoryLevel::update( EventSystem& events, Sprite& hero )
 	ticker_.updateTicker();
 };
 
-void InventoryLevel::render( Graphics& graphics, int level, EventSystem& events )
+void InventoryLevel::render( int level, EventSystem& events )
 {
 	// BG
-	graphics.renderRect( BG_DEST, 1 );
+	Render::renderRect( BG_DEST, 1 );
 
 	// GEMS
-	gem_icon_gfx_.render( graphics, GEM_ICON_DEST, nullptr );
-	Text::renderNumber( graphics, inventory_.fundsShown(), FUNDS_X, VERTICAL_POS, 5, Text::FontShade::DARK_GRAY );
+	gem_icon_gfx_.render( GEM_ICON_DEST, nullptr );
+	Text::renderNumber( inventory_.fundsShown(), FUNDS_X, VERTICAL_POS, 5, Text::FontShade::DARK_GRAY );
 
 	// HEALTH
-	health_.render( graphics );
+	health_.render();
 
 	// TIME
-	clock_.render( graphics, CLOCK_X, VERTICAL_POS, nullptr, Text::FontShade::DARK_GRAY );
-	clock_gfx_.render( graphics, CLOCK_ICON_DEST, nullptr );
+	clock_.render( CLOCK_X, VERTICAL_POS, nullptr, Text::FontShade::DARK_GRAY );
+	clock_gfx_.render( CLOCK_ICON_DEST, nullptr );
 
 	// KEY
 	if ( events.hasKey() )
 	{
-		key_gfx_.render( graphics, KEY_ICON_DEST, nullptr );
+		key_gfx_.render( KEY_ICON_DEST, nullptr );
 	}
 
 	/*
 	// SWITCH
 	if ( events.switchOn() )
 	{
-		switch_on_.render( graphics );
+		switch_on_.render();
 	}
 	else
 	{
-		switch_off_.render( graphics );
+		switch_off_.render();
 	}*/
 
 	// McGuffins
 	if ( show_mcguffins_ )
 	{
-		mcguffins_gfx_.render( graphics, MCGUFFIN_DEST, nullptr );
-		mcguffins_cross_.render( graphics, MCGUFFIN_CROSS_DEST, nullptr );
-		Text::renderNumber( graphics, inventory_.McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, VERTICAL_POS, 1, Text::FontShade::DARK_GRAY );
+		mcguffins_gfx_.render( MCGUFFIN_DEST, nullptr );
+		mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
+		Text::renderNumber( inventory_.McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, VERTICAL_POS, 1, Text::FontShade::DARK_GRAY );
 	}
 
 	// TICKER
-	ticker_.render( graphics );
+	ticker_.render();
 
 	// DIAMOND
 	if ( inventory_.haveDiamond( level ) )
 	{
-		diamond_gfx_.render( graphics, DIAMOND_ICON_DEST, nullptr );
+		diamond_gfx_.render( DIAMOND_ICON_DEST, nullptr );
 	}
 
 	// OXYGEN
-	oxygen_meter_.render( graphics );
+	oxygen_meter_.render();
 };
 
 void InventoryLevel::addFunds( int n )

@@ -8,6 +8,7 @@
 #include "input_component_player.h"
 #include "input_component_sequence.h"
 #include "inventory_level.h"
+#include <iostream>
 #include "level.h"
 #include "map.h"
 #include "player_sprite.h"

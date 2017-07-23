@@ -1,10 +1,11 @@
 #include <cassert>
 #include "game.h"
+#include <iostream>
 #include "message_state.h"
 #include "mezun_helpers.h"
-#include "title_state.h"
+#include "render.h"
 #include <SDL2/SDL.h>
-#include <iostream>
+#include "title_state.h"
 
 int Game::frames_ = 0;
 std::string Game::resource_path_ = "";
@@ -27,13 +28,13 @@ Game::Game( std::vector<std::string>& args )
 	}
 
 	setResourcePath();
-	graphics_ = std::make_unique<Graphics> ( *this, args );
+	Render::init( args );
 	firstState();
 };
 
 void Game::destruct()
 {
-	graphics_->quit();
+	Render::quit();
 	SDL_Quit();
 };
 
@@ -87,7 +88,7 @@ void Game::execute()
 				state_change_ = false;
 			}
 
-			states_.back()->update( *this, input_, *graphics_ );
+			states_.back()->update( *this, input_ );
 
 			++frames_;
 			ticks_ = SDL_GetTicks();
@@ -100,14 +101,14 @@ void Game::execute()
 
 void Game::render()
 {
-	graphics_->clearScreen();
-	graphics_->colorCanvas();
+	Render::clearScreen();
+	Render::colorCanvas();
 	for ( auto& st : states_ )
 	{
-		st->render( *graphics_ );
+		st->render();
 	}
-	graphics_->screenBorders();
-	graphics_->presentScreen();
+	Render::screenBorders();
+	Render::presentScreen();
 };
 
 void Game::quit()
@@ -140,14 +141,14 @@ void Game::changeStateSafe()
 	state_is_new_ = false;
 
 	// This is a mo' important state change from the others, so we should clear out surfaces.
-	graphics_->clearSurfaces();
+	Render::clearSurfaces();
 };
 
 void Game::pushState  ( std::unique_ptr<GameState> state )
 {
 	states_.push_back( move(state) );
-	states_.back()->changePalette( *graphics_ );
-	states_.back()->init( *this, *graphics_ );
+	states_.back()->changePalette();
+	states_.back()->init( *this );
 	state_change_ = true;
 };
 
@@ -165,7 +166,7 @@ void Game::popStateSafe()
 
 	assert ( !states_.empty() );
 
-	states_.back()->changePalette( *graphics_ );
+	states_.back()->changePalette();
 
 	state_pop_ = false;
 };

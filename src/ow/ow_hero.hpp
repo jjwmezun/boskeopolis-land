@@ -3,7 +3,7 @@
 #include "animated_graphics.h"
 
 class Collision;
-class Graphics;
+
 class Input;
 class OWCamera;
 class OWLevel;
@@ -16,7 +16,7 @@ class OWHero
 
 		OWHero( int x = 0, int y = 0 );
 		void update( const Input& input );
-		void render( Graphics& graphics, const OWCamera& camera );
+		void render( const OWCamera& camera );
 		void placeOnLv( const OWLevel& lv );
 
 		int x() const;

@@ -45,13 +45,13 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 	}
 };
 
-void MapLayerTilemap::render( Graphics& graphics, Camera& camera ) const
+void MapLayerTilemap::render( Camera& camera ) const
 {
 	for ( auto& b : blocks_ )
 	{
 		if ( camera.onscreen( b.hitBox() ) )
 		{
-			b.render( graphics, camera, false );
+			b.render( camera, false );
 		}
 	}
 };

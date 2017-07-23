@@ -33,7 +33,7 @@ std::vector<Text> PauseState::optionText( bool beaten ) const
 
 PauseState::~PauseState() {};
 
-void PauseState::update( Game& game, const Input& input, Graphics& graphics )
+void PauseState::update( Game& game, const Input& input )
 {
 	if ( input.pressed( Input::Action::MOVE_UP ) || input.pressed( Input::Action::MOVE_DOWN ) )
 	{
@@ -65,9 +65,9 @@ void PauseState::update( Game& game, const Input& input, Graphics& graphics )
 	}
 };
 
-void PauseState::stateRender( Graphics& graphics )
+void PauseState::stateRender()
 {
-	graphics.renderRect( surface_box_, 6 );
+	Render::renderRect( surface_box_, 6 );
 
 	for ( int i = 0; i < NUM_O_PAUSE_OPTIONS; ++i )
 	{
@@ -78,10 +78,10 @@ void PauseState::stateRender( Graphics& graphics )
 			text_color = Text::FontShade::WHITE;
 		}
 
-		option_text_.at( i ).render( graphics, nullptr, text_color );
+		option_text_.at( i ).render( nullptr, text_color );
 	}
 };
 
-void PauseState::init( Game& game, Graphics& graphics )
+void PauseState::init( Game& game )
 {
 };

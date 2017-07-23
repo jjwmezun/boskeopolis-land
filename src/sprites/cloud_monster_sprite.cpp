@@ -13,12 +13,12 @@ CloudMonsterSprite::CloudMonsterSprite( int x, int y )
 
 CloudMonsterSprite::~CloudMonsterSprite() {};
 
-void CloudMonsterSprite::render( Graphics& graphics, Camera& camera, bool priority )
+void CloudMonsterSprite::render( Camera& camera, bool priority )
 {
 	if ( camera.onscreen( hitBox() ) && graphics_ != nullptr )
 	{
-		graphics_->render( graphics, Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-		lightning_.render( graphics, camera, priority );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+		lightning_.render( camera, priority );
 	}
 };
 

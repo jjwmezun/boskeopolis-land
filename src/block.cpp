@@ -55,11 +55,11 @@ Block& Block::operator=( const Block& c )
 	destroyed_ = c.destroyed_;
 };
 
-void Block::render( Graphics& graphics, Camera& camera, bool priority ) const
+void Block::render( Camera& camera, bool priority ) const
 {
 	if ( hasType() )
 	{
-		type_->render( graphics, camera, *this, priority );
+		type_->render( camera, *this, priority );
 	}
 };
 

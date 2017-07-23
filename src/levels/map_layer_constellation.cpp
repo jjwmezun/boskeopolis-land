@@ -1,9 +1,9 @@
 #include "camera.h"
 #include <cassert>
 #include "game.h"
-#include "graphics.h"
 #include <iostream>
 #include "map_layer_constellation.h"
+#include "render.h"
 
 MapLayerConstellation::MapLayerConstellation
 (
@@ -24,7 +24,7 @@ MapLayerConstellation::MapLayerConstellation
 
 MapLayerConstellation::~MapLayerConstellation() {};
 
-void MapLayerConstellation::render( Graphics& graphics, Camera& camera ) const
+void MapLayerConstellation::render( Camera& camera ) const
 {
 	sdl2::SDLRect source = { 0, 0, TILE_SIZE, TILE_SIZE };
 	sdl2::SDLRect dest = { 0, 0, TILE_SIZE, TILE_SIZE };
@@ -48,7 +48,7 @@ void MapLayerConstellation::render( Graphics& graphics, Camera& camera ) const
 			{
 				source.x = ( int )( star_pattern_.at( indexFromXAndY( x, y ) ) ) * TILE_SIZE;
 
-				graphics.renderObject( texture_, source, dest );
+				Render::renderObject( texture_, source, dest );
 			}
 
 			dest.x += TILE_SIZE;

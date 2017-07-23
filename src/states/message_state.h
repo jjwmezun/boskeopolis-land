@@ -30,10 +30,10 @@ class MessageState : public GameState
 		MessageState( const MessageState& c ) = delete;
 		const MessageState& operator=( const MessageState& c ) = delete;
 
-		void update( Game& game, const Input& input, Graphics& graphics );
-		void stateRender( Graphics& graphics );
-		void init( Game& game, Graphics& graphics );
-		void backFromPop( Game& game, Graphics& graphics );
+		void update( Game& game, const Input& input );
+		void stateRender();
+		void init( Game& game );
+		void backFromPop( Game& game );
 
 	private:
 		const Text message_;

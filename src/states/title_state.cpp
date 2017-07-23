@@ -10,7 +10,7 @@ TitleState::TitleState() : GameState( StateID::TITLE_STATE ) {};
 
 TitleState::~TitleState() {};
 
-void TitleState::update( Game& game, const Input& input, Graphics& graphics )
+void TitleState::update( Game& game, const Input& input )
 {
 	if ( input.pressed( Input::Action::MOVE_UP ) )
 	{
@@ -28,11 +28,11 @@ void TitleState::update( Game& game, const Input& input, Graphics& graphics )
 		switch( (Option)selection_.value() )
 		{
 			case ( Option::NEW ):
-				game.changeState( std::unique_ptr<GameState> ( new OverworldState( false, graphics ) ) );
+				game.changeState( std::unique_ptr<GameState> ( new OverworldState( false ) ) );
 			break;
 
 			case ( Option::LOAD ):
-				game.changeState( std::unique_ptr<GameState> ( new OverworldState( true, graphics ) ) );
+				game.changeState( std::unique_ptr<GameState> ( new OverworldState( true ) ) );
 			break;
 
 			case ( Option::QUIT ):
@@ -42,9 +42,9 @@ void TitleState::update( Game& game, const Input& input, Graphics& graphics )
 	}
 };
 
-void TitleState::stateRender( Graphics& graphics )
+void TitleState::stateRender()
 {
-	graphics.renderRect( highlight_rect_, 6 );
+	Render::renderRect( highlight_rect_, 6 );
 
 	for ( int i = 0; i < option_text_.size(); ++i )
 	{
@@ -59,13 +59,13 @@ void TitleState::stateRender( Graphics& graphics )
 			shade = Text::FontShade::WHITE;
 		}
 
-		Text::renderText( graphics, option_text_.at( i ), 0, OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( i ), nullptr, shade, NULL, Text::FontAlign::CENTER );
+		Text::renderText( option_text_.at( i ), 0, OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( i ), nullptr, shade, NULL, Text::FontAlign::CENTER );
 	}
 
-	logo_gfx_.render( graphics, logo_rect_, nullptr );
+	logo_gfx_.render( logo_rect_, nullptr );
 };
 
-void TitleState::init( Game& game, Graphics& graphics )
+void TitleState::init( Game& game )
 {
 	std::ifstream ifs( Game::savePath() );
 

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "counter.h"
-#include "graphics.h"
 #include "map_layer.h"
+#include "mezun_sdl2.h"
+#include <SDL2/SDL.h>
+#include <string>
 #include "timers/timer_repeat.h"
 
 class MapLayerImage : public MapLayer
@@ -27,7 +29,7 @@ class MapLayerImage : public MapLayer
 			Uint8 alpha = 255
 		);
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) override;
-		void render( Graphics& graphics, Camera& camera ) const override;
+		void render( Camera& camera ) const override;
 
 	private:
 		const std::string texture_;
@@ -49,7 +51,7 @@ class MapLayerImage : public MapLayer
 		TimerRepeat animation_timer_;
 		Direction::Vertical frame_dir_;
 
-		void renderY( Graphics& graphics, Camera& camera ) const;
-		void renderX( Graphics& graphics, Camera& camera, sdl2::SDLRect& dest ) const;
+		void renderY( Camera& camera ) const;
+		void renderX( Camera& camera, sdl2::SDLRect& dest ) const;
 		bool onscreen( const sdl2::SDLRect& r, Camera& camera ) const;
 };

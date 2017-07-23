@@ -1,8 +1,8 @@
 #pragma once
 
-#include "graphics.h"
 #include "map_layer.h"
 #include "unit.h"
+#include <vector>
 
 class MapLayerConstellation : public MapLayer
 {
@@ -17,7 +17,7 @@ class MapLayerConstellation : public MapLayer
 
 		~MapLayerConstellation();
 
-		void render( Graphics& graphics, Camera& camera ) const override;
+		void render( Camera& camera ) const override;
 
 	private:
 		enum class StarType

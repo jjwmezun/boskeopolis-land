@@ -520,19 +520,19 @@ Palette Map::palette() const
 	return palette_;
 };
 
-void Map::renderBG( Graphics& graphics, Camera& camera )
+void Map::renderBG( Camera& camera )
 {
 	for ( int i = 0; i < backgrounds_.size(); ++i )
 	{
-		backgrounds_[ i ]->render( graphics, camera );
+		backgrounds_[ i ]->render( camera );
 	}
 };
 
-void Map::renderFG( Graphics& graphics, Camera& camera )
+void Map::renderFG( Camera& camera )
 {
 	for ( int i = 0; i < foregrounds_.size(); ++i )
 	{
-		foregrounds_[ i ]->render( graphics, camera );
+		foregrounds_[ i ]->render( camera );
 	}
 };
 

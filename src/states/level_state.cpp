@@ -34,7 +34,7 @@ catch ( const mezun::CantLoadTileset& e )
 
 LevelState::~LevelState() {};
 
-void LevelState::update( Game& game, const Input& input, Graphics& graphics )
+void LevelState::update( Game& game, const Input& input )
 {
 	try
 	{
@@ -52,7 +52,7 @@ void LevelState::update( Game& game, const Input& input, Graphics& graphics )
 
 		if ( events_.paletteChanged() )
 		{
-			newPalette( graphics, events_.getPalette() );
+			newPalette( events_.getPalette() );
 		}
 
 		testPause( game, input );
@@ -73,20 +73,20 @@ void LevelState::update( Game& game, const Input& input, Graphics& graphics )
 	}
 };
 
-void LevelState::stateRender( Graphics& graphics )
+void LevelState::stateRender()
 {
-	level_.currentMap().renderBG( graphics, camera_ );
-	blocks_.render( graphics, camera_, false );
-	sprites_.render( graphics, camera_, false );
-	blocks_.render( graphics, camera_, true );
-	sprites_.render( graphics, camera_, true );
-	level_.currentMap().renderFG( graphics, camera_ );
-	inventory_.render( graphics, level_.id(), events_ );
+	level_.currentMap().renderBG( camera_ );
+	blocks_.render( camera_, false );
+	sprites_.render( camera_, false );
+	blocks_.render( camera_, true );
+	sprites_.render( camera_, true );
+	level_.currentMap().renderFG( camera_ );
+	inventory_.render( level_.id(), events_ );
 };
 
-void LevelState::init( Game& game, Graphics& graphics )
+void LevelState::init( Game& game )
 {
-	newPalette( graphics, level_.currentMap().palette() );
+	newPalette( level_.currentMap().palette() );
 
 	try
 	{

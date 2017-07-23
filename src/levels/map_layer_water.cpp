@@ -34,7 +34,7 @@ void MapLayerWater::interact( Sprite& sprite )
 	}
 };
 
-void MapLayerWater::render( Graphics& graphics, Camera& camera ) const
+void MapLayerWater::render( Camera& camera ) const
 {
 	if ( Unit::SubPixelsToPixels( y_ ) < camera.bottom() )
 	{
@@ -43,11 +43,11 @@ void MapLayerWater::render( Graphics& graphics, Camera& camera ) const
 		for ( int x = x_offset_(); x < Unit::WINDOW_WIDTH_PIXELS; x += 8 )
 		{
 			const sdl2::SDLRect r = { x, relative_y, 8, 16 };
-			surface_.render( graphics, r, nullptr, false, ALPHA );
+			surface_.render( r, nullptr, false, ALPHA );
 		}
 		
 		relative_y += 16;		
-		graphics.renderRect( { 0, relative_y, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_WIDTH_PIXELS - relative_y }, COLOR, ALPHA );
+		Render::renderRect( { 0, relative_y, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_WIDTH_PIXELS - relative_y }, COLOR, ALPHA );
 	}
 };
 
