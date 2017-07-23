@@ -245,7 +245,7 @@ void SpriteSystem::spritesFromMap( const Map& lvmap )
 	}
 };
 
-void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
@@ -259,7 +259,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
 				)
 				{
-					blocks.interact( *sprites_.at( i ), level, events, inventory, camera );
+					blocks.interact( *sprites_.at( i ), level, events, camera );
 				}
 			}
 		}
@@ -267,11 +267,11 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 	if ( hero_->interactsWithBlocks() )
 	{
-		blocks.interact( *hero_, level, events, inventory, camera );
+		blocks.interact( *hero_, level, events, camera );
 	}
 };
 
-void SpriteSystem::reset( const Level& level, const InventoryLevel& inventory )
+void SpriteSystem::reset( const Level& level )
 {
 	clearSprites();
 	Sprite::resistance_x_ = Sprite::RESISTANCE_X_NORMAL;

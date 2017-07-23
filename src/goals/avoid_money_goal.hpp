@@ -10,7 +10,7 @@ class AvoidMoneyGoal : public Goal
 		AvoidMoneyGoal();
 		~AvoidMoneyGoal();
 
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
+		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events ) override;
 };
 
 #endif // AVOID_MONEY_GOAL_H

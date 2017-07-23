@@ -4,7 +4,6 @@ class Block;
 class BlockCondition;
 class Collision;
 class EventSystem;
-class InventoryLevel;
 class GameState;
 class Level;
 class Sprite;
@@ -34,7 +33,7 @@ class BlockType
 		const BlockType&& operator= ( BlockType&& ) = delete;
 
 		void update( EventSystem& events );
-		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
+		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera );
 		void render( Camera& camera, const Block& block, bool priority ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;

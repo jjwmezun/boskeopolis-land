@@ -1,7 +1,6 @@
 #pragma once
 
 #include "game_state.hpp"
-#include "inventory.hpp"
 #include "level.hpp"
 #include "sprite_graphics.hpp"
 #include "text.hpp"
@@ -10,7 +9,7 @@ class LevelSelectState : public GameState
 {
 
 	public:
-		LevelSelectState( const Inventory& inventory, int level );
+		LevelSelectState( int level );
 		~LevelSelectState();
 
 		void update();
@@ -54,7 +53,6 @@ class LevelSelectState : public GameState
 		std::vector<sdl2::SDLRect> gem_challenge_icon_dests_;
 		std::vector<sdl2::SDLRect> time_challenge_icon_dests_;
 
-		Inventory inventory_;
 		int prev_level_;
 		Counter selection_;
 		Camera camera_;

@@ -1,5 +1,6 @@
 #include "mcguffin_goal.hpp"
 #include "event_system.hpp"
+#include "inventory.hpp"
 #include "inventory_level.hpp"
 #include "text.hpp"
 
@@ -11,17 +12,17 @@ McGuffinGoal::McGuffinGoal( int amount_needed, std::string message )
 
 McGuffinGoal::~McGuffinGoal() {};
 
-void McGuffinGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void McGuffinGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
-	if ( inventory.McGuffins() >= amount_needed_ )
+	if ( Inventory::McGuffins() >= amount_needed_ )
 	{
 		events.win();
 	}
 };
 
-void McGuffinGoal::customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void McGuffinGoal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events )
 {
-	inventory.show_mcguffins_ = true;
+	inventory_screen.show_mcguffins_ = true;
 };
 
 const std::string McGuffinGoal::collectMessage( int amount_needed, std::string message ) const

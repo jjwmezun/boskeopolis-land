@@ -14,7 +14,7 @@ class LevelState : public GameState
 {
 
 	public:
-		LevelState( const Inventory& inventory, int lvname );
+		LevelState( int lvname );
 		~LevelState();
 
 		void update();
@@ -22,7 +22,7 @@ class LevelState : public GameState
 		void init();
 
 	private:
-		InventoryLevel inventory_;
+		InventoryLevel inventory_screen_;
 		EventSystem events_;
 		Level level_;
 		Camera camera_;

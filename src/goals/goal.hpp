@@ -17,9 +17,9 @@ class Goal
 		Goal( std::string message = "¡Get the Keycane!" );
 		virtual ~Goal();
 
-		virtual void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events );
-		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
-		virtual void customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
+		virtual void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events );
+		void init( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events );
+		virtual void customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events );
 
 		std::string message();
 

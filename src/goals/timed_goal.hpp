@@ -9,7 +9,7 @@ class TimedGoal : public Goal
 		TimedGoal( int time_limit = 120 );
 		~TimedGoal();
 
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
+		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events ) override;
 		
 	private:
 		const int time_limit_;

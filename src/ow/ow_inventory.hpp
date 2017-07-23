@@ -1,21 +1,13 @@
 #pragma once
 
-#include "inventory.hpp"
 #include "sprite_graphics.hpp"
 #include "unit.hpp"
-
-
-
 
 class OWInventory
 {
 	public:
-		OWInventory();
-		OWInventory( const Inventory& inventory );
 		void update( int lv_select );
 		void render( int lv_select );
-		void load();
-		const Inventory& inventory() const;
 
 	private:
 		static constexpr sdl2::SDLRect AREA = { 0, Unit::WINDOW_HEIGHT_PIXELS - 32, Unit::WINDOW_WIDTH_PIXELS, 32 };
@@ -28,7 +20,6 @@ class OWInventory
 		static constexpr int COLOR_END   = 3;
 		static constexpr int COLOR_TIMER_LIMIT = 4;
 
-		Inventory inventory_;
 		SpriteGraphics win_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", 40, 8 );
 		SpriteGraphics diamond_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 0 );
 		SpriteGraphics gem_icon_gfx_ = SpriteGraphics( "charset.png", 32, 16 );

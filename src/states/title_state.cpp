@@ -1,5 +1,6 @@
 #include "main.hpp"
 #include "input.hpp"
+#include "inventory.hpp"
 #include <fstream>
 #include "overworld_state.hpp"
 #include "title_state.hpp"
@@ -28,11 +29,12 @@ void TitleState::update()
 		switch( (Option)selection_.value() )
 		{
 			case ( Option::NEW ):
-				Main::changeState( std::unique_ptr<GameState> ( new OverworldState( false ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
 			break;
 
 			case ( Option::LOAD ):
-				Main::changeState( std::unique_ptr<GameState> ( new OverworldState( true ) ) );
+				Inventory::load();
+				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
 			break;
 
 			case ( Option::QUIT ):
@@ -79,4 +81,6 @@ void TitleState::init()
 	}
 
 	ifs.close();
+	
+	Inventory::reset();
 };

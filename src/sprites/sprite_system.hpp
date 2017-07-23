@@ -4,8 +4,6 @@
 class BlockSystem;
 class Camera;
 class EventSystem;
-
-class InventoryLevel;
 class MapLayer;
 
 #include <memory>
@@ -40,9 +38,9 @@ class SpriteSystem
 
 		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks );
 		void render( Camera& camera, bool priority = false );
-		void interact( BlockSystem& blocks, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
+		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera );
 		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap );
-		void reset( const Level& level, const InventoryLevel& inventory );
+		void reset( const Level& level );
 		void spawn( SpawnSprite type, int x, int y );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
 		void spawnSnowball( int x, int y, Direction::Horizontal direction );

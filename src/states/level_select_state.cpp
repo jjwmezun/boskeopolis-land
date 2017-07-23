@@ -1,5 +1,6 @@
 #include "main.hpp"
 #include "input.hpp"
+#include "inventory.hpp"
 #include "level.hpp"
 #include "level_state.hpp"
 #include "level_select_state.hpp"
@@ -9,15 +10,13 @@
 #include "overworld_state.hpp"
 #include "title_state.hpp"
 
-LevelSelectState::LevelSelectState( const Inventory& inventory, int level )
+LevelSelectState::LevelSelectState( int level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Level Select", 1 } ),
-	inventory_ ( inventory ),
 	prev_level_ ( level ),
 	selection_ ( Counter( level, Level::realLevelNum()-1, 0 ) ),
 	camera_ ( { 0, 0, Unit::WINDOW_WIDTH_BLOCKS, 7, 0, START_Y } )
-{
-};
+{};
 
 LevelSelectState::~LevelSelectState() {};
 
@@ -63,17 +62,18 @@ void LevelSelectState::update()
 	{
 		delay_length_ = 8;
 
-		if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && Input::held( Input::Action::CANCEL ) )
+		if ( Inventory::beenToLevel( level_ids_.at( selection_() ) ) && Input::held( Input::Action::CANCEL ) )
 		{
 			show_challenges_ = true;
 		}
 	}
 
-	inventory_.update();
+	Inventory::update();
 
-	if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && Input::pressed( Input::Action::CONFIRM ) )
+	if ( Inventory::beenToLevel( level_ids_.at( selection_() ) ) && Input::pressed( Input::Action::CONFIRM ) )
 	{
-		Main::changeState( std::make_unique<OverworldState> ( inventory_, level_ids_.at( selection_() ) ) );
+		Inventory::setCurrentLevel( level_ids_.at( selection_() ) );
+		Main::changeState( std::make_unique<OverworldState> () );
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
@@ -175,13 +175,13 @@ void LevelSelectState::stateRender()
 
 	Text::FontShade shade = Text::FontShade::BLACK;
 
-	if ( inventory_.totalFundsShown() < 0 )
+	if ( Inventory::totalFundsShown() < 0 )
 	{
 		shade = Text::FontShade::LIGHT_GRAY;
 	}
 
-	Text::renderNumber( inventory_.totalFundsShown(), FUNDS_X, INVENTORY_Y + 8, 9, shade );
-	Text::renderText( inventory_.percentShown(), FUNDS_X + ( 30 * 8 ), INVENTORY_Y + 8 );
+	Text::renderNumber( Inventory::totalFundsShown(), FUNDS_X, INVENTORY_Y + 8, 9, shade );
+	Text::renderText( Inventory::percentShown(), FUNDS_X + ( 30 * 8 ), INVENTORY_Y + 8 );
 
 	Render::renderRect( HEADER_BG_DEST, BG_COLOR );
 	title_.render();
@@ -198,7 +198,7 @@ void LevelSelectState::init()
 
 		for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
 		{
-			const std::string lvname = inventory_.levelName( i );
+			const std::string lvname = Inventory::levelName( i );
 
 			if ( !mezun::isStringEmpty( lvname ) )
 			{				
@@ -206,34 +206,34 @@ void LevelSelectState::init()
 
 				level_ids_.emplace_back( i );
 
-				gem_scores_.emplace_back( inventory_.gemScore( i ), X + ( 24 * 8 ), ( 8 * reali ) );
-				time_scores_.emplace_back( inventory_.timeScore( i ), X + ( 31 * 8 ), ( 8 * reali ) );
+				gem_scores_.emplace_back( Inventory::gemScore( i ), X + ( 24 * 8 ), ( 8 * reali ) );
+				time_scores_.emplace_back( Inventory::timeScore( i ), X + ( 31 * 8 ), ( 8 * reali ) );
 				gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), X + ( 24 * 8 ), ( 8 * reali ) );
 				time_challenges_text_.emplace_back( Level::timeChallengeText( i ), X + ( 31 * 8 ), ( 8 * reali ) );
-				gem_challenges_.emplace_back( inventory_.gemChallengeBeaten( i ) );
-				time_challenges_.emplace_back( inventory_.timeChallengeBeaten( i ) );
+				gem_challenges_.emplace_back( Inventory::gemChallengeBeaten( i ) );
+				time_challenges_.emplace_back( Inventory::timeChallengeBeaten( i ) );
 
-				if ( inventory_.victory( i ) )
+				if ( Inventory::victory( i ) )
 				{
 					win_icon_dests_.emplace_back( X, ( 8 * reali ), 8, 8 );
 				}
 
-				if ( inventory_.haveDiamond( i ) )
+				if ( Inventory::haveDiamond( i ) )
 				{
 					diamond_icon_dests_.emplace_back( X - 8, ( 8 * reali ), 8, 8 );
 				}
 				
-				if ( inventory_.gemChallengeBeaten( i ) )
+				if ( Inventory::gemChallengeBeaten( i ) )
 				{
 					gem_challenge_icon_dests_.emplace_back( X + ( 8 * 23 ), ( 8 * reali ), 8, 8 );
 				}
 				
-				if ( inventory_.timeChallengeBeaten( i ) )
+				if ( Inventory::timeChallengeBeaten( i ) )
 				{
 					time_challenge_icon_dests_.emplace_back( X + ( 8 * 30 ), ( 8 * reali ), 8, 8 );
 				}
 				
-				if ( inventory_.levelComplete( i ) )
+				if ( Inventory::levelComplete( i ) )
 				{
 					levels_complete_.emplace_back( true );
 				}

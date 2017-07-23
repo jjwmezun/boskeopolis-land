@@ -8,7 +8,7 @@ class BlockComponentMoney : public BlockComponent
 	public:
 		BlockComponentMoney( int amount = 100 );
 		~BlockComponentMoney();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera ) override;
 
 	private:
 		int amount_;

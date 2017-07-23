@@ -2,7 +2,6 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "fluttering_sprite_movement.hpp"
-#include "inventory_level.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"

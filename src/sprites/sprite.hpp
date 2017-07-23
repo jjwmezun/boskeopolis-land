@@ -6,8 +6,6 @@ class Camera;
 class Collision;
 class EventSystem;
 class GameState;
-
-class InventoryLevel;
 class Level;
 class Map;
 class SpriteGraphics;

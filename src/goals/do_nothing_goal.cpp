@@ -1,7 +1,8 @@
+#include "clock.hpp"
 #include "do_nothing_goal.hpp"
 #include "event_system.hpp"
 #include "input.hpp"
-#include "inventory_level.hpp"
+#include "inventory.hpp"
 
 DoNothingGoal::DoNothingGoal( int wait_time )
 :
@@ -11,7 +12,7 @@ DoNothingGoal::DoNothingGoal( int wait_time )
 
 DoNothingGoal::~DoNothingGoal() {};
 
-void DoNothingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
 	if
 	(
@@ -24,13 +25,13 @@ void DoNothingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, co
 		events.fail();
 	}
 
-	if ( inventory.clockTime() >= wait_time_ )
+	if ( Inventory::clock().totalSeconds() >= wait_time_ )
 	{
 		events.win();
 	}
 };
 
-void DoNothingGoal::customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void DoNothingGoal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events )
 {
-	inventory.clock().reset( Direction::Vertical::DOWN, wait_time_ );
+	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
 };

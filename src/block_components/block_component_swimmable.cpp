@@ -6,7 +6,7 @@ BlockComponentSwimmable::BlockComponentSwimmable() {};
 
 BlockComponentSwimmable::~BlockComponentSwimmable() {};
 
-void BlockComponentSwimmable::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentSwimmable::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
 	if ( sprite.centerXSubPixels() > block.topSubPixels() )
 	{

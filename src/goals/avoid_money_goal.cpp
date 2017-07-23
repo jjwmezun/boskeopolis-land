@@ -1,6 +1,6 @@
 #include "avoid_money_goal.hpp"
 #include "event_system.hpp"
-#include "inventory_level.hpp"
+#include "inventory.hpp"
 
 AvoidMoneyGoal::AvoidMoneyGoal()
 :
@@ -9,9 +9,9 @@ AvoidMoneyGoal::AvoidMoneyGoal()
 
 AvoidMoneyGoal::~AvoidMoneyGoal() {};
 
-void AvoidMoneyGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void AvoidMoneyGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
-	if ( inventory.funds() > 0 )
+	if ( Inventory::funds() > 0 )
 	{
 		events.fail();
 	}

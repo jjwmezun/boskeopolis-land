@@ -1,7 +1,8 @@
 #include "event_system.hpp"
-#include "main.hpp"
-#include "inventory_level.hpp"
+#include "inventory.hpp"
+#include "level.hpp"
 #include "level_message_state.hpp"
+#include "main.hpp"
 #include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
@@ -116,7 +117,7 @@ void EventSystem::flipSwitch()
 	switch_changed_ = true;
 };
 
-void EventSystem::update( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
 	switch_changed_ = false;
 
@@ -126,8 +127,8 @@ void EventSystem::update( Level& level, InventoryLevel& inventory, SpriteSystem&
 	}
 	
 	testMessage( level );
-	testWarp( level, inventory, sprites, camera, blocks );
-	testWinLoseOrQuit( level, inventory );
+	testWarp( level, sprites, camera, blocks );
+	testWinLoseOrQuit( level );
 };
 
 void EventSystem::testMessage( Level& level )
@@ -146,35 +147,35 @@ void EventSystem::testMessage( Level& level )
 	message_ = false;
 };
 
-void EventSystem::testWarp( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
 	if ( change_map_ )
 	{
-		level.warp( sprites, camera, inventory, *this, blocks );
+		level.warp( sprites, camera, *this, blocks );
 		change_map_ = false;
 		in_front_of_door_ = false;
 	}
 };
 
-void EventSystem::testWinLoseOrQuit( Level& level, InventoryLevel& inventory )
+void EventSystem::testWinLoseOrQuit( Level& level )
 {
 	if ( failed_ )
 	{
-		failEvent( level, inventory );
+		failEvent( level );
 	}
 	else if ( won_ )
 	{
-		winEvent( level, inventory );
+		winEvent( level );
 	}
 	else if ( quit_level_ )
 	{
-		quitEvent( level, inventory );
+		quitEvent( level );
 	}
 };
 
-void EventSystem::failEvent( Level& level, InventoryLevel& inventory )
+void EventSystem::failEvent( Level& level )
 {
-	inventory.failed();
+	Inventory::fail();
 
 	Main::pushState
 	(
@@ -184,7 +185,7 @@ void EventSystem::failEvent( Level& level, InventoryLevel& inventory )
 			(
 				"¡Failure!",
 				false,
-				std::unique_ptr<GameState> ( new OverworldState( inventory.inventory(), level.id() ) ),
+				std::unique_ptr<GameState> ( new OverworldState() ),
 				false,
 				{ "Mountain Red", 2 },
 				Text::FontShade::DARK_GRAY
@@ -193,9 +194,9 @@ void EventSystem::failEvent( Level& level, InventoryLevel& inventory )
 	);
 };
 
-void EventSystem::winEvent( Level& level, InventoryLevel& inventory )
+void EventSystem::winEvent( Level& level )
 {	
-	inventory.won( level.id() );
+	Inventory::win();
 	
 	Main::pushState
 	(
@@ -205,7 +206,7 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory )
 			(
 				"¡Success!",
 				false,
-				std::unique_ptr<GameState> ( new OverworldState( inventory.inventory(), level.id() ) ),
+				std::unique_ptr<GameState> ( new OverworldState() ),
 				false,
 				{ "Classic Green", 2 },
 				Text::FontShade::DARK_GRAY
@@ -214,10 +215,10 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory )
 	);
 };
 
-void EventSystem::quitEvent( Level& level, InventoryLevel& inventory )
+void EventSystem::quitEvent( Level& level )
 {	
-	inventory.quit( level.id() );
-	Main::changeState( std::unique_ptr<GameState> ( new OverworldState( inventory.inventory(), level.id() ) ) );
+	Inventory::quit();
+	Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
 };
 
 bool EventSystem::waterShouldMove() const

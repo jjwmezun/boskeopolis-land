@@ -10,7 +10,7 @@ class PastRightEdgeGoal : public Goal
 		PastRightEdgeGoal( std::string message = mezun::emptyString() );
 		~PastRightEdgeGoal();
 
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
+		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events ) override;
 		
 	private:
 		const std::string testMessage( std::string message ) const;

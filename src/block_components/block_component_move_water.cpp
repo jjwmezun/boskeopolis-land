@@ -7,7 +7,7 @@ BlockComponentMoveWater::BlockComponentMoveWater() {};
 
 BlockComponentMoveWater::~BlockComponentMoveWater() {};
 
-void BlockComponentMoveWater::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentMoveWater::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
 	if ( events.waterShouldMove() )
 	{

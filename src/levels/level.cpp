@@ -106,7 +106,7 @@ int Level::cameraY() const
 	return camera_y_;
 };
 
-void Level::warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& inventory, EventSystem& events, BlockSystem& blocks )
+void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks )
 {
 	const Warp* warp = currentMap().getWarp( sprites.hero().xSubPixels(), sprites.hero().ySubPixels() );
 
@@ -117,7 +117,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& invento
 		entrance_x_ = warp->entranceX();
 		entrance_y_ = warp->entranceY();
 
-		sprites.reset( *this, inventory );
+		sprites.reset( *this );
 
 		int camera_x = camera.x();
 		int camera_y = camera.y();
@@ -203,10 +203,10 @@ void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
 	goal_->init( hero, inventory, events );
 };
 
-void Level::update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, BlockSystem& blocks, const Camera& camera )
+void Level::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
 {
 	currentMap().update( events, sprites, blocks, camera );
-	goal_->update( sprites, inventory, currentMap(), events );
+	goal_->update( sprites, currentMap(), events );
 };
 
 unsigned int Level::realLevelNum()

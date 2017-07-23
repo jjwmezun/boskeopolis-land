@@ -1,7 +1,7 @@
 #pragma once
 
-#include "clock.hpp"
-#include "inventory.hpp"
+class EventSystem;
+
 #include "inventory_health.hpp"
 #include "mezun_sdl2.hpp"
 #include "news_ticker.hpp"
@@ -13,31 +13,10 @@ class InventoryLevel
 {
 	public:
 		InventoryLevel();
-		InventoryLevel( const Inventory& c );
-		InventoryLevel( Inventory&& m );
 
 		void update( EventSystem& events, Sprite& hero );
-		void render( int level, EventSystem& events );
-		void init();
+		void render( EventSystem& events );
 
-		void addFunds( int n = 100 );
-		void loseFunds( int n = 100 );
-		void setFunds( int n );
-		int funds() const;
-		int clockTime() const;
-		Clock& clock();
-
-		void registerBeenToLevel( int level );
-		bool haveDiamond( int level ) const;
-		void getDiamond( int level );
-		void won( int level );
-		void failed();
-		void quit( int level );
-		const Inventory& inventory() const;
-
-		void addMcGuffin();
-		int McGuffins() const;
-		
 		bool show_mcguffins_;
 
 	private:
@@ -63,9 +42,7 @@ class InventoryLevel
 		const Text switch_on_ = { "ON", 192, VERTICAL_POS, Text::FontShade::DARK_GRAY };
 		const Text switch_off_ = { "OFF", 192, VERTICAL_POS, Text::FontShade::DARK_GRAY };
 
-		Inventory inventory_;
-		InventoryHealth health_;
-		Clock clock_;
+		InventoryHealth health_gfx_;
 		OxygenMeter oxygen_meter_;
 		NewsTicker ticker_;
 };

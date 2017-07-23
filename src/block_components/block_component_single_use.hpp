@@ -8,7 +8,7 @@ class BlockComponentSingleUse : public BlockComponent
 	public:
 		BlockComponentSingleUse( int width = 1, int height = 1, int corner = 0 );
 		~BlockComponentSingleUse();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera ) override;
 
 	private:
 		int width_;

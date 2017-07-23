@@ -13,7 +13,7 @@
 
             void update();
             void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
-            void render( int x, int y, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK );
+            void render( int x, int y, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK ) const;
             static void renderTime( int x, int y, int total_seconds, Camera* camera = nullptr, Text::FontShade shade = Text::FontShade::BLACK );
             int secondsFromTotal() const;
             int minutesFromTotalSeconds() const;

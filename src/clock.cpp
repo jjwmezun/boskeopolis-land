@@ -78,7 +78,7 @@ std::string Clock::timeToString( int total_seconds )
 	return Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) );
 };
 
-void Clock::render( int x, int y, Camera* camera, Text::FontShade shade )
+void Clock::render( int x, int y, Camera* camera, Text::FontShade shade ) const
 {
 	if ( direction_ == Direction::Vertical::DOWN )
 	{

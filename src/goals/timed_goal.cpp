@@ -1,6 +1,7 @@
+#include "clock.hpp"
 #include "timed_goal.hpp"
 #include "event_system.hpp"
-#include "inventory_level.hpp"
+#include "inventory.hpp"
 #include "text.hpp"
 
 TimedGoal::TimedGoal( int time_limit )
@@ -11,9 +12,9 @@ TimedGoal::TimedGoal( int time_limit )
 
 TimedGoal::~TimedGoal() {};
 
-void TimedGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void TimedGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
-	if ( inventory.clockTime() >= time_limit_ )
+	if ( Inventory::clock().totalSeconds() >= time_limit_ )
 	{
 		events.fail();
 	}

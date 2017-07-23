@@ -1,14 +1,15 @@
 #include "main.hpp"
 #include "input.hpp"
+#include "inventory.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 
 constexpr sdl2::SDLRect PauseState::surface_box_;
 
-PauseState::PauseState( const Palette& palette, EventSystem& events, bool beaten )
+PauseState::PauseState( const Palette& palette, EventSystem& events )
 :
 	GameState( StateID::PAUSE_STATE, palette ),
-	option_text_ ( optionText( beaten ) ),
+	option_text_ ( optionText( Inventory::victory() ) ),
 	option_selection_ ( PauseOption::PO_CONTINUE ),
 	events_ ( events )
 {};

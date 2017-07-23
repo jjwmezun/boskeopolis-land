@@ -28,20 +28,20 @@ BlockComponentSwitch::BlockComponentSwitch
 
 BlockComponentSwitch::~BlockComponentSwitch() {};
 
-void BlockComponentSwitch::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentSwitch::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
 	if ( events.switchOn() )
 	{
 		if ( on_component_ )
 		{
-			on_component_->interact( collision, sprite, block, type, level, events, inventory, camera );
+			on_component_->interact( collision, sprite, block, type, level, events, camera );
 		}
 	}
 	else
 	{
 		if ( off_component_ )
 		{
-			off_component_->interact( collision, sprite, block, type, level, events, inventory, camera );
+			off_component_->interact( collision, sprite, block, type, level, events, camera );
 		}
 	}
 };

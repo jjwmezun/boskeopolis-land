@@ -7,7 +7,7 @@ BlockComponentSteepSlopeLeft::BlockComponentSteepSlopeLeft(){};
 
 BlockComponentSteepSlopeLeft::~BlockComponentSteepSlopeLeft() {};
 
-void BlockComponentSteepSlopeLeft::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentSteepSlopeLeft::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
 	if ( collision.collideAny() )
 	{

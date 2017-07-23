@@ -1,29 +1,15 @@
-#include "render.hpp"
 #include "input.hpp"
+#include "inventory.hpp"
 #include "level.hpp"
 #include "ow_inventory.hpp"
+#include "render.hpp"
 #include "text.hpp"
 
 constexpr sdl2::SDLRect OWInventory::AREA;
 
-OWInventory::OWInventory()
-:
-	inventory_ ()
-{};
-
-OWInventory::OWInventory( const Inventory& inventory )
-:
-	inventory_ ( inventory )
-{};
-
-void OWInventory::load()
-{
-	inventory_.load();
-};
-
 void OWInventory::update( int lv_select )
 {
-	inventory_.update();
+	Inventory::update();
 	
 	if ( !Input::held( Input::Action::CANCEL ) )
 	{
@@ -74,7 +60,6 @@ void OWInventory::update( int lv_select )
 void OWInventory::render( int lv_select )
 {
 	Render::renderRect( AREA );
-	//Text::renderNumber( lv_select, LEFT_EDGE, AREA.y + 8 );
 	
 	if ( lv_select > 0 )
 	{
@@ -95,20 +80,20 @@ void OWInventory::render( int lv_select )
 		}
 		else
 		{
-			gem_score  = inventory_.gemScore( lv_select );
-			time_score = inventory_.timeScore( lv_select );
+			gem_score  = Inventory::gemScore( lv_select );
+			time_score = Inventory::timeScore( lv_select );
 			
-			if ( inventory_.levelComplete( lv_select ) )
+			if ( Inventory::levelComplete( lv_select ) )
 			{
 				name_shade = ( Text::FontShade )( color_animation_ );
 			}
 			
-			if ( inventory_.gemChallengeBeaten( lv_select ) )
+			if ( Inventory::gemChallengeBeaten( lv_select ) )
 			{
 				gem_shade = ( Text::FontShade )( color_animation_ );
 			}
 			
-			if ( inventory_.timeChallengeBeaten( lv_select ) )
+			if ( Inventory::timeChallengeBeaten( lv_select ) )
 			{
 				time_shade = ( Text::FontShade )( color_animation_ );
 			}
@@ -123,14 +108,14 @@ void OWInventory::render( int lv_select )
 		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1, nullptr, time_shade );
 		
 		diamond_gfx_.current_frame_x_ = 56;
-		if ( inventory_.haveDiamond( lv_select ) )
+		if ( Inventory::haveDiamond( lv_select ) )
 		{
 			diamond_gfx_.current_frame_x_ = 48;
 		}
 		diamond_gfx_.render( { LEFT_EDGE, ROW_1, 8, 8 } );
 		
 		win_icon_gfx_.current_frame_x_ = 56;
-		if ( inventory_.victory( lv_select ) )
+		if ( Inventory::victory( lv_select ) )
 		{
 			win_icon_gfx_.current_frame_x_ = 40;
 		}
@@ -139,17 +124,12 @@ void OWInventory::render( int lv_select )
 
 	gem_icon_gfx_.render( { LEFT_EDGE, ROW_2, 8, 8 } );
 	
-	if ( inventory_.totalFundsShown() < 0 )
+	if ( Inventory::totalFundsShown() < 0 )
 	{
-		Text::renderNumber( inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontShade::DARK_MID_GRAY );
+		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontShade::DARK_MID_GRAY );
 	}
 	else
 	{
-		Text::renderNumber( inventory_.totalFundsShown(), AREA.x + 24, ROW_2, 9 );
+		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9 );
 	}
-};
-
-const Inventory& OWInventory::inventory() const
-{
-	return inventory_;
 };

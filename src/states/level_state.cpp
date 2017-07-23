@@ -1,4 +1,5 @@
 #include "input.hpp"
+#include "inventory.hpp"
 #include "main.hpp"
 #include "level_state.hpp"
 #include "message_state.hpp"
@@ -7,17 +8,17 @@
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 
-LevelState::LevelState( const Inventory& inventory, int lvname )
+LevelState::LevelState( int lvname )
 try :
 	GameState ( StateID::LEVEL_STATE ),
-	inventory_ ( inventory ),
+	inventory_screen_ (),
 	events_ (),
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
 	blocks_ ( level_.currentMap() )
 {
-	inventory_.registerBeenToLevel( lvname );
+	Inventory::levelStart( lvname );
 }
 catch ( const mezun::CantLoadTileset& e )
 {
@@ -27,7 +28,7 @@ catch ( const mezun::CantLoadTileset& e )
 		(
 			e.what(),
 			false,
-			std::make_unique<OverworldState> ( inventory_.inventory(), level_.id() ),
+			std::make_unique<OverworldState> (),
 			false
 		) )
 	);
@@ -42,14 +43,14 @@ void LevelState::update()
 		
 		blocks_.blocksFromMap( level_.currentMap(), camera_ );
 		blocks_.update( events_ );
-		level_.update( events_, sprites_, inventory_, blocks_, camera_ );
+		level_.update( events_, sprites_, blocks_, camera_ );
 		camera_.update();
 		sprites_.update( camera_, level_.currentMap(), events_, blocks_ );
-		sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
+		sprites_.interact( blocks_, level_, events_, camera_ );
 		sprites_.interactWithMap( level_.currentMap(), camera_ );
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
-		inventory_.update( events_, sprites_.hero() );
-		events_.update( level_, inventory_, sprites_, camera_, blocks_ );
+		inventory_screen_.update( events_, sprites_.hero() );
+		events_.update( level_, sprites_, camera_, blocks_ );
 
 		if ( events_.paletteChanged() )
 		{
@@ -66,7 +67,7 @@ void LevelState::update()
 			(
 				e.what(),
 				false,
-				std::make_unique<OverworldState> ( inventory_.inventory(), level_.id() ),
+				std::make_unique<OverworldState> (),
 				false
 			) )
 		);
@@ -81,7 +82,7 @@ void LevelState::stateRender()
 	blocks_.render( camera_, true );
 	sprites_.render( camera_, true );
 	level_.currentMap().renderFG( camera_ );
-	inventory_.render( level_.id(), events_ );
+	inventory_screen_.render( events_ );
 };
 
 void LevelState::init()
@@ -90,7 +91,7 @@ void LevelState::init()
 
 	try
 	{
-		sprites_.reset( level_, inventory_ );
+		sprites_.reset( level_ );
 	}
 	catch ( const mezun::InvalidSprite& e )
 	{
@@ -100,14 +101,13 @@ void LevelState::init()
 			(
 				e.what(),
 				false,
-				std::make_unique<OverworldState> ( inventory_.inventory(), level_.id() ),
+				std::make_unique<OverworldState> (),
 				false
 			) )
 		);
 	}
 
-	inventory_.init();
-	level_.init( sprites_.hero(), inventory_, events_ );
+	level_.init( sprites_.hero(), inventory_screen_, events_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };
 
@@ -119,7 +119,7 @@ void LevelState::testPause()
 		(
 			std::unique_ptr<GameState>
 			(
-				new PauseState( palette(), events_, inventory_.inventory().victory( level_.id() ) )
+				new PauseState( palette(), events_ )
 			)
 		);
 	}

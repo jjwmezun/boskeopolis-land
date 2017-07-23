@@ -21,7 +21,7 @@ class Block : public Object
 		Block& operator=( const Block& c );
 
 		void render( Camera& camera, bool priority = false ) const;
-		void interact( Sprite& sprite, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
+		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera );
 		int location() const;
 		int typeID() const;
 		bool hasType() const;

@@ -9,7 +9,7 @@ WindyGoal::WindyGoal( int wind_strength, Direction::Horizontal direction )
 
 WindyGoal::~WindyGoal() {};
 
-void WindyGoal::customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void WindyGoal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events )
 {
 	Sprite::resistance_x_ = wind_strength_;
 };

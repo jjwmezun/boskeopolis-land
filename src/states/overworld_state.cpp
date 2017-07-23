@@ -2,6 +2,7 @@
 #include "main.hpp"
 #include <fstream>
 #include "input.hpp"
+#include "inventory.hpp"
 #include "level_select_state.hpp"
 #include "level_state.hpp"
 #include "mezun_math.hpp"
@@ -11,12 +12,12 @@
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
 
-OverworldState::OverworldState( bool load )
+OverworldState::OverworldState()
 :
 	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),
 	camera_ (),
 	hero_ ( Unit::BlocksToPixels( 66 ), Unit::BlocksToPixels( 152 ) ),
-	inventory_ (),
+	inventory_screen_ (),
 	tiles_ (),
 	level_tiles_ (),
 	pal_change_tiles_ (),
@@ -58,75 +59,9 @@ OverworldState::OverworldState( bool load )
 	camera_trans_ ( false )
 {
 	mapData();
-	if ( load )
-	{
-		inventory_.load();
-		int level = inventory_.inventory().recentLevel();
 
-		if ( level != NULL )
-		{
-			for ( auto& l : level_tiles_ )
-			{
-				if ( l.lv() == level )
-				{
-					hero_.placeOnLv( l );
-					newPalette( lvPal( level ) );
-				}
-			}
-		}
-	}
-	camera_.center( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
-	mapEvents();
-};
+	int level = Inventory::currentLevel();
 
-OverworldState::OverworldState( const Inventory& inventory, int level )
-:
-	GameState( StateID::OVERWORLD_STATE, lvPal( level ) ),
-	camera_ (),
-	hero_ ( Unit::BlocksToPixels( 66 ), Unit::BlocksToPixels( 152 ) ),
-	inventory_ ( inventory ),
-	tiles_ (),
-	level_tiles_ (),
-	pal_change_tiles_ (),
-	level_selection_ ( NULL ),
-	water_gfx_
-	(
-		"tilesets/ow.png",
-		{
-			std::make_pair( 0, Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 1 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 2 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 3 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 4 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 5 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 6 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 7 ), Unit::BlocksToPixels( 6 ) )
-		}
-	),
-	lv_gfx_
-	(
-		"tilesets/ow.png",
-		{
-			std::make_pair( Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 9 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 10 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 11 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 12 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 13 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 13 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 12 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 11 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 10 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 9 ), Unit::BlocksToPixels( 6 ) ),
-			std::make_pair( Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 6 ) )
-		}
-	),
-	go_to_list_ ( false ),
-	camera_mode_ ( false ),
-	camera_trans_ ( false )
-{
-	mapData();
-	
 	if ( level != NULL )
 	{
 		for ( auto& l : level_tiles_ )
@@ -134,6 +69,7 @@ OverworldState::OverworldState( const Inventory& inventory, int level )
 			if ( l.lv() == level )
 			{
 				hero_.placeOnLv( l );
+				newPalette( lvPal( level ) );
 			}
 		}
 	}
@@ -172,14 +108,14 @@ void OverworldState::update()
 		interactions();
 		lv_gfx_.update();
 
-		inventory_.update( level_selection_ );
+		inventory_screen_.update( level_selection_ );
 
 		menu();
 		if ( level_selection_ > 0 )
 		{
 			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
-				Main::changeState( std::unique_ptr<GameState> ( new LevelState( inventory_.inventory(), level_selection_ ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( new LevelState( level_selection_ ) ) );
 			}
 		}
 	}
@@ -215,7 +151,7 @@ void OverworldState::stateRender()
 	}
 
 	hero_.render( camera_ );
-	inventory_.render( level_selection_ );
+	inventory_screen_.render( level_selection_ );
 	
 	if ( camera_mode_ )
 	{
@@ -412,7 +348,7 @@ void OverworldState::mapEvents()
 {
 	for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
 	{
-		if ( inventory_.inventory().victory( i ) )
+		if ( Inventory::victory( i ) )
 		{
 			eventByID( i );
 		}
@@ -481,7 +417,7 @@ void OverworldState::menu()
 		
 		Main::pushState
 		(
-			std::make_unique<LevelSelectState> ( inventory_.inventory(), level_selection_ )
+			std::make_unique<LevelSelectState> ( level_selection_ )
 		);
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )

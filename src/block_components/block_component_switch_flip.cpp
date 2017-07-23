@@ -5,7 +5,7 @@ BlockComponentSwitchFlip::BlockComponentSwitchFlip() {};
 
 BlockComponentSwitchFlip::~BlockComponentSwitchFlip() {};
 
-void BlockComponentSwitchFlip::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentSwitchFlip::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
 	if ( ready_ )
 	{

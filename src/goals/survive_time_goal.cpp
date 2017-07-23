@@ -1,6 +1,7 @@
+#include "clock.hpp"
 #include "survive_time_goal.hpp"
 #include "event_system.hpp"
-#include "inventory_level.hpp"
+#include "inventory.hpp"
 #include "mezun_helpers.hpp"
 #include "text.hpp"
 
@@ -12,17 +13,17 @@ SurviveTimeGoal::SurviveTimeGoal( int wait_time, std::string message )
 
 SurviveTimeGoal::~SurviveTimeGoal() {};
 
-void SurviveTimeGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void SurviveTimeGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
-	if ( inventory.clockTime() >= wait_time_ )
+	if ( Inventory::clock().totalSeconds() >= wait_time_ )
 	{
 		events.win();
 	}
 };
 
-void SurviveTimeGoal::customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void SurviveTimeGoal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events )
 {
-	inventory.clock().reset( Direction::Vertical::DOWN, wait_time_ );
+	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
 };
 
 const std::string SurviveTimeGoal::surviveMessage( int wait_time, std::string message ) const

@@ -11,7 +11,7 @@ PastRightEdgeGoal::PastRightEdgeGoal( std::string message )
 
 PastRightEdgeGoal::~PastRightEdgeGoal() {};
 
-void PastRightEdgeGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void PastRightEdgeGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
 	if ( sprites.hero().xPixels() > lvmap.widthPixels() + sprites.hero().widthPixels() )
 	{

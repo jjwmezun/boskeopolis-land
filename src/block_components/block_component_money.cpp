@@ -1,11 +1,11 @@
 #include "block_component_money.hpp"
-#include "inventory_level.hpp"
+#include "inventory.hpp"
 
 BlockComponentMoney::BlockComponentMoney( int amount ) : amount_ ( amount ) {};
 
 BlockComponentMoney::~BlockComponentMoney() {};
 
-void BlockComponentMoney::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentMoney::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
-	inventory.addFunds( amount_ );
+	Inventory::addFunds( amount_ );
 };

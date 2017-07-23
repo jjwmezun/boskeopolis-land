@@ -10,7 +10,7 @@ BlockComponentForceUpward::BlockComponentForceUpward()
 
 BlockComponentForceUpward::~BlockComponentForceUpward() {};
 
-void BlockComponentForceUpward::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockComponentForceUpward::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
 {
 	sprite.collideStopYBottom( collision.overlapYBottom() );
 };

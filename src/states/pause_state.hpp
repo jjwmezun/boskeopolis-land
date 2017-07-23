@@ -9,7 +9,7 @@ class PauseState : public GameState
 {
 
 	public:
-		PauseState( const Palette& palette, EventSystem& events, bool beaten );
+		PauseState( const Palette& palette, EventSystem& events );
 		~PauseState();
 
 		void update();

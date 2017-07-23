@@ -9,8 +9,8 @@ class DoNothingGoal : public Goal
 		DoNothingGoal( int wait_time = 60 );
 		~DoNothingGoal();
 
-		void customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
+		void customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events );
+		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events ) override;
 		
 	private:
 		const int wait_time_;

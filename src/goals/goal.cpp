@@ -4,18 +4,17 @@
 Goal::Goal( std::string message ) : message_ ( message ) {};
 Goal::~Goal() {};
 
-void Goal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
+void Goal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events )
 {
 };
 
-void Goal::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void Goal::init( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events )
 {
 	Main::tempMessage( message(), { "Sunny Yellow", 2 }, Text::FontShade::DARK_GRAY );
-
-	customInit( hero, inventory, events );
+	customInit( hero, inventory_screen, events );
 };
 
-void Goal::customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void Goal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events )
 {
 };
 

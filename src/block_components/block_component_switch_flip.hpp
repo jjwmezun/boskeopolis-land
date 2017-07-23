@@ -10,7 +10,7 @@ class BlockComponentSwitchFlip : public BlockComponent
 	public:
 		BlockComponentSwitchFlip();
 		~BlockComponentSwitchFlip();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera ) override;
 		void update( EventSystem& events, BlockType& type ) override;
 
 	private:

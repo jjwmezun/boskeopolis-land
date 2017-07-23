@@ -22,7 +22,7 @@ BlockType::BlockType
 
 BlockType::~BlockType() {};
 
-void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera )
+void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera )
 {
 	for ( int i = 0; i < components_.size(); ++i )
 	{
@@ -44,8 +44,12 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 		}
 
 		if ( can_interact )
+		{
 			if ( components_.at( i ) )
-				components_.at( i )->interact( collision, sprite, block, *this, level, events, inventory, camera );
+			{
+				components_.at( i )->interact( collision, sprite, block, *this, level, events, camera );
+			}
+		}
 	}
 };
 

@@ -15,8 +15,7 @@ class Collision;
 class OverworldState : public GameState
 {
 	public:
-		OverworldState( bool load );
-		OverworldState( const Inventory& inventory, int level = NULL );
+		OverworldState();
 		~OverworldState();
 
 		void update() override;
@@ -30,7 +29,7 @@ class OverworldState : public GameState
 		OWHero hero_;
 		int map_width_;
 		int map_height_;
-		OWInventory inventory_;
+		OWInventory inventory_screen_;
 		std::vector<OWTile> tiles_;
 		std::vector<OWLevel> level_tiles_;
 		std::vector<OWPalChange> pal_change_tiles_;

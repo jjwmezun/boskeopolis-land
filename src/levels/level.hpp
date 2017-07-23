@@ -31,12 +31,12 @@ class Level
 		int entranceY() const;
 		int cameraX() const;
 		int cameraY() const;
-		void warp( SpriteSystem& sprites, Camera& camera, InventoryLevel& inventory, EventSystem& events, BlockSystem& blocks );
+		void warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks );
 		std::string message() const;
 		int id() const;
 
 		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
-		void update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, BlockSystem& blocks, const Camera& camera );
+		void update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
 
 		static const std::string& NameOLevel( unsigned int n );
 		static unsigned int realLevelNum();
