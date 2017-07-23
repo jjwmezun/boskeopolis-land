@@ -14,7 +14,7 @@ SillyfishSprite::SillyfishSprite( int x, int y )
 
 SillyfishSprite::~SillyfishSprite() {};
 
-void SillyfishSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SillyfishSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	switch ( directionX() )
 	{

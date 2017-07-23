@@ -28,7 +28,7 @@ LilPipeMonsterSprite::LilPipeMonsterSprite( int x, int y, Direction::Vertical di
 
 LilPipeMonsterSprite::~LilPipeMonsterSprite() {};
 
-void LilPipeMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void LilPipeMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	switch ( direction_y_ )
 	{

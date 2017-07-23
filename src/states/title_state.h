@@ -13,9 +13,9 @@ class TitleState : public GameState
 		TitleState();
 		~TitleState();
 
-		void update( Game& game, const Input& input );
+		void update( const Input& input );
 		void stateRender();
-		void init( Game& game );
+		void init();
 
 	private:
 		enum class Option

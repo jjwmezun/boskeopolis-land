@@ -31,7 +31,7 @@ BouncyCloudBlockSprite::BouncyCloudBlockSprite( int x, int y )
 
 BouncyCloudBlockSprite::~BouncyCloudBlockSprite() {};
 
-void BouncyCloudBlockSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void BouncyCloudBlockSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( hit_box_.y < original_hit_box_.y + 99 || hit_box_.y > original_hit_box_.y - 99 )
 	{

@@ -1,5 +1,5 @@
 #include "event_system.h"
-#include "game.h"
+#include "main.h"
 #include "inventory_level.h"
 #include "level_message_state.h"
 #include "message_state.h"
@@ -116,7 +116,7 @@ void EventSystem::flipSwitch()
 	switch_changed_ = true;
 };
 
-void EventSystem::update( Level& level, InventoryLevel& inventory, Game& game, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::update( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
 	switch_changed_ = false;
 
@@ -125,12 +125,12 @@ void EventSystem::update( Level& level, InventoryLevel& inventory, Game& game, S
 		move_water_ = WATER_NULL;
 	}
 	
-	testMessage( level, game );
+	testMessage( level );
 	testWarp( level, inventory, sprites, camera, blocks );
-	testWinLoseOrQuit( level, inventory, game );
+	testWinLoseOrQuit( level, inventory );
 };
 
-void EventSystem::testMessage( Level& level, Game& game )
+void EventSystem::testMessage( Level& level )
 {
 	if ( message_lock_ && !message_ )
 	{
@@ -139,7 +139,7 @@ void EventSystem::testMessage( Level& level, Game& game )
 
 	if ( message_ && !message_lock_ )
 	{
-		game.pushState( std::unique_ptr<GameState> ( new LevelMessageState( level.currentMap().palette(), level.message() ) ) );
+		Main::pushState( std::unique_ptr<GameState> ( new LevelMessageState( level.currentMap().palette(), level.message() ) ) );
 		message_lock_ = true;
 	}
 	
@@ -156,27 +156,27 @@ void EventSystem::testWarp( Level& level, InventoryLevel& inventory, SpriteSyste
 	}
 };
 
-void EventSystem::testWinLoseOrQuit( Level& level, InventoryLevel& inventory, Game& game )
+void EventSystem::testWinLoseOrQuit( Level& level, InventoryLevel& inventory )
 {
 	if ( failed_ )
 	{
-		failEvent( level, inventory, game );
+		failEvent( level, inventory );
 	}
 	else if ( won_ )
 	{
-		winEvent( level, inventory, game );
+		winEvent( level, inventory );
 	}
 	else if ( quit_level_ )
 	{
-		quitEvent( level, inventory, game );
+		quitEvent( level, inventory );
 	}
 };
 
-void EventSystem::failEvent( Level& level, InventoryLevel& inventory, Game& game )
+void EventSystem::failEvent( Level& level, InventoryLevel& inventory )
 {
 	inventory.failed();
 
-	game.pushState
+	Main::pushState
 	(
 		std::unique_ptr<GameState>
 		(
@@ -193,11 +193,11 @@ void EventSystem::failEvent( Level& level, InventoryLevel& inventory, Game& game
 	);
 };
 
-void EventSystem::winEvent( Level& level, InventoryLevel& inventory, Game& game )
+void EventSystem::winEvent( Level& level, InventoryLevel& inventory )
 {	
 	inventory.won( level.id() );
 	
-	game.pushState
+	Main::pushState
 	(
 		std::unique_ptr<GameState>
 		(
@@ -214,10 +214,10 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory, Game& game 
 	);
 };
 
-void EventSystem::quitEvent( Level& level, InventoryLevel& inventory, Game& game )
+void EventSystem::quitEvent( Level& level, InventoryLevel& inventory )
 {	
 	inventory.quit( level.id() );
-	game.changeState( std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ) );
+	Main::changeState( std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ) );
 };
 
 bool EventSystem::waterShouldMove() const

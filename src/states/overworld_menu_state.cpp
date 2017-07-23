@@ -1,4 +1,5 @@
-#include "game.h"
+#include "input.h"
+#include "main.h"
 #include "overworld_menu_state.hpp"
 #include "title_state.h"
 
@@ -14,11 +15,11 @@ OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, con
 
 OverworldMenuState::~OverworldMenuState() {};
 
-void OverworldMenuState::update( Game& game, const Input& input )
+void OverworldMenuState::update( const Input& input )
 {
 	if ( input.pressed( Input::Action::MENU ) )
 	{
-		game.popState();
+		Main::popState();
 	}
 
 	if ( input.pressed( Input::Action::MOVE_DOWN ) )
@@ -44,21 +45,21 @@ void OverworldMenuState::update( Game& game, const Input& input )
 		switch ( option_selection_ )
 		{
 			case ( ( int )( Option::CONTINUE ) ):
-				game.popState();
+				Main::popState();
 			break;
 
 			case ( ( int )( Option::LIST ) ):
 				go_to_list_ = true;
-				game.popState();
+				Main::popState();
 			break;
 
 			case ( ( int )( Option::CAMERA ) ):
 				camera_mode_ = true;
-				game.popState();
+				Main::popState();
 			break;
 
 			case ( ( int )( Option::QUIT ) ):
-				game.changeState( std::make_unique<TitleState> () );
+				Main::changeState( std::make_unique<TitleState> () );
 			break;
 		}
 	}
@@ -81,6 +82,6 @@ void OverworldMenuState::stateRender()
 	}
 };
 
-void OverworldMenuState::init( Game& game )
+void OverworldMenuState::init()
 {
 };

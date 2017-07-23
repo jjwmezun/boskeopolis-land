@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "oxygen_meter.h"
 #include "render.h"
 #include "sprite.h"
@@ -43,7 +43,7 @@ void OxygenMeter::color( double percent )
 
 	if ( percent < .25 )
 	{
-		if ( Game::nextFrame( 2 ) )
+		if ( Main::nextFrame( 2 ) )
 		{
 			color_ = 2;
 		}

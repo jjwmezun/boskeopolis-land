@@ -22,7 +22,7 @@ FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal dire
 
 FallingBoughSprite::~FallingBoughSprite() {};
 
-void FallingBoughSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void FallingBoughSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( falling_timer_.on() )
 	{

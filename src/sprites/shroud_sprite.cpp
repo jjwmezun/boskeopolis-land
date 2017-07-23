@@ -16,7 +16,7 @@ ShroudSprite::ShroudSprite( int x, int y )
 
 ShroudSprite::~ShroudSprite() {};
 
-void ShroudSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void ShroudSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	switch ( state_ )
 	{

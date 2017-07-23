@@ -1,6 +1,7 @@
 #include "collision.h"
-#include "game.h"
+#include "main.h"
 #include <fstream>
+#include "input.h"
 #include "level_select_state.h"
 #include "level_state.h"
 #include "mezun_math.h"
@@ -145,7 +146,7 @@ OverworldState::OverworldState( const EventSystem& events, const Inventory& inve
 
 OverworldState::~OverworldState() {};
 
-void OverworldState::update( Game& game, const Input& input )
+void OverworldState::update( const Input& input )
 {
 	if ( camera_mode_ )
 	{
@@ -175,12 +176,12 @@ void OverworldState::update( Game& game, const Input& input )
 
 		inventory_.update( input, level_selection_ );
 
-		menu( game, input );
+		menu( input );
 		if ( level_selection_ > 0 )
 		{
 			if ( input.pressed( Input::Action::CONFIRM ) )
 			{
-				game.changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_.inventory(), level_selection_, game ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_.inventory(), level_selection_ ) ) );
 			}
 		}
 	}
@@ -224,13 +225,13 @@ void OverworldState::stateRender()
 	}
 };
 
-void OverworldState::init( Game& game )
+void OverworldState::init()
 {
 };
 
 void OverworldState::mapData()
 {
-	const std::string MAP_PATH = Game::resourcePath() + "maps" + Game::pathDivider() + "land-ow.json";
+	const std::string MAP_PATH = Main::resourcePath() + "maps" + Main::pathDivider() + "land-ow.json";
 
 	std::ifstream map_stream( MAP_PATH );
 
@@ -474,20 +475,20 @@ void OverworldState::eventByID( int id )
 	}
 };
 
-void OverworldState::menu( Game& game, const Input& input )
+void OverworldState::menu( const Input& input )
 {
 	if ( go_to_list_ )
 	{
 		go_to_list_ = false;
 		
-		game.pushState
+		Main::pushState
 		(
 			std::make_unique<LevelSelectState> ( events_, inventory_.inventory(), level_selection_ )
 		);
 	}
 	else if ( input.pressed( Input::Action::MENU ) )
 	{
-		game.pushState
+		Main::pushState
 		(
 			std::make_unique<OverworldMenuState> ( go_to_list_, camera_mode_, palette() )
 		);

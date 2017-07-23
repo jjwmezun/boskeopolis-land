@@ -11,7 +11,7 @@
 //===================================
 
     #include <fstream>
-    #include "game.h"
+    #include "main.h"
     #include <iostream>
 	#include "mezun_exceptions.h"
 	#include "mezun_helpers.h"
@@ -101,7 +101,7 @@
     {
 		if ( bg_ >= COLOR_LIMIT )
 		{
-			if ( Game::nextFrame( 256, 8 ) )
+			if ( Main::nextFrame( 256, 8 ) )
 				return color( 1 );
 			else
 				return color( 3 );
@@ -124,7 +124,7 @@
 
 	void Palette::loadPalettes() const
 	{
-		const std::string file_path = Game::resourcePath() + "palettes" + Game::pathDivider() + "palettes.json";
+		const std::string file_path = Main::resourcePath() + "palettes" + Main::pathDivider() + "palettes.json";
 	
 		std::ifstream ifs( file_path );
 

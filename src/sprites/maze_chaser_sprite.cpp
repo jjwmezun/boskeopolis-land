@@ -70,7 +70,6 @@
 		const Input& input,
 		Camera& camera,
 		Map& lvmap,
-		Game& game,
 		EventSystem& events,
 		SpriteSystem& sprites,
 		BlockSystem& blocks

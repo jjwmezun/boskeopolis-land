@@ -8,7 +8,7 @@
 #include <dirent.h>
 #include "event_system.h"
 #include <fstream>
-#include "game.h"
+#include "main.h"
 #include "level.h"
 #include "mezun_exceptions.h"
 #include "rapidjson/istreamwrapper.h"
@@ -198,9 +198,9 @@ int Level::id() const
 	return id_;
 };
 
-void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Game& game )
+void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
 {
-	goal_->init( hero, inventory, events, game );
+	goal_->init( hero, inventory, events );
 };
 
 void Level::update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, const Input& input, BlockSystem& blocks, const Camera& camera )
@@ -222,7 +222,7 @@ unsigned int Level::realLevelNum()
 
 Level Level::getLevel( int id )
 {
-	const std::string file_path = Game::resourcePath() + "levels" + Game::pathDivider() + Text::formatNumDigitPadding( id, 3 ) + ".json";
+	const std::string file_path = Main::resourcePath() + "levels" + Main::pathDivider() + Text::formatNumDigitPadding( id, 3 ) + ".json";
 
 	std::ifstream ifs( file_path );
 
@@ -401,7 +401,7 @@ Level Level::getLevel( int id )
 
 											if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
 											{
-												img = "bg" + Game::pathDivider() + bg[ "img" ].GetString();
+												img = "bg" + Main::pathDivider() + bg[ "img" ].GetString();
 											}
 											if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
 											{
@@ -681,7 +681,7 @@ Level Level::getLevel( int id )
 void Level::buildLevelList()
 {
 
-	const std::string path = Game::resourcePath() + "levels" + Game::pathDivider();
+	const std::string path = Main::resourcePath() + "levels" + Main::pathDivider();
 
 	if ( !mezun::checkDirectory( path ) )
 	{

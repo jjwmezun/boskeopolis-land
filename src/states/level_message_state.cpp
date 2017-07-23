@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "input.h"
 #include "level_message_state.h"
 #include "render.h"
@@ -25,11 +25,11 @@ LevelMessageState::LevelMessageState( const Palette& palette, std::string messag
 
 LevelMessageState::~LevelMessageState() {};
 
-void LevelMessageState::update( Game& game, const Input& input )
+void LevelMessageState::update( const Input& input )
 {
 	if ( input.pressedMain() )
 	{
-		game.popState();
+		Main::popState();
 	}
 };
 
@@ -39,4 +39,4 @@ void LevelMessageState::stateRender()
 	message_.render();
 };
 
-void LevelMessageState::init( Game& game ) {};
+void LevelMessageState::init() {};

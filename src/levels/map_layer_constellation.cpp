@@ -1,6 +1,6 @@
 #include "camera.h"
 #include <cassert>
-#include "game.h"
+#include "main.h"
 #include <iostream>
 #include "map_layer_constellation.h"
 #include "render.h"
@@ -14,7 +14,7 @@ MapLayerConstellation::MapLayerConstellation
 )
 :
 	MapLayer(),
-	texture_ ( "bg" + Game::pathDivider() + "constellation.png" ),
+	texture_ ( "bg" + Main::pathDivider() + "constellation.png" ),
 	scroll_speed_x_ ( scroll_speed_x ),
 	scroll_speed_y_ ( scroll_speed_y ),
 	height_ ( calculateWidth( map_height_blocks ) ),

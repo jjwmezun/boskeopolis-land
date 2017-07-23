@@ -81,7 +81,7 @@ bool Sprite::fellInBottomlessPit( Map& lvmap ) const
 	return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
 };
 
-void Sprite::update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void Sprite::update( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( !isDead() )
 	{
@@ -89,7 +89,7 @@ void Sprite::update( const Input& input, Camera& camera, Map& lvmap, Game& game,
 		{
 			component_->update( *this, *graphics_ );
 		}
-		customUpdate( input, camera, lvmap, game, events, sprites, blocks );
+		customUpdate( input, camera, lvmap, events, sprites, blocks );
 		status_.update( *this, *graphics_ );
 	}
 	else

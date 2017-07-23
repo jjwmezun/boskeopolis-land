@@ -5,7 +5,6 @@
 
 class BlockSystem;
 class Camera;
-class Game;
 class InventoryLevel;
 class Level;
 class SpriteSystem;
@@ -15,7 +14,7 @@ class EventSystem
 	public:
 		EventSystem();
 
-		void update( Level& level, InventoryLevel& inventory, Game& game, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
+		void update( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 		void reset();
 		
 		void win();
@@ -60,12 +59,12 @@ class EventSystem
 
 		void resetPalette();
 		
-		void testMessage( Level& level, Game& game );
+		void testMessage( Level& level );
 		void testWarp( Level& level, InventoryLevel& inventory, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
-		void testWinLoseOrQuit( Level& level, InventoryLevel& inventory, Game& game );
-		void failEvent( Level& level, InventoryLevel& inventory, Game& game );
-		void winEvent( Level& level, InventoryLevel& inventory, Game& game );
-		void quitEvent( Level& level, InventoryLevel& inventory, Game& game );
+		void testWinLoseOrQuit( Level& level, InventoryLevel& inventory );
+		void failEvent( Level& level, InventoryLevel& inventory );
+		void winEvent( Level& level, InventoryLevel& inventory );
+		void quitEvent( Level& level, InventoryLevel& inventory );
 };
 
 #endif // EVENT_SYSTEM_H

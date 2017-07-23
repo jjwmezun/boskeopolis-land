@@ -1,5 +1,5 @@
 #include "clock.h"
-#include "game.h"
+#include "main.h"
 #include "inventory.h"
 #include <fstream>
 #include "level.h"
@@ -320,7 +320,7 @@ void Inventory::update()
 
 void Inventory::save()
 {
-	if ( Game::savingAllowed() )
+	if ( Main::savingAllowed() )
 	{
 		saveBinary();
 	}
@@ -328,7 +328,7 @@ void Inventory::save()
 
 void Inventory::saveBinary()
 {
-	std::ofstream binofs( Game::savePath(), std::ios::out | std::ios::binary );
+	std::ofstream binofs( Main::savePath(), std::ios::out | std::ios::binary );
 
 		// Save total gems as 1st 4 bytes.
 			int32_t total_funds_block = total_funds_();
@@ -428,7 +428,7 @@ void Inventory::loadBinary()
 	// For each new clump, "current_block_start" is set to the previous "current_block_end",
 	// while "current_block_end" is set to where I calculate the new clump to end.
 
-	std::ifstream binifs ( Game::savePath(), std::ios::in | std::ios::binary | std::ios::ate );
+	std::ifstream binifs ( Main::savePath(), std::ios::in | std::ios::binary | std::ios::ate );
 
 		if ( binifs.is_open() )
 		{

@@ -38,7 +38,7 @@ RacerSprite::RacerSprite( int x, int y )
 
 RacerSprite::~RacerSprite() {};
 
-void RacerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void RacerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	actions( input );
 	//std::cout<<"( X: "<<Unit::PixelsToBlocks( xPixels() )<<"; Y: "<<yPixels()<<std::endl;

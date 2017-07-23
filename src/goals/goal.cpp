@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "goal.h"
 
 Goal::Goal( std::string message ) : message_ ( message ) {};
@@ -8,9 +8,9 @@ void Goal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& 
 {
 };
 
-void Goal::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Game& game )
+void Goal::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
 {
-	game.tempMessage( message(), { "Sunny Yellow", 2 }, Text::FontShade::DARK_GRAY );
+	Main::tempMessage( message(), { "Sunny Yellow", 2 }, Text::FontShade::DARK_GRAY );
 
 	customInit( hero, inventory, events );
 };

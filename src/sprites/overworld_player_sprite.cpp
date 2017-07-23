@@ -64,7 +64,7 @@ void OverworldPlayerSprite::sharedMovement( const Input& input, Camera& camera, 
 	camera.adjustCart( *this, lvmap );
 };
 
-void OverworldPlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void OverworldPlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	sharedMovement( input, camera, lvmap );
 };

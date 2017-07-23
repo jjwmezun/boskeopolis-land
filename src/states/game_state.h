@@ -1,8 +1,6 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-class Game;
-
 class Input;
 
 #include "camera.h"
@@ -33,9 +31,9 @@ class GameState
 
 		void render();
 
-		virtual void update( Game& game, const Input& input ) = 0;
+		virtual void update( const Input& input ) = 0;
 		virtual void stateRender() = 0;
-		virtual void init( Game& game ) = 0;
+		virtual void init() = 0;
 		void changePalette();
 		void newPalette( const Palette& pallete );
 		StateID id() const;

@@ -4,8 +4,6 @@
 class BlockSystem;
 class Camera;
 class EventSystem;
-class Game;
-
 class Input;
 class InventoryLevel;
 class MapLayer;
@@ -40,7 +38,7 @@ class SpriteSystem
 		SpriteSystem( const SpriteSystem& ) = delete;
 		SpriteSystem& operator= ( const SpriteSystem& ) = delete;
 
-		void update( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, BlockSystem& blocks );
+		void update( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks );
 		void render( Camera& camera, bool priority = false );
 		void interact( BlockSystem& blocks, Level& level, EventSystem& events, InventoryLevel& inventory, Camera& camera );
 		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap );

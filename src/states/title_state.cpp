@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "input.h"
 #include <fstream>
 #include "overworld_state.h"
@@ -10,7 +10,7 @@ TitleState::TitleState() : GameState( StateID::TITLE_STATE ) {};
 
 TitleState::~TitleState() {};
 
-void TitleState::update( Game& game, const Input& input )
+void TitleState::update( const Input& input )
 {
 	if ( input.pressed( Input::Action::MOVE_UP ) )
 	{
@@ -28,15 +28,15 @@ void TitleState::update( Game& game, const Input& input )
 		switch( (Option)selection_.value() )
 		{
 			case ( Option::NEW ):
-				game.changeState( std::unique_ptr<GameState> ( new OverworldState( false ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( new OverworldState( false ) ) );
 			break;
 
 			case ( Option::LOAD ):
-				game.changeState( std::unique_ptr<GameState> ( new OverworldState( true ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( new OverworldState( true ) ) );
 			break;
 
 			case ( Option::QUIT ):
-				game.quit();
+				Main::quit();
 			break;
 		}
 	}
@@ -65,9 +65,9 @@ void TitleState::stateRender()
 	logo_gfx_.render( logo_rect_, nullptr );
 };
 
-void TitleState::init( Game& game )
+void TitleState::init()
 {
-	std::ifstream ifs( Game::savePath() );
+	std::ifstream ifs( Main::savePath() );
 
 	if ( ifs.is_open() )
 	{

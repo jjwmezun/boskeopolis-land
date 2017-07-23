@@ -1,7 +1,7 @@
 #include "block.h"
 #include "camera.h"
 #include "collision.h"
-#include "game.h"
+#include "main.h"
 #include "event_system.h"
 #include <fstream>
 #include "input.h"
@@ -67,7 +67,7 @@ PlayerSprite::PlayerSprite
 
 PlayerSprite::~PlayerSprite() {};
 
-void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( !RacerSprite::DEBUG )
 	{
@@ -346,5 +346,5 @@ void PlayerSprite::testVX()
 
 void PlayerSprite::testFrameRate()
 {
-	std::cout<<Game::frame()<<std::endl;
+	std::cout<<Main::frame()<<std::endl;
 };

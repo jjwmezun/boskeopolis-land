@@ -1,9 +1,9 @@
-#ifndef PAUSE_STATE_H
-#define PAUSE_STATE_H
+#pragma once
 
 #include "event_system.h"
 #include "game_state.h"
 #include "text.h"
+#include <vector>
 
 class PauseState : public GameState
 {
@@ -12,9 +12,9 @@ class PauseState : public GameState
 		PauseState( const Palette& palette, EventSystem& events, bool beaten );
 		~PauseState();
 
-		void update( Game& game, const Input& input );
+		void update( const Input& input );
 		void stateRender();
-		void init( Game& game );
+		void init();
 
 
 	private:
@@ -42,5 +42,3 @@ class PauseState : public GameState
 
 		std::vector<Text> optionText( bool beaten ) const;
 };
-
-#endif // PAUSE_STATE_H

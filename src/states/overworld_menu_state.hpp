@@ -14,9 +14,9 @@ class OverworldMenuState : public GameState
 		OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal );
 		~OverworldMenuState();
 
-		void update( Game& game, const Input& input );
+		void update( const Input& input );
 		void stateRender();
-		void init( Game& game );
+		void init();
 
 	private:
 		enum class Option

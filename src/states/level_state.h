@@ -15,12 +15,12 @@ class LevelState : public GameState
 {
 
 	public:
-		LevelState( const EventSystem& events, const Inventory& inventory, int lvname, Game& game );
+		LevelState( const EventSystem& events, const Inventory& inventory, int lvname );
 		~LevelState();
 
-		void update( Game& game, const Input& input );
+		void update( const Input& input );
 		void stateRender();
-		void init( Game& game );
+		void init();
 
 	private:
 		InventoryLevel inventory_;
@@ -30,7 +30,7 @@ class LevelState : public GameState
 		SpriteSystem sprites_;
 		BlockSystem blocks_;
 		
-		void testPause( Game& game, const Input& input );
+		void testPause( const Input& input );
 };
 
 #endif // LEVEL_STATE_H

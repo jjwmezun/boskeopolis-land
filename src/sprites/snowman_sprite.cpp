@@ -20,7 +20,7 @@ SnowmanSprite::SnowmanSprite( int x, int y )
 
 SnowmanSprite::~SnowmanSprite() {};
 
-void SnowmanSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SnowmanSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	switch ( direction_x_ )
 	{

@@ -1,6 +1,6 @@
 #include <cassert>
 #include <cstdio>
-#include "game.h"
+#include "main.h"
 #include "render.h"
 #include <iostream>
 #include "mezun_exceptions.h"
@@ -221,7 +221,7 @@ namespace Render
 
 	const std::string setImgPath()
 	{
-		return Game::resourcePath() + IMG_RELATIVE_DIR + Game::pathDivider();
+		return Main::resourcePath() + IMG_RELATIVE_DIR + Main::pathDivider();
 	};
 
 	const std::string imgAddress( const std::string& relative_path )

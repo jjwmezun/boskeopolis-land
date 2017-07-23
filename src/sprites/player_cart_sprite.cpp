@@ -17,7 +17,7 @@ PlayerCartSprite::PlayerCartSprite( int x, int y, int max_hp, int hp )
 
 PlayerCartSprite::~PlayerCartSprite() {};
 
-void PlayerCartSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void PlayerCartSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( direction_x_ == Direction::Horizontal::RIGHT )
 	{

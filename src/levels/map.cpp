@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-#include "game.h"
+#include "main.h"
 #include "mezun_helpers.h"
 #include "map.h"
 #include "map_layer_tilemap.h"
@@ -26,7 +26,7 @@ Map Map::mapFromPath
 		std::vector<int> sprites = {};
 		std::vector<int> layer2 = {};
 
-		const std::string MAPS_DIR = Game::resourcePath() + "maps" + Game::pathDivider();
+		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
 
 		std::ifstream map_stream( MAP_PATH );

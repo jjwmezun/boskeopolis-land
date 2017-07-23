@@ -1,6 +1,6 @@
 #include "map_layer_image.h"
 #include "camera.h"
-#include "game.h"
+#include "main.h"
 #include "render.h"
 
 MapLayerImage::MapLayerImage
@@ -45,7 +45,7 @@ MapLayerImage::MapLayerImage
 
 void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera )
 {
-	if ( Game::nextFrame( 8 / animation_speed_ ) )
+	if ( Main::nextFrame( 8 / animation_speed_ ) )
 	{
 		switch( frame_dir_ )
 		{

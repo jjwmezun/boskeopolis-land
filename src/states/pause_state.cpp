@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "input.h"
 #include "pause_state.h"
 #include "level_select_state.h"
@@ -33,7 +33,7 @@ std::vector<Text> PauseState::optionText( bool beaten ) const
 
 PauseState::~PauseState() {};
 
-void PauseState::update( Game& game, const Input& input )
+void PauseState::update( const Input& input )
 {
 	if ( input.pressed( Input::Action::MOVE_UP ) || input.pressed( Input::Action::MOVE_DOWN ) )
 	{
@@ -56,12 +56,12 @@ void PauseState::update( Game& game, const Input& input )
 			events_.quitLevel();
 		}
 
-		game.popState();
+		Main::popState();
 	}
 
 	if ( input.pressed( Input::Action::MENU ) )
 	{
-		game.popState();
+		Main::popState();
 	}
 };
 
@@ -82,6 +82,6 @@ void PauseState::stateRender()
 	}
 };
 
-void PauseState::init( Game& game )
+void PauseState::init()
 {
 };

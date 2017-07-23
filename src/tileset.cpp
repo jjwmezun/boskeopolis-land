@@ -44,7 +44,7 @@
 #include "block_condition_not_ducking.h"
 #include "block_condition_rival.h"
 #include <fstream>
-#include "game.h"
+#include "main.h"
 #include "mezun_helpers.h"
 #include "mezun_exceptions.h"
 #include "rapidjson/istreamwrapper.h"
@@ -101,7 +101,7 @@ BlockType* Tileset::blockType( int type, int x, int y )
 
 std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::string& tileset ) const
 {	
-	const std::string path = Game::resourcePath() + "tilesets" + Game::pathDivider() + tileset + Game::pathDivider();
+	const std::string path = Main::resourcePath() + "tilesets" + Main::pathDivider() + tileset + Main::pathDivider();
 
 	if ( !mezun::checkDirectory( path ) )
 	{
@@ -146,7 +146,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 
 		std::unique_ptr<SpriteGraphics> graphics = nullptr;
 
-		std::string texture = "tilesets" + Game::pathDivider() + tileset + ".png";
+		std::string texture = "tilesets" + Main::pathDivider() + tileset + ".png";
 
 		if ( block.HasMember( "graphics" ) && block[ "graphics" ].IsObject() )
 		{

@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "input.h"
 #include "level.h"
 #include "level_state.h"
@@ -22,7 +22,7 @@ LevelSelectState::LevelSelectState( const EventSystem& events, const Inventory& 
 
 LevelSelectState::~LevelSelectState() {};
 
-void LevelSelectState::update( Game& game, const Input& input )
+void LevelSelectState::update( const Input& input )
 {
 	highlight_dest_.y = ( 8 * selection_() );
 
@@ -74,11 +74,11 @@ void LevelSelectState::update( Game& game, const Input& input )
 
 	if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && input.pressed( Input::Action::CONFIRM ) )
 	{
-		game.changeState( std::make_unique<OverworldState> ( events_, inventory_, level_ids_.at( selection_() ) ) );
+		Main::changeState( std::make_unique<OverworldState> ( events_, inventory_, level_ids_.at( selection_() ) ) );
 	}
 	else if ( input.pressed( Input::Action::MENU ) )
 	{
-		game.popState();
+		Main::popState();
 	}
 };
 
@@ -188,7 +188,7 @@ void LevelSelectState::stateRender()
 	title_.render();
 };
 
-void LevelSelectState::init( Game& game )
+void LevelSelectState::init()
 {
 	constexpr int X = 24;
 
@@ -256,7 +256,7 @@ void LevelSelectState::init( Game& game )
 	}
 	catch ( const mezun::CantLoadLevels& e )
 	{
-		game.pushState
+		Main::pushState
 		(
 			std::move( MessageState::error
 			(

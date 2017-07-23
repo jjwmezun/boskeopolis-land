@@ -1,4 +1,4 @@
-#include "game.h"
+#include "main.h"
 #include "input.h"
 #include "message_state.h"
 #include "render.h"
@@ -45,21 +45,21 @@ MessageState::MessageState
 
 MessageState::~MessageState() {};
 
-void MessageState::update( Game& game, const Input& input )
+void MessageState::update( const Input& input )
 {
 	if ( input.pressedMain() )
 	{
 		if ( pop_ )
 		{
-			game.popState();
+			Main::popState();
 		}
 		else if ( push_ )
 		{
-			game.pushState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
+			Main::pushState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
 		}
 		else
 		{
-			game.changeState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
+			Main::changeState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
 		}
 	}
 };
@@ -70,4 +70,4 @@ void MessageState::stateRender()
 	message_.render( nullptr, font_color_ );
 };
 
-void MessageState::init( Game& game ) {};
+void MessageState::init() {};

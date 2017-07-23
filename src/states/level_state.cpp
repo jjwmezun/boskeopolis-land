@@ -1,4 +1,5 @@
-#include "game.h"
+#include "input.h"
+#include "main.h"
 #include "level_state.h"
 #include "message_state.h"
 #include "mezun_exceptions.h"
@@ -6,7 +7,7 @@
 #include "pause_state.h"
 #include "level_select_state.h"
 
-LevelState::LevelState( const EventSystem& events, const Inventory& inventory, int lvname, Game& game )
+LevelState::LevelState( const EventSystem& events, const Inventory& inventory, int lvname )
 try :
 	GameState ( StateID::LEVEL_STATE ),
 	inventory_ ( inventory ),
@@ -20,7 +21,7 @@ try :
 }
 catch ( const mezun::CantLoadTileset& e )
 {
-	game.pushState
+	Main::pushState
 	(
 		std::move( MessageState::error
 		(
@@ -34,7 +35,7 @@ catch ( const mezun::CantLoadTileset& e )
 
 LevelState::~LevelState() {};
 
-void LevelState::update( Game& game, const Input& input )
+void LevelState::update( const Input& input )
 {
 	try
 	{
@@ -43,24 +44,24 @@ void LevelState::update( Game& game, const Input& input )
 		blocks_.update( events_ );
 		level_.update( events_, sprites_, inventory_, input, blocks_, camera_ );
 		camera_.update();
-		sprites_.update( input, camera_, level_.currentMap(), game, events_, blocks_ );
+		sprites_.update( input, camera_, level_.currentMap(), events_, blocks_ );
 		sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
 		sprites_.interactWithMap( level_.currentMap(), camera_ );
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
 		inventory_.update( events_, sprites_.hero() );
-		events_.update( level_, inventory_, game, sprites_, camera_, blocks_ );
+		events_.update( level_, inventory_, sprites_, camera_, blocks_ );
 
 		if ( events_.paletteChanged() )
 		{
 			newPalette( events_.getPalette() );
 		}
 
-		testPause( game, input );
+		testPause( input );
 		
 	}
 	catch ( const mezun::InvalidBlockType& e )
 	{
-		game.pushState
+		Main::pushState
 		(
 			std::move( MessageState::error
 			(
@@ -84,7 +85,7 @@ void LevelState::stateRender()
 	inventory_.render( level_.id(), events_ );
 };
 
-void LevelState::init( Game& game )
+void LevelState::init()
 {
 	newPalette( level_.currentMap().palette() );
 
@@ -94,7 +95,7 @@ void LevelState::init( Game& game )
 	}
 	catch ( const mezun::InvalidSprite& e )
 	{
-		game.pushState
+		Main::pushState
 		(
 			std::move( MessageState::error
 			(
@@ -107,16 +108,16 @@ void LevelState::init( Game& game )
 	}
 
 	inventory_.init();
-	level_.init( sprites_.hero(), inventory_, events_, game );
+	level_.init( sprites_.hero(), inventory_, events_ );
 	events_.reset();
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };
 
-void LevelState::testPause( Game& game, const Input& input )
+void LevelState::testPause( const Input& input )
 {
 	if ( input.pressed( Input::Action::MENU ) )
 	{
-		game.pushState
+		Main::pushState
 		(
 			std::unique_ptr<GameState>
 			(

@@ -11,7 +11,7 @@ class LilPipeMonsterSprite : public Sprite
 	public:
 		LilPipeMonsterSprite( int x, int y, Direction::Vertical direction );
 		~LilPipeMonsterSprite();
-		void customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+		void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 		
 	private:

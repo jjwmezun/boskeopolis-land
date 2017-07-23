@@ -28,7 +28,7 @@ CactooieSprite::CactooieSprite( int x, int y )
 
 CactooieSprite::~CactooieSprite() {};
 
-void CactooieSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, Game& game, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void CactooieSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	switch ( state_ )
 	{
