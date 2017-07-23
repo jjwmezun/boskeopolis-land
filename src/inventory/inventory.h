@@ -49,19 +49,22 @@ class Inventory
 		
 		void addMcGuffin();
 		int McGuffins() const;
+		
+		void heal();
+		void hurt();
+		int hp() const;
 
 		void update();
 		void save();
 		void load();
-
 
 		// Members
 		Counter funds_;
 		Counter total_funds_;
 
 		// Upgrades:
-		int heart_upgrades_ = 0;
-		bool oxygen_upgrade_ = false;
+		Counter heart_upgrades_;
+		bool oxygen_upgrade_;
 
 
 	private:
@@ -82,6 +85,7 @@ class Inventory
 		Counter total_funds_shown_;
 		int recent_level_;
 		int mcguffins_;
+		Counter hp_;
 
 		double percentPerLevel() const;
 		double percentPerVictory() const;

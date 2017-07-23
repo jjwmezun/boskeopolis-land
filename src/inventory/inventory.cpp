@@ -12,10 +12,13 @@ Inventory::Inventory()
 :
 	funds_ ( Counter( 0, FUNDS_MAX, 0 ) ),
 	total_funds_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
+	heart_upgrades_ ( 0, 2 ),
+	oxygen_upgrade_ ( false ),
 	funds_shown_ ( Counter( 0, FUNDS_MAX, 0 ) ),
 	total_funds_shown_ ( Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN ) ),
 	recent_level_ ( NULL ),
-	mcguffins_ ( 0 )
+	mcguffins_ ( 0 ),
+	hp_ ( 0, 3 + heart_upgrades_() )
 {
 
 	if ( victories_.empty() )
@@ -36,6 +39,8 @@ Inventory::Inventory( const Inventory& c )
 :
 	funds_ ( c.funds_ ),
 	total_funds_ ( c.total_funds_ ),
+	heart_upgrades_ ( c.heart_upgrades_ ),
+	oxygen_upgrade_ ( c.oxygen_upgrade_ ),
 	been_to_level_ ( c.been_to_level_ ),
 	victories_ ( c.victories_ ),
 	diamonds_ ( c.diamonds_ ),
@@ -44,7 +49,8 @@ Inventory::Inventory( const Inventory& c )
 	funds_shown_ ( { 0, FUNDS_MAX, 0 } ),
 	total_funds_shown_ ( c.total_funds_shown_ ),
 	recent_level_ ( c.recent_level_ ),
-	mcguffins_ ( c.mcguffins_ )
+	mcguffins_ ( c.mcguffins_ ),
+	hp_ ( c.hp_ )
 {};
 
 std::string Inventory::levelName( int level ) const
@@ -569,3 +575,7 @@ void Inventory::loadBinary()
 
 void Inventory::addMcGuffin() { ++mcguffins_; };
 int Inventory::McGuffins() const { return mcguffins_; };
+		
+void Inventory::heal() { ++hp_; };
+void Inventory::hurt() { --hp_; };
+int Inventory::hp() const { return hp_(); };
