@@ -13,7 +13,7 @@ class TitleState : public GameState
 		TitleState();
 		~TitleState();
 
-		void update( const Input& input );
+		void update();
 		void stateRender();
 		void init();
 

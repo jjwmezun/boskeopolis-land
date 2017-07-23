@@ -13,7 +13,7 @@
 //===================================
 
     class Block;
-    class Input;
+    
     class Sprite;
 
 
@@ -50,14 +50,14 @@
             );
             ~PlayerSprite();
 
-            virtual void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
             void duck();
             void unduck();
 
         protected:
             void deathAction( Camera& camera );
-            void actions( const Input& input );
+            void actions();
             std::unique_ptr<InputComponent> input_;
 			
 		private:

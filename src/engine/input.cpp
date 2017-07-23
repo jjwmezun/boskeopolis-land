@@ -1,69 +1,97 @@
 #include "input.h"
+#include <map>
 
-Input::Input()
+namespace Input
 {
-	reset();
-};
-
-void Input::reset()
-{
-	resetList( keys_pressed_ );
-	resetList( keys_released_ );
-	resetList( keys_held_ );
-};
-
-void Input::update()
-{
-	resetList( keys_pressed_ );
-	resetList( keys_released_ );
-};
-
-void Input::resetList( std::map<SDL_Keycode, bool>& list )
-{
-	for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+	// Private Variables
+	std::map<Action, SDL_Keycode> buttons_ =
 	{
-		list[ buttons_.at( ( Action )i ) ] = false;
-	}
-};
+		{ Action::CONFIRM     , SDLK_z      },
+		{ Action::CANCEL      , SDLK_x      },
+		{ Action::MENU        , SDLK_c      },
+		{ Action::JUMP        , SDLK_z      },
+		{ Action::RUN         , SDLK_x      },
+		{ Action::MOVE_UP     , SDLK_UP     },
+		{ Action::MOVE_RIGHT  , SDLK_RIGHT  },
+		{ Action::MOVE_DOWN   , SDLK_DOWN   },
+		{ Action::MOVE_LEFT   , SDLK_LEFT   },
+		{ Action::CAMERA_LEFT , SDLK_a      },
+		{ Action::CAMERA_RIGHT, SDLK_d      },
+		{ Action::CAMERA_UP   , SDLK_w      },
+		{ Action::CAMERA_DOWN , SDLK_s      },
+		{ Action::ESCAPE      , SDLK_ESCAPE }
+	};
+	std::map<SDL_Keycode, bool> keys_pressed_;
+	std::map<SDL_Keycode, bool> keys_pressed_before_released_;
+	std::map<SDL_Keycode, bool> keys_released_;
+	std::map<SDL_Keycode, bool> keys_held_;
 
-bool Input::pressed( Action action ) const
-{
-	return keys_pressed_.at( ( buttons_.at( action ) ) );
-};
 
-bool Input::pressedMain() const
-{
-	return pressed( Action::CONFIRM ) || pressed( Action::CANCEL ) || pressed( Action::MENU );
-};
+	// Private Function Declarations
+	void resetList( std::map<SDL_Keycode, bool>& list );
 
-bool Input::released( Action action ) const
-{
-	return keys_released_.at( buttons_.at( action ) );
-};
 
-bool Input::held( Action action ) const
-{
-	return keys_held_.at( buttons_.at( action ) );
-};
-
-void Input::keyPress( SDL_Keycode key )
-{
-	if ( !keys_pressed_before_released_[ key ] )
+	// Function Implementations
+	void reset()
 	{
-		keys_pressed_[ key ] = true;
-		keys_pressed_before_released_[ key ] = true;
-	}
-};
+		resetList( keys_pressed_ );
+		resetList( keys_released_ );
+		resetList( keys_held_ );
+	};
 
-void Input::keyRelease( SDL_Keycode key )
-{
-	keys_released_[ key ] = true;
-	keys_pressed_[ key ] = false;
-	keys_held_[ key ] = false;
-	keys_pressed_before_released_[ key ] = false;
-};
+	void update()
+	{
+		resetList( keys_pressed_ );
+		resetList( keys_released_ );
+	};
 
-void Input::keyHold( SDL_Keycode key )
-{
-	keys_held_[ key ] = true;
+	void resetList( std::map<SDL_Keycode, bool>& list )
+	{
+		for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+		{
+			list[ buttons_.at( ( Action )i ) ] = false;
+		}
+	};
+
+	bool pressed( Action action )
+	{
+		return keys_pressed_.at( ( buttons_.at( action ) ) );
+	};
+
+	bool pressedMain()
+	{
+		return pressed( Action::CONFIRM ) || pressed( Action::CANCEL ) || pressed( Action::MENU );
+	};
+
+	bool released( Action action )
+	{
+		return keys_released_.at( buttons_.at( action ) );
+	};
+
+	bool held( Action action )
+	{
+		return keys_held_.at( buttons_.at( action ) );
+	};
+
+	void keyPress( SDL_Keycode key )
+	{
+		if ( !keys_pressed_before_released_[ key ] )
+		{
+			keys_pressed_[ key ] = true;
+			keys_pressed_before_released_[ key ] = true;
+		}
+	};
+
+	void keyRelease( SDL_Keycode key )
+	{
+		keys_released_[ key ] = true;
+		keys_pressed_[ key ] = false;
+		keys_held_[ key ] = false;
+		keys_pressed_before_released_[ key ] = false;
+	};
+
+	void keyHold( SDL_Keycode key )
+	{
+		keys_held_[ key ] = true;
+	};
 };

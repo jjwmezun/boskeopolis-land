@@ -18,7 +18,7 @@ class LevelState : public GameState
 		LevelState( const EventSystem& events, const Inventory& inventory, int lvname );
 		~LevelState();
 
-		void update( const Input& input );
+		void update();
 		void stateRender();
 		void init();
 
@@ -30,7 +30,7 @@ class LevelState : public GameState
 		SpriteSystem sprites_;
 		BlockSystem blocks_;
 		
-		void testPause( const Input& input );
+		void testPause();
 };
 
 #endif // LEVEL_STATE_H

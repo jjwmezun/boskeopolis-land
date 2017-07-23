@@ -6,7 +6,7 @@ class Camera;
 class Collision;
 class EventSystem;
 class GameState;
-class Input;
+
 class InventoryLevel;
 class Level;
 class Map;
@@ -108,11 +108,11 @@ class Sprite : public Object
 		bool submerged_in_water_ = false;
 		Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
-		void update( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+		void update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
 		virtual void render( Camera& camera, bool priority = false );
 		void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 
-		virtual void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks ) = 0;
+		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks ) = 0;
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap ) = 0;
 		virtual void reset();
 

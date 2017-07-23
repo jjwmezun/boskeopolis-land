@@ -33,13 +33,13 @@ OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
 
 OverworldPlayerSprite::~OverworldPlayerSprite() {};
 
-void OverworldPlayerSprite::sharedMovement( const Input& input, Camera& camera, Map& lvmap )
+void OverworldPlayerSprite::sharedMovement( Camera& camera, Map& lvmap )
 {
-	if ( input.held( Input::Action::MOVE_LEFT ) )
+	if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
 		moveLeft();
 	}
-	else if ( input.held( Input::Action::MOVE_RIGHT ) )
+	else if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
 		moveRight();
 	}
@@ -48,11 +48,11 @@ void OverworldPlayerSprite::sharedMovement( const Input& input, Camera& camera, 
 		stopX();
 	}
 
-	if ( input.held( Input::Action::MOVE_UP ) )
+	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
 		moveUp();
 	}
-	else if ( input.held( Input::Action::MOVE_DOWN ) )
+	else if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		moveDown();
 	}
@@ -64,14 +64,14 @@ void OverworldPlayerSprite::sharedMovement( const Input& input, Camera& camera, 
 	camera.adjustCart( *this, lvmap );
 };
 
-void OverworldPlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void OverworldPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
-	sharedMovement( input, camera, lvmap );
+	sharedMovement( camera, lvmap );
 };
 
-void OverworldPlayerSprite::OWUpdate( const Input& input, Camera& camera, Map& lvmap )
+void OverworldPlayerSprite::OWUpdate( Camera& camera, Map& lvmap )
 {
-	sharedMovement( input, camera, lvmap );
+	sharedMovement( camera, lvmap );
 	position();
 
 	if ( graphics_ )

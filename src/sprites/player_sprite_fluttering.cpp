@@ -35,10 +35,10 @@
 
     PlayerSpriteFluttering::~PlayerSpriteFluttering() {};
 
-    void PlayerSpriteFluttering::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
 
-        if ( input.held( Input::Action::RUN ) )
+        if ( Input::held( Input::Action::RUN ) )
         {
             run();
         }
@@ -47,7 +47,7 @@
             stopRunning();
         }
 
-        if ( input.held( Input::Action::JUMP ) )
+        if ( Input::held( Input::Action::JUMP ) )
         {
             jump();
             jump_lock_ = true;
@@ -57,11 +57,11 @@
             jump_lock_ = false;
         }
 
-        if ( input.held( Input::Action::MOVE_LEFT ) && !input.held( Input::Action::MOVE_RIGHT ) )
+        if ( Input::held( Input::Action::MOVE_LEFT ) && !Input::held( Input::Action::MOVE_RIGHT ) )
         {
             moveLeft();
         }
-        else if ( input.held( Input::Action::MOVE_RIGHT ) && !input.held( Input::Action::MOVE_LEFT ) )
+        else if ( Input::held( Input::Action::MOVE_RIGHT ) && !Input::held( Input::Action::MOVE_LEFT ) )
         {
             moveRight();
         }
@@ -70,7 +70,7 @@
             stopX();
         }
 
-        if ( input.held( Input::Action::MOVE_UP ) )
+        if ( Input::held( Input::Action::MOVE_UP ) )
         {
             jump_start_speed_ = 6000;
             jump_top_speed_ = 10000;
@@ -81,7 +81,7 @@
             jump_top_speed_ = 7000;
         }
 
-        if ( input.held( Input::Action::MOVE_DOWN ) )
+        if ( Input::held( Input::Action::MOVE_DOWN ) )
         {
             gravity_start_speed_ = GRAVITY_START_SPEED*1.5;
             gravity_top_speed_ = GRAVITY_TOP_SPEED*1.5;

@@ -32,7 +32,7 @@
 
     HydrantSprite::~HydrantSprite() {};
 
-    void HydrantSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void HydrantSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( isDead() )
             block_interact_ = false;

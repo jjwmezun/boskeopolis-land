@@ -11,7 +11,7 @@ class SurviveTimeGoal : public Goal
 		~SurviveTimeGoal();
 
 		void customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events ) override;
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events, const Input& input ) override;
+		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
 
 	private:
 		const int wait_time_;

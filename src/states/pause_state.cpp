@@ -33,9 +33,9 @@ std::vector<Text> PauseState::optionText( bool beaten ) const
 
 PauseState::~PauseState() {};
 
-void PauseState::update( const Input& input )
+void PauseState::update()
 {
-	if ( input.pressed( Input::Action::MOVE_UP ) || input.pressed( Input::Action::MOVE_DOWN ) )
+	if ( Input::pressed( Input::Action::MOVE_UP ) || Input::pressed( Input::Action::MOVE_DOWN ) )
 	{
 		switch ( option_selection_ )
 		{
@@ -48,7 +48,7 @@ void PauseState::update( const Input& input )
 		}
 	}
 
-	if ( input.pressed( Input::Action::CONFIRM ) )
+	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 
 		if ( option_selection_ == PauseOption::PO_QUIT )
@@ -59,7 +59,7 @@ void PauseState::update( const Input& input )
 		Main::popState();
 	}
 
-	if ( input.pressed( Input::Action::MENU ) )
+	if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
 	}

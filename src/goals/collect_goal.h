@@ -9,7 +9,7 @@ class CollectGoal : public Goal
 		CollectGoal( int amount_needed, std::string message = mezun::emptyString() );
 		~CollectGoal();
 
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events, const Input& input ) override;
+		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
 
 	private:
 		const int amount_needed_;

@@ -34,7 +34,7 @@
 
     IceCubeSprite::~IceCubeSprite() {};
 
-    void IceCubeSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void IceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( in_water_ )
         {

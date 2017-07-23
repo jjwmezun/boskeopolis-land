@@ -146,17 +146,17 @@ OverworldState::OverworldState( const EventSystem& events, const Inventory& inve
 
 OverworldState::~OverworldState() {};
 
-void OverworldState::update( const Input& input )
+void OverworldState::update()
 {
 	if ( camera_mode_ )
 	{
-		if ( input.pressed( Input::Action::MENU ) )
+		if ( Input::pressed( Input::Action::MENU ) )
 		{
 			camera_mode_ = false;
 			camera_trans_ = true;
 		}
 		
-		camera_.move( input, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
+		camera_.move( Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
 	}
 	else if ( camera_trans_ )
 	{
@@ -169,17 +169,17 @@ void OverworldState::update( const Input& input )
 	{
 		level_selection_ = NULL;
 		water_gfx_.update();
-		hero_.update( input );
+		hero_.update();
 		camera_.adjust( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
 		interactions();
 		lv_gfx_.update();
 
-		inventory_.update( input, level_selection_ );
+		inventory_.update( level_selection_ );
 
-		menu( input );
+		menu();
 		if ( level_selection_ > 0 )
 		{
-			if ( input.pressed( Input::Action::CONFIRM ) )
+			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
 				Main::changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_.inventory(), level_selection_ ) ) );
 			}
@@ -475,7 +475,7 @@ void OverworldState::eventByID( int id )
 	}
 };
 
-void OverworldState::menu( const Input& input )
+void OverworldState::menu()
 {
 	if ( go_to_list_ )
 	{
@@ -486,7 +486,7 @@ void OverworldState::menu( const Input& input )
 			std::make_unique<LevelSelectState> ( events_, inventory_.inventory(), level_selection_ )
 		);
 	}
-	else if ( input.pressed( Input::Action::MENU ) )
+	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::pushState
 		(

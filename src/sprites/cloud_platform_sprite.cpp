@@ -45,7 +45,6 @@ CloudPlatformSprite::~CloudPlatformSprite() {};
 
 void CloudPlatformSprite::customUpdate
 (
-	const Input& input,
 	Camera& camera,
 	Map& lvmap,
 	EventSystem& events,

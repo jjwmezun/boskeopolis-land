@@ -12,7 +12,6 @@ namespace Main
 {
 	// Private Variables
 	constexpr char TITLE[] = "Boskeopolis Land";
-	Input input_ = {};
 	bool running_ = true;
 	bool state_change_ = false;
 	bool state_is_new_ = false;
@@ -56,6 +55,7 @@ namespace Main
 
 		setResourcePath();
 		Render::init( args );
+		Input::reset();
 		firstState();
 	};
 
@@ -84,18 +84,18 @@ namespace Main
 				}
 				if ( event.type == SDL_KEYDOWN )
 				{
-					input_.keyPress( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
-					input_.keyHold( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					Input::keyPress( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					Input::keyHold( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
 				}
 				if ( event.type == SDL_KEYUP )
 				{
-					input_.keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
 				}
 			}
 
 			if ( SDL_GetTicks() - ticks_ >= fpsMilliseconds() )
 			{
-				if ( input_.pressed( Input::Action::ESCAPE ) )
+				if ( Input::pressed( Input::Action::ESCAPE ) )
 				{
 					running_ = false;
 				}
@@ -111,16 +111,16 @@ namespace Main
 
 				if ( state_change_ )
 				{
-					input_.reset();
+					Input::reset();
 					state_change_ = false;
 				}
 
-				states_.back()->update( input_ );
+				states_.back()->update();
 
 				++frames_;
 				ticks_ = SDL_GetTicks();
 
-				input_.update();
+				Input::update();
 				render();
 			}
 		}

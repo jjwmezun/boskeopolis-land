@@ -21,11 +21,11 @@ void OWInventory::load()
 	inventory_.load();
 };
 
-void OWInventory::update( const Input& input, int lv_select )
+void OWInventory::update( int lv_select )
 {
 	inventory_.update();
 	
-	if ( !input.held( Input::Action::CANCEL ) )
+	if ( !Input::held( Input::Action::CANCEL ) )
 	{
 		show_challenges_lock_ = false;
 	}
@@ -34,7 +34,7 @@ void OWInventory::update( const Input& input, int lv_select )
 		show_challenges_lock_ = true;
 	}
 	
-	if ( !show_challenges_lock_ && input.held( Input::Action::CANCEL ) )
+	if ( !show_challenges_lock_ && Input::held( Input::Action::CANCEL ) )
 	{
 		show_challenges_ = true;
 	}

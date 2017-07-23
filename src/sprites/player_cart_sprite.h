@@ -14,7 +14,7 @@
 //===================================
 
     class Block;
-    class Input;
+    
     class Sprite;
 
 
@@ -32,7 +32,7 @@
         public:
             PlayerCartSprite( int x, int y, int max_hp, int hp );
             ~PlayerCartSprite();
-            void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 
         private:

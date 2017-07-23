@@ -2,7 +2,7 @@
 
 #include "unit.h"
 
-class Input;
+
 
 class OWCamera
 {
@@ -22,7 +22,7 @@ class OWCamera
 		void adjust( int x, int y, int w, int h, int map_w, int map_h );
 		void center( int x, int y, int w, int h, int map_w, int map_h );
 		bool backToHero( int x, int y, int w, int h, int map_w, int map_h );
-		void move( const Input& input, int map_w, int map_h );
+		void move( int map_w, int map_h );
 
 		constexpr sdl2::SDLRect relative( const sdl2::SDLRect& r ) const
 		{

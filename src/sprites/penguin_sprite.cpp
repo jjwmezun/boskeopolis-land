@@ -33,7 +33,7 @@
 
     PenguinSprite::~PenguinSprite() {};
 
-    void PenguinSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void PenguinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( direction_x_ == Direction::Horizontal::LEFT )
         {

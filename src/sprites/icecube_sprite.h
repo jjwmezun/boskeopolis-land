@@ -16,7 +16,7 @@
 //===================================
 
     class Block;
-    class Input;
+    
 
 
 // DEPENDENCIES
@@ -33,7 +33,7 @@
         public:
             IceCubeSprite( int x, int y, Direction::Horizontal direction = Direction::Horizontal::RIGHT, bool start_moving = false );
             ~IceCubeSprite();
-            void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
             void reset();
 

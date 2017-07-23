@@ -35,16 +35,16 @@ catch ( const mezun::CantLoadTileset& e )
 
 LevelState::~LevelState() {};
 
-void LevelState::update( const Input& input )
+void LevelState::update()
 {
 	try
 	{
 		
 		blocks_.blocksFromMap( level_.currentMap(), camera_ );
 		blocks_.update( events_ );
-		level_.update( events_, sprites_, inventory_, input, blocks_, camera_ );
+		level_.update( events_, sprites_, inventory_, blocks_, camera_ );
 		camera_.update();
-		sprites_.update( input, camera_, level_.currentMap(), events_, blocks_ );
+		sprites_.update( camera_, level_.currentMap(), events_, blocks_ );
 		sprites_.interact( blocks_, level_, events_, inventory_, camera_ );
 		sprites_.interactWithMap( level_.currentMap(), camera_ );
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
@@ -56,7 +56,7 @@ void LevelState::update( const Input& input )
 			newPalette( events_.getPalette() );
 		}
 
-		testPause( input );
+		testPause();
 		
 	}
 	catch ( const mezun::InvalidBlockType& e )
@@ -113,9 +113,9 @@ void LevelState::init()
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };
 
-void LevelState::testPause( const Input& input )
+void LevelState::testPause()
 {
-	if ( input.pressed( Input::Action::MENU ) )
+	if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::pushState
 		(

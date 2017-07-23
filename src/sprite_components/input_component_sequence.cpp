@@ -36,14 +36,14 @@
         ++frame_;
     };
 
-    bool InputComponentSequence::action1( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::JUMP ) : false; };
-    bool InputComponentSequence::action2( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::RUN ) : false; };
-    bool InputComponentSequence::action3( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MENU ) : false; };
-    bool InputComponentSequence::up( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_UP ) : false; };
-    bool InputComponentSequence::down( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_DOWN ) : false; };
-    bool InputComponentSequence::left( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_LEFT ) : false; };
-    bool InputComponentSequence::right( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_RIGHT ) : false; };
-    bool InputComponentSequence::cUp( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_UP ) : false; };
-    bool InputComponentSequence::cDown( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_DOWN ) : false; };
-    bool InputComponentSequence::cLeft( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_LEFT ) : false; };
-    bool InputComponentSequence::cRight( const Input& input ) { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_RIGHT ) : false; };
+    bool InputComponentSequence::action1() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::JUMP ) : false; };
+    bool InputComponentSequence::action2() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::RUN ) : false; };
+    bool InputComponentSequence::action3() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MENU ) : false; };
+    bool InputComponentSequence::up() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_UP ) : false; };
+    bool InputComponentSequence::down() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_DOWN ) : false; };
+    bool InputComponentSequence::left() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_LEFT ) : false; };
+    bool InputComponentSequence::right() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::MOVE_RIGHT ) : false; };
+    bool InputComponentSequence::cUp() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_UP ) : false; };
+    bool InputComponentSequence::cDown() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_DOWN ) : false; };
+    bool InputComponentSequence::cLeft() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_LEFT ) : false; };
+    bool InputComponentSequence::cRight() { return ( frame_.value() < sequence_of_inputs_.size() ) ? sequence_of_inputs_.at( frame_.value() ).at( (int)Input::Action::CAMERA_RIGHT ) : false; };

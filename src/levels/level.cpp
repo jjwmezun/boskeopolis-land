@@ -203,10 +203,10 @@ void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
 	goal_->init( hero, inventory, events );
 };
 
-void Level::update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, const Input& input, BlockSystem& blocks, const Camera& camera )
+void Level::update( EventSystem& events, SpriteSystem& sprites, InventoryLevel& inventory, BlockSystem& blocks, const Camera& camera )
 {
 	currentMap().update( events, sprites, blocks, camera );
-	goal_->update( sprites, inventory, currentMap(), events, input );
+	goal_->update( sprites, inventory, currentMap(), events );
 };
 
 unsigned int Level::realLevelNum()

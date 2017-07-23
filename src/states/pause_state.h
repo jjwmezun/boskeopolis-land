@@ -12,7 +12,7 @@ class PauseState : public GameState
 		PauseState( const Palette& palette, EventSystem& events, bool beaten );
 		~PauseState();
 
-		void update( const Input& input );
+		void update();
 		void stateRender();
 		void init();
 

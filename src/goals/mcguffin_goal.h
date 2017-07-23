@@ -9,7 +9,7 @@ class McGuffinGoal : public Goal
 		McGuffinGoal( int amount_needed, std::string message = mezun::emptyString() );
 		~McGuffinGoal();
 
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events, const Input& input ) override;
+		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
 		void customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events ) override;
 
 	private:

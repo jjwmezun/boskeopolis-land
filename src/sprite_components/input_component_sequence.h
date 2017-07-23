@@ -33,17 +33,17 @@
         public:
             InputComponentSequence( std::vector< std::array<bool, Input::NUM_O_ACTIONS> > sequence );
             void update();
-            bool action1( const Input& input );
-            bool action2( const Input& input );
-            bool action3( const Input& input );
-            bool up( const Input& input );
-            bool down( const Input& input );
-            bool left( const Input& input );
-            bool right( const Input& input );
-            bool cUp( const Input& input );
-            bool cDown( const Input& input );
-            bool cLeft( const Input& input );
-            bool cRight( const Input& input );
+            bool action1();
+            bool action2();
+            bool action3();
+            bool up();
+            bool down();
+            bool left();
+            bool right();
+            bool cUp();
+            bool cDown();
+            bool cLeft();
+            bool cRight();
 
         private:
             const std::vector< std::array<bool, Input::NUM_O_ACTIONS> > sequence_of_inputs_;

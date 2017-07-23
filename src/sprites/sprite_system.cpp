@@ -317,7 +317,7 @@ void SpriteSystem::destroySprite( int n )
 	}
 };
 
-void SpriteSystem::update( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks )
+void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
@@ -335,18 +335,18 @@ void SpriteSystem::update( const Input& input, Camera& camera, Map& lvmap, Event
 			case ( Sprite::CameraMovement::PAUSE_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( input, camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
 				}
 			break;
 
 			case ( Sprite::CameraMovement::PERMANENT ):
-				sprites_.at( i )->update( input, camera, lvmap, events, *this, blocks );
+				sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
 			break;
 
 			case ( Sprite::CameraMovement::RESET_INSTANTLY_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( input, camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
 				}
 				else
 				{
@@ -360,7 +360,7 @@ void SpriteSystem::update( const Input& input, Camera& camera, Map& lvmap, Event
 			case ( Sprite::CameraMovement::RESET_OFFSCREEN_AND_AWAY ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( input, camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
 				}
 				else
 				{
@@ -374,7 +374,7 @@ void SpriteSystem::update( const Input& input, Camera& camera, Map& lvmap, Event
 			case ( Sprite::CameraMovement::DESPAWN_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( input, camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
 				}
 				else
 				{
@@ -383,7 +383,7 @@ void SpriteSystem::update( const Input& input, Camera& camera, Map& lvmap, Event
 			break;
 		}
 	}
-	hero_->update( input, camera, lvmap, events, *this, blocks );
+	hero_->update( camera, lvmap, events, *this, blocks );
 
 	if ( hero_->deathFinished() )
 	{

@@ -12,7 +12,7 @@ LightningSprite::LightningSprite( int x, int y )
 
 LightningSprite::~LightningSprite() {};
 
-void LightningSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void LightningSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	graphics_->visible_ = on_;
 	++counter_;

@@ -25,9 +25,9 @@ LevelMessageState::LevelMessageState( const Palette& palette, std::string messag
 
 LevelMessageState::~LevelMessageState() {};
 
-void LevelMessageState::update( const Input& input )
+void LevelMessageState::update()
 {
-	if ( input.pressedMain() )
+	if ( Input::pressedMain() )
 	{
 		Main::popState();
 	}

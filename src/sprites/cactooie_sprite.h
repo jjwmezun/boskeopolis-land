@@ -2,7 +2,7 @@
 #define CACTOOIE_SPRITE_H
 
 class Block;
-class Input;
+
 
 #include "sprite.h"
 #include "timer_simple.h"
@@ -12,7 +12,7 @@ class CactooieSprite : public Sprite
 	public:
 		CactooieSprite( int x, int y );
 		~CactooieSprite();
-		void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 		
 	private:

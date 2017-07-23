@@ -45,9 +45,9 @@ MessageState::MessageState
 
 MessageState::~MessageState() {};
 
-void MessageState::update( const Input& input )
+void MessageState::update()
 {
-	if ( input.pressedMain() )
+	if ( Input::pressedMain() )
 	{
 		if ( pop_ )
 		{

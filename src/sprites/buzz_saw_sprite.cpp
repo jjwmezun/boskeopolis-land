@@ -30,7 +30,7 @@
 
     BuzzSawSprite::~BuzzSawSprite() {};
 
-    void BuzzSawSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void BuzzSawSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( graphics_ != nullptr )
         {

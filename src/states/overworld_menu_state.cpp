@@ -15,18 +15,18 @@ OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, con
 
 OverworldMenuState::~OverworldMenuState() {};
 
-void OverworldMenuState::update( const Input& input )
+void OverworldMenuState::update()
 {
-	if ( input.pressed( Input::Action::MENU ) )
+	if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
 	}
 
-	if ( input.pressed( Input::Action::MOVE_DOWN ) )
+	if ( Input::pressed( Input::Action::MOVE_DOWN ) )
 	{
 		++option_selection_;
 	}
-	else if ( input.pressed( Input::Action::MOVE_UP ) )
+	else if ( Input::pressed( Input::Action::MOVE_UP ) )
 	{
 		--option_selection_;
 	}
@@ -40,7 +40,7 @@ void OverworldMenuState::update( const Input& input )
 		option_selection_ = NUM_O_OPTIONS - 1;
 	}
 
-	if ( input.pressed( Input::Action::CONFIRM ) )
+	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 		switch ( option_selection_ )
 		{

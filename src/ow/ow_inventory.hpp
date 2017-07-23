@@ -5,14 +5,14 @@
 #include "unit.h"
 
 
-class Input;
+
 
 class OWInventory
 {
 	public:
 		OWInventory();
 		OWInventory( const Inventory& inventory );
-		void update( const Input& input, int lv_select );
+		void update( int lv_select );
 		void render( int lv_select );
 		void load();
 		const Inventory& inventory() const;

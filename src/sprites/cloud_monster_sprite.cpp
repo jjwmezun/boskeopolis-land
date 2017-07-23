@@ -22,10 +22,10 @@ void CloudMonsterSprite::render( Camera& camera, bool priority )
 	}
 };
 
-void CloudMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void CloudMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	lightning_.changeX( lightningPosition() );
-	lightning_.update( input, camera, lvmap, events, sprites, blocks );
+	lightning_.update( camera, lvmap, events, sprites, blocks );
 };
 
 void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )

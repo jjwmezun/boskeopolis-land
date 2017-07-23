@@ -56,7 +56,7 @@
 
     HeatBeamSprite::~HeatBeamSprite() {};
 
-    void HeatBeamSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void HeatBeamSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
 		if ( state_timer_.inTrans() )
 		{

@@ -11,7 +11,7 @@ class LevelMessageState : public GameState
 		LevelMessageState( const Palette& palette, std::string message );
 		~LevelMessageState();
 
-		void update( const Input& input );
+		void update();
 		void stateRender();
 		void init();
 		void backFromPop();

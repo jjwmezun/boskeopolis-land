@@ -17,7 +17,7 @@ PlayerCartSprite::PlayerCartSprite( int x, int y, int max_hp, int hp )
 
 PlayerCartSprite::~PlayerCartSprite() {};
 
-void PlayerCartSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( direction_x_ == Direction::Horizontal::RIGHT )
 	{
@@ -92,7 +92,7 @@ void PlayerCartSprite::customUpdate( const Input& input, Camera& camera, Map& lv
 		}
 	}
 
-	if ( input.held( Input::Action::JUMP ) )
+	if ( Input::held( Input::Action::JUMP ) )
 	{
 		jump();
 		jump_lock_ = true;
@@ -115,12 +115,12 @@ void PlayerCartSprite::customUpdate( const Input& input, Camera& camera, Map& lv
 		}
 	}
 
-	if ( input.held( Input::Action::MOVE_DOWN ) )
+	if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		duck();
 	}
 
-	if ( input.released( Input::Action::MOVE_DOWN ) )
+	if ( Input::released( Input::Action::MOVE_DOWN ) )
 	{
 		unduck();
 	}

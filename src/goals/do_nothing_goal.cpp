@@ -11,14 +11,14 @@ DoNothingGoal::DoNothingGoal( int wait_time )
 
 DoNothingGoal::~DoNothingGoal() {};
 
-void DoNothingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events, const Input& input )
+void DoNothingGoal::update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events )
 {
 	if
 	(
-		input.pressed( Input::Action::JUMP ) ||
-		input.pressed( Input::Action::MOVE_DOWN ) ||
-		input.pressed( Input::Action::MOVE_LEFT ) ||
-		input.pressed( Input::Action::MOVE_RIGHT )
+		Input::pressed( Input::Action::JUMP ) ||
+		Input::pressed( Input::Action::MOVE_DOWN ) ||
+		Input::pressed( Input::Action::MOVE_LEFT ) ||
+		Input::pressed( Input::Action::MOVE_RIGHT )
 	)
 	{
 		events.fail();

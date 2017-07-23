@@ -15,7 +15,7 @@
 //===================================
 
 class Block;
-class Input;
+
 
 
 // DEPENDENCIES
@@ -33,7 +33,7 @@ class CloudPlatformSprite : public Sprite
 	public:
 		CloudPlatformSprite( int x, int y, Direction::Horizontal direction );
 		~CloudPlatformSprite();
-		void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
 
 	private:

@@ -22,7 +22,7 @@ LevelSelectState::LevelSelectState( const EventSystem& events, const Inventory& 
 
 LevelSelectState::~LevelSelectState() {};
 
-void LevelSelectState::update( const Input& input )
+void LevelSelectState::update()
 {
 	highlight_dest_.y = ( 8 * selection_() );
 
@@ -39,12 +39,12 @@ void LevelSelectState::update( const Input& input )
 
 	if ( delay_ <= 0 )
 	{
-		if ( input.held( Input::Action::MOVE_UP ) )
+		if ( Input::held( Input::Action::MOVE_UP ) )
 		{
 			--selection_;
 			delay_ = delay_length_;
 		}
-		if ( input.held( Input::Action::MOVE_DOWN ) )
+		if ( Input::held( Input::Action::MOVE_DOWN ) )
 		{
 			++selection_;
 			delay_ = delay_length_;
@@ -56,7 +56,7 @@ void LevelSelectState::update( const Input& input )
 	}
 
 	show_challenges_ = false;
-	if ( input.held( Input::Action::MOVE_UP ) || input.held( Input::Action::MOVE_DOWN ) )
+	if ( Input::held( Input::Action::MOVE_UP ) || Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		delay_length_ = 4;
 	}
@@ -64,7 +64,7 @@ void LevelSelectState::update( const Input& input )
 	{
 		delay_length_ = 8;
 
-		if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && input.held( Input::Action::CANCEL ) )
+		if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && Input::held( Input::Action::CANCEL ) )
 		{
 			show_challenges_ = true;
 		}
@@ -72,11 +72,11 @@ void LevelSelectState::update( const Input& input )
 
 	inventory_.update();
 
-	if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && input.pressed( Input::Action::CONFIRM ) )
+	if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && Input::pressed( Input::Action::CONFIRM ) )
 	{
 		Main::changeState( std::make_unique<OverworldState> ( events_, inventory_, level_ids_.at( selection_() ) ) );
 	}
-	else if ( input.pressed( Input::Action::MENU ) )
+	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
 	}

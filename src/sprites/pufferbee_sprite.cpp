@@ -59,7 +59,7 @@
 
     PufferbeeSprite::~PufferbeeSprite() {};
 
-    void PufferbeeSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void PufferbeeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
         if ( component_ == nullptr )
         {

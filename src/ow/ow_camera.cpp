@@ -67,9 +67,9 @@ bool OWCamera::backToHero( int x, int y, int w, int h, int map_w, int map_h )
 	return close_nough_x && close_nough_y;
 };
 
-void OWCamera::move( const Input& input, int map_w, int map_h )
+void OWCamera::move( int map_w, int map_h )
 {
-	if ( input.held( Input::Action::RUN) )
+	if ( Input::held( Input::Action::RUN) )
 	{
 		speed_ = FAST_SPEED;
 	}
@@ -78,20 +78,20 @@ void OWCamera::move( const Input& input, int map_w, int map_h )
 		speed_ = NORMAL_SPEED;
 	}
 
-	if ( input.held( Input::Action::MOVE_LEFT ) )
+	if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
 		x_ -= speed_;
 	}
-	else if ( input.held( Input::Action::MOVE_RIGHT ) )
+	else if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
 		x_ += speed_;
 	}
 
-	if ( input.held( Input::Action::MOVE_UP ) )
+	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
 		y_ -= speed_;
 	}
-	else if ( input.held( Input::Action::MOVE_DOWN ) )
+	else if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		y_ += speed_;
 	}

@@ -13,9 +13,9 @@ OWHero::OWHero( int x, int y )
 	speed_ ( 2 )
 {};
 
-void OWHero::update( const Input& input )
+void OWHero::update()
 {
-	if ( input.held( Input::Action::RUN ) )
+	if ( Input::held( Input::Action::RUN ) )
 	{
 		speed_ = 4;
 	}
@@ -24,20 +24,20 @@ void OWHero::update( const Input& input )
 		speed_ = 2;
 	}
 	
-	if ( input.held( Input::Action::MOVE_RIGHT ) )
+	if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
 		x_ += speed_;
 	}
-	else if ( input.held( Input::Action::MOVE_LEFT ) )
+	else if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
 		x_ -= speed_;
 	}
 
-	if ( input.held( Input::Action::MOVE_DOWN ) )
+	if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		y_ += speed_;
 	}
-	else if ( input.held( Input::Action::MOVE_UP ) )
+	else if ( Input::held( Input::Action::MOVE_UP ) )
 	{
 		y_ -= speed_;
 	}

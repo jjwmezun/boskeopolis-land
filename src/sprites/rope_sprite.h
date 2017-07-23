@@ -14,7 +14,7 @@
 //===================================
 
     class Block;
-    class Input;
+    
 
 
 // DEPENDENCIES
@@ -32,7 +32,7 @@
         public:
             RopeSprite( int x, int y, int height = 18, int distance = 14, int speed = 1200 );
             ~RopeSprite();
-            void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
             void reset();
 

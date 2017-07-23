@@ -63,7 +63,7 @@ void SewerMonsterSprite::stateGraphics()
 	}
 };
 
-void SewerMonsterSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	
 	switch( state_ )

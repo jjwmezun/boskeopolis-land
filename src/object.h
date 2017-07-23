@@ -3,7 +3,7 @@
 class Camera;
 class Collision;
 
-class Input;
+
 
 #include "direction.h"
 #include <SDL2/SDL.h>

@@ -10,20 +10,20 @@ TitleState::TitleState() : GameState( StateID::TITLE_STATE ) {};
 
 TitleState::~TitleState() {};
 
-void TitleState::update( const Input& input )
+void TitleState::update()
 {
-	if ( input.pressed( Input::Action::MOVE_UP ) )
+	if ( Input::pressed( Input::Action::MOVE_UP ) )
 	{
 		--selection_;
 	}
-	else if ( input.pressed( Input::Action::MOVE_DOWN ) )
+	else if ( Input::pressed( Input::Action::MOVE_DOWN ) )
 	{
 		++selection_;
 	}
 
 	highlight_rect_.y = OPTIONS_TOP_Y + Unit::MiniBlocksToPixels( selection_.value() );
 
-	if ( input.pressed( Input::Action::CONFIRM ) )
+	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 		switch( (Option)selection_.value() )
 		{

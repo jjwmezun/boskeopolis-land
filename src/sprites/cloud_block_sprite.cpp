@@ -53,7 +53,7 @@
 
     CloudBlockSprite::~CloudBlockSprite() {};
 
-    void CloudBlockSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void CloudBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
     {
 		// For map loop
 		hit_box_.x = original_hit_box_.x;

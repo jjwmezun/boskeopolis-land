@@ -11,7 +11,7 @@ BadAppleSprite::BadAppleSprite( int x, int y )
 
 BadAppleSprite::~BadAppleSprite() {};
 
-void BadAppleSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void BadAppleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( isDead() )
 		block_interact_ = false;

@@ -20,7 +20,7 @@ class OverworldState : public GameState
 		OverworldState( const EventSystem& events, const Inventory& inventory, int level = NULL );
 		~OverworldState();
 
-		void update( const Input& input ) override;
+		void update() override;
 		void stateRender() override;
 		void init() override;
 		
@@ -48,7 +48,7 @@ class OverworldState : public GameState
 		Collision testCollision( const sdl2::SDLRect& lhs, const sdl2::SDLRect& rhs );
 		void mapEvents();
 		void eventByID( int id );
-		void menu( const Input& input );
+		void menu();
 		static Palette lvPal( int id );
 		void renderCameraArrows();
 };

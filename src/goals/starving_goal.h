@@ -12,7 +12,7 @@ class StarvingGoal : public Goal
 		~StarvingGoal();
 
 		void customInit( Sprite& hero, InventoryLevel& inventory, EventSystem& events ) override;
-		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events, const Input& input ) override;
+		void update( SpriteSystem& sprites, InventoryLevel& inventory, const Map& lvmap, EventSystem& events ) override;
 
 	private:
 		static constexpr int DELAY_LENGTH = 16;

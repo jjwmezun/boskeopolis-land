@@ -4,7 +4,7 @@
 
 class Collision;
 
-class Input;
+
 class OWCamera;
 class OWLevel;
 
@@ -15,7 +15,7 @@ class OWHero
 		static constexpr int H = 14;
 
 		OWHero( int x = 0, int y = 0 );
-		void update( const Input& input );
+		void update();
 		void render( const OWCamera& camera );
 		void placeOnLv( const OWLevel& lv );
 

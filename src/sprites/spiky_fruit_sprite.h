@@ -17,7 +17,7 @@
 //===================================
 
     class Block;
-    class Input;
+    
 
 
 // DEPENDENCIES
@@ -34,7 +34,7 @@
         public:
             SpikyFruitSprite( int x, int y );
             ~SpikyFruitSprite();
-            void customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+            void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
             void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
             void reset();
     };

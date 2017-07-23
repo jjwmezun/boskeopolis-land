@@ -56,7 +56,7 @@ PlayerSprite::PlayerSprite
 		max_hp,
 		hp
 	),
-	input_ ( std::move( input ) ),
+	input_ (),
 	door_lock_ ( true )
 {
 	if ( input_ == nullptr )
@@ -67,34 +67,34 @@ PlayerSprite::PlayerSprite
 
 PlayerSprite::~PlayerSprite() {};
 
-void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( !RacerSprite::DEBUG )
 	{
-		actions( input );
+		actions();
 
-		if ( input_->cLeft( input ) )
+		if ( input_->cLeft() )
 		{
 			camera.moveLeft();
 		}
-		if ( input_->cRight( input ) )
+		if ( input_->cRight() )
 		{
 			camera.moveRight();
 		}
-		if ( input_->cUp( input ) )
+		if ( input_->cUp() )
 		{
 			camera.moveUp();
 		}
-		if ( input_->cDown( input ) )
+		if ( input_->cDown() )
 		{
 			camera.moveDown();
 		}
 
-		if ( events.in_front_of_door_ && input_->up( input ) && !door_lock_ && on_ground_ )
+		if ( events.in_front_of_door_ && input_->up() && !door_lock_ && on_ground_ )
 		{
 			events.changeMap();
 		}
-		else if ( input_->up( input ) )
+		else if ( input_->up() )
 		{
 			door_lock_ = true;
 		}
@@ -102,7 +102,7 @@ void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap,
 
 		if ( door_lock_ )
 		{
-			if ( !input_->up( input ) )
+			if ( !input_->up() )
 			{
 				door_lock_ = false;
 			}
@@ -118,9 +118,9 @@ void PlayerSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap,
 	}
 };
 
-void PlayerSprite::actions( const Input& input )
+void PlayerSprite::actions()
 {
-	if ( input_->action2( input ) )
+	if ( input_->action2() )
 	{
 		run();
 	}
@@ -129,17 +129,17 @@ void PlayerSprite::actions( const Input& input )
 		stopRunning();
 	}
 
-	if ( input_->left( input ) && !input_->right( input ) && ( !isDucking() || !onGround() ) )
+	if ( input_->left() && !input_->right() && ( !isDucking() || !onGround() ) )
 	{
 		moveLeft();
 	}
 
-	if ( input_->right( input ) && !input_->left( input ) && ( !isDucking() || !onGround() ) )
+	if ( input_->right() && !input_->left() && ( !isDucking() || !onGround() ) )
 	{
 		moveRight();
 	}
 
-	if ( input_->down( input ) )
+	if ( input_->down() )
 	{
 		switch ( on_slope_ )
 		{
@@ -163,7 +163,7 @@ void PlayerSprite::actions( const Input& input )
 	
 	if ( !is_sliding_ )
 	{
-		if ( !input_->right( input ) && !input_->left( input ))
+		if ( !input_->right() && !input_->left())
 		{
 			if ( isDucking() )
 				stopDucking();
@@ -177,7 +177,7 @@ void PlayerSprite::actions( const Input& input )
 		top_speed_ = top_speed_run_;
 	}
 
-	if ( input_->action1( input ) )
+	if ( input_->action1() )
 	{
 			jump();
 			jump_lock_ = true;
@@ -200,22 +200,22 @@ void PlayerSprite::actions( const Input& input )
 		jump_lock_ = false;
 	}
 
-	if ( input_->up( input ) || input_->down( input ) )
+	if ( input_->up() || input_->down() )
 	{
 		if ( touching_ladder_ )
 			grabLadder();
 	}
 
-	if ( input.released( Input::Action::MOVE_UP ) )
+	if ( Input::released( Input::Action::MOVE_UP ) )
 	{
 		stopLookingUp();
 	}
 
-	if ( input_->up( input ) )
+	if ( input_->up() )
 	{
 		moveUp();
 	}
-	else if ( input_->down( input ) )
+	else if ( input_->down() )
 	{
 		moveDown();
 	}
@@ -246,7 +246,7 @@ void PlayerSprite::actions( const Input& input )
 	{
 		changeMovement( SpriteMovement::Type::GROUNDED );
 
-		if ( input_->action1( input ) )
+		if ( input_->action1() )
 			bounce();
 	}
 

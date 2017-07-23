@@ -1,7 +1,7 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-class Input;
+
 
 #include "camera.h"
 #include "palette.h"
@@ -31,7 +31,7 @@ class GameState
 
 		void render();
 
-		virtual void update( const Input& input ) = 0;
+		virtual void update() = 0;
 		virtual void stateRender() = 0;
 		virtual void init() = 0;
 		void changePalette();

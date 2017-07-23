@@ -9,7 +9,7 @@ SnowboulderSprite::SnowboulderSprite( int x, int y )
 
 SnowboulderSprite::~SnowboulderSprite() {};
 
-void SnowboulderSprite::customUpdate( const Input& input, Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SnowboulderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
 {
 	if ( vx_ < 0 )
 	{
