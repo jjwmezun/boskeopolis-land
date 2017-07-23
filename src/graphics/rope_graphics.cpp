@@ -16,7 +16,7 @@ void RopeGraphics::update( Sprite& sprite )
 {
 };
 
-void RopeGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
+void RopeGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, Uint8 alpha ) const
 {
 	const int LAST_BLOCK = bound_box.h - 8;
 

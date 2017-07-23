@@ -44,12 +44,12 @@ void SpriteGraphics::update()
 {
 };
 
-void SpriteGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
+void SpriteGraphics::render( Graphics& graphics, const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, Uint8 alpha ) const
 {
-	masterRender( graphics, bound_box, current_frame_x_, current_frame_y_, camera, priority );
+	masterRender( graphics, bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha );
 };
 
-void SpriteGraphics::masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority ) const
+void SpriteGraphics::masterRender( Graphics& graphics, const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha ) const
 {
 	if ( visible_ && ( ( priority && priority_ ) || ( !priority && !priority_ ) ) )
 	{
@@ -98,7 +98,7 @@ void SpriteGraphics::masterRender( Graphics& graphics, const sdl2::SDLRect& boun
 		else if ( flip_y_ )
 			flip = SDL_FLIP_VERTICAL;
 
-		graphics.renderObject( texture_, source, dest, flip, rotation_ );
+		graphics.renderObject( texture_, source, dest, flip, rotation_, alpha );
 
 	}
 };

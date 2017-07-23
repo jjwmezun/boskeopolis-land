@@ -1,5 +1,4 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#pragma once
 
 class Block;
 class BlockSystem;
@@ -289,5 +288,3 @@ class Sprite : public Object
 
 		TimerSimple on_ground_padding_;
 };
-
-#endif // SPRITE_H

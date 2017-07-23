@@ -1,5 +1,4 @@
-#ifndef SPRITE_STATUS_H
-#define SPRITE_STATUS_H
+#pragma once
 
 class SpriteGraphics;
 
@@ -36,5 +35,3 @@ class SpriteStatus
 
 		int oxygen_meter_;
 };
-
-#endif // SPRITE_STATUS_H

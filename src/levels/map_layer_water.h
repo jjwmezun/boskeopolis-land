@@ -18,12 +18,13 @@ class MapLayerWater : public MapLayer
 		void render( Graphics& graphics, Camera& camera ) const override;
 		void interact( Sprite& sprite ) override;
 
-
 	private:
+		static constexpr Uint8 ALPHA = 128;
+		static constexpr int COLOR = 4;
 		static constexpr int MOVE_SPEED = 500;
+
 		int y_;
 		AnimatedGraphics surface_;
-		const SpriteGraphics body_;
 		Counter x_offset_;
-		TimerRepeat move_speed_;
+		TimerRepeat animation_speed_;
 };
