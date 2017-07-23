@@ -9,10 +9,9 @@
 #include "overworld_state.hpp"
 #include "title_state.hpp"
 
-LevelSelectState::LevelSelectState( const EventSystem& events, const Inventory& inventory, int level )
+LevelSelectState::LevelSelectState( const Inventory& inventory, int level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Level Select", 1 } ),
-	events_ ( events ),
 	inventory_ ( inventory ),
 	prev_level_ ( level ),
 	selection_ ( Counter( level, Level::realLevelNum()-1, 0 ) ),
@@ -74,7 +73,7 @@ void LevelSelectState::update()
 
 	if ( inventory_.beenToLevel( level_ids_.at( selection_() ) ) && Input::pressed( Input::Action::CONFIRM ) )
 	{
-		Main::changeState( std::make_unique<OverworldState> ( events_, inventory_, level_ids_.at( selection_() ) ) );
+		Main::changeState( std::make_unique<OverworldState> ( inventory_, level_ids_.at( selection_() ) ) );
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
@@ -267,6 +266,4 @@ void LevelSelectState::init()
 			) )
 		);
 	}
-
-	events_.reset();
 };

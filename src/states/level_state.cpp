@@ -7,11 +7,11 @@
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 
-LevelState::LevelState( const EventSystem& events, const Inventory& inventory, int lvname )
+LevelState::LevelState( const Inventory& inventory, int lvname )
 try :
 	GameState ( StateID::LEVEL_STATE ),
 	inventory_ ( inventory ),
-	events_ ( events ),
+	events_ (),
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
@@ -27,7 +27,7 @@ catch ( const mezun::CantLoadTileset& e )
 		(
 			e.what(),
 			false,
-			std::make_unique<OverworldState> ( events_, inventory_.inventory(), level_.id() ),
+			std::make_unique<OverworldState> ( inventory_.inventory(), level_.id() ),
 			false
 		) )
 	);
@@ -57,7 +57,6 @@ void LevelState::update()
 		}
 
 		testPause();
-		
 	}
 	catch ( const mezun::InvalidBlockType& e )
 	{
@@ -67,7 +66,7 @@ void LevelState::update()
 			(
 				e.what(),
 				false,
-				std::make_unique<OverworldState> ( events_, inventory_.inventory(), level_.id() ),
+				std::make_unique<OverworldState> ( inventory_.inventory(), level_.id() ),
 				false
 			) )
 		);
@@ -101,7 +100,7 @@ void LevelState::init()
 			(
 				e.what(),
 				false,
-				std::make_unique<OverworldState> ( events_, inventory_.inventory(), level_.id() ),
+				std::make_unique<OverworldState> ( inventory_.inventory(), level_.id() ),
 				false
 			) )
 		);
@@ -109,7 +108,6 @@ void LevelState::init()
 
 	inventory_.init();
 	level_.init( sprites_.hero(), inventory_, events_ );
-	events_.reset();
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };
 

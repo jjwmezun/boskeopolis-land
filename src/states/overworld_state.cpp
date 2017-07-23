@@ -17,7 +17,6 @@ OverworldState::OverworldState( bool load )
 	camera_ (),
 	hero_ ( Unit::BlocksToPixels( 66 ), Unit::BlocksToPixels( 152 ) ),
 	inventory_ (),
-	events_ (),
 	tiles_ (),
 	level_tiles_ (),
 	pal_change_tiles_ (),
@@ -80,13 +79,12 @@ OverworldState::OverworldState( bool load )
 	mapEvents();
 };
 
-OverworldState::OverworldState( const EventSystem& events, const Inventory& inventory, int level )
+OverworldState::OverworldState( const Inventory& inventory, int level )
 :
 	GameState( StateID::OVERWORLD_STATE, lvPal( level ) ),
 	camera_ (),
 	hero_ ( Unit::BlocksToPixels( 66 ), Unit::BlocksToPixels( 152 ) ),
 	inventory_ ( inventory ),
-	events_ ( events ),
 	tiles_ (),
 	level_tiles_ (),
 	pal_change_tiles_ (),
@@ -181,7 +179,7 @@ void OverworldState::update()
 		{
 			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
-				Main::changeState( std::unique_ptr<GameState> ( new LevelState( events_, inventory_.inventory(), level_selection_ ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( new LevelState( inventory_.inventory(), level_selection_ ) ) );
 			}
 		}
 	}
@@ -483,7 +481,7 @@ void OverworldState::menu()
 		
 		Main::pushState
 		(
-			std::make_unique<LevelSelectState> ( events_, inventory_.inventory(), level_selection_ )
+			std::make_unique<LevelSelectState> ( inventory_.inventory(), level_selection_ )
 		);
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )

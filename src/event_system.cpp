@@ -17,8 +17,8 @@ EventSystem::EventSystem()
 	change_map_ ( false ),
 	switch_ ( false ),
 	switch_changed_ ( false ),
-	new_palette_ ( mezun::emptyString(), 0 ),
 	palette_changed_ ( false ),
+	new_palette_ ( mezun::emptyString(), 0 ),
 	move_water_ ( -1 ),
 	current_water_ ( - 1 ),
 	in_front_of_door_ ( false )
@@ -184,7 +184,7 @@ void EventSystem::failEvent( Level& level, InventoryLevel& inventory )
 			(
 				"¡Failure!",
 				false,
-				std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ),
+				std::unique_ptr<GameState> ( new OverworldState( inventory.inventory(), level.id() ) ),
 				false,
 				{ "Mountain Red", 2 },
 				Text::FontShade::DARK_GRAY
@@ -205,7 +205,7 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory )
 			(
 				"¡Success!",
 				false,
-				std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ),
+				std::unique_ptr<GameState> ( new OverworldState( inventory.inventory(), level.id() ) ),
 				false,
 				{ "Classic Green", 2 },
 				Text::FontShade::DARK_GRAY
@@ -217,7 +217,7 @@ void EventSystem::winEvent( Level& level, InventoryLevel& inventory )
 void EventSystem::quitEvent( Level& level, InventoryLevel& inventory )
 {	
 	inventory.quit( level.id() );
-	Main::changeState( std::unique_ptr<GameState> ( new OverworldState( *this, inventory.inventory(), level.id() ) ) );
+	Main::changeState( std::unique_ptr<GameState> ( new OverworldState( inventory.inventory(), level.id() ) ) );
 };
 
 bool EventSystem::waterShouldMove() const

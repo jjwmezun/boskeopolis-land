@@ -1,5 +1,4 @@
-#ifndef EVENT_SYSTEM_H
-#define EVENT_SYSTEM_H
+#pragma once
 
 #include "palette.hpp"
 
@@ -54,8 +53,8 @@ class EventSystem
 		bool change_map_;
 		bool switch_;
 		bool switch_changed_;
-		Palette new_palette_;
 		bool palette_changed_;
+		Palette new_palette_;
 
 		void resetPalette();
 		
@@ -66,5 +65,3 @@ class EventSystem
 		void winEvent( Level& level, InventoryLevel& inventory );
 		void quitEvent( Level& level, InventoryLevel& inventory );
 };
-
-#endif // EVENT_SYSTEM_H

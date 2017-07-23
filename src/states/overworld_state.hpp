@@ -1,7 +1,6 @@
 #pragma once
 
 #include "animated_graphics.hpp"
-#include "event_system.hpp"
 #include "game_state.hpp"
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
@@ -17,7 +16,7 @@ class OverworldState : public GameState
 {
 	public:
 		OverworldState( bool load );
-		OverworldState( const EventSystem& events, const Inventory& inventory, int level = NULL );
+		OverworldState( const Inventory& inventory, int level = NULL );
 		~OverworldState();
 
 		void update() override;
@@ -32,7 +31,6 @@ class OverworldState : public GameState
 		int map_width_;
 		int map_height_;
 		OWInventory inventory_;
-		EventSystem events_;
 		std::vector<OWTile> tiles_;
 		std::vector<OWLevel> level_tiles_;
 		std::vector<OWPalChange> pal_change_tiles_;

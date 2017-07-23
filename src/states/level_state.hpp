@@ -1,5 +1,4 @@
-#ifndef LEVEL_STATE_H
-#define LEVEL_STATE_H
+#pragma once
 
 #include "block_system.hpp"
 #include "camera.hpp"
@@ -15,7 +14,7 @@ class LevelState : public GameState
 {
 
 	public:
-		LevelState( const EventSystem& events, const Inventory& inventory, int lvname );
+		LevelState( const Inventory& inventory, int lvname );
 		~LevelState();
 
 		void update();
@@ -32,5 +31,3 @@ class LevelState : public GameState
 		
 		void testPause();
 };
-
-#endif // LEVEL_STATE_H
