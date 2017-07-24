@@ -1,12 +1,14 @@
 #pragma once
 
+class Health;
+
 #include "sprite_graphics.hpp"
 
 class OxygenMeter
 {
 	public:
 		OxygenMeter( int y );
-		void update( Sprite& hero );
+		void update( const Health& health );
 		void render() const;
 
 

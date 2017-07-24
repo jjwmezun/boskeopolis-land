@@ -1,6 +1,7 @@
 #include "block_system.hpp"
 #include <cassert>
 #include "collision.hpp"
+#include "health.hpp"
 #include "map.hpp"
 #include "maze_chaser_sprite.hpp"
 #include "maze_chaser_graphics.hpp"
@@ -49,7 +50,8 @@ void MazeChaserSprite::customUpdate
 	Map& lvmap,
 	EventSystem& events,
 	SpriteSystem& sprites,
-	BlockSystem& blocks
+	BlockSystem& blocks,
+	Health& health
 )
 {
 	if ( can_turn_ )
@@ -200,7 +202,7 @@ void MazeChaserSprite::customUpdate
 	}
 };
 
-void MazeChaserSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void MazeChaserSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {	
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -244,7 +246,7 @@ void MazeChaserSprite::customInteract( Collision& my_collision, Collision& their
 		//if ( their_collision.collideAny() )
 		if ( current_tile_ == getPlayerPosition( them ) )
 		{
-			them.hurt();
+			health.hurt();
 		}
 	}
 };

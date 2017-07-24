@@ -64,7 +64,7 @@ void OverworldPlayerSprite::sharedMovement( Camera& camera, Map& lvmap )
 	camera.adjustCart( *this, lvmap );
 };
 
-void OverworldPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void OverworldPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	sharedMovement( camera, lvmap );
 };
@@ -80,7 +80,7 @@ void OverworldPlayerSprite::OWUpdate( Camera& camera, Map& lvmap )
 	}
 };
 
-void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };
 

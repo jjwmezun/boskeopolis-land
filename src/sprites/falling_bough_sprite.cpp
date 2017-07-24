@@ -22,7 +22,7 @@ FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal dire
 
 FallingBoughSprite::~FallingBoughSprite() {};
 
-void FallingBoughSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void FallingBoughSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( falling_timer_.on() )
 	{
@@ -35,7 +35,7 @@ void FallingBoughSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	}
 };
 
-void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( Sprite::SpriteType::HERO ) )
 	{

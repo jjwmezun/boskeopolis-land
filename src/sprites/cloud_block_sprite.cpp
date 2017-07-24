@@ -53,13 +53,13 @@
 
     CloudBlockSprite::~CloudBlockSprite() {};
 
-    void CloudBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void CloudBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
     {
 		// For map loop
 		hit_box_.x = original_hit_box_.x;
     };
 
-    void CloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+    void CloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
     {
 		if ( them.hasType( SpriteType::HERO ) )
 		{

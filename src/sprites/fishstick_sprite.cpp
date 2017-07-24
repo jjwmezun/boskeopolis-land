@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "fishstick_sprite.hpp"
+#include "health.hpp"
 #include "sprite_graphics.hpp"
 
 FishstickSprite::FishstickSprite( int x, int y )
@@ -11,7 +12,7 @@ FishstickSprite::FishstickSprite( int x, int y )
 
 FishstickSprite::~FishstickSprite() {};
 
-void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( move_timer_.hit() )
 	{
@@ -52,10 +53,10 @@ void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		them.hurt();
+		health.hurt();
 	}
 };

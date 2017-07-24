@@ -1,4 +1,5 @@
 #include "collision.hpp"
+#include "health.hpp"
 #include "lightning_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -12,7 +13,7 @@ LightningSprite::LightningSprite( int x, int y )
 
 LightningSprite::~LightningSprite() {};
 
-void LightningSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void LightningSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	graphics_->visible_ = on_;
 	++counter_;
@@ -24,13 +25,13 @@ void LightningSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void LightningSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void LightningSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::HERO ) && on_ )
 	{
 		if ( my_collision.collideAny() )
 		{
-			them.hurt();
+			health.hurt();
 		}
 	}
 };

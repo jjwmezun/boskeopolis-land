@@ -11,7 +11,7 @@ SnowballSprite::SnowballSprite( int x, int y, Direction::Horizontal dir )
 
 SnowballSprite::~SnowballSprite() {};
 
-void SnowballSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SnowballSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( direction_x_ )
 	{
@@ -36,6 +36,6 @@ void SnowballSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 	++counter_;
 };
 
-void SnowballSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void SnowballSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };

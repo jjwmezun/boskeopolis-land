@@ -11,8 +11,8 @@ class SewerMonsterSprite : public Sprite
 	public:
 		SewerMonsterSprite( int x, int y );
 		~SewerMonsterSprite();
-		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
-		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
+		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
+		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
 
 	private:
 		static constexpr int GRAPHIC_WIDTH = 80;

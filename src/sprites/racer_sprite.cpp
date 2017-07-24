@@ -10,8 +10,6 @@ RacerSprite::RacerSprite( int x, int y )
 	(
 		x,
 		y,
-		3,
-		-1,
 		std::unique_ptr<InputComponent>
 		(
 			new InputComponentSequence
@@ -38,7 +36,7 @@ RacerSprite::RacerSprite( int x, int y )
 
 RacerSprite::~RacerSprite() {};
 
-void RacerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void RacerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	actions();
 	//std::cout<<"( X: "<<Unit::PixelsToBlocks( xPixels() )<<"; Y: "<<yPixels()<<std::endl;
@@ -50,23 +48,12 @@ void RacerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 
 	if ( DEBUG )
 	{
-		if ( fellInBottomlessPit( lvmap ) )
-		{
-			status_.kill();
-		}
 
 		//boundaries( camera, lvmap );
 		camera.adjust( *this, lvmap );
 	}
 };
 
-void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
-	if ( them.hasType( SpriteType::HERO ) )
-	{
-		if ( their_collision.collideAny() )
-		{
-			//them.hurt();
-		}
-	}
 };

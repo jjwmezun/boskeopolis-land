@@ -4,6 +4,7 @@
 #include "main.hpp"
 #include "event_system.hpp"
 #include <fstream>
+#include "health.hpp"
 #include "input.hpp"
 #include "input_component_player.hpp"
 #include "input_component_sequence.hpp"
@@ -19,8 +20,6 @@ PlayerSprite::PlayerSprite
 (
 	int x,
 	int y,
-	int max_hp,
-	int hp,
 	std::unique_ptr<InputComponent> input,
 	std::string&& texture,
 	SpriteType type,
@@ -52,9 +51,7 @@ PlayerSprite::PlayerSprite
 		true,
 		true,
 		false,
-		.2,
-		max_hp,
-		hp
+		.2
 	),
 	input_ (),
 	door_lock_ ( true )
@@ -67,7 +64,7 @@ PlayerSprite::PlayerSprite
 
 PlayerSprite::~PlayerSprite() {};
 
-void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( !RacerSprite::DEBUG )
 	{
@@ -88,6 +85,17 @@ void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 		if ( input_->cDown() )
 		{
 			camera.moveDown();
+		}
+		
+		if ( !is_dead_ && health.inWater() )
+		{
+			changeMovement( SpriteMovement::Type::SWIMMING );
+			health.outOfWater();
+		}
+		else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
+		{
+			changeMovement( SpriteMovement::Type::GROUNDED );
+			bounce();
 		}
 
 		if ( events.in_front_of_door_ && input_->up() && !door_lock_ && on_ground_ )
@@ -110,7 +118,20 @@ void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 
 		if ( fellInBottomlessPit( lvmap ) )
 		{
-			status_.kill();
+			kill();
+		}
+		else if ( health.drowned() )
+		{
+			kill();
+		}
+		
+		if ( health.flickerOff() )
+		{
+			graphics_->visible_ = false;
+		}
+		else
+		{
+			graphics_->visible_ = true;
 		}
 
 		boundaries( camera, lvmap );
@@ -242,14 +263,6 @@ void PlayerSprite::actions()
 	if ( !touching_ladder_ )
 		releaseLadder();
 
-	if ( !in_water_ && in_water_prev_ )
-	{
-		changeMovement( SpriteMovement::Type::GROUNDED );
-
-		if ( input_->action1() )
-			bounce();
-	}
-
 	if ( isDucking() )
 	{
 		jump_top_speed_ = JUMP_DUCK_TOP_SPEED;
@@ -260,18 +273,15 @@ void PlayerSprite::actions()
 	}
 
 	if ( abs( vx_ ) > top_speed_walk_ )
-		jump_top_speed_ *= 1.1;
-
-	if ( status_.drowned() )
 	{
-		kill();
+		jump_top_speed_ *= 1.1;
 	}
 
 	input_->update();
 
 };
 
-void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::ENEMY ) )
 	{
@@ -288,14 +298,14 @@ void PlayerSprite::customInteract( Collision& my_collision, Collision& their_col
 			}
 			else if ( my_collision.collideAny() && !them.isDead() )
 			{
-				hurt();
+				health.hurt();
 			}
 		}
 		else
 		{
 			if ( my_collision.collideAny() && !them.isDead() )
 			{
-				hurt();
+				health.hurt();
 			}
 		}
 	}

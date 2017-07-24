@@ -47,11 +47,10 @@ namespace Inventory
 	void fail();
 	void quit();
 
-	void heal();
-	void hurt();
-	int hp();
-
 	void update();
 	void save();
 	void load();
+	
+	int heartUpgrades();
+	bool haveOxygenUpgrade();
 };

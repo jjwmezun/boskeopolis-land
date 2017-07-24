@@ -63,7 +63,7 @@ void SewerMonsterSprite::stateGraphics()
 	}
 };
 
-void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	
 	switch( state_ )
@@ -125,7 +125,7 @@ void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	stateGraphics();	
 };
 
-void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

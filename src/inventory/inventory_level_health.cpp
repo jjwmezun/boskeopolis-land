@@ -1,21 +1,21 @@
-#include "inventory_health.hpp"
-#include "sprite.hpp"
+#include "health.hpp"
+#include "inventory_level_health.hpp"
 
-InventoryHealth::InventoryHealth( int y )
+InventoryLevelHealth::InventoryLevelHealth( int y )
 :
 	dest_ ( { 64, y, 8, 8 } ),
 	gfx_ ( "tilesets/universal.png", 32, 8 ),
 	hearts_shown_ ( 0 )
 {};
 
-void InventoryHealth::update( Sprite& hero )
+void InventoryLevelHealth::update( const Health& health )
 {
-	if ( hearts_shown_ > hero.status().hp() )
+	if ( hearts_shown_ > health.hp() )
 	{
 		--hearts_shown_;
 	}
 
-	if ( hearts_shown_ < hero.status().hp() )
+	if ( hearts_shown_ < health.hp() )
 	{
 		++hearts_shown_;
 	}
@@ -26,7 +26,7 @@ void InventoryHealth::update( Sprite& hero )
 	}
 };
 
-void InventoryHealth::render()
+void InventoryLevelHealth::render()
 {
 	const int heart_x_mem = dest_.x;
 

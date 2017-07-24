@@ -3,6 +3,7 @@
 class BlockType;
 class Camera;
 class EventSystem;
+class Health;
 class GameState;
 class Level;
 class Sprite;
@@ -19,7 +20,7 @@ class BlockSystem
 
 		void update( EventSystem& events );
 		void render( Camera& camera, bool priority = false );
-		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera );
+		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health );
 
 		void changeTileset( std::string new_tileset );
 		void blocksFromMap( const Map& lvmap, const Camera& camera );

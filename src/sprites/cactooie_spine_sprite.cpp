@@ -27,7 +27,7 @@ CactooieSpineSprite::CactooieSpineSprite( int x, int y, Direction::Horizontal di
 
 CactooieSpineSprite::~CactooieSpineSprite() {};
 
-void CactooieSpineSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void CactooieSpineSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( direction_x_ )
 	{
@@ -43,6 +43,6 @@ void CactooieSpineSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void CactooieSpineSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void CactooieSpineSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };

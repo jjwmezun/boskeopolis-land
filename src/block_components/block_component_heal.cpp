@@ -1,11 +1,11 @@
 #include "block_component_heal.hpp"
-#include "sprite.hpp"
+#include "health.hpp"
 
 BlockComponentHeal::BlockComponentHeal( int amount ) : amount_ ( amount ) {};
 
 BlockComponentHeal::~BlockComponentHeal() {};
 
-void BlockComponentHeal::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
+void BlockComponentHeal::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
-	sprite.heal( amount_ );
+	health.heal();
 };

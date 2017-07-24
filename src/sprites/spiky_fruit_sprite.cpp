@@ -34,14 +34,14 @@
 
     SpikyFruitSprite::~SpikyFruitSprite() {};
 
-    void SpikyFruitSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void SpikyFruitSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
     {
         if ( movement_->hasType( SpriteMovement::Type::GROUNDED ) )
             if ( graphics_ != nullptr )
                 graphics_->rotation_+=5;
     };
 
-    void SpikyFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+    void SpikyFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
     {
         if ( them.hasType( SpriteType::HERO ) )
         {

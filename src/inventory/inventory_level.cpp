@@ -20,11 +20,11 @@ InventoryLevel::InventoryLevel()
 	show_mcguffins_ ( false )
 {};
 
-void InventoryLevel::update( EventSystem& events, Sprite& hero )
+void InventoryLevel::update( EventSystem& events, const Health& health )
 {
-	oxygen_meter_.update( hero );
+	oxygen_meter_.update( health );
 	Inventory::update();
-	health_gfx_.update( hero );
+	health_gfx_.update( health );
 	ticker_.updateTicker();
 };
 

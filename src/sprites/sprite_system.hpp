@@ -1,9 +1,9 @@
-#ifndef SPRITE_SYSTEM_H
-#define SPRITE_SYSTEM_H
+#pragma once
 
 class BlockSystem;
 class Camera;
 class EventSystem;
+class Health;
 class MapLayer;
 
 #include <memory>
@@ -36,16 +36,16 @@ class SpriteSystem
 		SpriteSystem( const SpriteSystem& ) = delete;
 		SpriteSystem& operator= ( const SpriteSystem& ) = delete;
 
-		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks );
+		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health );
 		void render( Camera& camera, bool priority = false );
-		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera );
-		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap );
+		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health );
+		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health );
 		void reset( const Level& level );
 		void spawn( SpawnSprite type, int x, int y );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
 		void spawnSnowball( int x, int y, Direction::Horizontal direction );
 		Sprite& hero();
-		void interactWithMap( Map& lvmap, Camera& camera );
+		void interactWithMap( Map& lvmap, Camera& camera, Health& health );
 
 
 	private:
@@ -62,5 +62,3 @@ class SpriteSystem
 		
 		void testNumOSprites() const;
 };
-
-#endif // SPRITE_SYSTEM_H

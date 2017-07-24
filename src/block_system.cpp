@@ -36,11 +36,11 @@ void BlockSystem::render( Camera& camera, bool priority )
 	}
 };
 
-void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera )
+void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
 	for ( auto& b : blocks_ )
 	{
-		b.interact( sprite, level, events, camera );
+		b.interact( sprite, level, events, camera, health );
 	}
 };
 

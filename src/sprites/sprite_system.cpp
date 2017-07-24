@@ -16,6 +16,7 @@
 #include "fishstick_sprite.hpp"
 #include "guard_sprite.hpp"
 #include "handgun_sprite.hpp"
+#include "health.hpp"
 #include "heat_beam_sprite.hpp"
 #include "hydrant_graphics.hpp"
 #include "hydrant_sprite.hpp"
@@ -245,7 +246,7 @@ void SpriteSystem::spritesFromMap( const Map& lvmap )
 	}
 };
 
-void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera )
+void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
@@ -259,7 +260,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
 				)
 				{
-					blocks.interact( *sprites_.at( i ), level, events, camera );
+					blocks.interact( *sprites_.at( i ), level, events, camera, health );
 				}
 			}
 		}
@@ -267,7 +268,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 	if ( hero_->interactsWithBlocks() )
 	{
-		blocks.interact( *hero_, level, events, camera );
+		blocks.interact( *hero_, level, events, camera, health );
 	}
 };
 
@@ -289,13 +290,13 @@ void SpriteSystem::reset( const Level& level )
 	switch( level.currentMap().heroType() )
 	{
 		case ( HeroType::NORMAL ):
-			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY(), 2, hero_->hp() ) );
+			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::OVERWORLD ):
 			hero_.reset( new OverworldPlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::CART ):
-			hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY(), 2, hero_->hp()  ) );
+			hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::FLUTTERING ):
 			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
@@ -317,7 +318,7 @@ void SpriteSystem::destroySprite( int n )
 	}
 };
 
-void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks )
+void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
@@ -335,18 +336,18 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			case ( Sprite::CameraMovement::PAUSE_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
 				}
 			break;
 
 			case ( Sprite::CameraMovement::PERMANENT ):
-				sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
+				sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
 			break;
 
 			case ( Sprite::CameraMovement::RESET_INSTANTLY_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
 				}
 				else
 				{
@@ -360,7 +361,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			case ( Sprite::CameraMovement::RESET_OFFSCREEN_AND_AWAY ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
 				}
 				else
 				{
@@ -374,7 +375,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			case ( Sprite::CameraMovement::DESPAWN_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks );
+					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
 				}
 				else
 				{
@@ -383,7 +384,13 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			break;
 		}
 	}
-	hero_->update( camera, lvmap, events, *this, blocks );
+	
+	if ( health.hp() <= 0 )
+	{
+		hero_->kill();
+	}
+
+	hero_->update( camera, lvmap, events, *this, blocks, health );
 
 	if ( hero_->deathFinished() )
 	{
@@ -391,7 +398,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 	}
 };
 
-void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap )
+void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
@@ -401,8 +408,8 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 			{
 				if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
 				{
-					sprites_.at( i )->interact( *hero_, blocks, *this, lvmap );
-					hero_->interact( *sprites_.at( i ), blocks, *this, lvmap );
+					sprites_.at( i )->interact( *hero_, blocks, *this, lvmap, health );
+					hero_->interact( *sprites_.at( i ), blocks, *this, lvmap, health );
 				}
 
 				for ( int j = 0; j < sprites_.size(); ++j )
@@ -411,7 +418,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 						if ( i != j )
 							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) )
 								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
-									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap );
+									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health );
 				}
 			}
 		}
@@ -457,14 +464,9 @@ SpriteSystem::HeroType SpriteSystem::heroType( std::string property )
 	return HeroType::NORMAL;
 };
 
-void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera )
+void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera, Health& health )
 {
-	for ( auto& s : sprites_ )
-	{
-		lvmap.interact( *s, camera );
-	}
-
-	lvmap.interact( *hero_, camera );
+	lvmap.interact( *hero_, camera, health );
 };
 
 void SpriteSystem::testNumOSprites() const

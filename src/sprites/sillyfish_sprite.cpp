@@ -14,7 +14,7 @@ SillyfishSprite::SillyfishSprite( int x, int y )
 
 SillyfishSprite::~SillyfishSprite() {};
 
-void SillyfishSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SillyfishSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( directionX() )
 	{
@@ -92,6 +92,6 @@ void SillyfishSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 
 };
 
-void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };

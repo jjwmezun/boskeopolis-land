@@ -30,7 +30,7 @@
 
     BuzzSawSprite::~BuzzSawSprite() {};
 
-    void BuzzSawSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void BuzzSawSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
     {
         if ( graphics_ != nullptr )
         {
@@ -38,7 +38,7 @@
         }
     };
 
-    void BuzzSawSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+    void BuzzSawSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
     {
         if ( their_collision.collideAny() )
         {

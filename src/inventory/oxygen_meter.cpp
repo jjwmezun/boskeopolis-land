@@ -1,7 +1,7 @@
 #include "main.hpp"
 #include "oxygen_meter.hpp"
 #include "render.hpp"
-#include "sprite.hpp"
+#include "health.hpp"
 
 OxygenMeter::OxygenMeter( int y )
 :		
@@ -20,16 +20,16 @@ OxygenMeter::OxygenMeter( int y )
 {};
 
 
-void OxygenMeter::update( Sprite& hero )
+void OxygenMeter::update( const Health& health )
 {
-	if ( hero.in_water_ )
+	const double percent = health.oxygenPercent();
+
+	if ( health.inWater() || percent < .998 )
 	{
 		show_ = true;
-		const double percent = hero.status().oxygenPercent();
 		meter_bar_.w = round( WIDTH_PIXELS * percent );
 
 		color( percent );
-
 	}
 	else
 	{

@@ -59,7 +59,7 @@
 
     PufferbeeSprite::~PufferbeeSprite() {};
 
-    void PufferbeeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void PufferbeeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
     {
         if ( component_ == nullptr )
         {
@@ -104,7 +104,7 @@
         }
     };
 
-    void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+    void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 	{};
 
     Direction::Rotation PufferbeeSprite::randomDirection() const

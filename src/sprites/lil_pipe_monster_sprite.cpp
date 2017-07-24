@@ -28,7 +28,7 @@ LilPipeMonsterSprite::LilPipeMonsterSprite( int x, int y, Direction::Vertical di
 
 LilPipeMonsterSprite::~LilPipeMonsterSprite() {};
 
-void LilPipeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void LilPipeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( direction_y_ )
 	{
@@ -67,6 +67,6 @@ void LilPipeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	}
 };
 
-void LilPipeMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void LilPipeMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };

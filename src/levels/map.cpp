@@ -597,16 +597,16 @@ void Map::setChanged()
 	changed_ = true;
 };
 
-void Map::interact( Sprite& sprite, Camera& camera )
+void Map::interact( Sprite& sprite, Camera& camera, Health& health )
 {
 	for ( auto b : backgrounds_ )
 	{
-		b->interact( sprite );
+		b->interact( sprite, health );
 	}
 
 	for ( auto f : foregrounds_ )
 	{
-		f->interact( sprite );
+		f->interact( sprite, health );
 	}
 	
 	if ( scrollLoop() )

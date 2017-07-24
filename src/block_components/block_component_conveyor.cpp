@@ -8,7 +8,7 @@ BlockComponentConveyor::BlockComponentConveyor( Direction::Horizontal direction,
 
 BlockComponentConveyor::~BlockComponentConveyor() {};
 
-void BlockComponentConveyor::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
+void BlockComponentConveyor::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
 	sprite.addToX( x_effect_ );
 };

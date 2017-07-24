@@ -1,8 +1,9 @@
 #pragma once
 
 class EventSystem;
+class Health;
 
-#include "inventory_health.hpp"
+#include "inventory_level_health.hpp"
 #include "mezun_sdl2.hpp"
 #include "news_ticker.hpp"
 #include "oxygen_meter.hpp"
@@ -14,7 +15,7 @@ class InventoryLevel
 	public:
 		InventoryLevel();
 
-		void update( EventSystem& events, Sprite& hero );
+		void update( EventSystem& events, const Health& health );
 		void render( EventSystem& events );
 
 		bool show_mcguffins_;
@@ -42,7 +43,7 @@ class InventoryLevel
 		const Text switch_on_ = { "ON", 192, VERTICAL_POS, Text::FontShade::DARK_GRAY };
 		const Text switch_off_ = { "OFF", 192, VERTICAL_POS, Text::FontShade::DARK_GRAY };
 
-		InventoryHealth health_gfx_;
+		InventoryLevelHealth health_gfx_;
 		OxygenMeter oxygen_meter_;
 		NewsTicker ticker_;
 };

@@ -2,14 +2,15 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "render.hpp"
+#include "health.hpp"
 #include "input.hpp"
 #include "map.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_cart_graphics.hpp"
 
-PlayerCartSprite::PlayerCartSprite( int x, int y, int max_hp, int hp )
+PlayerCartSprite::PlayerCartSprite( int x, int y )
 :
-	Sprite( std::make_unique<PlayerCartGraphics> (), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8, max_hp, hp )
+	Sprite( std::make_unique<PlayerCartGraphics> (), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
 {
 	run();
 	direction_x_ = Direction::Horizontal::RIGHT;
@@ -17,18 +18,18 @@ PlayerCartSprite::PlayerCartSprite( int x, int y, int max_hp, int hp )
 
 PlayerCartSprite::~PlayerCartSprite() {};
 
-void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( direction_x_ == Direction::Horizontal::RIGHT )
 	{
 		if ( collide_right_ )
 		{
-			status_.hurt();
+			health.hurt();
 		}
 
 		if ( collide_bottom_ )
 		{
-			status_.hurt();
+			health.hurt();
 		}
 
 		if ( acceleration_x_ < 0 )
@@ -47,12 +48,12 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	{
 		if ( collide_left_ )
 		{
-			status_.hurt();
+			health.hurt();
 		}
 
 		if ( collide_bottom_ )
 		{
-			status_.hurt();
+			health.hurt();
 		}
 
 		if ( acceleration_x_ > 0 )
@@ -132,13 +133,13 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	if (  fellInBottomlessPit( lvmap ) )
 	{
-		status_.kill();
+		kill();
 	}
 
 	camera.adjustCart( *this, lvmap );
 };
 
-void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
 	{
@@ -156,12 +157,12 @@ void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their
 			}
 			else if ( !them.isDead() )
 			{
-				hurt();
+				health.hurt();
 			}
 		}
 		else if ( !them.isDead() )
 		{
-			hurt();
+			health.hurt();
 		}
 	}
 };

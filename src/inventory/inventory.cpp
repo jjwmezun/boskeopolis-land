@@ -36,8 +36,6 @@ namespace Inventory
 	void saveBinary();
 	void loadBinary();
 	
-	int maxHP();
-	
 
 	// Private Variables
 	constexpr bool DEFAULT_VICTORY        = false;
@@ -53,6 +51,7 @@ namespace Inventory
 	constexpr int  TOTAL_FUNDS_MAX_DIGITS = 9;
 	constexpr int  FUNDS_SPEED            = 25;
 	constexpr int  TOTAL_FUNDS_SPEED      = 100;
+	constexpr int  MAX_HEART_UPGRADES     = 3;
 
 	int mcguffins_ = 0;
 	bool oxygen_upgrade_ = false;
@@ -61,9 +60,8 @@ namespace Inventory
 	Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
 	Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
 	Counter current_level_ = Counter( 0, Level::NUM_O_LEVELS, 0 );
-	Counter heart_upgrades_ = Counter( 0, 2 );
-	Counter hp_ = Counter( maxHP(), maxHP(), 0 );
-	
+	Counter heart_upgrades_ = Counter( 0, MAX_HEART_UPGRADES );
+
 	bool been_to_level_[ Level::NUM_O_LEVELS ];
 	bool victories_[ Level::NUM_O_LEVELS ];
 	bool diamonds_[ Level::NUM_O_LEVELS ];
@@ -91,7 +89,6 @@ namespace Inventory
 		total_funds_shown_ = 0;
 		current_level_ = 0;
 		heart_upgrades_ = 0;
-		hp_ = maxHP();
 		mcguffins_ = 0;
 		oxygen_upgrade_ = false;
 	};
@@ -661,10 +658,6 @@ namespace Inventory
 		}
 	};
 	
-	void heal() { ++hp_; };
-	void hurt() { --hp_; };
-	int hp() { return hp_(); };
-	
 	void addFunds( int n )
 	{
 		funds_ += n;
@@ -690,8 +683,13 @@ namespace Inventory
 		return clock_;
 	};
 	
-	int maxHP()
+	int heartUpgrades()
 	{
-		return 3 + heart_upgrades_();
+		return heart_upgrades_();
+	};
+
+	bool haveOxygenUpgrade()
+	{
+		return oxygen_upgrade_;
 	};
 };

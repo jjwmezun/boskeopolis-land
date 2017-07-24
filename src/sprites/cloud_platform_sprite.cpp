@@ -49,7 +49,8 @@ void CloudPlatformSprite::customUpdate
 	Map& lvmap,
 	EventSystem& events,
 	SpriteSystem& sprites,
-	BlockSystem& blocks
+	BlockSystem& blocks,
+	Health& health
 )
 {
 	switch( direction_x_ )
@@ -73,7 +74,8 @@ void CloudPlatformSprite::customInteract
 	Sprite& them,
 	BlockSystem& blocks,
 	SpriteSystem& sprites,
-	Map& lvmap
+	Map& lvmap,
+	Health& health
 )
 {
 	if ( them.hasType( SpriteType::HERO ) )

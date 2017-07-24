@@ -1,20 +1,18 @@
 #pragma once
 
-class Sprite;
+class Health;
 
 #include "sprite_graphics.hpp"
 
-class InventoryHealth
+class InventoryLevelHealth
 {
 	public:
-		InventoryHealth( int y );
-		void update( Sprite& hero );
+		InventoryLevelHealth( int y );
+		void update( const Health& health );
 		void render();
-
 
 	private:
 		sdl2::SDLRect dest_;
 		const SpriteGraphics gfx_;
 		int hearts_shown_;
-
 };

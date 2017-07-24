@@ -16,7 +16,7 @@ ShroudSprite::ShroudSprite( int x, int y )
 
 ShroudSprite::~ShroudSprite() {};
 
-void ShroudSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void ShroudSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( state_ )
 	{
@@ -65,7 +65,7 @@ void ShroudSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	activated_ = false;
 };
 
-void ShroudSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void ShroudSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

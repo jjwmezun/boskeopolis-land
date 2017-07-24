@@ -1,6 +1,7 @@
 #pragma once
 
 class BlockType;
+class Health;
 class Map;
 class Sprite;
 class SpriteGraphics;
@@ -21,7 +22,7 @@ class Block : public Object
 		Block& operator=( const Block& c );
 
 		void render( Camera& camera, bool priority = false ) const;
-		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera );
+		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health );
 		int location() const;
 		int typeID() const;
 		bool hasType() const;

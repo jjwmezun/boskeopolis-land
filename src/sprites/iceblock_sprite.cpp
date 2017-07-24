@@ -33,7 +33,7 @@
 
     IceBlockSprite::~IceBlockSprite() {};
 
-    void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
     {
         switch ( crack_state_ )
         {
@@ -118,7 +118,7 @@
         }
     };
 
-    void IceBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+    void IceBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
     {
         if ( their_collision.collideAny() )
         {

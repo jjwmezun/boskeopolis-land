@@ -6,6 +6,7 @@ class Camera;
 class Collision;
 class EventSystem;
 class GameState;
+class Health;
 class Level;
 class Map;
 class SpriteGraphics;
@@ -19,7 +20,7 @@ class SpriteSystem;
 #include <SDL2/SDL.h>
 #include "sprite_component.hpp"
 #include "sprite_movement.hpp"
-#include "sprite_status.hpp"
+#include "timer_simple.hpp"
 #include "unit.hpp"
 
 class Sprite : public Object
@@ -81,8 +82,6 @@ class Sprite : public Object
 		Sprite( const Sprite& ) = delete;
 		Sprite& operator=( const Sprite& ) = delete;
 
-		const SpriteStatus& status() const;
-
 		static constexpr double TRACTION_NORMAL = 1.2;
 		static constexpr double TRACTION_ICY = 1.025;
 		static double traction_;
@@ -103,15 +102,14 @@ class Sprite : public Object
 		bool on_ground_ = false;
 		bool is_sliding_ = false;
 		bool in_water_ = false;
-		bool submerged_in_water_ = false;
 		Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
-		void update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks );
+		void update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		virtual void render( Camera& camera, bool priority = false );
-		void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap );
+		void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
 
-		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks ) = 0;
-		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap ) = 0;
+		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) = 0;
+		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health ) = 0;
 		virtual void reset();
 
 		bool onGround() const;
@@ -134,7 +132,6 @@ class Sprite : public Object
 		bool hasMovementType( SpriteMovement::Type type ) const;
 
 		bool isDead() const;
-		int hp() const;
 		bool fellInBottomlessPit( Map& lvmap ) const;
 
 		bool collidedLeft() const;
@@ -161,7 +158,6 @@ class Sprite : public Object
 		void bounceLeft( int overlap );
 		void bounceRight( int overlap );
 		void bounceDownward( int overlap );
-		virtual void swim();
 
 		const Collision testCollision( const Object& them ) const;
 		void collideStopAny( Collision& collision );
@@ -188,9 +184,6 @@ class Sprite : public Object
 
 		void kill();
 		void killNoAnimation();
-		void hurt( int amount = 1 );
-		void heal( int amount = 1 );
-		void fullHeal();
 
 		void boundaries( Camera& camera, Map& lvmap );
 		void setPosition( int x, int y );
@@ -216,7 +209,6 @@ class Sprite : public Object
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::unique_ptr<SpriteComponent> component_;
 		std::unique_ptr<SpriteMovement> movement_;
-		SpriteStatus status_;
 
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;
@@ -255,7 +247,6 @@ class Sprite : public Object
 		bool on_ladder_ = false;
 		bool on_ladder_prev_ = false;
 		bool looking_up_ = false;
-		bool in_water_prev_ = false;
 		bool is_sliding_prev_ = false;
 
 		bool collide_top_ = false;
@@ -276,6 +267,7 @@ class Sprite : public Object
 		void positionX();
 		void positionY();
 
+		bool is_dead_ = false;
 		bool death_finished_ = false;
 		bool dead_no_animation_ = false;
 		TimerSimple death_timer_ = TimerSimple( 32, false );

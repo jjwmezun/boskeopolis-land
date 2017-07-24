@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "event_system.hpp"
+#include "health.hpp"
 #include "sprite.hpp"
 #include "map_layer_water.hpp"
 
@@ -21,16 +22,16 @@ MapLayerWater::MapLayerWater( int y_blocks )
 	animation_speed_ ( 16 )
 {};
 
-void MapLayerWater::interact( Sprite& sprite )
+void MapLayerWater::interact( Sprite& sprite, Health& health )
 {
 	if ( sprite.centerYSubPixels() > y_ )
 	{
-		sprite.submerged_in_water_ = true;
+		health.submerge();
 	}
 
 	if ( sprite.bottomSubPixels() > y_ )
 	{
-		sprite.swim();
+		health.goInWater();
 	}
 };
 

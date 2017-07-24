@@ -16,7 +16,8 @@ try :
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
-	blocks_ ( level_.currentMap() )
+	blocks_ ( level_.currentMap() ),
+	health_ ()
 {
 	Inventory::levelStart( lvname );
 }
@@ -45,11 +46,12 @@ void LevelState::update()
 		blocks_.update( events_ );
 		level_.update( events_, sprites_, blocks_, camera_ );
 		camera_.update();
-		sprites_.update( camera_, level_.currentMap(), events_, blocks_ );
-		sprites_.interact( blocks_, level_, events_, camera_ );
-		sprites_.interactWithMap( level_.currentMap(), camera_ );
-		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap() );
-		inventory_screen_.update( events_, sprites_.hero() );
+		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+		sprites_.interact( blocks_, level_, events_, camera_, health_ );
+		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_ );
+		health_.update();
+		inventory_screen_.update( events_, health_ );
 		events_.update( level_, sprites_, camera_, blocks_ );
 
 		if ( events_.paletteChanged() )

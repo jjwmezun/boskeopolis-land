@@ -35,7 +35,7 @@
 
     PlayerSpriteFluttering::~PlayerSpriteFluttering() {};
 
-    void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+    void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
     {
 
         if ( Input::held( Input::Action::RUN ) )
@@ -96,6 +96,6 @@
         camera.adjust( *this, lvmap );
     };
 
-    void PlayerSpriteFluttering::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+    void PlayerSpriteFluttering::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
     {
     };

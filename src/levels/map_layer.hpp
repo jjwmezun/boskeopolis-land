@@ -3,6 +3,7 @@
 class BlockSystem;
 class Camera;
 class EventSystem;
+class Health;
 
 class Sprite;
 
@@ -13,5 +14,5 @@ class MapLayer
 		virtual ~MapLayer();
 		virtual void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) {};
 		virtual void render( Camera& camera ) const = 0;
-		virtual void interact( Sprite& sprite ) {};
+		virtual void interact( Sprite& sprite, Health& health ) {};
 };

@@ -4,6 +4,7 @@
 #include "camera.hpp"
 #include "game_state.hpp"
 #include "event_system.hpp"
+#include "health.hpp"
 #include "inventory_level.hpp"
 #include "level.hpp"
 #include "sprite.hpp"
@@ -28,6 +29,7 @@ class LevelState : public GameState
 		Camera camera_;
 		SpriteSystem sprites_;
 		BlockSystem blocks_;
+		Health health_;
 		
 		void testPause();
 };

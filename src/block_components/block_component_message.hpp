@@ -8,7 +8,7 @@ class BlockComponentMessage : public BlockComponent
 	public:
 		BlockComponentMessage();
 		~BlockComponentMessage();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health ) override;
 };
 
 #endif // BLOCK_COMPONENT_MESSAGE_H

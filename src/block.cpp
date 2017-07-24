@@ -73,12 +73,12 @@ int Block::location() const
 	return location_;
 };
 
-void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera )
+void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
 	if ( hasType() )
 	{
 		Collision collision = sprite.testCollision( *this );
-		type_->interact( collision, sprite, *this, level, events, camera );
+		type_->interact( collision, sprite, *this, level, events, camera, health );
 	}
 };
 

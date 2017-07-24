@@ -20,7 +20,7 @@ SnowmanSprite::SnowmanSprite( int x, int y )
 
 SnowmanSprite::~SnowmanSprite() {};
 
-void SnowmanSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void SnowmanSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( direction_x_ )
 	{
@@ -38,7 +38,7 @@ void SnowmanSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	handleThrowing( sprites );
 };
 
-void SnowmanSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void SnowmanSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

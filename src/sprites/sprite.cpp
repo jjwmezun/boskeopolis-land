@@ -56,7 +56,6 @@ Sprite::Sprite
 	direction_y_ ( direction_y ),
 	direction_y_orig_ ( direction_y ),
 	component_ ( std::move( component ) ),
-	status_ ( max_hp, hp ),
 	movement_ ( getMovement( physics_state ) ),
 	camera_movement_ ( camera_movement ),
 	despawn_when_dead_ ( despawn_when_dead ),
@@ -80,7 +79,7 @@ bool Sprite::fellInBottomlessPit( Map& lvmap ) const
 	return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
 };
 
-void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( !isDead() )
 	{
@@ -88,8 +87,7 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 		{
 			component_->update( *this, *graphics_ );
 		}
-		customUpdate( camera, lvmap, events, sprites, blocks );
-		status_.update( *this, *graphics_ );
+		customUpdate( camera, lvmap, events, sprites, blocks, health );
 	}
 	else
 	{
@@ -144,12 +142,10 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 		graphics_->update( *this );
 	}
 
-	in_water_prev_ = in_water_;
-	in_water_ = false;
-	submerged_in_water_ = false;
 	on_slope_ = Direction::Horizontal::__NULL;
 	is_sliding_prev_ = is_sliding_;
 	is_sliding_ = false;
+	in_water_ = false;
 };
 
 void Sprite::render( Camera& camera, bool priority )
@@ -389,12 +385,12 @@ void Sprite::stopRunning()
 	start_speed_ = start_speed_walk_;
 };
 
-void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	Collision my_collision = testCollision( them );
 	Collision their_collision = them.testCollision( *this );
 
-	customInteract( my_collision, their_collision, them, blocks, sprites, lvmap );
+	customInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health );
 };
 
 bool Sprite::canJump() const
@@ -496,12 +492,12 @@ void Sprite::stopLookingUp()
 
 void Sprite::kill()
 {
-	status_.kill();
+	is_dead_ = true;
 };
 
 bool Sprite::isDead() const
 {
-	return status_.isDead();
+	return is_dead_;
 };
 
 void Sprite::setPosition( int x, int y )
@@ -519,30 +515,6 @@ bool Sprite::hasType( Sprite::SpriteType type ) const
 
 	return false;
 };
-
-void Sprite::hurt( int amount )
-{
-	if ( !impervious_ )
-	{
-		status_.hurt( amount );
-	}
-};
-
-void Sprite::heal( int amount )
-{
-	status_.heal( amount );
-};
-
-void Sprite::fullHeal()
-{
-	status_.fullHeal();
-};
-
-int Sprite::hp() const
-{
-	return status_.hp();
-};
-
 
 void Sprite::collideStopAny( Collision& collision )
 {
@@ -655,20 +627,9 @@ void Sprite::killNoAnimation()
 	dead_no_animation_ = true;
 };
 
-const SpriteStatus& Sprite::status() const
-{
-	return status_;
-};
-
 bool Sprite::collideBottomOnly( const Collision& collision, const Object& other ) const
 {
 	return collision.collideBottom() && prevBottomSubPixels() <= other.ySubPixels() + 1000;
-};
-
-void Sprite::swim()
-{
-	in_water_ = true;
-	changeMovement( SpriteMovement::Type::SWIMMING );
 };
 
 void Sprite::bounceLeft( int overlap )

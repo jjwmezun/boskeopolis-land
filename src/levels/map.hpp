@@ -2,6 +2,7 @@
 
 class BlockSystem;
 class Camera;
+class Health;
 class SpriteSystem;
 
 #include "map_layer.hpp"
@@ -65,7 +66,7 @@ class Map
 		Camera::YPriority cameraYPriority() const;
 		bool blocksWorkOffscreen() const;
 		
-		void interact( Sprite& sprite, Camera& camera );
+		void interact( Sprite& sprite, Camera& camera, Health& health );
 		
 		bool scrollLoop() const;
 		int scrollLoopWidthPixels() const;

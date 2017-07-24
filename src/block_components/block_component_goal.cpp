@@ -5,7 +5,7 @@ BlockComponentGoal::BlockComponentGoal() {};
 
 BlockComponentGoal::~BlockComponentGoal() {};
 
-void BlockComponentGoal::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera )
+void BlockComponentGoal::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
 	events.win();
 };

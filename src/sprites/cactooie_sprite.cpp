@@ -28,7 +28,7 @@ CactooieSprite::CactooieSprite( int x, int y )
 
 CactooieSprite::~CactooieSprite() {};
 
-void CactooieSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks )
+void CactooieSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	switch ( state_ )
 	{
@@ -156,6 +156,6 @@ bool CactooieSprite::rollFinished() const
 	return abs( graphics_->rotation_ ) >= 360;
 };
 
-void CactooieSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap )
+void CactooieSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };
