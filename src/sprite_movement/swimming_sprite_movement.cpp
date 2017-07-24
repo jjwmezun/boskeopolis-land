@@ -32,7 +32,7 @@
         GroundedSpriteMovement( Type::SWIMMING )
     {};
 
-    void SwimmingSpriteMovement::jump( Sprite& sprite )
+    void SwimmingSpriteMovement::jump( Sprite& sprite ) const
     {
         if ( !sprite.jump_lock_ && !sprite.isDucking() )
         {
@@ -41,7 +41,7 @@
         }
     };
 
-    void SwimmingSpriteMovement::position( Sprite& sprite )
+    void SwimmingSpriteMovement::position( Sprite& sprite ) const
     {
 
         if ( !sprite.onGround() && !sprite.isJumping() )

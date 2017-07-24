@@ -14,14 +14,17 @@ class SpriteSystem;
 
 #include "direction.hpp"
 #include "render.hpp"
-#include "grounded_sprite_movement.hpp"
 #include <memory>
 #include "object.hpp"
 #include <SDL2/SDL.h>
 #include "sprite_component.hpp"
-#include "sprite_movement.hpp"
 #include "timer_simple.hpp"
 #include "unit.hpp"
+
+#include "sprite_movement.hpp"
+#include "grounded_sprite_movement.hpp"
+#include "fluttering_sprite_movement.hpp"
+#include "swimming_sprite_movement.hpp"
 
 class Sprite : public Object
 {
@@ -188,7 +191,7 @@ class Sprite : public Object
 		void boundaries( Camera& camera, Map& lvmap );
 		void setPosition( int x, int y );
 		void changeMovement( SpriteMovement::Type type );
-		static std::unique_ptr<SpriteMovement> getMovement( SpriteMovement::Type type );
+		const SpriteMovement* getMovement( SpriteMovement::Type type );
 
 		Direction::Horizontal directionX() const;
 		Direction::Vertical directionY() const;
@@ -208,7 +211,7 @@ class Sprite : public Object
 		const bool despawn_when_dead_;
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::unique_ptr<SpriteComponent> component_;
-		std::unique_ptr<SpriteMovement> movement_;
+		const SpriteMovement* movement_;
 
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;
@@ -233,6 +236,7 @@ class Sprite : public Object
 		int jump_start_speed_;
 		int jump_top_speed_normal_;
 		int jump_top_speed_;
+		int bounce_height_ = 0;
 		bool on_ground_prev_ = false;
 		bool can_jump_ = false;
 		bool is_jumping_ = false;
@@ -276,4 +280,9 @@ class Sprite : public Object
 		void resetPosition();
 
 		TimerSimple on_ground_padding_;
+
+		static const SpriteMovement floating_;
+		static const GroundedSpriteMovement grounded_;
+		static const FlutteringSpriteMovement fluttering_;
+		static const SwimmingSpriteMovement swimming_;
 };

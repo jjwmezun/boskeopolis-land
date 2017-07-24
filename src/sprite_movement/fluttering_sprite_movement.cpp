@@ -30,7 +30,7 @@
         GroundedSpriteMovement( Type::FLUTTERING )
     {};
 
-    void FlutteringSpriteMovement::jump( Sprite& sprite )
+    void FlutteringSpriteMovement::jump( Sprite& sprite ) const
     {
         if ( !sprite.jump_lock_ )
         {
@@ -39,7 +39,7 @@
         }
     };
 
-    void FlutteringSpriteMovement::position( Sprite& sprite )
+    void FlutteringSpriteMovement::position( Sprite& sprite ) const
     {
 
         if ( !sprite.onGround() && !sprite.isJumping() )

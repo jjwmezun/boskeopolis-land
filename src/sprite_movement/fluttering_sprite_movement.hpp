@@ -29,8 +29,8 @@
         public:
             FlutteringSpriteMovement();
 
-            void jump( Sprite& sprite );
-            void position( Sprite& sprite );
+            void jump( Sprite& sprite ) const;
+            void position( Sprite& sprite ) const;
     };
 
 #endif // FLUTTERING_SPRITE_MOVEMENT_H

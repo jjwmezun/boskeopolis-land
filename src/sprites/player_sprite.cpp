@@ -53,7 +53,7 @@ PlayerSprite::PlayerSprite
 		false,
 		.2
 	),
-	input_ (),
+	input_ ( std::move( input ) ),
 	door_lock_ ( true )
 {
 	if ( input_ == nullptr )

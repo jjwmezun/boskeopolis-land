@@ -1,13 +1,16 @@
 #include "block.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
-#include "fluttering_sprite_movement.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
-#include "swimming_sprite_movement.hpp"
 #include "input.hpp"
 #include "unit.hpp"
+
+const SpriteMovement Sprite::floating_ {};
+const GroundedSpriteMovement Sprite::grounded_ {};
+const FlutteringSpriteMovement Sprite::fluttering_ {};
+const SwimmingSpriteMovement Sprite::swimming_ {};
 
 double Sprite::traction_ = TRACTION_NORMAL;
 int Sprite::resistance_x_ = RESISTANCE_X_NORMAL;
@@ -70,9 +73,7 @@ Sprite::Sprite
 	rotate_on_slopes_ ( rotate_on_slopes )
 {};
 
-Sprite::~Sprite()
-{
-};
+Sprite::~Sprite() {};
 
 bool Sprite::fellInBottomlessPit( Map& lvmap ) const
 {
@@ -688,21 +689,24 @@ bool Sprite::hasMovementType( SpriteMovement::Type type ) const
 	return type == movement_->type();
 };
 
-std::unique_ptr<SpriteMovement> Sprite::getMovement( SpriteMovement::Type type )
+const SpriteMovement* Sprite::getMovement( SpriteMovement::Type type )
 {
 	switch ( type )
 	{
-		case ( SpriteMovement::Type::GROUNDED ):
-			return std::make_unique<GroundedSpriteMovement> ();
-		break;
 		case ( SpriteMovement::Type::FLOATING ):
-			return std::make_unique<SpriteMovement> ();
+			return &floating_;
 		break;
+
+		case ( SpriteMovement::Type::GROUNDED ):
+			return &grounded_;
+		break;
+
 		case ( SpriteMovement::Type::FLUTTERING ):
-			return std::make_unique<FlutteringSpriteMovement> ();
+			return &fluttering_;
 		break;
+
 		case ( SpriteMovement::Type::SWIMMING ):
-			return std::make_unique<SwimmingSpriteMovement> ();
+			return &swimming_;
 		break;
 	}
 };
