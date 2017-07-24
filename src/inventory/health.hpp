@@ -24,11 +24,12 @@ class Health
 
 		static int maxHP();
 		static int maxOxygen();
+		static int restorePoint();
 
 
 	private:
 		static constexpr int NORMAL_OXYGEN_LIMIT = 720;
-		static constexpr int STRONGER_OXYGEN_LIMIT = 1440;
+		static constexpr int STRONGER_OXYGEN_LIMIT = 720 + 360;
 		static constexpr int START_MAX_HP = 2;
 
 		int hp_;

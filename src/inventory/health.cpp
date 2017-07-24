@@ -30,7 +30,7 @@ void Health::update()
 	}
 	else
 	{
-		oxygen_meter_ = std::min( oxygen_meter_ + 2, maxOxygen() );
+		oxygen_meter_ = std::min( oxygen_meter_ + restorePoint(), maxOxygen() );
 	}
 
 	submerged_in_water_ = false;
@@ -127,4 +127,9 @@ int Health::maxOxygen()
 			return NORMAL_OXYGEN_LIMIT;
 		break;
 	}
+};
+
+int Health::restorePoint()
+{
+	return maxOxygen() / 100;
 };

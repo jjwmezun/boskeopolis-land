@@ -13,14 +13,12 @@ class OxygenMeter
 
 
 	private:
-		static constexpr int WIDTH_MINIBLOCKS = 10;
+		static constexpr int BASE_WIDTH = 8;
+		static constexpr int BASE_WIDTH_UPGRADED = 12;
 		static constexpr int HEIGHT_MINIBLOCKS = 1;
-		static constexpr int WIDTH_PIXELS = Unit::MiniBlocksToPixels( WIDTH_MINIBLOCKS );
 		static constexpr int HEIGHT_PIXELS = Unit::MiniBlocksToPixels( HEIGHT_MINIBLOCKS );
-		static constexpr int X_PIXELS = Unit::WINDOW_WIDTH_PIXELS - WIDTH_PIXELS - Unit::MiniBlocksToPixels( 1 );
-
+		static constexpr int X_PIXELS = Unit::MiniBlocksToPixels( 27 );
 		static constexpr int FIRST_BLOCK = 0;
-		static constexpr int LAST_BLOCK = WIDTH_MINIBLOCKS - 1;
 
 		const SpriteGraphics gfx_left_bar_;
 		const SpriteGraphics gfx_middle_bar_;
@@ -34,4 +32,8 @@ class OxygenMeter
 		void color( double percent );
 		void renderMeter() const;
 		void renderShell() const;
+
+		int width_mini_blocks() const;
+		int width_pixels() const;
+		int last_block() const;
 };

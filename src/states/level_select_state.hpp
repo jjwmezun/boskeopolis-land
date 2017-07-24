@@ -28,7 +28,7 @@ class LevelSelectState : public GameState
 		sdl2::SDLRect GEM_ICON_DEST = { FUNDS_X - 16, INVENTORY_Y + 8, 8, 8 };
 
 		Text title_ = Text( "Select a Level, yo.", 0, 16, Text::FontShade::BLACK, Text::FontAlign::CENTER );
-		SpriteGraphics win_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", 40, 8 );
+		SpriteGraphics win_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 8 );
 		SpriteGraphics diamond_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 0 );
 		SpriteGraphics gem_icon_gfx_ = SpriteGraphics( "charset.png", 32, 16 );
 

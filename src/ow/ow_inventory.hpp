@@ -20,8 +20,11 @@ class OWInventory
 		static constexpr int COLOR_END   = 3;
 		static constexpr int COLOR_TIMER_LIMIT = 4;
 
-		SpriteGraphics win_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", 40, 8 );
-		SpriteGraphics diamond_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 0 );
+		static constexpr int HAVE_X = 48;
+		static constexpr int DONT_HAVE_X = 56;
+
+		SpriteGraphics win_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", HAVE_X, 8 );
+		SpriteGraphics diamond_gfx_ = SpriteGraphics( "tilesets/universal.png", HAVE_X, 0 );
 		SpriteGraphics gem_icon_gfx_ = SpriteGraphics( "charset.png", 32, 16 );
 		SpriteGraphics time_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", 40, 0 );
 

@@ -107,19 +107,19 @@ void OWInventory::render( int lv_select )
 		time_icon_gfx_.render( { RIGHT_EDGE - ( 5 * 8 ), ROW_1, 8, 8 } );
 		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1, nullptr, time_shade );
 		
-		diamond_gfx_.current_frame_x_ = 56;
-		if ( Inventory::haveDiamond( lv_select ) )
-		{
-			diamond_gfx_.current_frame_x_ = 48;
-		}
-		diamond_gfx_.render( { LEFT_EDGE, ROW_1, 8, 8 } );
-		
-		win_icon_gfx_.current_frame_x_ = 56;
+		win_icon_gfx_.current_frame_x_ = DONT_HAVE_X;
 		if ( Inventory::victory( lv_select ) )
 		{
-			win_icon_gfx_.current_frame_x_ = 40;
+			win_icon_gfx_.current_frame_x_ = HAVE_X;
 		}
-		win_icon_gfx_.render( { LEFT_EDGE + 8, ROW_1, 8, 8 } );
+		win_icon_gfx_.render( { LEFT_EDGE, ROW_1, 8, 8 } );
+
+		diamond_gfx_.current_frame_x_ = DONT_HAVE_X;
+		if ( Inventory::haveDiamond( lv_select ) )
+		{
+			diamond_gfx_.current_frame_x_ = HAVE_X;
+		}
+		diamond_gfx_.render( { LEFT_EDGE + 8, ROW_1, 8, 8 } );
 	}
 
 	gem_icon_gfx_.render( { LEFT_EDGE, ROW_2, 8, 8 } );

@@ -1,3 +1,4 @@
+#include "inventory.hpp"
 #include "main.hpp"
 #include "oxygen_meter.hpp"
 #include "render.hpp"
@@ -12,7 +13,7 @@ OxygenMeter::OxygenMeter( int y )
 	({
 		X_PIXELS,
 		y,
-		WIDTH_PIXELS,
+		width_pixels(),
 		HEIGHT_PIXELS
 	}),
 	show_ ( false ),
@@ -27,7 +28,7 @@ void OxygenMeter::update( const Health& health )
 	if ( health.inWater() || percent < .998 )
 	{
 		show_ = true;
-		meter_bar_.w = round( WIDTH_PIXELS * percent );
+		meter_bar_.w = round( width_pixels() * percent );
 
 		color( percent );
 	}
@@ -66,7 +67,7 @@ void OxygenMeter::renderMeter() const
 
 void OxygenMeter::renderShell() const
 {	
-	for ( int i = 0; i < WIDTH_MINIBLOCKS; ++i )
+	for ( int i = 0; i < width_mini_blocks(); ++i )
 	{
 
 		const sdl2::SDLRect r =
@@ -81,7 +82,7 @@ void OxygenMeter::renderShell() const
 		{
 			gfx_left_bar_.render( r );
 		}
-		else if ( i == LAST_BLOCK )
+		else if ( i == last_block() )
 		{
 			gfx_right_bar_.render( r );
 		}
@@ -91,4 +92,19 @@ void OxygenMeter::renderShell() const
 		}
 
 	}
+};
+
+int OxygenMeter::width_mini_blocks() const
+{
+	return ( Inventory::haveOxygenUpgrade() ) ? BASE_WIDTH_UPGRADED : BASE_WIDTH;
+};
+
+int OxygenMeter::width_pixels() const
+{
+	return Unit::MiniBlocksToPixels( width_mini_blocks() );
+};
+
+int OxygenMeter::last_block() const
+{
+	return width_mini_blocks() - 1;
 };

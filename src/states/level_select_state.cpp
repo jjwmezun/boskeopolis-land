@@ -215,12 +215,12 @@ void LevelSelectState::init()
 
 				if ( Inventory::victory( i ) )
 				{
-					win_icon_dests_.emplace_back( X, ( 8 * reali ), 8, 8 );
+					win_icon_dests_.emplace_back( X - 8, ( 8 * reali ), 8, 8 );
 				}
 
 				if ( Inventory::haveDiamond( i ) )
 				{
-					diamond_icon_dests_.emplace_back( X - 8, ( 8 * reali ), 8, 8 );
+					diamond_icon_dests_.emplace_back( X, ( 8 * reali ), 8, 8 );
 				}
 				
 				if ( Inventory::gemChallengeBeaten( i ) )
