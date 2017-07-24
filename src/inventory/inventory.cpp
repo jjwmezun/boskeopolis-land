@@ -685,11 +685,13 @@ namespace Inventory
 	
 	int heartUpgrades()
 	{
+		return 3;
 		return heart_upgrades_();
 	};
 
 	bool haveOxygenUpgrade()
 	{
+		return true;
 		return oxygen_upgrade_;
 	};
 };
