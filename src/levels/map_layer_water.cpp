@@ -24,14 +24,17 @@ MapLayerWater::MapLayerWater( int y_blocks )
 
 void MapLayerWater::interact( Sprite& sprite, Health& health )
 {
-	if ( sprite.centerYSubPixels() > y_ )
+	if ( sprite.hasType( Sprite::SpriteType::HERO ) )
 	{
-		health.submerge();
+		if ( sprite.centerYSubPixels() > y_ )
+		{
+			health.submerge();
+		}
 	}
 
-	if ( sprite.bottomSubPixels() > y_ )
+	if ( sprite.bottomSubPixels() > y_ + 8000 )
 	{
-		health.goInWater();
+		sprite.in_water_ = true;
 	}
 };
 

@@ -1,6 +1,7 @@
 #include "block.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
+#include "health.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -37,12 +38,12 @@ Sprite::Sprite
 	bool sprite_interact,
 	bool impervious,
 	double bounce,
-	int max_hp,
-	int hp,
-	bool rotate_on_slopes
+	bool rotate_on_slopes,
+	bool ignore_on_camera
 )
 :
 	Object( x, y, width, height ),
+	original_hit_box_ ( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y ), Unit::PixelsToSubPixels( width ), Unit::PixelsToSubPixels( height ) } ),
 	graphics_ ( std::move( graphics ) ),
 	types_ ( type ),
 	jump_start_speed_ ( jump_start_speed ),
@@ -70,7 +71,8 @@ Sprite::Sprite
 	direction_ ( Direction::Simple::__NULL ),
 	top_speed_downward_ ( 0 ),
 	top_speed_upward_ ( 0 ),
-	rotate_on_slopes_ ( rotate_on_slopes )
+	rotate_on_slopes_ ( rotate_on_slopes ),
+	ignore_on_camera_ ( ignore_on_camera )
 {};
 
 Sprite::~Sprite() {};
@@ -146,12 +148,11 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 	on_slope_ = Direction::Horizontal::__NULL;
 	is_sliding_prev_ = is_sliding_;
 	is_sliding_ = false;
-	in_water_ = false;
 };
 
 void Sprite::render( Camera& camera, bool priority )
 {
-	if ( camera.onscreen( hitBox() ) && graphics_ != nullptr )
+	if ( ignore_on_camera_ || camera.onscreen( hitBox() ) && graphics_ != nullptr )
 	{
 		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	}
@@ -545,6 +546,11 @@ bool Sprite::collidedLeft() const
 	return collide_left_;
 };
 
+bool Sprite::collidedAny() const
+{
+	return collide_left_ || collide_right_ || collide_top_ || collide_bottom_;
+};
+
 void Sprite::reset()
 {
 	resetPosition();
@@ -709,4 +715,81 @@ const SpriteMovement* Sprite::getMovement( SpriteMovement::Type type )
 			return &swimming_;
 		break;
 	}
+};
+
+void Sprite::invincibilityFlicker( const Health& health )
+{
+	if ( health.flickerOff() )
+	{
+		graphics_->visible_ = false;
+	}
+	else
+	{
+		graphics_->visible_ = true;
+	}
+};
+
+int Sprite::prevRightPixels() const
+{
+	return Unit::SubPixelsToPixels( prevRightSubPixels() );
+};
+
+int Sprite::prevBottomPixels() const
+{
+	return Unit::SubPixelsToPixels( prevBottomSubPixels() );
+};
+
+int Sprite::originalXSubPixels() const
+{
+	return original_hit_box_.x;
+};
+
+int Sprite::originalYSubPixels() const
+{
+	return original_hit_box_.y;
+};
+
+const sdl2::SDLRect& Sprite::originalHitBox() const
+{
+	return original_hit_box_;
+};
+
+int Sprite::prevLeftSubPixels() const
+{
+	return xPrevSubPixels();
+};
+
+int Sprite::prevRightSubPixels() const
+{
+	return xPrevSubPixels() + hit_box_.w;
+};
+
+int Sprite::prevTopSubPixels() const
+{
+	return yPrevSubPixels();
+};
+
+int Sprite::prevBottomSubPixels() const
+{
+	return yPrevSubPixels() + hit_box_.h;
+};
+
+int Sprite::xPrevSubPixels() const
+{
+	return x_prev_;
+};
+
+int Sprite::yPrevSubPixels() const
+{
+	return y_prev_;
+};
+
+int Sprite::xPrevPixels() const
+{
+	return Unit::SubPixelsToPixels( x_prev_ );
+};
+
+int Sprite::yPrevPixels() const
+{
+	return Unit::SubPixelsToPixels( y_prev_ );
 };

@@ -136,6 +136,7 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		kill();
 	}
 
+	invincibilityFlicker( health );
 	camera.adjustCart( *this, lvmap );
 };
 

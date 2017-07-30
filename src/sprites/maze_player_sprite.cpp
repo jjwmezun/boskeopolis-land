@@ -1,9 +1,9 @@
 #include "camera.hpp"
 #include "input.hpp"
-#include "overworld_player_sprite.hpp"
+#include "maze_player_sprite.hpp"
 #include "animated_graphics.hpp"
 
-OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
+MazePlayerSprite::MazePlayerSprite( int x, int y )
 :
 	Sprite
 	(
@@ -31,9 +31,9 @@ OverworldPlayerSprite::OverworldPlayerSprite( int x, int y )
 {
 };
 
-OverworldPlayerSprite::~OverworldPlayerSprite() {};
+MazePlayerSprite::~MazePlayerSprite() {};
 
-void OverworldPlayerSprite::sharedMovement( Camera& camera, Map& lvmap )
+void MazePlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
@@ -61,30 +61,15 @@ void OverworldPlayerSprite::sharedMovement( Camera& camera, Map& lvmap )
 		stopY();
 	}
 
+	invincibilityFlicker( health );
 	camera.adjustCart( *this, lvmap );
 };
 
-void OverworldPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
-{
-	sharedMovement( camera, lvmap );
-};
-
-void OverworldPlayerSprite::OWUpdate( Camera& camera, Map& lvmap )
-{
-	sharedMovement( camera, lvmap );
-	position();
-
-	if ( graphics_ )
-	{
-		graphics_->update( *this );
-	}
-};
-
-void OverworldPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 };
 
-void OverworldPlayerSprite::deathAction( Camera& camera )
+void MazePlayerSprite::deathAction( Camera& camera )
 {	
 	block_interact_ = false;
 

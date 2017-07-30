@@ -20,6 +20,7 @@
 #include "avoid_money_goal.hpp"
 #include "collect_goal.hpp"
 #include "do_nothing_goal.hpp"
+#include "heat_goal.hpp"
 #include "mcguffin_goal.hpp"
 #include "past_right_edge_goal.hpp"
 #include "starving_goal.hpp"
@@ -198,15 +199,15 @@ int Level::id() const
 	return id_;
 };
 
-void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events )
+void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health )
 {
-	goal_->init( hero, inventory, events );
+	goal_->init( hero, inventory, events, health );
 };
 
-void Level::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
+void Level::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health )
 {
 	currentMap().update( events, sprites, blocks, camera );
-	goal_->update( sprites, currentMap(), events );
+	goal_->update( sprites, currentMap(), events, health );
 };
 
 unsigned int Level::realLevelNum()
@@ -600,6 +601,10 @@ Level Level::getLevel( int id )
 						else if ( mezun::areStringsEqual( goaltype, "starving" ) )
 						{
 							goal = std::make_unique<StarvingGoal> ();
+						}
+						else if ( mezun::areStringsEqual( goaltype, "heat" ) )
+						{
+							goal = std::make_unique<HeatGoal> ();
 						}
 					}
 					else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )

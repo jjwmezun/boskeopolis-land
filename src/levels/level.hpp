@@ -2,6 +2,7 @@
 
 class BlockSystem;
 class Camera;
+class Health;
 class InventoryLevel;
 class Sprite;
 class SpriteSystem;
@@ -35,8 +36,8 @@ class Level
 		std::string message() const;
 		int id() const;
 
-		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events );
-		void update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
+		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
+		void update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health );
 
 		static const std::string& NameOLevel( unsigned int n );
 		static unsigned int realLevelNum();

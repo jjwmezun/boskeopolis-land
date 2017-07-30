@@ -76,9 +76,8 @@ class Sprite : public Object
 			bool sprite_interact = true,
 			bool impervious = false,
 			double bounce_ = .2,
-			int max_hp = 3,
-			int hp = 3,
-			bool rotate_on_slopes = false
+			bool rotate_on_slopes = false,
+			bool ignore_on_camera = false
 		);
 
 		virtual ~Sprite();
@@ -100,10 +99,10 @@ class Sprite : public Object
 		Direction::Horizontal direction_x_;
 		Direction::Vertical direction_y_;
 
-		bool jump_lock_ = true;
-		bool touching_ladder_ = false;
+		bool jump_lock_ = true; // Not needed
+		bool touching_ladder_ = false; // Not needed
 		bool on_ground_ = false;
-		bool is_sliding_ = false;
+		bool is_sliding_ = false; // Not needed
 		bool in_water_ = false;
 		Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
@@ -121,22 +120,23 @@ class Sprite : public Object
 		bool canJump() const;
 		bool isJumping() const;
 		bool isJumpingPrev() const;
-		bool isDucking() const;
-		bool onLadder() const;
-		bool onLadderPrev() const;
-		bool touchingLadder() const;
-		bool touchingLadderPrev() const;
-		bool lookingUp() const;
+		bool isDucking() const; // Not needed
+		bool onLadder() const; // Not needed
+		bool onLadderPrev() const; // Not needed
+		bool touchingLadder() const; // Not needed
+		bool touchingLadderPrev() const; // Not needed
+		bool lookingUp() const; // Not needed
 
 		bool isMoving() const;
-		bool isRunning() const;
-		bool isSlidingPrev() const;
+		bool isRunning() const; // Not needed
+		bool isSlidingPrev() const; // Not needed
 		SpriteMovement::Type movementType() const;
 		bool hasMovementType( SpriteMovement::Type type ) const;
 
 		bool isDead() const;
 		bool fellInBottomlessPit( Map& lvmap ) const;
 
+		bool collidedAny() const;
 		bool collidedLeft() const;
 		bool collidedRight() const;
 		bool collideTopOnly( Collision& collision, Object& them ) const;
@@ -147,6 +147,7 @@ class Sprite : public Object
 		bool hasCameraMovement( CameraMovement type ) const;
 		CameraMovement cameraMovement() const;
 		bool despawnWhenDead() const;
+		const bool ignore_on_camera_;
 
 		void moveLeft();
 		void moveRight();
@@ -173,17 +174,17 @@ class Sprite : public Object
 
 		void slowFall();
 		void fastFall();
-		void stopDucking();
-		void touchLadder();
-		void grabLadder();
-		void releaseLadder();
-		void slideLeft();
-		void slideRight();
-		void lookUp();
-		void stopLookingUp();
+		void stopDucking(); // Not needed
+		void touchLadder(); // Not needed
+		void grabLadder(); // Not needed
+		void releaseLadder(); // Not needed
+		void slideLeft(); // Not needed
+		void slideRight(); // Not needed
+		void lookUp(); // Not needed
+		void stopLookingUp(); // Not needed
 
-		void run();
-		void stopRunning();
+		void run(); // Not needed
+		void stopRunning(); // Not needed
 
 		void kill();
 		void killNoAnimation();
@@ -198,6 +199,20 @@ class Sprite : public Object
 
 		bool deathFinished() const;
 
+		int xPrevSubPixels() const;
+		int yPrevSubPixels() const;
+		int xPrevPixels()    const;
+		int yPrevPixels()    const;
+		int prevLeftSubPixels()   const;
+		int prevRightSubPixels()  const;
+		int prevTopSubPixels()    const;
+		int prevBottomSubPixels() const;
+		int prevRightPixels()  const;
+		int prevBottomPixels() const;
+		const sdl2::SDLRect& originalHitBox() const;
+		int originalXSubPixels() const;
+		int originalYSubPixels() const;
+
 
 	protected:
 		static const int GRAVITY_START_SPEED = 500;
@@ -205,7 +220,11 @@ class Sprite : public Object
 		static const int JUMP_DUCK_TOP_SPEED = 5500;
 		static const int LADDER_SPEED = 1000;
 
-		bool rotate_on_slopes_;
+		int x_prev_ = -123456789;
+		int y_prev_ = -123456789;
+		const sdl2::SDLRect original_hit_box_;
+
+		bool rotate_on_slopes_; // Not needed
 		const std::vector<SpriteType> types_;
 		const CameraMovement camera_movement_;
 		const bool despawn_when_dead_;
@@ -219,8 +238,8 @@ class Sprite : public Object
 		const bool impervious_;
 		const int start_speed_walk_;
 		const int top_speed_walk_;
-		const int start_speed_run_;
-		const int top_speed_run_;
+		const int start_speed_run_; // Not needed
+		const int top_speed_run_; // Not needed
 		int start_speed_;
 		int top_speed_;
 		int top_speed_upward_;
@@ -229,10 +248,9 @@ class Sprite : public Object
 
 		int acceleration_x_ = 0;
 		int acceleration_y_ = 0;
-		int vx_at_change_ = 0;
 
-		int gravity_start_speed_ = GRAVITY_START_SPEED;
-		int gravity_top_speed_ = GRAVITY_TOP_SPEED;
+		int gravity_start_speed_ = GRAVITY_START_SPEED; // Not needed
+		int gravity_top_speed_ = GRAVITY_TOP_SPEED; // Not needed
 		int jump_start_speed_;
 		int jump_top_speed_normal_;
 		int jump_top_speed_;
@@ -245,13 +263,13 @@ class Sprite : public Object
 		bool jump_end_ = false;
 		bool is_bouncing_ = false;
 		bool is_bouncing_prev_ = false;
-		bool slide_jump_ = false;
-		bool is_ducking_ = false;
-		bool touching_ladder_prev_ = false;
-		bool on_ladder_ = false;
-		bool on_ladder_prev_ = false;
-		bool looking_up_ = false;
-		bool is_sliding_prev_ = false;
+		bool slide_jump_ = false; // Not needed
+		bool is_ducking_ = false; // Not needed
+		bool touching_ladder_prev_ = false; // Not needed
+		bool on_ladder_ = false; // Not needed
+		bool on_ladder_prev_ = false; // Not needed
+		bool looking_up_ = false; // Not needed
+		bool is_sliding_prev_ = false; // Not needed
 
 		bool collide_top_ = false;
 		bool collide_bottom_ = false;
@@ -278,6 +296,7 @@ class Sprite : public Object
 		virtual void deathAction( Camera& camera );
 		void defaultDeathAction( Camera& camera );
 		void resetPosition();
+		void invincibilityFlicker( const Health& health );
 
 		TimerSimple on_ground_padding_;
 

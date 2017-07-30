@@ -14,29 +14,10 @@ GroundedSpriteMovement::GroundedSpriteMovement( Type type )
 
 void GroundedSpriteMovement::moveUp( Sprite& sprite ) const
 {
-	if ( sprite.onLadder() )
-	{
-		if ( sprite.isJumping() )
-		{
-			sprite.acceleration_y_ = -sprite.LADDER_SPEED * 2;
-		}
-		else
-		{
-			sprite.acceleration_y_ = -sprite.LADDER_SPEED;
-		}
-	}
-	else if ( sprite.onGround() )
-	{
-		sprite.lookUp();
-	}
 };
 
 void GroundedSpriteMovement::moveDown( Sprite& sprite ) const
 {
-	if ( sprite.onLadder() )
-	{
-		sprite.acceleration_y_ = sprite.LADDER_SPEED;
-	}
 };
 
 void GroundedSpriteMovement::jump( Sprite& sprite ) const
@@ -115,11 +96,6 @@ void GroundedSpriteMovement::position( Sprite& sprite ) const
 
 	sprite.top_speed_downward_ = sprite.gravity_top_speed_;
 
-	if ( !sprite.isJumping() )
-	{
-		sprite.jump_end_ = true;
-	}
-
 	if ( sprite.onGround() )
 	{
 		sprite.slide_jump_ = false;
@@ -140,21 +116,30 @@ void GroundedSpriteMovement::position( Sprite& sprite ) const
 		sprite.on_ground_padding_.stop();
 	}
 
-	sprite.is_jumping_ = false;
-	sprite.on_ground_prev_ = sprite.on_ground_;
-	sprite.on_ground_ = false;
-	sprite.touching_ladder_prev_ = sprite.touching_ladder_;
-	sprite.touching_ladder_ = false;
-	sprite.is_bouncing_prev_ = sprite.is_bouncing_;
-
 	if ( sprite.onLadder() )
 	{
 		sprite.vy_ = 0;
 	}
+	sprite.touching_ladder_prev_ = sprite.touching_ladder_;
+	sprite.touching_ladder_ = false;
+
+
+	// UNIVERSAL
+	if ( !sprite.isJumping() )
+	{
+		sprite.jump_end_ = true;
+	}
+
+	sprite.is_jumping_ = false;
+	sprite.on_ground_prev_ = sprite.on_ground_;
+	sprite.on_ground_ = false;
+	sprite.is_bouncing_prev_ = sprite.is_bouncing_;
 
 	// If not moving anymo', start slowing down.
 	if ( sprite.acceleration_x_ == 0 )
+	{
 		sprite.vx_ /= sprite.traction_;
+	}
 };
 
 void GroundedSpriteMovement::startJump( Sprite& sprite ) const
@@ -163,13 +148,6 @@ void GroundedSpriteMovement::startJump( Sprite& sprite ) const
 	sprite.jump_end_ = false;
 	sprite.vy_ = 0;
 	sprite.on_ground_ = false;
-	sprite.on_ladder_ = false;
-
-	if ( sprite.is_sliding_ )
-	{
-		sprite.slide_jump_ = true;
-		sprite.vx_ *= 5;
-	}
 };
 
 void GroundedSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) const
@@ -190,6 +168,8 @@ void GroundedSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) c
 	{
 		sprite.hit_box_.y -= sprite.LADDER_SPEED;
 	}
+
+	sprite.collide_top_ = true;
 };
 
 void GroundedSpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) const
@@ -199,6 +179,7 @@ void GroundedSpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) cons
 	sprite.vy_ = 0;
 	sprite.hit_box_.y += overlap;
 	sprite.jump_end_ = true;
+	sprite.collide_bottom_ = true;
 };
 
 void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collision ) const
@@ -208,20 +189,17 @@ void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collisio
 		if ( collision.collideLeft() )
 		{
 			collideStopXLeft( sprite, collision.overlapXLeft() );
-			sprite.collide_left_ = true;
 		}
 
 		if ( collision.collideRight() )
 		{
 			collideStopXRight( sprite, collision.overlapXRight() );
-			sprite.collide_right_ = true;
 		}
 	}
 
 	if ( collision.collideBottom() )
 	{
 		collideStopYBottom( sprite, collision.overlapYBottom() );
-		sprite.collide_top_ = true;
 	}
 
 	if ( collision.collideTop() )
@@ -230,8 +208,6 @@ void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collisio
 		{
 			collideStopYTop( sprite, collision.overlapYTop() );
 		}
-
-		sprite.collide_bottom_ = true;
 	}
 };
 
@@ -275,11 +251,19 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const O
 			overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
 	}
 
+	// 4000 padding needed to keep ducking Autumn from clipping into walls.
+	// 8000 padding needed to keep Autumn from thunking sideways into ceiling while hitting it from below.
+	int top_padding = 4000;
+	if ( !me.onGround() && !me.isDucking() )
+	{
+		top_padding = 8000;
+	}
+	
 	if
 	(
 		me.leftSubPixels() < them.rightSubPixels() &&
 		me.rightSubPixels() > them.leftSubPixels() &&
-		me.topSubPixels() + 8000 < them.bottomSubPixels() &&
+		me.topSubPixels() + top_padding < them.bottomSubPixels() &&
 		me.bottomSubPixels() - 4000 > them.topSubPixels() // Keep character from getting caught on sides o' floor blocks.
 	)
 	{

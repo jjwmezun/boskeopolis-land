@@ -12,6 +12,7 @@
 #include "eggnon_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
 #include "event_system.hpp"
+#include "faucet_sprite.hpp"
 #include "falling_bough_sprite.hpp"
 #include "fishstick_sprite.hpp"
 #include "guard_sprite.hpp"
@@ -24,18 +25,20 @@
 #include "icecube_sprite.hpp"
 #include <iostream>
 #include "level.hpp"
+#include "lifesaver_sprite.hpp"
 #include "lightning_sprite.hpp"
 #include "lil_pipe_monster_sprite.hpp"
 #include "map.hpp"
+#include "maze_player_sprite.hpp"
 #include "maze_chaser_sprite.hpp"
 #include "mezun_exceptions.hpp"
-#include "overworld_player_sprite.hpp"
 #include "penguin_sprite.hpp"
 #include "platform_sprite.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_graphics.hpp"
 #include "player_sprite_fluttering.hpp"
 #include "pufferbee_sprite.hpp"
+#include "quadrapus_sprite.hpp"
 #include "racer_sprite.hpp"
 #include "rope_sprite.hpp"
 #include "saw_sprite.hpp"
@@ -51,10 +54,12 @@
 #include "sprite_component_right_and_left.hpp"
 #include "sprite_component_up_and_down.hpp"
 #include "sprite_system.hpp"
+#include "waterdrop_sprite.hpp"
+#include "waterdrop_spawner_sprite.hpp"
 
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
-	hero_ ( new OverworldPlayerSprite( entrance_x, entrance_y ) )
+	hero_ ()
 {};
 
 SpriteSystem::~SpriteSystem() {};
@@ -196,10 +201,16 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const 
 			return std::unique_ptr<Sprite> ( new SnowboulderSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 43 ):
-			return std::unique_ptr<Sprite> ( new FallingBoughSprite( x, y, Direction::Horizontal::LEFT, false ) );
+			return std::unique_ptr<Sprite> ( new LifesaverSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 44 ):
-			return std::unique_ptr<Sprite> ( new FallingBoughSprite( x, y, Direction::Horizontal::RIGHT, false ) );
+			return std::unique_ptr<Sprite> ( new QuadrapusSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 45 ):
+			return std::unique_ptr<Sprite> ( new WaterdropSpawnerSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 46 ):
+			return std::unique_ptr<Sprite> ( new FaucetSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 63 ):
 			return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );
@@ -228,6 +239,11 @@ void SpriteSystem::spawnCactooieSpine( int x, int y, Direction::Horizontal direc
 void SpriteSystem::spawnSnowball( int x, int y, Direction::Horizontal direction )
 {
 	sprites_.emplace_back( new SnowballSprite( x, y, direction ) );
+};
+
+void SpriteSystem::spawnWaterdrop( int x, int y )
+{
+	sprites_.emplace_back( new WaterdropSprite( x, y ) );
 };
 
 void SpriteSystem::spritesFromMap( const Map& lvmap )
@@ -293,7 +309,7 @@ void SpriteSystem::reset( const Level& level )
 			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::OVERWORLD ):
-			hero_.reset( new OverworldPlayerSprite( level.entranceX(), level.entranceY() ) );
+			hero_.reset( new MazePlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::CART ):
 			hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY() ) );
@@ -467,6 +483,24 @@ SpriteSystem::HeroType SpriteSystem::heroType( std::string property )
 void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera, Health& health )
 {
 	lvmap.interact( *hero_, camera, health );
+	
+	for ( auto& s : sprites_ )
+	{
+		if ( s != nullptr )
+		{
+			if ( s->interactsWithBlocks() )
+			{
+				if
+				(
+					camera.onscreen( s->hitBox(), OFFSCREEN_PADDING ) ||
+					s->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
+				)
+				{
+					lvmap.interact( *s, camera, health );
+				}
+			}
+		}
+	}
 };
 
 void SpriteSystem::testNumOSprites() const

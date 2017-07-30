@@ -1,5 +1,4 @@
-#ifndef TIMED_GOAL_H
-#define TIMED_GOAL_H
+#pragma once
 
 #include "goal.hpp"
 
@@ -9,10 +8,8 @@ class TimedGoal : public Goal
 		TimedGoal( int time_limit = 120 );
 		~TimedGoal();
 
-		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events ) override;
+		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health ) override;
 		
 	private:
 		const int time_limit_;
 };
-
-#endif // TIMED_GOAL_H

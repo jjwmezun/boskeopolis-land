@@ -55,13 +55,15 @@ namespace Main
 
 		setResourcePath();
 		Render::init( args );
-		Input::reset();
+		Input::init();
 		firstState();
 	};
 
 	void end()
 	{
 		Render::quit();
+		Input::close();
+		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
 		SDL_Quit();
 	};
 
@@ -78,18 +80,28 @@ namespace Main
 		{
 			while ( SDL_PollEvent( &event ) != 0 )
 			{
-				if ( event.type == SDL_QUIT )
+				switch ( event.type )
 				{
-					quit();
-				}
-				if ( event.type == SDL_KEYDOWN )
-				{
-					Input::keyPress( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
-					Input::keyHold( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
-				}
-				if ( event.type == SDL_KEYUP )
-				{
-					Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					case ( SDL_QUIT ):
+						quit();
+					break;
+					case ( SDL_KEYDOWN ):
+						Input::keyPress( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+						Input::keyHold( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					break;
+					case ( SDL_KEYUP ):
+						Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					break;
+					case ( SDL_JOYAXISMOTION ):
+						Input::axis( event.jaxis );
+					break;
+					case ( SDL_JOYBUTTONDOWN ):
+						Input::buttonPress( event.jbutton.button );
+						Input::buttonHold( event.jbutton.button );
+					break;
+					case ( SDL_JOYBUTTONUP ):
+						Input::buttonRelease( event.jbutton.button );
+					break;
 				}
 			}
 
@@ -149,6 +161,7 @@ namespace Main
 		{
 			SDL_Log( "SDL_Initialization failed: %s", SDL_GetError() );
 		}
+		//SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 	};
 
 	void changeState( std::unique_ptr<GameState> state )

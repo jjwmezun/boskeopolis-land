@@ -12,7 +12,7 @@ class WindyGoal : public Goal
 		WindyGoal( int wind_strength, Direction::Horizontal direction = Direction::Horizontal::__NULL );
 		~WindyGoal();
 
-		void customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events ) override;
+		void customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
 
 	private:
 		const int wind_strength_;

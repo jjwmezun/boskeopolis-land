@@ -44,7 +44,7 @@ void LevelState::update()
 		
 		blocks_.blocksFromMap( level_.currentMap(), camera_ );
 		blocks_.update( events_ );
-		level_.update( events_, sprites_, blocks_, camera_ );
+		level_.update( events_, sprites_, blocks_, camera_, health_ );
 		camera_.update();
 		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
 		sprites_.interact( blocks_, level_, events_, camera_, health_ );
@@ -109,7 +109,7 @@ void LevelState::init()
 		);
 	}
 
-	level_.init( sprites_.hero(), inventory_screen_, events_ );
+	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };
 

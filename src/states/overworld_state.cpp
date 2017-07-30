@@ -218,7 +218,7 @@ void OverworldState::mapData()
 					{
 						const int l = list[ j ].GetInt();
 						
-						if ( l >= 32 && l < 32 + 40 )
+						if ( l >= 32 && l < 32 + 45 )
 						{
 							level_tiles_.emplace_back( list[ j ].GetInt() - 33, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ), lv_gfx_ );
 						}

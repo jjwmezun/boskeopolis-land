@@ -2,24 +2,14 @@
 
 class Block;
 
-class Sprite;
-
 #include "sprite.hpp"
 
-class OverworldPlayerSprite : public Sprite
+class LifesaverSprite : public Sprite
 {
 	public:
-		OverworldPlayerSprite( int x, int y );
-		~OverworldPlayerSprite();
+		LifesaverSprite( int x, int y, Direction::Horizontal direction = Direction::Horizontal::RIGHT, bool start_moving = false );
+		~LifesaverSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-		void OWUpdate( Camera& camera, Map& lvmap );
-		void sharedMovement( Camera& camera, Map& lvmap );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
-
-	protected:
-		void deathAction( Camera& camera );
-
-	private:
-		static constexpr int DEATH_SPIN_SPEED = 20;
-		int death_spins_;
+		void reset();
 };

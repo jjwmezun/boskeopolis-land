@@ -2,6 +2,7 @@
 #include "block_component_swimmable.hpp"
 #include "health.hpp"
 #include "sprite.hpp"
+#include <iostream>
 
 BlockComponentSwimmable::BlockComponentSwimmable() {};
 
@@ -15,8 +16,6 @@ void BlockComponentSwimmable::interact( Collision& collision, Sprite& sprite, Bl
 		{
 			health.submerge();
 		}
-
-		health.goInWater();
 	}
 
 	sprite.in_water_ = true;

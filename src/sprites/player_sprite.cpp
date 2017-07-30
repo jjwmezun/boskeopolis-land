@@ -86,16 +86,20 @@ void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 		{
 			camera.moveDown();
 		}
-		
-		if ( !is_dead_ && health.inWater() )
+
+		if ( !is_dead_ && in_water_ )
 		{
 			changeMovement( SpriteMovement::Type::SWIMMING );
-			health.outOfWater();
+			in_water_ = false;
 		}
 		else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
 		{
 			changeMovement( SpriteMovement::Type::GROUNDED );
-			bounce();
+			
+			if ( input_->action1() )
+			{
+				bounce();
+			}
 		}
 
 		if ( events.in_front_of_door_ && input_->up() && !door_lock_ && on_ground_ )
@@ -125,14 +129,7 @@ void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 			kill();
 		}
 		
-		if ( health.flickerOff() )
-		{
-			graphics_->visible_ = false;
-		}
-		else
-		{
-			graphics_->visible_ = true;
-		}
+		invincibilityFlicker( health );
 
 		boundaries( camera, lvmap );
 		camera.adjust( *this, lvmap );
@@ -200,8 +197,20 @@ void PlayerSprite::actions()
 
 	if ( input_->action1() )
 	{
-			jump();
-			jump_lock_ = true;
+		jump();
+		
+		if ( jump_start_ && !jump_end_ )
+		{
+			on_ladder_ = false;
+
+			if ( is_sliding_ )
+			{
+				slide_jump_ = true;
+				vx_ *= 5;
+			}
+		}
+		
+		jump_lock_ = true;
 
 		slowFall();
 
@@ -224,7 +233,9 @@ void PlayerSprite::actions()
 	if ( input_->up() || input_->down() )
 	{
 		if ( touching_ladder_ )
+		{
 			grabLadder();
+		}
 	}
 
 	if ( Input::released( Input::Action::MOVE_UP ) )
@@ -235,10 +246,34 @@ void PlayerSprite::actions()
 	if ( input_->up() )
 	{
 		moveUp();
+		
+		if ( hasMovementType( SpriteMovement::Type::GROUNDED ) )
+		{
+			if ( onLadder() )
+			{
+				if ( isJumping() )
+				{
+					acceleration_y_ = -LADDER_SPEED * 2;
+				}
+				else
+				{
+					acceleration_y_ = -LADDER_SPEED;
+				}
+			}
+			else if ( onGround() )
+			{
+				lookUp();
+			}
+		}
 	}
 	else if ( input_->down() )
 	{
 		moveDown();
+
+		if ( onLadder() )
+		{
+			acceleration_y_ = LADDER_SPEED;
+		}
 	}
 	else
 	{
@@ -248,6 +283,7 @@ void PlayerSprite::actions()
 		}
 	}
 
+	
 	// In case player gets stuck 'tween 2 blocks with just 1 empty block 'tween them vertically.
 	// Makes player automatically move to the side till out o' space ala Super Mario Bros. 3.
 	if ( collide_top_prev_ && collide_bottom_prev_ && !isDucking() )

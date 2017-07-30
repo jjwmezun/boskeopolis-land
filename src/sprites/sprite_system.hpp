@@ -12,7 +12,6 @@ class MapLayer;
 #include <unordered_map>
 #include <vector>
 
-
 class SpriteSystem
 {
 	public:
@@ -44,6 +43,7 @@ class SpriteSystem
 		void spawn( SpawnSprite type, int x, int y );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
 		void spawnSnowball( int x, int y, Direction::Horizontal direction );
+		void spawnWaterdrop( int x, int y );
 		Sprite& hero();
 		void interactWithMap( Map& lvmap, Camera& camera, Health& health );
 

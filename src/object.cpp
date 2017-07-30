@@ -11,11 +11,13 @@ Object::Object
 	int height
 )
 :
-	original_hit_box_ ( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y ), Unit::PixelsToSubPixels( width ), Unit::PixelsToSubPixels( height ) } ),
 	hit_box_ ( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y ), Unit::PixelsToSubPixels( width ), Unit::PixelsToSubPixels( height ) } )
 {};
 
-Object::~Object() {};
+const sdl2::SDLRect& Object::hitBox() const
+{
+	return hit_box_;
+};
 
 void Object::changeX( int new_x_pixels )
 {
@@ -137,46 +139,6 @@ int Object::bottomSubPixels() const
 	return hit_box_.y + hit_box_.h;
 };
 
-int Object::prevLeftSubPixels() const
-{
-	return xPrevSubPixels();
-};
-
-int Object::prevRightSubPixels() const
-{
-	return xPrevSubPixels() + hit_box_.w;
-};
-
-int Object::prevTopSubPixels() const
-{
-	return yPrevSubPixels();
-};
-
-int Object::prevBottomSubPixels() const
-{
-	return yPrevSubPixels() + hit_box_.h;
-};
-
-int Object::xPrevSubPixels() const
-{
-	return x_prev_;
-};
-
-int Object::yPrevSubPixels() const
-{
-	return y_prev_;
-};
-
-int Object::xPrevPixels() const
-{
-	return Unit::SubPixelsToPixels( x_prev_ );
-};
-
-int Object::yPrevPixels() const
-{
-	return Unit::SubPixelsToPixels( y_prev_ );
-};
-
 int Object::rightPixels() const
 {
 	return Unit::SubPixelsToPixels( rightSubPixels() );
@@ -185,34 +147,4 @@ int Object::rightPixels() const
 int Object::bottomPixels() const
 {
 	return Unit::SubPixelsToPixels( bottomSubPixels() );
-};
-
-int Object::prevRightPixels() const
-{
-	return Unit::SubPixelsToPixels( prevRightSubPixels() );
-};
-
-int Object::prevBottomPixels() const
-{
-	return Unit::SubPixelsToPixels( prevBottomSubPixels() );
-};
-
-const sdl2::SDLRect& Object::hitBox() const
-{
-	return hit_box_;
-};
-
-int Object::originalXSubPixels() const
-{
-	return original_hit_box_.x;
-};
-
-int Object::originalYSubPixels() const
-{
-	return original_hit_box_.y;
-};
-
-const sdl2::SDLRect& Object::originalHitBox() const
-{
-	return original_hit_box_;
 };

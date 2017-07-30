@@ -25,7 +25,7 @@ void OxygenMeter::update( const Health& health )
 {
 	const double percent = health.oxygenPercent();
 
-	if ( health.inWater() || percent < .998 )
+	if ( health.losingMeter() || percent < .998 )
 	{
 		show_ = true;
 		meter_bar_.w = round( width_pixels() * percent );

@@ -70,6 +70,7 @@ void SpriteMovement::collideStopXLeft( Sprite& sprite, int overlap ) const
 		sprite.hit_box_.x -= sprite.vx_;
 		sprite.vx_ = -( sprite.vx_ * sprite.bounce_ );
 	}
+	sprite.collide_left_ = true;
 };
 
 void SpriteMovement::collideStopXRight( Sprite& sprite, int overlap ) const
@@ -80,6 +81,7 @@ void SpriteMovement::collideStopXRight( Sprite& sprite, int overlap ) const
 		sprite.hit_box_.x -= sprite.vx_;
 		sprite.vx_ = -( sprite.vx_ * sprite.bounce_ );
 	}
+	sprite.collide_right_ = true;
 };
 
 void SpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) const
@@ -90,6 +92,7 @@ void SpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) const
 		sprite.hit_box_.y -= sprite.vy_;
 		sprite.vy_ = -( sprite.vy_ * sprite.bounce_ );
 	}
+	sprite.collide_top_ = true;
 };
 
 void SpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) const
@@ -100,6 +103,7 @@ void SpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) const
 		sprite.hit_box_.y -= sprite.vy_;
 		sprite.vy_ = -( sprite.vy_ * sprite.bounce_ );
 	}
+	sprite.collide_bottom_ = true;
 };
 
 void SpriteMovement::collideStopAny( Sprite& sprite, Collision& collision ) const
@@ -107,25 +111,21 @@ void SpriteMovement::collideStopAny( Sprite& sprite, Collision& collision ) cons
 	if ( collision.collideLeft() )
 	{
 		collideStopXLeft( sprite, collision.overlapXLeft() );
-		sprite.collide_left_ = true;
 	}
 
 	if ( collision.collideRight() )
 	{
 		collideStopXRight( sprite, collision.overlapXRight() );
-		sprite.collide_right_ = true;
 	}
 
 	if ( collision.collideBottom() )
 	{
 		collideStopYBottom( sprite, collision.overlapYBottom() );
-		sprite.collide_top_ = true;
 	}
 
 	if ( collision.collideTop() )
 	{
 		collideStopYTop( sprite, collision.overlapYTop() );
-		sprite.collide_bottom_ = true;
 	}
 };
 

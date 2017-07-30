@@ -209,6 +209,12 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 				}
 				else if ( mezun::areStringsEqual( g[ "type" ].GetString(), "animated" ) )
 				{
+					int animation_speed = 8;
+
+					if ( g.HasMember( "speed" ) && g[ "speed" ].IsInt() )
+					{
+						animation_speed = g[ "speed" ].GetInt();
+					}
 
 					if ( g.HasMember( "frames" ) && g[ "frames" ].IsArray() )
 					{
@@ -243,7 +249,12 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							flip_x,
 							flip_y,
 							rotation,
-							priority
+							priority,
+							0,
+							0,
+							0,
+							0,
+							animation_speed
 						);
 					}
 				}
