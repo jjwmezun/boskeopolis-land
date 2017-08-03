@@ -83,6 +83,7 @@ namespace Input
 
 	void init()
 	{
+		SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 		for ( int i = 0; i < SDL_NumJoysticks(); ++i )
 		{
 			joysticks_.push_back( SDL_JoystickOpen( i ) );
@@ -99,6 +100,7 @@ namespace Input
 				SDL_JoystickClose( j );
 			}
 		}
+		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
 	};
 
 	void reset()

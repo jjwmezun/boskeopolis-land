@@ -297,6 +297,10 @@ void OverworldState::interactions()
 				case ( 3 ):
 					pal = "Overworld Blue";
 				break;
+					
+				case ( 4 ):
+					pal = "Overworld Gray";
+				break;
 			}
 			
 			newPalette( { pal, 2 } );
@@ -406,6 +410,25 @@ void OverworldState::eventByID( int id )
 				tiles_.at( mezun::nOfXY( i, 23, map_width_ ) ).type_ = 5;
 			}
 		break;
+
+		case ( 7 ):
+			for ( int i = 108; i < 125; ++i )
+			{
+				tiles_.at( mezun::nOfXY( i, 28, map_width_ ) ).type_ = 5;
+			}
+			for ( int i = 28; i < 43; ++i )
+			{
+				tiles_.at( mezun::nOfXY( 124, i, map_width_ ) ).type_ = 5;
+			}
+			for ( int i = 124; i < 149; ++i )
+			{
+				tiles_.at( mezun::nOfXY( i, 42, map_width_ ) ).type_ = 5;
+			}
+			for ( int i = 42; i < 53; ++i )
+			{
+				tiles_.at( mezun::nOfXY( 148, i, map_width_ ) ).type_ = 5;
+			}
+		break;
 	}
 };
 
@@ -453,6 +476,10 @@ Palette OverworldState::lvPal( int id )
 
 		case ( 6 ):
 			pal = "Overworld Blue";
+		break;
+
+		case ( 7 ):
+			pal = "Overworld Gray";
 		break;
 	}
 	

@@ -161,7 +161,6 @@ namespace Main
 		{
 			SDL_Log( "SDL_Initialization failed: %s", SDL_GetError() );
 		}
-		//SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 	};
 
 	void changeState( std::unique_ptr<GameState> state )
