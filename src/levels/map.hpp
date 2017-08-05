@@ -65,6 +65,7 @@ class Map
 		Camera::XPriority cameraXPriority() const;
 		Camera::YPriority cameraYPriority() const;
 		bool blocksWorkOffscreen() const;
+		bool loopSides() const;
 		
 		void interact( Sprite& sprite, Camera& camera, Health& health );
 		
@@ -94,7 +95,8 @@ class Map
 			int scroll_loop_width,
 			Camera::XPriority camera_x_priority,
 			Camera::YPriority camera_y_priority,
-			bool blocks_work_offscreen
+			bool blocks_work_offscreen,
+			bool loop_sides
 		);
 		std::vector<int> blocks_;
 		std::vector<int> sprites_;
@@ -115,7 +117,8 @@ class Map
 		const Camera::XPriority camera_x_priority_;
 		const Camera::YPriority camera_y_priority_;
 		const bool blocks_work_offscreen_;
-		
+		const bool loop_sides_;
+
 		static constexpr int LOOP_CHANGE = 3;
 		const int scroll_loop_width_;
 		int current_loop_;

@@ -125,6 +125,9 @@ Map Map::mapFromPath
 		Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
 		Camera::YPriority camera_y_priority = Camera::YPriority::__NULL;
 		bool blocks_work_offscreen = false;
+		bool loop_sides = false;
+		int water_effect_height = 0;
+		bool water_rising = false;
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -245,14 +248,35 @@ Map Map::mapFromPath
 					}
 				}
 
+				if ( mezun::areStringsEqual( name, "loop_sides" ) )
+				{
+					if ( prop.value.IsBool() )
+					{
+						loop_sides = prop.value.GetBool();
+					}
+				}
+
 				if ( mezun::areStringsEqual( name, "water_effect_height" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
-						foregrounds.emplace_back( std::make_unique<MapLayerWater> ( prop.value.GetInt() ) );
+						water_effect_height = prop.value.GetInt();
+					}
+				}
+
+				if ( mezun::areStringsEqual( name, "water_rising" ) )
+				{
+					if ( prop.value.IsBool() )
+					{
+						water_rising = prop.value.GetBool();
 					}
 				}
 			}
+		}
+
+		if ( water_effect_height != 0 || water_rising )
+		{
+			foregrounds.emplace_back( std::make_unique<MapLayerWater> ( water_effect_height, water_rising ) );
 		}
 
 
@@ -280,7 +304,8 @@ Map Map::mapFromPath
 			scroll_loop_width,
 			camera_x_priority,
 			camera_y_priority,
-			blocks_work_offscreen
+			blocks_work_offscreen,
+			loop_sides
 		);
 };
 
@@ -304,7 +329,8 @@ Map::Map
 	int scroll_loop_width,
 	Camera::XPriority camera_x_priority,
 	Camera::YPriority camera_y_priority,
-	bool blocks_work_offscreen
+	bool blocks_work_offscreen,
+	bool loop_sides
 )
 :
 	blocks_ ( blocks ),
@@ -325,7 +351,8 @@ Map::Map
 	changed_ ( true ),
 	camera_x_priority_ ( camera_x_priority ),
 	camera_y_priority_ ( camera_y_priority ),
-	blocks_work_offscreen_ ( blocks_work_offscreen )
+	blocks_work_offscreen_ ( blocks_work_offscreen ),
+	loop_sides_ ( loop_sides )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -360,7 +387,8 @@ Map::Map( Map&& m ) noexcept
 	current_loop_ ( m.current_loop_ ),
 	camera_x_priority_ ( m.camera_x_priority_ ),
 	camera_y_priority_ ( m.camera_y_priority_ ),
-	blocks_work_offscreen_ ( m.blocks_work_offscreen_ )
+	blocks_work_offscreen_ ( m.blocks_work_offscreen_ ),
+	loop_sides_ ( m.loop_sides_ )
 {};
 
 Map::Map( const Map& c )
@@ -384,7 +412,8 @@ Map::Map( const Map& c )
 	current_loop_ ( c.current_loop_ ),
 	camera_x_priority_ ( c.camera_x_priority_ ),
 	camera_y_priority_ ( c.camera_y_priority_ ),
-	blocks_work_offscreen_ ( c.blocks_work_offscreen_ )
+	blocks_work_offscreen_ ( c.blocks_work_offscreen_ ),
+	loop_sides_ ( c.loop_sides_ )
 {};
 
 int Map::widthBlocks() const
@@ -458,7 +487,7 @@ int Map::indexFromXAndY( int x, int y ) const
 		x = getXIndexForLoop( x );
 	}
 	
-	if ( x < 0 || x > widthBlocks() || y < 0 || y > heightBlocks() )
+	if ( x < 0 || x >= widthBlocks() || y < 0 || y > heightBlocks() )
 	{
 		return -1;
 	}
@@ -590,6 +619,11 @@ Camera::YPriority Map::cameraYPriority() const
 bool Map::blocksWorkOffscreen() const
 {
 	return blocks_work_offscreen_;
+};
+
+bool Map::loopSides() const
+{
+	return loop_sides_;
 };
 
 void Map::setChanged()

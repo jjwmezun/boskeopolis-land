@@ -364,69 +364,69 @@ void OverworldState::eventByID( int id )
 	switch ( id )
 	{
 		case ( 1 ):
-			tiles_.at( mezun::nOfXY( 59, 150, map_width_ ) ).type_ = 5;
+			tiles_.at( mezun::nOfXY( 59, 150, map_width_ ) ).changeType( 5, water_gfx_ );
 		break;
 
 		case ( 2 ):
-			tiles_.at( mezun::nOfXY( 36, 139, map_width_ ) ).type_ = 5;
+			tiles_.at( mezun::nOfXY( 36, 139, map_width_ ) ).changeType( 5, water_gfx_ );
 		break;
 
 		case ( 3 ):
 			for ( int i = 107; i < 121; ++i )
 			{
-				tiles_.at( mezun::nOfXY( 21, i, map_width_ ) ).type_ = 5;
+				tiles_.at( mezun::nOfXY( 21, i, map_width_ ) ).changeType( 5, water_gfx_ );
 			}
 		break;
 
 		case ( 4 ):
 			for ( int i = 53; i < 71; ++i )
 			{
-				tiles_.at( mezun::nOfXY( 24, i, map_width_ ) ).type_ = 26;
+				tiles_.at( mezun::nOfXY( 24, i, map_width_ ) ).changeType( 26, water_gfx_ );
 			}
 		break;
 
 		case ( 5 ):
 			for ( int i = 36; i < 42; ++i )
 			{
-				tiles_.at( mezun::nOfXY( 29, i, map_width_ ) ).type_ = 26;
+				tiles_.at( mezun::nOfXY( 29, i, map_width_ ) ).changeType( 26, water_gfx_ );
 			}
 			for ( int i = 26; i < 37; ++i )
 			{
-				tiles_.at( mezun::nOfXY( 39, i, map_width_ ) ).type_ = 26;
+				tiles_.at( mezun::nOfXY( 39, i, map_width_ ) ).changeType( 26, water_gfx_ );
 			}
 			for ( int i = 30; i < 39; ++i )
 			{
-				tiles_.at( mezun::nOfXY( i, 36, map_width_ ) ).type_ = 26;
+				tiles_.at( mezun::nOfXY( i, 36, map_width_ ) ).changeType( 26, water_gfx_ );
 			}
 			for ( int i = 40; i < 55; ++i )
 			{
-				tiles_.at( mezun::nOfXY( i, 26, map_width_ ) ).type_ = 26;
+				tiles_.at( mezun::nOfXY( i, 26, map_width_ ) ).changeType( 26, water_gfx_ );
 			}
 		break;
 
 		case ( 6 ):
 			for ( int i = 85; i < 95; ++i )
 			{
-				tiles_.at( mezun::nOfXY( i, 23, map_width_ ) ).type_ = 5;
+				tiles_.at( mezun::nOfXY( i, 23, map_width_ ) ).changeType( 5, water_gfx_ );
 			}
 		break;
 
 		case ( 7 ):
 			for ( int i = 108; i < 125; ++i )
 			{
-				tiles_.at( mezun::nOfXY( i, 28, map_width_ ) ).type_ = 5;
+				tiles_.at( mezun::nOfXY( i, 28, map_width_ ) ).changeType( 5, water_gfx_ );
 			}
 			for ( int i = 28; i < 43; ++i )
 			{
-				tiles_.at( mezun::nOfXY( 124, i, map_width_ ) ).type_ = 5;
+				tiles_.at( mezun::nOfXY( 124, i, map_width_ ) ).changeType( 5, water_gfx_ );
 			}
 			for ( int i = 124; i < 149; ++i )
 			{
-				tiles_.at( mezun::nOfXY( i, 42, map_width_ ) ).type_ = 5;
+				tiles_.at( mezun::nOfXY( i, 42, map_width_ ) ).changeType( 5, water_gfx_ );
 			}
 			for ( int i = 42; i < 53; ++i )
 			{
-				tiles_.at( mezun::nOfXY( 148, i, map_width_ ) ).type_ = 5;
+				tiles_.at( mezun::nOfXY( 148, i, map_width_ ) ).changeType( 5, water_gfx_ );
 			}
 		break;
 	}
@@ -463,22 +463,17 @@ Palette OverworldState::lvPal( int id )
 		break;
 
 		case ( 3 ):
-			pal = "Overworld Yellow";
-		break;
-
 		case ( 4 ):
 			pal = "Overworld Yellow";
 		break;
 
 		case ( 5 ):
-			pal = "Overworld Blue";
-		break;
-
 		case ( 6 ):
 			pal = "Overworld Blue";
 		break;
 
 		case ( 7 ):
+		case ( 8 ):
 			pal = "Overworld Gray";
 		break;
 	}

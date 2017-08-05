@@ -276,14 +276,27 @@ void Sprite::position()
 
 void Sprite::boundaries( Camera& camera, Map& lvmap )
 {
-	if ( hit_box_.x < Unit::PixelsToSubPixels( camera.x() ) )
+	if ( lvmap.loopSides() )
 	{
-		collideStopXLeft( abs ( camera.x() - hit_box_.x ) );
+		if ( hit_box_.x + hit_box_.w < Unit::PixelsToSubPixels( camera.x() ) )
+		{
+			hit_box_.x = Unit::PixelsToSubPixels( camera.right() );
+		}
+		if ( hit_box_.x > Unit::PixelsToSubPixels( camera.right() ) )
+		{
+			hit_box_.x = Unit::PixelsToSubPixels( camera.x() ) - hit_box_.w;
+		}
 	}
-
-	if ( hit_box_.x + hit_box_.w > Unit::PixelsToSubPixels( camera.right() ) )
+	else
 	{
-		collideStopXRight( ( hit_box_.x + hit_box_.w ) - Unit::PixelsToSubPixels( camera.right() ) );
+		if ( hit_box_.x < Unit::PixelsToSubPixels( camera.x() ) )
+		{
+			collideStopXLeft( abs ( camera.x() - hit_box_.x ) );
+		}
+		if ( hit_box_.x + hit_box_.w > Unit::PixelsToSubPixels( camera.right() ) )
+		{
+			collideStopXRight( ( hit_box_.x + hit_box_.w ) - Unit::PixelsToSubPixels( camera.right() ) );
+		}
 	}
 
 	if ( hit_box_.y < -hit_box_.h )

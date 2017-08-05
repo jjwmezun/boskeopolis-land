@@ -33,6 +33,7 @@
 #include "maze_chaser_sprite.hpp"
 #include "mezun_exceptions.hpp"
 #include "penguin_sprite.hpp"
+#include "pipe_eel_sprite.hpp"
 #include "platform_sprite.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_graphics.hpp"
@@ -211,6 +212,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const 
 		break;
 		case ( SPRITE_INDEX_START + 46 ):
 			return std::unique_ptr<Sprite> ( new FaucetSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 47 ):
+			return std::unique_ptr<Sprite> ( new PipeEelSprite( x, y, Direction::Vertical::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 48 ):
+			return std::unique_ptr<Sprite> ( new PipeEelSprite( x, y, Direction::Vertical::UP ) );
 		break;
 		case ( SPRITE_INDEX_START + 63 ):
 			return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );

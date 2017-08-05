@@ -18,6 +18,8 @@ class OWTile
 		sdl2::SDLRect coords() const;
 
 		int type_;
+		
+		void changeType( int type, const SpriteGraphics& gfx );
 
 	private:
 		static constexpr int SIZE = 16;
@@ -25,9 +27,9 @@ class OWTile
 
 		const int x_;
 		const int y_;
+		const SpriteGraphics* gfx_;
 	
 		sdl2::SDLRect src() const;
 		sdl2::SDLRect dest( const OWCamera& camera ) const;
-	
-		const SpriteGraphics* gfx_;
+		void setGFX( int type, const SpriteGraphics& gfx );
 };

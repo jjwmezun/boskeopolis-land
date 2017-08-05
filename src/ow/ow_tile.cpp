@@ -13,10 +13,7 @@ OWTile::OWTile( int type, int x, int y, const AnimatedGraphics& gfx )
 	y_ ( y ),
 	gfx_ ( nullptr )
 {
-	if ( type == 1 )
-	{
-		gfx_ = &gfx;
-	}
+	setGFX( type, gfx );
 };
 
 void OWTile::render( const OWCamera& camera ) const
@@ -78,4 +75,22 @@ sdl2::SDLRect OWTile::coords() const
 		SIZE,
 		SIZE
 	};
+};
+
+void OWTile::changeType( int type, const SpriteGraphics& gfx )
+{
+	type_ = type;
+	setGFX( type, gfx );
+};
+
+void OWTile::setGFX( int type, const SpriteGraphics& gfx )
+{
+	if ( type == 1 )
+	{
+		gfx_ = &gfx;
+	}
+	else
+	{
+		gfx_ = nullptr;
+	}
 };

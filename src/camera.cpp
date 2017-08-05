@@ -145,6 +145,22 @@
             }
         }
 
+        if ( m.leftLimit() > -1 )
+        {
+            if ( m.leftLimit() > x_ )
+            {
+                x_ = m.leftLimit();
+            }
+        }
+
+        if ( m.rightLimit() > -1 )
+        {
+            if ( m.widthPixels() - m.rightLimit() < right() )
+            {
+                x_ = m.widthPixels() - m.rightLimit() - widthPixels();
+            }
+        }
+
         if ( x() != prevX() || y() != prevY() )
             changed_ = true;
     }

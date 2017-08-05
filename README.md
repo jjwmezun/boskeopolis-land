@@ -36,20 +36,30 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 * Fix glitch wherein Autumn can't move upward on a ladder after a map transition.
 * Sprite class still a mess -- look into organizing states ( isJumping, isDucking, onLadder, etc. ) into finite state machine ).
 * Timers kinda wonky. In particular, I want to find a way to encapsulate common "if hit; else if on, update; else, start" pattern in the class itself so I don't have to keep typing it. Sometimes the stopping mechanism for TimerSimple is wonky ( see SewerMonster class ).
-* "full" console argument is bugged for some reason.
 
 ### Levels
 * Sherbet Slopes
 	* Figure out what I want to do with this level.
-* Ship-2-Ship Islands
-	* Draw pirate graphics.
+* The Playing Railroad
+	* Graphics
+	* Program enemies, hero & enemy bullets, & version o' hero who can shoot bullets.
+	* Figure out a way to make the level bump up & down like a train.
+* Mt. Volcocoa
+	* Design map.
+	* Think o' clever things to do with heat mechanic.
+* ¡Precipitous!
+	* Get round to making this, since I already made it before & it shouldn't take any effort.
 * The Minus Touch
 	* Finish map.
-* Porcelain Dreams
-	* Think o' enemies to add.
 * Hoot Chutes
 	* Finish map.
 	* Draw owl.
 * Curse o' the Ladder-Splayed Caves
 	* Figure out what else to do with this level.
 	* Fix level-select screen so this level name doesn't splay out into the scores (should make level names take up a'least 2 miniblocks o' vertical space & have them have a line-limit set).
+* Pepperoncini Pyramid
+	* Design map.
+	* Think o' ideas for sprites & dangers.
+* Windy Woods
+	* Design map.
+	* Think o' clever things to do with wind mechanic.

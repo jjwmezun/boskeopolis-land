@@ -12,7 +12,7 @@ class Sprite;
 class MapLayerWater : public MapLayer
 {
 	public:
-		MapLayerWater( int y_blocks );
+		MapLayerWater( int y_blocks, bool rising );
 
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) override;
 		void render( Camera& camera ) const override;
@@ -24,6 +24,7 @@ class MapLayerWater : public MapLayer
 		static constexpr int MOVE_SPEED = 500;
 
 		int y_;
+		const bool rising_;
 		AnimatedGraphics surface_;
 		Counter x_offset_;
 		TimerRepeat animation_speed_;

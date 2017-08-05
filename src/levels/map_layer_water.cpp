@@ -4,10 +4,11 @@
 #include "sprite.hpp"
 #include "map_layer_water.hpp"
 
-MapLayerWater::MapLayerWater( int y_blocks )
+MapLayerWater::MapLayerWater( int y_blocks, bool rising )
 :
 	MapLayer(),
 	y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
+	rising_ ( rising ),
 	surface_
 	(
 		"bg/animated_water.png",
@@ -66,7 +67,11 @@ void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Came
 
 	animation_speed_.update();
 
-	if ( events.waterShouldMove() )
+	if ( rising_ )
+	{
+		y_ -= MOVE_SPEED;
+	}
+	else if ( events.waterShouldMove() )
 	{
 		if ( events.move_water_ < y_ )
 		{
