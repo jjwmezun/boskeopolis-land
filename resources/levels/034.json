@@ -37,23 +37,6 @@
 					"y_offset": 125,
 					"y_repeat": false,
 					"x_speed": -6400
-				},
-				{
-					"type": "image",
-					"img": "train_windows.png",
-					"width": 272,
-					"height": 96,
-					"y_offset": 48,
-					"y_repeat": false,
-					"alpha": 64
-				},
-				{
-					"type": "image",
-					"img": "train.png",
-					"width": 272,
-					"height": 96,
-					"y_offset": 48,
-					"y_repeat": false
 				}
 			],
 			"warps":
@@ -207,23 +190,6 @@
 					"y_offset": 125,
 					"y_repeat": false,
 					"x_speed": -6400
-				},
-				{
-					"type": "image",
-					"img": "train_windows.png",
-					"width": 272,
-					"height": 96,
-					"y_offset": 48,
-					"y_repeat": false,
-					"alpha": 64
-				},
-				{
-					"type": "image",
-					"img": "train.png",
-					"width": 272,
-					"height": 96,
-					"y_offset": 48,
-					"y_repeat": false
 				}
 			],
 			"warps":
@@ -233,7 +199,7 @@
 					"entrance_x": 190,
 					"entrance_y": 6,
 					"location": [ 2, 6, 0, 4 ]
-				}
+				}		
 			]
 		}
 	],
@@ -247,6 +213,6 @@
 		"type": "kill_all"
 	},
 
-	"gem_challenge": 1000,
-	"time_challenge": 20
+	"gem_challenge": 10000,
+	"time_challenge": 120
 }

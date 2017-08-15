@@ -13,13 +13,15 @@ SpriteGraphics::SpriteGraphics
 	int x_adjustment,
 	int y_adjustment,
 	int w_adjustment,
-	int h_adjustment
+	int h_adjustment,
+	Uint8 alpha
 )
 :
 	flip_x_ ( flip_x ),
 	flip_y_ ( flip_y ),
 	priority_ ( priority ),
 	visible_ ( true ),
+	alpha_ ( alpha ),
 	current_frame_x_ ( current_frame_x ),
 	current_frame_y_ ( current_frame_y ),
 	x_adjustment_ ( x_adjustment ),
@@ -43,9 +45,9 @@ void SpriteGraphics::update()
 {
 };
 
-void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, Uint8 alpha ) const
+void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
-	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha );
+	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha_ );
 };
 
 void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha ) const

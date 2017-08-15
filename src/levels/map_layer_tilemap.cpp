@@ -34,12 +34,15 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 
 			for ( int x = first_x; x < last_x; ++x )
 			{
-				const int xp = Unit::BlocksToPixels( x );
-
 				const int i = nOfXY( x, y );
-				const int type = tiles_.at( i ) - 1;
+				if ( tiles_.at( i ) > 0 )
+				{
+					const int xp = Unit::BlocksToPixels( x );
 
-				blocks.addBlock( xp, yp, i, type, blocks_ );
+					const int type = tiles_.at( i ) - 1;
+
+					blocks.addBlock( xp, yp, i, type, blocks_ );
+				}
 			}
 		}
 	}

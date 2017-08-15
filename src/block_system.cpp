@@ -81,7 +81,7 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 			for ( int i = 0; i < lvmap.blocksSize(); ++i )
 			{
 				const int type = lvmap.block( i ) - 1;
-
+				
 				if ( type > -1 )
 				{
 					const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );

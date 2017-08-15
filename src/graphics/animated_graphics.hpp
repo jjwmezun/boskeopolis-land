@@ -21,7 +21,8 @@ class AnimatedGraphics : public SpriteGraphics
 			int y_adjustment = 0,
 			int w_adjustment = 0,
 			int h_adjustment = 0,
-			int animation_speed = 8
+			int animation_speed = 8,
+			Uint8 alpha = 255
 		);
 		~AnimatedGraphics();
 		void update();

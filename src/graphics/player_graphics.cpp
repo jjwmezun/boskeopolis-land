@@ -38,14 +38,18 @@ void PlayerGraphics::update( Sprite& sprite )
 			animation_timer_.update();
 		}
 
+		
 		switch ( climb_counter_.value() )
 		{
 			case 1:
-				flip_x_ = !flip_x_;
-				break;
+				current_frame_x_ = 128;
+			break;
+
+			default:
+				current_frame_x_ = 96;
+			break;
 		}
 
-		current_frame_x_ = 96;
 		current_frame_y_ = 0;
 	}
 	else if ( sprite.isSlidingPrev() )

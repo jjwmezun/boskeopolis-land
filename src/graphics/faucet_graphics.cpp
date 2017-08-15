@@ -30,9 +30,9 @@ void FaucetGraphics::update( Sprite& sprite )
 	}
 };
 
-void FaucetGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, Uint8 alpha ) const
+void FaucetGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
-	masterRender( bound_box, 256, 0, camera, priority, alpha );
+	masterRender( bound_box, 256, 0, camera, priority );
 
 	if ( priority )
 	{
@@ -42,9 +42,9 @@ void FaucetGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camer
 		for ( int i = 0; i < 4; ++i )
 		{
 			waterfall_box.y += 16;
-			masterRender( waterfall_box, current_frame_x_, current_frame_y_ * 32, camera, false, alpha );
+			masterRender( waterfall_box, current_frame_x_, current_frame_y_ * 32, camera, false );
 		}
 		waterfall_box.y += 16;
-		masterRender( waterfall_box, current_frame_x_, ( current_frame_y_ * 32 ) + 16, camera, false, alpha );
+		masterRender( waterfall_box, current_frame_x_, ( current_frame_y_ * 32 ) + 16, camera, false );
 	}
 }

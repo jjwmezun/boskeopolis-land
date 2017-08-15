@@ -12,10 +12,11 @@ AnimatedGraphics::AnimatedGraphics
 	int y_adjustment,
 	int w_adjustment,
 	int h_adjustment,
-	int animation_speed
+	int animation_speed,
+	Uint8 alpha
 )
 :
-	SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment ),
+	SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment, alpha ),
 	frames_ ( frames ),
 	current_frame_index_ ( 0, frames.size() - 1, 0, true ),
 	animation_timer_ ( animation_speed )

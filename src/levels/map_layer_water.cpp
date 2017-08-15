@@ -17,7 +17,17 @@ MapLayerWater::MapLayerWater( int y_blocks, bool rising )
 			std::make_pair<int, int> ( 8, 0 ),
 			std::make_pair<int, int> ( 16, 0 ),
 			std::make_pair<int, int> ( 24, 0 ),
-		}
+		},
+		false,
+		false,
+		0,
+		false,
+		0,
+		0,
+		0,
+		0,
+		8,
+		ALPHA
 	),
 	x_offset_ ( -8, 0, -8, true ),
 	animation_speed_ ( 16 )
@@ -48,7 +58,7 @@ void MapLayerWater::render( Camera& camera ) const
 		for ( int x = x_offset_(); x < Unit::WINDOW_WIDTH_PIXELS; x += 8 )
 		{
 			const sdl2::SDLRect r = { x, relative_y, 8, 16 };
-			surface_.render( r, nullptr, false, ALPHA );
+			surface_.render( r, nullptr, false );
 		}
 		
 		relative_y += 16;		

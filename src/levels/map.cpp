@@ -24,7 +24,7 @@ Map Map::mapFromPath
 
 		std::vector<int> blocks = {};
 		std::vector<int> sprites = {};
-		std::vector<int> layer2 = {};
+		std::vector<std::vector<int>> layer2s = {};
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -87,9 +87,14 @@ Map Map::mapFromPath
 						{
 							sprites.push_back( n.GetInt() );
 						}
-						else if ( i == LAYER2_INDEX )
+						else if ( i >= LAYER2_INDEX )
 						{
-							layer2.push_back( n.GetInt() );
+							if ( layer2s.size() < ( i - LAYER2_INDEX ) + 1 )
+							{
+								layer2s.emplace_back( std::vector<int> () );
+							}
+
+							layer2s[ i - LAYER2_INDEX ].emplace_back( n.GetInt() );
 						}
 						else
 						{
@@ -101,9 +106,9 @@ Map Map::mapFromPath
 			++i;
 		}
 		
-		if ( !layer2.empty() )
+		for ( auto& l2 : layer2s )
 		{
-			backgrounds.emplace_back( new MapLayerTilemap( layer2, width, height ) );
+			backgrounds.emplace_back( new MapLayerTilemap( l2, width, height ) );
 		}
 
 

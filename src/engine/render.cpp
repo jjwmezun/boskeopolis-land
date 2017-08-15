@@ -405,10 +405,7 @@ namespace Render
 			loadTexture( sheet, alpha );
 		}
 
-		if ( alpha != 255 )
-		{
-			SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
-		}
+		SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
 
 		if ( camera != nullptr )
 		{

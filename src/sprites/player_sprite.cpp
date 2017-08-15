@@ -13,7 +13,6 @@
 #include "level.hpp"
 #include "map.hpp"
 #include "player_sprite.hpp"
-#include "player_graphics.hpp"
 #include "racer_sprite.hpp"
 
 PlayerSprite::PlayerSprite
@@ -21,7 +20,7 @@ PlayerSprite::PlayerSprite
 	int x,
 	int y,
 	std::unique_ptr<InputComponent> input,
-	std::string&& texture,
+	std::unique_ptr<SpriteGraphics>&& gfx,
 	SpriteType type,
 	int start_speed,
 	int top_speed,
@@ -32,7 +31,7 @@ PlayerSprite::PlayerSprite
 :
 	Sprite
 	(
-		std::make_unique<PlayerGraphics> ( std::forward<std::string> ( texture ) ),
+		std::move( gfx ),
 		x,
 		y,
 		14,
@@ -235,7 +234,7 @@ void PlayerSprite::actions()
 		jump_lock_ = false;
 	}
 
-	if ( input_->up() || input_->down() )
+	if ( input_->up() )
 	{
 		if ( touching_ladder_ )
 		{

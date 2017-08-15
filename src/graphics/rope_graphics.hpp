@@ -11,7 +11,7 @@ class RopeGraphics : public SpriteGraphics
 		~RopeGraphics();
 
 		void update( Sprite& sprite );
-		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false, Uint8 alpha = 255 ) const override;
+		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const override;
 
 	private:
 		static constexpr std::pair<int, int> frame_body_ = { 112, 16 };

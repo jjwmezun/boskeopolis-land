@@ -4,6 +4,7 @@ class Block;
 class Sprite;
 
 #include "input_component_player.hpp"
+#include "player_graphics.hpp"
 #include "sprite.hpp"
 
 class PlayerSprite : public Sprite
@@ -16,8 +17,7 @@ class PlayerSprite : public Sprite
 			std::unique_ptr<InputComponent> input
 				= std::unique_ptr<InputComponentPlayer>
 				(),
-			std::string&& texture
-				= "sprites/autumn.png",
+			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<PlayerGraphics> ( "sprites/autumn.png" ),
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,
 			int top_speed = 2000,
@@ -29,8 +29,8 @@ class PlayerSprite : public Sprite
 
 		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
-		void duck();
-		void unduck();
+		virtual void duck();
+		virtual void unduck();
 
 	protected:
 		void deathAction( Camera& camera );

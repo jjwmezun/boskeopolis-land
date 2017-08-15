@@ -2,8 +2,7 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 9,
-		"y": 2,
-		"priority": true
+		"x": 3,
+		"y": 38
 	}
 }

@@ -126,6 +126,10 @@ std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::stri
 			{
 				types.emplace_back( std::move( makeType( block, tileset ) ) );
 			}
+			else
+			{
+				types.emplace_back( nullptr );
+			}
 
 			ifs.close();
 		}
@@ -157,6 +161,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 			bool flip_y = false;
 			double rotation = 0;
 			bool priority = false;
+			Uint8 alpha = 255;
 
 			if ( g.HasMember( "flip_x" ) && g[ "flip_x" ].IsBool() )
 			{
@@ -176,6 +181,11 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 			if ( g.HasMember( "priority" ) && g[ "priority" ].IsBool() )
 			{
 				priority = g[ "priority" ].GetBool();
+			}
+
+			if ( g.HasMember( "alpha" ) && g[ "alpha" ].IsInt() )
+			{
+				alpha = g[ "alpha" ].GetInt();
 			}
 
 
@@ -204,7 +214,12 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 						flip_x,
 						flip_y,
 						rotation,
-						priority
+						priority,
+						0,
+						0,
+						0,
+						0,
+						alpha
 					);
 				}
 				else if ( mezun::areStringsEqual( g[ "type" ].GetString(), "animated" ) )
