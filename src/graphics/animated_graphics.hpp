@@ -2,6 +2,7 @@
 
 #include "counter.hpp"
 #include "sprite_graphics.hpp"
+#include "timer_repeat.hpp"
 #include <vector>
 #include <utility>
 
@@ -28,6 +29,7 @@ class AnimatedGraphics : public SpriteGraphics
 	private:
 		std::vector<std::pair<int, int>> frames_;
 		Counter current_frame_index_;
+		TimerRepeat animation_timer_;
 
 		int getXFrameOfPairIndex( int index ) const;
 		int getYFrameOfPairIndex( int index ) const;

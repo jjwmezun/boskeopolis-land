@@ -33,10 +33,12 @@ class EventSystem
 		bool switchChanged() const;
 		void flipSwitch();
 
-		int move_water_;
-		int current_water_;
 		bool waterShouldMove() const;
 		bool waterShouldStop() const;
+
+		int misc_;
+		int move_water_;
+		int current_water_;
 		bool in_front_of_door_;
 
 

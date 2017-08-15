@@ -13,7 +13,7 @@ SurviveTimeGoal::SurviveTimeGoal( int wait_time, std::string message )
 
 SurviveTimeGoal::~SurviveTimeGoal() {};
 
-void SurviveTimeGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health )
+void SurviveTimeGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	if ( Inventory::clock().totalSeconds() >= wait_time_ )
 	{
@@ -21,7 +21,7 @@ void SurviveTimeGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSyst
 	}
 };
 
-void SurviveTimeGoal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void SurviveTimeGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
 };

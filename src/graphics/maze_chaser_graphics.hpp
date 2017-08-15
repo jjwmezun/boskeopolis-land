@@ -1,43 +1,18 @@
+#pragma once
 
+class Sprite;
 
-// Name
-//===================================
-//
-// MazeChaserGraphics
-//
+#include "sprite_graphics.hpp"
+#include "maze_chaser_sprite.hpp"
 
+class MazeChaserGraphics : public SpriteGraphics
+{
+	public:
+		MazeChaserGraphics( MazeChaserSprite::Type type );
+		~MazeChaserGraphics();
 
-#ifndef MAZE_CHASER_GRAPHICS_H
-#define MAZE_CHASER_GRAPHICS_H
+		void update( Sprite& sprite );
 
-
-// FORWARD DECLARATIONS
-//===================================
-
-    class Sprite;
-
-
-// DEPENDENCIES
-//===================================
-
-    #include "sprite_graphics.hpp"
-    #include "maze_chaser_sprite.hpp"
-
-
-// CLASS
-//===================================
-
-    class MazeChaserGraphics : public SpriteGraphics
-    {
-        public:
-            MazeChaserGraphics( MazeChaserSprite::Type type );
-            ~MazeChaserGraphics();
-
-            void update( Sprite& sprite );
-			
-		private:
-			int typesImgXFrame( MazeChaserSprite::Type type ) const;
-    };
-
-
-#endif // MAZE_CHASER_GRAPHICS_H
+	private:
+		int typesImgXFrame( MazeChaserSprite::Type type ) const;
+};

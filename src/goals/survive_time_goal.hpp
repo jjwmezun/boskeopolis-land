@@ -10,8 +10,8 @@ class SurviveTimeGoal : public Goal
 		SurviveTimeGoal( int wait_time = 30, std::string message = "" );
 		~SurviveTimeGoal();
 
-		void customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
-		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health ) override;
+		void customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
+		void update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
 
 	private:
 		const int wait_time_;

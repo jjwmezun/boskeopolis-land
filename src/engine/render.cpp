@@ -1,3 +1,4 @@
+#include "camera.hpp"
 #include <cassert>
 #include <cstdio>
 #include "main.hpp"
@@ -57,6 +58,7 @@ namespace Render
 	const std::string imgAddress( const std::string& relative_path );
 	const std::string setImgPath();
 	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source );
+	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
 
 
 	// Function Implementations
@@ -352,7 +354,51 @@ namespace Render
 		};
 	};
 
-	void renderObject( const std::string& sheet, sdl2::SDLRect source, sdl2::SDLRect dest, SDL_RendererFlip flip, double rotation, Uint8 alpha )
+	SDL_RendererFlip convertFlip( int flip_x, int flip_y )
+	{
+		if ( flip_x && flip_y )
+		{
+			return ( SDL_RendererFlip )( SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL );
+		}
+		else if ( flip_x )
+		{
+			return SDL_FLIP_HORIZONTAL;
+		}
+		else if ( flip_y )
+		{
+			return SDL_FLIP_VERTICAL;
+		}
+		else
+		{
+			return SDL_FLIP_NONE;
+		}
+	};
+	
+	void renderObject
+	(
+		const std::string& sheet,
+		const sdl2::SDLRect& source,
+		const sdl2::SDLRect& dest,
+		bool flip_x,
+		bool flip_y,
+		double rotation,
+		Uint8 alpha,
+		const Camera* camera
+	)
+	{
+		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera );
+	};
+
+	void renderObject
+	(
+		const std::string& sheet,
+		sdl2::SDLRect source,
+		sdl2::SDLRect dest,
+		SDL_RendererFlip flip,
+		double rotation,
+		Uint8 alpha,
+		const Camera* camera
+	)
 	{
 		if ( textures_.find( sheet ) == textures_.end() )
 		{
@@ -364,6 +410,19 @@ namespace Render
 			SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
 		}
 
+		if ( camera != nullptr )
+		{
+			if ( camera->onscreenPixels( dest ) )
+			{
+				dest.x = camera->relativeX( dest );
+				dest.y = camera->relativeY( dest );
+			}
+			else
+			{
+				return; // If not onscreen, don't draw; just quit function now.
+			}
+		}
+		
 		dest = sourceRelativeToScreen( dest );
 
 		if ( SDL_RenderCopyEx( renderer_, textures_.at( sheet ), &source, &dest, rotation, 0, flip ) != 0 )

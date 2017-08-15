@@ -1,11 +1,11 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "hydrant_sprite.hpp"
-#include "hydrant_graphics.hpp"
+#include "sprite_graphics.hpp"
 
 HydrantSprite::HydrantSprite( int x, int y )
 :
-	Sprite( std::make_unique<HydrantGraphics> (), x, y, 14, 14, {}, 100, 1500, 3000, 3000 )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/hydrant.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 ), x, y, 14, 14, {}, 100, 1500, 3000, 3000 )
 {
 	jump_lock_ = false;
 };

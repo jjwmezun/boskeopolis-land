@@ -66,6 +66,11 @@ PlayerSprite::~PlayerSprite() {};
 
 void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
+	heroActions( camera, lvmap, events, sprites, blocks, health );
+};
+
+void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+{
 	if ( !RacerSprite::DEBUG )
 	{
 		actions();

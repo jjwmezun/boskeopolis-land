@@ -18,7 +18,8 @@ InventoryLevel::InventoryLevel()
 	health_gfx_ ( Y ),
 	oxygen_meter_ ( Y ),
 	ticker_ ( Y + 16 ),
-	show_mcguffins_ ( false )
+	show_mcguffins_ ( false ),
+	kill_counter_ ( -1 )
 {};
 
 void InventoryLevel::update( EventSystem& events, const Health& health )
@@ -91,6 +92,14 @@ void InventoryLevel::render( EventSystem& events )
 			mcguffins_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
 			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontShade::DARK_GRAY );
+		}
+	
+		// Kill Count
+		if ( kill_counter_ > -1 )
+		{
+			kills_gfx_.render( MCGUFFIN_DEST, nullptr );
+			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
+			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontShade::DARK_GRAY );
 		}
 
 	// OXYGEN

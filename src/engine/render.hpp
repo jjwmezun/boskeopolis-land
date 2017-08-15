@@ -1,5 +1,6 @@
 #pragma once
 
+class Camera;
 class Palette;
 
 #include "mezun_sdl2.hpp"
@@ -16,11 +17,23 @@ namespace Render
 	void renderObject
 	(
 		const std::string& sheet,
+		const sdl2::SDLRect& source,
+		const sdl2::SDLRect& dest,
+		bool flip_x,
+		bool flip_y,
+		double rotation,
+		Uint8 alpha,
+		const Camera* camera
+	);
+	void renderObject
+	(
+		const std::string& sheet,
 		sdl2::SDLRect source,
 		sdl2::SDLRect dest,
 		SDL_RendererFlip flip = SDL_FLIP_NONE,
 		double rotation = 0,
-		Uint8 alpha = 255
+		Uint8 alpha = 255,
+		const Camera* = nullptr
 	);
 
 	void colorCanvas();

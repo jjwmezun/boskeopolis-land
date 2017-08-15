@@ -10,7 +10,7 @@ HeatGoal::HeatGoal()
 
 HeatGoal::~HeatGoal() {};
 
-void HeatGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health )
+void HeatGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	if ( sprites.hero().collidedAny() )
 	{

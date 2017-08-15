@@ -4,7 +4,8 @@
 BadAppleGraphics::BadAppleGraphics()
 :
 	SpriteGraphics ( "sprites/bad_apple.png" ),
-	animation_frame_ ( { 0, 1, 0, true } )
+	animation_frame_ ( { 0, 1, 0, true } ),
+	animation_timer_ ()
 {};
 
 BadAppleGraphics::~BadAppleGraphics() {};

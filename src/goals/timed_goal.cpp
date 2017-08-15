@@ -12,7 +12,7 @@ TimedGoal::TimedGoal( int time_limit )
 
 TimedGoal::~TimedGoal() {};
 
-void TimedGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health )
+void TimedGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	if ( Inventory::clock().totalSeconds() >= time_limit_ )
 	{

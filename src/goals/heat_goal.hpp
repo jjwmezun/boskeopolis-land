@@ -8,5 +8,5 @@ class HeatGoal : public Goal
 		HeatGoal();
 		~HeatGoal();
 
-		void update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health ) override;
+		void update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
 };

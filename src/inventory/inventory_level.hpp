@@ -19,6 +19,7 @@ class InventoryLevel
 		void render( EventSystem& events );
 
 		bool show_mcguffins_;
+		int kill_counter_;
 
 	private:
 		static constexpr int Y = Unit::WINDOW_HEIGHT_PIXELS - 24;
@@ -50,6 +51,7 @@ class InventoryLevel
 
 		const SpriteGraphics key_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 8 );
 		const SpriteGraphics mcguffins_gfx_ = SpriteGraphics( "tilesets/universal.png", 0, 24 );
+		const SpriteGraphics kills_gfx_ = SpriteGraphics( "tilesets/universal.png", 8, 24 );
 		const SpriteGraphics mcguffins_cross_ = SpriteGraphics( "charset.png", 8, 40 );
 		const Text switch_on_ = { "ON", MISC_X, Y, Text::FontShade::DARK_GRAY };
 		const Text switch_off_ = { "OFF", MISC_X, Y, Text::FontShade::DARK_GRAY };

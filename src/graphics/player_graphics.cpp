@@ -4,6 +4,7 @@
 PlayerGraphics::PlayerGraphics( std::string&& texture )
 :
 	SpriteGraphics ( std::forward<std::string> ( texture ), 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
+	animation_timer_ (),
 	walk_counter_  ( 0, 3, 0, true ),
 	climb_counter_ ( 0, 1, 0, true ),
 	blink_counter_ ( 0, 11, 0, true ),

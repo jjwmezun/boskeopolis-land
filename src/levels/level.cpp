@@ -21,6 +21,7 @@
 #include "collect_goal.hpp"
 #include "do_nothing_goal.hpp"
 #include "heat_goal.hpp"
+#include "kill_all_goal.hpp"
 #include "mcguffin_goal.hpp"
 #include "past_right_edge_goal.hpp"
 #include "starving_goal.hpp"
@@ -138,6 +139,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 
 		events.changePalette( currentMap().palette() );
 		blocks.changeTileset( currentMap().tileset() );
+		Sprite::resistance_x_ = currentMap().windStrength();
 
 		currentMap().setChanged();
 	}
@@ -201,13 +203,13 @@ int Level::id() const
 
 void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health )
 {
-	goal_->init( hero, inventory, events, health );
+	goal_->init( hero, *this, inventory, events, health );
 };
 
-void Level::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health )
+void Level::update( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health )
 {
 	currentMap().update( events, sprites, blocks, camera );
-	goal_->update( sprites, currentMap(), events, health );
+	goal_->update( sprites, currentMap(), inventory_screen, events, health );
 };
 
 unsigned int Level::realLevelNum()
@@ -606,6 +608,10 @@ Level Level::getLevel( int id )
 						{
 							goal = std::make_unique<HeatGoal> ();
 						}
+						else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
+						{
+							goal = std::make_unique<KillAllGoal> ();
+						}
 					}
 					else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
 					{
@@ -765,4 +771,30 @@ void Level::checkLvList()
 			std::cout<<Text::formatNumCommas( Text::formatNumDigitPadding( gem_challenge_list_.at( i ), 5 ) )<<"    "<<Clock::timeToString( time_challenge_list_.at( i ) )<<std::endl;
 		}
 	}
+};
+
+int Level::allEnemiesToKill() const
+{
+	int n = 0;
+
+	for ( auto& m : maps_ )
+	{
+		for ( int i = 0; i < m.spritesSize(); ++i )
+		{
+			if
+			(
+				m.sprite( i ) == 450 ||
+				m.sprite( i ) == 451 ||
+				m.sprite( i ) == 453 ||
+				m.sprite( i ) == 454 ||
+				m.sprite( i ) == 455 ||
+				m.sprite( i ) == 456
+			)
+			{
+				++n;
+			}
+		}
+	}
+	
+	return n;
 };

@@ -54,6 +54,7 @@ class Map
 		void setChanged();
 		void changeBlock( int where, int value );
 		void deleteBlock( int where );
+		void deleteSprite( int where );
 
 		int topLimit() const;
 		int bottomLimit() const;
@@ -66,7 +67,8 @@ class Map
 		Camera::YPriority cameraYPriority() const;
 		bool blocksWorkOffscreen() const;
 		bool loopSides() const;
-		
+		int windStrength() const;
+
 		void interact( Sprite& sprite, Camera& camera, Health& health );
 		
 		bool scrollLoop() const;
@@ -96,7 +98,8 @@ class Map
 			Camera::XPriority camera_x_priority,
 			Camera::YPriority camera_y_priority,
 			bool blocks_work_offscreen,
-			bool loop_sides
+			bool loop_sides,
+			int wind_strength
 		);
 		std::vector<int> blocks_;
 		std::vector<int> sprites_;
@@ -118,6 +121,7 @@ class Map
 		const Camera::YPriority camera_y_priority_;
 		const bool blocks_work_offscreen_;
 		const bool loop_sides_;
+		const int wind_strength_;
 
 		static constexpr int LOOP_CHANGE = 3;
 		const int scroll_loop_width_;

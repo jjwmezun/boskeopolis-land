@@ -1,13 +1,16 @@
 #include "bad_apple_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
+#include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
 #include "cactooie_spine_sprite.hpp"
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
+#include "cannon_sprite.hpp"
 #include "cloud_block_sprite.hpp"
 #include "cloud_monster_sprite.hpp"
 #include "cloud_platform_sprite.hpp"
+#include "cowpoker_sprite.hpp"
 #include "direction.hpp"
 #include "eggnon_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
@@ -19,7 +22,6 @@
 #include "handgun_sprite.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
-#include "hydrant_graphics.hpp"
 #include "hydrant_sprite.hpp"
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
@@ -28,6 +30,7 @@
 #include "lifesaver_sprite.hpp"
 #include "lightning_sprite.hpp"
 #include "lil_pipe_monster_sprite.hpp"
+#include "locked_door_sprite.hpp"
 #include "map.hpp"
 #include "maze_player_sprite.hpp"
 #include "maze_chaser_sprite.hpp"
@@ -44,6 +47,7 @@
 #include "rope_sprite.hpp"
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
+#include "shooter_player_sprite.hpp"
 #include "shroud_sprite.hpp"
 #include "sillyfish_sprite.hpp"
 #include "snowball_sprite.hpp"
@@ -55,17 +59,19 @@
 #include "sprite_component_right_and_left.hpp"
 #include "sprite_component_up_and_down.hpp"
 #include "sprite_system.hpp"
+#include "stronger_cowpoker_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
-	hero_ ()
+	hero_ (),
+	permanently_killed_enemies_ ( 0 )
 {};
 
 SpriteSystem::~SpriteSystem() {};
 
-std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const Map& lvmap )
+std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i, const Map& lvmap )
 {
 	x = Unit::SubPixelsToPixels( x );
 	y = Unit::SubPixelsToPixels( y );
@@ -219,6 +225,27 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, const 
 		case ( SPRITE_INDEX_START + 48 ):
 			return std::unique_ptr<Sprite> ( new PipeEelSprite( x, y, Direction::Vertical::UP ) );
 		break;
+		case ( SPRITE_INDEX_START + 49 ):
+			return std::move( CowpokerSprite::TallCowpokerSprite( x, y, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 50 ):
+			return std::move( CowpokerSprite::ShortCowpokerSprite( x, y, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 51 ):
+			return std::unique_ptr<Sprite> ( new LockedDoorSprite( x, y, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 52 ):
+			return std::unique_ptr<Sprite> ( new CannonSprite( x, y, Direction::Vertical::__NULL, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 53 ):
+			return std::unique_ptr<Sprite> ( new StrongerCowpokerSprite( x, y, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 54 ):
+			return std::unique_ptr<Sprite> ( new CannonSprite( x, y, Direction::Vertical::UP, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 55 ):
+			return std::unique_ptr<Sprite> ( new CannonSprite( x, y, Direction::Vertical::DOWN, i ) );
+		break;
 		case ( SPRITE_INDEX_START + 63 ):
 			return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );
 		break;
@@ -253,6 +280,16 @@ void SpriteSystem::spawnWaterdrop( int x, int y )
 	sprites_.emplace_back( new WaterdropSprite( x, y ) );
 };
 
+void SpriteSystem::spawnEnemyBullet( int x, int y, Direction::Simple direction )
+{
+	sprites_.emplace_back( new BulletSprite( x, y, direction, false ) );
+};
+
+void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction )
+{
+	sprites_.emplace_back( new BulletSprite( x, y, direction, true ) );
+};
+
 void SpriteSystem::spritesFromMap( const Map& lvmap )
 {
 	for ( int i = 0; i < lvmap.spritesSize(); ++i )
@@ -263,8 +300,18 @@ void SpriteSystem::spritesFromMap( const Map& lvmap )
 
 		if ( type != -1 )
 		{
-			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, lvmap ) );
+			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, lvmap ) );
 			sprites_.emplace_back( std::move( new_sprite ) );
+
+			/*
+			// DEBUG
+			const int n = sprites_.size() - 1;
+			if ( sprites_[ n ]->hasType( Sprite::SpriteType::DONT_RESPAWN ) )
+			{
+				std::cout<<sprites_[ n ]->map_id_<<std::endl;
+			}
+			// DEBUG
+			*/
 		}
 	}
 };
@@ -315,6 +362,9 @@ void SpriteSystem::reset( const Level& level )
 		case ( HeroType::NORMAL ):
 			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
+		case ( HeroType::SHOOTER ):
+			hero_.reset( new ShooterPlayerSprite( level.entranceX(), level.entranceY() ) );
+		break;
 		case ( HeroType::OVERWORLD ):
 			hero_.reset( new MazePlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
@@ -333,8 +383,14 @@ void SpriteSystem::clearSprites()
 	sprites_.clear();
 };
 
-void SpriteSystem::destroySprite( int n )
+void SpriteSystem::destroySprite( int n, Map& lvmap )
 {
+	if ( sprites_.at( n )->map_id_ > -1 )
+	{
+		lvmap.deleteSprite( sprites_.at( n )->map_id_ );
+		++permanently_killed_enemies_;
+	}
+
 	if ( n < sprites_.size() )
 	{
 		sprites_.erase( sprites_.begin() + n );
@@ -349,7 +405,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 		{
 			if ( sprites_.at( i )->deathFinished() )
 			{
-				destroySprite( i );
+				destroySprite( i, lvmap );
 				continue; // SPRITE IS DEAD--DO NOT TRY UPDATING.
 			}
 		}
@@ -402,7 +458,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 				}
 				else
 				{
-					destroySprite( i );
+					destroySprite( i, lvmap );
 				}
 			break;
 		}
@@ -483,6 +539,10 @@ SpriteSystem::HeroType SpriteSystem::heroType( std::string property )
 	{
 		return HeroType::OVERWORLD;
 	}
+	else if ( property.compare( "SHOOTER" ) == 0 )
+	{
+		return HeroType::SHOOTER;
+	}
 
 	return HeroType::NORMAL;
 };
@@ -513,4 +573,9 @@ void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera, Health& health )
 void SpriteSystem::testNumOSprites() const
 {
 	std::cout<<"Num o' sprites: "<<sprites_.size()<<std::endl;
+};
+
+int SpriteSystem::permanentlyKilledEnemies() const
+{
+	return permanently_killed_enemies_;
 };

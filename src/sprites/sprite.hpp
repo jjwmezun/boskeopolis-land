@@ -42,7 +42,9 @@ class Sprite : public Object
 			RIVAL,
 			BOPPABLE,
 			CLOUD_PLATFORM,
-			LIGHTNING
+			LIGHTNING,
+			HEROS_BULLET,
+			DONT_RESPAWN
 		};
 
 		enum class CameraMovement
@@ -77,7 +79,8 @@ class Sprite : public Object
 			bool impervious = false,
 			double bounce_ = .2,
 			bool rotate_on_slopes = false,
-			bool ignore_on_camera = false
+			bool ignore_on_camera = false,
+			int map_id = -1
 		);
 
 		virtual ~Sprite();
@@ -91,6 +94,8 @@ class Sprite : public Object
 		static const int RESISTANCE_X_NORMAL = 0;
 		static const int RESISTANCE_X_WINDY = 100;
 		static int resistance_x_;
+		
+		const int map_id_;
 
 		int vx_ = 0;
 		int vy_ = 0;
@@ -147,7 +152,6 @@ class Sprite : public Object
 		bool hasCameraMovement( CameraMovement type ) const;
 		CameraMovement cameraMovement() const;
 		bool despawnWhenDead() const;
-		const bool ignore_on_camera_;
 
 		void moveLeft();
 		void moveRight();
@@ -224,7 +228,6 @@ class Sprite : public Object
 		int y_prev_ = -123456789;
 		const sdl2::SDLRect original_hit_box_;
 
-		bool rotate_on_slopes_; // Not needed
 		const std::vector<SpriteType> types_;
 		const CameraMovement camera_movement_;
 		const bool despawn_when_dead_;

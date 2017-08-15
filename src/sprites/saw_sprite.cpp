@@ -14,7 +14,6 @@
 
     #include "camera.hpp"
     #include "collision.hpp"
-    #include "saw_graphics.hpp"
     #include "saw_sprite.hpp"
     #include "sprite_graphics.hpp"
 
@@ -28,7 +27,7 @@
 
     SawSprite::SawSprite( int x, int y )
     :
-        Sprite( std::make_unique<SawGraphics> (), x, y, 64, 256, {}, 1500, 1500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, true, true )
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/saw.png", 0, 0, false, false, 0, true, 0, 0, 16, 0 ), x, y, 64, 256, {}, 1500, 1500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, true, true )
     {};
 
     SawSprite::~SawSprite() {};

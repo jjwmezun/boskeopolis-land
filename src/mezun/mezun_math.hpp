@@ -11,6 +11,11 @@ namespace mezun
         // STD Min & Max makes this safe for value mixups.
         return rand() % ( std::max( max_value, min_value ) + 1 - std::min( min_value, max_value ) ) + std::min( min_value, max_value );
     };
+	
+	inline bool randBool()
+	{
+		return ( bool )( randInt( 1, 0 ) );
+	};
 
     inline int randPercent()
     {

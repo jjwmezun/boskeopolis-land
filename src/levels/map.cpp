@@ -128,6 +128,7 @@ Map Map::mapFromPath
 		bool loop_sides = false;
 		int water_effect_height = 0;
 		bool water_rising = false;
+		int wind_strength = 0;
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -271,6 +272,14 @@ Map Map::mapFromPath
 						water_rising = prop.value.GetBool();
 					}
 				}
+
+				if ( mezun::areStringsEqual( name, "wind_strength" ) )
+				{
+					if ( prop.value.IsInt() )
+					{
+						wind_strength = prop.value.GetInt();
+					}
+				}
 			}
 		}
 
@@ -305,7 +314,8 @@ Map Map::mapFromPath
 			camera_x_priority,
 			camera_y_priority,
 			blocks_work_offscreen,
-			loop_sides
+			loop_sides,
+			wind_strength
 		);
 };
 
@@ -330,7 +340,8 @@ Map::Map
 	Camera::XPriority camera_x_priority,
 	Camera::YPriority camera_y_priority,
 	bool blocks_work_offscreen,
-	bool loop_sides
+	bool loop_sides,
+	int wind_strength
 )
 :
 	blocks_ ( blocks ),
@@ -352,7 +363,8 @@ Map::Map
 	camera_x_priority_ ( camera_x_priority ),
 	camera_y_priority_ ( camera_y_priority ),
 	blocks_work_offscreen_ ( blocks_work_offscreen ),
-	loop_sides_ ( loop_sides )
+	loop_sides_ ( loop_sides ),
+	wind_strength_ ( wind_strength )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -388,7 +400,8 @@ Map::Map( Map&& m ) noexcept
 	camera_x_priority_ ( m.camera_x_priority_ ),
 	camera_y_priority_ ( m.camera_y_priority_ ),
 	blocks_work_offscreen_ ( m.blocks_work_offscreen_ ),
-	loop_sides_ ( m.loop_sides_ )
+	loop_sides_ ( m.loop_sides_ ),
+	wind_strength_ ( m.wind_strength_ )
 {};
 
 Map::Map( const Map& c )
@@ -413,7 +426,8 @@ Map::Map( const Map& c )
 	camera_x_priority_ ( c.camera_x_priority_ ),
 	camera_y_priority_ ( c.camera_y_priority_ ),
 	blocks_work_offscreen_ ( c.blocks_work_offscreen_ ),
-	loop_sides_ ( c.loop_sides_ )
+	loop_sides_ ( c.loop_sides_ ),
+	wind_strength_ ( c.wind_strength_ )
 {};
 
 int Map::widthBlocks() const
@@ -514,6 +528,14 @@ void Map::changeBlock( int where, int value )
 void Map::deleteBlock( int where )
 {
 	changeBlock( where, 0 );
+};
+
+void Map::deleteSprite( int where )
+{
+	if ( inBounds( where ) )
+	{
+		sprites_[ where ] = 0;
+	}
 };
 
 bool Map::inBounds( int n ) const
@@ -624,6 +646,11 @@ bool Map::blocksWorkOffscreen() const
 bool Map::loopSides() const
 {
 	return loop_sides_;
+};
+
+int Map::windStrength() const
+{
+	return wind_strength_;
 };
 
 void Map::setChanged()

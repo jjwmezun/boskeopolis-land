@@ -5,6 +5,7 @@
 WaterdropGraphics::WaterdropGraphics()
 :
 	SpriteGraphics ( "sprites/waterdrop.png", 5 * 14, 13, false, false, 0, false, 0, 0, 0, 0 ),
+	animation_timer_ (),
 	init_ ( true )
 {};
 

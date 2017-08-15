@@ -12,7 +12,7 @@ DoNothingGoal::DoNothingGoal( int wait_time )
 
 DoNothingGoal::~DoNothingGoal() {};
 
-void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health )
+void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	if
 	(
@@ -31,7 +31,7 @@ void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem
 	}
 };
 
-void DoNothingGoal::customInit( Sprite& hero, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void DoNothingGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
 };

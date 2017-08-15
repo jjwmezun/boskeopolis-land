@@ -22,7 +22,8 @@ EventSystem::EventSystem()
 	new_palette_ ( mezun::emptyString(), 0 ),
 	move_water_ ( -1 ),
 	current_water_ ( - 1 ),
-	in_front_of_door_ ( false )
+	in_front_of_door_ ( false ),
+	misc_ ( 0 )
 {};
 
 void EventSystem::reset()

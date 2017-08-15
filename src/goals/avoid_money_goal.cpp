@@ -9,7 +9,7 @@ AvoidMoneyGoal::AvoidMoneyGoal()
 
 AvoidMoneyGoal::~AvoidMoneyGoal() {};
 
-void AvoidMoneyGoal::update( SpriteSystem& sprites, const Map& lvmap, EventSystem& events, Health& health )
+void AvoidMoneyGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	if ( Inventory::funds() > 0 )
 	{

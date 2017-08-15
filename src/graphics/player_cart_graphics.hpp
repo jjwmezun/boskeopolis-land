@@ -1,5 +1,4 @@
-#ifndef PLAYER_CART_GRAPHICS_H
-#define PLAYER_CART_GRAPHICS_H
+#pragma once
 
 class Sprite;
 
@@ -13,6 +12,3 @@ class PlayerCartGraphics : public SpriteGraphics
 
 		void update( Sprite& sprite );
 };
-
-
-#endif // PLAYER_CART_GRAPHICS_H

@@ -3,7 +3,8 @@
 
 FaucetGraphics::FaucetGraphics()
 :
-	SpriteGraphics ( "sprites/faucet.png", 0, 0 )
+	SpriteGraphics ( "sprites/faucet.png", 0, 0 ),
+	animation_timer_ ()
 {};
 
 FaucetGraphics::~FaucetGraphics() {};

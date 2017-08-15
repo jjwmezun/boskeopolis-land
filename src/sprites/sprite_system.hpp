@@ -20,7 +20,8 @@ class SpriteSystem
 			NORMAL,
 			CART,
 			OVERWORLD,
-			FLUTTERING
+			FLUTTERING,
+			SHOOTER
 		};
 
 		static HeroType heroType( std::string property );
@@ -44,8 +45,11 @@ class SpriteSystem
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
 		void spawnSnowball( int x, int y, Direction::Horizontal direction );
 		void spawnWaterdrop( int x, int y );
+		void spawnEnemyBullet( int x, int y, Direction::Simple direction );
+		void spawnHeroBullet( int x, int y, Direction::Simple direction );
 		Sprite& hero();
 		void interactWithMap( Map& lvmap, Camera& camera, Health& health );
+		int permanentlyKilledEnemies() const;
 
 
 	private:
@@ -54,11 +58,12 @@ class SpriteSystem
 
 		std::vector<std::unique_ptr<Sprite>> sprites_;
 		std::unique_ptr<Sprite> hero_;
+		int permanently_killed_enemies_;
 
 		void clearSprites();
-		void destroySprite( int n );
+		void destroySprite( int n, Map& lvmap );
 		void spritesFromMap( const Map& lvmap );
-		std::unique_ptr<Sprite> spriteType( int type, int x, int y, const Map& lvmap );
+		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, const Map& lvmap );
 		
 		void testNumOSprites() const;
 };

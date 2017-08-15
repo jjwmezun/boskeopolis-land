@@ -39,7 +39,8 @@ Sprite::Sprite
 	bool impervious,
 	double bounce,
 	bool rotate_on_slopes,
-	bool ignore_on_camera
+	bool ignore_on_camera,
+	int map_id
 )
 :
 	Object( x, y, width, height ),
@@ -71,8 +72,7 @@ Sprite::Sprite
 	direction_ ( Direction::Simple::__NULL ),
 	top_speed_downward_ ( 0 ),
 	top_speed_upward_ ( 0 ),
-	rotate_on_slopes_ ( rotate_on_slopes ),
-	ignore_on_camera_ ( ignore_on_camera )
+	map_id_ ( map_id )
 {};
 
 Sprite::~Sprite() {};
@@ -124,22 +124,6 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 
 	position();
 
-	if ( rotate_on_slopes_ )
-	{
-		switch ( on_slope_ )
-		{
-			case ( Direction::Horizontal::LEFT ):
-				graphics_->rotation_ = -30;
-			break;
-			case ( Direction::Horizontal::RIGHT ):
-				graphics_->rotation_ = 30;
-			break;
-			case ( Direction::Horizontal::__NULL ):
-				graphics_->rotation_ = 0;
-			break;
-		}
-	}
-
 	if ( graphics_ )
 	{
 		graphics_->update( *this );
@@ -152,7 +136,7 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 
 void Sprite::render( Camera& camera, bool priority )
 {
-	if ( ignore_on_camera_ || camera.onscreen( hitBox() ) && graphics_ != nullptr )
+	if ( graphics_ != nullptr )
 	{
 		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	}

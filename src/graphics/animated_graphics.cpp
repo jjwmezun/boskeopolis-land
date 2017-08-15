@@ -15,9 +15,10 @@ AnimatedGraphics::AnimatedGraphics
 	int animation_speed
 )
 :
-	SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment, animation_speed ),
+	SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment ),
 	frames_ ( frames ),
-	current_frame_index_ ( 0, frames.size() - 1, 0, true )
+	current_frame_index_ ( 0, frames.size() - 1, 0, true ),
+	animation_timer_ ( animation_speed )
 {
 	setFrames();
 };

@@ -259,8 +259,6 @@ namespace Main
 		size_t pos = path.find( BASE_DIR );
 		path.replace( pos + BASE_DIR.length(), path.length() - pos - BASE_DIR.length(), RES_SUB_DIR );
 		resource_path_ = path;
-		/* WARNING: fix */
-		resource_path_ = "/home/jjwmezun/Documents/cpp-projects/boskeopolis-land/resources/";
 	};
 
 	std::string resourcePath()
