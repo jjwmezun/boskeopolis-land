@@ -19,7 +19,7 @@ class BlockSystem
 		BlockSystem( const Map& lvmap );
 
 		void update( EventSystem& events );
-		void render( Camera& camera, bool priority = false );
+		void render( const Camera& camera, bool priority = false );
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health );
 
 		void changeTileset( std::string new_tileset );

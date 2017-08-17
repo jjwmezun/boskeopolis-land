@@ -37,6 +37,19 @@
 					"y_offset": 125,
 					"y_repeat": false,
 					"x_speed": -6400
+				},
+				{
+					"type": "image",
+					"img": "tunnel_overlay.png",
+					"width": 1080,
+					"height": 208,
+					"x_scroll": 0.75,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_speed": -4800,
+					"alpha": 224,
+					"x_repeat": false,
+					"x_offset": 4000
 				}
 			],
 			"warps":
@@ -105,6 +118,18 @@
 				},
 				{
 					"type": "image",
+					"img": "tunnel_pipe.png",
+					"width": 360,
+					"height": 229,
+					"x_scroll": 0.75,
+					"y_scroll": 0.75,
+					"y_repeat": false,
+					"x_speed": -4800,
+					"x_repeat": 2,
+					"x_offset": 4000
+				},
+				{
+					"type": "image",
 					"img": "train-track.png",
 					"width": 32,
 					"height": 20,
@@ -114,6 +139,22 @@
 					"y_repeat": false,
 					"y_repeat": false,
 					"x_speed": -6400
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "tunnel_overlay.png",
+					"width": 1080,
+					"height": 208,
+					"x_scroll": 0.75,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_speed": -4800,
+					"alpha": 224,
+					"x_repeat": false,
+					"x_offset": 4000
 				}
 			],
 			"warps":
@@ -213,6 +254,6 @@
 		"type": "kill_all"
 	},
 
-	"gem_challenge": 10000,
-	"time_challenge": 120
+	"gem_challenge": 18000,
+	"time_challenge": 110
 }

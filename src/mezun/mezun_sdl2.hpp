@@ -36,6 +36,7 @@ namespace sdl2
                 y = c.y;
                 w = c.w;
                 h = c.h;
+				return *this;
             };
 
             SDLRect( SDLRect&& m )
@@ -49,6 +50,7 @@ namespace sdl2
                 y = m.y;
                 w = m.w;
                 h = m.h;
+				return *this;
             };
 
             constexpr int halfWidth() const

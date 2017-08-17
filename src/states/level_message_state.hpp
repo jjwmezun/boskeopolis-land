@@ -1,5 +1,4 @@
-#ifndef LEVEL_MESSAGE_STATE_H
-#define LEVEL_MESSAGE_STATE_H
+#pragma once
 
 #include "game_state.hpp"
 #include "text.hpp"
@@ -34,5 +33,3 @@ class LevelMessageState : public GameState
 		};
 
 };
-
-#endif // LEVEL_MESSAGE_STATE_H

@@ -17,7 +17,7 @@ class Text
 	public:
 		friend class TextComponentMarquee;
 
-		static constexpr int DEFAULT_LINE_LENGTH = Unit::WINDOW_WIDTH_MINIBLOCKS;
+		static constexpr unsigned int DEFAULT_LINE_LENGTH = Unit::WINDOW_WIDTH_MINIBLOCKS;
 
 		enum class FontShade
 		{
@@ -63,7 +63,7 @@ class Text
 		) const;
 
 		int right() const;
-		int width() const;
+		unsigned int width() const;
 		int x() const;
 
 		static void renderNumber
@@ -84,8 +84,7 @@ class Text
 			Camera* camera = nullptr,
 			FontShade shade = FontShade::BLACK,
 			unsigned int line_limit = DEFAULT_LINE_LENGTH,
-			FontAlign align = FontAlign::LEFT,
-			bool center_y = false
+			FontAlign align = FontAlign::LEFT
 		);
 
 		static std::string stringifyNum( int n );
@@ -95,8 +94,8 @@ class Text
 		static std::string timeToString( int seconds, int minutes, int minutes_padding = 1 );
 		static int getDigit( int n, int d, int remain = 10 );
 		static int numODigits( int n );
-		static int centerX( int line_length );
-		static int centerY( int text_length, int line_limit );
+		static int centerX( unsigned int line_length );
+		static int centerY( const std::string& words, unsigned int line_limit );
 
 
 	protected:
@@ -114,14 +113,13 @@ class Text
 
 		FontShade shade_;
 		FontAlign align_;
+		unsigned int line_limit_;
 		std::unique_ptr<TextComponent> component_;
-		int line_limit_;
-		bool center_y_;
 
-		static int frameX( int n );
-		static int frameY( int n, FontShade shade );
-		static int shadeOffset( FontShade shade );
-		static int testLineLength( const std::string& text, int line_length, int letters_so_far );
+		static int frameX( unsigned int n );
+		static int frameY( unsigned int n, FontShade shade );
+		static unsigned int shadeOffset( FontShade shade );
+		static unsigned int testLineLength( const std::string& text, unsigned int line_length, unsigned int letters_so_far );
 
-		int shadeNum() const;
+		unsigned int shadeNum() const;
 };

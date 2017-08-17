@@ -49,7 +49,7 @@ void MapLayerWater::interact( Sprite& sprite, Health& health )
 	}
 };
 
-void MapLayerWater::render( Camera& camera ) const
+void MapLayerWater::render( const Camera& camera ) const
 {
 	if ( Unit::SubPixelsToPixels( y_ ) < camera.bottom() )
 	{
@@ -66,7 +66,7 @@ void MapLayerWater::render( Camera& camera ) const
 	}
 };
 
-void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Camera& camera )
+void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
 {
 	surface_.update();
 

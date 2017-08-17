@@ -406,7 +406,8 @@ Map::Map( Map&& m ) noexcept
 	camera_y_priority_ ( m.camera_y_priority_ ),
 	blocks_work_offscreen_ ( m.blocks_work_offscreen_ ),
 	loop_sides_ ( m.loop_sides_ ),
-	wind_strength_ ( m.wind_strength_ )
+	wind_strength_ ( m.wind_strength_ ),
+	changed_ ( m.changed_ )
 {};
 
 Map::Map( const Map& c )
@@ -432,52 +433,41 @@ Map::Map( const Map& c )
 	camera_y_priority_ ( c.camera_y_priority_ ),
 	blocks_work_offscreen_ ( c.blocks_work_offscreen_ ),
 	loop_sides_ ( c.loop_sides_ ),
-	wind_strength_ ( c.wind_strength_ )
+	wind_strength_ ( c.wind_strength_ ),
+	changed_ ( c.changed_ )
 {};
 
-int Map::widthBlocks() const
+unsigned int Map::widthBlocks() const
 {
 	return width_;
 };
 
-int Map::heightBlocks() const
+unsigned int Map::heightBlocks() const
 {
 	return height_;
 };
 
-int Map::widthPixels() const
+unsigned int Map::widthPixels() const
 {
 	return Unit::BlocksToPixels( width_ );
 };
 
-int Map::heightPixels() const
+unsigned int Map::heightPixels() const
 {
 	return Unit::BlocksToPixels( height_ );
 };
 
-int Map::blocksSize() const
+unsigned int Map::blocksSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), (int)blocks_.size() );
+	return std::min( widthBlocks() * heightBlocks(), ( unsigned int )( blocks_.size() ) );
 };
 
-int Map::spritesSize() const
+unsigned int Map::spritesSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), (int)sprites_.size() );
+	return std::min( widthBlocks() * heightBlocks(), ( unsigned int )( sprites_.size() ) );
 };
 
-int Map::block( int n ) const
-{
-	if ( !inBounds( n ) )
-	{
-		return 0;
-	}
-	else
-	{
-		return blocks_.at( n );
-	}
-};
-
-int Map::sprite( int n ) const
+unsigned int Map::block( unsigned int n ) const
 {
 	if ( !inBounds( n ) )
 	{
@@ -485,16 +475,28 @@ int Map::sprite( int n ) const
 	}
 	else
 	{
-		return sprites_.at( n );
+		return blocks_[ n ];
 	}
 };
 
-int Map::mapX( int n ) const
+unsigned int Map::sprite( unsigned int n ) const
+{
+	if ( !inBounds( n ) )
+	{
+		return 0;
+	}
+	else
+	{
+		return sprites_[ n ];
+	}
+};
+
+unsigned int Map::mapX( int n ) const
 {
 	return n % widthBlocks();
 };
 
-int Map::mapY( int n ) const
+unsigned int Map::mapY( int n ) const
 {
 	return floor( n / widthBlocks() );
 };
@@ -506,17 +508,17 @@ int Map::indexFromXAndY( int x, int y ) const
 		x = getXIndexForLoop( x );
 	}
 	
-	if ( x < 0 || x >= widthBlocks() || y < 0 || y > heightBlocks() )
+	if ( x < 0 || x >= ( int )( widthBlocks() ) || y < 0 || y > ( int )( heightBlocks() ) )
 	{
 		return -1;
 	}
 	else
 	{
-		return ( y * widthBlocks() ) + x;
+		return ( y * ( int )( widthBlocks() ) ) + x;
 	}
 };
 
-const bool Map::changed() const
+bool Map::changed() const
 {
 	return changed_;
 };
@@ -543,20 +545,20 @@ void Map::deleteSprite( int where )
 	}
 };
 
-bool Map::inBounds( int n ) const
+bool Map::inBounds( unsigned int n ) const
 {
-	return n >= 0 && n < blocks_.size();
+	return n < blocks_.size();
 };
 
 void Map::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
 {
-	for ( int i = 0; i < backgrounds_.size(); ++i )
+	for ( auto b : backgrounds_ )
 	{
-		backgrounds_[ i ]->update( events, blocks, camera );
+		b->update( events, blocks, camera, *this );
 	}
-	for ( int i = 0; i < foregrounds_.size(); ++i )
+	for ( auto f : foregrounds_ )
 	{
-		foregrounds_[ i ]->update( events, blocks, camera );
+		f->update( events, blocks, camera, *this );
 	}
 
 	changed_ = false;
@@ -578,26 +580,28 @@ Palette Map::palette() const
 
 void Map::renderBG( Camera& camera )
 {
-	for ( int i = 0; i < backgrounds_.size(); ++i )
+	for ( auto b : backgrounds_ )
 	{
-		backgrounds_[ i ]->render( camera );
+		b->render( camera );
 	}
 };
 
 void Map::renderFG( Camera& camera )
 {
-	for ( int i = 0; i < foregrounds_.size(); ++i )
+	for ( auto f : foregrounds_ )
 	{
-		foregrounds_[ i ]->render( camera );
+		f->render( camera );
 	}
 };
 
 const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
 {
-	for ( int i = 0; i < warps_.size(); ++i )
+	for ( unsigned int i = 0; i < warps_.size(); ++i )
 	{
 		if ( warps_[ i ].inInterval( x_sub_pixels, y_sub_pixels ) )
+		{
 			return &warps_[ i ];
+		}
 	}
 
 	return nullptr;

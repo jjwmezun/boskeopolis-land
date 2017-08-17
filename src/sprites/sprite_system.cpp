@@ -55,6 +55,7 @@
 #include "snowman_sprite.hpp"
 #include "spike_egg_sprite.hpp"
 #include "spiky_fruit_sprite.hpp"
+#include "spring_sprite.hpp"
 #include "sprite_component_circle.hpp"
 #include "sprite_component_right_and_left.hpp"
 #include "sprite_component_up_and_down.hpp"
@@ -245,6 +246,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 55 ):
 			return std::unique_ptr<Sprite> ( new CannonSprite( x, y, Direction::Vertical::DOWN, i ) );
+		break;
+		case ( SPRITE_INDEX_START + 56 ):
+			return std::unique_ptr<Sprite> ( new SpringSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 63 ):
 			return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );

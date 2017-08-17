@@ -17,7 +17,7 @@ MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, 
 
 MapLayerTilemap::~MapLayerTilemap() {};
 
-void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Camera& camera )
+void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
 {
 	if ( camera.changed() )
 	{
@@ -48,13 +48,13 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 	}
 };
 
-void MapLayerTilemap::render( Camera& camera ) const
+void MapLayerTilemap::render( const Camera& camera ) const
 {
 	for ( auto& b : blocks_ )
 	{
 		if ( camera.onscreen( b.hitBox() ) )
 		{
-			b.render( camera, false );
+			b.renderAnyPriority( camera );
 		}
 	}
 };

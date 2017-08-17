@@ -9,8 +9,8 @@ class MapLayerTilemap : public MapLayer
 	public:
 		MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height );
 		~MapLayerTilemap();
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) override;
-		void render( Camera& camera ) const override;
+		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
+		void render( const Camera& camera ) const override;
 
 	private:
 		static constexpr int CAMERA_PADDING = 4;

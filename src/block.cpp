@@ -55,11 +55,19 @@ Block& Block::operator=( const Block& c )
 	destroyed_ = c.destroyed_;
 };
 
-void Block::render( Camera& camera, bool priority ) const
+void Block::render( const Camera& camera, bool priority ) const
 {
 	if ( hasType() )
 	{
 		type_->render( camera, *this, priority );
+	}
+};
+
+void Block::renderAnyPriority( const Camera& camera ) const
+{
+	if ( hasType() )
+	{
+		type_->renderAnyPriority( camera, *this );
 	}
 };
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <algorithm>
 #include "camera.hpp"
 #include "render.hpp"
@@ -125,14 +126,12 @@ Text::Text
 :
 	words_ ( words ),
 	x_ ( x ),
-	y_ ( y ),
+	y_ ( ( center_y ) ? centerY( words_, ( ( line_limit == 0 ) ? DEFAULT_LINE_LENGTH : line_limit ) ) : y ),
 	shade_ ( shade ),
 	align_ ( align ),
 	component_ ( std::move( component ) ),
-	line_limit_ ( ( line_limit == NULL ) ? Unit::WINDOW_WIDTH_MINIBLOCKS : line_limit ),
-	center_y_ ( center_y )
-{
-};
+	line_limit_ ( ( line_limit == 0 ) ? DEFAULT_LINE_LENGTH : line_limit )
+{};
 
 Text::~Text() noexcept {};
 
@@ -144,8 +143,7 @@ Text::Text( Text&& m ) noexcept
 	shade_ ( m.shade_ ),
 	align_ ( m.align_ ),
 	component_ ( std::move( m.component_ ) ),
-	line_limit_ ( m.line_limit_ ),
-	center_y_ ( m.center_y_ )
+	line_limit_ ( m.line_limit_ )
 {};
 
 void Text::renderText
@@ -156,34 +154,28 @@ void Text::renderText
 	Camera* camera,
 	FontShade shade,
 	unsigned int line_limit,
-	FontAlign align,
-	bool center_y
+	FontAlign align
 )
 {
-	if ( line_limit == NULL )
+	if ( line_limit == 0 )
 	{
 		line_limit = DEFAULT_LINE_LENGTH;
 	}
 
-	if ( center_y )
-	{
-		y = centerY( text.length(), line_limit );
-	}
-
-	int line = 0;
-	int letters_so_far = 0;
+	unsigned int line = 0;
+	unsigned int letters_so_far = 0;
 
 	while ( letters_so_far < text.length() )
 	{
-		const int line_length = testLineLength( text, line_limit, letters_so_far );
-		const int absolute_line_limit = line_length + letters_so_far;
+		const unsigned int line_length = testLineLength( text, line_limit, letters_so_far );
+		const unsigned int absolute_line_limit = line_length + letters_so_far;
 
 		if ( align == FontAlign::CENTER )
 		{
 			x = centerX( line_length );
 		}
 
-		for ( int c = letters_so_far; c < absolute_line_limit; ++c )
+		for ( unsigned int c = letters_so_far; c < absolute_line_limit; ++c )
 		{
 			// Newline
 			if ( text.at( c ) == '\n' )
@@ -196,9 +188,9 @@ void Text::renderText
 				++c;
 			}
 
-			const int frame = char_conversion_[ text.at( c ) ];
-			const int char_x = ( CHAR_SIZE_PIXELS * ( c - letters_so_far ) ) + x;
-			const int char_y = ( CHAR_SIZE_PIXELS * line ) + y;
+			const int frame = char_conversion_[ text[ c ] ];
+			const int char_x = ( CHAR_SIZE_PIXELS * ( c - ( int )( letters_so_far ) ) ) + x;
+			const int char_y = ( CHAR_SIZE_PIXELS * ( int )( line ) ) + y;
 
 			sdl2::SDLRect dest =
 			{
@@ -240,10 +232,10 @@ void Text::render( Camera* camera, FontShade shade ) const
 		shade = shade_;
 	}
 
-	renderText( words_, x_, y_, camera, shade, line_limit_, align_, center_y_ );
+	renderText( words_, x_, y_, camera, shade, line_limit_, align_ );
 };
 
-int Text::centerX( int line_length )
+int Text::centerX( unsigned int line_length )
 {	
 	// Center = half o' line length left o' middle (half window width), half on right.
 	// [     *    |    )     ]
@@ -255,18 +247,39 @@ int Text::centerX( int line_length )
 	);
 };
 
-int Text::centerY( int text_length, int line_limit )
+int Text::centerY( const std::string& words, unsigned int line_limit )
 {
-	const int text_height = floor ( text_length / line_limit );
+	unsigned int text_height = 0;
+
+	unsigned int col = 0;
+	for ( unsigned int i = 0; i < words.length(); ++i )
+	{
+		if ( words[ i ] == '\n' )
+		{
+			++text_height;
+			col = 0;
+		}
+		else
+		{
+			if ( col >= line_limit )
+			{
+				++text_height;
+				col = 0;
+			}
+			else
+			{
+				++col;
+			}
+		}
+	}
 
 	return Unit::MiniBlocksToPixels
 	(
-		floor ( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) -
-		floor ( text_height / 2 )
+		ceil( ( Unit::WINDOW_HEIGHT_MINIBLOCKS - text_height ) / 2 )
 	);
 };
 
-int Text::shadeOffset( FontShade shade )
+unsigned int Text::shadeOffset( FontShade shade )
 {
 	if ( shade == FontShade::__NULL )
 	{
@@ -274,11 +287,11 @@ int Text::shadeOffset( FontShade shade )
 	}
 	else
 	{
-		return ( int )shade * CHARSET_HEIGHT_MINI_BLOCKS;
+		return ( unsigned int )( shade ) * CHARSET_HEIGHT_MINI_BLOCKS;
 	}
 };
 
-int Text::shadeNum() const
+unsigned int Text::shadeNum() const
 {
 	if ( shade_ == FontShade::__NULL )
 	{
@@ -286,18 +299,18 @@ int Text::shadeNum() const
 	}
 	else
 	{
-		return (int)shade_;
+		return ( unsigned int )( shade_ );
 	}
 };
 
-int Text::frameX( int n )
+int Text::frameX( unsigned int n )
 {
-	return Unit::MiniBlocksToPixels( n % CHARSET_WIDTH_MINI_BLOCKS );
+	return Unit::MiniBlocksToPixels( ( int )( n ) % CHARSET_WIDTH_MINI_BLOCKS );
 };
 
-int Text::frameY( int n, FontShade shade )
+int Text::frameY( unsigned int n, FontShade shade )
 {
-	return shadeOffset( shade ) + Unit::MiniBlocksToPixels( floor( n / CHARSET_WIDTH_MINI_BLOCKS ) );
+	return shadeOffset( shade ) + Unit::MiniBlocksToPixels( floor( ( int )( n ) / CHARSET_WIDTH_MINI_BLOCKS ) );
 };
 
 void Text::renderNumber( int n, int x, int y, int digits, FontShade shade, Camera* camera )
@@ -414,9 +427,9 @@ int Text::right() const
 	return x_ + width();
 };
 
-int Text::width() const
+unsigned int Text::width() const
 {
-	return words_.size() * CHAR_SIZE_PIXELS;
+	return words_.size() * ( unsigned int )( CHAR_SIZE_PIXELS );
 };
 
 int Text::x() const
@@ -429,13 +442,13 @@ std::string Text::timeToString( int seconds, int minutes, int minutes_padding )
 	return formatNumDigitPadding( minutes, minutes_padding ) + ":" + formatNumDigitPadding( seconds, 2 );
 };
 
-int Text::testLineLength( const std::string& text, int line_length, int letters_so_far )
-{		
-	int limit = std::min( line_length, ( int )text.length() - letters_so_far );
+unsigned int Text::testLineLength( const std::string& text, unsigned int line_length, unsigned int letters_so_far )
+{
+	unsigned int limit = std::min( ( int )( line_length ), ( int )( text.length() ) - ( int )( letters_so_far ) );
 
-	for( int line_letter = 0; line_letter < limit; ++line_letter )
+	for( unsigned int line_letter = 0; line_letter < limit; ++line_letter )
 	{
-		const int absolute_letter = letters_so_far + line_letter;
+		const unsigned int absolute_letter = letters_so_far + line_letter;
 
 		if ( text[ absolute_letter ] == '\n' )
 		{

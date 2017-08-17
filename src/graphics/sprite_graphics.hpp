@@ -41,6 +41,7 @@ class SpriteGraphics
 		virtual void update( Sprite& sprite );
 		virtual void update();
 		virtual void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const;
+		void renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr ) const;
 		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
 
 

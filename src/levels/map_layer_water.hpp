@@ -14,8 +14,8 @@ class MapLayerWater : public MapLayer
 	public:
 		MapLayerWater( int y_blocks, bool rising );
 
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera ) override;
-		void render( Camera& camera ) const override;
+		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
+		void render( const Camera& camera ) const override;
 		void interact( Sprite& sprite, Health& health ) override;
 
 	private:

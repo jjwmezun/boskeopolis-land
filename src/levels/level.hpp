@@ -54,14 +54,14 @@ class Level
 		static unsigned int real_level_num_;
 
 		const int id_;
-		std::vector<Map> maps_;
-		std::unique_ptr<Goal> goal_;
 		int entrance_x_;
 		int entrance_y_;
 		const int camera_x_;
 		const int camera_y_;
+		unsigned int current_map_;
+		std::vector<Map> maps_;
+		std::unique_ptr<Goal> goal_;
 		const std::string message_;
-		int current_map_;
 
 		Level
 		(
@@ -75,7 +75,7 @@ class Level
 			std::string message = ""
 		);
 
-		int testCurrentMap() const;
+		unsigned int testCurrentMap() const;
 
 		static void buildLevelList();
 		static void checkLvList();

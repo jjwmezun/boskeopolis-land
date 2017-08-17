@@ -53,7 +53,15 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 	}
 };
 
-void BlockType::render( Camera& camera, const Block& block, bool priority ) const
+void BlockType::renderAnyPriority( const Camera& camera, const Block& block ) const
+{
+	if ( graphics_ )
+	{
+		graphics_->renderAnyPriority( Unit::SubPixelsToPixels( block.hitBox() ), &camera );
+	}
+};
+
+void BlockType::render( const Camera& camera, const Block& block, bool priority ) const
 {
 	if ( graphics_ )
 	{

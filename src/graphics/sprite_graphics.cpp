@@ -45,6 +45,11 @@ void SpriteGraphics::update()
 {
 };
 
+void SpriteGraphics::renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera ) const
+{
+	render( bound_box, camera, priority_ );
+};
+
 void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
 	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha_ );

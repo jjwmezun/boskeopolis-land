@@ -1,4 +1,6 @@
 #include <cassert>
+#include <cstdlib>
+#include <ctime>
 #include "input.hpp"
 #include "main.hpp"
 #include "message_state.hpp"
@@ -53,6 +55,7 @@ namespace Main
 			}
 		}
 
+		srand ( time( NULL ) );
 		setResourcePath();
 		Render::init( args );
 		Input::init();

@@ -1,12 +1,10 @@
-#ifndef MESSAGE_STATE_H
-#define MESSAGE_STATE_H
+#pragma once
 
 #include "game_state.hpp"
 #include "text.hpp"
 
 class MessageState : public GameState
 {
-
 	public:
 		MessageState
 		(
@@ -35,12 +33,11 @@ class MessageState : public GameState
 		void init();
 		void backFromPop();
 
+
 	private:
-		const Text message_;
 		const bool pop_;
-		std::unique_ptr<GameState> next_state_;
 		const bool push_;
 		const Text::FontShade font_color_;
+		const Text message_;
+		std::unique_ptr<GameState> next_state_;
 };
-
-#endif // MESSAGE_STATE_H

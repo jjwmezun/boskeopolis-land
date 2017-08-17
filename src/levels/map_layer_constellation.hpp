@@ -17,7 +17,7 @@ class MapLayerConstellation : public MapLayer
 
 		~MapLayerConstellation();
 
-		void render( Camera& camera ) const override;
+		void render( const Camera& camera ) const override;
 
 	private:
 		enum class StarType
@@ -43,11 +43,11 @@ class MapLayerConstellation : public MapLayer
 		static constexpr int BRIGHT_STAR_CHANCE = 25;
 
 		// KEEP THESE MEMBERS IN THIS ORDER FOR CONSTRUCTOR INITIALIZER:
-		const std::string texture_;
-		const double scroll_speed_x_;
-		const double scroll_speed_y_;
 		const int height_;
 		const int width_;
+		const double scroll_speed_x_;
+		const double scroll_speed_y_;
+		const std::string texture_;
 		const std::vector<StarType> star_pattern_;
 
 		const std::vector<StarType> generateStarPattern() const;

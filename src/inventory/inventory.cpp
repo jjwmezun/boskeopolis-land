@@ -189,7 +189,7 @@ namespace Inventory
 	{
 		if ( value > -1 && value < TIME_MAX )
 		{
-			time_scores_[ current_level_() ] = value;
+			time_scores_[ level ] = value;
 		}
 	};
 
@@ -582,14 +582,7 @@ namespace Inventory
 					const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUM_O_LEVELS;
 					current_block_end += NUM_O_TIME_SCORE_BLOCKS;
 
-					try
-					{
-						mezun::testSaveSize( binsize, current_block_end );
-					}
-					catch( const mezun::InvalidSaveSizeException& e )
-					{
-						throw;
-					}
+					assert( binsize >= current_block_end );
 
 					for ( int ti = 0; ti < Level::NUM_O_LEVELS; ++ti )
 					{
@@ -602,14 +595,7 @@ namespace Inventory
 					current_block_start = current_block_end;
 					current_block_end += sizeof( int32_t );
 
-					try
-					{
-						mezun::testSaveSize( binsize, current_block_end );
-					}
-					catch( const mezun::InvalidSaveSizeException& e )
-					{
-						throw;
-					}
+					assert( binsize >= current_block_end );
 
 					int32_t recent_level;
 					std::memcpy( &recent_level, &bindata[ current_block_start ], sizeof( int32_t ) );

@@ -6,7 +6,7 @@
 
 KillAllGoal::KillAllGoal()
 :
-	Goal( "¡Shoot out all the Cowpokers!" ),
+	Goal( "¡Shoot out all the Cowpokers &\nsentry guns!" ),
 	sprites_to_kill_ ( 99 )
 {};
 

@@ -43,7 +43,8 @@ Level::Level ( Level&& m )
 	entrance_y_ ( m.entrance_y_ ),
 	camera_x_ ( m.camera_x_ ),
 	camera_y_ ( m.camera_y_ ),
-	message_ ( m.message_ )
+	message_ ( m.message_ ),
+	current_map_ ( m.current_map_ )
 {};
 
 Level::Level
@@ -81,10 +82,9 @@ const Map& Level::currentMap() const
 	return maps_.at( testCurrentMap() );
 };
 
-int Level::testCurrentMap() const
+unsigned int Level::testCurrentMap() const
 {
-	assert ( current_map_ >= 0 && current_map_ < maps_.size() );
-
+	assert ( current_map_ < maps_.size() );
 	return current_map_;
 };
 
@@ -229,464 +229,464 @@ Level Level::getLevel( int id )
 
 	std::ifstream ifs( file_path );
 
-	if ( ifs.is_open() )
+	assert( ifs.is_open() );
+
+	rapidjson::IStreamWrapper ifs_wrap( ifs );
+	rapidjson::Document lv;
+	lv.ParseStream( ifs_wrap );
+
+	assert( lv.IsObject() );
+
+	auto lvobj = lv.GetObject();
+
+	/* MAP
+	==============================================================*/
+
+	assert( lvobj.HasMember( "maps" ) && lvobj[ "maps" ].IsArray() );
+
+	std::vector<Map> maps;
+	std::string slug = "";
+
+	for ( auto& m : lvobj[ "maps" ].GetArray() )
 	{
-		rapidjson::IStreamWrapper ifs_wrap( ifs );
-		rapidjson::Document lv;
-		lv.ParseStream( ifs_wrap );
-
-		if ( lv.IsObject() )
+		if ( m.IsObject() )
 		{
-			auto lvobj = lv.GetObject();
+			auto mobj = m.GetObject();
 
-			/* MAP
-			==============================================================*/
+			if ( mobj.HasMember( "slug" ) && mobj[ "slug" ].IsString() )
+			{
+				slug = mobj[ "slug" ].GetString();
+			}
 
-				if ( lvobj.HasMember( "maps" ) && lvobj[ "maps" ].IsArray() )
-				{
-					std::vector<Map> maps;
-					std::string slug = "";
 
-					for ( auto& m : lvobj[ "maps" ].GetArray() )
+		/* WARPS
+		==============================================================*/
+
+					std::vector<Warp> warps;
+
+					if ( mobj.HasMember( "warps" ) && mobj[ "warps" ].IsArray() )
 					{
-						if ( m.IsObject() )
+						for ( auto& w : mobj[ "warps" ].GetArray() )
 						{
-							auto mobj = m.GetObject();
-
-							if ( mobj.HasMember( "slug" ) && mobj[ "slug" ].IsString() )
+							if ( w.IsObject() )
 							{
-								slug = mobj[ "slug" ].GetString();
-							}
+								auto wo = w.GetObject();
 
+								int map = 0;
+								int entrance_x = 0;
+								int entrance_y = 0;
+								int location[ 4 ] = { 0 };
+								int camera_x = -1;
+								int camera_y = -1;
 
-				/* WARPS
-				==============================================================*/
-
-							std::vector<Warp> warps;
-
-							if ( mobj.HasMember( "warps" ) && mobj[ "warps" ].IsArray() )
-							{
-								for ( auto& w : mobj[ "warps" ].GetArray() )
+								if ( wo.HasMember( "map" ) && wo[ "map" ].IsInt() )
 								{
-									if ( w.IsObject() )
+									map = wo[ "map" ].GetInt();
+								}
+
+								if ( wo.HasMember( "entrance_x" ) && wo[ "entrance_x" ].IsInt() )
+								{
+									entrance_x = Unit::BlocksToPixels( wo[ "entrance_x" ].GetInt() );
+								}
+
+								if ( wo.HasMember( "entrance_y" ) && wo[ "entrance_y" ].IsInt() )
+								{
+									entrance_y = Unit::BlocksToPixels( wo[ "entrance_y" ].GetInt() );
+								}
+
+								if ( wo.HasMember( "location" ) && wo[ "location" ].IsArray() )
+								{
+									int li = 0;
+									for ( auto& l : wo[ "location" ].GetArray() )
 									{
-										auto wo = w.GetObject();
-
-										int map = 0;
-										int entrance_x = 0;
-										int entrance_y = 0;
-										int location[ 4 ] = { 0 };
-										int camera_x = -1;
-										int camera_y = -1;
-
-										if ( wo.HasMember( "map" ) && wo[ "map" ].IsInt() )
+										if ( l.IsInt() )
 										{
-											map = wo[ "map" ].GetInt();
+											if ( li > 4 ) break;
+
+											location[ li ] = l.GetInt();
+
+											++li;
 										}
-
-										if ( wo.HasMember( "entrance_x" ) && wo[ "entrance_x" ].IsInt() )
-										{
-											entrance_x = Unit::BlocksToPixels( wo[ "entrance_x" ].GetInt() );
-										}
-
-										if ( wo.HasMember( "entrance_y" ) && wo[ "entrance_y" ].IsInt() )
-										{
-											entrance_y = Unit::BlocksToPixels( wo[ "entrance_y" ].GetInt() );
-										}
-
-										if ( wo.HasMember( "location" ) && wo[ "location" ].IsArray() )
-										{
-											int li = 0;
-											for ( auto& l : wo[ "location" ].GetArray() )
-											{
-												if ( l.IsInt() )
-												{
-													if ( li > 4 ) break;
-
-													location[ li ] = l.GetInt();
-
-													++li;
-												}
-											}
-										}
-
-										if ( wo.HasMember( "camera_x" ) && wo[ "camera_x" ].IsInt() )
-										{
-											camera_x = wo[ "camera_x" ].GetInt();
-										}
-
-										if ( wo.HasMember( "camera_y" ) && wo[ "camera_y" ].IsInt() )
-										{
-											camera_y = wo[ "camera_y" ].GetInt();
-										}
-
-										warps.emplace_back( map, entrance_x, entrance_y, location[ 0 ], location[ 1 ], location[ 2 ], location[ 3 ], camera_x, camera_y );
 									}
 								}
 
+								if ( wo.HasMember( "camera_x" ) && wo[ "camera_x" ].IsInt() )
+								{
+									camera_x = wo[ "camera_x" ].GetInt();
+								}
+
+								if ( wo.HasMember( "camera_y" ) && wo[ "camera_y" ].IsInt() )
+								{
+									camera_y = wo[ "camera_y" ].GetInt();
+								}
+
+								warps.emplace_back( map, entrance_x, entrance_y, location[ 0 ], location[ 1 ], location[ 2 ], location[ 3 ], camera_x, camera_y );
 							}
+						}
+
+					}
 
 
 
-				/* LAYERS
-				==============================================================*/
+		/* LAYERS
+		==============================================================*/
 
-					// Can't rapidjson object to function, so we have to use dumb loops.								
-					std::vector<std::string> map_layer_group_types = { "backgrounds", "foregrounds" };
-					std::map<std::string, std::vector<std::unique_ptr<MapLayer>>> map_layer_groups;
+			// Can't rapidjson object to function, so we have to use dumb loops.								
+			std::vector<std::string> map_layer_group_types = { "backgrounds", "foregrounds" };
+			std::map<std::string, std::vector<std::unique_ptr<MapLayer>>> map_layer_groups;
 
-					for ( auto& mlg : map_layer_group_types )
+			for ( auto& mlg : map_layer_group_types )
+			{
+				std::vector<std::unique_ptr<MapLayer>> group;
+				const char* mlgc = mlg.c_str();
+
+				if ( mobj.HasMember( mlgc ) && mobj[ mlgc ].IsArray() )
+				{
+
+					for ( auto& bgitem : mobj[ mlgc ].GetArray() )
 					{
-						std::vector<std::unique_ptr<MapLayer>> group;
-						const char* mlgc = mlg.c_str();
 
-						if ( mobj.HasMember( mlgc ) && mobj[ mlgc ].IsArray() )
+						if ( bgitem.IsObject() )
 						{
+							auto bg = bgitem.GetObject();
 
-							for ( auto& bgitem : mobj[ mlgc ].GetArray() )
+							if ( bg.HasMember( "type" ) && bg[ "type" ].IsString() )
 							{
 
-								if ( bgitem.IsObject() )
+								auto bgtype = bg[ "type" ].GetString();
+
+								int bgw = 128;
+								int bgh = 128;
+								double bgxscroll = 1;
+								double bgyscroll = 1;
+
+
+								if ( bg.HasMember( "width" ) && bg[ "width" ].IsInt() )
 								{
-									auto bg = bgitem.GetObject();
+									bgw = bg[ "width" ].GetInt();
+								}
+								if ( bg.HasMember( "height" ) && bg[ "height" ].IsInt() )
+								{
+									bgh = bg[ "height" ].GetInt();
+								}
 
-									if ( bg.HasMember( "type" ) && bg[ "type" ].IsString() )
+								if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsDouble() )
+								{
+									bgxscroll = bg[ "x_scroll" ].GetDouble();
+								}
+								else if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsInt() )
+								{
+									bgxscroll = ( double )bg[ "x_scroll" ].GetInt();
+								}
+
+								if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsDouble() )
+								{
+									bgyscroll = bg[ "y_scroll" ].GetDouble();
+								}
+								else if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsInt() )
+								{
+									bgxscroll = ( double )bg[ "y_scroll" ].GetInt();
+								}
+
+								if ( mezun::areStringsEqual( bgtype, "image" ) )
+								{
+									std::string img = "clouds.png";
+									int bgxoffset = 0;
+									int bgyoffset = 0;
+									int bgframes  = 1;
+									int bgxrepeat = 255;
+									int bgyrepeat = 255;
+									int bgxspeed  = 0;
+									int bgyspeed  = 0;
+									int bganimspeed = 1;
+									bool bganimflip = false;
+									Uint8 alpha = 255;
+
+									if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
 									{
-
-										auto bgtype = bg[ "type" ].GetString();
-
-										int bgw = 128;
-										int bgh = 128;
-										double bgxscroll = 1;
-										double bgyscroll = 1;
-
-
-										if ( bg.HasMember( "width" ) && bg[ "width" ].IsInt() )
+										img = "bg" + Main::pathDivider() + bg[ "img" ].GetString();
+									}
+									if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
+									{
+										alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
+									}
+									if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
+									{
+										bgframes = bg[ "frames" ].GetInt();
+									}
+									if ( bg.HasMember( "x_offset" ) && bg[ "x_offset" ].IsInt() )
+									{
+										bgxoffset = bg[ "x_offset" ].GetInt();
+									}
+									if ( bg.HasMember( "y_offset" ) && bg[ "y_offset" ].IsInt() )
+									{
+										bgyoffset = bg[ "y_offset" ].GetInt();
+									}
+									if ( bg.HasMember( "x_repeat" ) )
+									{
+										if ( bg[ "x_repeat" ].IsBool() && !bg[ "x_repeat" ].GetBool() )
 										{
-											bgw = bg[ "width" ].GetInt();
+											bgxrepeat = 0;
 										}
-										if ( bg.HasMember( "height" ) && bg[ "height" ].IsInt() )
+										else if ( bg[ "x_repeat" ].IsInt() )
 										{
-											bgh = bg[ "height" ].GetInt();
+											bgxrepeat = bg[ "x_repeat" ].GetInt();
 										}
-
-										if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsDouble() )
+									}
+									if ( bg.HasMember( "y_repeat" ) )
+									{
+										if ( bg[ "y_repeat" ].IsBool() && !bg[ "y_repeat" ].GetBool() )
 										{
-											bgxscroll = bg[ "x_scroll" ].GetDouble();
+											bgyrepeat = 0;
 										}
-										else if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsInt() )
+										else if ( bg[ "y_repeat" ].IsInt() )
 										{
-											bgxscroll = ( double )bg[ "x_scroll" ].GetInt();
+											bgyrepeat = bg[ "y_repeat" ].GetInt();
 										}
-
-										if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsDouble() )
-										{
-											bgyscroll = bg[ "y_scroll" ].GetDouble();
-										}
-										else if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsInt() )
-										{
-											bgxscroll = ( double )bg[ "y_scroll" ].GetInt();
-										}
-
-										if ( mezun::areStringsEqual( bgtype, "image" ) )
-										{
-											std::string img = "clouds.png";
-											int bgxoffset = 0;
-											int bgyoffset = 0;
-											int bgframes  = 1;
-											bool bgxrepeat = true;
-											bool bgyrepeat = true;
-											int bgxspeed  = 0;
-											int bgyspeed  = 0;
-											int bganimspeed = 1;
-											bool bganimflip = false;
-											Uint8 alpha = 255;
-
-											if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
-											{
-												img = "bg" + Main::pathDivider() + bg[ "img" ].GetString();
-											}
-											if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
-											{
-												alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
-											}
-											if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
-											{
-												bgframes = bg[ "frames" ].GetInt();
-											}
-											if ( bg.HasMember( "x_offset" ) && bg[ "x_offset" ].IsInt() )
-											{
-												bgxoffset = bg[ "x_offset" ].GetInt();
-											}
-											if ( bg.HasMember( "y_offset" ) && bg[ "y_offset" ].IsInt() )
-											{
-												bgyoffset = bg[ "y_offset" ].GetInt();
-											}
-											if ( bg.HasMember( "x_repeat" ) && bg[ "x_repeat" ].IsBool() )
-											{
-												bgxrepeat = bg[ "x_repeat" ].GetBool();
-											}
-											if ( bg.HasMember( "y_repeat" ) && bg[ "y_repeat" ].IsBool() )
-											{
-												bgyrepeat = bg[ "y_repeat" ].GetBool();
-											}
-											if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
-											{
-												bgframes = bg[ "frames" ].GetInt();
-											}
-											if ( bg.HasMember( "x_speed" ) && bg[ "x_speed" ].IsInt() )
-											{
-												bgxspeed = bg[ "x_speed" ].GetInt();
-											}
-											if ( bg.HasMember( "y_speed" ) && bg[ "y_speed" ].IsInt() )
-											{
-												bgyspeed = bg[ "y_speed" ].GetInt();
-											}
-											if ( bg.HasMember( "animation_speed" ) && bg[ "animation_speed" ].IsInt() )
-											{
-												bganimspeed = bg[ "animation_speed" ].GetInt();
-											}
-											if ( bg.HasMember( "animation_flip" ) && bg[ "animation_flip" ].IsBool() )
-											{
-												bganimflip = bg[ "animation_flip" ].GetBool();
-											}
-
-
-											group.emplace_back
-											(
-												std::make_unique<MapLayerImage>
-												(
-													std::forward<std::string> ( img ),
-													bgw,
-													bgh,
-													bgxoffset,
-													bgyoffset,
-													bgxscroll,
-													bgyscroll,
-													bgframes,
-													bgxrepeat,
-													bgyrepeat,
-													bgxspeed,
-													bgyspeed,
-													bganimspeed,
-													bganimflip,
-													alpha
-												)
-											);
-
-										}
-										else if ( mezun::areStringsEqual( bgtype, "constellation" ) )
-										{
-											group.emplace_back
-											(
-												std::make_unique<MapLayerConstellation>
-												(
-													bgw,
-													bgh,
-													.1,
-													.1
-												)
-											);
-										}
-
+									}
+									if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
+									{
+										bgframes = bg[ "frames" ].GetInt();
+									}
+									if ( bg.HasMember( "x_speed" ) && bg[ "x_speed" ].IsInt() )
+									{
+										bgxspeed = bg[ "x_speed" ].GetInt();
+									}
+									if ( bg.HasMember( "y_speed" ) && bg[ "y_speed" ].IsInt() )
+									{
+										bgyspeed = bg[ "y_speed" ].GetInt();
+									}
+									if ( bg.HasMember( "animation_speed" ) && bg[ "animation_speed" ].IsInt() )
+									{
+										bganimspeed = bg[ "animation_speed" ].GetInt();
+									}
+									if ( bg.HasMember( "animation_flip" ) && bg[ "animation_flip" ].IsBool() )
+									{
+										bganimflip = bg[ "animation_flip" ].GetBool();
 									}
 
+
+									group.emplace_back
+									(
+										std::make_unique<MapLayerImage>
+										(
+											std::forward<std::string> ( img ),
+											bgw,
+											bgh,
+											bgxoffset,
+											bgyoffset,
+											bgxscroll,
+											bgyscroll,
+											bgframes,
+											bgxrepeat,
+											bgyrepeat,
+											bgxspeed,
+											bgyspeed,
+											bganimspeed,
+											bganimflip,
+											alpha
+										)
+									);
+
+								}
+								else if ( mezun::areStringsEqual( bgtype, "constellation" ) )
+								{
+									group.emplace_back
+									(
+										std::make_unique<MapLayerConstellation>
+										(
+											bgw,
+											bgh,
+											.1,
+											.1
+										)
+									);
 								}
 
 							}
 
 						}
 
-						map_layer_groups.insert( std::make_pair ( mlg, std::move( group ) ) );
 					}
 
+				}
+
+				map_layer_groups.insert( std::make_pair ( mlg, std::move( group ) ) );
+			}
 
 
 
-		maps.push_back
-		(
-			Map::mapFromPath
+
+			maps.push_back
 			(
-				slug,
-				std::move( map_layer_groups.at( "backgrounds" ) ),
-				warps,
-				std::move( map_layer_groups.at( "foregrounds" ) )
-			)
-		);
+				Map::mapFromPath
+				(
+					slug,
+					std::move( map_layer_groups.at( "backgrounds" ) ),
+					warps,
+					std::move( map_layer_groups.at( "foregrounds" ) )
+				)
+			);
 
 
 
-						}
-					}
-
-
-
-			/* GOAL
-			==============================================================*/
-
-				std::unique_ptr<Goal> goal;
-
-				if ( lvobj.HasMember( "goal" ) && lvobj[ "goal" ].IsObject() )
-				{
-					auto lvg = lvobj[ "goal" ].GetObject();
-
-					if ( lvg.HasMember( "type" ) && lvg[ "type" ].IsString() )
-					{
-						auto goaltype = lvg[ "type" ].GetString();
-
-						if ( mezun::areStringsEqual( goaltype, "collect" ) )
-						{
-							int amount = 10000;
-							std::string message = mezun::emptyString();
-
-							if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
-							{
-								amount = lvg[ "amount" ].GetInt();
-							}
-
-							if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
-							{
-								message = lvg[ "message" ].GetString();
-							}
-
-							goal = std::make_unique<CollectGoal> ( amount, message );
-						}
-						else if ( mezun::areStringsEqual( goaltype, "mcguffin" ) )
-						{
-							int amount = 3;
-							std::string message = mezun::emptyString();
-
-							if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
-							{
-								amount = lvg[ "amount" ].GetInt();
-							}
-
-							if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
-							{
-								message = lvg[ "message" ].GetString();
-							}
-
-							goal = std::make_unique<McGuffinGoal> ( amount, message );
-						}
-						else if ( mezun::areStringsEqual( goaltype, "survive_time" ) )
-						{
-							int amount = 60;
-							std::string message = mezun::emptyString();
-
-							if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
-							{
-								amount = lvg[ "amount" ].GetInt();
-							}
-
-							if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
-							{
-								message = lvg[ "message" ].GetString();
-							}
-
-							goal = std::make_unique<SurviveTimeGoal> ( amount, message );
-						}
-						else if ( mezun::areStringsEqual( goaltype, "past_right_edge" ) )
-						{
-							std::string message = mezun::emptyString();
-
-							if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
-							{
-								message = lvg[ "message" ].GetString();
-							}
-
-							goal = std::make_unique<PastRightEdgeGoal> ( message );
-						}
-						else if ( mezun::areStringsEqual( goaltype, "avoid_money" ) )
-						{
-							goal = std::make_unique<AvoidMoneyGoal> ();
-						}
-						else if ( mezun::areStringsEqual( goaltype, "starving" ) )
-						{
-							goal = std::make_unique<StarvingGoal> ();
-						}
-						else if ( mezun::areStringsEqual( goaltype, "heat" ) )
-						{
-							goal = std::make_unique<HeatGoal> ();
-						}
-						else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
-						{
-							goal = std::make_unique<KillAllGoal> ();
-						}
-					}
-					else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
-					{
-						const std::string message = lvg[ "message" ].GetString();
-						goal = std::make_unique<Goal> ( message );
-					}
 				}
-				else
+			}
+
+
+
+	/* GOAL
+	==============================================================*/
+	std::unique_ptr<Goal> goal;
+
+	if ( lvobj.HasMember( "goal" ) && lvobj[ "goal" ].IsObject() )
+	{
+		auto lvg = lvobj[ "goal" ].GetObject();
+
+		if ( lvg.HasMember( "type" ) && lvg[ "type" ].IsString() )
+		{
+			auto goaltype = lvg[ "type" ].GetString();
+
+			if ( mezun::areStringsEqual( goaltype, "collect" ) )
+			{
+				int amount = 10000;
+				std::string message = mezun::emptyString();
+
+				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
 				{
-					goal = std::make_unique<Goal> ();
+					amount = lvg[ "amount" ].GetInt();
 				}
 
-
-
-			/* ENTRANCES
-			==============================================================*/
-
-				int entrance_x = 0;
-				int entrance_y = 0;
-
-				if ( lvobj.HasMember( "entrance_x" ) && lvobj[ "entrance_x" ].IsInt() )
+				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
 				{
-					entrance_x = Unit::BlocksToPixels( lvobj[ "entrance_x" ].GetInt() );
-				}
-				if ( lvobj.HasMember( "entrance_y" ) && lvobj[ "entrance_y" ].IsInt() )
-				{
-					entrance_y = Unit::BlocksToPixels( lvobj[ "entrance_y" ].GetInt() );
+					message = lvg[ "message" ].GetString();
 				}
 
+				goal = std::make_unique<CollectGoal> ( amount, message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "mcguffin" ) )
+			{
+				int amount = 3;
+				std::string message = mezun::emptyString();
 
-
-			/* CAMERA
-			==============================================================*/
-
-				int camera_x = 0;
-				int camera_y = 0;
-
-				if ( lvobj.HasMember( "camera_x" ) && lvobj[ "camera_x" ].IsInt() )
+				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
 				{
-					camera_x = Unit::BlocksToPixels( lvobj[ "camera_x" ].GetInt() );
-				}
-				if ( lvobj.HasMember( "camera_y" ) && lvobj[ "camera_y" ].IsInt() )
-				{
-					camera_y = Unit::BlocksToPixels( lvobj[ "camera_y" ].GetInt() );
-				}	
-
-
-
-			/* CAMERA
-			==============================================================*/
-
-				std::string message = "";
-
-				if ( lvobj.HasMember( "message" ) && lvobj[ "message" ].IsString() )
-				{
-					message = lvobj[ "message" ].GetString();
+					amount = lvg[ "amount" ].GetInt();
 				}
 
+				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				{
+					message = lvg[ "message" ].GetString();
+				}
 
+				goal = std::make_unique<McGuffinGoal> ( amount, message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "survive_time" ) )
+			{
+				int amount = 60;
+				std::string message = mezun::emptyString();
 
-			/* SEND
-			==============================================================*/
+				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+				{
+					amount = lvg[ "amount" ].GetInt();
+				}
 
-				return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message );
+				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				{
+					message = lvg[ "message" ].GetString();
+				}
 
+				goal = std::make_unique<SurviveTimeGoal> ( amount, message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "past_right_edge" ) )
+			{
+				std::string message = mezun::emptyString();
+
+				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				{
+					message = lvg[ "message" ].GetString();
+				}
+
+				goal = std::make_unique<PastRightEdgeGoal> ( message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "avoid_money" ) )
+			{
+				goal = std::make_unique<AvoidMoneyGoal> ();
+			}
+			else if ( mezun::areStringsEqual( goaltype, "starving" ) )
+			{
+				goal = std::make_unique<StarvingGoal> ();
+			}
+			else if ( mezun::areStringsEqual( goaltype, "heat" ) )
+			{
+				goal = std::make_unique<HeatGoal> ();
+			}
+			else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
+			{
+				goal = std::make_unique<KillAllGoal> ();
 			}
 		}
-		else
+		else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
 		{
+			const std::string message = lvg[ "message" ].GetString();
+			goal = std::make_unique<Goal> ( message );
 		}
+	}
+	else
+	{
+		goal = std::make_unique<Goal> ();
+	}
 
-		ifs.close();
+			
+
+
+	/* ENTRANCES
+	==============================================================*/
+	int entrance_x = 0;
+	int entrance_y = 0;
+
+	if ( lvobj.HasMember( "entrance_x" ) && lvobj[ "entrance_x" ].IsInt() )
+	{
+		entrance_x = Unit::BlocksToPixels( lvobj[ "entrance_x" ].GetInt() );
+	}
+	if ( lvobj.HasMember( "entrance_y" ) && lvobj[ "entrance_y" ].IsInt() )
+	{
+		entrance_y = Unit::BlocksToPixels( lvobj[ "entrance_y" ].GetInt() );
 	}
 
 
+
+	/* CAMERA
+	==============================================================*/
+	int camera_x = 0;
+	int camera_y = 0;
+
+	if ( lvobj.HasMember( "camera_x" ) && lvobj[ "camera_x" ].IsInt() )
+	{
+		camera_x = Unit::BlocksToPixels( lvobj[ "camera_x" ].GetInt() );
+	}
+	if ( lvobj.HasMember( "camera_y" ) && lvobj[ "camera_y" ].IsInt() )
+	{
+		camera_y = Unit::BlocksToPixels( lvobj[ "camera_y" ].GetInt() );
+	}	
+
+
+
+	/* CAMERA
+	==============================================================*/
+	std::string message = "";
+
+	if ( lvobj.HasMember( "message" ) && lvobj[ "message" ].IsString() )
+	{
+		message = lvobj[ "message" ].GetString();
+	}
+
+
+
+	/* CONCLUDE
+	==============================================================*/
+	ifs.close();
+	return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message );
 };
 
 void Level::buildLevelList()
@@ -757,13 +757,13 @@ void Level::buildLevelList()
 
 void Level::checkLvList()
 {
-	for ( int i = 0; i < level_list_.size(); ++i )
+	for ( unsigned int i = 0; i < level_list_.size(); ++i )
 	{
 		if ( level_list_.at( i ) != "" )
 		{
 			std::cout<<Text::formatNumDigitPadding( i, 3 )<<"    "<<level_list_.at( i );
 			
-			for ( int j = 0; j < 24 - level_list_.at( i ).size(); ++j )
+			for ( int j = 0; j < 24 - ( int )( level_list_.at( i ).size() ); ++j )
 			{
 				std::cout<<" ";
 			}
@@ -773,6 +773,7 @@ void Level::checkLvList()
 	}
 };
 
+// For "Kill All Enemies" goal.
 int Level::allEnemiesToKill() const
 {
 	int n = 0;

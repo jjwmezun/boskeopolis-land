@@ -25,7 +25,7 @@ void BlockSystem::update( EventSystem& events )
 	getTileset().update( events );
 };
 
-void BlockSystem::render( Camera& camera, bool priority )
+void BlockSystem::render( const Camera& camera, bool priority )
 {
 	for ( auto& b : blocks_ )
 	{
