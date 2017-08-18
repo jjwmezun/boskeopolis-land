@@ -27,7 +27,7 @@ namespace Render
 	);
 	void renderObject
 	(
-		const std::string& sheet,
+		const std::string& orig_sheet,
 		sdl2::SDLRect source,
 		sdl2::SDLRect dest,
 		SDL_RendererFlip flip = SDL_FLIP_NONE,

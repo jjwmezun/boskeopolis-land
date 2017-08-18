@@ -74,7 +74,11 @@ void PauseState::stateRender()
 	{
 		Text::FontShade text_color = Text::FontShade::__NULL;
 
-		if ( ( int )option_selection_ == i )
+		if ( palette().neon() )
+		{
+			text_color = Text::FontShade::BLACK;
+		}
+		else if ( ( int )option_selection_ == i )
 		{
 			text_color = Text::FontShade::WHITE;
 		}

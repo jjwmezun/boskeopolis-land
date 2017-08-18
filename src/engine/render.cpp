@@ -258,23 +258,44 @@ namespace Render
 
 		if ( surfaces_.at( sheet ) != nullptr )
 		{
-			if ( palette_ )
+			if ( palette_->neon() )
+			{
+				for ( int i = 0; i < Palette::NUM_O_NEON_COLORS; ++i )
+				{
+					palette_->applyPaletteNeon( surfaces_.at( sheet ), i );
+
+					textures_.insert
+					(
+						std::make_pair
+						(
+							sheet + "_Neon" + std::to_string( i ),
+							SDL_CreateTextureFromSurface( renderer_, surfaces_.at( sheet ) )
+						)
+					);
+
+					if ( textures_.at( sheet + "_Neon" + std::to_string( i ) ) == nullptr )
+					{
+						SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
+					}
+				}
+			}
+			else
 			{
 				palette_->applyPalette( surfaces_.at( sheet ) );
-			}
 
-			textures_.insert
-			(
-				std::make_pair
+				textures_.insert
 				(
-					sheet,
-					SDL_CreateTextureFromSurface( renderer_, surfaces_.at( sheet ) )
-				)
-			);
+					std::make_pair
+					(
+						sheet,
+						SDL_CreateTextureFromSurface( renderer_, surfaces_.at( sheet ) )
+					)
+				);
 
-			if ( textures_.at( sheet ) == nullptr )
-			{
-				SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
+				if ( textures_.at( sheet ) == nullptr )
+				{
+					SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
+				}
 			}
 		}
 	};
@@ -327,8 +348,6 @@ namespace Render
 
 	void colorCanvas()
 	{
-		assert( palette_ );
-
 		const Uint8 r = palette_->bgR();
 		const Uint8 g = palette_->bgG();
 		const Uint8 b = palette_->bgB();
@@ -391,7 +410,7 @@ namespace Render
 
 	void renderObject
 	(
-		const std::string& sheet,
+		const std::string& orig_sheet,
 		sdl2::SDLRect source,
 		sdl2::SDLRect dest,
 		SDL_RendererFlip flip,
@@ -400,9 +419,17 @@ namespace Render
 		const Camera* camera
 	)
 	{
+		std::string sheet = orig_sheet;
+		
+		if ( palette_->neon() )
+		{
+			int neon_num = floor( Main::frame() % ( Palette::NUM_O_NEON_COLORS * 8 ) / 8 );
+			sheet += "_Neon" + std::to_string( neon_num );
+		}
+
 		if ( textures_.find( sheet ) == textures_.end() )
 		{
-			loadTexture( sheet, alpha );
+			loadTexture( orig_sheet, alpha );
 		}
 
 		SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
@@ -423,16 +450,23 @@ namespace Render
 		dest = sourceRelativeToScreen( dest );
 
 		if ( SDL_RenderCopyEx( renderer_, textures_.at( sheet ), &source, &dest, rotation, 0, flip ) != 0 )
+		{
 			printf( "Render failure: %s\n", SDL_GetError() );
+		}
 	};
 
 	void renderRect( const sdl2::SDLRect& box, int color, int alpha )
 	{
-		assert( palette_ );
+		Uint8 r = 0;
+		Uint8 g = 0;
+		Uint8 b = 0;
 
-		const Uint8 r = palette_->color( color ).r;
-		const Uint8 g = palette_->color( color ).g;
-		const Uint8 b = palette_->color( color ).b;
+		if ( !palette_->neon() )
+		{
+			r = palette_->color( color ).r;
+			g = palette_->color( color ).g;
+			b = palette_->color( color ).b;
+		}
 
 		sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
