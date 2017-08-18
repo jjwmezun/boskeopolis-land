@@ -139,6 +139,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 
 		events.changePalette( currentMap().palette() );
 		blocks.changeTileset( currentMap().tileset() );
+		blocks.clear();
 		Sprite::resistance_x_ = currentMap().windStrength();
 
 		currentMap().setChanged();

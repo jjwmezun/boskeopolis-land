@@ -4,7 +4,7 @@
 
 SpringSprite::SpringSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spring.png", 0, 0 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spring.png", 0, 0 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
 {};
 
 SpringSprite::~SpringSprite() {};

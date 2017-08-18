@@ -1,0 +1,57 @@
+{
+	"name": "Banana Beach",
+	"maps":
+	[
+		{
+			"slug": "beach",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "hills.png",
+					"width": 256,
+					"height": 64,
+					"y_repeat": false,
+					"y_offset": 64,
+					"x_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "wave.png",
+					"width": 32,
+					"height": 64,
+					"y_repeat": false,
+					"y_offset": 96,
+					"x_scroll": 0.5,
+					"x_speed": -100
+				},
+				{
+					"type": "image",
+					"img": "wave.png",
+					"width": 32,
+					"height": 64,
+					"y_repeat": false,
+					"y_offset": 112,
+					"x_scroll": 0.5,
+					"x_speed": 100
+				},
+				{
+					"type": "image",
+					"img": "wave.png",
+					"width": 32,
+					"height": 64,
+					"y_repeat": false,
+					"y_offset": 128,
+					"x_scroll": 0.5,
+					"x_speed": -100
+				}
+			]
+		}
+	],
+
+	"entrance_x": 1,
+	"entrance_y": 8,
+
+	"gem_challenge": 10000,
+	"time_challenge": 40
+}

@@ -499,7 +499,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 				{
 					if ( sprites_[ j ] != nullptr )
 						if ( i != j )
-							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) )
+							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) || sprites_.at( j )->cameraMovement() == Sprite::CameraMovement::PERMANENT )
 								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
 									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health );
 				}

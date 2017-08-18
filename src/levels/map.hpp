@@ -35,18 +35,18 @@ class Map
 		Palette palette() const;
 		const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
 
-		unsigned int widthBlocks() const;
-		unsigned int heightBlocks() const;
-		unsigned int widthPixels() const;
-		unsigned int heightPixels() const;
+		int widthBlocks() const;
+		int heightBlocks() const;
+		int widthPixels() const;
+		int heightPixels() const;
 
-		unsigned int blocksSize() const;
-		unsigned int spritesSize() const;
-		unsigned int block( unsigned int n ) const;
-		unsigned int sprite( unsigned int n ) const;
+		int blocksSize() const;
+		int spritesSize() const;
+		int block( int n ) const;
+		int sprite( int n ) const;
 
-		unsigned int mapX( int n ) const;
-		unsigned int mapY( int n ) const;
+		int mapX( int n ) const;
+		int mapY( int n ) const;
 		int indexFromXAndY( int x, int y ) const;
 
 		const std::string& tileset() const;
@@ -82,14 +82,14 @@ class Map
 		const bool blocks_work_offscreen_;
 		const bool loop_sides_;
 		const bool slippery_;
-		const unsigned int width_;
-		const unsigned int height_;
+		const int width_;
+		const int height_;
 		const int top_limit_;
 		const int bottom_limit_;
 		const int left_limit_;
 		const int right_limit_;
 		const int wind_strength_;
-		const unsigned int scroll_loop_width_;
+		const int scroll_loop_width_;
 		int current_loop_;
 		const SpriteSystem::HeroType hero_type_;
 		const Camera::XPriority camera_x_priority_;
@@ -137,5 +137,5 @@ class Map
 		int getLoopPixels( int x ) const;
 		int getXIndexForLoop( int x ) const;
 		int spriteLoopPosition( int x ) const;
-		bool inBounds( unsigned int n ) const;
+		bool inBounds( int n ) const;
 };

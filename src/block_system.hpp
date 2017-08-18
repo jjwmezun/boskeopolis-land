@@ -26,6 +26,7 @@ class BlockSystem
 		void blocksFromMap( const Map& lvmap, const Camera& camera );
 		bool blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const;
 		void addBlock( int x, int y, int i, int type, std::vector<Block>& list );
+		void clear();
 
 
 	private:
