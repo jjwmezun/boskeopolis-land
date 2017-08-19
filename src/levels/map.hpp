@@ -49,7 +49,7 @@ class Map
 		int mapY( int n ) const;
 		int indexFromXAndY( int x, int y ) const;
 
-		const std::string& tileset() const;
+		int tileset() const;
 		bool changed() const;
 		void setChanged();
 		void changeBlock( int where, int value );
@@ -90,12 +90,12 @@ class Map
 		const int right_limit_;
 		const int wind_strength_;
 		const int scroll_loop_width_;
+		const int tileset_;
 		int current_loop_;
 		const SpriteSystem::HeroType hero_type_;
 		const Camera::XPriority camera_x_priority_;
 		const Camera::YPriority camera_y_priority_;
 		const Palette palette_;
-		const std::string tileset_;
 		std::vector<int> blocks_;
 		std::vector<int> sprites_;
 		const std::vector<Warp> warps_;
@@ -108,7 +108,7 @@ class Map
 			std::vector<int> sprites,
 			int width,
 			int height,
-			std::string tileset,
+			int tileset,
 			Palette palette,
 			std::vector<std::unique_ptr<MapLayer>> backgrounds,
 			std::vector<Warp> warps,

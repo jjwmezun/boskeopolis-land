@@ -203,25 +203,10 @@ void Palette::loadPalettes()
 
 int Palette::stringID( const char* type )
 {
-	for ( int palette_number = 0; palette_number < num_o_palettes_; ++palette_number )
+	if ( strncmp( type, "Neon", 5 ) == 0 )
 	{
-		bool match = true;
-		for ( int letter = 0; letter < NAME_LIMIT; ++letter )
-		{
-			if ( type[ letter ] == '\0' || palette_names_[ palette_number ][ letter ] == '\0' )
-			{
-				break;
-			}
-			else if ( type[ letter ] != palette_names_[ palette_number ][ letter ] )
-			{
-				match = false;
-				break;
-			}
-		}
-		if ( match )
-		{
-			return palette_number;
-		}
+		return NEON_ID;
 	}
-	return 0;
+
+	return mezun::findIndexOfCStringInCArray( type, &palette_names_[ 0 ][ 0 ], num_o_palettes_, NAME_LIMIT );
 };

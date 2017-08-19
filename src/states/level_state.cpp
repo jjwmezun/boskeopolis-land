@@ -16,7 +16,7 @@ try :
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
-	blocks_ ( level_.currentMap() ),
+	blocks_ ( level_ ),
 	health_ ()
 {
 	Inventory::levelStart( lvname );

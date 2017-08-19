@@ -36,6 +36,7 @@ class Level
 		std::string message() const;
 		int id() const;
 		int allEnemiesToKill() const;
+		const std::vector<Map>& allMaps() const;
 
 		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
 		void update( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health );

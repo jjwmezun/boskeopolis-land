@@ -138,9 +138,8 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		camera.adjust( sprites.hero(), currentMap() );
 
 		events.changePalette( currentMap().palette() );
-		blocks.changeTileset( currentMap().tileset() );
+		blocks.changedMap( currentMap() );
 		Sprite::resistance_x_ = currentMap().windStrength();
-
 		currentMap().setChanged();
 	}
 };
@@ -798,4 +797,9 @@ int Level::allEnemiesToKill() const
 	}
 	
 	return n;
+};
+
+const std::vector<Map>& Level::allMaps() const
+{
+	return maps_;
 };

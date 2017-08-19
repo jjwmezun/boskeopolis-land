@@ -43,6 +43,7 @@
 #include "block_condition_key.hpp"
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_rival.hpp"
+#include <experimental/filesystem>
 #include <fstream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
@@ -51,10 +52,51 @@
 #include "sprite_graphics.hpp"
 #include "tileset.hpp"
 
-Tileset::Tileset( std::string tileset )
+namespace fs = std::experimental::filesystem::v1;
+
+char Tileset::tileset_names_[ NAME_LIMIT ][ LETTER_LIMIT ] = { "universal", '\0' };
+int Tileset::num_o_tilesets_ = 1;
+
+void Tileset::loadTilesetNames()
+{
+	std::string path = Main::resourcePath() + "tilesets";
+	for ( auto& dirit : fs::directory_iterator( path ) )
+	{
+		if ( num_o_tilesets_ >= NAME_LIMIT )
+		{
+			break;
+		}
+
+		const std::string& filename = dirit.path().string();
+		
+		if
+		(
+			filename != Main::resourcePath() + "tilesets" + Main::pathDivider() + "tiled_files" &&
+			filename != Main::resourcePath() + "tilesets" + Main::pathDivider() + "universal"
+		)
+		{
+			int absolute_index = 0;
+			int relative_index = path.size() + 1;
+			while ( absolute_index < LETTER_LIMIT && relative_index < filename.size() )
+			{
+				tileset_names_[ num_o_tilesets_ ][ absolute_index ] = filename.at( relative_index );
+				++absolute_index;
+				++relative_index;
+			}
+			++num_o_tilesets_;
+		}
+	}
+	
+	/*
+	for ( int i = 0; i < num_o_tilesets_; ++i )
+	{
+		std::cout<<tileset_names_[ i ]<<std::endl;
+	}*/
+};
+
+Tileset::Tileset( int id )
 :
-	name_ ( tileset ),
-	block_types_ ( std::move( makeBlockTypes( tileset ) ) )
+	block_types_ ( std::move( makeBlockTypes( id ) ) )
 {}
 
 void Tileset::update( EventSystem& events )
@@ -73,18 +115,19 @@ BlockType* Tileset::blockType( int type, int x, int y )
 	}
 	catch ( const std::out_of_range& e )
 	{
-		throw mezun::InvalidBlockType( type, name_, x, y );
+		mezun::error( "Invalid block type." );
 	}
 };
 
 
-std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::string& tileset ) const
+std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( int tileset_id ) const
 {	
+	const char* tileset = tileset_names_[ tileset_id ];
 	const std::string path = Main::resourcePath() + "tilesets" + Main::pathDivider() + tileset + Main::pathDivider();
 
 	if ( !mezun::checkDirectory( path ) )
 	{
-		mezun::error( "Can't load tileset \"" + tileset + "\"" );
+		mezun::error( "Can't load tileset \"" + std::string( tileset ) + "\" @ " + path );
 	}
 
 	std::vector<std::unique_ptr<BlockType>> types;
@@ -103,7 +146,7 @@ std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::stri
 
 			if ( block.IsObject() )
 			{
-				types.emplace_back( std::move( makeType( block, tileset ) ) );
+				types.emplace_back( std::move( makeType( block, tileset_id ) ) );
 			}
 			else
 			{
@@ -121,14 +164,14 @@ std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::stri
 	return types;
 };
 
-std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, const std::string& tileset ) const
+std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, int tileset_id ) const
 {
 
 	/* GRAPHICS
 	=================================================================*/
 
+		const char* tileset = tileset_names_[ tileset_id ];
 		std::unique_ptr<SpriteGraphics> graphics = nullptr;
-
 		std::string texture = "tilesets" + Main::pathDivider() + tileset + ".png";
 
 		if ( block.HasMember( "graphics" ) && block[ "graphics" ].IsObject() )
@@ -558,4 +601,9 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 			std::move( graphics ),
 			std::move ( components ), std::move( conditions )
 		);
+};
+
+int Tileset::nameID( const char* target_name )
+{
+	return mezun::findIndexOfCStringInCArray( target_name, &tileset_names_[ 0 ][ 0 ], num_o_tilesets_, LETTER_LIMIT );
 };

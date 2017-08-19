@@ -15,11 +15,13 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "palette":"Neon"
+     "palette":"Neon",
+     "tileset":"urban"
     },
  "propertytypes":
     {
-     "palette":"string"
+     "palette":"string",
+     "tileset":"string"
     },
  "renderorder":"right-down",
  "tileheight":16,

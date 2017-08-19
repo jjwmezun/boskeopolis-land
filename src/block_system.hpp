@@ -11,18 +11,19 @@ class Sprite;
 #include "block.hpp"
 #include "tileset.hpp"
 #include "unit.hpp"
+#include <unordered_map>
 #include <vector>
 
 class BlockSystem
 {
 	public:
-		BlockSystem( const Map& lvmap );
+		BlockSystem( const Level& level );
 
 		void update( EventSystem& events );
 		void render( const Camera& camera, bool priority = false );
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health );
 
-		void changeTileset( std::string new_tileset );
+		void changedMap( const Map& lvmap );
 		void blocksFromMap( const Map& lvmap, const Camera& camera );
 		bool blocksInTheWay( const sdl::rect& r, BlockComponent::Type type ) const;
 		void addBlock( int x, int y, int i, int type, std::vector<Block>& list );
@@ -33,12 +34,12 @@ class BlockSystem
 		static constexpr int CAMERA_PADDING = 4;
 
 		std::vector<Block> blocks_;
-
-		std::map<std::string, Tileset> tilesets_;
-		std::string current_tileset_;
+		std::vector<Tileset> tilesets_;
+		std::unordered_map<int, int> tileset_ids_;
+		int current_tileset_;
 
 		Tileset& universalTileset();
 		Tileset& mapTileset();
-
-		int debug_num_ = 0;
+		int lastTilesetIndex() const;
+		void setCurrentTileset( const Map& lvmap );
 };

@@ -1,17 +1,27 @@
 #include "block_system.hpp"
 #include "camera.hpp"
 #include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
 #include "render.hpp"
 #include <iostream>
-#include "map.hpp"
+#include "level.hpp"
 #include "sprite.hpp"
 #include <utility>
 
-BlockSystem::BlockSystem( const Map& lvmap )
-{
-	tilesets_.insert( std::make_pair( "universal", ( "universal" ) ) );
-	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
-	current_tileset_ = lvmap.tileset();
+BlockSystem::BlockSystem( const Level& level )
+{	
+	tilesets_.emplace_back( Tileset{ 0 } );
+
+	for ( auto& m : level.allMaps() )
+	{
+		const int tileset = m.tileset();
+		if ( mezun::notInMap( tileset_ids_, tileset ) )
+		{
+			tilesets_.emplace_back( Tileset{ tileset } );
+			tileset_ids_.insert( std::make_pair( tileset, lastTilesetIndex() ) );
+		}
+	}
+	setCurrentTileset( level.currentMap() );
 };
 
 void BlockSystem::update( EventSystem& events )
@@ -142,40 +152,27 @@ bool BlockSystem::blocksInTheWay( const sdl::rect& r, BlockComponent::Type type 
 	return false;
 };
 
-void BlockSystem::changeTileset( std::string new_tileset )
+void BlockSystem::changedMap( const Map& lvmap )
 {
-	// See if tileset already exists.
-	auto i = tilesets_.find( new_tileset );
-
-	// If Tileset doesn't already exist, try making 1.	
-	if ( i == tilesets_.end() )
-	{
-		tilesets_.insert( std::make_pair( new_tileset, ( new_tileset ) ) );
-	}
-
-	current_tileset_ = new_tileset;
+	setCurrentTileset( lvmap );
 };
 
 Tileset& BlockSystem::universalTileset()
 {
-	auto t = tilesets_.find( "universal" );
-
-	if ( t == tilesets_.end() )
-	{
-		mezun::error( "Universal tileset ne'er loaded in BlockSystem." );
-	}
-
-	return t->second;	
+	return tilesets_[ 0 ];
 };
 
 Tileset& BlockSystem::mapTileset()
 {
-	auto t = tilesets_.find( current_tileset_ );
+	return tilesets_[ current_tileset_ ];
+};
 
-	if ( t == tilesets_.end() )
-	{
-		mezun::error( "Map tileset \"" + current_tileset_ + "\" ne'er loaded in BlockSystem." );
-	}
+void BlockSystem::setCurrentTileset( const Map& lvmap )
+{
+	current_tileset_ = mezun::findInMap( tileset_ids_, lvmap.tileset() );
+};
 
-	return t->second;
+int BlockSystem::lastTilesetIndex() const
+{
+	return tilesets_.size() - 1;
 };

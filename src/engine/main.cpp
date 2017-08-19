@@ -7,6 +7,7 @@
 #include "mezun_helpers.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
+#include "tileset.hpp"
 #include "title_state.hpp"
 #include <vector>
 
@@ -58,6 +59,7 @@ namespace Main
 		srand ( time( NULL ) );
 		setResourcePath();
 		Palette::loadPalettes();
+		Tileset::loadTilesetNames();
 		Render::init( args );
 		Input::init();
 		firstState();

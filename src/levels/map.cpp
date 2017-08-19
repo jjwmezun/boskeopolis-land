@@ -8,6 +8,7 @@
 #include "map_layer_water.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
+#include "tileset.hpp"
 #include "unit.hpp"
 
 Map Map::mapFromPath
@@ -119,7 +120,7 @@ Map Map::mapFromPath
 
 		std::string palette = "Grayscale";
 		int bg_color = 1;
-		std::string tileset = "urban";
+		int tileset = 0;
 		bool slippery = false;
 		int camera_limit_top = -1;
 		int camera_limit_bottom = -1;
@@ -146,7 +147,7 @@ Map Map::mapFromPath
 				{
 					if ( prop.value.IsString() )
 					{
-						tileset = prop.value.GetString();
+						tileset = Tileset::nameID( prop.value.GetString() );
 					}
 				}
 
@@ -330,7 +331,7 @@ Map::Map
 	std::vector<int> sprites,
 	int width,
 	int height,
-	std::string tileset,
+	int tileset,
 	Palette palette,
 	std::vector<std::unique_ptr<MapLayer>> backgrounds,
 	std::vector<Warp> warps,
@@ -692,7 +693,7 @@ void Map::interact( Sprite& sprite, Camera& camera, Health& health )
 	}
 };
 
-const std::string& Map::tileset() const
+int Map::tileset() const
 {
 	return tileset_;
 };
