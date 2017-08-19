@@ -305,7 +305,7 @@ Map Map::mapFromPath
 			width,
 			height,
 			tileset,
-			{ palette, bg_color },
+			{ palette.c_str(), bg_color },
 			std::move( backgrounds ),
 			warps,
 			std::move( foregrounds ),

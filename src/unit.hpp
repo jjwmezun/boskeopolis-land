@@ -113,7 +113,7 @@
             return PixelsToBlocks( SubPixelsToPixels( sp ) );
         };
 
-        inline constexpr sdl2::SDLRect PixelsToSubPixels( const sdl2::SDLRect& r )
+        inline constexpr sdl::rect PixelsToSubPixels( const sdl::rect& r )
         {
             return
             {
@@ -124,7 +124,7 @@
             };
         };
 
-        inline constexpr sdl2::SDLRect SubPixelsToPixels( const sdl2::SDLRect& r )
+        inline constexpr sdl::rect SubPixelsToPixels( const sdl::rect& r )
         {
             return
             {

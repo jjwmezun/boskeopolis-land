@@ -28,8 +28,8 @@ class ShroudSprite : public Sprite
 		static constexpr int COLOR = 5;
 		static constexpr int TRANS_SPEED = 10;
 	
-		const sdl2::SDLRect top_;
-		const sdl2::SDLRect bottom_;
+		const sdl::rect top_;
+		const sdl::rect bottom_;
 		ShroudState state_;
 		Counter alpha_;
 		bool activated_;

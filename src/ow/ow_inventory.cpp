@@ -5,7 +5,7 @@
 #include "render.hpp"
 #include "text.hpp"
 
-constexpr sdl2::SDLRect OWInventory::AREA;
+constexpr sdl::rect OWInventory::AREA;
 
 void OWInventory::update( int lv_select )
 {

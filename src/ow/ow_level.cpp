@@ -19,7 +19,7 @@ void OWLevel::render( const OWCamera& camera ) const
 	Render::renderObject( "tilesets/ow.png", src(), dest( camera ), SDL_FLIP_NONE, 0.0 );
 };
 
-sdl2::SDLRect OWLevel::src() const
+sdl::rect OWLevel::src() const
 {
 	return
 	{
@@ -30,13 +30,13 @@ sdl2::SDLRect OWLevel::src() const
 	};
 };
 
-sdl2::SDLRect OWLevel::dest( const OWCamera& camera ) const
+sdl::rect OWLevel::dest( const OWCamera& camera ) const
 {
 	return
 	camera.relative( coords() );
 };
 
-sdl2::SDLRect OWLevel::coords() const
+sdl::rect OWLevel::coords() const
 {
 	return
 	{

@@ -19,7 +19,7 @@ EventSystem::EventSystem()
 	switch_ ( false ),
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
-	new_palette_ ( mezun::emptyString(), 0 ),
+	new_palette_ ( 0, 0 ),
 	move_water_ ( -1 ),
 	current_water_ ( - 1 ),
 	in_front_of_door_ ( false ),
@@ -86,7 +86,7 @@ void EventSystem::changePalette( const Palette& new_palette )
 
 Palette EventSystem::getPalette()
 {
-	const auto temp = new_palette_;
+	Palette temp = new_palette_;
 	resetPalette();
 	return temp;
 };
@@ -98,7 +98,7 @@ bool EventSystem::paletteChanged() const
 
 void EventSystem::resetPalette()
 {
-	new_palette_ = { mezun::emptyString(), 0 };
+	new_palette_ = { 0, 0 };
 	palette_changed_ = false;
 };
 

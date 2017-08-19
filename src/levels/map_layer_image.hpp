@@ -52,9 +52,9 @@ class MapLayerImage : public MapLayer
 		Counter current_frame_;
 		TimerRepeat animation_timer_;
 		const std::string texture_;
-		sdl2::SDLRect source_;
+		sdl::rect source_;
 
 		void renderY( const Camera& camera ) const;
-		void renderX( const Camera& camera, sdl2::SDLRect& dest ) const;
-		bool onscreen( const sdl2::SDLRect& r, const Camera& camera ) const;
+		void renderX( const Camera& camera, sdl::rect& dest ) const;
+		bool onscreen( const sdl::rect& r, const Camera& camera ) const;
 };

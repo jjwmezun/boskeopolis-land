@@ -112,7 +112,7 @@ void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& l
 	}
 };
 
-bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const
+bool BlockSystem::blocksInTheWay( const sdl::rect& r, BlockComponent::Type type ) const
 {
 	for ( auto& b : blocks_ )
 	{

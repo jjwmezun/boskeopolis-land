@@ -4,14 +4,14 @@
 #include "inventory_level.hpp"
 #include "render.hpp"
 
-constexpr sdl2::SDLRect InventoryLevel::BG_DEST;
-constexpr sdl2::SDLRect InventoryLevel::VICTORY_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::DIAMOND_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::GEM_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::CLOCK_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::KEY_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_DEST;
-constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_CROSS_DEST;
+constexpr sdl::rect InventoryLevel::BG_DEST;
+constexpr sdl::rect InventoryLevel::VICTORY_ICON_DEST;
+constexpr sdl::rect InventoryLevel::DIAMOND_ICON_DEST;
+constexpr sdl::rect InventoryLevel::GEM_ICON_DEST;
+constexpr sdl::rect InventoryLevel::CLOCK_ICON_DEST;
+constexpr sdl::rect InventoryLevel::KEY_ICON_DEST;
+constexpr sdl::rect InventoryLevel::MCGUFFIN_DEST;
+constexpr sdl::rect InventoryLevel::MCGUFFIN_CROSS_DEST;
 
 InventoryLevel::InventoryLevel()
 :

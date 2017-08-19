@@ -746,7 +746,7 @@ int Sprite::originalYSubPixels() const
 	return original_hit_box_.y;
 };
 
-const sdl2::SDLRect& Sprite::originalHitBox() const
+const sdl::rect& Sprite::originalHitBox() const
 {
 	return original_hit_box_;
 };

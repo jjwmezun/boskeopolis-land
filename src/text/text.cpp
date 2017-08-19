@@ -192,7 +192,7 @@ void Text::renderText
 			const int char_x = ( CHAR_SIZE_PIXELS * ( c - ( int )( letters_so_far ) ) ) + x;
 			const int char_y = ( CHAR_SIZE_PIXELS * ( int )( line ) ) + y;
 
-			sdl2::SDLRect dest =
+			sdl::rect dest =
 			{
 				char_x,
 				char_y,

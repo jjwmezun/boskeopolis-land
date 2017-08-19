@@ -70,7 +70,7 @@ void OxygenMeter::renderShell() const
 	for ( int i = 0; i < width_mini_blocks(); ++i )
 	{
 
-		const sdl2::SDLRect r =
+		const sdl::rect r =
 		{
 			X_PIXELS + Unit::MiniBlocksToPixels( i ),
 			meter_bar_.y,

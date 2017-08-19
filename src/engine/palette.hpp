@@ -1,47 +1,47 @@
 #pragma once
 
-#include <array>
 #include "mezun_sdl2.hpp"
-#include <unordered_map>
-#include <SDL2/SDL_image.h>
-#include "timers/timer_repeat.hpp"
 
 class Palette
 {
 	public:
 		static constexpr int NUM_O_NEON_COLORS = 12;
 
-		Palette( std::string type, int bg );
+		Palette( int id, int bg );
+		Palette( const char* name, int bg );
 		bool operator!= ( const Palette& p ) const;
-		const Palette& operator= ( const Palette& p );
+		//const Palette& operator= ( const Palette& p ) = default;
 
-		const std::string& type() const;
-		bool neon() const;
+		int id() const;
 		int bgN() const;
+		bool neon() const;
 
 		void applyPalette( SDL_Surface* s ) const;
 		void applyPaletteNeon( SDL_Surface* s, int n ) const;
 
-		const sdl2::SDLColor& color( int n = 1 ) const;
-		const sdl2::SDLColor& bg() const;
+		const sdl::color& color( int n = 1 ) const;
+		const sdl::color& bg() const;
 		Uint8 bgR() const;
 		Uint8 bgG() const;
 		Uint8 bgB() const;
 		Uint8 bgA() const;
 
+		static void loadPalettes();
+
 
 	private:
+		static constexpr int NEON_ID = -1;
+		static constexpr int PALETTE_LIMIT = 100;
 		static constexpr int COLOR_LIMIT = 7;
-		static constexpr sdl2::SDLColor BLACK = { 0, 0, 0, 255 };
-		//static std::unordered_map<std::string, std::array<sdl2::SDLColor, COLOR_LIMIT>> palettes_;
-		static std::vector<std::array<sdl2::SDLColor, COLOR_LIMIT>> palettes_;
-		static std::vector<std::string> palette_names_;
+		static constexpr int NAME_LIMIT = 20;
+		static constexpr sdl::color BLACK = { 0, 0, 0, 255 };
 
-		std::string type_;
-		bool neon_;
+		static sdl::color palettes_[ PALETTE_LIMIT ][ COLOR_LIMIT ];
+		static char palette_names_[ PALETTE_LIMIT ][ NAME_LIMIT ];
+		static int num_o_palettes_;
+
+		int id_;
 		int bg_;
 
-		int testColor( int n ) const;
-
-		void loadPalettes() const;
+		static int stringID( const char* type );
 };

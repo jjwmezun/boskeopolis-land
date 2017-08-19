@@ -26,17 +26,17 @@ namespace Render
 	std::map<std::string, SDL_Surface*> surfaces_ = {};
 	SDL_Renderer* renderer_ = nullptr;
 	SDL_Window* window_ = nullptr;
-	sdl2::SDLRect screen_;
+	sdl::rect screen_;
 	TimerRepeat animation_frame_ = {};
-	std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
+	Palette palette_ = { 0, 1 };
 
 	int magnification_ = 1;
 	int left_edge_ = 0;
 	int top_edge_ = 0;
-	sdl2::SDLRect top_bar_ = { 0, 0, 0, 0 };
-	sdl2::SDLRect bottom_bar_ = { 0, 0, 0, 0 };
-	sdl2::SDLRect left_bar_ = { 0, 0, 0, 0 };
-	sdl2::SDLRect right_bar_ = { 0, 0, 0, 0 };
+	sdl::rect top_bar_ = { 0, 0, 0, 0 };
+	sdl::rect bottom_bar_ = { 0, 0, 0, 0 };
+	sdl::rect left_bar_ = { 0, 0, 0, 0 };
+	sdl::rect right_bar_ = { 0, 0, 0, 0 };
 
 
 	// Private Function Declarations
@@ -57,7 +57,7 @@ namespace Render
 
 	const std::string imgAddress( const std::string& relative_path );
 	const std::string setImgPath();
-	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source );
+	sdl::rect sourceRelativeToScreen( const sdl::rect& source );
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
 
 
@@ -145,7 +145,7 @@ namespace Render
 			int monitor_width = Unit::WINDOW_WIDTH_PIXELS;
 			int monitor_height = Unit::WINDOW_HEIGHT_PIXELS;
 
-			sdl2::SDLRect r;
+			sdl::rect r;
 			if ( FORCE_MAGNIFICATION > -1 )
 			{
 				magnification_ = FORCE_MAGNIFICATION;
@@ -258,11 +258,11 @@ namespace Render
 
 		if ( surfaces_.at( sheet ) != nullptr )
 		{
-			if ( palette_->neon() )
+			if ( palette_.neon() )
 			{
 				for ( int i = 0; i < Palette::NUM_O_NEON_COLORS; ++i )
 				{
-					palette_->applyPaletteNeon( surfaces_.at( sheet ), i );
+					palette_.applyPaletteNeon( surfaces_.at( sheet ), i );
 
 					textures_.insert
 					(
@@ -281,7 +281,7 @@ namespace Render
 			}
 			else
 			{
-				palette_->applyPalette( surfaces_.at( sheet ) );
+				palette_.applyPalette( surfaces_.at( sheet ) );
 
 				textures_.insert
 				(
@@ -348,9 +348,9 @@ namespace Render
 
 	void colorCanvas()
 	{
-		const Uint8 r = palette_->bgR();
-		const Uint8 g = palette_->bgG();
-		const Uint8 b = palette_->bgB();
+		const Uint8 r = palette_.bgR();
+		const Uint8 g = palette_.bgG();
+		const Uint8 b = palette_.bgB();
 
 		SDL_SetRenderDrawColor( renderer_, r, g, b, FULL_OPACITY );
 		SDL_RenderFillRect( renderer_, &screen_ );
@@ -362,7 +362,7 @@ namespace Render
 		SDL_RenderClear( renderer_ );
 	};
 
-	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source )
+	sdl::rect sourceRelativeToScreen( const sdl::rect& source )
 	{
 		return
 		{
@@ -396,8 +396,8 @@ namespace Render
 	void renderObject
 	(
 		const std::string& sheet,
-		const sdl2::SDLRect& source,
-		const sdl2::SDLRect& dest,
+		const sdl::rect& source,
+		const sdl::rect& dest,
 		bool flip_x,
 		bool flip_y,
 		double rotation,
@@ -411,8 +411,8 @@ namespace Render
 	void renderObject
 	(
 		const std::string& orig_sheet,
-		sdl2::SDLRect source,
-		sdl2::SDLRect dest,
+		sdl::rect source,
+		sdl::rect dest,
 		SDL_RendererFlip flip,
 		double rotation,
 		Uint8 alpha,
@@ -421,7 +421,7 @@ namespace Render
 	{
 		std::string sheet = orig_sheet;
 		
-		if ( palette_->neon() )
+		if ( palette_.neon() )
 		{
 			int neon_num = floor( Main::frame() % ( Palette::NUM_O_NEON_COLORS * 8 ) / 8 );
 			sheet += "_Neon" + std::to_string( neon_num );
@@ -455,27 +455,27 @@ namespace Render
 		}
 	};
 
-	void renderRect( const sdl2::SDLRect& box, int color, int alpha )
+	void renderRect( const sdl::rect& box, int color, int alpha )
 	{
 		Uint8 r = 0;
 		Uint8 g = 0;
 		Uint8 b = 0;
 
-		if ( !palette_->neon() )
+		if ( !palette_.neon() )
 		{
-			r = palette_->color( color ).r;
-			g = palette_->color( color ).g;
-			b = palette_->color( color ).b;
+			r = palette_.color( color ).r;
+			g = palette_.color( color ).g;
+			b = palette_.color( color ).b;
 		}
 
-		sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
+		sdl::rect box_relative = sourceRelativeToScreen( box );
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
 		SDL_RenderFillRect( renderer_, &box_relative );
 	};
 
 	void newPalette( Palette palette )
 	{
-		palette_ = std::make_unique<Palette> ( palette );
+		palette_ = palette;
 		clearTextures();
 	};
 

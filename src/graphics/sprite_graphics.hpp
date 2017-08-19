@@ -40,9 +40,9 @@ class SpriteGraphics
 		virtual ~SpriteGraphics();
 		virtual void update( Sprite& sprite );
 		virtual void update();
-		virtual void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const;
-		void renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr ) const;
-		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
+		virtual void render( const sdl::rect& bound_box, const Camera* camera = nullptr, bool priority = false ) const;
+		void renderAnyPriority( const sdl::rect& bound_box, const Camera* camera = nullptr ) const;
+		sdl::rect adjustBoundBox( const sdl::rect& r ) const;
 
 
 	protected:
@@ -53,5 +53,5 @@ class SpriteGraphics
 		int prev_frame_x_;
 		int prev_frame_y_;
 
-		void masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha = 255 ) const;
+		void masterRender( const sdl::rect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha = 255 ) const;
 };

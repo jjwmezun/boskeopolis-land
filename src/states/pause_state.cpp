@@ -4,7 +4,7 @@
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 
-constexpr sdl2::SDLRect PauseState::surface_box_;
+constexpr sdl::rect PauseState::surface_box_;
 
 PauseState::PauseState( const Palette& palette, EventSystem& events )
 :

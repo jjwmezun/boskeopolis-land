@@ -213,7 +213,7 @@ class Sprite : public Object
 		int prevBottomSubPixels() const;
 		int prevRightPixels()  const;
 		int prevBottomPixels() const;
-		const sdl2::SDLRect& originalHitBox() const;
+		const sdl::rect& originalHitBox() const;
 		int originalXSubPixels() const;
 		int originalYSubPixels() const;
 
@@ -226,7 +226,7 @@ class Sprite : public Object
 
 		int x_prev_ = -123456789;
 		int y_prev_ = -123456789;
-		const sdl2::SDLRect original_hit_box_;
+		const sdl::rect original_hit_box_;
 
 		const std::vector<SpriteType> types_;
 		const CameraMovement camera_movement_;

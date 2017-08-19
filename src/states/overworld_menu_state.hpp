@@ -28,7 +28,7 @@ class OverworldMenuState : public GameState
 
 		static constexpr int BG_WIDTH = 24;
 		static constexpr int BG_HEIGHT = 11;
-		static constexpr sdl2::SDLRect bg_ =
+		static constexpr sdl::rect bg_ =
 		{
 			Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( BG_WIDTH / 2 ) ),
 			Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( BG_HEIGHT / 2 ) ),

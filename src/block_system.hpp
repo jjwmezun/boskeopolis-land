@@ -24,7 +24,7 @@ class BlockSystem
 
 		void changeTileset( std::string new_tileset );
 		void blocksFromMap( const Map& lvmap, const Camera& camera );
-		bool blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const;
+		bool blocksInTheWay( const sdl::rect& r, BlockComponent::Type type ) const;
 		void addBlock( int x, int y, int i, int type, std::vector<Block>& list );
 		void clear();
 

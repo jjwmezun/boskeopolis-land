@@ -303,12 +303,12 @@ void OverworldState::interactions()
 				break;
 			}
 			
-			newPalette( { pal, 2 } );
+			newPalette( { pal.c_str(), 2 } );
 		}
 	}
 };
 
-Collision OverworldState::testCollision( const sdl2::SDLRect& lhs, const sdl2::SDLRect& rhs )
+Collision OverworldState::testCollision( const sdl::rect& lhs, const sdl::rect& rhs )
 {
 	int overlap_x_left   = 0;
 	int overlap_x_right  = 0;
@@ -478,7 +478,7 @@ Palette OverworldState::lvPal( int id )
 		break;
 	}
 	
-	return { pal, 2 };
+	return { pal.c_str(), 2 };
 };
 
 void OverworldState::renderCameraArrows()

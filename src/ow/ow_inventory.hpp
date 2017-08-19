@@ -10,7 +10,7 @@ class OWInventory
 		void render( int lv_select );
 
 	private:
-		static constexpr sdl2::SDLRect AREA = { 0, Unit::WINDOW_HEIGHT_PIXELS - 32, Unit::WINDOW_WIDTH_PIXELS, 32 };
+		static constexpr sdl::rect AREA = { 0, Unit::WINDOW_HEIGHT_PIXELS - 32, Unit::WINDOW_WIDTH_PIXELS, 32 };
 		static constexpr int ROW_1 = AREA.y + 8;
 		static constexpr int ROW_2 = AREA.y + 16;
 		static constexpr int LEFT_EDGE = AREA.x + 8;

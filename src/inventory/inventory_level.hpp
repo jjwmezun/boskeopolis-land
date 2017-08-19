@@ -31,15 +31,15 @@ class InventoryLevel
 		static constexpr int CLOCK_X = CLOCK_ICON_X + 8;
 		static constexpr int MISC_X = Unit::MiniBlocksToPixels( 23 );
 
-		static constexpr sdl2::SDLRect BG_DEST = { 0, Unit::WINDOW_HEIGHT_PIXELS - 32, Unit::WINDOW_WIDTH_PIXELS, 32 };
-		static constexpr sdl2::SDLRect VICTORY_ICON_DEST = { VICTORY_X, Y, Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK };
-		static constexpr sdl2::SDLRect DIAMOND_ICON_DEST = { DIAMOND_X, Y, Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK };
-		static constexpr sdl2::SDLRect GEM_ICON_DEST = { FUNDS_ICON_X, Y, 8, 8 };
-		static constexpr sdl2::SDLRect CLOCK_ICON_DEST = { CLOCK_ICON_X, Y, 8, 8 };
+		static constexpr sdl::rect BG_DEST = { 0, Unit::WINDOW_HEIGHT_PIXELS - 32, Unit::WINDOW_WIDTH_PIXELS, 32 };
+		static constexpr sdl::rect VICTORY_ICON_DEST = { VICTORY_X, Y, Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK };
+		static constexpr sdl::rect DIAMOND_ICON_DEST = { DIAMOND_X, Y, Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK };
+		static constexpr sdl::rect GEM_ICON_DEST = { FUNDS_ICON_X, Y, 8, 8 };
+		static constexpr sdl::rect CLOCK_ICON_DEST = { CLOCK_ICON_X, Y, 8, 8 };
 
-		static constexpr sdl2::SDLRect KEY_ICON_DEST = { MISC_X, Y, Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK };
-		static constexpr sdl2::SDLRect MCGUFFIN_DEST = { MISC_X, Y, 8, 8 };
-		static constexpr sdl2::SDLRect MCGUFFIN_CROSS_DEST = { MISC_X + 8, Y, 8, 8 };
+		static constexpr sdl::rect KEY_ICON_DEST = { MISC_X, Y, Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK };
+		static constexpr sdl::rect MCGUFFIN_DEST = { MISC_X, Y, 8, 8 };
+		static constexpr sdl::rect MCGUFFIN_CROSS_DEST = { MISC_X + 8, Y, 8, 8 };
 
 		static constexpr int HAVE_X = 48;
 		static constexpr int DONT_HAVE_X = 56;

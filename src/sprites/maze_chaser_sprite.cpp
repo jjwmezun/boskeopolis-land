@@ -305,7 +305,7 @@ bool MazeChaserSprite::blockInPosition( const std::pair<int, int>& coordinates, 
 	const int x = Unit::BlocksToSubPixels( std::get<PAIR_POS_X> ( coordinates ) ) + 4000;
 	const int y = Unit::BlocksToSubPixels( std::get<PAIR_POS_Y> ( coordinates ) ) + 4000;
 
-	const sdl2::SDLRect r = { x, y, Unit::BlocksToSubPixels( 1 ) - 4000, Unit::BlocksToSubPixels( 1 ) - 4000 };
+	const sdl::rect r = { x, y, Unit::BlocksToSubPixels( 1 ) - 4000, Unit::BlocksToSubPixels( 1 ) - 4000 };
 
 	return blocks.blocksInTheWay( r, BlockComponent::Type::SOLID );
 };

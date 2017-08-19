@@ -24,7 +24,7 @@ class OxygenMeter
 		const SpriteGraphics gfx_middle_bar_;
 		const SpriteGraphics gfx_right_bar_;
 
-		sdl2::SDLRect meter_bar_;
+		sdl::rect meter_bar_;
 
 		bool show_;
 		int color_;

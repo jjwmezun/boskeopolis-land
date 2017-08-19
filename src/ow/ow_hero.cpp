@@ -63,7 +63,7 @@ void OWHero::collideStop( const Collision& collision )
 	x_ -= collision.overlapXRight();
 };
 
-sdl2::SDLRect OWHero::coords() const
+sdl::rect OWHero::coords() const
 {
 	return
 	{

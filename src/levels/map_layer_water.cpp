@@ -57,7 +57,7 @@ void MapLayerWater::render( const Camera& camera ) const
 
 		for ( int x = x_offset_(); x < Unit::WINDOW_WIDTH_PIXELS; x += 8 )
 		{
-			const sdl2::SDLRect r = { x, relative_y, 8, 16 };
+			const sdl::rect r = { x, relative_y, 8, 16 };
 			surface_.render( r, nullptr, false );
 		}
 		

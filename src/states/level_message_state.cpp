@@ -3,7 +3,7 @@
 #include "level_message_state.hpp"
 #include "render.hpp"
 
-constexpr sdl2::SDLRect LevelMessageState::backdrop_;
+constexpr sdl::rect LevelMessageState::backdrop_;
 
 LevelMessageState::LevelMessageState( const Palette& palette, std::string message )
 :

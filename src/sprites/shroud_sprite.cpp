@@ -77,8 +77,8 @@ void ShroudSprite::render( Camera& camera, bool priority )
 {
 	if ( priority && state_ != ShroudState::HIDDEN )
 	{
-		sdl2::SDLRect top = top_;
-		sdl2::SDLRect bottom = bottom_;
+		sdl::rect top = top_;
+		sdl::rect bottom = bottom_;
 
 		top.x = camera.relativeX( top );
 		top.y = camera.relativeY( top );

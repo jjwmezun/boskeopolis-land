@@ -57,6 +57,7 @@ namespace Main
 
 		srand ( time( NULL ) );
 		setResourcePath();
+		Palette::loadPalettes();
 		Render::init( args );
 		Input::init();
 		firstState();

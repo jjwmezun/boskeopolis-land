@@ -445,10 +445,9 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							comp_obj[ "palette" ].IsString()
 						)
 						{
-							const std::string palette = comp_obj[ "palette" ].GetString();
+							const char* palette = comp_obj[ "palette" ].GetString();
 							int bg_color = 1;
-							
-						
+
 							if
 							(
 								comp_obj.HasMember( "bg_color" ) &&
