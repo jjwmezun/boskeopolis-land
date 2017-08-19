@@ -37,7 +37,8 @@ class BlockSystem
 		std::map<std::string, Tileset> tilesets_;
 		std::string current_tileset_;
 
-		Tileset& getTileset();
+		Tileset& universalTileset();
+		Tileset& mapTileset();
 
 		int debug_num_ = 0;
 };

@@ -10,6 +10,7 @@
 #include <SDL2/SDL_image.h>
 #include "timers/timer_repeat.hpp"
 #include "unit.hpp"
+#include <unordered_map>
 
 namespace Render
 {
@@ -19,11 +20,11 @@ namespace Render
 	Uint32 WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;
 	int FORCE_MAGNIFICATION = -1;
 
-	const std::string IMG_RELATIVE_DIR = "img";
+	static constexpr char* IMG_RELATIVE_DIR = "img";
 
 	std::string img_path_;
-	std::map<std::string, SDL_Texture*> textures_ = {};
-	std::map<std::string, SDL_Surface*> surfaces_ = {};
+	std::unordered_map<std::string, SDL_Texture*> textures_ = {};
+	std::unordered_map<std::string, SDL_Surface*> surfaces_ = {};
 	SDL_Renderer* renderer_ = nullptr;
 	SDL_Window* window_ = nullptr;
 	sdl::rect screen_;
@@ -223,7 +224,7 @@ namespace Render
 
 	const std::string setImgPath()
 	{
-		return Main::resourcePath() + IMG_RELATIVE_DIR + Main::pathDivider();
+		return Main::resourcePath() + std::string( IMG_RELATIVE_DIR ) + Main::pathDivider();
 	};
 
 	const std::string imgAddress( const std::string& relative_path )

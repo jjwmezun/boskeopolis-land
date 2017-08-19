@@ -9,20 +9,15 @@
 
 BlockSystem::BlockSystem( const Map& lvmap )
 {
-	try
-	{
-		tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
-		current_tileset_ = lvmap.tileset();
-	}
-	catch ( const mezun::CantLoadTileset& e )
-	{
-		throw e;
-	}
+	tilesets_.insert( std::make_pair( "universal", ( "universal" ) ) );
+	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
+	current_tileset_ = lvmap.tileset();
 };
 
 void BlockSystem::update( EventSystem& events )
 {
-	getTileset().update( events );
+	universalTileset().update( events );
+	mapTileset().update( events );
 };
 
 void BlockSystem::render( const Camera& camera, bool priority )
@@ -104,7 +99,20 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 
 void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& list )
 {
-	BlockType* block_type = getTileset().blockType( type, x, y );
+	BlockType* block_type;
+
+	if ( type <= Tileset::EMPTY_BLOCK )
+	{
+		return;
+	}
+	else if ( type < Tileset::UNIVERSAL_TILESET_SIZE )
+	{
+		block_type = universalTileset().blockType( type, x, y );
+	}
+	else
+	{
+		block_type = mapTileset().blockType( type - Tileset::UNIVERSAL_TILESET_SIZE, x, y );
+	}
 
 	if ( block_type != nullptr )
 	{
@@ -148,13 +156,25 @@ void BlockSystem::changeTileset( std::string new_tileset )
 	current_tileset_ = new_tileset;
 };
 
-Tileset& BlockSystem::getTileset()
+Tileset& BlockSystem::universalTileset()
+{
+	auto t = tilesets_.find( "universal" );
+
+	if ( t == tilesets_.end() )
+	{
+		mezun::error( "Universal tileset ne'er loaded in BlockSystem." );
+	}
+
+	return t->second;	
+};
+
+Tileset& BlockSystem::mapTileset()
 {
 	auto t = tilesets_.find( current_tileset_ );
 
 	if ( t == tilesets_.end() )
 	{
-		throw mezun::MissingTileset( current_tileset_ );
+		mezun::error( "Map tileset \"" + current_tileset_ + "\" ne'er loaded in BlockSystem." );
 	}
 
 	return t->second;

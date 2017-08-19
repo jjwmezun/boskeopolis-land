@@ -5,7 +5,6 @@ class Palette;
 
 #include "mezun_sdl2.hpp"
 #include <SDL2/SDL.h>
-#include <map>
 #include <vector>
 
 namespace Render

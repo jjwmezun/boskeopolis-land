@@ -1,14 +1,11 @@
-
-#ifndef MEZUN_HELPERS_H
-#define MEZUN_HELPERS_H
-
+#pragma once
 #include <dirent.h>
 #include "mezun_math.hpp"
 #include <iostream>
-#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace mezun
 {
@@ -34,7 +31,7 @@ namespace mezun
 	};
 	
 	template<typename K, typename V>
-	bool notInMap( const std::map<K, V>& container, const K& item )
+	bool notInMap( const std::unordered_map<K, V>& container, const K& item )
 	{
 		return container.find( item ) == container.end();
 	};
@@ -66,5 +63,3 @@ namespace mezun
 		return test;
 	};
 };
-
-#endif // MEZUN_HELPERS_H

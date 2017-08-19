@@ -52,23 +52,13 @@
 #include "tileset.hpp"
 
 Tileset::Tileset( std::string tileset )
-try :
+:
 	name_ ( tileset ),
-	universal_block_types_ ( std::move( makeBlockTypes( "universal" ) ) ),
 	block_types_ ( std::move( makeBlockTypes( tileset ) ) )
 {}
-catch ( const mezun::CantLoadTileset& e )
-{
-	throw e;
-};
 
 void Tileset::update( EventSystem& events )
 {
-	for ( auto& u : universal_block_types_ )
-	{
-		if ( u ) u->update( events );
-	}
-
 	for ( auto& t : block_types_ )
 	{
 		if ( t ) t->update( events );
@@ -79,18 +69,7 @@ BlockType* Tileset::blockType( int type, int x, int y )
 {
 	try
 	{
-		if ( type <= EMPTY_BLOCK )
-		{
-			return nullptr;
-		}
-		else if ( type < UNIVERSAL_TILESET_SIZE )
-		{
-			return universal_block_types_.at( type ).get();
-		}
-		else
-		{
-			return block_types_.at( type - UNIVERSAL_TILESET_SIZE ).get();
-		}
+		return block_types_.at( type ).get();
 	}
 	catch ( const std::out_of_range& e )
 	{
@@ -105,7 +84,7 @@ std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::stri
 
 	if ( !mezun::checkDirectory( path ) )
 	{
-		throw mezun::CantLoadTileset( tileset );
+		mezun::error( "Can't load tileset \"" + tileset + "\"" );
 	}
 
 	std::vector<std::unique_ptr<BlockType>> types;
