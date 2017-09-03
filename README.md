@@ -38,12 +38,10 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 * Timers kinda wonky. In particular, I want to find a way to encapsulate common "if hit; else if on, update; else, start" pattern in the class itself so I don't have to keep typing it. Sometimes the stopping mechanism for TimerSimple is wonky ( see SewerMonster class ).
 
 ### Levels
+* Lunacy
+	* Think o' clever things to do with space physics & ways to not make it slow, sluggish, & boring.
 * Sherbet Slopes
 	* Figure out what I want to do with this level.
-* The Playing Railroad
-	* Graphics
-	* Program enemies, hero & enemy bullets, & version o' hero who can shoot bullets.
-	* Figure out a way to make the level bump up & down like a train.
 * Mt. Volcocoa
 	* Design map.
 	* Think o' clever things to do with heat mechanic.
