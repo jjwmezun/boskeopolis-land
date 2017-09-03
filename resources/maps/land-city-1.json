@@ -29,13 +29,13 @@
     {
      "bg_color":4,
      "palette":"Midnight Blue",
-     "tileset":"urban"
+     "warps":null
     },
  "propertytypes":
     {
      "bg_color":"int",
      "palette":"string",
-     "tileset":"string"
+     "warps":""
     },
  "renderorder":"left-down",
  "tileheight":16,

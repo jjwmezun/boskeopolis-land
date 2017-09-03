@@ -10,7 +10,6 @@
 #include <SDL2/SDL_image.h>
 #include "timers/timer_repeat.hpp"
 #include "unit.hpp"
-#include <unordered_map>
 
 namespace Render
 {
@@ -20,24 +19,24 @@ namespace Render
 	Uint32 WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;
 	int FORCE_MAGNIFICATION = -1;
 
-	static constexpr char* IMG_RELATIVE_DIR = "img";
+	const std::string IMG_RELATIVE_DIR = "img";
 
 	std::string img_path_;
-	std::unordered_map<std::string, SDL_Texture*> textures_ = {};
-	std::unordered_map<std::string, SDL_Surface*> surfaces_ = {};
+	std::map<std::string, SDL_Texture*> textures_ = {};
+	std::map<std::string, SDL_Surface*> surfaces_ = {};
 	SDL_Renderer* renderer_ = nullptr;
 	SDL_Window* window_ = nullptr;
-	sdl::rect screen_;
+	sdl2::SDLRect screen_;
 	TimerRepeat animation_frame_ = {};
-	Palette palette_ = { 0, 1 };
+	std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
 
 	int magnification_ = 1;
 	int left_edge_ = 0;
 	int top_edge_ = 0;
-	sdl::rect top_bar_ = { 0, 0, 0, 0 };
-	sdl::rect bottom_bar_ = { 0, 0, 0, 0 };
-	sdl::rect left_bar_ = { 0, 0, 0, 0 };
-	sdl::rect right_bar_ = { 0, 0, 0, 0 };
+	sdl2::SDLRect top_bar_ = { 0, 0, 0, 0 };
+	sdl2::SDLRect bottom_bar_ = { 0, 0, 0, 0 };
+	sdl2::SDLRect left_bar_ = { 0, 0, 0, 0 };
+	sdl2::SDLRect right_bar_ = { 0, 0, 0, 0 };
 
 
 	// Private Function Declarations
@@ -58,7 +57,7 @@ namespace Render
 
 	const std::string imgAddress( const std::string& relative_path );
 	const std::string setImgPath();
-	sdl::rect sourceRelativeToScreen( const sdl::rect& source );
+	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source );
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
 
 
@@ -146,7 +145,7 @@ namespace Render
 			int monitor_width = Unit::WINDOW_WIDTH_PIXELS;
 			int monitor_height = Unit::WINDOW_HEIGHT_PIXELS;
 
-			sdl::rect r;
+			sdl2::SDLRect r;
 			if ( FORCE_MAGNIFICATION > -1 )
 			{
 				magnification_ = FORCE_MAGNIFICATION;
@@ -224,7 +223,7 @@ namespace Render
 
 	const std::string setImgPath()
 	{
-		return Main::resourcePath() + std::string( IMG_RELATIVE_DIR ) + Main::pathDivider();
+		return Main::resourcePath() + IMG_RELATIVE_DIR + Main::pathDivider();
 	};
 
 	const std::string imgAddress( const std::string& relative_path )
@@ -259,44 +258,23 @@ namespace Render
 
 		if ( surfaces_.at( sheet ) != nullptr )
 		{
-			if ( palette_.neon() )
+			if ( palette_ )
 			{
-				for ( int i = 0; i < Palette::NUM_O_NEON_COLORS; ++i )
-				{
-					palette_.applyPaletteNeon( surfaces_.at( sheet ), i );
-
-					textures_.insert
-					(
-						std::make_pair
-						(
-							sheet + "_Neon" + std::to_string( i ),
-							SDL_CreateTextureFromSurface( renderer_, surfaces_.at( sheet ) )
-						)
-					);
-
-					if ( textures_.at( sheet + "_Neon" + std::to_string( i ) ) == nullptr )
-					{
-						SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
-					}
-				}
+				palette_->applyPalette( surfaces_.at( sheet ) );
 			}
-			else
-			{
-				palette_.applyPalette( surfaces_.at( sheet ) );
 
-				textures_.insert
+			textures_.insert
+			(
+				std::make_pair
 				(
-					std::make_pair
-					(
-						sheet,
-						SDL_CreateTextureFromSurface( renderer_, surfaces_.at( sheet ) )
-					)
-				);
+					sheet,
+					SDL_CreateTextureFromSurface( renderer_, surfaces_.at( sheet ) )
+				)
+			);
 
-				if ( textures_.at( sheet ) == nullptr )
-				{
-					SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
-				}
+			if ( textures_.at( sheet ) == nullptr )
+			{
+				SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
 			}
 		}
 	};
@@ -349,9 +327,11 @@ namespace Render
 
 	void colorCanvas()
 	{
-		const Uint8 r = palette_.bgR();
-		const Uint8 g = palette_.bgG();
-		const Uint8 b = palette_.bgB();
+		assert( palette_ );
+
+		const Uint8 r = palette_->bgR();
+		const Uint8 g = palette_->bgG();
+		const Uint8 b = palette_->bgB();
 
 		SDL_SetRenderDrawColor( renderer_, r, g, b, FULL_OPACITY );
 		SDL_RenderFillRect( renderer_, &screen_ );
@@ -363,7 +343,7 @@ namespace Render
 		SDL_RenderClear( renderer_ );
 	};
 
-	sdl::rect sourceRelativeToScreen( const sdl::rect& source )
+	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source )
 	{
 		return
 		{
@@ -397,8 +377,8 @@ namespace Render
 	void renderObject
 	(
 		const std::string& sheet,
-		const sdl::rect& source,
-		const sdl::rect& dest,
+		const sdl2::SDLRect& source,
+		const sdl2::SDLRect& dest,
 		bool flip_x,
 		bool flip_y,
 		double rotation,
@@ -411,26 +391,18 @@ namespace Render
 
 	void renderObject
 	(
-		const std::string& orig_sheet,
-		sdl::rect source,
-		sdl::rect dest,
+		const std::string& sheet,
+		sdl2::SDLRect source,
+		sdl2::SDLRect dest,
 		SDL_RendererFlip flip,
 		double rotation,
 		Uint8 alpha,
 		const Camera* camera
 	)
 	{
-		std::string sheet = orig_sheet;
-		
-		if ( palette_.neon() )
-		{
-			int neon_num = floor( Main::frame() % ( Palette::NUM_O_NEON_COLORS * 8 ) / 8 );
-			sheet += "_Neon" + std::to_string( neon_num );
-		}
-
 		if ( textures_.find( sheet ) == textures_.end() )
 		{
-			loadTexture( orig_sheet, alpha );
+			loadTexture( sheet, alpha );
 		}
 
 		SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
@@ -451,32 +423,25 @@ namespace Render
 		dest = sourceRelativeToScreen( dest );
 
 		if ( SDL_RenderCopyEx( renderer_, textures_.at( sheet ), &source, &dest, rotation, 0, flip ) != 0 )
-		{
 			printf( "Render failure: %s\n", SDL_GetError() );
-		}
 	};
 
-	void renderRect( const sdl::rect& box, int color, int alpha )
+	void renderRect( const sdl2::SDLRect& box, int color, int alpha )
 	{
-		Uint8 r = 0;
-		Uint8 g = 0;
-		Uint8 b = 0;
+		assert( palette_ );
 
-		if ( !palette_.neon() )
-		{
-			r = palette_.color( color ).r;
-			g = palette_.color( color ).g;
-			b = palette_.color( color ).b;
-		}
+		const Uint8 r = palette_->color( color ).r;
+		const Uint8 g = palette_->color( color ).g;
+		const Uint8 b = palette_->color( color ).b;
 
-		sdl::rect box_relative = sourceRelativeToScreen( box );
+		sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
 		SDL_RenderFillRect( renderer_, &box_relative );
 	};
 
 	void newPalette( Palette palette )
 	{
-		palette_ = palette;
+		palette_ = std::make_unique<Palette> ( palette );
 		clearTextures();
 	};
 

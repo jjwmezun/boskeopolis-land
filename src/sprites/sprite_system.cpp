@@ -41,10 +41,17 @@
 #include "player_cart_sprite.hpp"
 #include "player_graphics.hpp"
 #include "player_sprite_fluttering.hpp"
+#include "pollo_sprite.hpp"
+#include "pollo_del_aire_sprite.hpp"
+#include "pollo_del_aire_circle_sprite.hpp"
+#include "pollo_del_aire_still_sprite.hpp"
+#include "pollo_del_aire_vertical_sprite.hpp"
 #include "pufferbee_sprite.hpp"
 #include "quadrapus_sprite.hpp"
 #include "racer_sprite.hpp"
+#include "rolling_ball_sprite.hpp"
 #include "rope_sprite.hpp"
+#include "rotating_block_sprite.hpp"
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
 #include "shooter_player_sprite.hpp"
@@ -92,7 +99,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new PlatformSprite( x, y, Direction::Simple::UP, 64000 ) );
 		break;
 		case ( SPRITE_INDEX_START + 4 ):
-			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 5 ):
 			return std::unique_ptr<Sprite> ( new SpikyFruitSprite( x, y ) );
@@ -250,8 +257,47 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 56 ):
 			return std::unique_ptr<Sprite> ( new SpringSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 57 ):
+			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 58 ):
+			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 59 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 60 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 61 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 62 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::DOWN ) );
+		break;
 		case ( SPRITE_INDEX_START + 63 ):
-			return std::unique_ptr<Sprite> ( new SawSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireStillSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 64 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 65 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 66 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 67 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 68 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 69 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, false ) );
+		break;
+		case ( SPRITE_INDEX_START + 70 ):
+			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
@@ -348,9 +394,16 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 void SpriteSystem::reset( const Level& level )
 {
-	clearSprites();
 	Sprite::resistance_x_ = Sprite::RESISTANCE_X_NORMAL;
-	spritesFromMap( level.currentMap() );
+
+	if ( level.currentMap().moon_gravity_ )
+	{
+		Sprite::moonGravityOn();
+	}
+	else
+	{
+		Sprite::moonGravityOff();
+	}
 
 	if ( level.currentMap().slippery() )
 	{
@@ -361,6 +414,8 @@ void SpriteSystem::reset( const Level& level )
 		Sprite::traction_ = Sprite::TRACTION_NORMAL;
 	}
 
+	clearSprites();
+	spritesFromMap( level.currentMap() );
 	switch( level.currentMap().heroType() )
 	{
 		case ( HeroType::NORMAL ):
@@ -499,7 +554,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 				{
 					if ( sprites_[ j ] != nullptr )
 						if ( i != j )
-							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) || sprites_.at( j )->cameraMovement() == Sprite::CameraMovement::PERMANENT )
+							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) )
 								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
 									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health );
 				}

@@ -1,212 +1,213 @@
-#include <cassert>
-#include <fstream>
-#include "main.hpp"
-#include "mezun_helpers.hpp"
-#include "palette.hpp"
-#include "rapidjson/document.h"
-#include "rapidjson/istreamwrapper.h"
-#include <SDL2/SDL_image.h>
 
-constexpr sdl::color Palette::BLACK;
-sdl::color Palette::palettes_[ PALETTE_LIMIT ][ COLOR_LIMIT ];
-char Palette::palette_names_[ PALETTE_LIMIT ][ NAME_LIMIT ] = { '\0' };
-int Palette::num_o_palettes_ = 0;
 
-Palette::Palette( int id, int bg )
-:
-	id_ ( id ),
-	bg_ ( bg )
-{};
+// Name
+//===================================
+//
+// Palette
+//
 
-Palette::Palette( const char* name, int bg )
-{
-	id_ = stringID( name );
-	bg_ = bg;
-};
 
-bool Palette::operator!= ( const Palette& p ) const
-{
-	return ( id_ != p.id() || bg_ != p.bgN() );
-};
+// DEPENDENCIES
+//===================================
 
-int Palette::id() const { return id_; };
-int Palette::bgN() const { return bg_; };
-bool Palette::neon() const { return id_ == NEON_ID; };
+    #include <fstream>
+    #include "main.hpp"
+    #include <iostream>
+	#include "mezun_exceptions.hpp"
+	#include "mezun_helpers.hpp"
+    #include "palette.hpp"
+    #include "rapidjson/document.h"
+    #include "rapidjson/istreamwrapper.h"
 
-void Palette::applyPalette( SDL_Surface* s ) const
-{
-	for ( int i = 0; i < COLOR_LIMIT && i < s->format->palette->ncolors; ++i )
+
+// STATIC PROPERTIES
+//===================================
+
+    std::unordered_map<std::string, std::array<sdl2::SDLColor, Palette::COLOR_LIMIT>> Palette::palettes_;
+
+
+// METHODS
+//===================================
+
+	Palette::Palette( std::string type, int bg )
+	:
+		type_ ( type ),
+		bg_ ( bg )
 	{
-		s->format->palette->colors[ i ] = color( i );
-	}
-};
-
-void Palette::applyPaletteNeon( SDL_Surface* s, int n ) const
-{
-	for ( int i = 0; i < COLOR_LIMIT && i < s->format->palette->ncolors; ++i )
-	{
-		switch ( i )
+		if ( palettes_.empty() )
 		{
-			case 0:
-				s->format->palette->colors[ i ].a = 0;
-			break;
-
-			case 5: //fallthrough
-			case 6:
-				switch ( n )
-				{
-					case ( 0 ):
-						s->format->palette->colors[ i ] = { 255, 0, 0, 255 };
-					break;
-					case ( 1 ):
-						s->format->palette->colors[ i ] = { 255, 128, 0, 255 };
-					break;
-					case ( 2 ):
-						s->format->palette->colors[ i ] = { 255, 255, 0, 255 };
-					break;
-					case ( 3 ):
-						s->format->palette->colors[ i ] = { 128, 255, 0, 255 };
-					break;
-					case ( 4 ):
-						s->format->palette->colors[ i ] = { 0, 255, 0, 255 };
-					break;
-					case ( 5 ):
-						s->format->palette->colors[ i ] = { 0, 255, 128, 255 };
-					break;
-					case ( 6 ):
-						s->format->palette->colors[ i ] = { 0, 255, 255, 255 };
-					break;
-					case ( 7 ):
-						s->format->palette->colors[ i ] = { 0, 128, 255, 255 };
-					break;
-					case ( 8 ):
-						s->format->palette->colors[ i ] = { 0, 0, 255, 255 };
-					break;
-					case ( 9 ):
-						s->format->palette->colors[ i ] = { 128, 0, 255, 255 };
-					break;
-					case ( 10 ):
-						s->format->palette->colors[ i ] = { 255, 0, 255, 255 };
-					break;
-					case ( 11 ):
-						s->format->palette->colors[ i ] = { 255, 0, 128, 255 };
-					break;
-
-					default:
-						throw std::logic_error( "Invalid Neon Palette #." );
-					break;
-				}
-			break;
-
-			default:
-				s->format->palette->colors[ i ] = BLACK;
-			break;
+			try
+			{
+				loadPalettes();
+			}
+			catch( const mezun::CantLoadPalettes& e )
+			{
+				throw e;
+			}
 		}
-	}
-};
+	};
 
-const sdl::color& Palette::color( int n ) const
-{
-	assert( n >= 0 && n < COLOR_LIMIT );
-	return palettes_[ id_ ][ n ];
-};
+	bool Palette::operator!= ( const Palette& p ) const
+	{
+		return ( bg_ != p.bgN() || !mezun::areStringsEqual( type_, p.type() ) );
+	};
 
-const sdl::color& Palette::bg() const
-{
-	if ( neon() )
+	const Palette& Palette::operator= ( const Palette& p )
 	{
-		return BLACK;
-	}
-	else if ( bg_ >= COLOR_LIMIT )
-	{
-		if ( Main::nextFrame( 256, 8 ) )
+		type_ = p.type_;
+		bg_ = p.bg_;
+	};
+
+	const std::string& Palette::type() const { return type_; };
+
+	int Palette::bgN() const { return bg_; };
+
+    void Palette::applyPalette( SDL_Surface* s ) const
+    {
+        if ( s != nullptr )
+        {
+            for ( int i = 0; i < COLOR_LIMIT; ++i )
+            {
+                // Obviously we should abort if we reach beyond the # o' colors in the surface's array.
+                if ( i > s->format->palette->ncolors )
+                {
+                    return;
+                }
+                else
+                {
+                    s->format->palette->colors[ i ] = color( i );
+                }
+            }
+        }
+    };
+
+    const sdl2::SDLColor& Palette::color( unsigned int n ) const
+    {
+		auto p = palettes_.find( type_ );
+		
+		if ( p == palettes_.end() ) throw mezun::MissingPalette( type_ );
+		
+		try
 		{
-			return color( 1 );
+			return p->second.at( n );
+		}
+		catch ( const std::out_of_range& e )
+		{
+			throw mezun::InvalidColor( n, type_ );
+		}
+    };
+
+    const sdl2::SDLColor& Palette::bg() const
+    {
+		if ( bg_ >= COLOR_LIMIT )
+		{
+			if ( Main::nextFrame( 256, 8 ) )
+				return color( 1 );
+			else
+				return color( 3 );
 		}
 		else
 		{
-			return color( 3 );
+			return color( bg_ );
 		}
-	}
-	else
+    };
+
+    Uint8 Palette::bgR() const { return bg().r; };
+    Uint8 Palette::bgG() const { return bg().g; };
+    Uint8 Palette::bgB() const { return bg().b; };
+    Uint8 Palette::bgA() const { return bg().a; };
+
+	unsigned int Palette::testColor( unsigned int n ) const
 	{
-		return color( bg_ );
-	}
-};
+		return ( n > 0 && n < COLOR_LIMIT ) ? n : 1;
+	};
 
-Uint8 Palette::bgR() const { return bg().r; };
-Uint8 Palette::bgG() const { return bg().g; };
-Uint8 Palette::bgB() const { return bg().b; };
-Uint8 Palette::bgA() const { return bg().a; };
-
-void Palette::loadPalettes()
-{
-	const std::string file_path = Main::resourcePath() + "palettes" + Main::pathDivider() + "palettes.json";
-	std::ifstream ifs( file_path );
-
-	if ( ifs.is_open() )
+	void Palette::loadPalettes() const
 	{
-		rapidjson::IStreamWrapper ifs_wrap( ifs );
-		rapidjson::Document pal;
-		pal.ParseStream( ifs_wrap );
+		const std::string file_path = Main::resourcePath() + "palettes" + Main::pathDivider() + "palettes.json";
+	
+		std::ifstream ifs( file_path );
 
-		assert( pal.IsObject() );
-		auto palobj = pal.GetObject();
-		assert( palobj.HasMember( "palettes" ) && palobj[ "palettes" ].IsArray() );
-
-		for ( auto& pitem : palobj[ "palettes" ].GetArray() )
+		if ( ifs.is_open() )
 		{
-			assert( num_o_palettes_ <= PALETTE_LIMIT );
-			assert( pitem.IsObject() );
-			auto p = pitem.GetObject();
+			rapidjson::IStreamWrapper ifs_wrap( ifs );
+			rapidjson::Document pal;
+			pal.ParseStream( ifs_wrap );
 
-			assert( p.HasMember( "name" ) && p[ "name" ].IsString() );
-			const char* this_palette_name = p[ "name" ].GetString();
-			
-			for ( int letter = 0; letter < NAME_LIMIT; ++letter )
+			if ( pal.IsObject() )
 			{
-				palette_names_[ num_o_palettes_ ][ letter ] = this_palette_name[ letter ];
-
-				if ( this_palette_name[ letter ] == '\0' )
+				auto palobj = pal.GetObject();
+				
+				if ( palobj.HasMember( "palettes" ) && palobj[ "palettes" ].IsArray() )
 				{
-					break;
+					
+					for ( auto& pitem : palobj[ "palettes" ].GetArray() )
+					{
+						
+						if ( pitem.IsObject() )
+						{
+							auto p = pitem.GetObject();
+
+							if ( p.HasMember( "name" ) && p[ "name" ].IsString() )
+							{
+								
+								std::string type = p[ "name" ].GetString();
+
+								if ( p.HasMember( "colors" ) && p[ "colors" ].IsArray() )
+								{
+									sdl2::SDLColor t = { 0, 0, 0, 0 };
+
+									std::array<sdl2::SDLColor, COLOR_LIMIT> colors = { t, t, t, t, t, t, t };
+
+									int i = 0;
+									for ( auto& c : p[ "colors" ].GetArray() )
+									{
+										if ( c.IsObject() )
+										{
+											auto cobj = c.GetObject();
+
+											t = { 0, 0, 0, 0 };
+
+											if ( cobj.HasMember( "r" ) && cobj[ "r" ].IsInt() )
+											{
+												t.r = cobj[ "r" ].GetInt();
+											}
+											if ( cobj.HasMember( "g" ) && cobj[ "g" ].IsInt() )
+											{
+												t.g = cobj[ "g" ].GetInt();
+											}
+											if ( cobj.HasMember( "b" ) && cobj[ "b" ].IsInt() )
+											{
+												t.b = cobj[ "b" ].GetInt();
+											}
+											if ( cobj.HasMember( "a" ) && cobj[ "a" ].IsInt() )
+											{
+												t.a = cobj[ "a" ].GetInt();
+											}
+											
+											colors.at( i ) = t;
+
+											++i;
+
+											if ( i > 6 ) break;
+										}
+									}
+
+									palettes_.insert
+									(
+										std::make_pair
+										(
+											type,
+											colors
+										)
+									);
+								}
+							}
+						}						
+					}
+					
 				}
+				
 			}
-
-			assert( p.HasMember( "colors" ) && p[ "colors" ].IsArray() );
-			int color_index = 0;
-			for ( auto& color_list : p[ "colors" ].GetArray() )
-			{
-				assert( color_list.IsObject() );
-				auto color_object = color_list.GetObject();
-
-				if ( color_object.HasMember( "r" ) && color_object[ "r" ].IsInt() ) {
-					palettes_[ num_o_palettes_ ][ color_index ].r = color_object[ "r" ].GetInt();
-				}
-				if ( color_object.HasMember( "g" ) && color_object[ "g" ].IsInt() ) {
-					palettes_[ num_o_palettes_ ][ color_index ].g = color_object[ "g" ].GetInt();
-				}
-				if ( color_object.HasMember( "b" ) && color_object[ "b" ].IsInt() ) {
-					palettes_[ num_o_palettes_ ][ color_index ].b = color_object[ "b" ].GetInt();
-				}
-				if ( color_object.HasMember( "a" ) && color_object[ "a" ].IsInt() ) {
-					palettes_[ num_o_palettes_ ][ color_index ].a = color_object[ "a" ].GetInt();
-				}
-
-				++color_index;
-				if ( color_index >= COLOR_LIMIT ) break;
-			} // COLOR_LOOP
-		++num_o_palettes_;
-		} // PALETTE_LOOP
-	}
-};
-
-int Palette::stringID( const char* type )
-{
-	if ( strncmp( type, "Neon", 5 ) == 0 )
-	{
-		return NEON_ID;
-	}
-
-	return mezun::findIndexOfCStringInCArray( type, &palette_names_[ 0 ][ 0 ], num_o_palettes_, NAME_LIMIT );
-};
+		}
+	};

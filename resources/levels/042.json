@@ -1,0 +1,59 @@
+{
+	"name": "Milky Mountain",
+	
+	"maps":
+	[
+		{
+			"slug": "mountain-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144,
+					"x_scroll": 0.1,
+					"y_scroll": 0.0
+				},
+				{
+					"type": "image",
+					"img": "painted_clouds.png",
+					"width": 256,
+					"height": 128,
+					"x_scroll": 0.15,
+					"y_scroll": 0.05,
+					"x_speed": -50,
+					"y_offset": 32,
+					"alpha": 160
+				},
+				{
+					"type": "image",
+					"img": "painted_clouds.png",
+					"width": 256,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.1,
+					"x_speed": -100,
+					"alpha": 224
+				},
+				{
+					"type": "image",
+					"img": "mountain.png",
+					"width": 256,
+					"height": 320,
+					"y_repeat": false,
+					"x_scroll": 0.5,
+					"y_scroll": 0.15,
+					"y_offset": 72
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 164,
+	"entrance_y": 20,
+	"camera_x": 162,
+	
+	"gem_challenge": 10000,
+	"time_challenge": 25
+}

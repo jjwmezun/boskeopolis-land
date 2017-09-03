@@ -12,7 +12,6 @@ class SpriteGraphics;
 
 #include "block_component.hpp"
 #include <map>
-#include <memory>
 #include "object.hpp"
 #include <vector>
 

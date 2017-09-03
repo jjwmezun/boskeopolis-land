@@ -91,9 +91,19 @@ class Sprite : public Object
 		static constexpr double TRACTION_ICY = 1.025;
 		static double traction_;
 
-		static const int RESISTANCE_X_NORMAL = 0;
-		static const int RESISTANCE_X_WINDY = 100;
+		static constexpr int RESISTANCE_X_NORMAL = 0;
+		static constexpr int RESISTANCE_X_WINDY = 100;
 		static int resistance_x_;
+
+		static constexpr int GRAVITY_START_SPEED_NORMAL = 500;
+		static constexpr int GRAVITY_TOP_SPEED_NORMAL = 4000;
+		static constexpr int GRAVITY_START_SPEED_MOON = 200;
+		static constexpr int GRAVITY_TOP_SPEED_MOON = 1000;
+		static int gravity_start_speed_;
+		static int gravity_top_speed_;
+		
+		static void moonGravityOn();
+		static void moonGravityOff();
 		
 		const int map_id_;
 
@@ -213,20 +223,16 @@ class Sprite : public Object
 		int prevBottomSubPixels() const;
 		int prevRightPixels()  const;
 		int prevBottomPixels() const;
-		const sdl::rect& originalHitBox() const;
+		const sdl2::SDLRect& originalHitBox() const;
 		int originalXSubPixels() const;
 		int originalYSubPixels() const;
 
-
-	protected:
-		static const int GRAVITY_START_SPEED = 500;
-		static const int GRAVITY_TOP_SPEED = 4000;
 		static const int JUMP_DUCK_TOP_SPEED = 5500;
 		static const int LADDER_SPEED = 1000;
 
 		int x_prev_ = -123456789;
 		int y_prev_ = -123456789;
-		const sdl::rect original_hit_box_;
+		const sdl2::SDLRect original_hit_box_;
 
 		const std::vector<SpriteType> types_;
 		const CameraMovement camera_movement_;
@@ -251,9 +257,8 @@ class Sprite : public Object
 
 		int acceleration_x_ = 0;
 		int acceleration_y_ = 0;
-
-		int gravity_start_speed_ = GRAVITY_START_SPEED; // Not needed
-		int gravity_top_speed_ = GRAVITY_TOP_SPEED; // Not needed
+		int fall_start_speed_ = gravity_start_speed_; // Not needed
+		int fall_top_speed_ = gravity_top_speed_; // Not needed
 		int jump_start_speed_;
 		int jump_top_speed_normal_;
 		int jump_top_speed_;

@@ -1,4 +1,7 @@
-#pragma once
+#ifndef GAME_STATE_H
+#define GAME_STATE_H
+
+
 
 #include "camera.hpp"
 #include "palette.hpp"
@@ -21,7 +24,7 @@ class GameState
 		GameState
 		(
 			StateID id = __NULL,
-			const Palette& palette = { 0, 1 }
+			const Palette& palette = { "Grayscale", 1 }
 		);
 
 		virtual ~GameState();
@@ -42,3 +45,5 @@ class GameState
 	private:
 		Palette palette_;
 };
+
+#endif // GAME_STATE_H

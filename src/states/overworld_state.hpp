@@ -42,7 +42,7 @@ class OverworldState : public GameState
 
 		void mapData();
 		void interactions();
-		Collision testCollision( const sdl::rect& lhs, const sdl::rect& rhs );
+		Collision testCollision( const sdl2::SDLRect& lhs, const sdl2::SDLRect& rhs );
 		void mapEvents();
 		void eventByID( int id );
 		void menu();

@@ -218,7 +218,7 @@ void OverworldState::mapData()
 					{
 						const int l = list[ j ].GetInt();
 						
-						if ( l >= 32 && l < 32 + 45 )
+						if ( l >= 32 && l < 32 + 64 )
 						{
 							level_tiles_.emplace_back( list[ j ].GetInt() - 33, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ), lv_gfx_ );
 						}
@@ -227,7 +227,7 @@ void OverworldState::mapData()
 					{
 						const int p = list[ j ].GetInt();
 
-						if ( p >= 32 && p < 32 + 40 )
+						if ( p >= 32 && p < 32 + 64 )
 						{
 							pal_change_tiles_.emplace_back( list[ j ].GetInt() - 33, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ) );
 						}
@@ -303,12 +303,12 @@ void OverworldState::interactions()
 				break;
 			}
 			
-			newPalette( { pal.c_str(), 2 } );
+			newPalette( { pal, 2 } );
 		}
 	}
 };
 
-Collision OverworldState::testCollision( const sdl::rect& lhs, const sdl::rect& rhs )
+Collision OverworldState::testCollision( const sdl2::SDLRect& lhs, const sdl2::SDLRect& rhs )
 {
 	int overlap_x_left   = 0;
 	int overlap_x_right  = 0;
@@ -478,7 +478,7 @@ Palette OverworldState::lvPal( int id )
 		break;
 	}
 	
-	return { pal.c_str(), 2 };
+	return { pal, 2 };
 };
 
 void OverworldState::renderCameraArrows()

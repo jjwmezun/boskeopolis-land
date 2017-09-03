@@ -16,13 +16,13 @@ void RopeGraphics::update( Sprite& sprite )
 {
 };
 
-void RopeGraphics::render( const sdl::rect& bound_box, const Camera* camera, bool priority ) const
+void RopeGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
 	const int LAST_BLOCK = bound_box.h - 8;
 
 	for ( int i = 0; i < LAST_BLOCK; i += 8 )
 	{
-		const sdl::rect dest =
+		const sdl2::SDLRect dest =
 		{
 			bound_box.x,
 			bound_box.y + i,
@@ -33,7 +33,7 @@ void RopeGraphics::render( const sdl::rect& bound_box, const Camera* camera, boo
 		masterRender( dest, std::get<X_INDEX> ( frame_body_ ), std::get<Y_INDEX> ( frame_body_ ), camera, priority );
 	}
 
-	const sdl::rect dest =
+	const sdl2::SDLRect dest =
 	{
 		bound_box.x,
 		LAST_BLOCK,

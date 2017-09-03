@@ -33,7 +33,7 @@ void OWTile::highlight( const OWCamera& camera ) const
 	Render::renderRect( dest( camera ), 4, 128 );
 };
 
-sdl::rect OWTile::src() const
+sdl2::SDLRect OWTile::src() const
 {
 	return
 	{
@@ -44,7 +44,7 @@ sdl::rect OWTile::src() const
 	};
 };
 
-sdl::rect OWTile::dest( const OWCamera& camera ) const
+sdl2::SDLRect OWTile::dest( const OWCamera& camera ) const
 {
 	return camera.relative( coords() );
 };
@@ -66,7 +66,7 @@ void OWTile::interact( OWHero& hero, const Collision& collision ) const
 	}
 };
 
-sdl::rect OWTile::coords() const
+sdl2::SDLRect OWTile::coords() const
 {
 	return
 	{

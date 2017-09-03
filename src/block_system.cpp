@@ -1,33 +1,28 @@
 #include "block_system.hpp"
 #include "camera.hpp"
 #include "mezun_exceptions.hpp"
-#include "mezun_helpers.hpp"
 #include "render.hpp"
 #include <iostream>
-#include "level.hpp"
+#include "map.hpp"
 #include "sprite.hpp"
 #include <utility>
 
-BlockSystem::BlockSystem( const Level& level )
-{	
-	tilesets_.emplace_back( Tileset{ 0 } );
-
-	for ( auto& m : level.allMaps() )
+BlockSystem::BlockSystem( const Map& lvmap )
+{
+	try
 	{
-		const int tileset = m.tileset();
-		if ( mezun::notInMap( tileset_ids_, tileset ) )
-		{
-			tilesets_.emplace_back( Tileset{ tileset } );
-			tileset_ids_.insert( std::make_pair( tileset, lastTilesetIndex() ) );
-		}
+		tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
+		current_tileset_ = lvmap.tileset();
 	}
-	setCurrentTileset( level.currentMap() );
+	catch ( const mezun::CantLoadTileset& e )
+	{
+		throw e;
+	}
 };
 
 void BlockSystem::update( EventSystem& events )
 {
-	universalTileset().update( events );
-	mapTileset().update( events );
+	getTileset().update( events );
 };
 
 void BlockSystem::render( const Camera& camera, bool priority )
@@ -109,20 +104,7 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 
 void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& list )
 {
-	BlockType* block_type;
-
-	if ( type <= Tileset::EMPTY_BLOCK )
-	{
-		return;
-	}
-	else if ( type < Tileset::UNIVERSAL_TILESET_SIZE )
-	{
-		block_type = universalTileset().blockType( type, x, y );
-	}
-	else
-	{
-		block_type = mapTileset().blockType( type - Tileset::UNIVERSAL_TILESET_SIZE, x, y );
-	}
+	BlockType* block_type = getTileset().blockType( type, x, y );
 
 	if ( block_type != nullptr )
 	{
@@ -130,7 +112,7 @@ void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& l
 	}
 };
 
-bool BlockSystem::blocksInTheWay( const sdl::rect& r, BlockComponent::Type type ) const
+bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const
 {
 	for ( auto& b : blocks_ )
 	{
@@ -152,27 +134,28 @@ bool BlockSystem::blocksInTheWay( const sdl::rect& r, BlockComponent::Type type 
 	return false;
 };
 
-void BlockSystem::changedMap( const Map& lvmap )
+void BlockSystem::changeTileset( std::string new_tileset )
 {
-	setCurrentTileset( lvmap );
+	// See if tileset already exists.
+	auto i = tilesets_.find( new_tileset );
+
+	// If Tileset doesn't already exist, try making 1.	
+	if ( i == tilesets_.end() )
+	{
+		tilesets_.insert( std::make_pair( new_tileset, ( new_tileset ) ) );
+	}
+
+	current_tileset_ = new_tileset;
 };
 
-Tileset& BlockSystem::universalTileset()
+Tileset& BlockSystem::getTileset()
 {
-	return tilesets_[ 0 ];
-};
+	auto t = tilesets_.find( current_tileset_ );
 
-Tileset& BlockSystem::mapTileset()
-{
-	return tilesets_[ current_tileset_ ];
-};
+	if ( t == tilesets_.end() )
+	{
+		throw mezun::MissingTileset( current_tileset_ );
+	}
 
-void BlockSystem::setCurrentTileset( const Map& lvmap )
-{
-	current_tileset_ = mezun::findInMap( tileset_ids_, lvmap.tileset() );
-};
-
-int BlockSystem::lastTilesetIndex() const
-{
-	return tilesets_.size() - 1;
+	return t->second;
 };

@@ -17,7 +17,7 @@ struct OWPalChange
 		y ( ay )
 	{};
 
-	constexpr sdl::rect coords() const
+	constexpr sdl2::SDLRect coords() const
 	{
 		return
 		{

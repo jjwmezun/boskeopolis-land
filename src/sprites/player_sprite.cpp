@@ -9,6 +9,7 @@
 #include "input_component_player.hpp"
 #include "input_component_sequence.hpp"
 #include "inventory_level.hpp"
+#include "inventory.hpp"
 #include <iostream>
 #include "level.hpp"
 #include "map.hpp"
@@ -19,14 +20,13 @@ PlayerSprite::PlayerSprite
 (
 	int x,
 	int y,
+	int jump_start_speed,
+	int jump_top_speed,
 	std::unique_ptr<InputComponent> input,
 	std::unique_ptr<SpriteGraphics>&& gfx,
 	SpriteType type,
 	int start_speed,
-	int top_speed,
-	int jump_start_speed,
-	int jump_top_speed,
-	bool permanent
+	int top_speed
 )
 :
 	Sprite
@@ -70,74 +70,76 @@ void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 
 void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( !RacerSprite::DEBUG )
+	if ( on_ground_ )
 	{
-		actions();
-
-		if ( input_->cLeft() )
-		{
-			camera.moveLeft();
-		}
-		if ( input_->cRight() )
-		{
-			camera.moveRight();
-		}
-		if ( input_->cUp() )
-		{
-			camera.moveUp();
-		}
-		if ( input_->cDown() )
-		{
-			camera.moveDown();
-		}
-
-		if ( !is_dead_ && in_water_ )
-		{
-			changeMovement( SpriteMovement::Type::SWIMMING );
-			in_water_ = false;
-		}
-		else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
-		{
-			changeMovement( SpriteMovement::Type::GROUNDED );
-			
-			if ( input_->action1() )
-			{
-				bounce();
-			}
-		}
-
-		if ( events.in_front_of_door_ && input_->up() && !door_lock_ && on_ground_ )
-		{
-			events.changeMap();
-		}
-		else if ( input_->up() )
-		{
-			door_lock_ = true;
-		}
-		events.in_front_of_door_ = false;
-
-		if ( door_lock_ )
-		{
-			if ( !input_->up() )
-			{
-				door_lock_ = false;
-			}
-		}
-
-		if ( fellInBottomlessPit( lvmap ) )
-		{
-			kill();
-		}
-		else if ( health.drowned() )
-		{
-			kill();
-		}
-		
-		invincibilityFlicker( health );
-
-		boundaries( camera, lvmap );
-		camera.adjust( *this, lvmap );
+		Inventory::clearBops();
 	}
+
+	actions();
+
+	if ( input_->cLeft() )
+	{
+		camera.moveLeft();
+	}
+	if ( input_->cRight() )
+	{
+		camera.moveRight();
+	}
+	if ( input_->cUp() )
+	{
+		camera.moveUp();
+	}
+	if ( input_->cDown() )
+	{
+		camera.moveDown();
+	}
+
+	if ( !is_dead_ && in_water_ )
+	{
+		changeMovement( SpriteMovement::Type::SWIMMING );
+		in_water_ = false;
+	}
+	else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
+	{
+		changeMovement( SpriteMovement::Type::GROUNDED );
+
+		if ( input_->action1() )
+		{
+			bounce();
+		}
+	}
+
+	if ( events.in_front_of_door_ && input_->up() && !door_lock_ && on_ground_ )
+	{
+		events.changeMap();
+	}
+	else if ( input_->up() )
+	{
+		door_lock_ = true;
+	}
+	events.in_front_of_door_ = false;
+
+	if ( door_lock_ )
+	{
+		if ( !input_->up() )
+		{
+			door_lock_ = false;
+		}
+	}
+
+	if ( fellInBottomlessPit( lvmap ) )
+	{
+		kill();
+	}
+	else if ( health.drowned() )
+	{
+		kill();
+	}
+
+	invincibilityFlicker( health );
+
+	boundaries( camera, lvmap );
+	camera.adjust( *this, lvmap );
 };
 
 void PlayerSprite::actions()
@@ -331,6 +333,7 @@ void PlayerSprite::customInteract( Collision& my_collision, Collision& their_col
 			{
 				them.kill();
 				bounce();
+				Inventory::bop();
 			}
 			else if ( my_collision.collideAny() && isSlidingPrev() )
 			{

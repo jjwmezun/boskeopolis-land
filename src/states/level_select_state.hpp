@@ -22,10 +22,10 @@ class LevelSelectState : public GameState
 		static constexpr int FUNDS_X = 32;
 		static constexpr int BG_COLOR = 1;
 		static constexpr int INVENTORY_Y = Unit::WINDOW_HEIGHT_PIXELS - 24;
-		sdl::rect INVENTORY_BG_DEST = { 0, INVENTORY_Y, Unit::WINDOW_WIDTH_PIXELS, 24 };
+		sdl2::SDLRect INVENTORY_BG_DEST = { 0, INVENTORY_Y, Unit::WINDOW_WIDTH_PIXELS, 24 };
 		static constexpr int START_Y = 40;
-		sdl::rect HEADER_BG_DEST = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, START_Y };
-		sdl::rect GEM_ICON_DEST = { FUNDS_X - 16, INVENTORY_Y + 8, 8, 8 };
+		sdl2::SDLRect HEADER_BG_DEST = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, START_Y };
+		sdl2::SDLRect GEM_ICON_DEST = { FUNDS_X - 16, INVENTORY_Y + 8, 8, 8 };
 
 		Text title_ = Text( "Select a Level, yo.", 0, 16, Text::FontShade::BLACK, Text::FontAlign::CENTER );
 		SpriteGraphics win_icon_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 8 );
@@ -36,7 +36,7 @@ class LevelSelectState : public GameState
 		int delay_ = 0;
 		bool show_challenges_ = false;
 
-		sdl::rect highlight_dest_ = { 16, START_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 };
+		sdl2::SDLRect highlight_dest_ = { 16, START_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 };
 
 		std::vector<Text> level_names_;
 		std::vector<int>  level_ids_;
@@ -48,10 +48,10 @@ class LevelSelectState : public GameState
 		std::vector<bool> time_challenges_;
 		std::vector<bool> levels_complete_;
 
-		std::vector<sdl::rect> win_icon_dests_;
-		std::vector<sdl::rect> diamond_icon_dests_;
-		std::vector<sdl::rect> gem_challenge_icon_dests_;
-		std::vector<sdl::rect> time_challenge_icon_dests_;
+		std::vector<sdl2::SDLRect> win_icon_dests_;
+		std::vector<sdl2::SDLRect> diamond_icon_dests_;
+		std::vector<sdl2::SDLRect> gem_challenge_icon_dests_;
+		std::vector<sdl2::SDLRect> time_challenge_icon_dests_;
 
 		int prev_level_;
 		Counter selection_;

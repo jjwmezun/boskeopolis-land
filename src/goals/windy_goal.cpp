@@ -14,7 +14,7 @@ void WindyGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventor
 	Sprite::resistance_x_ = wind_strength_;
 };
 
-int WindyGoal::windStrength( Direction::Horizontal direction, int wind_strength )
+int WindyGoal::windStrength( Direction::Horizontal direction, unsigned int wind_strength )
 {
 	switch( direction )
 	{

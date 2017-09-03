@@ -36,7 +36,6 @@
     {
         sprite.changeX( sprite.originalXSubPixels() + ( sprite.widthSubPixels() / 2 ) + ( std::cos( angle() ) * radius() ) );
         sprite.changeY( sprite.originalYSubPixels() + ( sprite.heightSubPixels() / 2 ) + ( std::sin( angle() ) * radius() ) );
-
         angle_ += speed_;
     };
 

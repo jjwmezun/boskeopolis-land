@@ -17,7 +17,7 @@ class WindyGoal : public Goal
 	private:
 		const int wind_strength_;
 
-		int windStrength( Direction::Horizontal direction, int wind_strength );
+		int windStrength( Direction::Horizontal direction, unsigned int wind_strength );
 };
 
 #endif // WINDY_GOAL_H

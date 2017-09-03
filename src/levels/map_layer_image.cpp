@@ -140,7 +140,7 @@ void MapLayerImage::renderY( const Camera& camera ) const
 		}
 	}
 
-	sdl::rect dest = { dl, dy, source_.w, source_.h };
+	sdl2::SDLRect dest = { dl, dy, source_.w, source_.h };
 
 	// E'en if not repeating, we still want to draw the BG a'least once.
 	renderX( camera, dest );
@@ -160,7 +160,7 @@ void MapLayerImage::renderY( const Camera& camera ) const
 	}
 };
 
-void MapLayerImage::renderX( const Camera& camera, sdl::rect& dest ) const
+void MapLayerImage::renderX( const Camera& camera, sdl2::SDLRect& dest ) const
 {
 	if ( onscreen( dest, camera ) )
 	{
@@ -183,7 +183,7 @@ void MapLayerImage::renderX( const Camera& camera, sdl::rect& dest ) const
 	}
 };
 
-bool MapLayerImage::onscreen( const sdl::rect& r, const Camera& camera ) const
+bool MapLayerImage::onscreen( const sdl2::SDLRect& r, const Camera& camera ) const
 {
 	return
 		r.right() > 0 &&

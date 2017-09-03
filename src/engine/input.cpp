@@ -4,10 +4,10 @@
 
 namespace Input
 {
-	constexpr Uint8  AXIS_X        = 0;
-	constexpr Uint8  AXIS_Y        = 1;
-	constexpr Sint16 AXIS_POSITIVE = 32767;
-	constexpr Sint16 AXIS_NEGATIVE = -32768;
+	//constexpr Uint8  AXIS_X        = 0;
+	//constexpr Uint8  AXIS_Y        = 1;
+	//constexpr Sint16 AXIS_POSITIVE = 32767;
+	//constexpr Sint16 AXIS_NEGATIVE = -32768;
 
 	// Private Variables
 	std::vector<SDL_Keycode> key_map_ [ NUM_O_ACTIONS ] =
@@ -27,29 +27,13 @@ namespace Input
 		/* CAMERA_DOWN  */ { SDLK_s }      ,
 		/* ESCAPE       */ { SDLK_ESCAPE }
 	};
-	std::vector<Uint8> controller_button_map_ [ NUM_O_ACTIONS ] =
-	{
-		/* CONFIRM      */ { 0, 1 } ,
-		/* CANCEL       */ { 2, 3 } ,
-		/* MENU         */ { 6, 7 } ,
-		/* JUMP         */ { 0 } ,
-		/* RUN          */ { 2 } ,
-		/* MOVE_UP      */ { 255 },
-		/* MOVE_RIGHT   */ { 255 },
-		/* MOVE_DOWN    */ { 255 },
-		/* MOVE_LEFT    */ { 255 },
-		/* CAMERA_LEFT  */ { 4 },
-		/* CAMERA_RIGHT */ { 5 },
-		/* CAMERA_UP    */ { 3 },
-		/* CAMERA_DOWN  */ { 1 },
-		/* ESCAPE       */ { 255 }
-	};
-	Action action_x_negative_ = Action::MOVE_LEFT;
-	Action action_x_positive_ = Action::MOVE_RIGHT;
-	Action action_y_negative_ = Action::MOVE_UP;
-	Action action_y_positive_ = Action::MOVE_DOWN;
+
+	//Action action_x_negative_ = Action::MOVE_LEFT;
+	//Action action_x_positive_ = Action::MOVE_RIGHT;
+	//Action action_y_negative_ = Action::MOVE_UP;
+	//Action action_y_positive_ = Action::MOVE_DOWN;
 	
-	std::vector<SDL_Joystick*> joysticks_;
+	//std::vector<SDL_Joystick*> joysticks_;
 
 	bool actions_pressed_ [ NUM_O_ACTIONS ];
 	bool actions_pressed_before_released_ [ NUM_O_ACTIONS ];
@@ -83,16 +67,16 @@ namespace Input
 
 	void init()
 	{
-		SDL_InitSubSystem( SDL_INIT_JOYSTICK );
+		/*SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 		for ( int i = 0; i < SDL_NumJoysticks(); ++i )
 		{
 			joysticks_.push_back( SDL_JoystickOpen( i ) );
-		}
+		}*/
 		reset();
 	};
 	
 	void close()
-	{
+	{/*
 		for ( auto j : joysticks_ )
 		{
 			if ( j != nullptr )
@@ -100,7 +84,7 @@ namespace Input
 				SDL_JoystickClose( j );
 			}
 		}
-		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
+		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );*/
 	};
 
 	void reset()
@@ -180,7 +164,7 @@ namespace Input
 	{
 		eachKey( key, key_map_, registerKeyHold );
 	};
-	
+	/*
 	void buttonPress( Uint8 button )
 	{
 		eachKey( button, controller_button_map_, registerKeyPress );
@@ -231,5 +215,5 @@ namespace Input
 				registerAxis( axis_event.value, action_y_negative_, action_y_positive_ );
 			break;
 		}
-	};
+	};*/
 };

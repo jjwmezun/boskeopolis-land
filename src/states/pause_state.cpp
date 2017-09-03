@@ -4,7 +4,7 @@
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 
-constexpr sdl::rect PauseState::surface_box_;
+constexpr sdl2::SDLRect PauseState::surface_box_;
 
 PauseState::PauseState( const Palette& palette, EventSystem& events )
 :
@@ -74,11 +74,7 @@ void PauseState::stateRender()
 	{
 		Text::FontShade text_color = Text::FontShade::__NULL;
 
-		if ( palette().neon() )
-		{
-			text_color = Text::FontShade::BLACK;
-		}
-		else if ( ( int )option_selection_ == i )
+		if ( ( int )option_selection_ == i )
 		{
 			text_color = Text::FontShade::WHITE;
 		}

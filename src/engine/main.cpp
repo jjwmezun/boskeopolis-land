@@ -7,7 +7,6 @@
 #include "mezun_helpers.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
-#include "tileset.hpp"
 #include "title_state.hpp"
 #include <vector>
 
@@ -58,8 +57,6 @@ namespace Main
 
 		srand ( time( NULL ) );
 		setResourcePath();
-		Palette::loadPalettes();
-		Tileset::loadTilesetNames();
 		Render::init( args );
 		Input::init();
 		firstState();
@@ -69,7 +66,6 @@ namespace Main
 	{
 		Render::quit();
 		Input::close();
-		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
 		SDL_Quit();
 	};
 
@@ -99,14 +95,14 @@ namespace Main
 						Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
 					break;
 					case ( SDL_JOYAXISMOTION ):
-						Input::axis( event.jaxis );
+						//Input::axis( event.jaxis );
 					break;
 					case ( SDL_JOYBUTTONDOWN ):
-						Input::buttonPress( event.jbutton.button );
-						Input::buttonHold( event.jbutton.button );
+						//Input::buttonPress( event.jbutton.button );
+						//Input::buttonHold( event.jbutton.button );
 					break;
 					case ( SDL_JOYBUTTONUP ):
-						Input::buttonRelease( event.jbutton.button );
+						//Input::buttonRelease( event.jbutton.button );
 					break;
 				}
 			}

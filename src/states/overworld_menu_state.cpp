@@ -3,7 +3,7 @@
 #include "overworld_menu_state.hpp"
 #include "title_state.hpp"
 
-constexpr sdl::rect OverworldMenuState::bg_;
+constexpr sdl2::SDLRect OverworldMenuState::bg_;
 
 OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal )
 :

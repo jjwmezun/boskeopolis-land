@@ -46,11 +46,11 @@
 
         if ( !sprite.onGround() && !sprite.isJumping() )
         {
-            sprite.acceleration_y_ = sprite.gravity_start_speed_ / 2;
+            sprite.acceleration_y_ = sprite.fall_start_speed_ / 2;
         }
 
         sprite.top_speed_upward_ = sprite.jump_top_speed_ / 2;
-        sprite.top_speed_downward_ = sprite.gravity_top_speed_ / 2;
+        sprite.top_speed_downward_ = sprite.fall_top_speed_ / 2;
 
         sprite.on_ground_prev_ = sprite.on_ground_;
         sprite.on_ground_ = false;

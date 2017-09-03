@@ -55,7 +55,7 @@
                     bool done() const;
                     Type type() const;
 
-                protected:
+                
                     virtual void update( EggnonSprite& e ) = 0;
                     TimerSimple timer_;
                     Type type_;
@@ -67,7 +67,7 @@
                     MovingState();
                     void init( EggnonSprite& e, SpriteSystem& sprites );
 
-                protected:
+                
                     void update( EggnonSprite& e );
             };
 
@@ -77,7 +77,7 @@
                     DroppingState();
                     void init( EggnonSprite& e, SpriteSystem& sprites );
 
-                protected:
+                
                     void update( EggnonSprite& e );
             };
 

@@ -24,7 +24,7 @@ class OWCamera
 		bool backToHero( int x, int y, int w, int h, int map_w, int map_h );
 		void move( int map_w, int map_h );
 
-		constexpr sdl::rect relative( const sdl::rect& r ) const
+		constexpr sdl2::SDLRect relative( const sdl2::SDLRect& r ) const
 		{
 			return
 			{

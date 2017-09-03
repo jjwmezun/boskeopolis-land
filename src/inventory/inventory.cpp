@@ -38,37 +38,40 @@ namespace Inventory
 	
 
 	// Private Variables
-	constexpr bool DEFAULT_VICTORY        = false;
-	constexpr bool DEFAULT_DIAMOND        = false;
-	constexpr int  DEFAULT_GEM_SCORE      = -1;
-	constexpr int  DEFAULT_TIME_SCORE     = -1;
-	constexpr int  PRICE_OF_DEATH         = 2500;
-	constexpr int  FUNDS_MAX              = 99999;
-	constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;
-	constexpr int  TOTAL_FUNDS_MAX        = 999999999;
-	constexpr int  TOTAL_FUNDS_MIN        = -99999999;
-	constexpr int  FUNDS_MAX_DIGITS       = 5;
-	constexpr int  TOTAL_FUNDS_MAX_DIGITS = 9;
-	constexpr int  FUNDS_SPEED            = 25;
-	constexpr int  TOTAL_FUNDS_SPEED      = 100;
-	constexpr int  MAX_HEART_UPGRADES     = 3;
+	static constexpr bool DEFAULT_VICTORY        = false;
+	static constexpr bool DEFAULT_DIAMOND        = false;
+	static constexpr int  DEFAULT_GEM_SCORE      = -1;
+	static constexpr int  DEFAULT_TIME_SCORE     = -1;
+	static constexpr int  PRICE_OF_DEATH         = 2500;
+	static constexpr int  FUNDS_MAX              = 99999;
+	static constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;
+	static constexpr int  TOTAL_FUNDS_MAX        = 999999999;
+	static constexpr int  TOTAL_FUNDS_MIN        = -99999999;
+	static constexpr int  FUNDS_MAX_DIGITS       = 5;
+	static constexpr int  TOTAL_FUNDS_MAX_DIGITS = 9;
+	static constexpr int  FUNDS_SPEED            = 25;
+	static constexpr int  TOTAL_FUNDS_SPEED      = 100;
+	static constexpr int  MAX_HEART_UPGRADES     = 3;
+	static constexpr int  MAX_BOPS               = 8;
 
-	int mcguffins_ = 0;
-	bool oxygen_upgrade_ = false;
-	Counter funds_ = Counter( 0, FUNDS_MAX, 0 );
-	Counter total_funds_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
-	Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
-	Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
-	Counter current_level_ = Counter( 0, Level::NUM_O_LEVELS, 0 );
-	Counter heart_upgrades_ = Counter( 0, MAX_HEART_UPGRADES );
+	static int mcguffins_ = 0;
+	static bool oxygen_upgrade_ = false;
+	static Counter funds_ = Counter( 0, FUNDS_MAX, 0 );
+	static Counter total_funds_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
+	static Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
+	static Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
+	static Counter current_level_ = Counter( 0, Level::NUM_O_LEVELS, 0 );
+	static Counter heart_upgrades_ = Counter( 0, MAX_HEART_UPGRADES );
 
-	bool been_to_level_[ Level::NUM_O_LEVELS ];
-	bool victories_[ Level::NUM_O_LEVELS ];
-	bool diamonds_[ Level::NUM_O_LEVELS ];
-	int gem_scores_[ Level::NUM_O_LEVELS ];
-	int time_scores_[ Level::NUM_O_LEVELS ];
+	static bool been_to_level_[ Level::NUM_O_LEVELS ];
+	static bool victories_[ Level::NUM_O_LEVELS ];
+	static bool diamonds_[ Level::NUM_O_LEVELS ];
+	static int gem_scores_[ Level::NUM_O_LEVELS ];
+	static int time_scores_[ Level::NUM_O_LEVELS ];
 
-	Clock clock_ = Clock();
+	static Clock clock_ = Clock();
+	
+	static int bops_ = 0;
 
 	
 	// Function Implementations
@@ -91,6 +94,7 @@ namespace Inventory
 		heart_upgrades_ = 0;
 		mcguffins_ = 0;
 		oxygen_upgrade_ = false;
+		bops_ = 0;
 	};
 	
 	std::string levelName( int level )
@@ -228,6 +232,7 @@ namespace Inventory
 		mcguffins_ = 0;
 		funds_ = 0;
 		funds_shown_ = 0;
+		bops_ = 0;
 		clock_.reset();
 		save();
 	};
@@ -677,5 +682,31 @@ namespace Inventory
 	bool haveOxygenUpgrade()
 	{
 		return oxygen_upgrade_;
+	};
+
+	void bop()
+	{
+		++bops_;
+		if ( bopsMultiplier() )
+		{
+			//  2    3    4    5     6      7      8
+			// 100, 200, 400, 800, 1,600, 3,200, 6,400
+			addFunds( ( int )( 100 * pow( 2, bops_ - 2 ) ) );
+		}
+	};
+	
+	bool bopsMultiplier()
+	{
+		return bops_ > 1 && bops_ <= MAX_BOPS;
+	};
+
+	void clearBops()
+	{
+		bops_ = 0;
+	};
+
+	int howManyBops()
+	{
+		return bops_;
 	};
 };

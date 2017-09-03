@@ -1,36 +1,57 @@
-#pragma once
 
-#include <iostream>
+#include <memory>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-namespace sdl
+#ifndef BOSK_SDL2
+#define BOSK_SDL2
+
+namespace sdl2
 {
-    class color : public SDL_Color
+    class SDLColor : public SDL_Color
     {
         public:
-            constexpr color( Uint8 red = 0, Uint8 green = 0, Uint8 blue = 0, Uint8 alpha = 255 )
+            constexpr SDLColor( Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha )
             :
                 SDL_Color( { red, green, blue, alpha } )
             {};
     };
 
-    class rect : public SDL_Rect
+    class SDLRect : public SDL_Rect
     {
         public:
-            constexpr rect( int arg_x = 0, int arg_y = 0, int arg_w = 0, int arg_h = 0 )
+            constexpr SDLRect( int arg_x = 0, int arg_y = 0, int arg_w = 0, int arg_h = 0 )
             :
                 SDL_Rect( { arg_x, arg_y, arg_w, arg_h } )
             {};
 
-            constexpr rect( const rect& c )
+            SDLRect( const SDLRect& c )
             :
                 SDL_Rect( { c.x, c.y, c.w, c.h } )
             {};
 
-            rect& operator=( const rect& c );
-            rect( rect&& m );
-            rect& operator=( rect&& m );
+            SDLRect& operator=( const SDLRect& c )
+            {
+                x = c.x;
+                y = c.y;
+                w = c.w;
+                h = c.h;
+				return *this;
+            };
+
+            SDLRect( SDLRect&& m )
+            :
+                SDL_Rect( { m.x, m.y, m.w, m.h } )
+            {};
+
+            SDLRect& operator=( SDLRect&& m )
+            {
+                x = m.x;
+                y = m.y;
+                w = m.w;
+                h = m.h;
+				return *this;
+            };
 
             constexpr int halfWidth() const
             {
@@ -74,4 +95,4 @@ namespace sdl
     };
 }
 
-std::ostream& operator<<( std::ostream& os, const sdl::color& color );
+#endif // BOSK_SDL2

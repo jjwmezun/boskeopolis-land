@@ -26,8 +26,8 @@ MapLayerConstellation::~MapLayerConstellation() {};
 
 void MapLayerConstellation::render( const Camera& camera ) const
 {
-	sdl::rect source = { 0, 0, TILE_SIZE, TILE_SIZE };
-	sdl::rect dest = { 0, 0, TILE_SIZE, TILE_SIZE };
+	sdl2::SDLRect source = { 0, 0, TILE_SIZE, TILE_SIZE };
+	sdl2::SDLRect dest = { 0, 0, TILE_SIZE, TILE_SIZE };
 
 	const int first_x = ( floor( camera.x() / TILE_SIZE ) * scroll_speed_x_ );
 	const int first_y = ( floor( camera.y() / TILE_SIZE ) * scroll_speed_y_ );

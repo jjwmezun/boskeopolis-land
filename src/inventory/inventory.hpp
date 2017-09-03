@@ -53,4 +53,9 @@ namespace Inventory
 	
 	int heartUpgrades();
 	bool haveOxygenUpgrade();
+	
+	void bop();
+	void clearBops();
+	int howManyBops();
+	bool bopsMultiplier();
 };

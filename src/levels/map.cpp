@@ -8,7 +8,6 @@
 #include "map_layer_water.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
-#include "tileset.hpp"
 #include "unit.hpp"
 
 Map Map::mapFromPath
@@ -90,7 +89,7 @@ Map Map::mapFromPath
 						}
 						else if ( i >= LAYER2_INDEX )
 						{
-							if ( ( int )( layer2s.size() ) < ( i - LAYER2_INDEX ) + 1 )
+							if ( layer2s.size() < ( i - LAYER2_INDEX ) + 1 )
 							{
 								layer2s.emplace_back( std::vector<int> () );
 							}
@@ -120,7 +119,7 @@ Map Map::mapFromPath
 
 		std::string palette = "Grayscale";
 		int bg_color = 1;
-		int tileset = 0;
+		std::string tileset = "urban";
 		bool slippery = false;
 		int camera_limit_top = -1;
 		int camera_limit_bottom = -1;
@@ -135,6 +134,7 @@ Map Map::mapFromPath
 		int water_effect_height = 0;
 		bool water_rising = false;
 		int wind_strength = 0;
+		bool moon_gravity = false;
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -147,11 +147,11 @@ Map Map::mapFromPath
 				{
 					if ( prop.value.IsString() )
 					{
-						tileset = Tileset::nameID( prop.value.GetString() );
+						tileset = prop.value.GetString();
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "palette" ) )
+				else if ( mezun::areStringsEqual( name, "palette" ) )
 				{
 					if ( prop.value.IsString() )
 					{
@@ -159,7 +159,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "bg_color" ) )
+				else if ( mezun::areStringsEqual( name, "bg_color" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -167,7 +167,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "slippery" ) )
+				else if ( mezun::areStringsEqual( name, "slippery" ) )
 				{
 					if ( prop.value.IsBool() )
 					{
@@ -175,7 +175,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "camera_limit_top" ) )
+				else if ( mezun::areStringsEqual( name, "camera_limit_top" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -183,7 +183,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "camera_limit_bottom" ) )
+				else if ( mezun::areStringsEqual( name, "camera_limit_bottom" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -191,7 +191,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "camera_limit_left" ) )
+				else if ( mezun::areStringsEqual( name, "camera_limit_left" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -199,7 +199,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "camera_limit_right" ) )
+				else if ( mezun::areStringsEqual( name, "camera_limit_right" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -207,7 +207,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "scroll_loop_width" ) )
+				else if ( mezun::areStringsEqual( name, "scroll_loop_width" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -215,7 +215,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "hero_type" ) )
+				else if ( mezun::areStringsEqual( name, "hero_type" ) )
 				{
 					if ( prop.value.IsString() )
 					{
@@ -223,7 +223,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "camera_priority_x" ) )
+				else if ( mezun::areStringsEqual( name, "camera_priority_x" ) )
 				{
 					if ( prop.value.IsString() )
 					{
@@ -235,7 +235,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "camera_priority_y" ) )
+				else if ( mezun::areStringsEqual( name, "camera_priority_y" ) )
 				{
 					if ( prop.value.IsString() )
 					{
@@ -247,7 +247,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "blocks_work_offscreen" ) )
+				else if ( mezun::areStringsEqual( name, "blocks_work_offscreen" ) )
 				{
 					if ( prop.value.IsBool() )
 					{
@@ -255,7 +255,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "loop_sides" ) )
+				else if ( mezun::areStringsEqual( name, "loop_sides" ) )
 				{
 					if ( prop.value.IsBool() )
 					{
@@ -263,7 +263,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "water_effect_height" ) )
+				else if ( mezun::areStringsEqual( name, "water_effect_height" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
@@ -271,7 +271,7 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "water_rising" ) )
+				else if ( mezun::areStringsEqual( name, "water_rising" ) )
 				{
 					if ( prop.value.IsBool() )
 					{
@@ -279,11 +279,19 @@ Map Map::mapFromPath
 					}
 				}
 
-				if ( mezun::areStringsEqual( name, "wind_strength" ) )
+				else if ( mezun::areStringsEqual( name, "wind_strength" ) )
 				{
 					if ( prop.value.IsInt() )
 					{
 						wind_strength = prop.value.GetInt();
+					}
+				}
+
+				else if ( mezun::areStringsEqual( name, "moon_gravity" ) )
+				{
+					if ( prop.value.IsBool() )
+					{
+						moon_gravity = prop.value.GetBool();
 					}
 				}
 			}
@@ -306,7 +314,7 @@ Map Map::mapFromPath
 			width,
 			height,
 			tileset,
-			{ palette.c_str(), bg_color },
+			{ palette, bg_color },
 			std::move( backgrounds ),
 			warps,
 			std::move( foregrounds ),
@@ -321,7 +329,8 @@ Map Map::mapFromPath
 			camera_y_priority,
 			blocks_work_offscreen,
 			loop_sides,
-			wind_strength
+			wind_strength,
+			moon_gravity
 		);
 };
 
@@ -331,7 +340,7 @@ Map::Map
 	std::vector<int> sprites,
 	int width,
 	int height,
-	int tileset,
+	std::string tileset,
 	Palette palette,
 	std::vector<std::unique_ptr<MapLayer>> backgrounds,
 	std::vector<Warp> warps,
@@ -347,7 +356,8 @@ Map::Map
 	Camera::YPriority camera_y_priority,
 	bool blocks_work_offscreen,
 	bool loop_sides,
-	int wind_strength
+	int wind_strength,
+	bool moon_gravity
 )
 :
 	blocks_ ( blocks ),
@@ -370,7 +380,8 @@ Map::Map
 	camera_y_priority_ ( camera_y_priority ),
 	blocks_work_offscreen_ ( blocks_work_offscreen ),
 	loop_sides_ ( loop_sides ),
-	wind_strength_ ( wind_strength )
+	wind_strength_ ( wind_strength ),
+	moon_gravity_ ( moon_gravity )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -408,6 +419,7 @@ Map::Map( Map&& m ) noexcept
 	blocks_work_offscreen_ ( m.blocks_work_offscreen_ ),
 	loop_sides_ ( m.loop_sides_ ),
 	wind_strength_ ( m.wind_strength_ ),
+	moon_gravity_ ( m.moon_gravity_ ),
 	changed_ ( m.changed_ )
 {};
 
@@ -435,40 +447,41 @@ Map::Map( const Map& c )
 	blocks_work_offscreen_ ( c.blocks_work_offscreen_ ),
 	loop_sides_ ( c.loop_sides_ ),
 	wind_strength_ ( c.wind_strength_ ),
+	moon_gravity_ ( c.moon_gravity_ ),
 	changed_ ( c.changed_ )
 {};
 
-int Map::widthBlocks() const
+unsigned int Map::widthBlocks() const
 {
 	return width_;
 };
 
-int Map::heightBlocks() const
+unsigned int Map::heightBlocks() const
 {
 	return height_;
 };
 
-int Map::widthPixels() const
+unsigned int Map::widthPixels() const
 {
 	return Unit::BlocksToPixels( width_ );
 };
 
-int Map::heightPixels() const
+unsigned int Map::heightPixels() const
 {
 	return Unit::BlocksToPixels( height_ );
 };
 
-int Map::blocksSize() const
+unsigned int Map::blocksSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), ( int )( blocks_.size() ) );
+	return std::min( widthBlocks() * heightBlocks(), ( unsigned int )( blocks_.size() ) );
 };
 
-int Map::spritesSize() const
+unsigned int Map::spritesSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), ( int )( sprites_.size() ) );
+	return std::min( widthBlocks() * heightBlocks(), ( unsigned int )( sprites_.size() ) );
 };
 
-int Map::block( int n ) const
+unsigned int Map::block( unsigned int n ) const
 {
 	if ( !inBounds( n ) )
 	{
@@ -480,7 +493,7 @@ int Map::block( int n ) const
 	}
 };
 
-int Map::sprite( int n ) const
+unsigned int Map::sprite( unsigned int n ) const
 {
 	if ( !inBounds( n ) )
 	{
@@ -492,12 +505,12 @@ int Map::sprite( int n ) const
 	}
 };
 
-int Map::mapX( int n ) const
+unsigned int Map::mapX( int n ) const
 {
 	return n % widthBlocks();
 };
 
-int Map::mapY( int n ) const
+unsigned int Map::mapY( int n ) const
 {
 	return floor( n / widthBlocks() );
 };
@@ -509,13 +522,13 @@ int Map::indexFromXAndY( int x, int y ) const
 		x = getXIndexForLoop( x );
 	}
 	
-	if ( x < 0 || x >= widthBlocks() || y < 0 || y > heightBlocks() )
+	if ( x < 0 || x >= ( int )( widthBlocks() ) || y < 0 || y > ( int )( heightBlocks() ) )
 	{
 		return -1;
 	}
 	else
 	{
-		return ( y * widthBlocks() ) + x;
+		return ( y * ( int )( widthBlocks() ) ) + x;
 	}
 };
 
@@ -546,9 +559,9 @@ void Map::deleteSprite( int where )
 	}
 };
 
-bool Map::inBounds( int n ) const
+bool Map::inBounds( unsigned int n ) const
 {
-	return n >= 0 && n < ( int )( blocks_.size() );
+	return n < blocks_.size();
 };
 
 void Map::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
@@ -597,7 +610,7 @@ void Map::renderFG( Camera& camera )
 
 const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
 {
-	for ( int i = 0; i < ( int )( warps_.size() ); ++i )
+	for ( unsigned int i = 0; i < warps_.size(); ++i )
 	{
 		if ( warps_[ i ].inInterval( x_sub_pixels, y_sub_pixels ) )
 		{
@@ -693,7 +706,7 @@ void Map::interact( Sprite& sprite, Camera& camera, Health& health )
 	}
 };
 
-int Map::tileset() const
+const std::string& Map::tileset() const
 {
 	return tileset_;
 };

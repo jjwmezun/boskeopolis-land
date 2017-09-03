@@ -28,7 +28,7 @@ class PauseState : public GameState
 		static constexpr int PAUSE_BOX_WIDTH = 24;
 		static constexpr int PAUSE_BOX_HEIGHT = 7;
 
-		static constexpr sdl::rect surface_box_ =
+		static constexpr sdl2::SDLRect surface_box_ =
 		{
 			Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( PAUSE_BOX_WIDTH / 2 ) ),
 			Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( PAUSE_BOX_HEIGHT / 2 ) ),

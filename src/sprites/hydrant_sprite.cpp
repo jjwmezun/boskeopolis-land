@@ -1,6 +1,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "hydrant_sprite.hpp"
+#include "inventory.hpp"
 #include "sprite_graphics.hpp"
 
 HydrantSprite::HydrantSprite( int x, int y )
@@ -60,6 +61,7 @@ void HydrantSprite::customInteract( Collision& my_collision, Collision& their_co
 				{
 					kill();
 					them.bounce();
+					Inventory::bop();
 				}
 				else if ( their_collision.collideAny() && !isDead() )
 				{

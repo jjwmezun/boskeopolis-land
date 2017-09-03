@@ -165,18 +165,18 @@
             changed_ = true;
     }
 
-    bool Camera::onscreen( const sdl::rect& r, int padding ) const
+    bool Camera::onscreen( const sdl2::SDLRect& r, int padding ) const
     {
         return !offscreen( r, padding );
     };
 
-    bool Camera::onscreenPixels( const sdl::rect& r, int padding ) const
+    bool Camera::onscreenPixels( const sdl2::SDLRect& r, int padding ) const
     {
-        sdl::rect new_r = Unit::PixelsToSubPixels( r );
+        sdl2::SDLRect new_r = Unit::PixelsToSubPixels( r );
         return !offscreen( new_r, padding );
     };
 
-    bool Camera::offscreen( const sdl::rect& r, int padding, Direction::Simple dir ) const
+    bool Camera::offscreen( const sdl2::SDLRect& r, int padding, Direction::Simple dir ) const
     {
         switch( dir )
         {

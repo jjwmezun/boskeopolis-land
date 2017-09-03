@@ -14,7 +14,7 @@ Object::Object
 	hit_box_ ( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y ), Unit::PixelsToSubPixels( width ), Unit::PixelsToSubPixels( height ) } )
 {};
 
-const sdl::rect& Object::hitBox() const
+const sdl2::SDLRect& Object::hitBox() const
 {
 	return hit_box_;
 };

@@ -1,0 +1,16 @@
+{
+	"name": "Check Yo Self",
+	
+	"maps":
+	[
+		{
+			"slug": "checkit"
+		}
+	],
+	
+	"entrance_x": 2,
+	"entrance_y": 14,
+	
+	"gem_challenge": 10000,
+	"time_challenge": 40
+}

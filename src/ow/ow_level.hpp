@@ -9,7 +9,7 @@ class OWLevel
 	public:
 		OWLevel( int type, int x, int y, const AnimatedGraphics& gfx );
 		void render( const OWCamera& camera ) const;
-		sdl::rect coords() const;
+		sdl2::SDLRect coords() const;
 		int lv() const;
 		int x() const;
 		int y() const;
@@ -23,6 +23,6 @@ class OWLevel
 		const int y_;
 		const AnimatedGraphics* gfx_;
 	
-		sdl::rect src() const;
-		sdl::rect dest( const OWCamera& camera ) const;
+		sdl2::SDLRect src() const;
+		sdl2::SDLRect dest( const OWCamera& camera ) const;
 };

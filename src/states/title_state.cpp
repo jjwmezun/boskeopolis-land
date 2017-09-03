@@ -5,7 +5,7 @@
 #include "overworld_state.hpp"
 #include "title_state.hpp"
 
-constexpr sdl::rect TitleState::logo_rect_;
+constexpr sdl2::SDLRect TitleState::logo_rect_;
 
 TitleState::TitleState() : GameState( StateID::TITLE_STATE ) {};
 

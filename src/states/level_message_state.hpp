@@ -24,7 +24,7 @@ class LevelMessageState : public GameState
 		static constexpr int MESSAGE_BOX_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - ( ( TEXT_Y - Unit::MiniBlocksToPixels( MESSAGE_BOX_PADDING ) ) * 2 );
 		static constexpr int LINE_LIMIT = Unit::PixelsToMiniBlocks( MESSAGE_BOX_WIDTH ) - ( MESSAGE_BOX_PADDING * 2 );
 		const Text message_;
-		static constexpr sdl::rect backdrop_ =
+		static constexpr sdl2::SDLRect backdrop_ =
 		{
 			( Unit::WINDOW_WIDTH_PIXELS / 2 ) - ( MESSAGE_BOX_WIDTH / 2 ),
 			( Unit::WINDOW_HEIGHT_PIXELS / 2 ) - ( MESSAGE_BOX_HEIGHT / 2 ),

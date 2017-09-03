@@ -45,23 +45,23 @@ void SpriteGraphics::update()
 {
 };
 
-void SpriteGraphics::renderAnyPriority( const sdl::rect& bound_box, const Camera* camera ) const
+void SpriteGraphics::renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera ) const
 {
 	render( bound_box, camera, priority_ );
 };
 
-void SpriteGraphics::render( const sdl::rect& bound_box, const Camera* camera, bool priority ) const
+void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
 	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha_ );
 };
 
-void SpriteGraphics::masterRender( const sdl::rect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha ) const
+void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha ) const
 {
 	if ( visible_ && ( ( priority && priority_ ) || ( !priority && !priority_ ) ) )
 	{
-		sdl::rect dest = adjustBoundBox( bound_box );
+		sdl2::SDLRect dest = adjustBoundBox( bound_box );
 
-		sdl::rect source =
+		sdl2::SDLRect source =
 		{
 			current_frame_x,
 			current_frame_y,
@@ -73,7 +73,7 @@ void SpriteGraphics::masterRender( const sdl::rect& bound_box, int current_frame
 	}
 };
 
-sdl::rect SpriteGraphics::adjustBoundBox( const sdl::rect& r ) const
+sdl2::SDLRect SpriteGraphics::adjustBoundBox( const sdl2::SDLRect& r ) const
 {
 	return
 	{

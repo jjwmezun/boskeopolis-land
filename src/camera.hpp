@@ -165,59 +165,69 @@
                 return x_ + ( widthPixels() * .65 );
             };
 
-            constexpr bool offscreenTop( const sdl::rect& r, int padding = 0 ) const
+            constexpr bool offscreenTop( const sdl2::SDLRect& r, int padding = 0 ) const
             {
                 return r.y + r.h < Unit::PixelsToSubPixels( y() - padding );
             };
 
-            constexpr bool offscreenLeft( const sdl::rect& r, int padding = 0 ) const
+            constexpr bool offscreenLeft( const sdl2::SDLRect& r, int padding = 0 ) const
             {
                 return r.x + r.w < Unit::PixelsToSubPixels( x() - padding );
             };
 
-            constexpr bool offscreenBottom( const sdl::rect& r, int padding = 0 ) const
+            constexpr bool offscreenBottom( const sdl2::SDLRect& r, int padding = 0 ) const
             {
                 return r.y > Unit::PixelsToSubPixels( bottom() + padding );
             };
 
-            constexpr bool offscreenRight( const sdl::rect& r, int padding = 0 ) const
+            constexpr bool offscreenRight( const sdl2::SDLRect& r, int padding = 0 ) const
             {
                 return r.x > Unit::PixelsToSubPixels( right() + padding );
             };
 
-            constexpr bool offscreenPartwayTop( const sdl::rect& r ) const
+            constexpr bool offscreenPartwayTop( const sdl2::SDLRect& r ) const
             {
                 return r.y < y();
             };
 
-            constexpr bool offscreenPartwayRight( const sdl::rect& r ) const
+            constexpr bool offscreenPartwayRight( const sdl2::SDLRect& r ) const
             {
                 return r.x + r.h > widthPixels();
             };
 
-            constexpr bool offscreenPartwayBottom( const sdl::rect& r ) const
+            constexpr bool offscreenPartwayBottom( const sdl2::SDLRect& r ) const
             {
                 return r.y + r.w > heightPixels();
             };
 
-            constexpr bool offscreenPartwayLeft( const sdl::rect& r ) const
+            constexpr bool offscreenPartwayLeft( const sdl2::SDLRect& r ) const
             {
                 return r.x < x();
             };
 
-            constexpr int relativeX( const sdl::rect& r ) const
+            constexpr int relativeX( const sdl2::SDLRect& r ) const
             {
                 return r.x - x() + xOffset();
             };
 
-            constexpr int relativeY( const sdl::rect& r ) const
+            constexpr int relativeY( const sdl2::SDLRect& r ) const
             {
                 return r.y - y() + yOffset();
             };
 
-            bool onscreen( const sdl::rect& r, int padding = 0 )  const;
-            bool onscreenPixels( const sdl::rect& r, int padding = 0 )  const;
-            bool offscreen( const sdl::rect& r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
+            constexpr int relativeX( int n ) const
+            {
+                return n - x() + xOffset();
+            };
+
+            constexpr int relativeY( int n ) const
+            {
+                return n - y() + yOffset();
+            };
+
+            bool onscreen( const sdl2::SDLRect& r, int padding = 0 )  const;
+            bool onscreenPixels( const sdl2::SDLRect& r, int padding = 0 )  const;
+            bool offscreen( const sdl2::SDLRect& r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
 
             bool changed() const;
 			void update();

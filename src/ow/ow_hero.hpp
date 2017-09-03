@@ -24,7 +24,7 @@ class OWHero
 		int right() const;
 		int bottom() const;
 		void collideStop( const Collision& collision );
-		sdl::rect coords() const;
+		sdl2::SDLRect coords() const;
 
 	private:
 		AnimatedGraphics gfx_;

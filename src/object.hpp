@@ -23,7 +23,7 @@ class Object
 		void addToX ( int addition_x_pixels );
 		void addToY ( int addition_y_pixels );
 
-		const sdl::rect& hitBox() const;
+		const sdl2::SDLRect& hitBox() const;
 
 		int xPixels()    const;
 		int yPixels()    const;
@@ -53,7 +53,5 @@ class Object
 		int rightPixels()  const;
 		int bottomPixels() const;
 
-
-	protected:
-		sdl::rect hit_box_;
+		sdl2::SDLRect hit_box_;
 };

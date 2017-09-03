@@ -10,20 +10,22 @@ class Sprite;
 class PlayerSprite : public Sprite
 {
 	public:
+		static constexpr int PLAYER_DEFAULT_JUMP_START_SPEED = 1000;
+		static constexpr int PLAYER_DEFAULT_JUMP_TOP_SPEED   = 6000;
+
 		PlayerSprite
 		(
 			int x,
 			int y,
+			int jump_start_speed = 1000,
+			int jump_top_speed = 6000,
 			std::unique_ptr<InputComponent> input
 				= std::unique_ptr<InputComponentPlayer>
 				(),
 			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<PlayerGraphics> ( "sprites/autumn.png" ),
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,
-			int top_speed = 2000,
-			int jump_start_speed = 1000,
-			int jump_top_speed = 6000,
-			bool permanent = true
+			int top_speed = 2000
 		);
 		~PlayerSprite();
 
@@ -32,7 +34,7 @@ class PlayerSprite : public Sprite
 		virtual void duck();
 		virtual void unduck();
 
-	protected:
+	
 		void deathAction( Camera& camera );
 		void actions();
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );

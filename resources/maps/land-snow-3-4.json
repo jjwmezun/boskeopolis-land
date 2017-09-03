@@ -27,14 +27,12 @@
  "properties":
     {
      "palette":"Icy Blue",
-     "slippery":true,
-     "tileset":"urban"
+     "slippery":true
     },
  "propertytypes":
     {
      "palette":"string",
-     "slippery":"bool",
-     "tileset":"string"
+     "slippery":"bool"
     },
  "renderorder":"right-down",
  "tileheight":16,

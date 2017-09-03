@@ -8,14 +8,13 @@ ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
 	(
 		x,
 		y,
+		1000,
+		6000,
 		std::unique_ptr<InputComponent> ( new InputComponentPlayer() ),
 		std::make_unique<SpriteGraphics> ( "sprites/cowgirl_autumn.png", 0, 0, false, false, 0, false, -8, -3, 12, 5 ),
 		SpriteType::HERO,
 		160,
-		2000,
-		1000,
-		6000,
-		true
+		2000
 	),
 	is_shooting_ ( false ),
 	is_shooting_up_ ( false ),

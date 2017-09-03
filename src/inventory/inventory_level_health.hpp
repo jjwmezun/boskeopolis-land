@@ -15,7 +15,7 @@ class InventoryLevelHealth
 	private:
 		static constexpr int X = Unit::MiniBlocksToPixels( 11 );
 
-		sdl::rect dest_;
+		sdl2::SDLRect dest_;
 		const SpriteGraphics gfx_;
 		const SpriteGraphics empty_gfx_;
 		int hearts_shown_;

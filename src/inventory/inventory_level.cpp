@@ -1,17 +1,19 @@
+#include "camera.hpp"
 #include "clock.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
 #include "inventory_level.hpp"
 #include "render.hpp"
+#include "sprite.hpp"
 
-constexpr sdl::rect InventoryLevel::BG_DEST;
-constexpr sdl::rect InventoryLevel::VICTORY_ICON_DEST;
-constexpr sdl::rect InventoryLevel::DIAMOND_ICON_DEST;
-constexpr sdl::rect InventoryLevel::GEM_ICON_DEST;
-constexpr sdl::rect InventoryLevel::CLOCK_ICON_DEST;
-constexpr sdl::rect InventoryLevel::KEY_ICON_DEST;
-constexpr sdl::rect InventoryLevel::MCGUFFIN_DEST;
-constexpr sdl::rect InventoryLevel::MCGUFFIN_CROSS_DEST;
+constexpr sdl2::SDLRect InventoryLevel::BG_DEST;
+constexpr sdl2::SDLRect InventoryLevel::VICTORY_ICON_DEST;
+constexpr sdl2::SDLRect InventoryLevel::DIAMOND_ICON_DEST;
+constexpr sdl2::SDLRect InventoryLevel::GEM_ICON_DEST;
+constexpr sdl2::SDLRect InventoryLevel::CLOCK_ICON_DEST;
+constexpr sdl2::SDLRect InventoryLevel::KEY_ICON_DEST;
+constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_DEST;
+constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_CROSS_DEST;
 
 InventoryLevel::InventoryLevel()
 :
@@ -30,7 +32,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	ticker_.updateTicker();
 };
 
-void InventoryLevel::render( EventSystem& events )
+void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera )
 {
 	// BG
 	Render::renderRect( BG_DEST, 1 );
@@ -107,4 +109,10 @@ void InventoryLevel::render( EventSystem& events )
 
 	// TICKER
 	ticker_.render();
+	
+	// BOPS
+	if ( Inventory::bopsMultiplier() )
+	{
+		Text::renderNumber( Inventory::howManyBops(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontShade::DARK_GRAY );
+	}
 };

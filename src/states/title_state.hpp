@@ -30,8 +30,8 @@ class TitleState : public GameState
 		static constexpr int OPTIONS_TOP_Y = 64;
 
 		SpriteGraphics logo_gfx_ = SpriteGraphics( "bosko_logo.png" );
-		static constexpr sdl::rect logo_rect_ = { 0, 0, 320, 48 };
-		sdl::rect highlight_rect_ = { 16, OPTIONS_TOP_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 };
+		static constexpr sdl2::SDLRect logo_rect_ = { 0, 0, 320, 48 };
+		sdl2::SDLRect highlight_rect_ = { 16, OPTIONS_TOP_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 };
 
 		const std::array<const std::string, (std::size_t)OPTIONS_SIZE> option_text_ =
 		{{

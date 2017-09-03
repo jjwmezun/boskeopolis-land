@@ -83,13 +83,13 @@
 
         if ( Input::held( Input::Action::MOVE_DOWN ) )
         {
-            gravity_start_speed_ = GRAVITY_START_SPEED*1.5;
-            gravity_top_speed_ = GRAVITY_TOP_SPEED*1.5;
+            fall_start_speed_ = gravity_start_speed_ * 1.5;
+            fall_top_speed_ = gravity_top_speed_ * 1.5;
         }
         else
         {
-            gravity_start_speed_ = GRAVITY_START_SPEED;
-            gravity_top_speed_ = GRAVITY_TOP_SPEED;
+            gravity_start_speed_ = gravity_start_speed_;
+            gravity_top_speed_ = gravity_top_speed_;
         }
 
         boundaries( camera, lvmap );

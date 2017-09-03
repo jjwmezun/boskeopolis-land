@@ -16,7 +16,7 @@ try :
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
-	blocks_ ( level_ ),
+	blocks_ ( level_.currentMap() ),
 	health_ ()
 {
 	Inventory::levelStart( lvname );
@@ -84,7 +84,7 @@ void LevelState::stateRender()
 	blocks_.render( camera_, true );
 	sprites_.render( camera_, true );
 	level_.currentMap().renderFG( camera_ );
-	inventory_screen_.render( events_ );
+	inventory_screen_.render( events_, sprites_.hero(), camera_ );
 };
 
 void LevelState::init()

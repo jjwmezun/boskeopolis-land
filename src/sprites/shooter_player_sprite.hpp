@@ -13,7 +13,7 @@ class ShooterPlayerSprite : public PlayerSprite
 		void duck() override;
 		void unduck() override;
 
-	protected:
+	
 		void deathAction( Camera& camera ) override;
 
 	private:

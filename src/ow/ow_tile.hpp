@@ -15,7 +15,7 @@ class OWTile
 		void highlight( const OWCamera& camera ) const;
 
 		void interact( OWHero& hero, const Collision& collision ) const;
-		sdl::rect coords() const;
+		sdl2::SDLRect coords() const;
 
 		int type_;
 		
@@ -29,7 +29,7 @@ class OWTile
 		const int y_;
 		const SpriteGraphics* gfx_;
 	
-		sdl::rect src() const;
-		sdl::rect dest( const OWCamera& camera ) const;
+		sdl2::SDLRect src() const;
+		sdl2::SDLRect dest( const OWCamera& camera ) const;
 		void setGFX( int type, const SpriteGraphics& gfx );
 };
