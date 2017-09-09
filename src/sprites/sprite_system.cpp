@@ -1,3 +1,4 @@
+#include "angry_truck_sprite.hpp"
 #include "bad_apple_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
@@ -298,6 +299,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 70 ):
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 71 ):
+			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

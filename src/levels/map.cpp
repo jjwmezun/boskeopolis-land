@@ -451,37 +451,37 @@ Map::Map( const Map& c )
 	changed_ ( c.changed_ )
 {};
 
-unsigned int Map::widthBlocks() const
+int Map::widthBlocks() const
 {
 	return width_;
 };
 
-unsigned int Map::heightBlocks() const
+int Map::heightBlocks() const
 {
 	return height_;
 };
 
-unsigned int Map::widthPixels() const
+int Map::widthPixels() const
 {
 	return Unit::BlocksToPixels( width_ );
 };
 
-unsigned int Map::heightPixels() const
+int Map::heightPixels() const
 {
 	return Unit::BlocksToPixels( height_ );
 };
 
-unsigned int Map::blocksSize() const
+int Map::blocksSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), ( unsigned int )( blocks_.size() ) );
+	return std::min( widthBlocks() * heightBlocks(), ( int )( blocks_.size() ) );
 };
 
-unsigned int Map::spritesSize() const
+int Map::spritesSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), ( unsigned int )( sprites_.size() ) );
+	return std::min( widthBlocks() * heightBlocks(), ( int )( sprites_.size() ) );
 };
 
-unsigned int Map::block( unsigned int n ) const
+int Map::block( int n ) const
 {
 	if ( !inBounds( n ) )
 	{
@@ -493,7 +493,7 @@ unsigned int Map::block( unsigned int n ) const
 	}
 };
 
-unsigned int Map::sprite( unsigned int n ) const
+int Map::sprite( int n ) const
 {
 	if ( !inBounds( n ) )
 	{
@@ -505,12 +505,12 @@ unsigned int Map::sprite( unsigned int n ) const
 	}
 };
 
-unsigned int Map::mapX( int n ) const
+int Map::mapX( int n ) const
 {
 	return n % widthBlocks();
 };
 
-unsigned int Map::mapY( int n ) const
+int Map::mapY( int n ) const
 {
 	return floor( n / widthBlocks() );
 };
@@ -559,7 +559,7 @@ void Map::deleteSprite( int where )
 	}
 };
 
-bool Map::inBounds( unsigned int n ) const
+bool Map::inBounds( int n ) const
 {
 	return n < blocks_.size();
 };
@@ -610,7 +610,7 @@ void Map::renderFG( Camera& camera )
 
 const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
 {
-	for ( unsigned int i = 0; i < warps_.size(); ++i )
+	for ( int i = 0; i < warps_.size(); ++i )
 	{
 		if ( warps_[ i ].inInterval( x_sub_pixels, y_sub_pixels ) )
 		{

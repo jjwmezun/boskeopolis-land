@@ -132,12 +132,12 @@
 
             constexpr int boundaryTop() const
             {
-                return y_ + ( heightPixels() * .15 );
+                return y_ + ( heightPixels() * .25 );
             };
 
             constexpr int boundaryTopWeaker() const
             {
-                return y_ + ( heightPixels() * .15 );
+                return y_ + ( heightPixels() * .25 );
             };
 
             constexpr int boundaryCenterY() const

@@ -18,7 +18,7 @@
         const int PIXELS_PER_BLOCK         = 16;
         const int PIXELS_PER_MINIBLOCK     = 8;
         const int MINIBLOCKS_PER_BLOCK     = 2;
-        const int BLOCKS_PER_SCREEN        = 20;//16;
+        const int BLOCKS_PER_SCREEN        = 25;//20;//16;
         const int MINIBLOCKS_PER_SCREEN    = BLOCKS_PER_SCREEN * 2;
         const int PIXELS_PER_SCREEN        = BLOCKS_PER_SCREEN * PIXELS_PER_BLOCK;
         const int SUBPIXELS_PER_PIXEL      = 1000;
@@ -28,7 +28,7 @@
         const int WINDOW_WIDTH_MINIBLOCKS  = MINIBLOCKS_PER_SCREEN;
         const int WINDOW_WIDTH_PIXELS      = PIXELS_PER_SCREEN;
         const int WINDOW_WIDTH_SUBPIXELS   = SUBPIXELS_PER_SCREEN;
-        const int WINDOW_HEIGHT_BLOCKS     = 11;//12;
+        const int WINDOW_HEIGHT_BLOCKS     = 14;//11;//12;
         const int WINDOW_HEIGHT_MINIBLOCKS = WINDOW_HEIGHT_BLOCKS * 2;
         const int WINDOW_HEIGHT_PIXELS     = WINDOW_HEIGHT_BLOCKS * PIXELS_PER_BLOCK;
         const int WINDOW_HEIGHT_SUBPIXELS  = WINDOW_HEIGHT_PIXELS * SUBPIXELS_PER_PIXEL;
