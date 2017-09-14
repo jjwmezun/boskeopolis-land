@@ -1,0 +1,15 @@
+{
+	"name": "Peperoncini Pyramid",
+	
+	"maps":
+	[
+		{
+			"slug": "desert-3"
+		}
+	],
+
+	"entrance_x": 6,
+	"entrance_y": 45,
+	"gem_challenge": 1000,
+	"time_challenge": 20
+}

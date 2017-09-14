@@ -10,4 +10,9 @@ void BlockComponentSink::interact( Collision& collision, Sprite& sprite, Block& 
 {	
 	sprite.fullStopY();
 	sprite.addToY( 100 );
+	
+	if ( collision.collideTop() )
+	{
+		sprite.kill();
+	}
 };

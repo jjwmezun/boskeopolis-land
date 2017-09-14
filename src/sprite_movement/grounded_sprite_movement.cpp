@@ -184,8 +184,8 @@ void GroundedSpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) cons
 
 void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collision ) const
 {
-	if ( !sprite.collide_bottom_prev_ || !sprite.collide_top_prev_ )
-	{
+	//if ( !sprite.collide_bottom_prev_ || !sprite.collide_top_prev_ )
+	//{
 		if ( collision.collideLeft() )
 		{
 			collideStopXLeft( sprite, collision.overlapXLeft() );
@@ -195,7 +195,7 @@ void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collisio
 		{
 			collideStopXRight( sprite, collision.overlapXRight() );
 		}
-	}
+	//}
 
 	if ( collision.collideBottom() )
 	{
@@ -204,10 +204,10 @@ void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collisio
 
 	if ( collision.collideTop() )
 	{
-		if ( !sprite.collide_top_prev_ )
-		{
+		//if ( !sprite.collide_top_prev_ )
+		//{
 			collideStopYTop( sprite, collision.overlapYTop() );
-		}
+		//}
 	}
 };
 

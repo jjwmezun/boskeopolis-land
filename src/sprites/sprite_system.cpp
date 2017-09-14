@@ -8,6 +8,7 @@
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
 #include "cannon_sprite.hpp"
+#include "choque_sprite.hpp"
 #include "cloud_block_sprite.hpp"
 #include "cloud_monster_sprite.hpp"
 #include "cloud_platform_sprite.hpp"
@@ -23,6 +24,7 @@
 #include "handgun_sprite.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
+#include "hieroglyph_pusher_sprite.hpp"
 #include "hydrant_sprite.hpp"
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
@@ -69,6 +71,7 @@
 #include "sprite_component_up_and_down.hpp"
 #include "sprite_system.hpp"
 #include "stronger_cowpoker_sprite.hpp"
+#include "underground_subway_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 
@@ -302,6 +305,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 71 ):
 			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 72 ):
+			return std::unique_ptr<Sprite> ( new ChoqueSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 73 ):
+			return std::unique_ptr<Sprite> ( new HieroglyphPusherSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 74 ):
+			return std::unique_ptr<Sprite> ( new UndergroundSubwaySprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

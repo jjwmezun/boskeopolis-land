@@ -15,7 +15,7 @@ LevelSelectState::LevelSelectState( int level )
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Level Select", 1 } ),
 	prev_level_ ( level ),
 	selection_ ( Counter( level, Level::realLevelNum()-1, 0 ) ),
-	camera_ ( { 0, 0, Unit::WINDOW_WIDTH_BLOCKS, 7, 0, START_Y } )
+	camera_ ( { 0, 0, Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4, 0, START_Y } )
 {};
 
 LevelSelectState::~LevelSelectState() {};
@@ -190,6 +190,7 @@ void LevelSelectState::stateRender()
 void LevelSelectState::init()
 {
 	constexpr int X = 24;
+	constexpr int END_X = Unit::WINDOW_WIDTH_PIXELS - 16;
 
 	try
 	{
@@ -206,10 +207,10 @@ void LevelSelectState::init()
 
 				level_ids_.emplace_back( i );
 
-				gem_scores_.emplace_back( Inventory::gemScore( i ), X + ( 24 * 8 ), ( 8 * reali ) );
-				time_scores_.emplace_back( Inventory::timeScore( i ), X + ( 31 * 8 ), ( 8 * reali ) );
-				gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), X + ( 24 * 8 ), ( 8 * reali ) );
-				time_challenges_text_.emplace_back( Level::timeChallengeText( i ), X + ( 31 * 8 ), ( 8 * reali ) );
+				gem_scores_.emplace_back( Inventory::gemScore( i ), END_X - ( 11 * 8 ), ( 8 * reali ) );
+				time_scores_.emplace_back( Inventory::timeScore( i ), END_X - ( 4 * 8 ), ( 8 * reali ) );
+				gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), END_X - ( 11 * 8 ), ( 8 * reali ) );
+				time_challenges_text_.emplace_back( Level::timeChallengeText( i ), END_X - ( 4 * 8 ), ( 8 * reali ) );
 				gem_challenges_.emplace_back( Inventory::gemChallengeBeaten( i ) );
 				time_challenges_.emplace_back( Inventory::timeChallengeBeaten( i ) );
 
@@ -225,12 +226,12 @@ void LevelSelectState::init()
 				
 				if ( Inventory::gemChallengeBeaten( i ) )
 				{
-					gem_challenge_icon_dests_.emplace_back( X + ( 8 * 23 ), ( 8 * reali ), 8, 8 );
+					gem_challenge_icon_dests_.emplace_back( END_X - ( 12 * 8 ), ( 8 * reali ), 8, 8 );
 				}
 				
 				if ( Inventory::timeChallengeBeaten( i ) )
 				{
-					time_challenge_icon_dests_.emplace_back( X + ( 8 * 30 ), ( 8 * reali ), 8, 8 );
+					time_challenge_icon_dests_.emplace_back( END_X - ( 5 * 8 ), ( 8 * reali ), 8, 8 );
 				}
 				
 				if ( Inventory::levelComplete( i ) )
