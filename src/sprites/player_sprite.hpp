@@ -32,11 +32,11 @@ class PlayerSprite : public Sprite
 		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
 		virtual void duck();
-		virtual void unduck();
+		virtual void unduck( const BlockSystem& blocks );
 
 	
 		void deathAction( Camera& camera );
-		void actions();
+		void actions( const BlockSystem& blocks );
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		std::unique_ptr<InputComponent> input_;
 

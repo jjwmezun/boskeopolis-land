@@ -2,6 +2,8 @@
 #include "sprite.hpp"
 #include "grounded_sprite_movement.hpp"
 
+#include <iostream>
+
 GroundedSpriteMovement::GroundedSpriteMovement()
 :
 	SpriteMovement( Type::GROUNDED )
@@ -223,11 +225,12 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const O
 	int overlap_y_top    = 0;
 	int overlap_y_bottom = 0;
 
+	const int left_right_padding = 4000;
 	// Keep character from catching on walls moving vertically.
 	if
 	(
-		me.leftSubPixels() + 4000 < them.rightSubPixels() &&
-		me.rightSubPixels() - 4000 > them.leftSubPixels() &&
+		me.leftSubPixels() + left_right_padding < them.rightSubPixels() &&
+		me.rightSubPixels() - left_right_padding > them.leftSubPixels() &&
 		me.topSubPixels() < them.bottomSubPixels() &&
 		me.bottomSubPixels() > them.topSubPixels()
 	)
@@ -251,14 +254,13 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const O
 			overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
 	}
 
-	// 4000 padding needed to keep ducking Autumn from clipping into walls.
 	// 8000 padding needed to keep Autumn from thunking sideways into ceiling while hitting it from below.
-	int top_padding = 4000;
-	if ( !me.onGround() && !me.isDucking() )
+	int top_padding = 0;
+	if ( !me.on_ground_prev_ )
 	{
 		top_padding = 8000;
 	}
-	
+
 	if
 	(
 		me.leftSubPixels() < them.rightSubPixels() &&

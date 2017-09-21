@@ -1,0 +1,16 @@
+{
+	"name": "Steam Engeenius",
+
+	"maps":
+	[
+		{
+			"slug": "factory-1"
+		}
+	],
+
+	"entrance_x": 5,
+	"entrance_y": 58,
+
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

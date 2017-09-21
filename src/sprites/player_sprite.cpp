@@ -1,4 +1,5 @@
 #include "block.hpp"
+#include "block_system.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "main.hpp"
@@ -75,7 +76,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 		Inventory::clearBops();
 	}
 
-	actions();
+	actions( blocks );
 
 	if ( input_->cLeft() )
 	{
@@ -142,7 +143,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 	camera.adjust( *this, lvmap );
 };
 
-void PlayerSprite::actions()
+void PlayerSprite::actions( const BlockSystem& blocks )
 {
 	if ( input_->action2() )
 	{
@@ -168,11 +169,11 @@ void PlayerSprite::actions()
 		switch ( on_slope_ )
 		{
 			case ( Direction::Horizontal::LEFT ):
-				if ( isDucking() ) unduck();
+				if ( isDucking() ) unduck( blocks );
 				slideLeft();
 			break;
 			case ( Direction::Horizontal::RIGHT ):
-				if ( isDucking() ) unduck();
+				if ( isDucking() ) unduck( blocks );
 				slideRight();
 			break;
 			case ( Direction::Horizontal::__NULL ):
@@ -182,7 +183,7 @@ void PlayerSprite::actions()
 	}
 	else
 	{
-		unduck();
+		unduck( blocks );
 	}
 	
 	if ( !is_sliding_ )
@@ -201,7 +202,10 @@ void PlayerSprite::actions()
 		top_speed_ = top_speed_run_;
 	}
 
-	if ( input_->action1() )
+	
+	const sdl2::SDLRect just_above = { hit_box_.x, hit_box_.y - 16000, hit_box_.w, 20000 };
+
+	if ( input_->action1() && !( isDucking() && blocks.blocksInTheWay( just_above, BlockComponent::Type::SOLID ) ) )
 	{
 		jump();
 		
@@ -289,7 +293,7 @@ void PlayerSprite::actions()
 		}
 	}
 
-	
+	/*
 	// In case player gets stuck 'tween 2 blocks with just 1 empty block 'tween them vertically.
 	// Makes player automatically move to the side till out o' space ala Super Mario Bros. 3.
 	if ( collide_top_prev_ && collide_bottom_prev_ && !isDucking() )
@@ -300,7 +304,7 @@ void PlayerSprite::actions()
 			vx_ = -1000;
 
 		stopX();
-	}
+	}*/
 
 	if ( !touching_ladder_ )
 		releaseLadder();
@@ -373,18 +377,23 @@ void PlayerSprite::duck()
 	}
 };
 
-void PlayerSprite::unduck()
+void PlayerSprite::unduck( const BlockSystem& blocks )
 {
-	// Hacky way to keep player from falling through ground after gaining height from unducking.
-	if ( isDucking() )
-	{
-		hit_box_.y -= Unit::PixelsToSubPixels( 10 );
-		graphics_->y_adjustment_ = -2;
-		graphics_->h_adjustment_ = 3;
-	}
+	const sdl2::SDLRect just_above = { hit_box_.x, hit_box_.y - 16000, hit_box_.w, 20000 };
 
-	is_ducking_ = false;
-	hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 1 );
+	if ( !blocks.blocksInTheWay( just_above, BlockComponent::Type::SOLID ) )
+	{
+		// Hacky way to keep player from falling through ground after gaining height from unducking.
+		if ( isDucking() )
+		{
+			hit_box_.y -= Unit::PixelsToSubPixels( 10 );
+			graphics_->y_adjustment_ = -2;
+			graphics_->h_adjustment_ = 3;
+		}
+
+		is_ducking_ = false;
+		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 1 );
+	}
 };
 
 void PlayerSprite::deathAction( Camera& camera )

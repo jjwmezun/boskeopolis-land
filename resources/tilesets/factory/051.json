@@ -2,8 +2,8 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 7,
-		"y": 0
+		"x": 11,
+		"y": 3
 	},
 	"behavior":
 	[
