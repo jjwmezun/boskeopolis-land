@@ -1,5 +1,7 @@
 #include "angry_truck_sprite.hpp"
 #include "bad_apple_sprite.hpp"
+#include "bat_sprite.hpp"
+#include "bird_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
 #include "bullet_sprite.hpp"
@@ -14,12 +16,16 @@
 #include "cloud_platform_sprite.hpp"
 #include "cowpoker_sprite.hpp"
 #include "direction.hpp"
+#include "downhill_gem_sprite.hpp"
 #include "eggnon_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
 #include "event_system.hpp"
 #include "faucet_sprite.hpp"
 #include "falling_bough_sprite.hpp"
+#include "falling_gem_sprite.hpp"
 #include "fishstick_sprite.hpp"
+#include "gemmy_sprite.hpp"
+#include "ghost_sprite.hpp"
 #include "guard_sprite.hpp"
 #include "handgun_sprite.hpp"
 #include "health.hpp"
@@ -315,6 +321,27 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 74 ):
 			return std::unique_ptr<Sprite> ( new UndergroundSubwaySprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 75 ):
+			return std::unique_ptr<Sprite> ( new BatSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 76 ):
+			return std::unique_ptr<Sprite> ( new BirdSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 77 ):
+			return std::unique_ptr<Sprite> ( new BirdSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 78 ):
+			return std::unique_ptr<Sprite> ( new GhostSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 79 ):
+			return std::unique_ptr<Sprite> ( new GemmySprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 80 ):
+			return std::unique_ptr<Sprite> ( new FallingGemSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 81 ):
+			return std::unique_ptr<Sprite> ( new DownhillGemSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -410,7 +437,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 void SpriteSystem::reset( const Level& level )
 {
-	Sprite::resistance_x_ = Sprite::RESISTANCE_X_NORMAL;
+	Sprite::resistance_x_ = level.currentMap().windStrength();
 
 	if ( level.currentMap().moon_gravity_ )
 	{

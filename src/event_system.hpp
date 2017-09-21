@@ -35,6 +35,9 @@ class EventSystem
 
 		bool waterShouldMove() const;
 		bool waterShouldStop() const;
+	
+		void lightSwitchTurnOn();
+		bool testLightSwitch();
 
 		int misc_;
 		int move_water_;

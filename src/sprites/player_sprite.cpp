@@ -41,7 +41,7 @@ PlayerSprite::PlayerSprite
 		top_speed, 
 		jump_start_speed,
 		jump_top_speed,
-		Direction::Horizontal::__NULL,
+		Direction::Horizontal::RIGHT,
 		Direction::Vertical::__NULL,
 		nullptr,
 		SpriteMovement::Type::GROUNDED,

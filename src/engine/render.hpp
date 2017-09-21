@@ -36,6 +36,7 @@ namespace Render
 		const Camera* = nullptr
 	);
 
+	void colorCanvas( int color, int alpha = 255 );
 	void colorCanvas();
 	void clearScreen();
 	void screenBorders();

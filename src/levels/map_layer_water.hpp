@@ -21,11 +21,11 @@ class MapLayerWater : public MapLayer
 	private:
 		static constexpr Uint8 ALPHA = 128;
 		static constexpr int COLOR = 4;
-		static constexpr int MOVE_SPEED = 500;
 
-		int y_;
-		const bool rising_;
 		AnimatedGraphics surface_;
 		Counter x_offset_;
 		TimerRepeat animation_speed_;
+		int move_speed_;
+		int y_;
+		const bool rising_;
 };

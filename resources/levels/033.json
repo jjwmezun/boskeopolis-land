@@ -19,11 +19,14 @@
 		}
 	],
 	
-	"entrance_x": 99,
-	"entrance_y": 48,
+	"entrance_x": 88,
+	"entrance_y": -32,
 
 	"goal":
 	{
 		"type": "avoid_money"
-	}
+	},
+	
+	"gem_challenge": 0,
+	"time_challenge": 70
 }

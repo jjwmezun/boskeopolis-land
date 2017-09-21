@@ -31,10 +31,10 @@
 					"type": "image",
 					"img": "train-track.png",
 					"width": 32,
-					"height": 20,
+					"height": 36,
 					"x_scroll": 0.0,
 					"y_scroll": 0.0,
-					"y_offset": 125,
+					"y_offset": 157,
 					"y_repeat": false,
 					"x_speed": -6400
 				},
@@ -246,7 +246,7 @@
 	],
 	
 	"entrance_x": 33,
-	"entrance_y": 7,
+	"entrance_y": 10,
 	"camera_x": 480,
 	
 	"goal":

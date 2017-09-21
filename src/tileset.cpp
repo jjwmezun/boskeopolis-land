@@ -16,6 +16,7 @@
 #include "block_component_hurt.hpp"
 #include "block_component_key.hpp"
 #include "block_component_kill.hpp"
+#include "block_component_light_switch.hpp"
 #include "block_component_lose.hpp"
 #include "block_component_low_slope_left.hpp"
 #include "block_component_low_slope_right.hpp"
@@ -36,6 +37,7 @@
 #include "block_condition_collide_bottom.hpp"
 #include "block_condition_collide_left.hpp"
 #include "block_condition_collide_right.hpp"
+#include "block_condition_collide_specific.hpp"
 #include "block_condition_collide_top.hpp"
 #include "block_condition_enemy.hpp"
 #include "block_condition_fade_cloud.hpp"
@@ -500,6 +502,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentDoor> () );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentLightSwitch> () );
+					}
 
 				}
 
@@ -559,6 +565,32 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "fade_cloud" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionFadeCloud> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "collide_specific" ) )
+							{
+								int left = 0;
+								int right = 0;
+								int top = 0;
+								int bottom = 0;
+								
+								if ( cond.HasMember( "left" ) && cond[ "left" ].IsInt() )
+								{
+									left = cond[ "left" ].GetInt();
+								}
+								if ( cond.HasMember( "right" ) && cond[ "right" ].IsInt() )
+								{
+									right = cond[ "right" ].GetInt();
+								}
+								if ( cond.HasMember( "top" ) && cond[ "top" ].IsInt() )
+								{
+									top = cond[ "top" ].GetInt();
+								}
+								if ( cond.HasMember( "bottom" ) && cond[ "bottom" ].IsInt() )
+								{
+									bottom = cond[ "bottom" ].GetInt();
+								}
+
+								this_condition.emplace_back( std::make_unique<BlockConditionCollideSpecific> ( left, right, top, bottom ) );
 							}
 
 						}

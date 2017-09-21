@@ -325,16 +325,17 @@ namespace Render
 		SDL_RenderPresent( renderer_ );
 	};
 
-	void colorCanvas()
+	void colorCanvas( int color, int alpha )
 	{
 		assert( palette_ );
-
-		const Uint8 r = palette_->bgR();
-		const Uint8 g = palette_->bgG();
-		const Uint8 b = palette_->bgB();
-
-		SDL_SetRenderDrawColor( renderer_, r, g, b, FULL_OPACITY );
+		const auto& color_obj = palette_->color( color );
+		SDL_SetRenderDrawColor( renderer_, color_obj.r, color_obj.g, color_obj.b, alpha );
 		SDL_RenderFillRect( renderer_, &screen_ );
+	};
+	
+	void colorCanvas()
+	{
+		colorCanvas( palette_->bgN() );
 	};
 
 	void clearScreen()

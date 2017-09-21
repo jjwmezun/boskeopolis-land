@@ -18,7 +18,7 @@
 					"type": "image",
 					"img": "skyline.png",
 					"width": 264,
-					"height": 160,
+					"height": 224,
 					"x_scroll": 0.5
 				}
 			],
@@ -28,7 +28,7 @@
 					"map": 1,
 					"entrance_x": 5,
 					"entrance_y": 0,
-					"location": [ 0, 20, 0, 16 ]
+					"location": [ 0, 25, 0, 16 ]
 				}
 			]
 		},
@@ -76,7 +76,7 @@
 					"type": "image",
 					"img": "skyline.png",
 					"width": 264,
-					"height": 160,
+					"height": 224,
 					"x_scroll": 0.5,
 					"y_scroll": 0.25
 				}
@@ -84,8 +84,8 @@
 		}
 	],
 	
-	"entrance_x": 5,
-	"entrance_y": 5,
+	"entrance_x": 6,
+	"entrance_y": 7,
 	
 	"gem_challenge": 52500,
 	"time_challenge": 50

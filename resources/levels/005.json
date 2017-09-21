@@ -14,7 +14,8 @@
 					"height": 144,
 					"x_scroll": 0.0,
 					"y_scroll": 0.0,
-					"y_offset": -144
+					"y_offset": 56,
+					"y_repeat": false
 				},
 				{
 					"type": "image",

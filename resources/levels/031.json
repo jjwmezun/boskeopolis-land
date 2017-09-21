@@ -16,7 +16,7 @@
 					"type": "image",
 					"img": "skyline.png",
 					"width": 264,
-					"height": 160,
+					"height": 224,
 					"x_scroll": 0.25,
 					"y_scroll": 0.0
 				}

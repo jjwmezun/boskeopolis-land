@@ -4,6 +4,11 @@
 #include "sprite.hpp"
 #include "map_layer_water.hpp"
 
+#include <iostream>
+
+static constexpr int WATER_MOVE_MAX = 900;
+static constexpr int WATER_MOVE_MIN = 650;
+
 MapLayerWater::MapLayerWater( int y_blocks, bool rising )
 :
 	MapLayer(),
@@ -30,7 +35,8 @@ MapLayerWater::MapLayerWater( int y_blocks, bool rising )
 		ALPHA
 	),
 	x_offset_ ( -8, 0, -8, true ),
-	animation_speed_ ( 16 )
+	animation_speed_ ( 16 ),
+	move_speed_ ( 700 )
 {};
 
 void MapLayerWater::interact( Sprite& sprite, Health& health )
@@ -40,6 +46,12 @@ void MapLayerWater::interact( Sprite& sprite, Health& health )
 		if ( sprite.centerYSubPixels() > y_ )
 		{
 			health.submerge();
+		}
+
+		if ( rising_ )
+		{
+			const int extra_speed = Unit::SubPixelsToPixels( y_ - sprite.hit_box_.y );
+			move_speed_ = std::max( std::min( WATER_MOVE_MIN + extra_speed, WATER_MOVE_MAX ), WATER_MOVE_MIN );
 		}
 	}
 
@@ -79,17 +91,17 @@ void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Came
 
 	if ( rising_ )
 	{
-		y_ -= MOVE_SPEED;
+		y_ -= move_speed_;
 	}
 	else if ( events.waterShouldMove() )
 	{
 		if ( events.move_water_ < y_ )
 		{
-			y_ -= MOVE_SPEED;
+			y_ -= move_speed_;
 		}
 		else if ( events.move_water_ > y_ )
 		{
-			y_ += MOVE_SPEED;
+			y_ += move_speed_;
 		}
 	}
 

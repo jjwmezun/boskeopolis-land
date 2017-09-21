@@ -1,5 +1,6 @@
 #include "map_layer_constellation.hpp"
 #include "map_layer_image.hpp"
+#include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"
@@ -139,7 +140,6 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 
 		events.changePalette( currentMap().palette() );
 		blocks.changeTileset( currentMap().tileset() );
-		Sprite::resistance_x_ = currentMap().windStrength();
 
 		currentMap().setChanged();
 	}
@@ -501,6 +501,23 @@ Level Level::getLevel( int id )
 											.1
 										)
 									);
+								}
+								else if ( mezun::areStringsEqual( bgtype, "shade" ) )
+								{
+									Uint8 alpha = 255;
+
+									if ( bg.HasMember( "color" ) && bg[ "color" ].IsInt() )
+									{
+										if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
+										{
+											alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
+										}
+										
+										group.emplace_back
+										(
+											std::make_unique<MapLayerShade> ( bg[ "color" ].GetInt(), alpha )
+										);
+									}
 								}
 
 							}

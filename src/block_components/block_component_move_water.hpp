@@ -1,5 +1,4 @@
-#ifndef BLOCK_COMPONENT_MOVE_WATER_H
-#define BLOCK_COMPONENT_MOVE_WATER_H
+#pragma once
 
 #include "block_component.hpp"
 
@@ -10,6 +9,3 @@ class BlockComponentMoveWater : public BlockComponent
 		~BlockComponentMoveWater();
 		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health ) override;
 };
-
-#endif // BLOCK_COMPONENT_MOVE_WATER_H
-

@@ -231,3 +231,15 @@ bool EventSystem::waterShouldStop() const
 {
 	return move_water_ == current_water_;
 };
+
+void EventSystem::lightSwitchTurnOn()
+{
+	switch_ = true;
+};
+
+bool EventSystem::testLightSwitch()
+{
+	bool temp = switch_;
+	switch_ = false;
+	return temp;
+};

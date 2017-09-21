@@ -40,7 +40,24 @@ const Palette& Palette::operator= ( const Palette& p )
 
 const std::string& Palette::type() const { return type_; };
 
-int Palette::bgN() const { return bg_; };
+int Palette::bgN() const
+{
+	if ( bg_ >= COLOR_LIMIT )
+	{
+		if ( Main::nextFrame( 256, 8 ) )
+		{
+			return 1;
+		}
+		else
+		{
+			return 3;
+		}
+	}
+	else
+	{
+		return bg_;
+	}
+};
 
 void Palette::applyPalette( SDL_Surface* s ) const
 {
@@ -79,17 +96,7 @@ const sdl2::SDLColor& Palette::color( unsigned int n ) const
 
 const sdl2::SDLColor& Palette::bg() const
 {
-	if ( bg_ >= COLOR_LIMIT )
-	{
-		if ( Main::nextFrame( 256, 8 ) )
-			return color( 1 );
-		else
-			return color( 3 );
-	}
-	else
-	{
-		return color( bg_ );
-	}
+	return color( bgN() );
 };
 
 Uint8 Palette::bgR() const { return bg().r; };

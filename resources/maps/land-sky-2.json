@@ -26,7 +26,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "bg_color":3,
+     "bg_color":4,
      "camera_priority_x":"CENTER",
      "palette":"Pearl Pink",
      "scroll_loop":true,

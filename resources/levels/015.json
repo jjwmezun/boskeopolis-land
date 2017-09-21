@@ -11,7 +11,11 @@
 					"type": "image",
 					"img": "sky_gradient.png",
 					"width": 32,
-					"height": 144
+					"height": 144,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_offset": 56,
+					"y_repeat": false
 				},
 				{
 					"type": "image",

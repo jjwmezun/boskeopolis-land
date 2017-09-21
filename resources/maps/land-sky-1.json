@@ -27,11 +27,13 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "bg_color":4,
      "palette":"Baby Blue",
      "tileset":"sky"
     },
  "propertytypes":
     {
+     "bg_color":"int",
      "palette":"string",
      "tileset":"string"
     },

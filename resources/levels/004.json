@@ -20,6 +20,7 @@
 					"img": "canyon_2.png",
 					"width": 256,
 					"height": 111,
+					"y_offset": 64,
 					"x_scroll": 0.5,
 					"y_scroll": 0.0,
 					"y_offset": 32,
