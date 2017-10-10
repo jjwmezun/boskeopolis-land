@@ -36,7 +36,7 @@ class PlayerSprite : public Sprite
 
 	
 		void deathAction( Camera& camera );
-		void actions( const BlockSystem& blocks );
+		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		std::unique_ptr<InputComponent> input_;
 

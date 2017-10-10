@@ -1,7 +1,8 @@
 {
 	"graphics":
 	{
-		"type": "sprite",
+		"type": "fading",
+		"speed": 48,
 		"x": 6,
 		"y": 5,
 		"flip_x": true

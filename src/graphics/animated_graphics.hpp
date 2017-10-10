@@ -25,7 +25,7 @@ class AnimatedGraphics : public SpriteGraphics
 			Uint8 alpha = 255
 		);
 		~AnimatedGraphics();
-		void update();
+		void update() override;
 
 	private:
 		std::vector<std::pair<int, int>> frames_;

@@ -24,7 +24,7 @@ class SpriteSystem
 			SHOOTER
 		};
 
-		static HeroType heroType( std::string property );
+		static HeroType heroType( const std::string& property );
 
 		enum class SpawnSprite
 		{

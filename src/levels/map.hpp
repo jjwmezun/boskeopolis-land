@@ -75,6 +75,7 @@ class Map
 		int scrollLoopWidthPixels() const;
 
 		const bool moon_gravity_;
+		const bool show_on_off_;
 
 
 	private:
@@ -127,7 +128,8 @@ class Map
 			bool blocks_work_offscreen,
 			bool loop_sides,
 			int wind_strength,
-			bool moon_gravity
+			bool moon_gravity,
+			bool show_on_off
 		);
 		int scrollLoopWidthBlocks() const;
 		int scrollLoopWidthBlocks( int loop ) const;

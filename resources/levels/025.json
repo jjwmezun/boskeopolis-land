@@ -1,0 +1,46 @@
+{
+	"name": "Hoot Chutes",
+
+	"maps":
+	[
+		{
+			"slug": "sky-3",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"width": 256,
+					"height": 256
+				},
+				{
+					"type": "image",
+					"img": "dim_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": 40,
+					"y_speed": 40,
+					"alpha": 128
+				},
+				{
+					"type": "image",
+					"img": "bright_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25,
+					"x_speed": -80,
+					"y_speed": -80,
+					"alpha": 64
+				}
+			]
+		}
+	],
+	
+	"entrance_x": 63,
+	"entrance_y": -32,
+	
+	"gem_challenge": 16950,
+	"time_challenge": 45
+}

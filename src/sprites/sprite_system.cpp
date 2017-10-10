@@ -627,7 +627,7 @@ Sprite& SpriteSystem::hero()
 	return *hero_;
 };
 
-SpriteSystem::HeroType SpriteSystem::heroType( std::string property )
+SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 {
 	if ( property.compare( "CART" ) == 0 )
 	{

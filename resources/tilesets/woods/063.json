@@ -1,0 +1,11 @@
+{
+	"graphics":
+	{
+		"type": "fading",
+		"speed": 48,
+		"starts_on": false,
+		"x": 6,
+		"y": 5,
+		"flip_x": true
+	}
+}

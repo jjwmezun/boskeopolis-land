@@ -3,6 +3,7 @@
 class Camera;
 class EventSystem;
 class Health;
+class Map;
 class Sprite;
 
 #include "inventory_level_health.hpp"
@@ -18,7 +19,7 @@ class InventoryLevel
 		InventoryLevel();
 
 		void update( EventSystem& events, const Health& health );
-		void render( const EventSystem& events, const Sprite& hero, const Camera& camera );
+		void render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap );
 
 		bool show_mcguffins_;
 		int kill_counter_;

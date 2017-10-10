@@ -50,7 +50,7 @@
 
         private:
 			static constexpr int COLOR_LIMIT = 7;
-			static std::unordered_map<std::string, std::array<sdl2::SDLColor, COLOR_LIMIT>> palettes_	;
+			static std::unordered_map<std::string, std::array<sdl2::SDLColor, COLOR_LIMIT>> palettes_;
 			
 			std::string type_;
 			int bg_;

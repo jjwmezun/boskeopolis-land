@@ -1,7 +1,5 @@
 #pragma once
 
-class Block;
-
 #include "player_sprite.hpp"
 
 class ShooterPlayerSprite : public PlayerSprite
@@ -11,7 +9,7 @@ class ShooterPlayerSprite : public PlayerSprite
 		~ShooterPlayerSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void duck() override;
-		void unduck() override;
+		void unduck( const BlockSystem& blocks ) override;
 
 	
 		void deathAction( Camera& camera ) override;

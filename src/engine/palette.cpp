@@ -46,11 +46,11 @@ int Palette::bgN() const
 	{
 		if ( Main::nextFrame( 256, 8 ) )
 		{
-			return 1;
+			return bg_ % COLOR_LIMIT;
 		}
 		else
 		{
-			return 3;
+			return floor( bg_ / COLOR_LIMIT );
 		}
 	}
 	else

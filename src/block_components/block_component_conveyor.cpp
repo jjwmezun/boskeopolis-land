@@ -1,7 +1,7 @@
 #include "block_component_conveyor.hpp"
+#include "collision.hpp"
+#include "event_system.hpp"
 #include "sprite.hpp"
-
-#include <iostream>
 
 BlockComponentConveyor::BlockComponentConveyor( Direction::Horizontal direction, int speed )
 :
@@ -14,6 +14,18 @@ void BlockComponentConveyor::interact( Collision& collision, Sprite& sprite, Blo
 {
 	if ( ( x_effect_ < 0 && !sprite.collide_left_ ) || ( x_effect_ > 0 && !sprite.collide_right_ ) )
 	{
-		sprite.addToX( x_effect_ );
+		if ( events.switchOn() )
+		{
+			sprite.addToX( -x_effect_ );
+		}
+		else
+		{
+			sprite.addToX( x_effect_ );
+		}
+	}
+
+	if ( collision.collideBottom() )
+	{
+		events.on_conveyor_belt_ = true;
 	}
 };

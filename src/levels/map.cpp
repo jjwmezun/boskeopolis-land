@@ -135,6 +135,7 @@ Map Map::mapFromPath
 		bool water_rising = false;
 		int wind_strength = 0;
 		bool moon_gravity = false;
+		bool show_on_off = false;
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -294,6 +295,14 @@ Map Map::mapFromPath
 						moon_gravity = prop.value.GetBool();
 					}
 				}
+
+				else if ( mezun::areStringsEqual( name, "show_on_off" ) )
+				{
+					if ( prop.value.IsBool() )
+					{
+						show_on_off = prop.value.GetBool();
+					}
+				}
 			}
 		}
 
@@ -330,7 +339,8 @@ Map Map::mapFromPath
 			blocks_work_offscreen,
 			loop_sides,
 			wind_strength,
-			moon_gravity
+			moon_gravity,
+			show_on_off
 		);
 };
 
@@ -357,7 +367,8 @@ Map::Map
 	bool blocks_work_offscreen,
 	bool loop_sides,
 	int wind_strength,
-	bool moon_gravity
+	bool moon_gravity,
+	bool show_on_off
 )
 :
 	blocks_ ( blocks ),
@@ -381,7 +392,8 @@ Map::Map
 	blocks_work_offscreen_ ( blocks_work_offscreen ),
 	loop_sides_ ( loop_sides ),
 	wind_strength_ ( wind_strength ),
-	moon_gravity_ ( moon_gravity )
+	moon_gravity_ ( moon_gravity ),
+	show_on_off_ ( show_on_off )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -420,7 +432,8 @@ Map::Map( Map&& m ) noexcept
 	loop_sides_ ( m.loop_sides_ ),
 	wind_strength_ ( m.wind_strength_ ),
 	moon_gravity_ ( m.moon_gravity_ ),
-	changed_ ( m.changed_ )
+	changed_ ( m.changed_ ),
+	show_on_off_ ( m.show_on_off_ )
 {};
 
 Map::Map( const Map& c )
@@ -448,7 +461,8 @@ Map::Map( const Map& c )
 	loop_sides_ ( c.loop_sides_ ),
 	wind_strength_ ( c.wind_strength_ ),
 	moon_gravity_ ( c.moon_gravity_ ),
-	changed_ ( c.changed_ )
+	changed_ ( c.changed_ ),
+	show_on_off_ ( c.show_on_off_ )
 {};
 
 int Map::widthBlocks() const

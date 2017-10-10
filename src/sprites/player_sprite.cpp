@@ -76,7 +76,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 		Inventory::clearBops();
 	}
 
-	actions( blocks );
+	actions( blocks, events );
 
 	if ( input_->cLeft() )
 	{
@@ -143,7 +143,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 	camera.adjust( *this, lvmap );
 };
 
-void PlayerSprite::actions( const BlockSystem& blocks )
+void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 {
 	if ( input_->action2() )
 	{
@@ -205,7 +205,7 @@ void PlayerSprite::actions( const BlockSystem& blocks )
 	
 	const sdl2::SDLRect just_above = { hit_box_.x, hit_box_.y - 16000, hit_box_.w, 20000 };
 
-	if ( input_->action1() && !( isDucking() && blocks.blocksInTheWay( just_above, BlockComponent::Type::SOLID ) ) )
+	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocks.blocksInTheWay( just_above, BlockComponent::Type::SOLID ) ) )
 	{
 		jump();
 		
@@ -239,6 +239,7 @@ void PlayerSprite::actions( const BlockSystem& blocks )
 		}
 		jump_lock_ = false;
 	}
+	events.on_conveyor_belt_ = false;
 
 	if ( input_->up() )
 	{

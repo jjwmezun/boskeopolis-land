@@ -200,7 +200,7 @@ void ShooterPlayerSprite::duck()
 	}
 };
 
-void ShooterPlayerSprite::unduck()
+void ShooterPlayerSprite::unduck( const BlockSystem& blocks )
 {
 	// Hacky way to keep player from falling through ground after gaining height from unducking.
 	if ( isDucking() )

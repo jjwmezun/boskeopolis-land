@@ -31,7 +31,6 @@
 #include "block_component_steep_slope_right.hpp"
 #include "block_component_swimmable.hpp"
 #include "block_component_switch.hpp"
-#include "block_component_switch_flip.hpp"
 #include "block_component_warp.hpp"
 #include "block_condition_collide_any.hpp"
 #include "block_condition_collide_bottom.hpp"
@@ -41,10 +40,12 @@
 #include "block_condition_collide_top.hpp"
 #include "block_condition_enemy.hpp"
 #include "block_condition_fade_cloud.hpp"
+#include "block_condition_fade_out.hpp"
 #include "block_condition_hero.hpp"
 #include "block_condition_key.hpp"
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_rival.hpp"
+#include "fading_graphics.hpp"
 #include <fstream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
@@ -275,6 +276,50 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 						);
 					}
 				}
+				if ( mezun::areStringsEqual( g[ "type" ].GetString(), "fading" ) )
+				{
+					int fading_speed = 8;
+					bool fading_starts_on = true;
+					int x = 0;
+					int y = 0;
+
+					if ( g.HasMember( "x" ) && g[ "x" ].IsInt() )
+					{
+						x = g[ "x" ].GetInt();
+					}
+
+					if ( g.HasMember( "y" ) && g[ "y" ].IsInt() )
+					{
+						y = g[ "y" ].GetInt();
+					}
+
+					if ( g.HasMember( "speed" ) && g[ "speed" ].IsInt() )
+					{
+						fading_speed = g[ "speed" ].GetInt();
+					}
+
+					if ( g.HasMember( "starts_on" ) && g[ "starts_on" ].IsBool() )
+					{
+						fading_starts_on = g[ "starts_on" ].GetBool();
+					}
+
+					graphics = std::make_unique<FadingGraphics>
+					(
+						std::forward<std::string> ( texture ),
+						Unit::BlocksToPixels( x ),
+						Unit::BlocksToPixels( y ),
+						fading_starts_on,
+						fading_speed,
+						flip_x,
+						flip_y,
+						rotation,
+						priority,
+						0,
+						0,
+						0,
+						0
+					);
+				}
 			}
 
 		}
@@ -502,6 +547,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentDoor> () );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "switch" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSwitch> () );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentLightSwitch> () );
@@ -561,6 +610,15 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "rival" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionRival> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "fade_out" ) )
+							{
+								int threshold = 0;
+								if ( cond.HasMember( "threshold" ) && cond[ "threshold" ].IsInt() )
+								{
+									threshold = cond[ "threshold" ].GetInt();
+								}
+								this_condition.emplace_back( std::make_unique<BlockConditionFadeOut> ( threshold ) );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "fade_cloud" ) )
 							{

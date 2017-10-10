@@ -9,7 +9,7 @@ static constexpr int MOVE_DELAY = 16;
 
 BirdSprite::BirdSprite( int x, int y, Direction::Horizontal dir )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bird.png" ), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 4000, 0, 0, dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bird.png" ), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 4000, 0, 0, dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false ),
 	wait_limit_counter_ ( 0 ),
 	move_delay_counter_ ( 0 )
 {};
@@ -74,6 +74,12 @@ void BirdSprite::reset()
 	resetPosition();
 	vx_ = 0;
 	acceleration_x_ = 0;
+	acceleration_y_ = 0;
+	vy_ = 0;
 	wait_limit_counter_ = 0;
 	move_delay_counter_ = 0;
+	is_dead_ = false;
+	death_finished_ = false;
+	changeMovement( SpriteMovement::Type::FLOATING );
+	sprite_interact_ = true;
 };

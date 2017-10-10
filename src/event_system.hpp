@@ -43,6 +43,7 @@ class EventSystem
 		int move_water_;
 		int current_water_;
 		bool in_front_of_door_;
+		bool on_conveyor_belt_;
 
 
    private:

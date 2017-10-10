@@ -1,7 +1,8 @@
 {
 	"graphics":
 	{
-		"type": "sprite",
+		"type": "fading",
+		"speed": 48,
 		"x": 7,
 		"y": 6,
 		"flip_x": true
@@ -15,7 +16,8 @@
 			},
 			"conditions":
 			[
-				{ "type": "collide_bottom" }
+				{ "type": "collide_bottom" },
+				{ "type": "fade_out", "threshold": 80 }
 			]
 		}
 	]

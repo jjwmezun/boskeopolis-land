@@ -3,6 +3,7 @@
 #include "event_system.hpp"
 #include "inventory.hpp"
 #include "inventory_level.hpp"
+#include "map.hpp"
 #include "render.hpp"
 #include "sprite.hpp"
 
@@ -32,7 +33,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	ticker_.updateTicker();
 };
 
-void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera )
+void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
 {
 	// BG
 	Render::renderRect( BG_DEST, 1 );
@@ -77,16 +78,18 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 			key_gfx_.render( KEY_ICON_DEST, nullptr );
 		}
 
-		/*
 		// SWITCH
-		if ( events.switchOn() )
+		if ( lvmap.show_on_off_ )
 		{
-			switch_on_.render();
+			if ( events.switchOn() )
+			{
+				switch_on_.render();
+			}
+			else
+			{
+				switch_off_.render();
+			}
 		}
-		else
-		{
-			switch_off_.render();
-		}*/
 
 		// McGuffins
 		if ( show_mcguffins_ )
