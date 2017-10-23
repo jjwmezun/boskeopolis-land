@@ -2,12 +2,12 @@
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
 
-static constexpr int VERTICAL_DIST_LIMIT_BLOCKS = 3;
+static constexpr int VERTICAL_DIST_LIMIT_BLOCKS = 1;
 static constexpr int VERTICAL_DIST_LIMIT_SUBPIXELS = Unit::BlocksToSubPixels( VERTICAL_DIST_LIMIT_BLOCKS );
 
 GhostSprite::GhostSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ghost.png" ), x, y, 24, 24, { SpriteType::ENEMY }, 500, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ghost.png", 0, 0, true ), x, y, 24, 24, { SpriteType::ENEMY }, 2500, 2500, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false )
 {
 	graphics_->priority_ = true;
 };

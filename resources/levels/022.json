@@ -8,9 +8,9 @@
 		}
 	],
 
-	"entrance_x": 2,
-	"entrance_y": 11,
+	"entrance_x": 80,
+	"entrance_y": 19,
 
-	"gem_challenge": 7850,
-	"time_challenge": 20
+	"gem_challenge": 5800,
+	"time_challenge": 22
 }
