@@ -25,8 +25,8 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 
 		const int first_x = std::max( ( int )( floor( camera.x() / Unit::PIXELS_PER_BLOCK ) - CAMERA_PADDING ), 0 );
 		const int first_y = std::max( ( int )( floor( camera.y() / Unit::PIXELS_PER_BLOCK ) - CAMERA_PADDING ), 0 );
-		const int last_x = std::min( ( int )( ceil( camera.right() / Unit::PIXELS_PER_BLOCK ) + CAMERA_PADDING ), width_ - 1 );
-		const int last_y = std::min( ( int )( ceil( camera.bottom() / Unit::PIXELS_PER_BLOCK ) + CAMERA_PADDING ), height_ - 1 );
+		const int last_x = std::min( ( int )( ceil( camera.right() / Unit::PIXELS_PER_BLOCK ) + CAMERA_PADDING ), width_ );
+		const int last_y = std::min( ( int )( ceil( camera.bottom() / Unit::PIXELS_PER_BLOCK ) + CAMERA_PADDING ), height_ );
 
 		for ( int y = first_y; y < last_y; ++y )
 		{

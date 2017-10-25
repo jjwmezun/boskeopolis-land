@@ -77,6 +77,7 @@
 #include "sprite_component_up_and_down.hpp"
 #include "sprite_system.hpp"
 #include "stronger_cowpoker_sprite.hpp"
+#include "tall_tombstone_sprite.hpp"
 #include "underground_subway_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
@@ -341,6 +342,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 81 ):
 			return std::unique_ptr<Sprite> ( new DownhillGemSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 82 ):
+			return std::unique_ptr<Sprite> ( new TallTombstoneSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

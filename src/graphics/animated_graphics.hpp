@@ -4,6 +4,7 @@
 #include "sprite_graphics.hpp"
 #include "timer_repeat.hpp"
 #include <vector>
+#include "unit.hpp"
 #include <utility>
 
 class AnimatedGraphics : public SpriteGraphics
@@ -21,7 +22,7 @@ class AnimatedGraphics : public SpriteGraphics
 			int y_adjustment = 0,
 			int w_adjustment = 0,
 			int h_adjustment = 0,
-			int animation_speed = 8,
+			int animation_speed = Unit::DEFAULT_ANIMATION_SPEED,
 			Uint8 alpha = 255
 		);
 		~AnimatedGraphics();
