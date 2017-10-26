@@ -312,4 +312,9 @@ class Sprite : public Object
 		static const GroundedSpriteMovement grounded_;
 		static const FlutteringSpriteMovement fluttering_;
 		static const SwimmingSpriteMovement swimming_;
+
+		sdl2::SDLRect justAbove() const;
+		bool blocksJustAbove( const BlockSystem& blocks ) const;
+		sdl2::SDLRect justLeft() const;
+		bool blocksJustLeft( const BlockSystem& blocks ) const;
 };

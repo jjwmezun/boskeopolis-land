@@ -5,7 +5,7 @@ BlockComponentKill::BlockComponentKill() {};
 
 BlockComponentKill::~BlockComponentKill() {};
 
-void BlockComponentKill::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
+void BlockComponentKill::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	sprite.killNoAnimation();
 };

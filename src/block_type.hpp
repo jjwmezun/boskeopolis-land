@@ -2,6 +2,7 @@
 
 class Block;
 class BlockCondition;
+class BlockSystem;
 class Collision;
 class EventSystem;
 class Health;
@@ -34,7 +35,7 @@ class BlockType
 		const BlockType&& operator= ( BlockType&& ) = delete;
 
 		void update( EventSystem& events );
-		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health );
+		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks );
 		void render( const Camera& camera, const Block& block, bool priority ) const;
 		void renderAnyPriority( const Camera& camera, const Block& block ) const;
 

@@ -2,6 +2,7 @@
 #define BLOCK_COMPONENT_H
 
 class Block;
+class BlockSystem;
 class BlockType;
 class Camera;
 class Collision;
@@ -22,7 +23,7 @@ class BlockComponent
 
 		BlockComponent( Type type = Type::NOTYPE );
 		virtual ~BlockComponent();
-		virtual void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health ) = 0;
+		virtual void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) = 0;
 		virtual void update( EventSystem& events, BlockType& type );
 		Type type() const;
 

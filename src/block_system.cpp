@@ -40,7 +40,7 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 {
 	for ( auto& b : blocks_ )
 	{
-		b.interact( sprite, level, events, camera, health );
+		b.interact( sprite, level, events, camera, health, *this );
 	}
 };
 
@@ -118,19 +118,16 @@ bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type t
 	{
 		if
 		(
-			b.rightSubPixels() > r.x &&
+			b.hasComponentType( type )    &&
+			b.rightSubPixels() > r.x      &&
 			b.leftSubPixels() < r.right() &&
 			b.topSubPixels() < r.bottom() &&
 			b.bottomSubPixels() > r.y
 		)
 		{
-			if ( b.hasComponentType( type ) )
-			{
-				return true;
-			}
+			return true;
 		}
 	}
-
 	return false;
 };
 

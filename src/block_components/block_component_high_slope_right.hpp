@@ -8,7 +8,7 @@ class BlockComponentHighSlopeRight : public BlockComponent
 	public:
 		BlockComponentHighSlopeRight();
 		~BlockComponentHighSlopeRight();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 };
 
 #endif // BLOCK_COMPONENT_HIGH_SLOPE_RIGHT_H

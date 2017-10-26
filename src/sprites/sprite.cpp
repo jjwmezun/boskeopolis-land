@@ -1,4 +1,5 @@
 #include "block.hpp"
+#include "block_system.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "health.hpp"
@@ -803,4 +804,24 @@ int Sprite::xPrevPixels() const
 int Sprite::yPrevPixels() const
 {
 	return Unit::SubPixelsToPixels( y_prev_ );
+};
+
+sdl2::SDLRect Sprite::justAbove() const
+{
+	return { hit_box_.x + 3000, hit_box_.y - 16000, hit_box_.w - 6000, 16000 };
+};
+
+bool Sprite::blocksJustAbove( const BlockSystem& blocks ) const
+{
+	return blocks.blocksInTheWay( justAbove(), BlockComponent::Type::SOLID );
+};
+
+sdl2::SDLRect Sprite::justLeft() const
+{
+	return { hit_box_.x - 16000, hit_box_.y + 3000, 16000, hit_box_.h - 6000 };
+};
+
+bool Sprite::blocksJustLeft( const BlockSystem& blocks ) const
+{
+	return blocks.blocksInTheWay( justLeft(), BlockComponent::Type::SOLID );
 };

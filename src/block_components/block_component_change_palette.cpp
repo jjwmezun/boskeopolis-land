@@ -6,7 +6,7 @@ BlockComponentChangePalette::BlockComponentChangePalette( const Palette& palette
 
 BlockComponentChangePalette::~BlockComponentChangePalette() {};
 
-void BlockComponentChangePalette::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
+void BlockComponentChangePalette::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	events.changePalette( palette_ );
 };

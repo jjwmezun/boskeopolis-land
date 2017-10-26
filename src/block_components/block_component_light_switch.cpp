@@ -5,7 +5,7 @@ BlockComponentLightSwitch::BlockComponentLightSwitch() {};
 
 BlockComponentLightSwitch::~BlockComponentLightSwitch() {};
 
-void BlockComponentLightSwitch::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
+void BlockComponentLightSwitch::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	events.lightSwitchTurnOn();
 };

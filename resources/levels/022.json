@@ -40,9 +40,9 @@
 		}
 	],
 
-	"entrance_x": 20,
-	"entrance_y": 16,
+	"entrance_x": 80,
+	"entrance_y": 19,
 
-	"gem_challenge": 5800,
+	"gem_challenge": 6000,
 	"time_challenge": 22
 }

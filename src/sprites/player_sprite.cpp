@@ -202,10 +202,7 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 		top_speed_ = top_speed_run_;
 	}
 
-	
-	const sdl2::SDLRect just_above = { hit_box_.x, hit_box_.y - 16000, hit_box_.w, 20000 };
-
-	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocks.blocksInTheWay( just_above, BlockComponent::Type::SOLID ) ) )
+	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocksJustAbove( blocks ) ) )
 	{
 		jump();
 		
@@ -380,9 +377,7 @@ void PlayerSprite::duck()
 
 void PlayerSprite::unduck( const BlockSystem& blocks )
 {
-	const sdl2::SDLRect just_above = { hit_box_.x, hit_box_.y - 16000, hit_box_.w, 20000 };
-
-	if ( !blocks.blocksInTheWay( just_above, BlockComponent::Type::SOLID ) )
+	if ( !blocksJustAbove( blocks ) )
 	{
 		// Hacky way to keep player from falling through ground after gaining height from unducking.
 		if ( isDucking() )

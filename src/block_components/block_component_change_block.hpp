@@ -8,7 +8,7 @@ class BlockComponentChangeBlock : public BlockComponent
 	public:
 		BlockComponentChangeBlock( int new_block );
 		~BlockComponentChangeBlock();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& eventsLevel, Camera& camera, Health& health ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 
 	private:
 		int new_block_;

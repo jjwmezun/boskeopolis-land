@@ -1,5 +1,6 @@
 #pragma once
 
+class BlockSystem;
 class BlockType;
 class Health;
 class Map;
@@ -23,7 +24,7 @@ class Block : public Object
 
 		void render( const Camera& camera, bool priority = false ) const;
 		void renderAnyPriority( const Camera& camera ) const;
-		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health );
+		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks );
 		int location() const;
 		int typeID() const;
 		bool hasType() const;

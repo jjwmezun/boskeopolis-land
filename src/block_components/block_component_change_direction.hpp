@@ -9,7 +9,7 @@ class BlockComponentChangeDirection : public BlockComponent
 	public:
 		BlockComponentChangeDirection( Direction::Simple direction );
 		~BlockComponentChangeDirection();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health ) override;
+		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 
 	private:
 		Direction::Simple direction_;

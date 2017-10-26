@@ -6,7 +6,7 @@ BlockComponentSink::BlockComponentSink() {};
 
 BlockComponentSink::~BlockComponentSink() {};
 
-void BlockComponentSink::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health )
+void BlockComponentSink::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {	
 	sprite.fullStopY();
 	sprite.addToY( 100 );
