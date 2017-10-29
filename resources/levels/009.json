@@ -20,6 +20,6 @@
 	"entrance_x": 18,
 	"entrance_y": 31,
 
-	"gem_challenge": 0,
-	"time_challenge": 0
+	"gem_challenge": 31000,
+	"time_challenge": 17
 }

@@ -78,7 +78,7 @@ void BlockType::update( EventSystem& events )
 
 	if ( graphics_ )
 	{
-		graphics_->update();
+		graphics_->update( events );
 	}
 
 };

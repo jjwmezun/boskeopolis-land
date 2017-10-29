@@ -1,6 +1,7 @@
 #pragma once
 
 class Camera;
+class EventSystem;
 class Sprite;
 
 #include "render.hpp"
@@ -38,8 +39,9 @@ class SpriteGraphics
 		double rotation_;
 
 		virtual ~SpriteGraphics();
-		virtual void update( Sprite& sprite );
 		virtual void update();
+		virtual void update( Sprite& sprite );
+		virtual void update( const EventSystem& events );
 		virtual void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const;
 		void renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr ) const;
 		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;

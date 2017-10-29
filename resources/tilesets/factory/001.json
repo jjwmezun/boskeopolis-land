@@ -1,14 +1,29 @@
 {
 	"graphics":
 	{
-		"type": "animated",
-		"frames":
-		[
-			{ "x": 1, "y": 0 },
-			{ "x": 1, "y": 1 },
-			{ "x": 1, "y": 2 },
-			{ "x": 1, "y": 3 }
-		]
+		"type": "switch",
+		"off":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 1, "y": 0 },
+				{ "x": 1, "y": 1 },
+				{ "x": 1, "y": 2 },
+				{ "x": 1, "y": 3 }
+			]
+		},
+		"on":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 1, "y": 3 },
+				{ "x": 1, "y": 2 },
+				{ "x": 1, "y": 1 },
+				{ "x": 1, "y": 0 }
+			]
+		}
 	},
 	"behavior":
 	[

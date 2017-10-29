@@ -47,8 +47,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 	* Think o' clever things to do with heat mechanic.
 * ¡Precipitous!
 	* Get round to making this, since I already made it before & it shouldn't take any effort.
-* The Minus Touch
-	* Finish map.
 * Hoot Chutes
 	* Finish map.
 	* Draw owl.

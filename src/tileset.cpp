@@ -1,4 +1,3 @@
-#include "animated_graphics.hpp"
 #include "block_component_bouncy.hpp"
 #include "block_component_change_block.hpp"
 #include "block_component_change_direction.hpp"
@@ -45,13 +44,12 @@
 #include "block_condition_key.hpp"
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_rival.hpp"
-#include "fading_graphics.hpp"
 #include <fstream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_exceptions.hpp"
 #include "rapidjson/istreamwrapper.h"
-#include "sprite_graphics.hpp"
+#include "switch_graphics.hpp"
 #include "tileset.hpp"
 
 Tileset::Tileset( std::string tileset )
@@ -152,176 +150,26 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 	=================================================================*/
 
 		std::unique_ptr<SpriteGraphics> graphics = nullptr;
-
-		std::string texture = "tilesets" + Main::pathDivider() + tileset + ".png";
+		const std::string texture = "tilesets" + Main::pathDivider() + tileset + ".png";
 
 		if ( block.HasMember( "graphics" ) && block[ "graphics" ].IsObject() )
 		{
-
 			auto g = block[ "graphics" ].GetObject();
 
-			bool flip_x = false;
-			bool flip_y = false;
-			double rotation = 0;
-			bool priority = false;
-			Uint8 alpha = 255;
-
-			if ( g.HasMember( "flip_x" ) && g[ "flip_x" ].IsBool() )
+			if ( g.HasMember( "type" ) && g[ "type" ].IsString() && strcmp( g[ "type" ].GetString(), "switch" ) == 0 )
 			{
-				flip_x = g[ "flip_x" ].GetBool();
-			}
+				assert( g.HasMember( "off" ) && g[ "off" ].IsObject() );
+				assert( g.HasMember( "on" )  && g[ "on" ].IsObject()  );
 
-			if ( g.HasMember( "flip_y" ) && g[ "flip_y" ].IsBool() )
+				std::unique_ptr<SpriteGraphics> off_gfx = getGraphics( g[ "off" ].GetObject(), texture );
+				std::unique_ptr<SpriteGraphics> on_gfx = getGraphics( g[ "on" ].GetObject(), texture );
+
+				graphics = std::make_unique<SwitchGraphics> ( std::move( off_gfx ), std::move( on_gfx ) );
+			}
+			else
 			{
-				flip_y = g[ "flip_y" ].GetBool();
+				graphics = getGraphics( g, texture );
 			}
-
-			if ( g.HasMember( "rotation" ) && g[ "rotation" ].IsInt() )
-			{
-				rotation = g[ "rotation" ].GetInt();
-			}
-
-			if ( g.HasMember( "priority" ) && g[ "priority" ].IsBool() )
-			{
-				priority = g[ "priority" ].GetBool();
-			}
-
-			if ( g.HasMember( "alpha" ) && g[ "alpha" ].IsInt() )
-			{
-				alpha = g[ "alpha" ].GetInt();
-			}
-
-
-			if ( g.HasMember( "type" ) && g[ "type" ].IsString() )
-			{
-				if ( mezun::areStringsEqual( g[ "type" ].GetString(), "sprite" ) )
-				{
-					int x = 0;
-					int y = 0;
-
-					if ( g.HasMember( "x" ) && g[ "x" ].IsInt() )
-					{
-						x = g[ "x" ].GetInt();
-					}
-
-					if ( g.HasMember( "y" ) && g[ "y" ].IsInt() )
-					{
-						y = g[ "y" ].GetInt();
-					}
-
-					graphics = std::make_unique<SpriteGraphics>
-					(
-						std::forward<std::string> ( texture ),
-						Unit::BlocksToPixels( x ),
-						Unit::BlocksToPixels( y ),
-						flip_x,
-						flip_y,
-						rotation,
-						priority,
-						0,
-						0,
-						0,
-						0,
-						alpha
-					);
-				}
-				else if ( mezun::areStringsEqual( g[ "type" ].GetString(), "animated" ) )
-				{
-					int animation_speed = 8;
-
-					if ( g.HasMember( "speed" ) && g[ "speed" ].IsInt() )
-					{
-						animation_speed = g[ "speed" ].GetInt();
-					}
-
-					if ( g.HasMember( "frames" ) && g[ "frames" ].IsArray() )
-					{
-						std::vector<std::pair<int, int>> frames;
-
-						for ( auto& fr : g[ "frames" ].GetArray() )
-						{
-							if ( fr.IsObject() )
-							{
-								auto f = fr.GetObject();
-								int x = 0;
-								int y = 0;
-
-								if ( f.HasMember( "x" ) && f[ "x" ].IsInt() )
-								{
-									x = Unit::BlocksToPixels( f[ "x" ].GetInt() );
-								}
-
-								if ( f.HasMember( "y" ) && f[ "y" ].IsInt() )
-								{
-									y = Unit::BlocksToPixels( f[ "y" ].GetInt() );
-								}
-
-								frames.emplace_back( std::make_pair ( x, y ) );
-							}
-						}
-
-						graphics = std::make_unique<AnimatedGraphics>
-						(
-							std::forward<std::string> ( texture ),
-							frames,
-							flip_x,
-							flip_y,
-							rotation,
-							priority,
-							0,
-							0,
-							0,
-							0,
-							animation_speed
-						);
-					}
-				}
-				if ( mezun::areStringsEqual( g[ "type" ].GetString(), "fading" ) )
-				{
-					int fading_speed = 8;
-					bool fading_starts_on = true;
-					int x = 0;
-					int y = 0;
-
-					if ( g.HasMember( "x" ) && g[ "x" ].IsInt() )
-					{
-						x = g[ "x" ].GetInt();
-					}
-
-					if ( g.HasMember( "y" ) && g[ "y" ].IsInt() )
-					{
-						y = g[ "y" ].GetInt();
-					}
-
-					if ( g.HasMember( "speed" ) && g[ "speed" ].IsInt() )
-					{
-						fading_speed = g[ "speed" ].GetInt();
-					}
-
-					if ( g.HasMember( "starts_on" ) && g[ "starts_on" ].IsBool() )
-					{
-						fading_starts_on = g[ "starts_on" ].GetBool();
-					}
-
-					graphics = std::make_unique<FadingGraphics>
-					(
-						std::forward<std::string> ( texture ),
-						Unit::BlocksToPixels( x ),
-						Unit::BlocksToPixels( y ),
-						fading_starts_on,
-						fading_speed,
-						flip_x,
-						flip_y,
-						rotation,
-						priority,
-						0,
-						0,
-						0,
-						0
-					);
-				}
-			}
-
 		}
 
 

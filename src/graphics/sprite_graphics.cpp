@@ -36,13 +36,16 @@ SpriteGraphics::SpriteGraphics
 
 SpriteGraphics::~SpriteGraphics() {};
 
+void SpriteGraphics::update() {};
+
 void SpriteGraphics::update( Sprite& sprite )
 {
 	update();
 };
 
-void SpriteGraphics::update()
+void SpriteGraphics::update( const EventSystem& events )
 {
+	update();
 };
 
 void SpriteGraphics::renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera ) const

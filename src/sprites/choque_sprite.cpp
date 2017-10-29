@@ -1,5 +1,6 @@
 #include "choque_sprite.hpp"
 #include "collision.hpp"
+#include "health.hpp"
 #include "sprite_graphics.hpp"
 
 ChoqueSprite::ChoqueSprite( int x, int y )
@@ -47,7 +48,10 @@ void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_col
 	
 	if ( their_collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
+		if ( !their_collision.collideTop() )
+		{
+			them.collideStopAny( their_collision );
+		}
 		
 		if ( their_collision.collideBottom() )
 		{
@@ -56,11 +60,12 @@ void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_col
 		
 		if
 		(
-			( their_collision.collideBottom() && them.collide_bottom_ ) ||
-			( their_collision.collideTop() && them.collide_top_ )
+			them.hasType( SpriteType::HERO ) &&
+			( ( their_collision.collideBottom() && them.collide_bottom_ ) ||
+			( their_collision.collideTop() && them.collide_top_ ) )
 		)
 		{
-			them.kill();
+			health.hurt();
 		}
 	}
 };

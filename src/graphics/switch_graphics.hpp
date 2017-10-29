@@ -1,20 +1,20 @@
 #pragma once
 
-class Camera;
-class Sprite;
-
-#include "render.hpp"
+#include "sprite_graphics.hpp"
 
 class SwitchGraphics : public SpriteGraphics
 {
 	public:
 		SwitchGraphics
 		(
-			std::unique_ptr<SpriteGraphics> gfx_on,
-			std::unique_ptr<SpriteGraphics> gfx_off
+			std::unique_ptr<SpriteGraphics> gfx_off,
+			std::unique_ptr<SpriteGraphics> gfx_on
 		);
+		void update( const EventSystem& events ) override;
+		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const override;
 
 	private:
-		std::unique_ptr<SpriteGraphics> gfx_on_;
 		std::unique_ptr<SpriteGraphics> gfx_off_;
+		std::unique_ptr<SpriteGraphics> gfx_on_;
+		SpriteGraphics* current_gfx_;
 };
