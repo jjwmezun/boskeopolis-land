@@ -4,7 +4,16 @@
 	"maps":
 	[
 		{
-			"slug": "factory-1"
+			"slug": "factory-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "factory-blocks.png",
+					"width": 48,
+					"height": 48
+				}
+			]
 		}
 	],
 

@@ -2,9 +2,8 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 5,
+		"x": 6,
 		"y": 3,
-		"alpha": 128,
-		"rotation": 270
+		"alpha": 128
 	}
 }
