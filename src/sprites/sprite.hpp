@@ -155,7 +155,7 @@ class Sprite : public Object
 		bool collidedAny() const;
 		bool collidedLeft() const;
 		bool collidedRight() const;
-		bool collideTopOnly( Collision& collision, Object& them ) const;
+		bool collideTopOnly( const Collision& collision, Object& them ) const;
 
 		bool interactsWithBlocks() const;
 		bool interactsWithSprites() const;
@@ -179,7 +179,7 @@ class Sprite : public Object
 		void bounceDownward( int overlap );
 
 		const Collision testCollision( const Object& them ) const;
-		void collideStopAny( Collision& collision );
+		void collideStopAny( const Collision& collision );
 		void collideStopXLeft( int overlap );
 		void collideStopXRight( int overlap );
 		void collideStopYBottom( int overlap );

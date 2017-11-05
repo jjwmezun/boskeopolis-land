@@ -11,7 +11,7 @@ BlockComponentConveyor::BlockComponentConveyor( Direction::Horizontal direction,
 
 BlockComponentConveyor::~BlockComponentConveyor() {};
 
-void BlockComponentConveyor::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentConveyor::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	int x_effect = x_effect_;
 	if ( events.switchOn() )

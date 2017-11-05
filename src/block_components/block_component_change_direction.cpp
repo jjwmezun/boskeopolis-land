@@ -8,7 +8,7 @@ BlockComponentChangeDirection::BlockComponentChangeDirection( Direction::Simple 
 
 BlockComponentChangeDirection::~BlockComponentChangeDirection() {};
 
-void BlockComponentChangeDirection::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentChangeDirection::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	switch ( direction_ )
 	{

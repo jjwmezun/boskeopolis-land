@@ -4,7 +4,7 @@
 BlockComponentMcGuffin::BlockComponentMcGuffin() {};
 BlockComponentMcGuffin::~BlockComponentMcGuffin() {};
 
-void BlockComponentMcGuffin::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentMcGuffin::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	Inventory::addMcGuffin();
 };

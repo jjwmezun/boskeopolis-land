@@ -5,7 +5,7 @@ BlockComponentFullHeal::BlockComponentFullHeal() {};
 
 BlockComponentFullHeal::~BlockComponentFullHeal() {};
 
-void BlockComponentFullHeal::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentFullHeal::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	health.fullHeal();
 };

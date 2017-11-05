@@ -8,7 +8,7 @@ class BlockComponentSolid : public BlockComponent
 	public:
 		BlockComponentSolid();
 		~BlockComponentSolid();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 };
 
 #endif // BLOCK_COMPONENT_SOLID_H

@@ -10,7 +10,7 @@ BlockComponentForceRightward::BlockComponentForceRightward()
 
 BlockComponentForceRightward::~BlockComponentForceRightward() {};
 
-void BlockComponentForceRightward::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentForceRightward::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	if ( sprite.vx_ < 0 )
 	{
@@ -18,6 +18,7 @@ void BlockComponentForceRightward::interact( Collision& collision, Sprite& sprit
 	}
 	else
 	{
+		sprite.fullStopX();
 		sprite.hit_box_.x += collision.overlapXLeft();
 	}
 };

@@ -4,7 +4,7 @@
 BlockComponentDoor::BlockComponentDoor() {};
 BlockComponentDoor::~BlockComponentDoor() {};
 
-void BlockComponentDoor::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentDoor::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	events.in_front_of_door_ = true;
 };

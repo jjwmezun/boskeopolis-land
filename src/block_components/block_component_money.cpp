@@ -5,7 +5,7 @@ BlockComponentMoney::BlockComponentMoney( int amount ) : amount_ ( amount ) {};
 
 BlockComponentMoney::~BlockComponentMoney() {};
 
-void BlockComponentMoney::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentMoney::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	Inventory::addFunds( amount_ );
 };

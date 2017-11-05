@@ -32,7 +32,7 @@ class SpriteMovement
 		void collideStopXRight( Sprite& sprite, int overlap ) const;
 		virtual void collideStopYBottom( Sprite& sprite, int overlap ) const;
 		virtual void collideStopYTop( Sprite& sprite, int overlap ) const;
-		virtual void collideStopAny( Sprite& sprite, Collision& collision ) const;
+		virtual void collideStopAny( Sprite& sprite, const Collision& collision ) const;
 		virtual const Collision testCollision( const Sprite& me, const Object& them ) const;
 
 	protected:

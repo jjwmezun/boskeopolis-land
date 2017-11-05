@@ -5,7 +5,7 @@ BlockComponentWarp::BlockComponentWarp() {};
 
 BlockComponentWarp::~BlockComponentWarp() {};
 
-void BlockComponentWarp::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentWarp::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	events.changeMap();
 };

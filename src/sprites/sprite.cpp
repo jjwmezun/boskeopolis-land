@@ -532,7 +532,7 @@ bool Sprite::hasType( Sprite::SpriteType type ) const
 	return false;
 };
 
-void Sprite::collideStopAny( Collision& collision )
+void Sprite::collideStopAny( const Collision& collision )
 {
 	if ( movement_ != nullptr )
 	{
@@ -592,7 +592,7 @@ void Sprite::slideRight()
 	moveRight();
 };
 
-bool Sprite::collideTopOnly( Collision& collision, Object& them ) const
+bool Sprite::collideTopOnly( const Collision& collision, Object& them ) const
 {
 	return collision.collideTop() && prevBottomSubPixels() >= them.ySubPixels() - 1000;
 };

@@ -9,7 +9,7 @@ class BlockComponentChangePalette : public BlockComponent
 	public:
 		BlockComponentChangePalette( const Palette& palette );
 		~BlockComponentChangePalette();
-		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 
 	private:
 		const Palette palette_;

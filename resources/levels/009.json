@@ -1,5 +1,5 @@
 {
-	"name": "Steam Engeenius",
+	"name": "Conveyor Slayer",
 
 	"maps":
 	[
@@ -20,6 +20,6 @@
 	"entrance_x": 18,
 	"entrance_y": 31,
 
-	"gem_challenge": 31000,
-	"time_challenge": 17
+	"gem_challenge": 33000,
+	"time_challenge": 16
 }

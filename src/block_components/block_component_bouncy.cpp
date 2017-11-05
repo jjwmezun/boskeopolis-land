@@ -6,7 +6,7 @@ BlockComponentBouncy::BlockComponentBouncy( int strength ) : strength_ ( strengt
 
 BlockComponentBouncy::~BlockComponentBouncy() {};
 
-void BlockComponentBouncy::interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentBouncy::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	if ( collision.collideBottom() )
 	{

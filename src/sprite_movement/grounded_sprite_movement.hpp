@@ -14,7 +14,7 @@ class GroundedSpriteMovement : public SpriteMovement
 		virtual void position( Sprite& sprite ) const;
 		void collideStopYBottom( Sprite& sprite, int overlap ) const;
 		void collideStopYTop( Sprite& sprite, int overlap ) const;
-		void collideStopAny( Sprite& sprite, Collision& collision ) const;
+		void collideStopAny( Sprite& sprite, const Collision& collision ) const;
 		const Collision testCollision( const Sprite& me, const Object& them ) const;
 
 	protected:

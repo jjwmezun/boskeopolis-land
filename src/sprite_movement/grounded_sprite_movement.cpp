@@ -2,8 +2,6 @@
 #include "sprite.hpp"
 #include "grounded_sprite_movement.hpp"
 
-#include <iostream>
-
 GroundedSpriteMovement::GroundedSpriteMovement()
 :
 	SpriteMovement( Type::GROUNDED )
@@ -184,7 +182,7 @@ void GroundedSpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) cons
 	sprite.collide_bottom_ = true;
 };
 
-void GroundedSpriteMovement::collideStopAny( Sprite& sprite, Collision& collision ) const
+void GroundedSpriteMovement::collideStopAny( Sprite& sprite, const Collision& collision ) const
 {
 	//if ( !sprite.collide_bottom_prev_ || !sprite.collide_top_prev_ )
 	//{
@@ -270,9 +268,9 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const O
 	)
 	{
 		if ( me.centerXSubPixels() < them.centerXSubPixels() )
-			overlap_x_right = them.rightSubPixels() - me.leftSubPixels();
+			overlap_x_right = me.rightSubPixels() - them.leftSubPixels();
 		else if ( me.centerXSubPixels() > them.centerXSubPixels() )
-			overlap_x_left = me.rightSubPixels() - them.leftSubPixels();
+			overlap_x_left = them.rightSubPixels() - me.leftSubPixels();
 	}
 
 	return Collision( overlap_x_left, overlap_x_right, overlap_y_top, overlap_y_bottom );

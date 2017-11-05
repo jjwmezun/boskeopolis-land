@@ -106,7 +106,7 @@ void SpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) const
 	sprite.collide_bottom_ = true;
 };
 
-void SpriteMovement::collideStopAny( Sprite& sprite, Collision& collision ) const
+void SpriteMovement::collideStopAny( Sprite& sprite, const Collision& collision ) const
 {
 	if ( collision.collideLeft() )
 	{
