@@ -2,11 +2,11 @@
 
 #include "block_component.hpp"
 
-class BlockComponentForceUpward : public BlockComponent
+class BlockComponentForceRightward : public BlockComponent
 {
 	public:
-		BlockComponentForceUpward();
-		~BlockComponentForceUpward();
+		BlockComponentForceRightward();
+		~BlockComponentForceRightward();
 		void interact( Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 };
 

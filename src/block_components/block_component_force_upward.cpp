@@ -1,5 +1,4 @@
 #include "block_component_force_upward.hpp"
-#include "block_type.hpp"
 #include "collision.hpp"
 #include "sprite.hpp"
 

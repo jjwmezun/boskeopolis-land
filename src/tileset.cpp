@@ -6,6 +6,7 @@
 #include "block_component_conveyor.hpp"
 #include "block_component_diamond.hpp"
 #include "block_component_door.hpp"
+#include "block_component_force_rightward.hpp"
 #include "block_component_force_upward.hpp"
 #include "block_component_full_heal.hpp"
 #include "block_component_goal.hpp"
@@ -378,6 +379,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "force_upward" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentForceUpward> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "force_rightward" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentForceRightward> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "bouncy" ) )
 					{

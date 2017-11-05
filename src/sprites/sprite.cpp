@@ -1,9 +1,11 @@
+#include <iostream>
 #include "block.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "health.hpp"
 #include "map.hpp"
+#include "render.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "input.hpp"
@@ -824,4 +826,10 @@ sdl2::SDLRect Sprite::justLeft() const
 bool Sprite::blocksJustLeft( const BlockSystem& blocks ) const
 {
 	return blocks.blocksInTheWay( justLeft(), BlockComponent::Type::SOLID );
+};
+
+void Sprite::drawHitBox( const Camera& camera )
+{
+	auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );
+	Render::renderRect( r, 4, 128 );
 };

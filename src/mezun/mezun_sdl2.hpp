@@ -25,7 +25,7 @@ namespace sdl2
                 SDL_Rect( { arg_x, arg_y, arg_w, arg_h } )
             {};
 
-            SDLRect( const SDLRect& c )
+            constexpr SDLRect( const SDLRect& c )
             :
                 SDL_Rect( { c.x, c.y, c.w, c.h } )
             {};
@@ -39,7 +39,7 @@ namespace sdl2
 				return *this;
             };
 
-            SDLRect( SDLRect&& m )
+            constexpr SDLRect( SDLRect&& m )
             :
                 SDL_Rect( { m.x, m.y, m.w, m.h } )
             {};
