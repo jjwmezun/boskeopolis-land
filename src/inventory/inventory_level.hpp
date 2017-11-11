@@ -16,6 +16,10 @@ class Sprite;
 class InventoryLevel
 {
 	public:
+		static constexpr int HEIGHT = 24;
+		static constexpr int Y = Unit::WINDOW_HEIGHT_PIXELS - HEIGHT;
+		static constexpr int TOP_ROW_Y = Y + 8;
+
 		InventoryLevel();
 
 		void update( EventSystem& events, const Health& health );
@@ -25,7 +29,6 @@ class InventoryLevel
 		int kill_counter_;
 
 	private:
-		static constexpr int Y = Unit::WINDOW_HEIGHT_PIXELS - 24;
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );
 		static constexpr int FUNDS_ICON_X = Unit::MiniBlocksToPixels( 4 );
@@ -62,4 +65,6 @@ class InventoryLevel
 		InventoryLevelHealth health_gfx_;
 		OxygenMeter oxygen_meter_;
 		NewsTicker ticker_;
+		int flashing_timer_;
+		int flashing_time_shade_;
 };

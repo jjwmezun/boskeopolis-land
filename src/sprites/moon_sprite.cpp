@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-static constexpr int TIME_LIMIT = 45;
+static constexpr int TIME_LIMIT = 7;
 
 MoonSprite::MoonSprite( int x, int y )
 :
@@ -27,6 +27,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 			events.switch_ = true;
 			Inventory::clock().reset( Direction::Vertical::DOWN, TIME_LIMIT );
 			graphics_->visible_ = false;
+			events.special_ = EventSystem::EType::TIMER_START;
 			moon_state_ = MoonState::RUNNING;
 		break;
 

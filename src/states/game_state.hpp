@@ -1,7 +1,4 @@
-#ifndef GAME_STATE_H
-#define GAME_STATE_H
-
-
+#pragma once
 
 #include "camera.hpp"
 #include "palette.hpp"
@@ -18,7 +15,8 @@ class GameState
 			OVERWORLD_MENU_STATE,
 			LEVEL_STATE,
 			MESSAGE_STATE,
-			PAUSE_STATE
+			PAUSE_STATE,
+			TIME_START_STATE
 		};
 
 		GameState
@@ -45,5 +43,3 @@ class GameState
 	private:
 		Palette palette_;
 };
-
-#endif // GAME_STATE_H

@@ -15,7 +15,8 @@ class EventSystem
 	{
 		__NULL,
 		LOCKED_GATE_OPENING,
-		LOCKED_GATE_OPEN
+		LOCKED_GATE_OPEN,
+		TIMER_START
 	};
 
 	static constexpr int WATER_NULL = -1;

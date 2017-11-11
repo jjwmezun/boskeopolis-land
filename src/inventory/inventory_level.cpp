@@ -16,13 +16,29 @@ constexpr sdl2::SDLRect InventoryLevel::KEY_ICON_DEST;
 constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_DEST;
 constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_CROSS_DEST;
 
+static constexpr int FLASHING_TIMER_SHADES_NUM = 8;
+static constexpr Text::FontShade FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
+{
+	Text::FontShade::DARK_GRAY,
+	Text::FontShade::DARK_MID_GRAY,
+	Text::FontShade::LIGHT_MID_GRAY,
+	Text::FontShade::LIGHT_GRAY,
+	Text::FontShade::LIGHT_GRAY,
+	Text::FontShade::LIGHT_MID_GRAY,
+	Text::FontShade::DARK_MID_GRAY,
+	Text::FontShade::DARK_GRAY
+};
+static constexpr int FLASHING_TIMER_SPEED = 8;
+
 InventoryLevel::InventoryLevel()
 :
 	health_gfx_ ( Y ),
 	oxygen_meter_ ( Y ),
 	ticker_ ( Y + 16 ),
 	show_mcguffins_ ( false ),
-	kill_counter_ ( -1 )
+	kill_counter_ ( -1 ),
+	flashing_timer_ ( 0 ),
+	flashing_time_shade_ ( 0 )
 {};
 
 void InventoryLevel::update( EventSystem& events, const Health& health )
@@ -31,6 +47,22 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	Inventory::update();
 	health_gfx_.update( health );
 	ticker_.updateTicker();
+
+	if ( Inventory::clock().lowOnTime() )
+	{
+		++flashing_timer_;
+
+		if ( flashing_timer_ >= Inventory::clock().timeRemaining() )
+		{
+			++flashing_time_shade_;
+			flashing_timer_ = 0;
+			
+			if ( flashing_time_shade_ >= FLASHING_TIMER_SHADES_NUM )
+			{
+				flashing_time_shade_ = 0;
+			}
+		}
+	}
 };
 
 void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
@@ -68,7 +100,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	health_gfx_.render();
 
 	// TIME
-	Inventory::clock().render( CLOCK_X, Y, nullptr, Text::FontShade::DARK_GRAY );
+	Inventory::clock().render( CLOCK_X, Y, nullptr, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] );
 	clock_gfx_.render( CLOCK_ICON_DEST, nullptr );
 
 	// MISC

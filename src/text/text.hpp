@@ -42,7 +42,7 @@ class Text
 			std::string words,
 			int x = 0,
 			int y = 0,
-			FontShade shade = FontShade::BLACK,
+			FontShade color = FontShade::BLACK,
 			FontAlign align = FontAlign::LEFT,
 			bool center_y = false,
 			unsigned int line_limit = DEFAULT_LINE_LENGTH,
@@ -59,7 +59,7 @@ class Text
 		void render
 		(
 			Camera* camera = nullptr,
-			FontShade shade = FontShade::__NULL
+			FontShade color = FontShade::__NULL
 		) const;
 
 		int right() const;
@@ -72,7 +72,7 @@ class Text
 			int x,
 			int y,
 			int digits = -1,
-			FontShade shade = FontShade::BLACK,
+			FontShade color = FontShade::BLACK,
 			Camera* camera = nullptr
 		);
 
@@ -82,9 +82,11 @@ class Text
 			int x,
 			int y,
 			Camera* camera = nullptr,
-			FontShade shade = FontShade::BLACK,
+			FontShade color = FontShade::BLACK,
 			unsigned int line_limit = DEFAULT_LINE_LENGTH,
-			FontAlign align = FontAlign::LEFT
+			FontAlign align = FontAlign::LEFT,
+			FontShade shadow = FontShade::__NULL,
+			int char_size = 1
 		);
 
 		static std::string stringifyNum( int n );
@@ -111,15 +113,15 @@ class Text
 		static constexpr int CHARSET_HEIGHT_MINI_BLOCKS = 32;
 		static std::map<char, int> char_conversion_;
 
-		FontShade shade_;
+		FontShade color_;
 		FontAlign align_;
 		unsigned int line_limit_;
 		std::unique_ptr<TextComponent> component_;
 
 		static int frameX( unsigned int n );
-		static int frameY( unsigned int n, FontShade shade );
-		static unsigned int shadeOffset( FontShade shade );
+		static int frameY( unsigned int n, FontShade color );
+		static unsigned int colorOffset( FontShade color );
 		static unsigned int testLineLength( const std::string& text, unsigned int line_length, unsigned int letters_so_far );
 
-		unsigned int shadeNum() const;
+		unsigned int colorNum() const;
 };

@@ -7,6 +7,7 @@
 #include "overworld_state.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
+#include "time_start_state.hpp"
 
 LevelState::LevelState( int lvname )
 try :
@@ -58,6 +59,18 @@ void LevelState::update()
 		if ( events_.paletteChanged() )
 		{
 			newPalette( events_.getPalette() );
+		}
+
+		if ( events_.special_ == EventSystem::EType::TIMER_START )
+		{
+			events_.special_ = EventSystem::EType::__NULL;
+			Main::pushState
+			(
+				std::unique_ptr<GameState>
+				(
+					new TimeStartState( palette() )
+				)
+			);
 		}
 
 		testPause();

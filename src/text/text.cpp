@@ -117,7 +117,7 @@ Text::Text
 	std::string words,
 	int x,
 	int y,
-	FontShade shade,
+	FontShade color,
 	FontAlign align,
 	bool center_y,
 	unsigned int line_limit,
@@ -127,7 +127,7 @@ Text::Text
 	words_ ( words ),
 	x_ ( x ),
 	y_ ( ( center_y ) ? centerY( words_, ( ( line_limit == 0 ) ? DEFAULT_LINE_LENGTH : line_limit ) ) : y ),
-	shade_ ( shade ),
+	color_ ( color ),
 	align_ ( align ),
 	component_ ( std::move( component ) ),
 	line_limit_ ( ( line_limit == 0 ) ? DEFAULT_LINE_LENGTH : line_limit )
@@ -140,7 +140,7 @@ Text::Text( Text&& m ) noexcept
 	words_ ( m.words_ ),
 	x_ ( m.x_ ),
 	y_ ( m.y_ ),
-	shade_ ( m.shade_ ),
+	color_ ( m.color_ ),
 	align_ ( m.align_ ),
 	component_ ( std::move( m.component_ ) ),
 	line_limit_ ( m.line_limit_ )
@@ -152,9 +152,11 @@ void Text::renderText
 	int x,
 	int y,
 	Camera* camera,
-	FontShade shade,
+	FontShade color,
 	unsigned int line_limit,
-	FontAlign align
+	FontAlign align,
+	FontShade shadow,
+	int char_size
 )
 {
 	if ( line_limit == 0 )
@@ -172,7 +174,7 @@ void Text::renderText
 
 		if ( align == FontAlign::CENTER )
 		{
-			x = centerX( line_length );
+			x = centerX( line_length * CHAR_SIZE_PIXELS * char_size );
 		}
 
 		for ( unsigned int c = letters_so_far; c < absolute_line_limit; ++c )
@@ -189,15 +191,15 @@ void Text::renderText
 			}
 
 			const int frame = char_conversion_[ text[ c ] ];
-			const int char_x = ( CHAR_SIZE_PIXELS * ( c - ( int )( letters_so_far ) ) ) + x;
-			const int char_y = ( CHAR_SIZE_PIXELS * ( int )( line ) ) + y;
+			const int char_x = ( CHAR_SIZE_PIXELS * char_size * ( c - ( int )( letters_so_far ) ) ) + x;
+			const int char_y = ( CHAR_SIZE_PIXELS * char_size * ( int )( line ) ) + y;
 
 			sdl2::SDLRect dest =
 			{
 				char_x,
 				char_y,
-				CHAR_SIZE_PIXELS,
-				CHAR_SIZE_PIXELS
+				CHAR_SIZE_PIXELS * char_size,
+				CHAR_SIZE_PIXELS * char_size
 			};
 
 			if ( camera != nullptr )
@@ -211,7 +213,7 @@ void Text::renderText
 				"charset.png",
 				{
 					frameX( frame ),
-					frameY( frame, shade ),
+					frameY( frame, color ),
 					CHAR_SIZE_PIXELS,
 					CHAR_SIZE_PIXELS
 				},
@@ -225,14 +227,14 @@ void Text::renderText
 
 };
 
-void Text::render( Camera* camera, FontShade shade ) const
+void Text::render( Camera* camera, FontShade color ) const
 {
-	if ( shade == FontShade::__NULL )
+	if ( color == FontShade::__NULL )
 	{
-		shade = shade_;
+		color = color_;
 	}
 
-	renderText( words_, x_, y_, camera, shade, line_limit_, align_ );
+	renderText( words_, x_, y_, camera, color, line_limit_, align_ );
 };
 
 int Text::centerX( unsigned int line_length )
@@ -240,11 +242,9 @@ int Text::centerX( unsigned int line_length )
 	// Center = half o' line length left o' middle (half window width), half on right.
 	// [     *    |    )     ]
 	// * is left-most point we want to return.
-	return Unit::MiniBlocksToPixels
-	(
-		floor ( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) -
-		floor ( line_length / 2 )
-	);
+	return
+		floor ( Unit::WINDOW_WIDTH_PIXELS / 2 ) -
+		floor ( line_length / 2 );
 };
 
 int Text::centerY( const std::string& words, unsigned int line_limit )
@@ -279,27 +279,27 @@ int Text::centerY( const std::string& words, unsigned int line_limit )
 	);
 };
 
-unsigned int Text::shadeOffset( FontShade shade )
+unsigned int Text::colorOffset( FontShade color )
 {
-	if ( shade == FontShade::__NULL )
+	if ( color == FontShade::__NULL )
 	{
 		return 0;
 	}
 	else
 	{
-		return ( unsigned int )( shade ) * CHARSET_HEIGHT_MINI_BLOCKS;
+		return ( unsigned int )( color ) * CHARSET_HEIGHT_MINI_BLOCKS;
 	}
 };
 
-unsigned int Text::shadeNum() const
+unsigned int Text::colorNum() const
 {
-	if ( shade_ == FontShade::__NULL )
+	if ( color_ == FontShade::__NULL )
 	{
 		return 0;
 	}
 	else
 	{
-		return ( unsigned int )( shade_ );
+		return ( unsigned int )( color_ );
 	}
 };
 
@@ -308,14 +308,14 @@ int Text::frameX( unsigned int n )
 	return Unit::MiniBlocksToPixels( ( int )( n ) % CHARSET_WIDTH_MINI_BLOCKS );
 };
 
-int Text::frameY( unsigned int n, FontShade shade )
+int Text::frameY( unsigned int n, FontShade color )
 {
-	return shadeOffset( shade ) + Unit::MiniBlocksToPixels( floor( ( int )( n ) / CHARSET_WIDTH_MINI_BLOCKS ) );
+	return colorOffset( color ) + Unit::MiniBlocksToPixels( floor( ( int )( n ) / CHARSET_WIDTH_MINI_BLOCKS ) );
 };
 
-void Text::renderNumber( int n, int x, int y, int digits, FontShade shade, Camera* camera )
+void Text::renderNumber( int n, int x, int y, int digits, FontShade color, Camera* camera )
 {
-	renderText( formatNumDigitPadding( n, digits ), x, y, camera, shade );
+	renderText( formatNumDigitPadding( n, digits ), x, y, camera, color );
 };
 
 // Get d digit place for n #.

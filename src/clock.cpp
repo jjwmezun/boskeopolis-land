@@ -18,21 +18,13 @@ Clock::~Clock() {};
 void Clock::update()
 {
 	if ( timer_.hit() )
-	{/*
-		if ( direction_ == Direction::Vertical::DOWN )
+	{
+		++total_seconds_;
+
+		if ( total_seconds_ > limit_ )
 		{
-			--total_seconds_;
-
-			if ( total_seconds_ < limit_ )
-				total_seconds_ = limit_;
+			total_seconds_ = limit_;
 		}
-		else
-		{*/
-			++total_seconds_;
-
-			if ( total_seconds_ > limit_ )
-				total_seconds_ = limit_;
-		//}
 	}
 
 	timer_.update();
@@ -68,9 +60,9 @@ bool Clock::hitLimit() const
 	return total_seconds_ >= limit_;
 };
 
-void Clock::renderTime( int x, int y, int total_seconds, Camera* camera, Text::FontShade shade )
+void Clock::renderTime( int x, int y, int total_seconds, Camera* camera, Text::FontShade color, Text::FontAlign align, Text::FontShade shadow, int magnification )
 {
-	Text::renderText( Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) ), x, y, camera, shade );
+	Text::renderText( Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) ), x, y, camera, color, Text::DEFAULT_LINE_LENGTH, align, shadow, magnification );
 }
 
 std::string Clock::timeToString( int total_seconds )
@@ -78,19 +70,29 @@ std::string Clock::timeToString( int total_seconds )
 	return Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) );
 };
 
-void Clock::render( int x, int y, Camera* camera, Text::FontShade shade ) const
+void Clock::render( int x, int y, Camera* camera, Text::FontShade color, Text::FontAlign align, Text::FontShade shadow, int magnification ) const
 {
 	if ( direction_ == Direction::Vertical::DOWN )
 	{
-		renderTime( x, y, limit_ - total_seconds_, camera, shade );
+		renderTime( x, y, timeRemaining(), camera, color, align, shadow, magnification );
 	}
 	else
 	{
-		renderTime( x, y, total_seconds_, camera, shade );
+		renderTime( x, y, total_seconds_, camera, color, align, shadow, magnification );
 	}
 };
 
 void Clock::reset( Direction::Vertical direction, int limit )
 {
 	*this = Clock( 0, direction, limit );
+};
+
+bool Clock::lowOnTime() const
+{
+	return direction_ == Direction::Vertical::DOWN && timeRemaining() < 5;
+};
+
+int Clock::timeRemaining() const
+{
+	return limit_ - total_seconds_;
 };
