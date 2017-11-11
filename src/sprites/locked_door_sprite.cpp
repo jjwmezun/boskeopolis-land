@@ -18,7 +18,7 @@ void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 {
 	has_key_ = events.hasKey();
 	
-	if ( events.misc_ == 2 || ( events.misc_ == 1 && hit_box_.h >= ( 16000 * 6 ) ) )
+	if ( events.special_ == EventSystem::EType::LOCKED_GATE_OPEN || ( events.special_ == EventSystem::EType::LOCKED_GATE_OPENING && hit_box_.h >= ( 16000 * 6 ) ) )
 	{
 		killNoAnimation();
 		death_finished_ = true;
@@ -27,7 +27,7 @@ void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	if ( opening_ )
 	{
 		hit_box_.h = std::max( 0, hit_box_.h - 2000 );
-		events.misc_ = 1;
+		events.special_ = EventSystem::EType::LOCKED_GATE_OPENING;
 	}
 	
 	if ( hit_box_.h == 0 )
@@ -38,7 +38,7 @@ void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	
 	if ( fellInBottomlessPit( lvmap ) )
 	{
-		events.misc_ = 2;
+		events.special_ = EventSystem::EType::LOCKED_GATE_OPEN;
 	}
 };
 

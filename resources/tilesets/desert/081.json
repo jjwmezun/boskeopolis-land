@@ -1,0 +1,17 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 6,
+		"y": 6
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "slope_high_left"
+			}
+		}
+	]
+}

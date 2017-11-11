@@ -28,6 +28,7 @@
 #include "starving_goal.hpp"
 #include "survive_time_goal.hpp"
 #include "timed_goal.hpp"
+#include "warp_goal.hpp"
 #include "windy_goal.hpp"
 
 std::vector<std::string> Level::level_list_;
@@ -206,9 +207,9 @@ void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, 
 	goal_->init( hero, *this, inventory, events, health );
 };
 
-void Level::update( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health )
+void Level::updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health )
 {
-	currentMap().update( events, sprites, blocks, camera );
+	//currentMap().update( events, sprites, blocks, camera );
 	goal_->update( sprites, currentMap(), inventory_screen, events, health );
 };
 
@@ -625,6 +626,18 @@ Level Level::getLevel( int id )
 				}
 
 				goal = std::make_unique<PastRightEdgeGoal> ( message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "warp" ) )
+			{
+				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				{
+					const std::string message = lvg[ "message" ].GetString();
+					goal = std::make_unique<WarpGoal> ( message );
+				}
+				else
+				{
+					goal = std::make_unique<WarpGoal> ();
+				}
 			}
 			else if ( mezun::areStringsEqual( goaltype, "avoid_money" ) )
 			{

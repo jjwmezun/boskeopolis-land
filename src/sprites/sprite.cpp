@@ -833,3 +833,83 @@ void Sprite::drawHitBox( const Camera& camera )
 	auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );
 	Render::renderRect( r, 4, 128 );
 };
+
+void Sprite::turnOnCollide()
+{
+	switch ( direction_x_ )
+	{
+		case ( Direction::Horizontal::LEFT ):
+			if ( collidedLeft() )
+			{
+				direction_x_ = Direction::Horizontal::RIGHT;
+			}
+		break;
+
+		case ( Direction::Horizontal::RIGHT ):
+			if ( collidedRight() )
+			{
+				direction_x_ = Direction::Horizontal::LEFT;
+			}
+		break;
+	}
+};
+
+void Sprite::turnOnEdge( const BlockSystem& blocks )
+{
+	switch ( direction_x_ )
+	{
+		case ( Direction::Horizontal::LEFT ):
+
+			if( !blocks.blocksInTheWay
+			(
+				{
+					leftSubPixels() - Unit::BlocksToSubPixels( 1 ),
+					bottomSubPixels(),
+					Unit::BlocksToSubPixels( 1 ),
+					Unit::BlocksToSubPixels( 1 )
+
+				},
+				BlockComponent::Type::SOLID 
+			))
+			{
+				direction_x_ = Direction::Horizontal::RIGHT;
+			}
+		break;
+
+		case ( Direction::Horizontal::RIGHT ):
+
+			if( !blocks.blocksInTheWay
+			(
+				{
+					rightSubPixels(),
+					bottomSubPixels(),
+					Unit::BlocksToSubPixels( 1 ),
+					Unit::BlocksToSubPixels( 1 )
+
+				},
+				BlockComponent::Type::SOLID 
+			))
+			{
+				direction_x_ = Direction::Horizontal::LEFT;
+			}
+		break;
+	}
+};
+
+void Sprite::moveInDirectionX()
+{
+	switch ( direction_x_ )
+	{
+		case ( Direction::Horizontal::LEFT ):
+			moveLeft();
+		break;
+
+		case ( Direction::Horizontal::RIGHT ):
+			moveRight();
+		break;
+			
+		case ( Direction::Horizontal::__NULL ):
+			stopX();
+		break;
+	}
+};

@@ -16,80 +16,9 @@ SillyfishSprite::~SillyfishSprite() {};
 
 void SillyfishSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	switch ( directionX() )
-	{
-		case ( Direction::Horizontal::LEFT ):
-
-			if( !blocks.blocksInTheWay
-			(
-				{
-					leftSubPixels() - Unit::BlocksToSubPixels( 1 ),
-					bottomSubPixels(),
-					Unit::BlocksToSubPixels( 1 ),
-					Unit::BlocksToSubPixels( 1 )
-
-				},
-				BlockComponent::Type::SOLID 
-			))
-			{
-				direction_x_ = Direction::Horizontal::RIGHT;
-			}
-
-			if ( collidedLeft() )
-			{
-				direction_x_ = Direction::Horizontal::RIGHT;
-			}
-
-		break;
-
-		case ( Direction::Horizontal::RIGHT ):
-
-			if( !blocks.blocksInTheWay
-			(
-				{
-					rightSubPixels(),
-					bottomSubPixels(),
-					Unit::BlocksToSubPixels( 1 ),
-					Unit::BlocksToSubPixels( 1 )
-
-				},
-				BlockComponent::Type::SOLID 
-			))
-			{
-				direction_x_ = Direction::Horizontal::LEFT;
-			}
-
-			if ( collidedRight() )
-			{
-				direction_x_ = Direction::Horizontal::LEFT;
-			}
-
-		break;
-
-		case ( Direction::Horizontal::__NULL ):
-			std::cout<<"ERROR: Sillyfish has invalid direction."<<std::endl;
-		break;
-	}
-
-	switch ( directionX() )
-	{
-		case ( Direction::Horizontal::LEFT ):
-
-			moveLeft();
-
-		break;
-
-		case ( Direction::Horizontal::RIGHT ):
-
-			moveRight();
-
-		break;
-
-		case ( Direction::Horizontal::__NULL ):
-			std::cout<<"ERROR: Sillyfish has invalid direction."<<std::endl;
-		break;
-	}
-
+	turnOnEdge( blocks );
+	turnOnCollide();
+	moveInDirectionX();
 };
 
 void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )

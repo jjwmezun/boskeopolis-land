@@ -45,6 +45,7 @@
 #include "maze_player_sprite.hpp"
 #include "maze_chaser_sprite.hpp"
 #include "mezun_exceptions.hpp"
+#include "moon_sprite.hpp"
 #include "penguin_sprite.hpp"
 #include "pipe_eel_sprite.hpp"
 #include "platform_sprite.hpp"
@@ -349,6 +350,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 83 ):
 			return std::unique_ptr<Sprite> ( new FallingFistSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 84 ):
+			return std::unique_ptr<Sprite> ( new MoonSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

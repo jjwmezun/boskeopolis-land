@@ -1,5 +1,4 @@
-#ifndef BLOCK_COMPONENT_H
-#define BLOCK_COMPONENT_H
+#pragma once
 
 class Block;
 class BlockSystem;
@@ -30,5 +29,3 @@ class BlockComponent
 	protected:
 		const Type type_;
 };
-
-#endif // BLOCK_COMPONENT_H

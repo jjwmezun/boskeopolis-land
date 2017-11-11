@@ -48,11 +48,8 @@ void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_col
 	
 	if ( their_collision.collideAny() )
 	{
-		if ( !their_collision.collideTop() )
-		{
-			them.collideStopAny( their_collision );
-		}
-		
+		them.collideStopAny( their_collision );
+
 		if ( their_collision.collideBottom() )
 		{
 			them.hit_box_.y += vy_;
@@ -65,7 +62,15 @@ void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_col
 			( their_collision.collideTop() && them.collide_top_ ) )
 		)
 		{
-			health.hurt();
+			them.kill();
 		}
 	}
+};
+
+void ChoqueSprite::reset()
+{
+	fullStopY();
+	resetPosition();
+	changeMovement( SpriteMovement::Type::FLOATING );
+	still_ = true;
 };

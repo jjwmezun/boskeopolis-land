@@ -318,4 +318,8 @@ class Sprite : public Object
 		bool blocksJustAbove( const BlockSystem& blocks ) const;
 		sdl2::SDLRect justLeft() const;
 		bool blocksJustLeft( const BlockSystem& blocks ) const;
+
+		void turnOnEdge( const BlockSystem& blocks );
+		void turnOnCollide();
+		void moveInDirectionX();
 };

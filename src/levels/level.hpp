@@ -38,7 +38,7 @@ class Level
 		int allEnemiesToKill() const;
 
 		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
-		void update( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health );
+		void updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health );
 
 		static const std::string& NameOLevel( unsigned int n );
 		static unsigned int realLevelNum();

@@ -41,10 +41,10 @@ void LevelState::update()
 {
 	try
 	{
-		
 		blocks_.blocksFromMap( level_.currentMap(), camera_ );
 		blocks_.update( events_ );
-		level_.update( inventory_screen_, events_, sprites_, blocks_, camera_, health_ );
+		//level_.update( inventory_screen_, events_, sprites_, blocks_, camera_, health_ );
+		level_.currentMap().update( events_, sprites_, blocks_, camera_ );
 		camera_.update();
 		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
 		sprites_.interact( blocks_, level_, events_, camera_, health_ );
@@ -52,6 +52,7 @@ void LevelState::update()
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_ );
 		health_.update();
 		inventory_screen_.update( events_, health_ );
+		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_ );
 		events_.update( level_, sprites_, camera_, blocks_ );
 
 		if ( events_.paletteChanged() )

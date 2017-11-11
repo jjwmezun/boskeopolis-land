@@ -4,15 +4,21 @@ class Block;
 
 #include "sprite.hpp"
 
-class ChoqueSprite : public Sprite
+class MoonSprite : public Sprite
 {
 	public:
-		ChoqueSprite( int x, int y );
-		~ChoqueSprite();
+		MoonSprite( int x, int y );
+		~MoonSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health ) override;
-		void reset() override;
 
 	private:
-		bool still_;
+		enum class MoonState
+		{
+			UNUSED,
+			STARTING,
+			RUNNING
+		};
+
+		MoonState moon_state_;
 };

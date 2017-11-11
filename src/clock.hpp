@@ -24,11 +24,11 @@
             bool hitLimit() const;
 
         private:
-            static const int DEFAULT_LIMIT = 599;
-            static const Direction::Vertical DEFAULT_DIRECTION = Direction::Vertical::UP;
-            static const int SECONDS_PER_MINUTE = 60;
-            TimerRepeat timer_ = TimerRepeat( Unit::FPS );
+            static constexpr int DEFAULT_LIMIT = 599;
+            static constexpr Direction::Vertical DEFAULT_DIRECTION = Direction::Vertical::UP;
+            static constexpr int SECONDS_PER_MINUTE = 60;
             int total_seconds_;
             int limit_;
             Direction::Vertical direction_;
+            TimerRepeat timer_ = TimerRepeat( Unit::FPS );
     };

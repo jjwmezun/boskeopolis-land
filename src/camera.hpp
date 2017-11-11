@@ -32,6 +32,7 @@ class Camera
 			int y_offset = 0
 		)
 		:
+			changed_ ( true ),
 			x_( x ),
 			y_( y ),
 			width_( width ),
@@ -40,7 +41,8 @@ class Camera
 			y_offset_ ( y_offset ),
 			prev_x_ ( -87654 ),
 			prev_y_ ( -87654 ),
-			changed_ ( true )
+			shake_amount_ ( 0 ),
+			shake_dir_ ( Direction::Horizontal::__NULL )
 		{};
 
 		constexpr int widthBlocks() const
@@ -228,8 +230,10 @@ class Camera
 		void moveLeft( int amount = 1 );
 		void moveRight( int amount = 1 );
 		void setPosition( int x, int y );
+		void startShaking();
 
 	private:
+		bool changed_;
 		int x_;
 		int y_;
 		const int x_offset_;
@@ -238,7 +242,8 @@ class Camera
 		const int height_;
 		int prev_x_;
 		int prev_y_;
-		bool changed_ = true;
+		int shake_amount_;
+		Direction::Horizontal shake_dir_;
 
 		void contain( Map& m );
 };

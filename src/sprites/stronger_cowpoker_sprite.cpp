@@ -85,7 +85,7 @@ void StrongerCowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	}
 	else
 	{
-		if ( events.misc_ > 0 )
+		if ( events.special_ == EventSystem::EType::LOCKED_GATE_OPENING || events.special_ == EventSystem::EType::LOCKED_GATE_OPEN )
 		{
 			awake_ = true;
 		}

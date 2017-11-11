@@ -13,30 +13,9 @@ HieroglyphPusherSprite::~HieroglyphPusherSprite() {};
 
 void HieroglyphPusherSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	switch ( direction_x_ )
-	{
-		case ( Direction::Horizontal::LEFT ):
-		{
-			moveLeft();
-
-			if ( collide_left_ )
-			{
-				direction_x_ = Direction::Horizontal::RIGHT;
-			}
-		}
-		break;
-
-		case ( Direction::Horizontal::RIGHT ):
-		{
-			moveRight();
-		
-			if ( collide_right_ )
-			{
-				direction_x_ = Direction::Horizontal::LEFT;
-			}
-		}
-		break;
-	}
+	turnOnEdge( blocks );
+	turnOnCollide();
+	moveInDirectionX();
 };
 
 void HieroglyphPusherSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )

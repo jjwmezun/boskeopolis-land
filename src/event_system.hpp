@@ -10,63 +10,59 @@ class SpriteSystem;
 class EventSystem
 {
 	public:
-		EventSystem();
-
-		void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
-		void reset();
-		
-		void win();
-		void fail();
-		void quitLevel();
-		void changeMap();
-		
-		void getKey();
-		bool hasKey() const;
-		
-		void showMessage();
-		
-		void changePalette( const Palette& new_palette );
-		Palette getPalette();	
-		bool paletteChanged() const;
-
-		bool switchOn() const;
-		bool switchChanged() const;
-		void flipSwitch();
-
-		bool waterShouldMove() const;
-		bool waterShouldStop() const;
 	
-		void lightSwitchTurnOn();
-		bool testLightSwitch();
+	enum class EType
+	{
+		__NULL,
+		LOCKED_GATE_OPENING,
+		LOCKED_GATE_OPEN
+	};
 
-		int misc_;
-		int move_water_;
-		int current_water_;
-		bool in_front_of_door_;
-		bool on_conveyor_belt_;
+	static constexpr int WATER_NULL = -1;
 
+	bool won_;
+	bool failed_;
+	bool quit_level_;
+	bool key_;
+	bool message_;
+	bool message_lock_;
+	bool change_map_;
+	bool switch_;
+	bool switch_changed_;
+	bool palette_changed_;
+	bool in_front_of_door_;
+	bool on_conveyor_belt_;
+	int move_water_;
+	int current_water_;
+	EType special_;
+	Palette new_palette_;
 
-   private:
-		static constexpr int WATER_NULL = -1;
+	bool hasKey() const;
+	bool paletteChanged() const;
+	bool switchOn() const;
+	bool switchChanged() const;
+	void flipSwitch();
+	bool waterShouldMove() const;
+	bool waterShouldStop() const;
 
-		bool won_;
-		bool failed_;
-		bool quit_level_;
-		bool key_;
-		bool message_;
-		bool message_lock_;
-		bool change_map_;
-		bool switch_;
-		bool switch_changed_;
-		bool palette_changed_;
-		Palette new_palette_;
-
-		void resetPalette();
-		
-		void testMessage( Level& level );
-		void testWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
-		void testWinLoseOrQuit( Level& level );
-		void failEvent( Level& level );
-		void winEvent( Level& level );
-		void quitEvent( Level& level );
+	EventSystem();
+	void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
+	void reset();
+	Palette getPalette();
+	bool testLightSwitch();
+	void win();
+	void fail();
+	void quitLevel();
+	void changeMap();
+	void getKey();
+	void showMessage();
+	void changePalette( const Palette& new_palette );
+	void lightSwitchTurnOn();
+	void resetPalette();
+	void testMessage( Level& level );
+	void testWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
+	void testWinLoseOrQuit( Level& level );
+	void failEvent( Level& level );
+	void winEvent( Level& level );
+	void quitEvent( Level& level );
 };

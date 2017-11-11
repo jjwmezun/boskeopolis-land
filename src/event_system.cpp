@@ -23,7 +23,7 @@ EventSystem::EventSystem()
 	move_water_ ( -1 ),
 	current_water_ ( - 1 ),
 	in_front_of_door_ ( false ),
-	misc_ ( 0 ),
+	special_ ( EType::__NULL ),
 	on_conveyor_belt_ ( false )
 {};
 
@@ -40,7 +40,8 @@ void EventSystem::reset()
 	move_water_ = -1;
 	current_water_ = -1;
 	in_front_of_door_ = false;
-
+	on_conveyor_belt_ = false;
+	special_ = EType::__NULL;
 	resetPalette();
 };
 

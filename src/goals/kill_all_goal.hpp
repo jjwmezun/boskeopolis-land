@@ -1,7 +1,6 @@
 #pragma once
 
 #include "goal.hpp"
-#include "mezun_helpers.hpp"
 
 class KillAllGoal : public Goal
 {
