@@ -127,6 +127,17 @@ namespace Input
 	{
 		return actions_held_[ ( int )( action ) ];
 	};
+	
+	bool movingCharacter()
+	{
+		return
+		(
+			pressed( Action::JUMP )      ||
+			pressed( Action::MOVE_DOWN ) ||
+			pressed( Action::MOVE_LEFT ) ||
+			pressed( Action::MOVE_RIGHT )
+		);
+	};
 
 	void registerKeyPress( Action action )
 	{

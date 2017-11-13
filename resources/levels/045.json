@@ -1,106 +1,19 @@
 {
-	"name": "Blueberry Burroughs",
-	
+	"name": "Stop & Go Space Station",
 	"maps":
 	[
 		{
-			"slug": "city-1",
-			"palette_set": { "palette_type": "Midnight Blue", "bg_color": 4 },
-			"backgrounds":
-			[
-				{
-					"type": "image",
-					"img": "gradient.png",
-					"width": 8,
-					"height": 160,
-					"x_scroll": 0,
-					"y_scroll": 0.0
-				},
-				{
-					"type": "constellation",
-					"width": 224,
-					"height": 16
-				},
-				{
-					"type": "image",
-					"img": "skyline.png",
-					"width": 264,
-					"height": 160,
-					"x_scroll": 0.5,
-					"y_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "fence.png",
-					"width": 48,
-					"height": 32,
-					"y_offset": 176,
-					"y_repeat": false
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 1,
-					"entrance_x": 2,
-					"entrance_y": 2,
-					"location": [ 140, 160, 0, 16 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 17,
-					"entrance_y": 2,
-					"location": [ 170, 200, 0, 16 ]
-				}
-			]
-		},
-		{
-			"slug": "city-1-2",
-			"palette_set": { "palette_type": "Golden Yellow", "bg_color": 4 },
-			"backgrounds":
-			[
-				{
-					"type": "image",
-					"img": "tunnel_pipe.png",
-					"width": 360,
-					"height": 229,
-					"y_offset": -16,
-					"x_scroll": 0,
-					"y_scroll": 0
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 0,
-					"entrance_x": 153,
-					"entrance_y": 12,
-					"location": [ 0, 5, -64, 16 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 181,
-					"entrance_y": 12,
-					"location": [ 15, 20, -64, 16 ],
-					"camera_x": 2816
-				}
-			]
+			"slug": "space-3"
 		}
 	],
 	
-	
 	"goal":
 	{
-		"type": "collect",
-		"amount": 10000
+		"type": "do_nothing"
 	},
 	
-	"entrance_x": 12,
-	"entrance_y": 11,
-	"camera_x": 10,
-	
-	"message": "Gems o' average brightness are\nworth 100\t, particularly bright gems are worth 250\t, & particu-\nlarly dark gems are worth 500\t.",
-	
+	"entrance_x": 3,
+	"entrance_y": 48,
 	"gem_challenge": 10000,
 	"time_challenge": 40
 }

@@ -1,5 +1,4 @@
-#ifndef GOAL_H
-#define GOAL_H
+#pragma once
 
 class EventSystem;
 class Health;
@@ -27,5 +26,3 @@ class Goal
 	private:
 		const std::string message_;
 };
-
-#endif // GOAL_H

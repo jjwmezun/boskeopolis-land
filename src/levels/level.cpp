@@ -651,6 +651,10 @@ Level Level::getLevel( int id )
 			{
 				goal = std::make_unique<HeatGoal> ();
 			}
+			else if ( mezun::areStringsEqual( goaltype, "do_nothing" ) )
+			{
+				goal = std::make_unique<DoNothingGoal> ();
+			}
 			else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
 			{
 				goal = std::make_unique<KillAllGoal> ();

@@ -27,6 +27,7 @@ namespace Input
 	bool pressedMain();
 	bool released( Action action );
 	bool held( Action action );
+	bool movingCharacter();
 
 	void init();
 	void close();

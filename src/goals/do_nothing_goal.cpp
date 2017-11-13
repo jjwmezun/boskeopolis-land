@@ -14,13 +14,7 @@ DoNothingGoal::~DoNothingGoal() {};
 
 void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
-	if
-	(
-		Input::pressed( Input::Action::JUMP ) ||
-		Input::pressed( Input::Action::MOVE_DOWN ) ||
-		Input::pressed( Input::Action::MOVE_LEFT ) ||
-		Input::pressed( Input::Action::MOVE_RIGHT )
-	)
+	if ( Input::movingCharacter() )
 	{
 		events.fail();
 	}
