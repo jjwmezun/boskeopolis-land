@@ -7,7 +7,7 @@ BlockConditionCollideLeft::BlockConditionCollideLeft() {};
 
 BlockConditionCollideLeft::~BlockConditionCollideLeft() {};
 
-bool BlockConditionCollideLeft::condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events )
+bool BlockConditionCollideLeft::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
 {
 	return collision.collideLeft();
 };

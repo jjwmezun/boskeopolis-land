@@ -47,6 +47,7 @@
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_rival.hpp"
 #include "block_condition_switch_off.hpp"
+#include "block_condition_switch_on.hpp"
 #include <fstream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
@@ -457,6 +458,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "collide_right" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionCollideRight> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "switch_on" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionSwitchOn> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "switch_off" ) )
 							{

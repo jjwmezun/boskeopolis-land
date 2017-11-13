@@ -5,7 +5,7 @@ BlockConditionEnemy::BlockConditionEnemy() {};
 
 BlockConditionEnemy::~BlockConditionEnemy() {};
 
-bool BlockConditionEnemy::condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events )
+bool BlockConditionEnemy::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
 {
 	return sprite.hasType( Sprite::SpriteType::ENEMY );
 };

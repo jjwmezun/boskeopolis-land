@@ -5,7 +5,7 @@ BlockConditionRival::BlockConditionRival() {};
 
 BlockConditionRival::~BlockConditionRival() {};
 
-bool BlockConditionRival::condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events )
+bool BlockConditionRival::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
 {
 	return sprite.hasType( Sprite::SpriteType::RIVAL );
 };

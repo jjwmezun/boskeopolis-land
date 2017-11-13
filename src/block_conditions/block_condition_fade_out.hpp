@@ -7,7 +7,7 @@ class BlockConditionFadeOut : public BlockCondition
 	public:
 		BlockConditionFadeOut( int threshold = 0 );
 		~BlockConditionFadeOut();
-		bool condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events ) override;
 		
 	private:
 		const int threshold_;

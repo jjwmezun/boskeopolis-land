@@ -5,7 +5,7 @@ BlockConditionHero::BlockConditionHero() {};
 
 BlockConditionHero::~BlockConditionHero() {};
 
-bool BlockConditionHero::condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events )
+bool BlockConditionHero::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
 {
 	return sprite.hasType( Sprite::SpriteType::HERO );
 };

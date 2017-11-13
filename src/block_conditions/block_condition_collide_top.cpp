@@ -7,7 +7,7 @@ BlockConditionCollideTop::BlockConditionCollideTop() {};
 
 BlockConditionCollideTop::~BlockConditionCollideTop() {};
 
-bool BlockConditionCollideTop::condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events )
+bool BlockConditionCollideTop::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
 {
 	return sprite.collideTopOnly( collision, block );
 };

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "camera.hpp"
 #include "collision.hpp"
 #include "clock.hpp"
@@ -8,15 +9,18 @@
 #include "unit.hpp"
 
 static constexpr int TIME_LIMIT = 45;
+static constexpr int MOON_FRAMES = 10;
+static constexpr int ANIMATION_LIMIT = 19;
 
 MoonSprite::MoonSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/moon.png" ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/moon.png", 0, 0, false, false, 0, true ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	small_pebble_src_ ( 0, 0, 3, 3 ),
 	big_pebble_src_ ( 3, 0, 5, 4 ),
 	large_pebble_src_ ( 0, 4, 8, 7 ),
 	moon_state_ ( MoonState::UNUSED ),
-	timer_ ( 0 )
+	timer_ ( 0 ),
+	animation_counter_ ( 0 )
 {};
 
 MoonSprite::~MoonSprite() {};
@@ -25,11 +29,45 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 {
 	switch ( moon_state_ )
 	{
-		case ( MoonState::STARTING ):
-			camera.startShaking();
+		case ( MoonState::UNUSED ):	
+			++timer_;
+			if ( timer_ >= 4 )
+			{
+				timer_ = 0;
+				++animation_counter_;
+				if ( animation_counter_ > ANIMATION_LIMIT )
+				{
+					animation_counter_ = 0;
+				}
+			}
+
+			if ( animation_counter_ <= MOON_FRAMES )
+			{
+				graphics_->current_frame_x_ = Unit::BlocksToPixels( animation_counter_ );
+				graphics_->flip_x_ = false;
+			}
+			else
+			{
+				graphics_->current_frame_x_ = Unit::BlocksToPixels( MOON_FRAMES - ( animation_counter_ - MOON_FRAMES ) );
+				graphics_->flip_x_ = true;
+			}
+		break;
+
+		case ( MoonState::BEFORE_FREEZE ):
 			events.switch_ = true;
+			graphics_->current_frame_x_ = Unit::BlocksToPixels( 5 );
+			moon_state_ = MoonState::FREEZE;
+		break;
+
+		case ( MoonState::FREEZE ):
 			Inventory::clock().reset( Direction::Vertical::DOWN, TIME_LIMIT );
 			events.special_ = EventSystem::EType::TIMER_START;
+			moon_state_ = MoonState::AFTER_FREEZE;
+		break;
+
+		case ( MoonState::AFTER_FREEZE ):
+			camera.startShaking();
+			timer_ = 0; // Reuse for last-frame-timer.
 			moon_state_ = MoonState::RUNNING;
 		break;
 
@@ -40,30 +78,24 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 			}
 			if ( Inventory::clock().countdownHit0() )
 			{
-				events.fail();
+				// 'Cause it's awkward if you lose before you get a chance to see 0,
+				// wait 1 mo' second after it reaches 0 to fail.
+				if ( timer_ > Unit::FPS )
+				{
+					events.fail();
+				}
+				++timer_;
 			}
 		break;
 	}
-	
-	/*
-	++timer_;
-	if ( timer_ >= 8 )
-	{
-		timer_ = 0;
-		graphics_->current_frame_x_ += 16;
-		if ( graphics_->current_frame_x_ >= 12 * 16 )
-		{
-			graphics_->current_frame_x_ = 0;
-		}
-	}*/
 };
 
 void MoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
 {
 	if ( moon_state_ == MoonState::UNUSED && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		moon_state_ = MoonState::STARTING;
-		hit_box_.y = them.hit_box_.y - 8000;
+		moon_state_ = MoonState::BEFORE_FREEZE;
+		hit_box_.y = them.hit_box_.y - 16000;
 
 		switch ( them.direction_x_ )
 		{
@@ -82,7 +114,9 @@ void MoonSprite::render( Camera& camera, bool priority )
 	switch ( moon_state_ )
 	{
 		case ( MoonState::UNUSED ):
-		case ( MoonState::STARTING ):
+		case ( MoonState::BEFORE_FREEZE ):
+		case ( MoonState::FREEZE ):
+		case ( MoonState::AFTER_FREEZE ):
 			graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 		break;
 

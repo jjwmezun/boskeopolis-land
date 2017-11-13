@@ -155,7 +155,7 @@ class Sprite : public Object
 		bool collidedAny() const;
 		bool collidedLeft() const;
 		bool collidedRight() const;
-		bool collideTopOnly( const Collision& collision, Object& them ) const;
+		bool collideTopOnly( const Collision& collision, const Object& them ) const;
 
 		bool interactsWithBlocks() const;
 		bool interactsWithSprites() const;

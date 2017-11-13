@@ -23,8 +23,8 @@
 		"message": "¡Get the silver moon & then 'scape 'fore time\nruns out!"
 	},
 
-	"entrance_x": 32,
-	"entrance_y": 55,
+	"entrance_x": 5,
+	"entrance_y": 38,
 	"gem_challenge": 14000,
-	"time_challenge": 20
+	"time_challenge": 25
 }

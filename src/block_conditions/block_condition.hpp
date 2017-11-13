@@ -1,5 +1,4 @@
-#ifndef BLOCK_CONDITION_H
-#define BLOCK_CONDITION_H
+#pragma once
 
 class Block;
 class Collision;
@@ -11,8 +10,5 @@ class BlockCondition
 	public:
 		BlockCondition();
 		virtual ~BlockCondition();
-		virtual bool condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events ) = 0;
+		virtual bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events ) = 0;
 };
-
-#endif // BLOCK_CONDITION_H
-

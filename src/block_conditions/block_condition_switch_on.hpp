@@ -2,10 +2,10 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionOnGround : public BlockCondition
+class BlockConditionSwitchOn : public BlockCondition
 {
 	public:
-		BlockConditionOnGround();
-		~BlockConditionOnGround();
+		BlockConditionSwitchOn();
+		~BlockConditionSwitchOn();
 		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events ) override;
 };

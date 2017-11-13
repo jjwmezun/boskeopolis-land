@@ -7,5 +7,5 @@ class BlockConditionKey : public BlockCondition
 	public:
 		BlockConditionKey();
 		~BlockConditionKey();
-		bool condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events ) override;
 };

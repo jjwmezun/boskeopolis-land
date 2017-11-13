@@ -592,7 +592,7 @@ void Sprite::slideRight()
 	moveRight();
 };
 
-bool Sprite::collideTopOnly( const Collision& collision, Object& them ) const
+bool Sprite::collideTopOnly( const Collision& collision, const Object& them ) const
 {
 	return collision.collideTop() && prevBottomSubPixels() >= them.ySubPixels() - 1000;
 };

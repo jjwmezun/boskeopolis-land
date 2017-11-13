@@ -8,7 +8,7 @@ class BlockConditionCollideTop : public BlockCondition
 	public:
 		BlockConditionCollideTop();
 		~BlockConditionCollideTop();
-		bool condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events ) override;
 };
 
 #endif // BLOCK_CONDITION_COLLIDE_TOP_H

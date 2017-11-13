@@ -41,7 +41,9 @@ class MoonSprite : public Sprite
 		enum class MoonState
 		{
 			UNUSED,
-			STARTING,
+			BEFORE_FREEZE,
+			FREEZE,
+			AFTER_FREEZE,
 			RUNNING
 		};
 		static constexpr int MAX_PEBBLES = 5;
@@ -51,5 +53,6 @@ class MoonSprite : public Sprite
 		const sdl2::SDLRect big_pebble_src_;
 		const sdl2::SDLRect large_pebble_src_;
 		MoonState moon_state_;
-		int timer_;
+		int timer_; // For both moon animation before grabbed & last second if clock hits 0 @ end.
+		int animation_counter_;
 };
