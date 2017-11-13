@@ -6,7 +6,11 @@
 #include <stdexcept>
 #include "text.hpp"
 
-std::map<char, int> Text::char_conversion_ =
+static constexpr int CHAR_SIZE_PIXELS           = 8;
+static constexpr int NUM_OF_FONT_SHADES         = 6;
+static constexpr int CHARSET_WIDTH_MINI_BLOCKS  = 32;
+static constexpr int CHARSET_HEIGHT_MINI_BLOCKS = 32;
+static std::map<char, int> char_conversion_ =
 {
 	{ '0', 0 },
 	{ '1', 1 },
@@ -108,26 +112,38 @@ std::map<char, int> Text::char_conversion_ =
 	{ ' ', 127 }
 };
 
-
-// METHODS
-//===================================
+unsigned int testLineLength( const std::string& text, unsigned int line_length, unsigned int letters_so_far );
+static constexpr unsigned int colorOffset( Text::FontColor color )
+{
+	return ( color == Text::FontColor::__NULL ) ? 0 : ( unsigned int )( color ) * CHARSET_HEIGHT_MINI_BLOCKS;
+};
+static constexpr int frameX( unsigned int n )
+{
+	return Unit::MiniBlocksToPixels( ( int )( n ) % CHARSET_WIDTH_MINI_BLOCKS );
+};
+static constexpr int frameY( unsigned int n, Text::FontColor color )
+{
+	return colorOffset( color ) + Unit::MiniBlocksToPixels( floor( ( int )( n ) / CHARSET_WIDTH_MINI_BLOCKS ) );
+};
 
 Text::Text
 (
 	std::string words,
 	int x,
 	int y,
-	FontShade color,
+	FontColor color,
 	FontAlign align,
 	bool center_y,
 	unsigned int line_limit,
-	std::unique_ptr<TextComponent> component
+	std::unique_ptr<TextComponent> component,
+	FontColor shadow
 )
 :
 	words_ ( words ),
 	x_ ( x ),
 	y_ ( ( center_y ) ? centerY( words_, ( ( line_limit == 0 ) ? DEFAULT_LINE_LENGTH : line_limit ) ) : y ),
 	color_ ( color ),
+	shadow_ ( shadow ),
 	align_ ( align ),
 	component_ ( std::move( component ) ),
 	line_limit_ ( ( line_limit == 0 ) ? DEFAULT_LINE_LENGTH : line_limit )
@@ -141,6 +157,7 @@ Text::Text( Text&& m ) noexcept
 	x_ ( m.x_ ),
 	y_ ( m.y_ ),
 	color_ ( m.color_ ),
+	shadow_ ( m.shadow_ ),
 	align_ ( m.align_ ),
 	component_ ( std::move( m.component_ ) ),
 	line_limit_ ( m.line_limit_ )
@@ -151,11 +168,11 @@ void Text::renderText
 	const std::string& text,
 	int x,
 	int y,
-	Camera* camera,
-	FontShade color,
+	const Camera* camera,
+	FontColor color,
 	unsigned int line_limit,
 	FontAlign align,
-	FontShade shadow,
+	FontColor shadow,
 	int char_size
 )
 {
@@ -190,7 +207,7 @@ void Text::renderText
 				++c;
 			}
 
-			const int frame = char_conversion_[ text[ c ] ];
+			const char letter = text[ c ];
 			const int char_x = ( CHAR_SIZE_PIXELS * char_size * ( c - ( int )( letters_so_far ) ) ) + x;
 			const int char_y = ( CHAR_SIZE_PIXELS * char_size * ( int )( line ) ) + y;
 
@@ -208,17 +225,11 @@ void Text::renderText
 				dest.y = camera->relativeY( dest );
 			}
 
-			Render::renderObject
-			(
-				"charset.png",
-				{
-					frameX( frame ),
-					frameY( frame, color ),
-					CHAR_SIZE_PIXELS,
-					CHAR_SIZE_PIXELS
-				},
-				dest
-			);
+			if ( shadow != FontColor::__NULL )
+			{
+				renderChar( letter, shadow, { dest.x + char_size, dest.y + char_size, dest.w, dest.h } );
+			}
+			renderChar( letter, color, dest );
 		}
 
 		++line;
@@ -227,14 +238,30 @@ void Text::renderText
 
 };
 
-void Text::render( Camera* camera, FontShade color ) const
+void Text::renderChar( char letter, FontColor color, const sdl2::SDLRect& dest )
 {
-	if ( color == FontShade::__NULL )
+	const int frame = char_conversion_[ letter ];
+	Render::renderObject
+	(
+		"charset.png",
+		{
+			frameX( frame ),
+			frameY( frame, color ),
+			CHAR_SIZE_PIXELS,
+			CHAR_SIZE_PIXELS
+		},
+		dest
+	);
+};
+
+void Text::render( const Camera* camera, FontColor color ) const
+{
+	if ( color == FontColor::__NULL )
 	{
 		color = color_;
 	}
 
-	renderText( words_, x_, y_, camera, color, line_limit_, align_ );
+	renderText( words_, x_, y_, camera, color, line_limit_, align_, shadow_ );
 };
 
 int Text::centerX( unsigned int line_length )
@@ -279,49 +306,9 @@ int Text::centerY( const std::string& words, unsigned int line_limit )
 	);
 };
 
-unsigned int Text::colorOffset( FontShade color )
-{
-	if ( color == FontShade::__NULL )
-	{
-		return 0;
-	}
-	else
-	{
-		return ( unsigned int )( color ) * CHARSET_HEIGHT_MINI_BLOCKS;
-	}
-};
-
-unsigned int Text::colorNum() const
-{
-	if ( color_ == FontShade::__NULL )
-	{
-		return 0;
-	}
-	else
-	{
-		return ( unsigned int )( color_ );
-	}
-};
-
-int Text::frameX( unsigned int n )
-{
-	return Unit::MiniBlocksToPixels( ( int )( n ) % CHARSET_WIDTH_MINI_BLOCKS );
-};
-
-int Text::frameY( unsigned int n, FontShade color )
-{
-	return colorOffset( color ) + Unit::MiniBlocksToPixels( floor( ( int )( n ) / CHARSET_WIDTH_MINI_BLOCKS ) );
-};
-
-void Text::renderNumber( int n, int x, int y, int digits, FontShade color, Camera* camera )
+void Text::renderNumber( int n, int x, int y, int digits, FontColor color, const Camera* camera )
 {
 	renderText( formatNumDigitPadding( n, digits ), x, y, camera, color );
-};
-
-// Get d digit place for n #.
-int Text::getDigit( int n, int d, int remain )
-{
-	return int( floor( n / pow( 10, d - 1 ) ) ) % remain;
 };
 
 // Determine how many digit places n # has.
@@ -442,7 +429,7 @@ std::string Text::timeToString( int seconds, int minutes, int minutes_padding )
 	return formatNumDigitPadding( minutes, minutes_padding ) + ":" + formatNumDigitPadding( seconds, 2 );
 };
 
-unsigned int Text::testLineLength( const std::string& text, unsigned int line_length, unsigned int letters_so_far )
+unsigned int testLineLength( const std::string& text, unsigned int line_length, unsigned int letters_so_far )
 {
 	unsigned int limit = std::min( ( int )( line_length ), ( int )( text.length() ) - ( int )( letters_so_far ) );
 

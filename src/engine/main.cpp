@@ -211,7 +211,7 @@ namespace Main
 		state_pop_ = false;
 	};
 
-	void tempMessage( std::string message, Palette&& palette, Text::FontShade text_color )
+	void tempMessage( std::string message, Palette&& palette, Text::FontColor text_color )
 	{
 		pushState( std::unique_ptr<GameState> ( new MessageState( message, true, nullptr, false, palette, text_color ) ) );
 	};

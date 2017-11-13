@@ -16,6 +16,16 @@ void HieroglyphPusherSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	turnOnEdge( blocks );
 	turnOnCollide();
 	moveInDirectionX();
+
+	switch ( direction_x_ )
+	{
+		case ( Direction::Horizontal::LEFT ):
+			graphics_->flip_x_ = true;
+		break;
+		case ( Direction::Horizontal::RIGHT ):
+			graphics_->flip_x_ = false;
+		break;
+	}
 };
 
 void HieroglyphPusherSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )

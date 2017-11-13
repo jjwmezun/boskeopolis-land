@@ -19,6 +19,8 @@ class InventoryLevel
 		static constexpr int HEIGHT = 24;
 		static constexpr int Y = Unit::WINDOW_HEIGHT_PIXELS - HEIGHT;
 		static constexpr int TOP_ROW_Y = Y + 8;
+		static constexpr int CLOCK_ICON_X = Unit::MiniBlocksToPixels( 17 );
+		static constexpr int CLOCK_X = CLOCK_ICON_X + 8;
 
 		InventoryLevel();
 
@@ -33,8 +35,6 @@ class InventoryLevel
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );
 		static constexpr int FUNDS_ICON_X = Unit::MiniBlocksToPixels( 4 );
 		static constexpr int FUNDS_X = FUNDS_ICON_X + 8;
-		static constexpr int CLOCK_ICON_X = Unit::MiniBlocksToPixels( 17 );
-		static constexpr int CLOCK_X = CLOCK_ICON_X + 8;
 		static constexpr int MISC_X = Unit::MiniBlocksToPixels( 23 );
 
 		static constexpr sdl2::SDLRect BG_DEST = { 0, Unit::WINDOW_HEIGHT_PIXELS - 32, Unit::WINDOW_WIDTH_PIXELS, 32 };
@@ -59,8 +59,8 @@ class InventoryLevel
 		const SpriteGraphics mcguffins_gfx_ = SpriteGraphics( "tilesets/universal.png", 0, 24 );
 		const SpriteGraphics kills_gfx_ = SpriteGraphics( "tilesets/universal.png", 8, 24 );
 		const SpriteGraphics mcguffins_cross_ = SpriteGraphics( "charset.png", 8, 40 );
-		const Text switch_on_ = { "ON", MISC_X, Y, Text::FontShade::DARK_GRAY };
-		const Text switch_off_ = { "OFF", MISC_X, Y, Text::FontShade::DARK_GRAY };
+		const Text switch_on_ = { "ON", MISC_X, Y, Text::FontColor::DARK_GRAY };
+		const Text switch_off_ = { "OFF", MISC_X, Y, Text::FontColor::DARK_GRAY };
 
 		InventoryLevelHealth health_gfx_;
 		OxygenMeter oxygen_meter_;

@@ -11,6 +11,7 @@
 class MapLayerImage : public MapLayer
 {
 	public:
+		static constexpr int REPEAT_INFINITE = 255;
 		MapLayerImage
 		(
 			std::string&& texture,
@@ -31,10 +32,10 @@ class MapLayerImage : public MapLayer
 		);
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
 		void render( const Camera& camera ) const override;
+		void move( int width );
+		void render( const sdl2::SDLRect& container );
 
 	private:
-		static constexpr int REPEAT_INFINITE = 255;
-
 		const Uint8 alpha_;
 		const int offset_x_;
 		const int offset_y_;
@@ -54,7 +55,15 @@ class MapLayerImage : public MapLayer
 		const std::string texture_;
 		sdl2::SDLRect source_;
 
-		void renderY( const Camera& camera ) const;
-		void renderX( const Camera& camera, sdl2::SDLRect& dest ) const;
-		bool onscreen( const sdl2::SDLRect& r, const Camera& camera ) const;
+		void renderY( const sdl2::SDLRect& container ) const;
+		void renderX( const sdl2::SDLRect& container, sdl2::SDLRect& dest ) const;
+
+		static constexpr bool onscreen( const sdl2::SDLRect& r, const sdl2::SDLRect& container )
+		{
+			return
+				r.right() > 0 &&
+				r.x < container.w &&
+				r.bottom() > 0 &&
+				r.y < container.h;
+		};
 };

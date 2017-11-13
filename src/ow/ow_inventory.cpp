@@ -63,9 +63,9 @@ void OWInventory::render( int lv_select )
 	
 	if ( lv_select > 0 )
 	{
-		Text::FontShade name_shade = Text::FontShade::BLACK;
-		Text::FontShade gem_shade = Text::FontShade::BLACK;
-		Text::FontShade time_shade = Text::FontShade::BLACK;
+		Text::FontColor name_shade = Text::FontColor::BLACK;
+		Text::FontColor gem_shade = Text::FontColor::BLACK;
+		Text::FontColor time_shade = Text::FontColor::BLACK;
 
 		std::string gem_score;
 		std::string time_score;
@@ -74,9 +74,9 @@ void OWInventory::render( int lv_select )
 		{
 			gem_score  = Level::gemChallengeText( lv_select );
 			time_score = Level::timeChallengeText( lv_select );
-			name_shade = Text::FontShade::DARK_MID_GRAY;
-			gem_shade = Text::FontShade::DARK_MID_GRAY;
-			time_shade = Text::FontShade::DARK_MID_GRAY;
+			name_shade = Text::FontColor::DARK_MID_GRAY;
+			gem_shade = Text::FontColor::DARK_MID_GRAY;
+			time_shade = Text::FontColor::DARK_MID_GRAY;
 		}
 		else
 		{
@@ -85,17 +85,17 @@ void OWInventory::render( int lv_select )
 			
 			if ( Inventory::levelComplete( lv_select ) )
 			{
-				name_shade = ( Text::FontShade )( color_animation_ );
+				name_shade = ( Text::FontColor )( color_animation_ );
 			}
 			
 			if ( Inventory::gemChallengeBeaten( lv_select ) )
 			{
-				gem_shade = ( Text::FontShade )( color_animation_ );
+				gem_shade = ( Text::FontColor )( color_animation_ );
 			}
 			
 			if ( Inventory::timeChallengeBeaten( lv_select ) )
 			{
-				time_shade = ( Text::FontShade )( color_animation_ );
+				time_shade = ( Text::FontColor )( color_animation_ );
 			}
 		}
 		
@@ -126,7 +126,7 @@ void OWInventory::render( int lv_select )
 	
 	if ( Inventory::totalFundsShown() < 0 )
 	{
-		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontShade::DARK_MID_GRAY );
+		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontColor::DARK_MID_GRAY );
 	}
 	else
 	{

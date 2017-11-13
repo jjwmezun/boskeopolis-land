@@ -12,6 +12,8 @@
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
 
+static constexpr int SMOOTH_MOVEMENT_PADDING = 4;
+
 OverworldState::OverworldState()
 :
 	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),

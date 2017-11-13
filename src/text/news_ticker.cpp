@@ -11,7 +11,7 @@ NewsTicker::NewsTicker( int y )
 		"",
 		Unit::WINDOW_WIDTH_PIXELS,
 		y,
-		FontShade::DARK_GRAY,
+		FontColor::DARK_GRAY,
 		FontAlign::LEFT,
 		false,
 		NULL, 

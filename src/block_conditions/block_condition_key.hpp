@@ -1,5 +1,4 @@
-#ifndef BLOCK_CONDITION_KEY_H
-#define BLOCK_CONDITION_KEY_H
+#pragma once
 
 #include "block_condition.hpp"
 
@@ -10,5 +9,3 @@ class BlockConditionKey : public BlockCondition
 		~BlockConditionKey();
 		bool condition( Collision& collision, Sprite& sprite, Block& block, EventSystem& events ) override;
 };
-
-#endif // BLOCK_CONDITION_KEY_H

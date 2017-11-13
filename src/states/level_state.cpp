@@ -44,7 +44,6 @@ void LevelState::update()
 	{
 		blocks_.blocksFromMap( level_.currentMap(), camera_ );
 		blocks_.update( events_ );
-		//level_.update( inventory_screen_, events_, sprites_, blocks_, camera_, health_ );
 		level_.currentMap().update( events_, sprites_, blocks_, camera_ );
 		camera_.update();
 		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );

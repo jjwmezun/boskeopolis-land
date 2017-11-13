@@ -1,21 +1,20 @@
-#ifndef TITLE_STATE_H
-#define TITLE_STATE_H
+#pragma once
 
 #include "game_state.hpp"
+#include "map_layer_image.hpp"
 #include "sprite_graphics.hpp"
 #include "text.hpp"
 #include <array>
 
 class TitleState : public GameState
 {
-
 	public:
 		TitleState();
 		~TitleState();
 
-		void update();
-		void stateRender();
-		void init();
+		void update() override;
+		void stateRender() override;
+		void init() override;
 
 	private:
 		enum class Option
@@ -26,23 +25,14 @@ class TitleState : public GameState
 			QUIT,
 			__END
 		};
-		static constexpr int OPTIONS_SIZE = ( int )Option::__END;
-		static constexpr int OPTIONS_TOP_Y = 64;
+		static constexpr int OPTIONS_SIZE = ( int )( Option::__END );
 
-		SpriteGraphics logo_gfx_ = SpriteGraphics( "bosko_logo.png" );
-		static constexpr sdl2::SDLRect logo_rect_ = { ( Unit::WINDOW_WIDTH_PIXELS - 320 ) / 2, 0, 320, 48 };
-		sdl2::SDLRect highlight_rect_ = { 16, OPTIONS_TOP_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 };
-
-		const std::array<const std::string, (std::size_t)OPTIONS_SIZE> option_text_ =
-		{{
-			"New Game",
-			"Load Game",
-			"Options",
-			"Quit"
-		}};
-		Counter selection_ = { 0, OPTIONS_SIZE - 1 };
-
-		bool can_load_ = false;
+		MapLayerImage bg_;
+		const std::array<const std::string, ( std::size_t )( OPTIONS_SIZE )> option_text_;
+		SpriteGraphics logo_gfx_;
+		Text created_by_;
+		Counter selection_;
+		const sdl2::SDLRect logo_rect_;
+		sdl2::SDLRect highlight_rect_;
+		bool can_load_;
 };
-
-#endif // TITLE_STATE_H

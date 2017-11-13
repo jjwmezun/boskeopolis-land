@@ -10,8 +10,8 @@
 				{
 					"type": "image",
 					"img": "pyramid_bg.png",
-					"width": 8,
-					"height": 8
+					"width": 16,
+					"height": 16
 				}
 			]
 		}
@@ -20,11 +20,11 @@
 	"goal":
 	{
 		"type": "warp",
-		"message": "¡Get the silver moon & then 'scape 'fore time runs out!"
+		"message": "¡Get the silver moon & then 'scape 'fore time\nruns out!"
 	},
 
 	"entrance_x": 32,
-	"entrance_y": 61,
-	"gem_challenge": 1000,
+	"entrance_y": 55,
+	"gem_challenge": 14000,
 	"time_challenge": 20
 }

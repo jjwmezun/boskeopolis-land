@@ -45,6 +45,11 @@ class Camera
 			shake_dir_ ( Direction::Horizontal::__NULL )
 		{};
 
+		constexpr sdl2::SDLRect rect() const
+		{
+			return { x_, y_, widthPixels(), heightPixels() };
+		};
+
 		constexpr int widthBlocks() const
 		{
 			return width_;

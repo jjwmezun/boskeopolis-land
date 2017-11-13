@@ -24,14 +24,13 @@ class GameState
 			StateID id = __NULL,
 			const Palette& palette = { "Grayscale", 1 }
 		);
-
 		virtual ~GameState();
 
 		void render();
-
 		virtual void update() = 0;
 		virtual void stateRender() = 0;
-		virtual void init() = 0;
+		virtual void init();
+
 		void changePalette();
 		void newPalette( const Palette& pallete );
 		StateID id() const;

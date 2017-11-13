@@ -13,14 +13,12 @@
 
 class LevelState : public GameState
 {
-
 	public:
 		LevelState( int lvname );
 		~LevelState();
-
-		void update();
-		void stateRender();
-		void init();
+		void update() override;
+		void stateRender() override;
+		void init() override;
 
 	private:
 		InventoryLevel inventory_screen_;

@@ -3,7 +3,8 @@
 	{
 		"type": "sprite",
 		"x": 7,
-		"y": 5
+		"y": 5,
+		"priority": true
 	},
 	"behavior":
 	[

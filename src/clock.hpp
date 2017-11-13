@@ -2,23 +2,31 @@
 
 #include <string>
 #include "text.hpp"
-#include "timers/timer_repeat.hpp"
-#include "unit.hpp"
 
 class Clock
 {
-	public:
-		Clock( int start_time = 0, Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
-		~Clock();
+	public:	
+		constexpr Clock
+		(
+			int start_time = 0,
+			Direction::Vertical direction = DEFAULT_DIRECTION,
+			int limit = DEFAULT_LIMIT
+		)
+		:
+			frames_timer_ ( 0 ),
+			total_seconds_ ( start_time ),
+			limit_ ( limit ),
+			direction_ ( direction )
+		{};
 
 		void render
 		(
 			int x,
 			int y,
-			Camera* camera = nullptr,
-			Text::FontShade color = Text::FontShade::BLACK,
+			const Camera* camera = nullptr,
+			Text::FontColor color = Text::FontColor::BLACK,
 			Text::FontAlign align = Text::FontAlign::LEFT,
-			Text::FontShade shadow = Text::FontShade::__NULL,
+			Text::FontColor shadow = Text::FontColor::__NULL,
 			int magnification = 1
 		) const;
 
@@ -27,32 +35,70 @@ class Clock
 			int x,
 			int y,
 			int total_seconds,
-			Camera* camera = nullptr,
-			Text::FontShade color = Text::FontShade::BLACK,
+			const Camera* camera = nullptr,
+			Text::FontColor color = Text::FontColor::BLACK,
 			Text::FontAlign align = Text::FontAlign::LEFT,
-			Text::FontShade shadow = Text::FontShade::__NULL,
+			Text::FontColor shadow = Text::FontColor::__NULL,
 			int magnification = 1
 		);
 
 		void update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
-		int secondsFromTotal() const;
-		int minutesFromTotalSeconds() const;
-		static int secondsFromTotal( int total_seconds );
-		static int minutesFromTotalSeconds( int total_seconds );
+		void startMoonCountdown( int start_time );
 		static std::string timeToString( int total_seconds );
-		int totalSeconds() const;
-		bool hitLimit() const;
-		bool lowOnTime() const;
-		int timeRemaining() const;
+
+		constexpr int secondsFromTotal() const
+		{
+			return secondsFromTotal( total_seconds_ );
+		};
+
+		constexpr int minutesFromTotalSeconds() const
+		{
+			return minutesFromTotalSeconds( total_seconds_ );
+		};
+
+		static constexpr int secondsFromTotal( int total_seconds )
+		{
+			return total_seconds % SECONDS_PER_MINUTE;
+		};
+
+		static constexpr int minutesFromTotalSeconds( int total_seconds )
+		{
+			return floor( total_seconds / SECONDS_PER_MINUTE );
+		};
+
+		constexpr int totalSeconds() const
+		{
+			return total_seconds_;
+		};
+
+		constexpr bool hitLimit() const
+		{
+			return total_seconds_ >= limit_;
+		};
+
+		constexpr bool lowOnTime() const
+		{
+			return direction_ == Direction::Vertical::DOWN && timeRemaining() < 5;
+		};
+
+		constexpr int timeRemaining() const
+		{
+			return limit_ - total_seconds_;
+		};
+		
+		constexpr int countdownHit0() const
+		{
+			return timeRemaining() <= 0;
+		};
 
 	private:
 		static constexpr int DEFAULT_LIMIT = 599;
 		static constexpr Direction::Vertical DEFAULT_DIRECTION = Direction::Vertical::UP;
 		static constexpr int SECONDS_PER_MINUTE = 60;
 
+		int frames_timer_;
 		int total_seconds_;
 		int limit_;
 		Direction::Vertical direction_;
-		TimerRepeat timer_ = TimerRepeat( Unit::FPS );
 };

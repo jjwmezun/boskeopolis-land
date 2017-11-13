@@ -17,16 +17,16 @@ constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_DEST;
 constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_CROSS_DEST;
 
 static constexpr int FLASHING_TIMER_SHADES_NUM = 8;
-static constexpr Text::FontShade FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
+static constexpr Text::FontColor FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
 {
-	Text::FontShade::DARK_GRAY,
-	Text::FontShade::DARK_MID_GRAY,
-	Text::FontShade::LIGHT_MID_GRAY,
-	Text::FontShade::LIGHT_GRAY,
-	Text::FontShade::LIGHT_GRAY,
-	Text::FontShade::LIGHT_MID_GRAY,
-	Text::FontShade::DARK_MID_GRAY,
-	Text::FontShade::DARK_GRAY
+	Text::FontColor::DARK_GRAY,
+	Text::FontColor::DARK_MID_GRAY,
+	Text::FontColor::LIGHT_MID_GRAY,
+	Text::FontColor::LIGHT_GRAY,
+	Text::FontColor::LIGHT_GRAY,
+	Text::FontColor::LIGHT_MID_GRAY,
+	Text::FontColor::DARK_MID_GRAY,
+	Text::FontColor::DARK_GRAY
 };
 static constexpr int FLASHING_TIMER_SPEED = 8;
 
@@ -94,7 +94,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 
 	// GEMS
 	gem_icon_gfx_.render( GEM_ICON_DEST, nullptr );
-	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, Text::FontShade::DARK_GRAY );
+	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, Text::FontColor::DARK_GRAY );
 
 	// HEALTH
 	health_gfx_.render();
@@ -128,7 +128,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 		{
 			mcguffins_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
-			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontShade::DARK_GRAY );
+			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
 		}
 	
 		// Kill Count
@@ -136,7 +136,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 		{
 			kills_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
-			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontShade::DARK_GRAY );
+			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
 		}
 
 	// OXYGEN
@@ -148,6 +148,6 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	// BOPS
 	if ( Inventory::bopsMultiplier() )
 	{
-		Text::renderNumber( Inventory::howManyBops(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontShade::DARK_GRAY );
+		Text::renderNumber( Inventory::howManyBops(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontColor::DARK_GRAY );
 	}
 };

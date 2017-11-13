@@ -1,24 +1,12 @@
 #include "clock.hpp"
 #include <cmath>
-
-Clock::Clock
-(
-	int start_time,
-	Direction::Vertical direction,
-	int limit
-)
-:
-	total_seconds_ ( start_time ),
-	limit_ ( limit ),
-	direction_ ( direction )
-{};
-
-Clock::~Clock() {};
+#include "unit.hpp"
 
 void Clock::update()
 {
-	if ( timer_.hit() )
+	if ( frames_timer_ >= Unit::FPS )
 	{
+		frames_timer_ = 0;
 		++total_seconds_;
 
 		if ( total_seconds_ > limit_ )
@@ -26,41 +14,10 @@ void Clock::update()
 			total_seconds_ = limit_;
 		}
 	}
-
-	timer_.update();
+	++frames_timer_;
 };
 
-int Clock::secondsFromTotal() const
-{
-	return secondsFromTotal( total_seconds_ );
-};
-
-int Clock::minutesFromTotalSeconds() const
-{
-	return minutesFromTotalSeconds( total_seconds_ );
-};
-
-int Clock::secondsFromTotal( int total_seconds )
-{
-	return total_seconds % SECONDS_PER_MINUTE;
-};
-
-int Clock::minutesFromTotalSeconds( int total_seconds )
-{
-	return floor( total_seconds / SECONDS_PER_MINUTE );
-};
-
-int Clock::totalSeconds() const
-{
-	return total_seconds_;
-};
-
-bool Clock::hitLimit() const
-{
-	return total_seconds_ >= limit_;
-};
-
-void Clock::renderTime( int x, int y, int total_seconds, Camera* camera, Text::FontShade color, Text::FontAlign align, Text::FontShade shadow, int magnification )
+void Clock::renderTime( int x, int y, int total_seconds, const Camera* camera, Text::FontColor color, Text::FontAlign align, Text::FontColor shadow, int magnification )
 {
 	Text::renderText( Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) ), x, y, camera, color, Text::DEFAULT_LINE_LENGTH, align, shadow, magnification );
 }
@@ -70,7 +27,7 @@ std::string Clock::timeToString( int total_seconds )
 	return Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) );
 };
 
-void Clock::render( int x, int y, Camera* camera, Text::FontShade color, Text::FontAlign align, Text::FontShade shadow, int magnification ) const
+void Clock::render( int x, int y, const Camera* camera, Text::FontColor color, Text::FontAlign align, Text::FontColor shadow, int magnification ) const
 {
 	if ( direction_ == Direction::Vertical::DOWN )
 	{
@@ -84,15 +41,14 @@ void Clock::render( int x, int y, Camera* camera, Text::FontShade color, Text::F
 
 void Clock::reset( Direction::Vertical direction, int limit )
 {
-	*this = Clock( 0, direction, limit );
+	frames_timer_ = 0;
+	total_seconds_ = 0;
+	limit_ = limit;
+	direction_ = direction;
 };
 
-bool Clock::lowOnTime() const
+void Clock::startMoonCountdown( int start_time )
 {
-	return direction_ == Direction::Vertical::DOWN && timeRemaining() < 5;
-};
-
-int Clock::timeRemaining() const
-{
-	return limit_ - total_seconds_;
+	direction_ = Direction::Vertical::DOWN;
+	limit_ = total_seconds_ + start_time;
 };

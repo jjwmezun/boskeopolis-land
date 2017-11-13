@@ -3,14 +3,29 @@
 #include "overworld_menu_state.hpp"
 #include "title_state.hpp"
 
-constexpr sdl2::SDLRect OverworldMenuState::bg_;
+static constexpr int BG_WIDTH = 24;
+static constexpr int BG_HEIGHT = 11;
 
 OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal )
 :
-	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
-	option_selection_ ( ( int )( Option::CONTINUE ) ),
+	GameState( StateID::OVERWORLD_MENU_STATE, pal ),	
+	bg_
+	(
+		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( BG_WIDTH / 2 ) ),
+		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( BG_HEIGHT / 2 ) ),
+		Unit::MiniBlocksToPixels( BG_WIDTH ),
+		Unit::MiniBlocksToPixels( BG_HEIGHT )
+	),
+	option_text_
+	({{
+		Text( "Continue", bg_.x + 8, bg_.y + 16, Text::FontColor::LIGHT_MID_GRAY ),
+		Text( "Level List", bg_.x + 8, bg_.y + 32, Text::FontColor::LIGHT_MID_GRAY ),
+		Text( "Camera View", bg_.x + 8, bg_.y + 48, Text::FontColor::LIGHT_MID_GRAY ),
+		Text( "Quit", bg_.x + 8, bg_.y + 64, Text::FontColor::LIGHT_MID_GRAY )
+	}}),
 	go_to_list_ ( go_to_list ),
-	camera_mode_ ( camera_mode )
+	camera_mode_ ( camera_mode ),
+	option_selection_ ( ( int )( Option::CONTINUE ) )
 {};
 
 OverworldMenuState::~OverworldMenuState() {};
@@ -71,11 +86,11 @@ void OverworldMenuState::stateRender()
 
 	for ( int i = 0; i < NUM_O_OPTIONS; ++i )
 	{
-		Text::FontShade text_color = Text::FontShade::__NULL;
+		Text::FontColor text_color = Text::FontColor::__NULL;
 
 		if ( option_selection_ == i )
 		{
-			text_color = Text::FontShade::WHITE;
+			text_color = Text::FontColor::WHITE;
 		}
 
 		option_text_.at( i ).render( nullptr, text_color );

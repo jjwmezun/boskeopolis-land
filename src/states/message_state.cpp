@@ -20,7 +20,7 @@ std::unique_ptr<MessageState> MessageState::error
 			std::move( next_state ),
 			push,
 			{ "Grayscale", 6 },
-			Text::FontShade::WHITE
+			Text::FontColor::WHITE
 		)
 	);
 };
@@ -32,15 +32,14 @@ MessageState::MessageState
 	std::unique_ptr<GameState> next_state,
 	bool push,
 	const Palette& palette,
-	Text::FontShade font_color
+	Text::FontColor font_color
 )
 :
 	GameState( StateID::MESSAGE_STATE, palette ),
-	message_ ( Text( message, 0, 0, Text::FontShade::BLACK, Text::FontAlign::CENTER, true )  ),
-	next_state_ ( move( next_state ) ),
+	message_ ( message, 0, 0, font_color, Text::FontAlign::CENTER, true ),
+	next_state_ ( std::move( next_state ) ),
 	pop_ ( pop ),
-	push_ ( push ),
-	font_color_ ( font_color )
+	push_ ( push )
 {};
 
 MessageState::~MessageState() {};
@@ -55,11 +54,11 @@ void MessageState::update()
 		}
 		else if ( push_ )
 		{
-			Main::pushState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
+			Main::pushState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
 		}
 		else
 		{
-			Main::changeState( std::unique_ptr<GameState> ( move( next_state_ ) ) );
+			Main::changeState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
 		}
 	}
 };
@@ -67,7 +66,5 @@ void MessageState::update()
 void MessageState::stateRender()
 {
 	Render::colorCanvas();
-	message_.render( nullptr, font_color_ );
+	message_.render();
 };
-
-void MessageState::init() {};

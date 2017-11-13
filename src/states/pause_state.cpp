@@ -4,32 +4,31 @@
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 
-constexpr sdl2::SDLRect PauseState::surface_box_;
+static constexpr int PAUSE_BOX_WIDTH = 24;
+static constexpr int PAUSE_BOX_HEIGHT = 7;
 
 PauseState::PauseState( const Palette& palette, EventSystem& events )
 :
 	GameState( StateID::PAUSE_STATE, palette ),
-	option_text_ ( optionText( Inventory::victory() ) ),
-	option_selection_ ( PauseOption::PO_CONTINUE ),
-	events_ ( events )
+	surface_box_
+	(
+		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( PAUSE_BOX_WIDTH / 2 ) ),
+		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( PAUSE_BOX_HEIGHT / 2 ) ),
+		Unit::MiniBlocksToPixels( PAUSE_BOX_WIDTH ),
+		Unit::MiniBlocksToPixels( PAUSE_BOX_HEIGHT )
+	),
+	option_text_
+	({
+		{ "Continue", surface_box_.x + 8, surface_box_.y + 16, Text::FontColor::LIGHT_MID_GRAY },
+		{ quitName( Inventory::victory() ), surface_box_.x + 8, surface_box_.y + 32, Text::FontColor::LIGHT_MID_GRAY }
+	}),
+	events_ ( events ),
+	option_selection_ ( PauseOption::PO_CONTINUE )
 {};
 
-std::vector<Text> PauseState::optionText( bool beaten ) const
+std::string PauseState::quitName( bool beaten ) const
 {
-	std::vector<Text> temp;
-
-	temp.push_back( Text( "Continue", surface_box_.x + 8, surface_box_.y + 16, Text::FontShade::LIGHT_MID_GRAY ) );
-
-	if ( beaten )
-	{
-		temp.push_back( Text( "Back to Level Select", surface_box_.x + 8, surface_box_.y + 32, Text::FontShade::LIGHT_MID_GRAY ) );
-	}
-	else
-	{
-		temp.push_back( Text( "Give Up", surface_box_.x + 8, surface_box_.y + 32, Text::FontShade::LIGHT_MID_GRAY ) );
-	}
-
-	return temp;
+	return ( beaten ) ? "Back to Level Select" : "Give Up";
 };
 
 PauseState::~PauseState() {};
@@ -51,16 +50,13 @@ void PauseState::update()
 
 	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
-
 		if ( option_selection_ == PauseOption::PO_QUIT )
 		{
 			events_.quitLevel();
 		}
-
 		Main::popState();
 	}
-
-	if ( Input::pressed( Input::Action::MENU ) )
+	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
 	}
@@ -72,17 +68,13 @@ void PauseState::stateRender()
 
 	for ( int i = 0; i < NUM_O_PAUSE_OPTIONS; ++i )
 	{
-		Text::FontShade text_color = Text::FontShade::__NULL;
+		Text::FontColor text_color = Text::FontColor::__NULL;
 
-		if ( ( int )option_selection_ == i )
+		if ( ( int )( option_selection_ ) == i )
 		{
-			text_color = Text::FontShade::WHITE;
+			text_color = Text::FontColor::WHITE;
 		}
 
-		option_text_.at( i ).render( nullptr, text_color );
+		option_text_[ i ].render( nullptr, text_color );
 	}
-};
-
-void PauseState::init()
-{
 };

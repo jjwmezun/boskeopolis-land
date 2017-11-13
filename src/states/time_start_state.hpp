@@ -10,7 +10,6 @@ class TimeStartState : public GameState
 
 		void update() override;
 		void stateRender() override;
-		void init() override;
 
 	private:
 		enum class State
@@ -18,11 +17,15 @@ class TimeStartState : public GameState
 			GOING_DOWN,
 			BUMPING_UPWARD,
 			BUMPING_BACK_DOWN,
+			BLINKING,
+			SHRINKING,
 			DONE
 		};
 
 		int y_;
+		int x_;
 		int size_;
-		int size_timer_;
+		int timer_;
+		Text::FontColor color_;
 		State state_;
 };

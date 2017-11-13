@@ -10,12 +10,29 @@
 #include "overworld_state.hpp"
 #include "title_state.hpp"
 
+static constexpr int DEFAULT_LEVEL = 0;
+static constexpr int FUNDS_X = 32;
+static constexpr int BG_COLOR = 1;
+static constexpr int INVENTORY_Y = Unit::WINDOW_HEIGHT_PIXELS - 24;
+static constexpr int START_Y = 40;
+
 LevelSelectState::LevelSelectState( int level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Level Select", 1 } ),
+	win_icon_gfx_ ( "tilesets/universal.png", 48, 8 ),
+	diamond_gfx_ ( "tilesets/universal.png", 48, 0 ),
+	gem_icon_gfx_ ( "charset.png", 32, 16 ),
+	title_ ( "Select a Level, yo.", 0, 16, Text::FontColor::BLACK, Text::FontAlign::CENTER ),
+	camera_ ( 0, 0, Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4, 0, START_Y ),
+	selection_ ( level, Level::realLevelNum()-1, 0 ),
+	INVENTORY_BG_DEST ( 0, INVENTORY_Y, Unit::WINDOW_WIDTH_PIXELS, 24 ),
+	HEADER_BG_DEST ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, START_Y ),
+	GEM_ICON_DEST ( FUNDS_X - 16, INVENTORY_Y + 8, 8, 8 ),
+	highlight_dest_ ( 16, START_Y, Unit::WINDOW_WIDTH_PIXELS - 32, 8 ),
 	prev_level_ ( level ),
-	selection_ ( Counter( level, Level::realLevelNum()-1, 0 ) ),
-	camera_ ( { 0, 0, Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4, 0, START_Y } )
+	delay_length_ ( 16 ),
+	delay_ ( 0 ),
+	show_challenges_ ( false )
 {};
 
 LevelSelectState::~LevelSelectState() {};
@@ -88,21 +105,21 @@ void LevelSelectState::stateRender()
 
 	for ( int i = 0; i < level_ids_.size(); ++i )
 	{
-		Text::FontShade shade = Text::FontShade::BLACK;
+		Text::FontColor shade = Text::FontColor::BLACK;
 		
 		if ( levels_complete_.at( i ) )
 		{
-			shade = Text::FontShade::LIGHT_MID_GRAY;
+			shade = Text::FontColor::LIGHT_MID_GRAY;
 		}
 		else if ( i == selection_.value() )
 		{
 			if ( show_challenges_ )
 			{
-				shade = Text::FontShade::LIGHT_GRAY;
+				shade = Text::FontColor::LIGHT_GRAY;
 			}
 			else
 			{
-				shade = Text::FontShade::WHITE;
+				shade = Text::FontColor::WHITE;
 			}
 		}
 
@@ -115,13 +132,13 @@ void LevelSelectState::stateRender()
 		{
 			if ( i == selection_.value() && show_challenges_ )
 			{
-				gem_challenges_text_[ i ].render( &camera_, Text::FontShade::LIGHT_GRAY );
+				gem_challenges_text_[ i ].render( &camera_, Text::FontColor::LIGHT_GRAY );
 			}
 			else
 			{
 				if ( gem_challenges_.at( i ) )
 				{
-					gem_scores_[ i ].render( &camera_, Text::FontShade::LIGHT_MID_GRAY );
+					gem_scores_[ i ].render( &camera_, Text::FontColor::LIGHT_MID_GRAY );
 				}
 				else
 				{
@@ -134,13 +151,13 @@ void LevelSelectState::stateRender()
 		{
 			if ( i == selection_.value() && show_challenges_ )
 			{
-				time_challenges_text_[ i ].render( &camera_, Text::FontShade::LIGHT_GRAY );
+				time_challenges_text_[ i ].render( &camera_, Text::FontColor::LIGHT_GRAY );
 			}
 			else
 			{
 				if ( time_challenges_.at( i ) )
 				{
-					time_scores_[ i ].render( &camera_, Text::FontShade::LIGHT_MID_GRAY );
+					time_scores_[ i ].render( &camera_, Text::FontColor::LIGHT_MID_GRAY );
 				}
 				else
 				{
@@ -173,11 +190,11 @@ void LevelSelectState::stateRender()
 	Render::renderRect( INVENTORY_BG_DEST, BG_COLOR );
 	gem_icon_gfx_.render( GEM_ICON_DEST, nullptr );
 
-	Text::FontShade shade = Text::FontShade::BLACK;
+	Text::FontColor shade = Text::FontColor::BLACK;
 
 	if ( Inventory::totalFundsShown() < 0 )
 	{
-		shade = Text::FontShade::LIGHT_GRAY;
+		shade = Text::FontColor::LIGHT_GRAY;
 	}
 
 	Text::renderNumber( Inventory::totalFundsShown(), FUNDS_X, INVENTORY_Y + 8, 9, shade );

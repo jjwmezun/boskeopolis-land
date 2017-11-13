@@ -23,8 +23,6 @@ class OverworldState : public GameState
 		void init() override;
 		
 	private:
-		static constexpr int SMOOTH_MOVEMENT_PADDING = 4;
-
 		OWCamera camera_;
 		OWHero hero_;
 		int map_width_;
