@@ -48,4 +48,6 @@ namespace mezun
 	{
 		return ( y * w ) + x;
 	};
+	
+	bool nextFrame( int frame, int interval, int duration );
 };

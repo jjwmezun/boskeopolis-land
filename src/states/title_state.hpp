@@ -9,10 +9,12 @@
 class TitleState : public GameState
 {
 	public:
+		static constexpr int OPTIONS_SIZE = 4;
+
 		TitleState();
 		~TitleState();
 
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
 
@@ -22,17 +24,28 @@ class TitleState : public GameState
 			NEW,
 			LOAD,
 			OPTIONS,
-			QUIT,
-			__END
+			QUIT
 		};
-		static constexpr int OPTIONS_SIZE = ( int )( Option::__END );
 
-		MapLayerImage bg_;
+		MapLayerImage light_gradient_bg_;
+		MapLayerImage skyline_bg_;
+		MapLayerImage skyscrapers_bg_;
+		MapLayerImage cloud_bg_;
+		const std::array<const sdl2::SDLRect, ( std::size_t )( OPTIONS_SIZE )> option_bg_;
+		const std::array<const sdl2::SDLRect, ( std::size_t )( OPTIONS_SIZE )> option_bg_shadows_;
 		const std::array<const std::string, ( std::size_t )( OPTIONS_SIZE )> option_text_;
 		SpriteGraphics logo_gfx_;
 		Text created_by_;
-		Counter selection_;
 		const sdl2::SDLRect logo_rect_;
-		sdl2::SDLRect highlight_rect_;
+		int selection_;
+		int prev_selection_;
+		int selection_timer_;
 		bool can_load_;
+		
+		void addToSelection();
+		void subtractFromSelection();
+		inline bool invalidOption( int i )
+		{
+			return i == ( int )( Option::OPTIONS ) || ( !can_load_ && i == ( int )( Option::LOAD ) );
+		};
 };

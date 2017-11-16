@@ -1,3 +1,4 @@
+#include <iostream>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -9,6 +10,8 @@
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
+
+static constexpr int LOOP_CHANGE = 3;
 
 Map Map::mapFromPath
 (
@@ -136,6 +139,7 @@ Map Map::mapFromPath
 		int wind_strength = 0;
 		bool moon_gravity = false;
 		bool show_on_off = false;
+		int lightning_flash_color = 0;
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -303,6 +307,15 @@ Map Map::mapFromPath
 						show_on_off = prop.value.GetBool();
 					}
 				}
+
+				else if ( mezun::areStringsEqual( name, "lightning_flash_color" ) )
+				{
+					if ( prop.value.IsInt() )
+					{
+						lightning_flash_color = prop.value.GetInt();
+						assert( lightning_flash_color >= 0 || lightning_flash_color < Palette::COLOR_LIMIT );
+					}
+				}
 			}
 		}
 
@@ -340,7 +353,8 @@ Map Map::mapFromPath
 			loop_sides,
 			wind_strength,
 			moon_gravity,
-			show_on_off
+			show_on_off,
+			lightning_flash_color
 		);
 };
 
@@ -368,7 +382,8 @@ Map::Map
 	bool loop_sides,
 	int wind_strength,
 	bool moon_gravity,
-	bool show_on_off
+	bool show_on_off,
+	int lightning_flash_color
 )
 :
 	blocks_ ( blocks ),
@@ -393,7 +408,9 @@ Map::Map
 	loop_sides_ ( loop_sides ),
 	wind_strength_ ( wind_strength ),
 	moon_gravity_ ( moon_gravity ),
-	show_on_off_ ( show_on_off )
+	show_on_off_ ( show_on_off ),
+	lightning_flash_color_ ( lightning_flash_color ),
+	current_bg_ ( palette.bgN() )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -433,7 +450,9 @@ Map::Map( Map&& m ) noexcept
 	wind_strength_ ( m.wind_strength_ ),
 	moon_gravity_ ( m.moon_gravity_ ),
 	changed_ ( m.changed_ ),
-	show_on_off_ ( m.show_on_off_ )
+	show_on_off_ ( m.show_on_off_ ),
+	lightning_flash_color_ ( m.lightning_flash_color_ ),
+	current_bg_ ( m.current_bg_ )
 {};
 
 Map::Map( const Map& c )
@@ -462,7 +481,9 @@ Map::Map( const Map& c )
 	wind_strength_ ( c.wind_strength_ ),
 	moon_gravity_ ( c.moon_gravity_ ),
 	changed_ ( c.changed_ ),
-	show_on_off_ ( c.show_on_off_ )
+	show_on_off_ ( c.show_on_off_ ),
+	lightning_flash_color_ ( c.lightning_flash_color_ ),
+	current_bg_ ( c.current_bg_ )
 {};
 
 int Map::widthBlocks() const
@@ -546,11 +567,6 @@ int Map::indexFromXAndY( int x, int y ) const
 	}
 };
 
-bool Map::changed() const
-{
-	return changed_;
-};
-
 void Map::changeBlock( int where, int value )
 {
 	if ( inBounds( where ) )
@@ -578,7 +594,15 @@ bool Map::inBounds( int n ) const
 	return n < blocks_.size();
 };
 
-void Map::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
+void Map::update( EventSystem& events, const SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
+{
+	updateLayers( events, blocks, camera );
+	updateLoop( sprites );
+	updateBGColor();
+	changed_ = false;
+};
+
+void Map::updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera )
 {
 	for ( auto b : backgrounds_ )
 	{
@@ -588,9 +612,10 @@ void Map::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& block
 	{
 		f->update( events, blocks, camera, *this );
 	}
+};
 
-	changed_ = false;
-	
+void Map::updateLoop( const SpriteSystem& sprites )
+{	
 	if ( sprites.hero().rightPixels() > rightEdgeOfLoop() )
 	{
 		++current_loop_;
@@ -601,25 +626,50 @@ void Map::update( EventSystem& events, SpriteSystem& sprites, BlockSystem& block
 	}
 };
 
-Palette Map::palette() const
+void Map::updateBGColor()
 {
-	return palette_;
+	current_bg_ = palette_.bgN();
+	if ( lightning_flash_color_ != 0 && Main::stateFrame() >= 8 )
+	{
+		current_bg_ = lightning_flash_color_;
+
+		const int difference = palette_.bgN() - lightning_flash_color_;
+		assert( difference >= 0 );
+
+		for ( int i = difference; i >= 0; --i )
+		{
+			const int color = lightning_flash_color_ + i;
+			const int duration = ( color == lightning_flash_color_ ) ? 8 : 2;
+			const int first_frame_check = 256 - ( ( difference - 1 ) * 2 );
+			
+			if ( Main::nextStateFrame( first_frame_check, duration ) )
+			{
+				current_bg_ = color;
+			}
+		}
+	}
 };
 
-void Map::renderBG( Camera& camera )
+void Map::renderBG( const Camera& camera )
 {
+	renderBGColor();
 	for ( auto b : backgrounds_ )
 	{
 		b->render( camera );
 	}
 };
 
-void Map::renderFG( Camera& camera )
+void Map::renderFG( const Camera& camera )
 {
 	for ( auto f : foregrounds_ )
 	{
 		f->render( camera );
 	}
+};
+
+void Map::renderBGColor() const
+{
+	Render::colorCanvas( current_bg_ );
 };
 
 const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
@@ -631,68 +681,7 @@ const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
 			return &warps_[ i ];
 		}
 	}
-
 	return nullptr;
-};
-
-bool Map::slippery() const
-{
-	return slippery_;
-};
-
-int Map::topLimit() const
-{
-	return top_limit_;
-};
-
-int Map::bottomLimit() const
-{
-	return bottom_limit_;
-};
-
-int Map::leftLimit() const
-{
-	return left_limit_;
-};
-
-int Map::rightLimit() const
-{
-	return right_limit_;
-};
-
-SpriteSystem::HeroType Map::heroType() const
-{
-	return hero_type_;
-};
-
-Camera::XPriority Map::cameraXPriority() const
-{
-	return camera_x_priority_;
-};
-
-Camera::YPriority Map::cameraYPriority() const
-{
-	return camera_y_priority_;
-};
-
-bool Map::blocksWorkOffscreen() const
-{
-	return blocks_work_offscreen_;
-};
-
-bool Map::loopSides() const
-{
-	return loop_sides_;
-};
-
-int Map::windStrength() const
-{
-	return wind_strength_;
-};
-
-void Map::setChanged()
-{
-	changed_ = true;
 };
 
 void Map::interact( Sprite& sprite, Camera& camera, Health& health )

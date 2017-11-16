@@ -20,6 +20,8 @@ namespace Main
 
 	bool nextFrame( int interval = 8, int duration = 1 );
 	int frame();
+	bool nextStateFrame( int interval = 8, int duration = 1 );
+	int stateFrame();
 
 	std::string resourcePath();
 	std::string pathDivider();

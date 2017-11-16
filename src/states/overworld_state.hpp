@@ -18,7 +18,7 @@ class OverworldState : public GameState
 		OverworldState();
 		~OverworldState();
 
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
 		

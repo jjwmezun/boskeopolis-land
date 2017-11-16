@@ -4,6 +4,7 @@ class BlockSystem;
 class Camera;
 class Health;
 class InventoryLevel;
+class LevelState;
 class Sprite;
 class SpriteSystem;
 
@@ -16,7 +17,6 @@ class Level
 {
 	public:
 		static constexpr int NUM_O_LEVELS = 64;
-
 		static Level getLevel( int id );
 
 		~Level();
@@ -33,12 +33,12 @@ class Level
 		int cameraX() const;
 		int cameraY() const;
 		void warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks );
-		std::string message() const;
+		const std::string& message() const;
 		int id() const;
 		int allEnemiesToKill() const;
 
 		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
-		void updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health );
+		void updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health, LevelState& state );
 
 		static const std::string& NameOLevel( unsigned int n );
 		static unsigned int realLevelNum();
@@ -48,20 +48,15 @@ class Level
 		static std::string timeChallengeText( unsigned int n );
 
 	private:
-		static std::vector<std::string> level_list_;
-		static std::vector<int> gem_challenge_list_;
-		static std::vector<int> time_challenge_list_;
-		static unsigned int real_level_num_;
-
+		std::vector<Map> maps_;
+		const std::string message_;
+		std::unique_ptr<Goal> goal_;
+		unsigned int current_map_;
 		const int id_;
-		int entrance_x_;
-		int entrance_y_;
 		const int camera_x_;
 		const int camera_y_;
-		unsigned int current_map_;
-		std::vector<Map> maps_;
-		std::unique_ptr<Goal> goal_;
-		const std::string message_;
+		int entrance_x_;
+		int entrance_y_;
 
 		Level
 		(

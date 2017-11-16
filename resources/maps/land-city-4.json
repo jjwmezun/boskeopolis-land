@@ -26,8 +26,9 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "bg_color":7,
+     "bg_color":3,
      "blocks_work_offscreen":true,
+     "lightning_flash_color":1,
      "palette":"Midnight Red",
      "tileset":"urban"
     },
@@ -35,6 +36,7 @@
     {
      "bg_color":"int",
      "blocks_work_offscreen":"bool",
+     "lightning_flash_color":"int",
      "palette":"string",
      "tileset":"string"
     },

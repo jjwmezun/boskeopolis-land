@@ -12,7 +12,7 @@ KillAllGoal::KillAllGoal()
 
 KillAllGoal::~KillAllGoal() {};
 
-void KillAllGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void KillAllGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	const int kill_count = sprites_to_kill_ - sprites.permanentlyKilledEnemies();
 

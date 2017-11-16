@@ -12,7 +12,7 @@ McGuffinGoal::McGuffinGoal( int amount_needed, std::string message )
 
 McGuffinGoal::~McGuffinGoal() {};
 
-void McGuffinGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void McGuffinGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	if ( Inventory::McGuffins() >= amount_needed_ )
 	{

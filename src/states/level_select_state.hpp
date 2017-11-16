@@ -10,7 +10,7 @@ class LevelSelectState : public GameState
 	public:
 		LevelSelectState( int level );
 		~LevelSelectState();
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
 

@@ -277,7 +277,7 @@ void Sprite::position()
 
 void Sprite::boundaries( Camera& camera, Map& lvmap )
 {
-	if ( lvmap.loopSides() )
+	if ( lvmap.loop_sides_ )
 	{
 		if ( hit_box_.x + hit_box_.w < Unit::PixelsToSubPixels( camera.x() ) )
 		{

@@ -5,6 +5,7 @@
 #include "main.hpp"
 #include "message_state.hpp"
 #include "mezun_helpers.hpp"
+#include "mezun_math.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
 #include "title_state.hpp"
@@ -143,7 +144,7 @@ namespace Main
 	void render()
 	{
 		Render::clearScreen();
-		Render::colorCanvas();
+		//Render::colorCanvas();
 		for ( auto& st : states_ )
 		{
 			st->render();
@@ -231,20 +232,22 @@ namespace Main
 
 	bool nextFrame( int interval, int duration )
 	{
-		for ( int i = 0; i < duration; ++i )
-		{
-			if ( frames_ % interval == i )
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return mezun::nextFrame( frames_, interval, duration );
 	};
 
 	int frame()
 	{
 		return frames_;
+	};
+
+	bool nextStateFrame( int interval, int duration )
+	{
+		return states_.back()->nextFrame( interval, duration );
+	};
+
+	int stateFrame()
+	{
+		return states_.back()->frame();
 	};
 
 	void setResourcePath()

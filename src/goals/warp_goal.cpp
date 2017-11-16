@@ -8,7 +8,7 @@ WarpGoal::WarpGoal( const std::string& msg )
 
 WarpGoal::~WarpGoal() {};
 
-void WarpGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void WarpGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	if ( events.change_map_ )
 	{

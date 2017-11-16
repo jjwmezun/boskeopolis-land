@@ -37,7 +37,7 @@ LevelMessageState::LevelMessageState( const Palette& palette, std::string messag
 
 LevelMessageState::~LevelMessageState() {};
 
-void LevelMessageState::update()
+void LevelMessageState::stateUpdate()
 {
 	if ( Input::pressedMain() )
 	{

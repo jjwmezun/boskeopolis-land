@@ -42,6 +42,7 @@ const std::string& Palette::type() const { return type_; };
 
 int Palette::bgN() const
 {
+	/*
 	if ( bg_ >= COLOR_LIMIT )
 	{
 		if ( Main::nextFrame( 256, 8 ) )
@@ -56,7 +57,8 @@ int Palette::bgN() const
 	else
 	{
 		return bg_;
-	}
+	}*/
+	return bg_;
 };
 
 void Palette::applyPalette( SDL_Surface* s ) const

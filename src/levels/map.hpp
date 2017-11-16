@@ -15,6 +15,34 @@ class SpriteSystem;
 class Map
 {
 	public:
+		const std::vector<Warp> warps_;
+		std::vector<std::shared_ptr<MapLayer>> backgrounds_;
+		std::vector<std::shared_ptr<MapLayer>> foregrounds_;
+		std::vector<int> blocks_;
+		std::vector<int> sprites_;
+		const std::string tileset_;
+		const Palette palette_;
+		const SpriteSystem::HeroType hero_type_;
+		const Camera::XPriority camera_x_priority_;
+		const Camera::YPriority camera_y_priority_;
+		const int width_;
+		const int height_;
+		const int top_limit_;
+		const int bottom_limit_;
+		const int left_limit_;
+		const int right_limit_;
+		const int wind_strength_;
+		const int scroll_loop_width_;
+		const int lightning_flash_color_;
+		int current_loop_;
+		int current_bg_;
+		const bool blocks_work_offscreen_;
+		const bool loop_sides_;
+		const bool slippery_;
+		const bool moon_gravity_;
+		const bool show_on_off_;
+		bool changed_;
+
 		static Map mapFromPath
 		(
 			std::string path,
@@ -28,11 +56,10 @@ class Map
 		Map( const Map& c );
 		Map& operator= ( const Map& c ) = delete;
 
-		void update( EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
-		void renderBG( Camera& camera );
-		void renderFG( Camera& camera );
+		void update( EventSystem& events, const SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
+		void renderBG( const Camera& camera );
+		void renderFG( const Camera& camera );
 
-		Palette palette() const;
 		const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
 
 		int widthBlocks() const;
@@ -50,61 +77,16 @@ class Map
 		int indexFromXAndY( int x, int y ) const;
 
 		const std::string& tileset() const;
-		bool changed() const;
-		void setChanged();
 		void changeBlock( int where, int value );
 		void deleteBlock( int where );
 		void deleteSprite( int where );
-
-		int topLimit() const;
-		int bottomLimit() const;
-		int leftLimit() const;
-		int rightLimit() const;
-
-		bool slippery() const;		
-		SpriteSystem::HeroType heroType() const;
-		Camera::XPriority cameraXPriority() const;
-		Camera::YPriority cameraYPriority() const;
-		bool blocksWorkOffscreen() const;
-		bool loopSides() const;
-		int windStrength() const;
 
 		void interact( Sprite& sprite, Camera& camera, Health& health );
 		
 		bool scrollLoop() const;
 		int scrollLoopWidthPixels() const;
 
-		const bool moon_gravity_;
-		const bool show_on_off_;
-
-
 	private:
-		static constexpr int LOOP_CHANGE = 3;
-
-		bool changed_;
-		const bool blocks_work_offscreen_;
-		const bool loop_sides_;
-		const bool slippery_;
-		const int width_;
-		const int height_;
-		const int top_limit_;
-		const int bottom_limit_;
-		const int left_limit_;
-		const int right_limit_;
-		const int wind_strength_;
-		const int scroll_loop_width_;
-		int current_loop_;
-		const SpriteSystem::HeroType hero_type_;
-		const Camera::XPriority camera_x_priority_;
-		const Camera::YPriority camera_y_priority_;
-		const Palette palette_;
-		const std::string tileset_;
-		std::vector<int> blocks_;
-		std::vector<int> sprites_;
-		const std::vector<Warp> warps_;
-		std::vector<std::shared_ptr<MapLayer>> backgrounds_;
-		std::vector<std::shared_ptr<MapLayer>> foregrounds_;
-
 		Map
 		(
 			std::vector<int> blocks,
@@ -129,8 +111,13 @@ class Map
 			bool loop_sides,
 			int wind_strength,
 			bool moon_gravity,
-			bool show_on_off
+			bool show_on_off,
+			int lightning_flash_color
 		);
+		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera );
+		void updateLoop( const SpriteSystem& sprites );
+		void updateBGColor();
+		void renderBGColor() const;
 		int scrollLoopWidthBlocks() const;
 		int scrollLoopWidthBlocks( int loop ) const;
 		int scrollLoopWidthPixels( int loop ) const;

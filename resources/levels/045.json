@@ -9,7 +9,7 @@
 	
 	"goal":
 	{
-		"type": "do_nothing"
+		"type": "stop_on_off"
 	},
 	
 	"entrance_x": 3,

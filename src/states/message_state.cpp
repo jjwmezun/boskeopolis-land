@@ -44,7 +44,7 @@ MessageState::MessageState
 
 MessageState::~MessageState() {};
 
-void MessageState::update()
+void MessageState::stateUpdate()
 {
 	if ( Input::pressedMain() )
 	{

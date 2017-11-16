@@ -143,7 +143,7 @@ void EventSystem::testMessage( Level& level )
 
 	if ( message_ && !message_lock_ )
 	{
-		Main::pushState( std::unique_ptr<GameState> ( new LevelMessageState( level.currentMap().palette(), level.message() ) ) );
+		Main::pushState( std::unique_ptr<GameState> ( new LevelMessageState( level.currentMap().palette_, level.message() ) ) );
 		message_lock_ = true;
 	}
 	

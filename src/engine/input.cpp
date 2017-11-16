@@ -47,6 +47,7 @@ namespace Input
 	void registerKeyRelease( Action action );
 	void registerKeyHold( Action action );
 	void registerAxis( Sint16 value, Action negative, Action positive );
+	bool movingCharacterFunction( bool ( *f )( Action a ) );
 
 
 	// Function Implementations	
@@ -127,15 +128,25 @@ namespace Input
 	{
 		return actions_held_[ ( int )( action ) ];
 	};
-	
+
 	bool movingCharacter()
+	{
+		movingCharacterFunction( &held );
+	};
+	
+	bool movingCharacterNoHold()
+	{
+		movingCharacterFunction( &pressed );
+	};
+	
+	bool movingCharacterFunction( bool ( *f )( Action a ) )
 	{
 		return
 		(
-			pressed( Action::JUMP )      ||
-			pressed( Action::MOVE_DOWN ) ||
-			pressed( Action::MOVE_LEFT ) ||
-			pressed( Action::MOVE_RIGHT )
+			f( Action::JUMP )      ||
+			f( Action::MOVE_DOWN ) ||
+			f( Action::MOVE_LEFT ) ||
+			f( Action::MOVE_RIGHT )
 		);
 	};
 

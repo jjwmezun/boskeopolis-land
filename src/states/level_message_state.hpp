@@ -8,7 +8,7 @@ class LevelMessageState : public GameState
 	public:
 		LevelMessageState( const Palette& palette, std::string message );
 		~LevelMessageState();
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 
 	private:

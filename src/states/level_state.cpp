@@ -38,7 +38,7 @@ catch ( const mezun::CantLoadTileset& e )
 
 LevelState::~LevelState() {};
 
-void LevelState::update()
+void LevelState::stateUpdate()
 {
 	try
 	{
@@ -52,7 +52,7 @@ void LevelState::update()
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_ );
 		health_.update();
 		inventory_screen_.update( events_, health_ );
-		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_ );
+		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
 		events_.update( level_, sprites_, camera_, blocks_ );
 
 		if ( events_.paletteChanged() )
@@ -102,7 +102,7 @@ void LevelState::stateRender()
 
 void LevelState::init()
 {
-	newPalette( level_.currentMap().palette() );
+	newPalette( level_.currentMap().palette_ );
 
 	try
 	{

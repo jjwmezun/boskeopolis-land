@@ -46,9 +46,9 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 
 void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 {
-	if ( !lvmap.blocksWorkOffscreen() )
+	if ( !lvmap.blocks_work_offscreen_ )
 	{
-		if ( camera.changed() || lvmap.changed() )
+		if ( camera.changed() || lvmap.changed_ )
 		{
 			blocks_.clear();
 

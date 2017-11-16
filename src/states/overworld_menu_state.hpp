@@ -10,7 +10,7 @@ class OverworldMenuState : public GameState
 	public:
 		OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal );
 		~OverworldMenuState();
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
 

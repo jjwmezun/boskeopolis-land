@@ -19,7 +19,7 @@ void Camera::adjust( Sprite& o, Map& m )
 	x_ -= shake_amount_;
 	setPrev();
 
-	switch( m.cameraXPriority() )
+	switch( m.camera_x_priority_ )
 	{
 		case ( XPriority::CENTER ):
 
@@ -45,7 +45,7 @@ void Camera::adjust( Sprite& o, Map& m )
 		break;
 	}
 
-	switch( m.cameraYPriority() )
+	switch( m.camera_y_priority_ )
 	{
 		case ( YPriority::CENTER ):
 
@@ -139,27 +139,27 @@ void Camera::contain( Map& m )
 		y_ = m.heightPixels() - heightPixels() - 0;
 	}
 
-	if ( m.topLimit() > -1 )
+	if ( m.top_limit_ > -1 )
 	{
-		if ( m.topLimit() > y_ )
+		if ( m.top_limit_ > y_ )
 		{
-			y_ = m.topLimit();
+			y_ = m.top_limit_;
 		}
 	}
 
-	if ( m.leftLimit() > -1 )
+	if ( m.left_limit_ > -1 )
 	{
-		if ( m.leftLimit() > x_ )
+		if ( m.left_limit_ > x_ )
 		{
-			x_ = m.leftLimit();
+			x_ = m.left_limit_;
 		}
 	}
 
-	if ( m.rightLimit() > -1 )
+	if ( m.right_limit_ > -1 )
 	{
-		if ( m.widthPixels() - m.rightLimit() < right() )
+		if ( m.widthPixels() - m.right_limit_ < right() )
 		{
-			x_ = m.widthPixels() - m.rightLimit() - widthPixels();
+			x_ = m.widthPixels() - m.right_limit_ - widthPixels();
 		}
 	}
 

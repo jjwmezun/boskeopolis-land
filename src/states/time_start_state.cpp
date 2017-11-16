@@ -34,7 +34,7 @@ TimeStartState::TimeStartState( const Palette& palette )
 
 TimeStartState::~TimeStartState() {};
 
-void TimeStartState::update()
+void TimeStartState::stateUpdate()
 {
 	switch ( state_ )
 	{

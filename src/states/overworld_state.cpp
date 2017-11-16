@@ -82,7 +82,7 @@ OverworldState::OverworldState()
 
 OverworldState::~OverworldState() {};
 
-void OverworldState::update()
+void OverworldState::stateUpdate()
 {
 	if ( camera_mode_ )
 	{

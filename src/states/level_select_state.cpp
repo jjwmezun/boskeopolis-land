@@ -37,7 +37,7 @@ LevelSelectState::LevelSelectState( int level )
 
 LevelSelectState::~LevelSelectState() {};
 
-void LevelSelectState::update()
+void LevelSelectState::stateUpdate()
 {
 	highlight_dest_.y = ( 8 * selection_() );
 

@@ -4,7 +4,7 @@
 Goal::Goal( std::string message ) : message_ ( message ) {};
 Goal::~Goal() {};
 
-void Goal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void Goal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 };
 

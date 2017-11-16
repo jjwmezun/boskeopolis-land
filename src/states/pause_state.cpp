@@ -33,7 +33,7 @@ std::string PauseState::quitName( bool beaten ) const
 
 PauseState::~PauseState() {};
 
-void PauseState::update()
+void PauseState::stateUpdate()
 {
 	if ( Input::pressed( Input::Action::MOVE_UP ) || Input::pressed( Input::Action::MOVE_DOWN ) )
 	{

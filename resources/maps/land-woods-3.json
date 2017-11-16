@@ -38,13 +38,15 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "bg_color":43,
+     "bg_color":6,
+     "lightning_flash_color":1,
      "palette":"Haunted",
      "tileset":"woods"
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "lightning_flash_color":"int",
      "palette":"string",
      "tileset":"string"
     },

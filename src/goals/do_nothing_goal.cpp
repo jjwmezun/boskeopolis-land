@@ -12,7 +12,7 @@ DoNothingGoal::DoNothingGoal( int wait_time )
 
 DoNothingGoal::~DoNothingGoal() {};
 
-void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	if ( Input::movingCharacter() )
 	{

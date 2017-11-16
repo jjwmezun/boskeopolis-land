@@ -449,7 +449,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 void SpriteSystem::reset( const Level& level )
 {
-	Sprite::resistance_x_ = level.currentMap().windStrength();
+	Sprite::resistance_x_ = level.currentMap().wind_strength_;
 
 	if ( level.currentMap().moon_gravity_ )
 	{
@@ -460,7 +460,7 @@ void SpriteSystem::reset( const Level& level )
 		Sprite::moonGravityOff();
 	}
 
-	if ( level.currentMap().slippery() )
+	if ( level.currentMap().slippery_ )
 	{
 		Sprite::traction_ = Sprite::TRACTION_ICY;
 	}
@@ -471,7 +471,7 @@ void SpriteSystem::reset( const Level& level )
 
 	clearSprites();
 	spritesFromMap( level.currentMap() );
-	switch( level.currentMap().heroType() )
+	switch( level.currentMap().hero_type_ )
 	{
 		case ( HeroType::NORMAL ):
 			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() ) );
@@ -635,6 +635,11 @@ void SpriteSystem::render( Camera& camera, bool priority )
 };
 
 Sprite& SpriteSystem::hero()
+{
+	return *hero_;
+};
+
+const Sprite& SpriteSystem::hero() const
 {
 	return *hero_;
 };

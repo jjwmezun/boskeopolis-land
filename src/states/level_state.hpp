@@ -16,7 +16,7 @@ class LevelState : public GameState
 	public:
 		LevelState( int lvname );
 		~LevelState();
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
 

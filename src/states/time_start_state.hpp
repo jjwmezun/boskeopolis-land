@@ -8,7 +8,7 @@ class TimeStartState : public GameState
 		TimeStartState( const Palette& palette );
 		~TimeStartState();
 
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 
 	private:

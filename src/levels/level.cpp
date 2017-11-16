@@ -26,15 +26,16 @@
 #include "mcguffin_goal.hpp"
 #include "past_right_edge_goal.hpp"
 #include "starving_goal.hpp"
+#include "stop_on_off_goal.hpp"
 #include "survive_time_goal.hpp"
 #include "timed_goal.hpp"
 #include "warp_goal.hpp"
 #include "windy_goal.hpp"
 
-std::vector<std::string> Level::level_list_;
-std::vector<int> Level::gem_challenge_list_;
-std::vector<int> Level::time_challenge_list_;
-unsigned int Level::real_level_num_ = 0;
+static std::vector<std::string> level_list_;
+static std::vector<int> gem_challenge_list_;
+static std::vector<int> time_challenge_list_;
+static unsigned int real_level_num_ = 0;
 
 Level::Level ( Level&& m )
 :
@@ -139,10 +140,10 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		camera.setPosition( camera_x, camera_y );
 		camera.adjust( sprites.hero(), currentMap() );
 
-		events.changePalette( currentMap().palette() );
+		events.changePalette( currentMap().palette_ );
 		blocks.changeTileset( currentMap().tileset() );
 
-		currentMap().setChanged();
+		currentMap().changed_ = true;
 	}
 };
 
@@ -192,7 +193,7 @@ std::string Level::timeChallengeText( unsigned int n )
 	return Clock::timeToString( timeChallenge( n ) );
 };
 
-std::string Level::message() const
+const std::string& Level::message() const
 {
 	return message_;
 };
@@ -207,10 +208,9 @@ void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, 
 	goal_->init( hero, *this, inventory, events, health );
 };
 
-void Level::updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health )
+void Level::updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health, LevelState& state )
 {
-	//currentMap().update( events, sprites, blocks, camera );
-	goal_->update( sprites, currentMap(), inventory_screen, events, health );
+	goal_->update( sprites, currentMap(), inventory_screen, events, health, state );
 };
 
 unsigned int Level::realLevelNum()
@@ -658,6 +658,10 @@ Level Level::getLevel( int id )
 			else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
 			{
 				goal = std::make_unique<KillAllGoal> ();
+			}
+			else if ( mezun::areStringsEqual( goaltype, "stop_on_off" ) )
+			{
+				goal = std::make_unique<StopOnOffGoal> ();
 			}
 		}
 		else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )

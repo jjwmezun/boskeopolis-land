@@ -26,13 +26,15 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "bg_color":7,
+     "bg_color":3,
+     "lightning_flash_color":1,
      "palette":"Shadow",
      "tileset":"shadow"
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "lightning_flash_color":"int",
      "palette":"string",
      "tileset":"string"
     },

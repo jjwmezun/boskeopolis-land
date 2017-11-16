@@ -28,7 +28,7 @@ class MessageState : public GameState
 		MessageState( const MessageState& c ) = delete;
 		const MessageState& operator=( const MessageState& c ) = delete;
 
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 
 	private:

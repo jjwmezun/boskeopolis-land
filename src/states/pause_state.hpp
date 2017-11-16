@@ -10,7 +10,7 @@ class PauseState : public GameState
 	public:
 		PauseState( const Palette& palette, EventSystem& events );
 		~PauseState();
-		void update() override;
+		void stateUpdate() override;
 		void stateRender() override;
 
 	private:

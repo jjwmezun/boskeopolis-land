@@ -1,4 +1,5 @@
 #include "game_state.hpp"
+#include "mezun_math.hpp"
 #include "render.hpp"
 
 GameState::GameState
@@ -8,10 +9,17 @@ GameState::GameState
 )
 :
 	id_ ( id ),
-	palette_ ( palette )
+	palette_ ( palette ),
+	frame_counter_ ( 0 )
 {};
 
 GameState::~GameState() {};
+
+void GameState::update()
+{
+	stateUpdate();
+	++frame_counter_;
+};
 
 void GameState::render()
 {
@@ -37,6 +45,16 @@ void GameState::newPalette( const Palette& palette )
 	}
 };
 
+void GameState::newPalette( const char* name )
+{
+	std::string type = std::string( name );
+	if ( palette_.type() != type )
+	{
+		palette_ = { type, palette_.bgN() };
+		changePalette();
+	}
+};
+
 GameState::StateID GameState::id() const
 {
 	return id_;
@@ -45,4 +63,14 @@ GameState::StateID GameState::id() const
 const Palette& GameState::palette() const
 {
 	return palette_;
+};
+
+bool GameState::nextFrame( int interval, int duration ) const
+{
+	return mezun::nextFrame( frame_counter_, interval, duration );
+};
+
+int GameState::frame() const
+{
+	return frame_counter_;
 };

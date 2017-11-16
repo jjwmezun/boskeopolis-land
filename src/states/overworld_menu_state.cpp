@@ -30,7 +30,7 @@ OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, con
 
 OverworldMenuState::~OverworldMenuState() {};
 
-void OverworldMenuState::update()
+void OverworldMenuState::stateUpdate()
 {
 	if ( Input::pressed( Input::Action::MENU ) )
 	{

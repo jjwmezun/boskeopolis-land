@@ -11,7 +11,7 @@ CollectGoal::CollectGoal( int amount_needed, std::string message )
 
 CollectGoal::~CollectGoal() {};
 
-void CollectGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void CollectGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	if ( Inventory::funds() >= amount_needed_ )
 	{

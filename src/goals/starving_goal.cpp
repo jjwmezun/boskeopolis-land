@@ -12,7 +12,7 @@ StarvingGoal::StarvingGoal( int amount_lost_per_frame, int starting_amount )
 
 StarvingGoal::~StarvingGoal() {};
 
-void StarvingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void StarvingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	if ( delay_.hit() )
 	{
