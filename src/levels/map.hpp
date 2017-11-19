@@ -15,6 +15,21 @@ class SpriteSystem;
 class Map
 {
 	public:
+		enum class LayerType
+		{
+			__NULL,
+			BLOCKS,
+			SPRITES,
+			BACKGROUND,
+			FOREGROUND
+		};
+
+		struct LayerInfo
+		{
+			LayerType type;
+			int n;
+		};
+
 		const std::vector<Warp> warps_;
 		std::vector<std::shared_ptr<MapLayer>> backgrounds_;
 		std::vector<std::shared_ptr<MapLayer>> foregrounds_;
@@ -114,6 +129,7 @@ class Map
 			bool show_on_off,
 			int lightning_flash_color
 		);
+		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera );
 		void updateLoop( const SpriteSystem& sprites );
 		void updateBGColor();
@@ -130,4 +146,5 @@ class Map
 		int getXIndexForLoop( int x ) const;
 		int spriteLoopPosition( int x ) const;
 		bool inBounds( int n ) const;
+		
 };

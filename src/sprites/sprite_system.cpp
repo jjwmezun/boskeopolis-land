@@ -488,6 +488,12 @@ void SpriteSystem::reset( const Level& level )
 		case ( HeroType::FLUTTERING ):
 			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
 		break;
+		case ( HeroType::SPACESHIP ):
+			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
+		break;
+		case ( HeroType::CAR ):
+			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
+		break;
 	}
 
 };
@@ -661,6 +667,14 @@ SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 	else if ( property.compare( "SHOOTER" ) == 0 )
 	{
 		return HeroType::SHOOTER;
+	}
+	else if ( property.compare( "SPACESHIP" ) == 0 )
+	{
+		return HeroType::SPACESHIP;
+	}
+	else if ( property.compare( "CAR" ) == 0 )
+	{
+		return HeroType::CAR;
 	}
 
 	return HeroType::NORMAL;

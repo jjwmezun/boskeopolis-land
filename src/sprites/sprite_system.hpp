@@ -21,7 +21,9 @@ class SpriteSystem
 			CART,
 			OVERWORLD,
 			FLUTTERING,
-			SHOOTER
+			SHOOTER,
+			SPACESHIP,
+			CAR
 		};
 
 		static HeroType heroType( const std::string& property );

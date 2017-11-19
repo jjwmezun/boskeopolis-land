@@ -1,4 +1,3 @@
-#include <iostream>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -12,6 +11,40 @@
 #include "unit.hpp"
 
 static constexpr int LOOP_CHANGE = 3;
+static constexpr int FLASH_INTERVAL = 200;
+static constexpr int FLASH_DURATION = 8;
+static constexpr int INNER_FLASH_DURATION = 2;
+static constexpr int BG_LAYER_LIMIT = 5;
+
+Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
+{
+	if ( layer_name == "Blocks" )
+	{
+		return { LayerType::BLOCKS, 0 };
+	}
+	else if ( layer_name == "Sprites" )
+	{
+		return { LayerType::SPRITES, 0 };
+	}
+	else
+	{
+		for ( int i = 1; i <= BG_LAYER_LIMIT; ++i )
+		{
+			const std::string bg_line = std::string( std::string( "BG" ) + std::to_string( i ) );
+			const std::string fg_line = std::string( std::string( "FG" ) + std::to_string( i ) );
+
+			if ( layer_name == bg_line )
+			{
+				return { LayerType::BACKGROUND, i };
+			}
+			else if ( layer_name == fg_line )
+			{
+				return { LayerType::FOREGROUND, i };
+			}
+		}
+	}
+	return { LayerType::__NULL, 0 };
+};
 
 Map Map::mapFromPath
 (
@@ -69,40 +102,34 @@ Map Map::mapFromPath
 		assert( map_data.HasMember("layers") );
 		assert( map_data[ "layers" ].IsArray() );
 
-		constexpr int BLOCKS_INDEX = 0;
-		constexpr int SPRITES_INDEX = 1;
-		constexpr int LAYER2_INDEX = 2;
-
 		int i = 0;
 		for ( auto& v : map_data[ "layers" ].GetArray() )
 		{
-			if ( v.HasMember("data") )
+			if ( v.HasMember( "data" ) && v[ "data" ].IsArray() )
 			{
-				if ( v[ "data" ].IsArray() )
+				const std::string layer_type = v[ "name" ].GetString();
+				const LayerInfo layer_info = getLayerInfo( layer_type );
+
+				for ( auto& n : v[ "data" ].GetArray() )
 				{
-					for ( auto& n : v[ "data" ].GetArray() )
+					switch ( layer_info.type )
 					{
-						if ( i == BLOCKS_INDEX )
-						{
+						case ( LayerType::BLOCKS ):
 							blocks.push_back( n.GetInt() );
-						}
-						else if ( i == SPRITES_INDEX )
-						{
+						break;
+						case ( LayerType::SPRITES ):
 							sprites.push_back( n.GetInt() );
-						}
-						else if ( i >= LAYER2_INDEX )
-						{
-							if ( layer2s.size() < ( i - LAYER2_INDEX ) + 1 )
+						break;
+						case ( LayerType::BACKGROUND ):
+							std::cout<<layer_info.n<<std::endl;
+							while ( layer2s.size() < layer_info.n )
 							{
 								layer2s.emplace_back( std::vector<int> () );
 							}
-
-							layer2s[ i - LAYER2_INDEX ].emplace_back( n.GetInt() );
-						}
-						else
-						{
-							break;
-						}
+							layer2s[ layer_info.n - 1 ].emplace_back( n.GetInt() );
+						break;
+						case ( LayerType::FOREGROUND ):
+						break;
 					}
 				}
 			}
@@ -628,23 +655,52 @@ void Map::updateLoop( const SpriteSystem& sprites )
 
 void Map::updateBGColor()
 {
+	// Default BG Color
 	current_bg_ = palette_.bgN();
-	if ( lightning_flash_color_ != 0 && Main::stateFrame() >= 8 )
+	
+	// Only bother with calculating flash color if we have a flash color set.
+	// Also, since we check flashing using remainder, we need to make sure we're 'bove or equal to the interval,
+	// so it doesn't flash right @ the start.
+	if ( lightning_flash_color_ != 0 && Main::stateFrame() >= FLASH_INTERVAL )
 	{
-		current_bg_ = lightning_flash_color_;
+		const int colors_in_between = palette_.bgN() - lightning_flash_color_ - 1;
+		assert( colors_in_between >= 0 );
 
-		const int difference = palette_.bgN() - lightning_flash_color_;
-		assert( difference >= 0 );
+		 // * 2 refers to how it goes through inner colors twice: toward & 'way from flash.
+		const int max_duration = FLASH_DURATION + ( ( colors_in_between * INNER_FLASH_DURATION ) * 2 );
 
-		for ( int i = difference; i >= 0; --i )
+		const int frame = Main::frame() % FLASH_INTERVAL;
+		const int frames_going_toward_flash = ( colors_in_between * INNER_FLASH_DURATION ) + FLASH_DURATION;
+
+		// Checks for frame going toward flash.
+		if ( frame < frames_going_toward_flash )
 		{
-			const int color = lightning_flash_color_ + i;
-			const int duration = ( color == lightning_flash_color_ ) ? 8 : 2;
-			const int first_frame_check = 256 - ( ( difference - 1 ) * 2 );
-			
-			if ( Main::nextStateFrame( first_frame_check, duration ) )
+			for ( int i = colors_in_between; i >= 0; --i )
 			{
-				current_bg_ = color;
+				const int color = lightning_flash_color_ + i;
+				const int duration = ( color == lightning_flash_color_ ) ? FLASH_DURATION : INNER_FLASH_DURATION;
+				const int first_frame_check = ( colors_in_between - i ) * INNER_FLASH_DURATION;
+
+				// Checks interval o' first_frame & duration.
+				// duration - 1 'cause the first frame counts as part o' duration.
+				if ( frame >= first_frame_check && frame <= first_frame_check + ( duration - 1 ) )
+				{
+					current_bg_ = color;
+				}
+			}
+		}
+		// Checks for frame going 'way from flash.
+		else if ( frame < max_duration )
+		{
+			for ( int i = 1; i <= colors_in_between; ++i )
+			{
+				const int color = lightning_flash_color_ + i;
+				const int first_frame_check = frames_going_toward_flash + ( ( i - 1 ) * INNER_FLASH_DURATION );
+
+				if ( frame >= first_frame_check && frame <= first_frame_check + ( INNER_FLASH_DURATION - 1 ) )
+				{
+					current_bg_ = color;
+				}
 			}
 		}
 	}
