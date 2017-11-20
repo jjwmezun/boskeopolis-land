@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "map_layer_constellation.hpp"
 #include "map_layer_image.hpp"
 #include "map_layer_shade.hpp"
@@ -142,6 +143,8 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 
 		events.changePalette( currentMap().palette_ );
 		blocks.changeTileset( currentMap().tileset() );
+		
+		Audio::changeSong( currentMap().music_ );
 
 		currentMap().changed_ = true;
 	}
@@ -497,9 +500,7 @@ Level Level::getLevel( int id )
 										std::make_unique<MapLayerConstellation>
 										(
 											bgw,
-											bgh,
-											.1,
-											.1
+											bgh
 										)
 									);
 								}

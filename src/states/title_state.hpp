@@ -36,6 +36,7 @@ class TitleState : public GameState
 		const std::array<const std::string, ( std::size_t )( OPTIONS_SIZE )> option_text_;
 		SpriteGraphics logo_gfx_;
 		Text created_by_;
+		const sdl2::SDLRect window_box_;
 		const sdl2::SDLRect logo_rect_;
 		int selection_;
 		int prev_selection_;

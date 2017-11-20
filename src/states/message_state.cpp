@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "main.hpp"
 #include "input.hpp"
 #include "message_state.hpp"
@@ -32,7 +33,8 @@ MessageState::MessageState
 	std::unique_ptr<GameState> next_state,
 	bool push,
 	const Palette& palette,
-	Text::FontColor font_color
+	Text::FontColor font_color,
+	std::string music
 )
 :
 	GameState( StateID::MESSAGE_STATE, palette ),
@@ -40,7 +42,10 @@ MessageState::MessageState
 	next_state_ ( std::move( next_state ) ),
 	pop_ ( pop ),
 	push_ ( push )
-{};
+{
+	Audio::turnOffSong();
+	Audio::changeSong( music );
+};
 
 MessageState::~MessageState() {};
 

@@ -28,6 +28,7 @@
     {
      "bg_color":3,
      "lightning_flash_color":1,
+     "music":"sneak",
      "palette":"Shadow",
      "tileset":"shadow"
     },
@@ -35,6 +36,7 @@
     {
      "bg_color":"int",
      "lightning_flash_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

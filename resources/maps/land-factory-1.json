@@ -38,6 +38,7 @@
  "properties":
     {
      "bg_color":1,
+     "music":"factory",
      "palette":"Sunny Yellow",
      "show_on_off":true,
      "tileset":"factory"
@@ -45,6 +46,7 @@
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "show_on_off":"bool",
      "tileset":"string"

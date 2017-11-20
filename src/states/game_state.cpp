@@ -31,6 +31,11 @@ void GameState::init()
 	// Do nothing if not overrided by children.
 };
 
+void GameState::backFromPop()
+{
+	// Do nothing if not overrided by children.
+};
+
 void GameState::changePalette()
 {
 	Render::newPalette( palette_ );

@@ -9,34 +9,37 @@
 #include "palette.hpp"
 #include <SDL2/SDL_image.h>
 #include "timers/timer_repeat.hpp"
-#include "unit.hpp"
 
 namespace Render
 {
 	// Private Variables
-	constexpr Uint8 FULL_OPACITY = 255;
+	static constexpr Uint8 FULL_OPACITY = 255;
+	static constexpr sdl2::SDLRect window_box_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
+	static sdl2::SDLRect window_box_magnified_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
 
-	Uint32 WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;
-	int FORCE_MAGNIFICATION = -1;
+	static Uint32 WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;
+	static int FORCE_MAGNIFICATION = -1;
 
-	const std::string IMG_RELATIVE_DIR = "img";
+	static const std::string IMG_RELATIVE_DIR = "img";
 
-	std::string img_path_;
-	std::map<std::string, SDL_Texture*> textures_ = {};
-	std::map<std::string, SDL_Surface*> surfaces_ = {};
-	SDL_Renderer* renderer_ = nullptr;
-	SDL_Window* window_ = nullptr;
-	sdl2::SDLRect screen_;
-	TimerRepeat animation_frame_ = {};
-	std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
+	static std::string img_path_;
+	static std::map<std::string, SDL_Texture*> textures_ = {};
+	static std::map<std::string, SDL_Surface*> surfaces_ = {};
+	static SDL_Renderer* renderer_ = nullptr;
+	static SDL_Window* window_ = nullptr;
+	static sdl2::SDLRect screen_;
+	static TimerRepeat animation_frame_ = {};
+	static std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
 
-	int magnification_ = 1;
-	int left_edge_ = 0;
-	int top_edge_ = 0;
-	sdl2::SDLRect top_bar_ = { 0, 0, 0, 0 };
-	sdl2::SDLRect bottom_bar_ = { 0, 0, 0, 0 };
-	sdl2::SDLRect left_bar_ = { 0, 0, 0, 0 };
-	sdl2::SDLRect right_bar_ = { 0, 0, 0, 0 };
+	static int magnification_ = 1;
+	static int left_edge_ = 0;
+	static int top_edge_ = 0;
+	static sdl2::SDLRect top_bar_ = { 0, 0, 0, 0 };
+	static sdl2::SDLRect bottom_bar_ = { 0, 0, 0, 0 };
+	static sdl2::SDLRect left_bar_ = { 0, 0, 0, 0 };
+	static sdl2::SDLRect right_bar_ = { 0, 0, 0, 0 };
+
+	static SDL_Texture* target_ = nullptr;
 
 
 	// Private Function Declarations
@@ -59,6 +62,8 @@ namespace Render
 	const std::string setImgPath();
 	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source );
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
+	void cameraAdjust( sdl2::SDLRect& dest, const Camera* camera );
+	void checkTexture( const std::string& sheet );
 
 
 	// Function Implementations
@@ -105,7 +110,7 @@ namespace Render
 
 	void createRenderer()
 	{
-		renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_ACCELERATED );
+		renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_TARGETTEXTURE );
 
 		if ( !renderer_ )
 		{
@@ -114,6 +119,7 @@ namespace Render
 		}
 
 		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
+		target_ = SDL_GetRenderTarget( renderer_ );
 	};
 
 	void createWindow()
@@ -165,6 +171,7 @@ namespace Render
 
 			adjustScreen( monitor_width, monitor_height );
 			adjustBorderBars( monitor_width, monitor_height );
+			window_box_magnified_ = sourceRelativeToScreen( window_box_ );
 		};
 
 		int calculateMagnification( int monitor_width, int monitor_height )
@@ -249,7 +256,7 @@ namespace Render
 		}
 	};
 
-	void loadTexture( const std::string& sheet, Uint8 alpha )
+	void loadTexture( const std::string& sheet )
 	{
 		if ( mezun::notInMap( surfaces_, sheet ) )
 		{
@@ -344,6 +351,12 @@ namespace Render
 		SDL_RenderClear( renderer_ );
 	};
 
+	void clearScreenTransparency()
+	{
+		SDL_SetRenderDrawColor( renderer_, 0, 0, 0, 0 );
+		SDL_RenderClear( renderer_ );
+	};
+
 	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source )
 	{
 		return
@@ -401,13 +414,57 @@ namespace Render
 		const Camera* camera
 	)
 	{
+		checkTexture( sheet );
+		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera );
+	}
+
+	void renderObjectNoMagnify
+	(
+		const std::string& sheet,
+		sdl2::SDLRect source,
+		sdl2::SDLRect dest
+	)
+	{
+		checkTexture( sheet );
+		SDL_Texture* texture = textures_.at( sheet );
+
+		if ( SDL_RenderCopy( renderer_, texture, &source, &dest ) != 0 )
+		{
+			printf( "Render failure: %s\n", SDL_GetError() );
+		}
+	}
+
+	void renderObject
+	(
+		SDL_Texture* texture,
+		sdl2::SDLRect source,
+		sdl2::SDLRect dest,
+		SDL_RendererFlip flip,
+		double rotation,
+		Uint8 alpha,
+		const Camera* camera
+	)
+	{
+		SDL_SetTextureAlphaMod( texture, alpha );
+		cameraAdjust( dest, camera );
+		dest = sourceRelativeToScreen( dest );
+
+		if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
+		{
+			printf( "Render failure: %s\n", SDL_GetError() );
+		}
+	};
+
+	void checkTexture( const std::string& sheet )
+	{
 		if ( textures_.find( sheet ) == textures_.end() )
 		{
-			loadTexture( sheet, alpha );
+			loadTexture( sheet );
 		}
+	};
 
-		SDL_SetTextureAlphaMod( textures_.at( sheet ), alpha );
-
+	void cameraAdjust( sdl2::SDLRect& dest, const Camera* camera )
+	{
 		if ( camera != nullptr )
 		{
 			if ( camera->onscreenPixels( dest ) )
@@ -420,11 +477,6 @@ namespace Render
 				return; // If not onscreen, don't draw; just quit function now.
 			}
 		}
-		
-		dest = sourceRelativeToScreen( dest );
-
-		if ( SDL_RenderCopyEx( renderer_, textures_.at( sheet ), &source, &dest, rotation, 0, flip ) != 0 )
-			printf( "Render failure: %s\n", SDL_GetError() );
 	};
 
 	void renderRect( const sdl2::SDLRect& box, int color, int alpha )
@@ -452,5 +504,51 @@ namespace Render
 		IMG_Quit();
 		SDL_DestroyRenderer( renderer_ );
 		SDL_DestroyWindow( window_ );
+	};
+
+	SDL_Texture* createRenderBoxMagnified( int width, int height )
+	{
+		return createRenderBox( magnified( width ), magnified( height ) );
+	};
+
+	SDL_Texture* createRenderBox( int width, int height )
+	{
+		SDL_Texture* temp = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height );
+
+		if ( temp == nullptr )
+		{
+			printf( "Failed to allocate render box: %s\n", SDL_GetError() );
+		}
+
+		SDL_SetTextureBlendMode( temp, SDL_BLENDMODE_BLEND );
+
+		return temp;
+	};
+
+	void setRenderTarget( SDL_Texture* texture )
+	{
+		SDL_SetRenderTarget( renderer_, texture );
+	};
+
+	void releaseRenderTarget()
+	{
+		SDL_SetRenderTarget( renderer_, target_ );
+	};
+
+	void renderRenderBox( SDL_Texture* texture )
+	{
+		if ( SDL_RenderCopy( renderer_, texture, &window_box_magnified_, &window_box_magnified_ ) )
+		{
+			printf( "Failed to draw render box: %s\n", SDL_GetError() );
+		}
+	};
+
+	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src )
+	{
+		const sdl2::SDLRect dest = sourceRelativeToScreen( src );
+		if ( SDL_RenderCopy( renderer_, texture, &src, &dest ) )
+		{
+			printf( "Failed to draw render box: %s\n", SDL_GetError() );
+		}
 	};
 };

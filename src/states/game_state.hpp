@@ -31,6 +31,7 @@ class GameState
 		virtual void stateUpdate() = 0;
 		virtual void stateRender() = 0;
 		virtual void init();
+		virtual void backFromPop();
 
 		void changePalette();
 		void newPalette( const Palette& pallete );

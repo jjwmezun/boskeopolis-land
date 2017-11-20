@@ -28,6 +28,7 @@
     {
      "bg_color":4,
      "camera_priority_x":"CENTER",
+     "music":"sky",
      "palette":"Pearl Pink",
      "scroll_loop":true,
      "scroll_loop_width":192,
@@ -37,6 +38,7 @@
     {
      "bg_color":"int",
      "camera_priority_x":"string",
+     "music":"string",
      "palette":"string",
      "scroll_loop":"bool",
      "scroll_loop_width":"int",

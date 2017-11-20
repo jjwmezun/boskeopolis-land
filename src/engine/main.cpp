@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
@@ -58,13 +59,15 @@ namespace Main
 
 		srand ( time( NULL ) );
 		setResourcePath();
-		Render::init( args );
 		Input::init();
+		Render::init( args );
+		Audio::init();
 		firstState();
 	};
 
 	void end()
 	{
+		Audio::close();
 		Render::quit();
 		Input::close();
 		SDL_Quit();
@@ -160,7 +163,7 @@ namespace Main
 
 	void initSDL()
 	{
-		if ( SDL_Init( SDL_INIT_VIDEO ) != 0 )
+		if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) != 0 )
 		{
 			SDL_Log( "SDL_Initialization failed: %s", SDL_GetError() );
 		}
@@ -202,13 +205,10 @@ namespace Main
 	void popStateSafe()
 	{
 		assert ( !states_.empty() );
-
 		states_.pop_back();
-
 		assert ( !states_.empty() );
-
 		states_.back()->changePalette();
-
+		states_.back()->backFromPop();
 		state_pop_ = false;
 	};
 

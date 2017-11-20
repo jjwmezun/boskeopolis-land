@@ -27,12 +27,14 @@
  "properties":
     {
      "bg_color":2,
+     "music":"desert",
      "palette":"Mustard Orange",
      "tileset":"desert"
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

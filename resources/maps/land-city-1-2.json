@@ -15,11 +15,13 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "camera_limit_top":32
+     "camera_limit_top":32,
+     "music":"urban"
     },
  "propertytypes":
     {
-     "camera_limit_top":"int"
+     "camera_limit_top":"int",
+     "music":"string"
     },
  "renderorder":"right-down",
  "tileheight":16,

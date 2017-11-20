@@ -48,7 +48,7 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 	}
 };
 
-void MapLayerTilemap::render( const Camera& camera ) const
+void MapLayerTilemap::render( const Camera& camera )
 {
 	for ( auto& b : blocks_ )
 	{

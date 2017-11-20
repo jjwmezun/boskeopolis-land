@@ -28,6 +28,7 @@
     {
      "bg_color":4,
      "camera_priority_y":"CENTER",
+     "music":"mines",
      "palette":"Golden Yellow",
      "tileset":"mines"
     },
@@ -35,6 +36,7 @@
     {
      "bg_color":"int",
      "camera_priority_y":"string",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

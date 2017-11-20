@@ -8,7 +8,7 @@ class MapLayerShade : public MapLayer
 	public:
 		MapLayerShade( int shade, int alpha );
 		~MapLayerShade();
-		void render( const Camera& camera ) const override;
+		void render( const Camera& camera ) override;
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
 
 	private:

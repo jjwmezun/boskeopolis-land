@@ -5,7 +5,7 @@
 MapLayerShade::MapLayerShade( int shade, int alpha ) : shade_ ( shade ), alpha_ ( 0 ) {};
 MapLayerShade::~MapLayerShade() {};
 
-void MapLayerShade::render( const Camera& camera ) const
+void MapLayerShade::render( const Camera& camera )
 {
 	Render::colorCanvas( shade_, alpha_ );
 };

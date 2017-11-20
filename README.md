@@ -53,3 +53,24 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 * Windy Woods
 	* Design map.
 	* Think o' clever things to do with wind mechanic.
+	
+## Credits
+
+### Music
+
+All music is royalty-free music by Kevin MacLeod @ incompetech.com, all o' which is under the Creative Commons License 3.0, Attribution - http://creativecommons.org/licenses/by/3.0/.
+
+Maybe temporary, maybe not.
+
+* Title: Shaving Mirror
+* Overworld: Breakdown
+* City: District Four
+* Woods: Twisted
+* Mines: Chillin Hard
+* Desert: Wepa
+* Mountain: Groundwork
+* Sky: Nowhere Land
+* Snow: Chill Wave
+* Pirate: Salty Ditty
+* Sewers: RetroFuture Nasty
+* Factory: Robozo

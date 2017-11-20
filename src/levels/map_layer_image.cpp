@@ -45,12 +45,14 @@ MapLayerImage::MapLayerImage
 	alpha_ ( alpha )
 {};
 
+MapLayerImage::~MapLayerImage() {};
+
 void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
 {
-	move( lvmap.widthPixels() );
+	move( lvmap.widthPixels(), camera.rect() );
 };
 
-void MapLayerImage::move( int width )
+void MapLayerImage::move( int width, const sdl2::SDLRect& container )
 {
 	if ( Main::nextFrame( 8 / animation_speed_ ) )
 	{
@@ -95,7 +97,7 @@ void MapLayerImage::move( int width )
 			movement_position_x_ += ( Unit::PixelsToSubPixels( source_.w ) * ( ( repeat_x_ == REPEAT_INFINITE ) ? 1 : ( repeat_x_ + 1 ) ) );
 		}
 		*/
-		
+
 		// Size o' whole BG ( including all repeats ).
 		const int amount_to_push_forward = ( Unit::PixelsToSubPixels( source_.w ) * ( ( repeat_x_ == REPEAT_INFINITE ) ? 1 : ( repeat_x_ + 1 ) ) );
 		const int times_to_push_forward = ceil( ( Unit::PixelsToSubPixels( width ) - movement_position_x_ ) / amount_to_push_forward );
@@ -103,9 +105,9 @@ void MapLayerImage::move( int width )
 	}
 };
 
-void MapLayerImage::render( const Camera& camera ) const
+void MapLayerImage::render( const Camera& camera )
 {
-	renderY( camera.rect() );
+	render( camera.rect() );
 };
 
 void MapLayerImage::render( const sdl2::SDLRect& container )

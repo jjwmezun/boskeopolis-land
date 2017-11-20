@@ -1,0 +1,16 @@
+{
+	"name": "Banana Beach",
+	
+	"maps":
+	[
+		{
+			"slug": "beach-1"
+		}
+	],
+
+	"entrance_x": 3,
+	"entrance_y": 13,
+
+	"gem_challenge": 10000,
+	"time_challenge": 40
+}

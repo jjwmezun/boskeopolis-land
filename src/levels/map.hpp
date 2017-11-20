@@ -36,6 +36,7 @@ class Map
 		std::vector<int> blocks_;
 		std::vector<int> sprites_;
 		const std::string tileset_;
+		const std::string music_;
 		const Palette palette_;
 		const SpriteSystem::HeroType hero_type_;
 		const Camera::XPriority camera_x_priority_;
@@ -127,7 +128,8 @@ class Map
 			int wind_strength,
 			bool moon_gravity,
 			bool show_on_off,
-			int lightning_flash_color
+			int lightning_flash_color,
+			std::string music
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera );

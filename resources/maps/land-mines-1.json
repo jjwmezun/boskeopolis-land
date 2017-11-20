@@ -28,12 +28,14 @@
  "properties":
     {
      "bg_color":4,
+     "music":"mines",
      "palette":"Subterranean Teal",
      "tileset":"mines"
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

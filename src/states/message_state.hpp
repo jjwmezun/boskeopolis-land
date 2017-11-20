@@ -13,7 +13,8 @@ class MessageState : public GameState
 			std::unique_ptr<GameState> next_state = nullptr,
 			bool push = false,
 			const Palette& palette = { "Grayscale", 1 },
-			Text::FontColor font_color = Text::FontColor::BLACK
+			Text::FontColor font_color = Text::FontColor::BLACK,
+			std::string music = ""
 		);
 
 		static std::unique_ptr<MessageState> error

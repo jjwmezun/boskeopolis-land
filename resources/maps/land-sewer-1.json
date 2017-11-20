@@ -28,6 +28,7 @@
     {
      "bg_color":3,
      "camera_limit_top":32,
+     "music":"sewers",
      "palette":"Pale Green",
      "tileset":"urban",
      "water_effect_height":20
@@ -36,6 +37,7 @@
     {
      "bg_color":"int",
      "camera_limit_top":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string",
      "water_effect_height":"int"

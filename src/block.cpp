@@ -1,6 +1,8 @@
 #include "block.hpp"
 #include "block_type.hpp"
 #include "collision.hpp"
+#include "level.hpp"
+#include "map.hpp"
 #include "sprite.hpp"
 #include <iostream>
 
@@ -83,7 +85,7 @@ int Block::location() const
 
 void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
-	if ( hasType() )
+	if ( hasType() && areNearbyWithAllBlocks( sprite, level.currentMap() ) )
 	{
 		Collision collision = sprite.testCollision( *this );
 		type_->interact( collision, sprite, *this, level, events, camera, health, blocks );
@@ -111,4 +113,14 @@ bool Block::hasType() const
 const BlockType* Block::type() const
 {
 	return type_;
+};
+
+bool Block::areNearbyWithAllBlocks( const Object& other, const Map& lvmap ) const
+{
+	return
+		!lvmap.blocks_work_offscreen_ ||
+		(
+			other.rightSubPixels() > hit_box_.x - Unit::WINDOW_WIDTH_SUBPIXELS &&
+			other.hit_box_.x < rightSubPixels() + Unit::WINDOW_WIDTH_SUBPIXELS
+		);
 };

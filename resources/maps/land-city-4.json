@@ -29,6 +29,7 @@
      "bg_color":3,
      "blocks_work_offscreen":true,
      "lightning_flash_color":1,
+     "music":"urban",
      "palette":"Midnight Red",
      "tileset":"urban"
     },
@@ -37,6 +38,7 @@
      "bg_color":"int",
      "blocks_work_offscreen":"bool",
      "lightning_flash_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

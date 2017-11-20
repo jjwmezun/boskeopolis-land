@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 #include <fstream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
@@ -121,7 +120,6 @@ Map Map::mapFromPath
 							sprites.push_back( n.GetInt() );
 						break;
 						case ( LayerType::BACKGROUND ):
-							std::cout<<layer_info.n<<std::endl;
 							while ( layer2s.size() < layer_info.n )
 							{
 								layer2s.emplace_back( std::vector<int> () );
@@ -167,6 +165,7 @@ Map Map::mapFromPath
 		bool moon_gravity = false;
 		bool show_on_off = false;
 		int lightning_flash_color = 0;
+		std::string music = "";
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -196,6 +195,14 @@ Map Map::mapFromPath
 					if ( prop.value.IsInt() )
 					{
 						bg_color = prop.value.GetInt();
+					}
+				}
+
+				else if ( mezun::areStringsEqual( name, "music" ) )
+				{
+					if ( prop.value.IsString() )
+					{
+						music = prop.value.GetString();
 					}
 				}
 
@@ -381,7 +388,8 @@ Map Map::mapFromPath
 			wind_strength,
 			moon_gravity,
 			show_on_off,
-			lightning_flash_color
+			lightning_flash_color,
+			music
 		);
 };
 
@@ -410,7 +418,8 @@ Map::Map
 	int wind_strength,
 	bool moon_gravity,
 	bool show_on_off,
-	int lightning_flash_color
+	int lightning_flash_color,
+	std::string music
 )
 :
 	blocks_ ( blocks ),
@@ -437,7 +446,8 @@ Map::Map
 	moon_gravity_ ( moon_gravity ),
 	show_on_off_ ( show_on_off ),
 	lightning_flash_color_ ( lightning_flash_color ),
-	current_bg_ ( palette.bgN() )
+	current_bg_ ( palette.bgN() ),
+	music_ ( music )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -479,7 +489,8 @@ Map::Map( Map&& m ) noexcept
 	changed_ ( m.changed_ ),
 	show_on_off_ ( m.show_on_off_ ),
 	lightning_flash_color_ ( m.lightning_flash_color_ ),
-	current_bg_ ( m.current_bg_ )
+	current_bg_ ( m.current_bg_ ),
+	music_ ( m.music_ )
 {};
 
 Map::Map( const Map& c )
@@ -510,7 +521,8 @@ Map::Map( const Map& c )
 	changed_ ( c.changed_ ),
 	show_on_off_ ( c.show_on_off_ ),
 	lightning_flash_color_ ( c.lightning_flash_color_ ),
-	current_bg_ ( c.current_bg_ )
+	current_bg_ ( c.current_bg_ ),
+	music_ ( c.music_ )
 {};
 
 int Map::widthBlocks() const

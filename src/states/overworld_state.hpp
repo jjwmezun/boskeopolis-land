@@ -21,7 +21,8 @@ class OverworldState : public GameState
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
-		
+		void backFromPop() override;
+
 	private:
 		OWCamera camera_;
 		OWHero hero_;

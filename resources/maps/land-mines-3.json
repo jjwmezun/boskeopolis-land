@@ -37,11 +37,13 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "music":"mines",
      "palette":"Cement Gray",
      "tileset":"mines"
     },
  "propertytypes":
     {
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

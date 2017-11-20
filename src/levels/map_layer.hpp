@@ -13,6 +13,6 @@ class MapLayer
 		MapLayer();
 		virtual ~MapLayer();
 		virtual void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) {};
-		virtual void render( const Camera& camera ) const = 0;
+		virtual void render( const Camera& camera ) = 0;
 		virtual void interact( Sprite& sprite, Health& health ) {};
 };

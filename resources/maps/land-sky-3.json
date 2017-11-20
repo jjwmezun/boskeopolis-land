@@ -28,6 +28,7 @@
     {
      "bg_color":6,
      "hero_type":"FLUTTERING",
+     "music":"sky",
      "palette":"Starry Blue",
      "tileset":"sky"
     },
@@ -35,6 +36,7 @@
     {
      "bg_color":"int",
      "hero_type":"string",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

@@ -3,7 +3,7 @@ LINKER = g++-6
 EXT = cpp
 CFLAGS = -pg -g -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wfloat-equal -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Weffc++ -Wzero-as-null-pointer-constant -Wmain -Wfatal-errors -Wextra -Wall -std=c++14 -Wno-switch -Wno-unused-parameter -Wno-reorder -Wno-float-equal
 
-LDFLAGS = -lSDL2 -lSDL2_image
+LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer
 ABS_INC = -I/home/jjwmezun/Documents/boskeopolis-land/src/
 LOCAL_INC = -Isrc/ $(patsubst %,-I%,$(filter %/,$(wildcard $(SRC_DIR)*/)))
 INC =  $(ABS_INC) $(LOCAL_INC)

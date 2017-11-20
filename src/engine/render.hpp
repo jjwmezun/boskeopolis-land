@@ -7,6 +7,7 @@ class Palette;
 #include <SDL2/SDL.h>
 #include <map>
 #include <vector>
+#include "unit.hpp"
 
 namespace Render
 {
@@ -35,15 +36,40 @@ namespace Render
 		Uint8 alpha = 255,
 		const Camera* = nullptr
 	);
+	void renderObject
+	(
+		SDL_Texture* texture,
+		sdl2::SDLRect source,
+		sdl2::SDLRect dest,
+		SDL_RendererFlip flip = SDL_FLIP_NONE,
+		double rotation = 0,
+		Uint8 alpha = 255,
+		const Camera* = nullptr
+	);
+	
+	void renderObjectNoMagnify
+	(
+		const std::string& sheet,
+		sdl2::SDLRect source,
+		sdl2::SDLRect dest
+	);
 
 	void colorCanvas( int color, int alpha = 255 );
 	void colorCanvas();
 	void clearScreen();
+	void clearScreenTransparency();
 	void screenBorders();
 	void presentScreen();
 
 	void newPalette( Palette palette );
 
 	void clearSurfaces();
-	void loadTexture( const std::string& sheet, Uint8 alpha = 255 );
+	void loadTexture( const std::string& sheet );
+
+	SDL_Texture* createRenderBox( int width = Unit::WINDOW_WIDTH_PIXELS, int height = Unit::WINDOW_HEIGHT_PIXELS );
+	SDL_Texture* createRenderBoxMagnified( int width = Unit::WINDOW_WIDTH_PIXELS, int height = Unit::WINDOW_HEIGHT_PIXELS );
+	void setRenderTarget( SDL_Texture* texture );
+	void releaseRenderTarget();
+	void renderRenderBox( SDL_Texture* texture );
+	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src );
 };

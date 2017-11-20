@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "main.hpp"
 #include <fstream>
@@ -80,7 +81,9 @@ OverworldState::OverworldState()
 	mapEvents();
 };
 
-OverworldState::~OverworldState() {};
+OverworldState::~OverworldState()
+{
+};
 
 void OverworldState::stateUpdate()
 {
@@ -163,6 +166,7 @@ void OverworldState::stateRender()
 
 void OverworldState::init()
 {
+	Audio::changeSong( "overworld" );
 };
 
 void OverworldState::mapData()
@@ -489,4 +493,9 @@ void OverworldState::renderCameraArrows()
 	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS - 32, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 90.0 );
 	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS / 2 - 8, camera_.H - 32, 16, 16 }, SDL_FLIP_VERTICAL, 0.0 );
 	Render::renderObject( "tilesets/ow.png", { 0, Unit::BlocksToPixels( 7 ), 16, 16 }, { 16, camera_.H / 2 - 8, 16, 16 }, SDL_FLIP_NONE, 270.0 );
+};
+
+void OverworldState::backFromPop()
+{
+	Audio::changeSong( "overworld" );
 };

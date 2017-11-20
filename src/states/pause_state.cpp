@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
@@ -24,7 +25,9 @@ PauseState::PauseState( const Palette& palette, EventSystem& events )
 	}),
 	events_ ( events ),
 	option_selection_ ( PauseOption::PO_CONTINUE )
-{};
+{
+	Audio::pauseSong();
+};
 
 std::string PauseState::quitName( bool beaten ) const
 {

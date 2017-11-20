@@ -27,6 +27,7 @@
  "properties":
     {
      "bg_color":2,
+     "music":"ice",
      "palette":"Triste Blue",
      "slippery":true,
      "tileset":"ice"
@@ -34,6 +35,7 @@
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "slippery":"bool",
      "tileset":"string"

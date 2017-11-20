@@ -61,7 +61,7 @@ void MapLayerWater::interact( Sprite& sprite, Health& health )
 	}
 };
 
-void MapLayerWater::render( const Camera& camera ) const
+void MapLayerWater::render( const Camera& camera )
 {
 	if ( Unit::SubPixelsToPixels( y_ ) < camera.bottom() )
 	{

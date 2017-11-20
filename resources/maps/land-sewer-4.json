@@ -29,6 +29,7 @@
      "camera_limit_left":16,
      "camera_limit_right":16,
      "loop_sides":true,
+     "music":"sewers",
      "palette":"Subterranean Teal",
      "water_effect_height":104,
      "water_rising":true
@@ -38,6 +39,7 @@
      "camera_limit_left":"int",
      "camera_limit_right":"int",
      "loop_sides":"bool",
+     "music":"string",
      "palette":"string",
      "water_effect_height":"int",
      "water_rising":"bool"

@@ -37,4 +37,6 @@ class Block : public Object
 		int location_;
 		int type_id_;
 		bool destroyed_;
+
+		bool areNearbyWithAllBlocks( const Object& other, const Map& lvmap ) const;
 };

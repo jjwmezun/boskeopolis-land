@@ -30,13 +30,19 @@ class MapLayerImage : public MapLayer
 			bool flip = false,
 			Uint8 alpha = 255
 		);
+		~MapLayerImage();
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
-		void render( const Camera& camera ) const override;
-		void move( int width );
+		void render( const Camera& camera ) override;
+		void move( int width, const sdl2::SDLRect& container );
 		void render( const sdl2::SDLRect& container );
 
 	private:
-		const Uint8 alpha_;
+		TimerRepeat animation_timer_;
+		Counter current_frame_;
+		const std::string texture_;
+		sdl2::SDLRect source_;
+		const double scroll_speed_x_;
+		const double scroll_speed_y_;
 		const int offset_x_;
 		const int offset_y_;
 		const int repeat_x_;
@@ -48,12 +54,7 @@ class MapLayerImage : public MapLayer
 		int_fast32_t movement_position_x_;
 		int_fast32_t movement_position_y_;
 		Direction::Vertical frame_dir_;
-		const double scroll_speed_x_;
-		const double scroll_speed_y_;
-		Counter current_frame_;
-		TimerRepeat animation_timer_;
-		const std::string texture_;
-		sdl2::SDLRect source_;
+		const Uint8 alpha_;
 
 		void renderY( const sdl2::SDLRect& container ) const;
 		void renderX( const sdl2::SDLRect& container, sdl2::SDLRect& dest ) const;

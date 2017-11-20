@@ -39,12 +39,14 @@
  "properties":
     {
      "bg_color":4,
+     "music":"urban",
      "palette":"Midnight Blue",
      "warps":null
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "warps":""
     },

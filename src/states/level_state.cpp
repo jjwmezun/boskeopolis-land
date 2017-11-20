@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
 #include "main.hpp"
@@ -36,7 +37,9 @@ catch ( const mezun::CantLoadTileset& e )
 	);
 };
 
-LevelState::~LevelState() {};
+LevelState::~LevelState()
+{
+};
 
 void LevelState::stateUpdate()
 {
@@ -138,4 +141,10 @@ void LevelState::testPause()
 			)
 		);
 	}
+};
+
+void LevelState::backFromPop()
+{
+	Audio::changeSong( level_.currentMap().music_ );
+	Audio::resumeSong();
 };

@@ -1,54 +1,108 @@
 #include "camera.hpp"
 #include <cassert>
-#include "main.hpp"
 #include <iostream>
+#include "main.hpp"
 #include "map_layer_constellation.hpp"
 #include "render.hpp"
+#include "unit.hpp"
+
+
+// CONSTANTS
+//=============================================================
+
+static constexpr int BRIGHT_STAR_MODIFIER = 3;
+static constexpr int TILE_SIZE = Unit::PIXELS_PER_MINIBLOCK;
+static constexpr int STAR_CHANCE = 25;
+static constexpr int BIG_STAR_CHANCE = 10;
+static constexpr int MEDIUM_STAR_CHANCE = 25;
+static constexpr int BRIGHT_STAR_CHANCE = 25;
+static constexpr int MOON_START_X = Unit::WINDOW_WIDTH_MINIBLOCKS + 6;
+static constexpr int MOON_START_Y = 3;
+static constexpr int WIDTH = MOON_START_X - 2 + Unit::WINDOW_WIDTH_MINIBLOCKS;
+static constexpr int WIDTH_PIXELS = Unit::MiniBlocksToPixels( WIDTH );
+
+
+
+// CONSTRUCTOR FUNCTION DECLARATIONS
+//=============================================================
+
+static double scrollSpeedX( int map_width_blocks );
+static int calculateHeight( int map_height_blocks, double scroll_speed );
+static const std::vector<StarType> generateStarPattern( int height );
+static const std::string graphicsPath();
+
+
+
+// MEMBER FUNCTIONS
+//=============================================================
 
 MapLayerConstellation::MapLayerConstellation
 (
 	int map_width_blocks,
-	int map_height_blocks,
-	double scroll_speed_x,
-	double scroll_speed_y
+	int map_height_blocks
 )
 :
-	MapLayer(),
-	texture_ ( "bg" + Main::pathDivider() + "constellation.png" ),
-	scroll_speed_x_ ( scroll_speed_x ),
-	scroll_speed_y_ ( scroll_speed_y ),
-	height_ ( calculateWidth( map_height_blocks ) ),
-	width_ ( calculateWidth( map_width_blocks ) ),
-	star_pattern_ ( generateStarPattern() )
-{};
-
-MapLayerConstellation::~MapLayerConstellation() {};
-
-void MapLayerConstellation::render( const Camera& camera ) const
+	MapLayer()
 {
+	const double scroll_speed = scrollSpeedX( map_width_blocks );
+	const int map_width_miniblocks = Unit::BlocksToMiniBlocks( map_width_blocks );
+	const int map_height_miniblocks = Unit::BlocksToMiniBlocks( map_height_blocks );
+	const int height = calculateHeight( map_height_miniblocks, scroll_speed );
+	const int height_pixels = Unit::MiniBlocksToPixels( height );
+	std::vector<StarType> star_pattern = generateStarPattern( height );
+
+	scroll_speed_ = scroll_speed;
+	texture_ = Render::createRenderBox( WIDTH_PIXELS, height_pixels );
+	height_ = height;
+	rendered_ = false;
+	src_ = { 0, 0, WIDTH_PIXELS, height_pixels };
+	star_pattern_ = std::move( star_pattern );
+};
+
+MapLayerConstellation::~MapLayerConstellation()
+{
+	SDL_DestroyTexture( texture_ );
+};
+
+void MapLayerConstellation::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+{
+	if ( !rendered_ )
+	{
+		formTexture();
+	}
+};
+
+void MapLayerConstellation::render( const Camera& camera )
+{
+	const sdl2::SDLRect dest =
+	{
+		-( ( int )( ( double )( camera.x() ) * scroll_speed_ ) ),
+		-( ( int )( ( double )( camera.y() ) * scroll_speed_ ) ),
+		src_.w,
+		src_.h
+	};
+	Render::renderObject( texture_, src_, dest );
+};
+
+void MapLayerConstellation::renderTexture()
+{
+	const std::string img = graphicsPath();
 	sdl2::SDLRect source = { 0, 0, TILE_SIZE, TILE_SIZE };
 	sdl2::SDLRect dest = { 0, 0, TILE_SIZE, TILE_SIZE };
 
-	const int first_x = ( floor( camera.x() / TILE_SIZE ) * scroll_speed_x_ );
-	const int first_y = ( floor( camera.y() / TILE_SIZE ) * scroll_speed_y_ );
-	const int last_x = Unit::PixelsToMiniBlocks( camera.widthPixels() ) + first_x + 1;
-	const int last_y = Unit::PixelsToMiniBlocks( camera.heightPixels() ) + first_y + 1;
-
-	dest.y = -( (int)( camera.y() * scroll_speed_y_ ) % TILE_SIZE );
-
-	for ( int y = first_y; y < last_y; ++y )
+	for ( int y = 0; y < height_; ++y )
 	{
-		dest.x = -( (int)( camera.x() * scroll_speed_x_ ) % TILE_SIZE );
+		dest.x = 0;
 
-		for ( int x = first_x; x < last_x; ++x )
+		for ( int x = 0; x < WIDTH; ++x )
 		{
-			assert( indexFromXAndY( x, y ) < star_pattern_.size() );
+			const int index = mezun::nOfXY( x, y, WIDTH );
+			assert( index < star_pattern_.size() );
 
-			if ( star_pattern_.at( indexFromXAndY( x, y ) ) != StarType::NO_STAR )
+			if ( star_pattern_.at( index ) != StarType::NO_STAR )
 			{
-				source.x = ( int )( star_pattern_.at( indexFromXAndY( x, y ) ) ) * TILE_SIZE;
-
-				Render::renderObject( texture_, source, dest );
+				source.x = ( int )( star_pattern_.at( index ) ) * TILE_SIZE;
+				Render::renderObjectNoMagnify( img, source, dest );
 			}
 
 			dest.x += TILE_SIZE;
@@ -58,13 +112,47 @@ void MapLayerConstellation::render( const Camera& camera ) const
 	}
 };
 
-const std::vector<MapLayerConstellation::StarType> MapLayerConstellation::generateStarPattern() const
+void MapLayerConstellation::formTexture()
+{
+	Render::setRenderTarget( texture_ );
+		Render::clearScreenTransparency();
+		renderTexture();
+	Render::releaseRenderTarget();
+	rendered_ = true;
+};
+
+void MapLayerConstellation::testValues() const
+{
+	std::cout<<"STARS: "<<star_pattern_.size()<<std::endl;
+	std::cout<<"SRC: "<<src_.w<<std::endl;
+	std::cout<<"SCROLL: "<<scroll_speed_<<std::endl;
+	std::cout<<"H: "<<height_<<std::endl;
+	std::cout<<"RENDERERED: "<<rendered_<<std::endl;
+	std::cout<<"TEXTURE: "<<texture_<<std::endl;
+};
+
+
+
+// CONSTRUCTOR FUNCTIONS
+//=============================================================
+
+double scrollSpeedX( int map_width_blocks )
+{
+	return ( double )( WIDTH ) / ( double )( map_width_blocks * 4 );
+};
+
+int calculateHeight( int map_height_miniblocks, double scroll_speed )
+{
+	return ( int )( ( double )( map_height_miniblocks ) / scroll_speed );
+};
+
+const std::vector<StarType> generateStarPattern( int height )
 {
 	std::vector<StarType> c;
 
-	for ( int y = 0; y < height_; ++y )
+	for ( int y = 0; y < height; ++y )
 	{
-		for ( int x = 0; x < width_; ++x )
+		for ( int x = 0; x < WIDTH; ++x )
 		{
 			bool draw_star = mezun::testRandomWithinPercentage( STAR_CHANCE );
 
@@ -102,28 +190,15 @@ const std::vector<MapLayerConstellation::StarType> MapLayerConstellation::genera
 		}
 	}
 
-	const int MOON_START_X = ( width_ - 2 );
-	const int MOON_START_Y = 3;
-
-	c.at( indexFromXAndY( MOON_START_X, MOON_START_Y ) ) = StarType::MOON_TOP_LEFT;
-	c.at( indexFromXAndY( MOON_START_X + 1, MOON_START_Y ) ) = StarType::MOON_TOP_RIGHT;
-	c.at( indexFromXAndY( MOON_START_X, MOON_START_Y + 1 ) ) = StarType::MOON_BOTTOM_LEFT;
-	c.at( indexFromXAndY( MOON_START_X + 1, MOON_START_Y + 1 ) ) = StarType::MOON_BOTTOM_RIGHT;
+	c.at( mezun::nOfXY( MOON_START_X, MOON_START_Y, WIDTH ) ) = StarType::MOON_TOP_LEFT;
+	c.at( mezun::nOfXY( MOON_START_X + 1, MOON_START_Y, WIDTH ) ) = StarType::MOON_TOP_RIGHT;
+	c.at( mezun::nOfXY( MOON_START_X, MOON_START_Y + 1, WIDTH ) ) = StarType::MOON_BOTTOM_LEFT;
+	c.at( mezun::nOfXY( MOON_START_X + 1, MOON_START_Y + 1, WIDTH ) ) = StarType::MOON_BOTTOM_RIGHT;
 
 	return c;
 };
 
-const int MapLayerConstellation::calculateWidth( int map_width_blocks ) const
+const std::string graphicsPath()
 {
-	return std::max( ( int )( Unit::BlocksToMiniBlocks( map_width_blocks ) * scroll_speed_x_ ), Unit::WINDOW_WIDTH_MINIBLOCKS + 2);
-};
-
-const int MapLayerConstellation::calculateHeight( int map_height_blocks ) const
-{
-	return std::max( ( int )( Unit::BlocksToMiniBlocks( map_height_blocks ) * scroll_speed_y_ ), Unit::WINDOW_HEIGHT_MINIBLOCKS + 2 );
-};
-
-int MapLayerConstellation::indexFromXAndY( int x, int y ) const
-{
-	return ( ( y % height_ ) * width_ ) + ( x % width_ );
+	return "bg" + Main::pathDivider() + "constellation.png";
 };

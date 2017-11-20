@@ -19,6 +19,7 @@ class LevelState : public GameState
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
+		void backFromPop() override;
 
 	private:
 		InventoryLevel inventory_screen_;

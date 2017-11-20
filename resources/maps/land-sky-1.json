@@ -28,12 +28,14 @@
  "properties":
     {
      "bg_color":4,
+     "music":"sky",
      "palette":"Baby Blue",
      "tileset":"sky"
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

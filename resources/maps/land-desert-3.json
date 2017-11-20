@@ -40,6 +40,7 @@
      "bg_color":4,
      "camera_limit_left":8,
      "camera_limit_right":8,
+     "music":"desert",
      "palette":"Sunny Yellow",
      "tileset":"desert"
     },
@@ -48,6 +49,7 @@
      "bg_color":"int",
      "camera_limit_left":"int",
      "camera_limit_right":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

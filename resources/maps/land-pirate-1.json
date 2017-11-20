@@ -38,6 +38,7 @@
  "properties":
     {
      "bg_color":2,
+     "music":"pirate",
      "palette":"Cement Gray",
      "tileset":"pirate",
      "water_effect_height":35
@@ -45,6 +46,7 @@
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string",
      "water_effect_height":"int"
