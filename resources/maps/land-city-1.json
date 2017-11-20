@@ -38,7 +38,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "bg_color":4,
+     "bg_color":2,
      "music":"urban",
      "palette":"Midnight Blue",
      "warps":null

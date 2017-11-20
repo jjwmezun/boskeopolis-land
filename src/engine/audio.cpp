@@ -16,6 +16,7 @@ namespace Audio
 			printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
 			exit( -1 );
 		}
+		Mix_VolumeMusic( MIX_MAX_VOLUME / 10 );
 	};
 
 	void changeSong( const std::string& song_name )
