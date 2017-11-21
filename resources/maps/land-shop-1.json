@@ -28,6 +28,7 @@
     {
      "bg_color":1,
      "hero_type":"CART",
+     "music":"mall",
      "palette":"Sunny Yellow",
      "tileset":"mountain"
     },
@@ -35,6 +36,7 @@
     {
      "bg_color":"int",
      "hero_type":"string",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

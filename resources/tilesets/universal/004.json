@@ -10,24 +10,26 @@
 		{
 			"component":
 			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" },
+				{ "type": "not_full_health" }
+			]
+		},
+		{
+			"component":
+			{
 				"type": "heal",
 				"amount": 1
 			},
 			"conditions":
 			[
 				{ "type": "collide_any" },
-				{ "type": "hero" }
-			]
-		},
-		{
-			"component":
-			{
-				"type": "single"
-			},
-			"conditions":
-			[
-				{ "type": "collide_any" },
-				{ "type": "hero" }
+				{ "type": "hero" },
+				{ "type": "not_full_health" }
 			]
 		}
 	]

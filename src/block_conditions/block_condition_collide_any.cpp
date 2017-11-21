@@ -6,7 +6,7 @@ BlockConditionCollideAny::BlockConditionCollideAny() {};
 
 BlockConditionCollideAny::~BlockConditionCollideAny() {};
 
-bool BlockConditionCollideAny::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
+bool BlockConditionCollideAny::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health )
 {
 	return collision.collideAny();
 };

@@ -45,6 +45,7 @@
 #include "block_condition_hero.hpp"
 #include "block_condition_key.hpp"
 #include "block_condition_not_ducking.hpp"
+#include "block_condition_not_full_health.hpp"
 #include "block_condition_rival.hpp"
 #include "block_condition_switch_off.hpp"
 #include "block_condition_switch_on.hpp"
@@ -470,6 +471,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "key" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionKey> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "not_full_health" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionNotFullHealth> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "not_ducking" ) )
 							{

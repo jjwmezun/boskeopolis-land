@@ -4,7 +4,7 @@
 BlockConditionSwitchOn::BlockConditionSwitchOn() {};
 BlockConditionSwitchOn::~BlockConditionSwitchOn() {};
 
-bool BlockConditionSwitchOn::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
+bool BlockConditionSwitchOn::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health )
 {
 	return events.switch_;
 };

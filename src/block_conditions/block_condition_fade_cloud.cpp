@@ -7,7 +7,7 @@ BlockConditionFadeCloud::BlockConditionFadeCloud() {};
 
 BlockConditionFadeCloud::~BlockConditionFadeCloud() {};
 
-bool BlockConditionFadeCloud::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
+bool BlockConditionFadeCloud::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health )
 {
 	if ( block.type() != nullptr && block.type()->graphics() != nullptr )
 	{

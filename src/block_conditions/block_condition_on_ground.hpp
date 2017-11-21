@@ -7,5 +7,5 @@ class BlockConditionOnGround : public BlockCondition
 	public:
 		BlockConditionOnGround();
 		~BlockConditionOnGround();
-		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) override;
 };

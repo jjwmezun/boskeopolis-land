@@ -34,7 +34,7 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 			{
 				if ( conditions_.at( i ).at( j ) )
 				{
-					if ( !conditions_.at( i ).at( j )->condition( collision, sprite, block, events ) )
+					if ( !conditions_.at( i ).at( j )->condition( collision, sprite, block, events, health ) )
 					{
 						can_interact = false;
 						break;

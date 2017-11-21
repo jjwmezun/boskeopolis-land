@@ -50,6 +50,7 @@ class SpriteGraphics
 		virtual void update( const EventSystem& events );
 		virtual void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const;
 		void renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr ) const;
+		void renderAnyPriorityOverrideAlpha( const sdl2::SDLRect& bound_box, Uint8 alpha, const Camera* camera = nullptr ) const;
 		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
 		void masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha = 255 ) const;
 };

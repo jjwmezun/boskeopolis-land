@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include <algorithm>
 #include "inventory.hpp"
 #include "health.hpp"
@@ -66,6 +67,10 @@ void Health::heal()
 	{
 		hp_ = maxHP();
 	}
+	else
+	{
+		Audio::playSound( Audio::SoundType::HEAL );
+	}
 };
 
 void Health::fullHeal()
@@ -83,6 +88,7 @@ void Health::hurt()
 		{
 			invincible_ = true;
 			invincibility_timer_.start();
+			Audio::playSound( Audio::SoundType::HURT );
 		}
 	}
 };

@@ -27,6 +27,7 @@ PauseState::PauseState( const Palette& palette, EventSystem& events )
 	option_selection_ ( PauseOption::PO_CONTINUE )
 {
 	Audio::pauseSong();
+	Audio::playSound( Audio::SoundType::PAUSE );
 };
 
 std::string PauseState::quitName( bool beaten ) const
@@ -49,6 +50,7 @@ void PauseState::stateUpdate()
 				option_selection_ = PauseOption::PO_CONTINUE;
 			break;
 		}
+		Audio::playSound( Audio::SoundType::SELECT );
 	}
 
 	if ( Input::pressed( Input::Action::CONFIRM ) )
@@ -58,10 +60,12 @@ void PauseState::stateUpdate()
 			events_.quitLevel();
 		}
 		Main::popState();
+		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
+		Audio::playSound( Audio::SoundType::CANCEL );
 	}
 };
 

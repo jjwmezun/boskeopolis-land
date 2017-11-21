@@ -21,7 +21,8 @@ class Map
 			BLOCKS,
 			SPRITES,
 			BACKGROUND,
-			FOREGROUND
+			FOREGROUND,
+			FADE_FOREGROUND
 		};
 
 		struct LayerInfo

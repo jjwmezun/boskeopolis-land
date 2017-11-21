@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "block.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"
@@ -54,7 +55,8 @@ PlayerSprite::PlayerSprite
 		.2
 	),
 	input_ ( std::move( input ) ),
-	door_lock_ ( true )
+	door_lock_ ( true ),
+	death_sound_ ( false )
 {
 	if ( input_ == nullptr )
 	{
@@ -205,7 +207,7 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocksJustAbove( blocks ) ) )
 	{
 		jump();
-		
+
 		if ( jump_start_ && !jump_end_ )
 		{
 			on_ladder_ = false;
@@ -214,6 +216,10 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 			{
 				slide_jump_ = true;
 				vx_ *= 5;
+			}
+			if ( on_ground_prev_ )
+			{
+				Audio::playSound( Audio::SoundType::JUMP );
 			}
 		}
 		
@@ -336,6 +342,7 @@ void PlayerSprite::customInteract( Collision& my_collision, Collision& their_col
 				them.kill();
 				bounce();
 				Inventory::bop();
+				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else if ( my_collision.collideAny() && isSlidingPrev() )
 			{
@@ -395,6 +402,12 @@ void PlayerSprite::unduck( const BlockSystem& blocks )
 void PlayerSprite::deathAction( Camera& camera )
 {
 	defaultDeathAction( camera );
+	
+	if ( !death_sound_ )
+	{
+		Audio::playSound( Audio::SoundType::DEATH );
+		death_sound_ = true;
+	}
 };
 
 void PlayerSprite::testVX()

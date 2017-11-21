@@ -31,6 +31,7 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 		{
 			const std::string bg_line = std::string( std::string( "BG" ) + std::to_string( i ) );
 			const std::string fg_line = std::string( std::string( "FG" ) + std::to_string( i ) );
+			const std::string fade_fg_line = std::string( std::string( "Fade FG" ) + std::to_string( i ) );
 
 			if ( layer_name == bg_line )
 			{
@@ -39,6 +40,10 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 			else if ( layer_name == fg_line )
 			{
 				return { LayerType::FOREGROUND, i };
+			}
+			else if ( layer_name == fade_fg_line )
+			{
+				return { LayerType::FADE_FOREGROUND, i };
 			}
 		}
 	}
@@ -59,7 +64,9 @@ Map Map::mapFromPath
 
 		std::vector<int> blocks = {};
 		std::vector<int> sprites = {};
-		std::vector<std::vector<int>> layer2s = {};
+		std::vector<std::vector<int>> bg_block_layers = {};
+		std::vector<std::vector<int>> fg_block_layers = {};
+		std::vector<std::vector<int>> fade_fg_block_layers = {};
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -120,13 +127,25 @@ Map Map::mapFromPath
 							sprites.push_back( n.GetInt() );
 						break;
 						case ( LayerType::BACKGROUND ):
-							while ( layer2s.size() < layer_info.n )
+							while ( bg_block_layers.size() < layer_info.n )
 							{
-								layer2s.emplace_back( std::vector<int> () );
+								bg_block_layers.emplace_back( std::vector<int> () );
 							}
-							layer2s[ layer_info.n - 1 ].emplace_back( n.GetInt() );
+							bg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
 						break;
 						case ( LayerType::FOREGROUND ):
+							while ( fg_block_layers.size() < layer_info.n )
+							{
+								fg_block_layers.emplace_back( std::vector<int> () );
+							}
+							fg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
+						break;
+						case ( LayerType::FADE_FOREGROUND ):
+							while ( fade_fg_block_layers.size() < layer_info.n )
+							{
+								fade_fg_block_layers.emplace_back( std::vector<int> () );
+							}
+							fade_fg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
 						break;
 					}
 				}
@@ -134,9 +153,17 @@ Map Map::mapFromPath
 			++i;
 		}
 		
-		for ( auto& l2 : layer2s )
+		for ( auto& bg_block_layer : bg_block_layers )
 		{
-			backgrounds.emplace_back( new MapLayerTilemap( l2, width, height ) );
+			backgrounds.emplace_back( new MapLayerTilemap( bg_block_layer, width, height ) );
+		}
+		for ( auto& fg_block_layer : fg_block_layers )
+		{
+			foregrounds.emplace_back( new MapLayerTilemap( fg_block_layer, width, height, false ) );
+		}
+		for ( auto& fade_fg_block_layer : fade_fg_block_layers )
+		{
+			foregrounds.emplace_back( new MapLayerTilemap( fade_fg_block_layer, width, height, true ) );
 		}
 
 

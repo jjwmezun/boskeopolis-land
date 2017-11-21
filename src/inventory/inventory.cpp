@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include <cassert>
 #include "clock.hpp"
 #include "counter.hpp"
@@ -652,6 +653,7 @@ namespace Inventory
 	void addFunds( int n )
 	{
 		funds_ += n;
+		Audio::playSound( Audio::SoundType::GEM );
 	};
 
 	void loseFunds( int n )

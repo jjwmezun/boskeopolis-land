@@ -2,6 +2,20 @@
 
 namespace Audio
 {
+	enum class SoundType
+	{
+		GEM,
+		HURT,
+		JUMP,
+		HEAL,
+		BOP,
+		DEATH,
+		PAUSE,
+		SELECT,
+		CONFIRM,
+		CANCEL
+	};
+
 	void init();
 	void close();
 
@@ -10,4 +24,5 @@ namespace Audio
 	void pauseSong();
 	void resumeSong();
 	void closeSong();
+	void playSound( SoundType sound );
 };

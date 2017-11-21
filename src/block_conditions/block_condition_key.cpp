@@ -4,7 +4,7 @@
 BlockConditionKey::BlockConditionKey() {};
 BlockConditionKey::~BlockConditionKey() {};
 
-bool BlockConditionKey::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events )
+bool BlockConditionKey::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health )
 {
 	return events.hasKey();
 };

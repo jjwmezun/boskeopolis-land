@@ -44,4 +44,5 @@ class PlayerSprite : public Sprite
 		void testVX();
 		void testFrameRate();
 		bool door_lock_;
+		bool death_sound_;
 };
