@@ -212,9 +212,9 @@ namespace Main
 		state_pop_ = false;
 	};
 
-	void tempMessage( std::string message, Palette&& palette, Text::FontColor text_color )
+	void tempMessage( std::string message, Palette&& palette, Text::FontColor text_color, std::string music, bool loop_music )
 	{
-		pushState( std::unique_ptr<GameState> ( new MessageState( message, true, nullptr, false, palette, text_color ) ) );
+		pushState( std::unique_ptr<GameState> ( new MessageState( message, true, nullptr, false, palette, text_color, music, loop_music ) ) );
 	};
 
 	int fpsMilliseconds()

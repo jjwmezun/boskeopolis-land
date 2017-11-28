@@ -12,13 +12,13 @@ class TextComponentMarquee : public TextComponent
 			int speed = 1
 		);
 		~TextComponentMarquee();
-		void update( Text& text );
+		void update( TextObj& text ) override;
 
 	private:
 		const Direction::Horizontal direction_;
 		const int speed_;
 
-		void moveLeft( Text& text );
-		void moveRight( Text& text );
-		void overrideLineLimit( Text& text );
+		void moveLeft( TextObj& text );
+		void moveRight( TextObj& text );
+		void overrideLineLimit( TextObj& text );
 };

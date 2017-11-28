@@ -110,7 +110,12 @@ namespace Inventory
 			}
 			else
 			{
-				return "????????????????????";
+				char question[ 33 ] = { '\0' };
+				for ( int i = 0; i < name.length(); ++i )
+				{
+					question[ i ] = '?';
+				}
+				return std::string( question );
 			}
 		}
 		else
@@ -621,7 +626,11 @@ namespace Inventory
 		binifs.close();
 	};
 
-	void addMcGuffin() { ++mcguffins_; };
+	void addMcGuffin()
+	{
+		++mcguffins_;
+	};
+
 	int McGuffins() { return mcguffins_; };
 
 	void win()

@@ -1,0 +1,24 @@
+{
+	"name": "Lunacy",
+	
+	"maps":
+	[
+		{
+			"slug": "space-1",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"width": 166,
+					"height": 72
+				}
+			]
+		}
+	],
+
+	"entrance_x": 2,
+	"entrance_y": 13,
+
+	"gem_challenge": 8000,
+	"time_challenge": 50
+}

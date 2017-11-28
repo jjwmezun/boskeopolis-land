@@ -36,7 +36,7 @@ TitleState::TitleState()
 	logo_gfx_ ( "bosko_logo.png" ),
 	window_box_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
-	created_by_ ( "Created by J.J.W. Mezun - 2017", 0, CREATED_BY_Y, Text::FontColor::BLACK, Text::FontAlign::CENTER ),
+	created_by_ ( "Created by J.J.W. Mezun - 2017", 0, CREATED_BY_Y, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
 	option_bg_
 	({{
 		{ OPTIONS_X, OPTIONS_TOP_Y, OPTION_WIDTH_PIXELS, OPTION_HEIGHT_PIXELS },
@@ -78,6 +78,7 @@ void TitleState::stateUpdate()
 			subtractFromSelection();
 		}
 		selection_timer_ = 0;
+		Audio::playSound( Audio::SoundType::SELECT );
 	}
 	else if ( Input::pressed( Input::Action::MOVE_DOWN ) )
 	{
@@ -87,6 +88,7 @@ void TitleState::stateUpdate()
 			addToSelection();
 		}
 		selection_timer_ = 0;
+		Audio::playSound( Audio::SoundType::SELECT );
 	}
 	else
 	{
@@ -110,6 +112,7 @@ void TitleState::stateUpdate()
 				Main::quit();
 			break;
 		}
+		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 	
 	cloud_bg_.move( Unit::WINDOW_WIDTH_PIXELS, window_box_ );

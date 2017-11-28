@@ -4,6 +4,7 @@
 #include "inventory.hpp"
 #include "inventory_level.hpp"
 #include "map.hpp"
+#include "news_ticker.hpp"
 #include "render.hpp"
 #include "sprite.hpp"
 
@@ -34,7 +35,7 @@ InventoryLevel::InventoryLevel()
 :
 	health_gfx_ ( Y ),
 	oxygen_meter_ ( Y ),
-	ticker_ ( Y + 16 ),
+	ticker_ ( NewsTicker::make( Y + 16 ) ),
 	show_mcguffins_ ( false ),
 	kill_counter_ ( -1 ),
 	flashing_timer_ ( 0 ),
@@ -46,7 +47,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	oxygen_meter_.update( health );
 	Inventory::update();
 	health_gfx_.update( health );
-	ticker_.updateTicker();
+	ticker_.update();
 
 	if ( Inventory::clock().lowOnTime() )
 	{

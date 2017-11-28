@@ -15,6 +15,7 @@
 			},
 			"conditions":
 			[
+				{ "type": "hero" },
 				{ "type": "collide_any" }
 			]
 		}

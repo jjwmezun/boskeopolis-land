@@ -1,5 +1,6 @@
 #pragma once
 
+#include "direction.hpp"
 #include <string>
 #include "text.hpp"
 

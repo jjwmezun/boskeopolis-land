@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "block_component_money.hpp"
 #include "inventory.hpp"
 

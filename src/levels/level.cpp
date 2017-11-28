@@ -158,7 +158,6 @@ const std::string& Level::NameOLevel( unsigned int n )
 	}
 
 	assert( n < level_list_.size() );
-
 	return level_list_.at( n );
 };
 

@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "block.hpp"
 #include "block_component_diamond.hpp"
 #include "collision.hpp"
@@ -20,6 +21,7 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 		if ( collision.collideAny() && sprite.hasType( Sprite::SpriteType::HERO ) )
 		{
 			Inventory::getDiamond();
+			Audio::playSound( Audio::SoundType::DIAMOND );
 		}
 	}
 };

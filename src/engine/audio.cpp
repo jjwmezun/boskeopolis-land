@@ -5,7 +5,7 @@
 
 namespace Audio
 {
-	static constexpr int NUM_O_SOUNDS = 10;
+	static constexpr int NUM_O_SOUNDS = 13;
 	const std::string RELATIVE_DIR = "music";
 	const std::string EXT = "mp3";
 	std::string current_song_ = "";
@@ -21,7 +21,7 @@ namespace Audio
 			printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
 			exit( -1 );
 		}
-		Mix_VolumeMusic( MIX_MAX_VOLUME / 4 );
+		Mix_VolumeMusic( MIX_MAX_VOLUME / 3 );
 		Mix_Volume( -1, MIX_MAX_VOLUME / 2 );
 		sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
 		sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );
@@ -33,9 +33,12 @@ namespace Audio
 		sounds_[ ( int )( SoundType::SELECT ) ] = loadSound( "select.wav" );
 		sounds_[ ( int )( SoundType::CONFIRM ) ] = loadSound( "confirm.wav" );
 		sounds_[ ( int )( SoundType::CANCEL ) ] = loadSound( "cancel.wav" );
+		sounds_[ ( int )( SoundType::DIAMOND ) ] = loadSound( "diamond.wav" );
+		sounds_[ ( int )( SoundType::ITEM ) ] = loadSound( "item.wav" );
+		sounds_[ ( int )( SoundType::JINGLE ) ] = loadSound( "jingle.wav" );
 	};
 
-	void changeSong( const std::string& song_name )
+	void changeSong( const std::string& song_name, bool loop )
 	{
 		if ( song_name != current_song_ )
 		{
@@ -52,7 +55,7 @@ namespace Audio
 				}
 				else
 				{
-					Mix_PlayMusic( music_, -1 );
+					Mix_PlayMusic( music_, ( loop ) ? -1 : 1 );
 					current_song_ = song_name;
 				}
 			}

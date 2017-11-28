@@ -13,13 +13,16 @@ namespace Audio
 		PAUSE,
 		SELECT,
 		CONFIRM,
-		CANCEL
+		CANCEL,
+		DIAMOND,
+		ITEM,
+		JINGLE
 	};
 
 	void init();
 	void close();
 
-	void changeSong( const std::string& song_name );
+	void changeSong( const std::string& song_name, bool loop = true );
 	void turnOffSong();
 	void pauseSong();
 	void resumeSong();

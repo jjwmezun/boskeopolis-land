@@ -75,13 +75,13 @@ void PauseState::stateRender()
 
 	for ( int i = 0; i < NUM_O_PAUSE_OPTIONS; ++i )
 	{
-		Text::FontColor text_color = Text::FontColor::__NULL;
+		option_text_[ i ].color_ = Text::FontColor::LIGHT_MID_GRAY;
 
 		if ( ( int )( option_selection_ ) == i )
 		{
-			text_color = Text::FontColor::WHITE;
+			option_text_[ i ].color_ = Text::FontColor::WHITE;
 		}
 
-		option_text_[ i ].render( nullptr, text_color );
+		option_text_[ i ].render( nullptr );
 	}
 };

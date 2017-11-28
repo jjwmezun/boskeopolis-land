@@ -1,4 +1,4 @@
-#include "text.hpp"
+#include "text_obj.hpp"
 #include "text_component_marquee.hpp"
 
 TextComponentMarquee::TextComponentMarquee
@@ -13,7 +13,7 @@ TextComponentMarquee::TextComponentMarquee
 
 TextComponentMarquee::~TextComponentMarquee() {};
 
-void TextComponentMarquee::update( Text& text )
+void TextComponentMarquee::update( TextObj& text )
 {
 	overrideLineLimit( text );
 
@@ -27,7 +27,7 @@ void TextComponentMarquee::update( Text& text )
 	}
 };
 
-void TextComponentMarquee::moveLeft( Text& text )
+void TextComponentMarquee::moveLeft( TextObj& text )
 {
 	text.x_ -= speed_;
 
@@ -37,7 +37,7 @@ void TextComponentMarquee::moveLeft( Text& text )
 	}
 };
 
-void TextComponentMarquee::moveRight( Text& text )
+void TextComponentMarquee::moveRight( TextObj& text )
 {
 	text.x_ += speed_;
 
@@ -47,7 +47,7 @@ void TextComponentMarquee::moveRight( Text& text )
 	}
 };
 
-void TextComponentMarquee::overrideLineLimit( Text& text )
+void TextComponentMarquee::overrideLineLimit( TextObj& text )
 {
 	text.line_limit_ = text.words_.length();
 };

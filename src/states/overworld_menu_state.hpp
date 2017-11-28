@@ -3,7 +3,7 @@
 #include <array>
 #include "game_state.hpp"
 #include "mezun_sdl2.hpp"
-#include "text.hpp"
+#include "text_obj.hpp"
 
 class OverworldMenuState : public GameState
 {
@@ -12,7 +12,6 @@ class OverworldMenuState : public GameState
 		~OverworldMenuState();
 		void stateUpdate() override;
 		void stateRender() override;
-		void init() override;
 
 	private:
 		enum class Option
@@ -25,7 +24,7 @@ class OverworldMenuState : public GameState
 		static constexpr int NUM_O_OPTIONS = ( int )( Option::QUIT ) + 1;
 
 		const sdl2::SDLRect bg_;
-		const std::array<Text, NUM_O_OPTIONS> option_text_;
+		std::array<TextObj, NUM_O_OPTIONS> option_text_;
 		bool& go_to_list_;
 		bool& camera_mode_;
 		int option_selection_;

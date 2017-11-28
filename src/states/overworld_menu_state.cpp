@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "input.hpp"
 #include "main.hpp"
 #include "overworld_menu_state.hpp"
@@ -18,15 +19,17 @@ OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, con
 	),
 	option_text_
 	({{
-		Text( "Continue", bg_.x + 8, bg_.y + 16, Text::FontColor::LIGHT_MID_GRAY ),
-		Text( "Level List", bg_.x + 8, bg_.y + 32, Text::FontColor::LIGHT_MID_GRAY ),
-		Text( "Camera View", bg_.x + 8, bg_.y + 48, Text::FontColor::LIGHT_MID_GRAY ),
-		Text( "Quit", bg_.x + 8, bg_.y + 64, Text::FontColor::LIGHT_MID_GRAY )
+		TextObj( "Continue", bg_.x + 8, bg_.y + 16, Text::FontColor::LIGHT_MID_GRAY ),
+		TextObj( "Level List", bg_.x + 8, bg_.y + 32, Text::FontColor::LIGHT_MID_GRAY ),
+		TextObj( "Camera View", bg_.x + 8, bg_.y + 48, Text::FontColor::LIGHT_MID_GRAY ),
+		TextObj( "Quit", bg_.x + 8, bg_.y + 64, Text::FontColor::LIGHT_MID_GRAY )
 	}}),
 	go_to_list_ ( go_to_list ),
 	camera_mode_ ( camera_mode ),
 	option_selection_ ( ( int )( Option::CONTINUE ) )
-{};
+{
+	Audio::playSound( Audio::SoundType::PAUSE );
+};
 
 OverworldMenuState::~OverworldMenuState() {};
 
@@ -35,15 +38,18 @@ void OverworldMenuState::stateUpdate()
 	if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
+		Audio::playSound( Audio::SoundType::CANCEL );
 	}
 
 	if ( Input::pressed( Input::Action::MOVE_DOWN ) )
 	{
 		++option_selection_;
+		Audio::playSound( Audio::SoundType::SELECT );
 	}
 	else if ( Input::pressed( Input::Action::MOVE_UP ) )
 	{
 		--option_selection_;
+		Audio::playSound( Audio::SoundType::SELECT );
 	}
 	
 	if ( option_selection_ >= NUM_O_OPTIONS )
@@ -77,6 +83,7 @@ void OverworldMenuState::stateUpdate()
 				Main::changeState( std::make_unique<TitleState> () );
 			break;
 		}
+		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 };
 
@@ -86,17 +93,13 @@ void OverworldMenuState::stateRender()
 
 	for ( int i = 0; i < NUM_O_OPTIONS; ++i )
 	{
-		Text::FontColor text_color = Text::FontColor::__NULL;
+		option_text_[ i ].color_ = Text::FontColor::LIGHT_MID_GRAY;
 
 		if ( option_selection_ == i )
 		{
-			text_color = Text::FontColor::WHITE;
+			option_text_[ i ].color_ = Text::FontColor::WHITE;
 		}
 
-		option_text_.at( i ).render( nullptr, text_color );
+		option_text_[ i ].render( nullptr );
 	}
-};
-
-void OverworldMenuState::init()
-{
 };

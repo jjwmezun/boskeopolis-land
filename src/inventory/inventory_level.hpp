@@ -8,10 +8,9 @@ class Sprite;
 
 #include "inventory_level_health.hpp"
 #include "mezun_sdl2.hpp"
-#include "news_ticker.hpp"
 #include "oxygen_meter.hpp"
 #include "sprite_graphics.hpp"
-#include "text.hpp"
+#include "text_obj.hpp"
 
 class InventoryLevel
 {
@@ -59,12 +58,12 @@ class InventoryLevel
 		const SpriteGraphics mcguffins_gfx_ = SpriteGraphics( "tilesets/universal.png", 0, 24 );
 		const SpriteGraphics kills_gfx_ = SpriteGraphics( "tilesets/universal.png", 8, 24 );
 		const SpriteGraphics mcguffins_cross_ = SpriteGraphics( "charset.png", 8, 40 );
-		const Text switch_on_ = { "ON", MISC_X, Y, Text::FontColor::DARK_GRAY };
-		const Text switch_off_ = { "OFF", MISC_X, Y, Text::FontColor::DARK_GRAY };
+		const TextObj switch_on_ = { "ON", MISC_X, Y, Text::FontColor::DARK_GRAY };
+		const TextObj switch_off_ = { "OFF", MISC_X, Y, Text::FontColor::DARK_GRAY };
 
 		InventoryLevelHealth health_gfx_;
 		OxygenMeter oxygen_meter_;
-		NewsTicker ticker_;
+		TextObj ticker_;
 		int flashing_timer_;
 		int flashing_time_shade_;
 };

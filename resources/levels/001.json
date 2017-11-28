@@ -99,7 +99,7 @@
 	"entrance_y": 11,
 	"camera_x": 10,
 	
-	"message": "Gems o' average brightness are\nworth 100\t, particularly bright gems are worth 250\t, & particu-\nlarly dark gems are worth 500\t.",
+	"message": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
 	
 	"gem_challenge": 10000,
 	"time_challenge": 40

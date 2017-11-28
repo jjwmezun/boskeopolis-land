@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
@@ -33,7 +34,9 @@ LevelSelectState::LevelSelectState( int level )
 	delay_length_ ( 16 ),
 	delay_ ( 0 ),
 	show_challenges_ ( false )
-{};
+{
+	Audio::changeSong( "level-select" );
+};
 
 LevelSelectState::~LevelSelectState() {};
 
@@ -58,11 +61,13 @@ void LevelSelectState::stateUpdate()
 		{
 			--selection_;
 			delay_ = delay_length_;
+			Audio::playSound( Audio::SoundType::SELECT );
 		}
 		if ( Input::held( Input::Action::MOVE_DOWN ) )
 		{
 			++selection_;
 			delay_ = delay_length_;
+			Audio::playSound( Audio::SoundType::SELECT );
 		}
 	}
 	else
@@ -91,10 +96,12 @@ void LevelSelectState::stateUpdate()
 	{
 		Inventory::setCurrentLevel( level_ids_.at( selection_() ) );
 		Main::changeState( std::make_unique<OverworldState> () );
+		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Main::popState();
+		Audio::playSound( Audio::SoundType::CANCEL );
 	}
 };
 
@@ -125,25 +132,27 @@ void LevelSelectState::stateRender()
 
 		if ( i < level_names_.size() )
 		{
-			level_names_[ i ].render( &camera_, shade );
+			level_names_[ i ].color_ = shade;
+			level_names_[ i ].render( &camera_ );
 		}
 		
 		if ( i < gem_scores_.size() )
 		{
 			if ( i == selection_.value() && show_challenges_ )
 			{
-				gem_challenges_text_[ i ].render( &camera_, Text::FontColor::LIGHT_GRAY );
+				gem_challenges_text_[ i ].render( &camera_ );
 			}
 			else
 			{
 				if ( gem_challenges_.at( i ) )
 				{
-					gem_scores_[ i ].render( &camera_, Text::FontColor::LIGHT_MID_GRAY );
+					gem_scores_[ i ].color_ = Text::FontColor::LIGHT_MID_GRAY;
 				}
 				else
 				{
-					gem_scores_[ i ].render( &camera_, shade );
+					gem_scores_[ i ].color_ = shade;
 				}
+				gem_scores_[ i ].render( &camera_ );
 			}
 		}
 
@@ -151,18 +160,19 @@ void LevelSelectState::stateRender()
 		{
 			if ( i == selection_.value() && show_challenges_ )
 			{
-				time_challenges_text_[ i ].render( &camera_, Text::FontColor::LIGHT_GRAY );
+				time_challenges_text_[ i ].render( &camera_ );
 			}
 			else
 			{
 				if ( time_challenges_.at( i ) )
 				{
-					time_scores_[ i ].render( &camera_, Text::FontColor::LIGHT_MID_GRAY );
+					time_scores_[ i ].color_ = Text::FontColor::LIGHT_MID_GRAY;
 				}
 				else
 				{
-					time_scores_[ i ].render( &camera_, shade );
+					time_scores_[ i ].color_ = shade;
 				}
+				time_scores_[ i ].render( &camera_ );
 			}
 		}
 	}
@@ -211,7 +221,6 @@ void LevelSelectState::init()
 
 	try
 	{
-
 		int reali = 0;
 
 		for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
@@ -226,8 +235,8 @@ void LevelSelectState::init()
 
 				gem_scores_.emplace_back( Inventory::gemScore( i ), END_X - ( 11 * 8 ), ( 8 * reali ) );
 				time_scores_.emplace_back( Inventory::timeScore( i ), END_X - ( 4 * 8 ), ( 8 * reali ) );
-				gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), END_X - ( 11 * 8 ), ( 8 * reali ) );
-				time_challenges_text_.emplace_back( Level::timeChallengeText( i ), END_X - ( 4 * 8 ), ( 8 * reali ) );
+				gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), END_X - ( 11 * 8 ), ( 8 * reali ), Text::FontColor::LIGHT_GRAY );
+				time_challenges_text_.emplace_back( Level::timeChallengeText( i ), END_X - ( 4 * 8 ), ( 8 * reali ), Text::FontColor::LIGHT_GRAY );
 				gem_challenges_.emplace_back( Inventory::gemChallengeBeaten( i ) );
 				time_challenges_.emplace_back( Inventory::timeChallengeBeaten( i ) );
 

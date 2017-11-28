@@ -75,7 +75,11 @@ void Health::heal()
 
 void Health::fullHeal()
 {
-	hp_ = maxHP();
+	if ( hp_ < maxHP() )
+	{
+		hp_ = maxHP();
+		Audio::playSound( Audio::SoundType::HEAL );
+	}
 };
 
 void Health::hurt()

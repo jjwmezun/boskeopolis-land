@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game_state.hpp"
-#include "text.hpp"
+#include "text_obj.hpp"
 
 class LevelMessageState : public GameState
 {
@@ -13,5 +13,6 @@ class LevelMessageState : public GameState
 
 	private:
 		const sdl2::SDLRect backdrop_;
-		const Text message_;
+		const sdl2::SDLRect border_;
+		TextObj message_;
 };

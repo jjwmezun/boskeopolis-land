@@ -62,7 +62,7 @@ namespace Render
 	const std::string setImgPath();
 	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source );
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
-	void cameraAdjust( sdl2::SDLRect& dest, const Camera* camera );
+	bool cameraAdjust( sdl2::SDLRect& dest, const Camera* camera );
 	void checkTexture( const std::string& sheet );
 
 
@@ -446,7 +446,12 @@ namespace Render
 	)
 	{
 		SDL_SetTextureAlphaMod( texture, alpha );
-		cameraAdjust( dest, camera );
+
+		if ( !cameraAdjust( dest, camera ) )
+		{
+			return;
+		};
+
 		dest = sourceRelativeToScreen( dest );
 
 		if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
@@ -463,7 +468,7 @@ namespace Render
 		}
 	};
 
-	void cameraAdjust( sdl2::SDLRect& dest, const Camera* camera )
+	bool cameraAdjust( sdl2::SDLRect& dest, const Camera* camera )
 	{
 		if ( camera != nullptr )
 		{
@@ -471,11 +476,16 @@ namespace Render
 			{
 				dest.x = camera->relativeX( dest );
 				dest.y = camera->relativeY( dest );
+				return true;
 			}
 			else
 			{
-				return; // If not onscreen, don't draw; just quit function now.
+				return false; // If not onscreen, don't draw; just quit function now.
 			}
+		}
+		else
+		{
+			return true;
 		}
 	};
 

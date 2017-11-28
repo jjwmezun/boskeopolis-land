@@ -34,17 +34,18 @@ MessageState::MessageState
 	bool push,
 	const Palette& palette,
 	Text::FontColor font_color,
-	std::string music
+	std::string music,
+	bool loop_music
 )
 :
 	GameState( StateID::MESSAGE_STATE, palette ),
-	message_ ( message, 0, 0, font_color, Text::FontAlign::CENTER, true ),
+	message_ ( message, 0, 0, font_color, Text::FontAlign::CENTER, Text::FontColor::__NULL, true ),
 	next_state_ ( std::move( next_state ) ),
 	pop_ ( pop ),
 	push_ ( push )
 {
 	Audio::turnOffSong();
-	Audio::changeSong( music );
+	Audio::changeSong( music, loop_music );
 };
 
 MessageState::~MessageState() {};

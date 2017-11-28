@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game_state.hpp"
-#include "text.hpp"
+#include "text_obj.hpp"
 
 class MessageState : public GameState
 {
@@ -14,7 +14,8 @@ class MessageState : public GameState
 			bool push = false,
 			const Palette& palette = { "Grayscale", 1 },
 			Text::FontColor font_color = Text::FontColor::BLACK,
-			std::string music = ""
+			std::string music = "",
+			bool loop_music = true
 		);
 
 		static std::unique_ptr<MessageState> error
@@ -33,7 +34,7 @@ class MessageState : public GameState
 		void stateRender() override;
 
 	private:
-		const Text message_;
+		const TextObj message_;
 		std::unique_ptr<GameState> next_state_;
 		const bool pop_;
 		const bool push_;

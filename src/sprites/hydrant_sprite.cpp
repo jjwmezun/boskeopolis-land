@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "health.hpp"
 #include "hydrant_sprite.hpp"
@@ -62,6 +63,7 @@ void HydrantSprite::customInteract( Collision& my_collision, Collision& their_co
 					kill();
 					them.bounce();
 					Inventory::bop();
+					Audio::playSound( Audio::SoundType::BOP );
 				}
 				else if ( their_collision.collideAny() && !isDead() )
 				{

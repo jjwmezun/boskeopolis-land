@@ -3,7 +3,7 @@
 #include "game_state.hpp"
 #include "map_layer_image.hpp"
 #include "sprite_graphics.hpp"
-#include "text.hpp"
+#include "text_obj.hpp"
 #include <array>
 
 class TitleState : public GameState
@@ -35,7 +35,7 @@ class TitleState : public GameState
 		const std::array<const sdl2::SDLRect, ( std::size_t )( OPTIONS_SIZE )> option_bg_shadows_;
 		const std::array<const std::string, ( std::size_t )( OPTIONS_SIZE )> option_text_;
 		SpriteGraphics logo_gfx_;
-		Text created_by_;
+		TextObj created_by_;
 		const sdl2::SDLRect window_box_;
 		const sdl2::SDLRect logo_rect_;
 		int selection_;
