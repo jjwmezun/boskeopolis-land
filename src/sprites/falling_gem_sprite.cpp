@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "falling_gem_sprite.hpp"
@@ -50,6 +51,7 @@ void FallingGemSprite::customInteract( Collision& my_collision, Collision& their
 		if ( active_ && their_collision.collideAny() )
 		{
 			Inventory::addFunds( 100 );
+			Audio::playSound( Audio::SoundType::GEM );
 		}
 	}
 };

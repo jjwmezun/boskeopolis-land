@@ -21,7 +21,7 @@ namespace Audio
 			printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
 			exit( -1 );
 		}
-		Mix_VolumeMusic( MIX_MAX_VOLUME / 3 );
+		Mix_VolumeMusic( MIX_MAX_VOLUME / 4 );
 		Mix_Volume( -1, MIX_MAX_VOLUME / 2 );
 		sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
 		sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );

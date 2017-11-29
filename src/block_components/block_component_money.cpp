@@ -9,4 +9,5 @@ BlockComponentMoney::~BlockComponentMoney() {};
 void BlockComponentMoney::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
 {
 	Inventory::addFunds( amount_ );
+	Audio::playSound( Audio::SoundType::GEM );
 };

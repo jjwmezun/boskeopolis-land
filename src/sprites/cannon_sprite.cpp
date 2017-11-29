@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "mezun_math.hpp"
 #include "cannon_sprite.hpp"
 #include "collision.hpp"
@@ -135,7 +136,7 @@ void CannonSprite::handleShooting( SpriteSystem& sprites, Direction::Simple dir 
 void CannonSprite::hurt()
 {
 	--hp_;
-
+	Audio::playSound( Audio::SoundType::BOP );
 	if ( hp_ <= 0 )
 	{
 		deactivated_ = true;

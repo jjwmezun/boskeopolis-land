@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "gemmy_sprite.hpp"
 #include "collision.hpp"
 #include "inventory.hpp"
@@ -59,5 +60,6 @@ void GemmySprite::customInteract( Collision& my_collision, Collision& their_coll
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		Inventory::addFunds( 100 );
+		Audio::playSound( Audio::SoundType::GEM );
 	}
 };

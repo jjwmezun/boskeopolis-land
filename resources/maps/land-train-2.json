@@ -38,6 +38,7 @@
  "properties":
     {
      "hero_type":"SHOOTER",
+     "music":"train",
      "palette":"Sunrise",
      "tileset":"train",
      "wind_strength":-100
@@ -45,6 +46,7 @@
  "propertytypes":
     {
      "hero_type":"string",
+     "music":"string",
      "palette":"string",
      "tileset":"string",
      "wind_strength":"int"

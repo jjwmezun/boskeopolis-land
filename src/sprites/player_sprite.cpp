@@ -347,6 +347,7 @@ void PlayerSprite::customInteract( Collision& my_collision, Collision& their_col
 			else if ( my_collision.collideAny() && isSlidingPrev() )
 			{
 				them.kill();
+				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else if ( my_collision.collideAny() && !them.isDead() )
 			{
@@ -405,7 +406,6 @@ void PlayerSprite::deathAction( Camera& camera )
 	
 	if ( !death_sound_ )
 	{
-		Audio::playSound( Audio::SoundType::DEATH );
 		death_sound_ = true;
 	}
 };

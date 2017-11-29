@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "health.hpp"
@@ -132,6 +133,7 @@ void StrongerCowpokerSprite::hurt()
 	if ( invincibility_ == 0 )
 	{
 		--hp_;
+		Audio::playSound( Audio::SoundType::BOP );
 		invincibility_ = 60;
 		
 		if ( hp_ <= 0 )

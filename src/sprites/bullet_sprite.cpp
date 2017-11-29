@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "health.hpp"
 #include "mezun_math.hpp"
@@ -59,6 +60,7 @@ void BulletSprite::customInteract( Collision& my_collision, Collision& their_col
 				{
 					them.kill();
 					kill();
+					Audio::playSound( Audio::SoundType::BOP );
 				}
 			break;
 

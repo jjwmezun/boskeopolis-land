@@ -33,6 +33,7 @@ class EventSystem
 	bool palette_changed_;
 	bool in_front_of_door_;
 	bool on_conveyor_belt_;
+	bool played_death_song_;
 	int move_water_;
 	int current_water_;
 	EType special_;

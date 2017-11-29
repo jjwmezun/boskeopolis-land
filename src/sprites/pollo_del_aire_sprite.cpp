@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "health.hpp"
 #include "inventory.hpp"
@@ -112,10 +113,12 @@ void PolloDelAireSprite::polloInteract( Collision& my_collision, Collision& thei
 				me.kill();
 				them.bounce();
 				Inventory::bop();
+				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else if ( them.isSlidingPrev() )
 			{
 				me.kill();
+				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else
 			{

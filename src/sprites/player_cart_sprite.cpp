@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
@@ -101,6 +102,10 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		if ( is_bouncing_ )
 		{
 			bounce();
+		}
+		if ( on_ground_prev_ )
+		{
+			Audio::playSound( Audio::SoundType::JUMP );
 		}
 	}
 	else

@@ -50,6 +50,7 @@
     {
      "camera_limit_top":32,
      "hero_type":"SHOOTER",
+     "music":"train",
      "palette":"Burnt",
      "tileset":"train"
     },
@@ -57,6 +58,7 @@
     {
      "camera_limit_top":"int",
      "hero_type":"string",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

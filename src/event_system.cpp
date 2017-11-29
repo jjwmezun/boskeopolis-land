@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
@@ -24,7 +25,8 @@ EventSystem::EventSystem()
 	current_water_ ( - 1 ),
 	in_front_of_door_ ( false ),
 	special_ ( EType::__NULL ),
-	on_conveyor_belt_ ( false )
+	on_conveyor_belt_ ( false ),
+	played_death_song_ ( false )
 {};
 
 void EventSystem::reset()
@@ -41,6 +43,7 @@ void EventSystem::reset()
 	current_water_ = -1;
 	in_front_of_door_ = false;
 	on_conveyor_belt_ = false;
+	played_death_song_ = false;
 	special_ = EType::__NULL;
 	resetPalette();
 };
@@ -196,6 +199,11 @@ void EventSystem::failEvent( Level& level )
 			)
 		)
 	);
+	if ( !played_death_song_ )
+	{
+		Audio::playSound( Audio::SoundType::DEATH );
+		played_death_song_ = true;
+	}
 };
 
 void EventSystem::winEvent( Level& level )

@@ -429,7 +429,7 @@ namespace Render
 
 		if ( SDL_RenderCopy( renderer_, texture, &source, &dest ) != 0 )
 		{
-			printf( "Render failure: %s\n", SDL_GetError() );
+			printf( "Failure to render\"%s\": %s\n", sheet.c_str(), SDL_GetError() );
 		}
 	}
 

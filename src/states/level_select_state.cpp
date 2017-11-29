@@ -170,17 +170,17 @@ void LevelSelectState::updateInput()
 		if ( Input::held( Input::Action::MOVE_UP ) )
 		{
 			--selection_;
-			if ( selection_ < 0 ) selection_ = 0;
+			if ( selection_ < 0 ) { selection_ = 0; }
+			else { Audio::playSound( Audio::SoundType::SELECT ); }
 			delay_ = delay_length_;
-			Audio::playSound( Audio::SoundType::SELECT );
 			changed_selection_ = true;
 		}
 		if ( Input::held( Input::Action::MOVE_DOWN ) )
 		{
 			++selection_;
-			if ( selection_ >= level_names_.size() ) selection_ = level_names_.size() - 1;
+			if ( selection_ >= level_names_.size() ) { selection_ = level_names_.size() - 1; }
+			else { Audio::playSound( Audio::SoundType::SELECT ); }
 			delay_ = delay_length_;
-			Audio::playSound( Audio::SoundType::SELECT );
 			changed_selection_ = true;
 		}
 	}
@@ -209,11 +209,18 @@ void LevelSelectState::updateInput()
 	}
 	show_challenges_prev_ = show_challenges_;
 	
-	if ( Input::pressed( Input::Action::CONFIRM ) && Inventory::beenToLevel( level_ids_.at( selection_ ) ) )
+	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
-		Inventory::setCurrentLevel( level_ids_.at( selection_ ) );
-		Main::changeState( std::make_unique<OverworldState> () );
-		Audio::playSound( Audio::SoundType::CONFIRM );
+		if ( Inventory::beenToLevel( level_ids_.at( selection_ ) ) )
+		{
+			Inventory::setCurrentLevel( level_ids_.at( selection_ ) );
+			Main::changeState( std::make_unique<OverworldState> () );
+			Audio::playSound( Audio::SoundType::CONFIRM );
+		}
+		else
+		{
+			Audio::playSound( Audio::SoundType::CANCEL );
+		}
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
