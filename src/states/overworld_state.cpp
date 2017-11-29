@@ -356,7 +356,7 @@ Collision OverworldState::testCollision( const sdl2::SDLRect& lhs, const sdl2::S
 
 void OverworldState::mapEvents()
 {
-	for ( int i = 0; i < Level::NUM_O_LEVELS; ++i )
+	for ( int i = 0; i < Level::MAX; ++i )
 	{
 		if ( Inventory::victory( i ) )
 		{

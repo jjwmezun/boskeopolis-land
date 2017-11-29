@@ -16,7 +16,7 @@ class SpriteSystem;
 class Level
 {
 	public:
-		static constexpr int NUM_O_LEVELS = 64;
+		static constexpr int MAX = 64;
 		static Level getLevel( int id );
 
 		~Level();

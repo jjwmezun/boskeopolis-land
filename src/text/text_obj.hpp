@@ -40,7 +40,7 @@ struct TextObj
 	);
 	~TextObj() noexcept;
 	TextObj( TextObj&& m ) noexcept;
-	TextObj& operator=( TextObj&& m ) = delete;
+	TextObj& operator=( TextObj&& m ) noexcept;
 	TextObj( const TextObj& ) = delete;
 	TextObj& operator= ( const TextObj& ) = delete;
 };

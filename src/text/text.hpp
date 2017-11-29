@@ -35,7 +35,8 @@ namespace Text
 		int y,
 		int digits = -1,
 		FontColor color = FontColor::BLACK,
-		const Camera* camera = nullptr
+		const Camera* camera = nullptr,
+		FontColor shadow = FontColor::__NULL
 	);
 
 	void renderText

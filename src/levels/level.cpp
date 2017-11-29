@@ -737,7 +737,7 @@ void Level::buildLevelList()
 		throw mezun::CantLoadLevels();
 	}
 
-	for ( int i = 0; i < NUM_O_LEVELS; ++i )
+	for ( int i = 0; i < MAX; ++i )
 	{
 
 		const std::string file_path = path + Text::formatNumDigitPadding( i, 3 ) + ".json";

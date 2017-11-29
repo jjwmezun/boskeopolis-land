@@ -14,7 +14,6 @@ namespace Render
 {
 	// Private Variables
 	static constexpr Uint8 FULL_OPACITY = 255;
-	static constexpr sdl2::SDLRect window_box_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
 	static sdl2::SDLRect window_box_magnified_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
 
 	static Uint32 WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;

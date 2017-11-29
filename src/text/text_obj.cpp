@@ -54,6 +54,20 @@ TextObj::TextObj( TextObj&& m ) noexcept
 	char_size_ ( m.char_size_ )
 {};
 
+TextObj& TextObj::operator=( TextObj&& m ) noexcept
+{
+	words_ = m.words_;
+	x_ = m.x_;
+	y_ = m.y_;
+	color_ = m.color_;
+	shadow_ = m.shadow_;
+	align_ = m.align_;
+	component_ = std::move( m.component_ );
+	line_limit_ = m.line_limit_;
+	chars_to_render_ = m.chars_to_render_;
+	char_size_ = m.char_size_;
+};
+
 int TextObj::right() const
 {
 	return x_ + width();

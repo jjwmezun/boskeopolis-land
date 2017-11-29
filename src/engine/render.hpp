@@ -11,6 +11,7 @@ class Palette;
 
 namespace Render
 {
+	static constexpr sdl2::SDLRect window_box_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
 	void init( const std::vector<std::string>& args );
 	void quit();
 

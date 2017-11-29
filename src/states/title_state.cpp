@@ -34,7 +34,6 @@ TitleState::TitleState()
 	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 248, 175, 0, Unit::WINDOW_HEIGHT_PIXELS - 175, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 112, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	logo_gfx_ ( "bosko_logo.png" ),
-	window_box_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
 	created_by_ ( "Created by J.J.W. Mezun - 2017", 0, CREATED_BY_Y, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
 	option_bg_
@@ -115,19 +114,19 @@ void TitleState::stateUpdate()
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 	
-	cloud_bg_.move( Unit::WINDOW_WIDTH_PIXELS, window_box_ );
-	skyline_bg_.move( Unit::WINDOW_WIDTH_PIXELS, window_box_ );
-	skyscrapers_bg_.move( Unit::WINDOW_WIDTH_PIXELS, window_box_ );
+	cloud_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
+	skyline_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
+	skyscrapers_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
 };
 
 void TitleState::stateRender()
 {
 	Render::colorCanvas( 2 );
 	logo_gfx_.render( logo_rect_, nullptr );
-	light_gradient_bg_.render( window_box_ );
-	skyline_bg_.render( window_box_ );
-	skyscrapers_bg_.render( window_box_ );
-	cloud_bg_.render( window_box_ );
+	light_gradient_bg_.render( Render::window_box_ );
+	skyline_bg_.render( Render::window_box_ );
+	skyscrapers_bg_.render( Render::window_box_ );
+	cloud_bg_.render( Render::window_box_ );
 
 	for ( int i = 0; i < option_text_.size(); ++i )
 	{

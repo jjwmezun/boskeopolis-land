@@ -282,9 +282,9 @@ namespace Text
 		);
 	};
 
-	void renderNumber( int n, int x, int y, int digits, FontColor color, const Camera* camera )
+	void renderNumber( int n, int x, int y, int digits, FontColor color, const Camera* camera, FontColor shadow )
 	{
-		renderText( formatNumDigitPadding( n, digits ), x, y, camera, color );
+		renderText( formatNumDigitPadding( n, digits ), x, y, camera, color, DEFAULT_LINE_LENGTH, FontAlign::LEFT, shadow );
 	};
 
 	// Determine how many digit places n # has.
