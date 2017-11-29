@@ -1,3 +1,4 @@
+#include "event_system.hpp"
 #include "input.hpp"
 #include "shooter_player_sprite.hpp"
 #include "sprite_system.hpp"
@@ -214,9 +215,10 @@ void ShooterPlayerSprite::unduck( const BlockSystem& blocks )
 	hit_box_.h = original_hit_box_.h;
 };
 
-void ShooterPlayerSprite::deathAction( Camera& camera )
+void ShooterPlayerSprite::deathAction( Camera& camera, EventSystem& events )
 {
 	graphics_->current_frame_x_ = 208;
 	graphics_->current_frame_y_ = 0;
 	defaultDeathAction( camera );
+	events.playDeathSoundIfNotAlreadyPlaying();
 };

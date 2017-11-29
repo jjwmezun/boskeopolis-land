@@ -67,4 +67,5 @@ class EventSystem
 	void failEvent( Level& level );
 	void winEvent( Level& level );
 	void quitEvent( Level& level );
+	void playDeathSoundIfNotAlreadyPlaying();
 };

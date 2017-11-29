@@ -37,11 +37,13 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "music":"sleet",
      "palette":"Icy Blue",
      "slippery":true
     },
  "propertytypes":
     {
+     "music":"string",
      "palette":"string",
      "slippery":"bool"
     },

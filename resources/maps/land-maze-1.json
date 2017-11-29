@@ -29,6 +29,7 @@
      "bg_color":6,
      "blocks_work_offscreen":true,
      "hero_type":"OVERWORLD",
+     "music":"maze",
      "palette":"Baby Blue"
     },
  "propertytypes":
@@ -36,6 +37,7 @@
      "bg_color":"int",
      "blocks_work_offscreen":"bool",
      "hero_type":"string",
+     "music":"string",
      "palette":"string"
     },
  "renderorder":"right-down",

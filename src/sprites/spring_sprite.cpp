@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "spring_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -42,5 +43,10 @@ void SpringSprite::customInteract( Collision& my_collision, Collision& their_col
 	else if ( their_collision.collideTop() )
 	{
 		them.bounceDownward( their_collision.overlapYTop() );
+	}
+
+	if ( their_collision.collideAny() && them.hasType( SpriteType::HERO ) )
+	{
+		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
 };

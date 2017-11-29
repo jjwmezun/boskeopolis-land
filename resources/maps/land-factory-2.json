@@ -27,12 +27,14 @@
  "properties":
     {
      "bg_color":6,
+     "music":"warmup",
      "palette":"Fiery Red",
      "tileset":"factory"
     },
  "propertytypes":
     {
      "bg_color":"int",
+     "music":"string",
      "palette":"string",
      "tileset":"string"
     },

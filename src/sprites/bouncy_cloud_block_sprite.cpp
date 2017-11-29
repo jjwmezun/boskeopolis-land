@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "collision.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
 #include "map.hpp"
@@ -60,6 +61,7 @@ void BouncyCloudBlockSprite::customInteract( Collision& my_collision, Collision&
 			hit_box_.y += them.vy_;	
 			them.changeY( hit_box_.y - them.heightSubPixels() );
 			them.bounce( ( hit_box_.y - original_hit_box_.y ) / 300 );
+			Audio::playSound( Audio::SoundType::BOUNCE );
 		}	
 	}
 };

@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "block_component_bouncy.hpp"
 #include "collision.hpp"
 #include "sprite.hpp"
@@ -23,5 +24,10 @@ void BlockComponentBouncy::interact( const Collision& collision, Sprite& sprite,
 	else if ( collision.collideTop() )
 	{
 		sprite.bounceDownward( collision.overlapYTop() );
+	}
+
+	if ( collision.collideAny() && sprite.hasType( Sprite::SpriteType::HERO ) )
+	{
+		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
 };

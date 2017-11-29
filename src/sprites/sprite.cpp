@@ -113,7 +113,7 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 	{
 		if ( !dead_no_animation_ )
 		{
-			deathAction( camera );
+			deathAction( camera, events );
 		}
 		else
 		{
@@ -612,7 +612,7 @@ bool Sprite::despawnWhenDead() const
 	return despawn_when_dead_;
 }
 
-void Sprite::deathAction( Camera& camera )
+void Sprite::deathAction( Camera& camera, EventSystem& events )
 {
 	defaultDeathAction( camera );
 };

@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "block_component_change_direction.hpp"
 #include "sprite.hpp"
 
@@ -23,5 +24,10 @@ void BlockComponentChangeDirection::interact( const Collision& collision, Sprite
 			sprite.direction_y_ = Direction::simpleToVertical( direction_ );
 			sprite.direction_x_ = Direction::Horizontal::__NULL;
 		break;
+	}
+
+	if ( sprite.hasType( Sprite::SpriteType::HERO ) )
+	{
+		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
 };

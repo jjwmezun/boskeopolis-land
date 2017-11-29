@@ -1,9 +1,10 @@
-#include <iostream>
+#include "audio.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "clock.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
+#include "map.hpp"
 #include "moon_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "unit.hpp"
@@ -106,6 +107,8 @@ void MoonSprite::customInteract( Collision& my_collision, Collision& their_colli
 				hit_box_.x = them.hit_box_.right() - 4000;
 			break;
 		}
+		lvmap.music_ = "countdown";
+		Audio::changeSong( "countdown", false );
 	}
 };
 

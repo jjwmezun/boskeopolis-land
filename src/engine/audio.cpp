@@ -5,12 +5,38 @@
 
 namespace Audio
 {
-	static constexpr int NUM_O_SOUNDS = 13;
+	static constexpr int NUM_O_SOUNDS = 14;
 	const std::string RELATIVE_DIR = "music";
 	const std::string EXT = "mp3";
 	std::string current_song_ = "";
 	Mix_Music* music_ = nullptr;
 	Mix_Chunk* sounds_[ NUM_O_SOUNDS ];
+	
+	enum class ChannelType
+	{
+		PRIORITY = 0,
+		GEM = 1,
+		JUMP = 2,
+		MISC = 3
+	};
+	static constexpr int MAX_CHANNELS = 4;
+	ChannelType sound_channels_[ NUM_O_SOUNDS ] =
+	{
+		ChannelType::GEM,
+		ChannelType::MISC,
+		ChannelType::JUMP,
+		ChannelType::MISC,
+		ChannelType::MISC,
+		ChannelType::PRIORITY,
+		ChannelType::PRIORITY,
+		ChannelType::GEM,
+		ChannelType::JUMP,
+		ChannelType::JUMP,
+		ChannelType::MISC,
+		ChannelType::MISC,
+		ChannelType::PRIORITY,
+		ChannelType::MISC
+	};
 
 	Mix_Chunk* loadSound( const std::string& sound_name );
 
@@ -21,8 +47,9 @@ namespace Audio
 			printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
 			exit( -1 );
 		}
+		Mix_AllocateChannels( MAX_CHANNELS );
 		Mix_VolumeMusic( MIX_MAX_VOLUME / 4 );
-		Mix_Volume( -1, MIX_MAX_VOLUME / 2 );
+		Mix_Volume( -1, MIX_MAX_VOLUME );
 		sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
 		sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );
 		sounds_[ ( int )( SoundType::HEAL ) ] = loadSound( "heal.wav" );
@@ -36,9 +63,10 @@ namespace Audio
 		sounds_[ ( int )( SoundType::DIAMOND ) ] = loadSound( "diamond.wav" );
 		sounds_[ ( int )( SoundType::ITEM ) ] = loadSound( "item.wav" );
 		sounds_[ ( int )( SoundType::JINGLE ) ] = loadSound( "jingle.wav" );
+		sounds_[ ( int )( SoundType::BOUNCE ) ] = loadSound( "bounce.wav" );
 	};
 
-	void changeSong( const std::string& song_name, bool loop )
+	void changeSong( const std::string& song_name, bool loop, int quietness )
 	{
 		if ( song_name != current_song_ )
 		{
@@ -121,6 +149,16 @@ namespace Audio
 	
 	void playSound( SoundType sound )
 	{
-		Mix_PlayChannel( -1, sounds_[ ( int )( sound ) ], 0 );
+		const int channel = ( int )( sound_channels_[ ( int )( sound ) ] );
+		if ( channel == 0 )
+		{
+			// Silence all channels.
+			Mix_HaltChannel( -1 );
+		}
+		else
+		{
+			Mix_HaltChannel( channel );
+		}
+		Mix_PlayChannel( channel, sounds_[ ( int )( sound ) ], 0 );
 	};
 };

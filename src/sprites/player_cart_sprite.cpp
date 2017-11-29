@@ -202,3 +202,10 @@ void PlayerCartSprite::unduck()
 	jump_lock_ = false;
 	hit_box_.h = original_hit_box_.h;
 };
+
+
+void PlayerCartSprite::deathAction( Camera& camera, EventSystem& events )
+{
+	defaultDeathAction( camera );
+	events.playDeathSoundIfNotAlreadyPlaying();
+};

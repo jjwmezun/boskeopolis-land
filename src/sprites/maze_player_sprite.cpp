@@ -69,7 +69,7 @@ void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their
 {
 };
 
-void MazePlayerSprite::deathAction( Camera& camera )
+void MazePlayerSprite::deathAction( Camera& camera, EventSystem& events )
 {	
 	block_interact_ = false;
 

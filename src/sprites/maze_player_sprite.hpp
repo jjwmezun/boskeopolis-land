@@ -14,7 +14,7 @@ class MazePlayerSprite : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health ) override;
 
 	
-		void deathAction( Camera& camera );
+		void deathAction( Camera& camera, EventSystem& events );
 
 	private:
 		static constexpr int DEATH_SPIN_SPEED = 20;

@@ -29,13 +29,13 @@ class PlayerSprite : public Sprite
 		);
 		~PlayerSprite();
 
-		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
+		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
+		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health ) override;
 		virtual void duck();
 		virtual void unduck( const BlockSystem& blocks );
 
 	
-		void deathAction( Camera& camera );
+		void deathAction( Camera& camera, EventSystem& events ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		std::unique_ptr<InputComponent> input_;
@@ -44,5 +44,4 @@ class PlayerSprite : public Sprite
 		void testVX();
 		void testFrameRate();
 		bool door_lock_;
-		bool death_sound_;
 };

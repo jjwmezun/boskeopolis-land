@@ -12,7 +12,7 @@ PolloDelAireStillSprite::PolloDelAireStillSprite( int x, int y )
 
 PolloDelAireStillSprite::~PolloDelAireStillSprite() {};
 
-void PolloDelAireStillSprite::deathAction( Camera& camera )
+void PolloDelAireStillSprite::deathAction( Camera& camera, EventSystem& events )
 {
 	PolloDelAireSprite::polloDeath( camera, *this );
 };

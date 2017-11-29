@@ -55,8 +55,7 @@ PlayerSprite::PlayerSprite
 		.2
 	),
 	input_ ( std::move( input ) ),
-	door_lock_ ( true ),
-	death_sound_ ( false )
+	door_lock_ ( true )
 {
 	if ( input_ == nullptr )
 	{
@@ -400,14 +399,10 @@ void PlayerSprite::unduck( const BlockSystem& blocks )
 	}
 };
 
-void PlayerSprite::deathAction( Camera& camera )
+void PlayerSprite::deathAction( Camera& camera, EventSystem& events )
 {
 	defaultDeathAction( camera );
-	
-	if ( !death_sound_ )
-	{
-		death_sound_ = true;
-	}
+	events.playDeathSoundIfNotAlreadyPlaying();
 };
 
 void PlayerSprite::testVX()

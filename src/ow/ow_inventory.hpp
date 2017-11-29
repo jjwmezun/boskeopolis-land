@@ -34,4 +34,5 @@ class OWInventory
 		int color_animation_ = COLOR_START;
 		bool color_going_up_ = true;
 		int color_animation_timer_ = 0;
+		bool sound_lock_ = false;
 };

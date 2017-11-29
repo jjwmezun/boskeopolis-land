@@ -121,6 +121,7 @@ void OverworldState::stateUpdate()
 			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
 				Main::changeState( std::unique_ptr<GameState> ( new LevelState( level_selection_ ) ) );
+				Audio::playSound( Audio::SoundType::CONFIRM );
 			}
 		}
 	}

@@ -37,7 +37,7 @@ class Map
 		std::vector<int> blocks_;
 		std::vector<int> sprites_;
 		const std::string tileset_;
-		const std::string music_;
+		std::string music_;
 		const Palette palette_;
 		const SpriteSystem::HeroType hero_type_;
 		const Camera::XPriority camera_x_priority_;

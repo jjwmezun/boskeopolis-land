@@ -12,7 +12,7 @@ class ShooterPlayerSprite : public PlayerSprite
 		void unduck( const BlockSystem& blocks ) override;
 
 	
-		void deathAction( Camera& camera ) override;
+		void deathAction( Camera& camera, EventSystem& events ) override;
 
 	private:
 		bool is_shooting_;

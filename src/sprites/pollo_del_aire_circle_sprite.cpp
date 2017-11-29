@@ -14,7 +14,7 @@ PolloDelAireCircleSprite::PolloDelAireCircleSprite( int x, int y, bool clockwise
 
 PolloDelAireCircleSprite::~PolloDelAireCircleSprite() {};
 
-void PolloDelAireCircleSprite::deathAction( Camera& camera )
+void PolloDelAireCircleSprite::deathAction( Camera& camera, EventSystem& events )
 {
 	PolloDelAireSprite::polloDeath( camera, *this );
 };

@@ -31,25 +31,25 @@
 			[
 				{
 					"map": 1,
-					"entrance_x": 3,
+					"entrance_x": 5,
 					"entrance_y": 5,
 					"location": [ 0, 16, 20, 40 ]
 				},
 				{
 					"map": 2,
-					"entrance_x": 16,
+					"entrance_x": 20,
 					"entrance_y": 3,
 					"location": [ 80, 100, 20, 40 ]
 				},
 				{
 					"map": 4,
-					"entrance_x": 3,
+					"entrance_x": 5,
 					"entrance_y": 5,
 					"location": [ 130, 140, 20, 40 ]
 				},
 				{
 					"map": 3,
-					"entrance_x": 16,
+					"entrance_x": 19,
 					"entrance_y": 3,
 					"location": [ 290, 300, 0, 16 ]
 				},

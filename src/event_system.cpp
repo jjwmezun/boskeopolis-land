@@ -199,11 +199,7 @@ void EventSystem::failEvent( Level& level )
 			)
 		)
 	);
-	if ( !played_death_song_ )
-	{
-		Audio::playSound( Audio::SoundType::DEATH );
-		played_death_song_ = true;
-	}
+	playDeathSoundIfNotAlreadyPlaying();
 };
 
 void EventSystem::winEvent( Level& level )
@@ -254,4 +250,13 @@ bool EventSystem::testLightSwitch()
 	bool temp = switch_;
 	switch_ = false;
 	return temp;
+};
+
+void EventSystem::playDeathSoundIfNotAlreadyPlaying()
+{
+	if ( !played_death_song_ )
+	{
+		Audio::playSound( Audio::SoundType::DEATH );
+		played_death_song_ = true;
+	}
 };

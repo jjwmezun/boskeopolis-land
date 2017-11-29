@@ -15,7 +15,7 @@ PolloDelAireSprite::PolloDelAireSprite( int x, int y, Direction::Horizontal dir_
 
 PolloDelAireSprite::~PolloDelAireSprite() {};
 
-void PolloDelAireSprite::deathAction( Camera& camera )
+void PolloDelAireSprite::deathAction( Camera& camera, EventSystem& events )
 {
 	polloDeath( camera, *this );
 };

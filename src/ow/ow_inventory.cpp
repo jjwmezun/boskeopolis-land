@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
@@ -23,10 +24,16 @@ void OWInventory::update( int lv_select )
 	if ( !show_challenges_lock_ && Input::held( Input::Action::CANCEL ) )
 	{
 		show_challenges_ = true;
+		if ( !sound_lock_ )
+		{
+			Audio::playSound( Audio::SoundType::SELECT );
+			sound_lock_ = true;
+		}
 	}
 	else
 	{
 		show_challenges_ = false;
+		sound_lock_ = false;
 	}
 	
 	if ( color_animation_timer_ >= COLOR_TIMER_LIMIT )
