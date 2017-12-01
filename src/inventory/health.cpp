@@ -8,7 +8,7 @@ Health::Health()
 	hp_ ( maxHP() ),
 	meter_ ( maxOxygen() ),
 	invincible_ ( false ),
-	lose_meter_ ( false ),
+	lose_meter_amount_ ( -1 ),
 	heater_ ( false ),
 	invincibility_timer_ ( 48, false )
 {};
@@ -25,10 +25,10 @@ void Health::update()
 		}
 	}
 
-	switch ( lose_meter_ )
+	switch ( losingMeter() )
 	{
 		case ( true ):
-			meter_ = std::max( meter_ - losePoint(), 0 );
+			meter_ = std::max( meter_ - ( losePoint() * lose_meter_amount_ ), 0 );
 		break;
 
 		default:
@@ -46,7 +46,7 @@ void Health::update()
 		break;
 	}
 
-	lose_meter_ = false;
+	lose_meter_amount_ = -1;
 };
 
 bool Health::flickerOff() const
@@ -97,20 +97,20 @@ void Health::hurt()
 	}
 };
 
-void Health::submerge()
+void Health::submerge( int amount )
 {
-	lose_meter_ = true;
+	lose_meter_amount_ = amount;
 };
 
 void Health::heatUp()
 {
 	heater_ = true;
-	lose_meter_ = true;
+	lose_meter_amount_ = 1;
 };
 
 bool Health::losingMeter() const
 {
-	return lose_meter_;
+	return lose_meter_amount_ > -1;
 };
 
 bool Health::drowned() const

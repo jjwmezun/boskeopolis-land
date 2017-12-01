@@ -37,23 +37,12 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 * Sprite class still a mess -- look into organizing states ( isJumping, isDucking, onLadder, etc. ) into finite state machine ).
 * Timers kinda wonky. In particular, I want to find a way to encapsulate common "if hit; else if on, update; else, start" pattern in the class itself so I don't have to keep typing it. Sometimes the stopping mechanism for TimerSimple is wonky ( see SewerMonster class ).
 
-### Levels
-* Lunacy
-	* Think o' clever things to do with space physics & ways to not make it slow, sluggish, & boring.
-* Sherbet Slopes
-	* Figure out what I want to do with this level.
-* Mt. Volcocoa
-	* Design map.
-	* Think o' clever things to do with heat mechanic.
-* ¡Precipitous!
-	* Get round to making this, since I already made it before & it shouldn't take any effort.
-* Hoot Chutes
-	* Finish map.
-	* Draw owl.
-* Windy Woods
-	* Design map.
-	* Think o' clever things to do with wind mechanic.
-	
+### Levels to Do Soon
+* Petrol Pond Place
+* Donut Dungeon
+* Foul Fowl Farm
+* Stop & Go Space Station
+
 ## Credits
 
 ### Music
@@ -64,13 +53,28 @@ Maybe temporary, maybe not.
 
 * Title: Shaving Mirror
 * Overworld: Breakdown
-* City: District Four
-* Woods: Twisted
-* Mines: Chillin Hard
-* Desert: Wepa
-* Mountain: Groundwork
-* Sky: Nowhere Land
-* Snow: Chill Wave
-* Pirate: Salty Ditty
-* Sewers: RetroFuture Nasty
-* Factory: Robozo
+* Level Select: Too Cool
+* Success: Happy Happy Game Show
+* Failure: Lobby Time
+* City1, City4: District Four
+* Woods1, Woods2: Twisted
+* Woods3: Nightmare Machine
+* Mines1, Mines3, Mines4: Chillin Hard
+* Desert1: Wepa
+* Desert2: Mischief Maker, Clash Defiant
+* Desert4: The Show Must Be Go
+* Mountain1: Groundwork
+* Sky1, Sky2, Sky3, Sky4: Nowhere Land
+* Space1: Disco Lounge
+* Ice1: Nouvelle Noel
+* Ice2: Crinoline Dreams
+* Pirate1, Pirate3: Salty Ditty
+* Pirate2: Funin and Sunin
+* Sewers1, Sewers2, Sewers3: RetroFuture Nasty
+* Factory1: Robozo
+* Factory3: Noise Attack
+* Factory4: Corruption
+* Palace1: Obliteration
+* Palace3: Kool Kats
+* Mart: Got Funk
+* Maze: Reformat

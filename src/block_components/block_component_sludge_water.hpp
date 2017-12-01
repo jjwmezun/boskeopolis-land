@@ -2,10 +2,10 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSwimmable : public BlockComponent
+class BlockComponentSludgeWater : public BlockComponent
 {
 	public:
-		BlockComponentSwimmable();
-		~BlockComponentSwimmable();
+		BlockComponentSludgeWater();
+		~BlockComponentSludgeWater();
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
 };

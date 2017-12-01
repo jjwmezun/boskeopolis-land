@@ -15,7 +15,7 @@ class Health
 		void fullHeal();
 
 		bool losingMeter() const;
-		void submerge();
+		void submerge( int amount = 1 );
 		void heatUp();
 		bool drowned() const;
 		bool overheated() const;
@@ -33,7 +33,7 @@ class Health
 		int hp_;
 		int meter_;
 		bool invincible_;
-		bool lose_meter_;
+		int lose_meter_amount_;
 		bool heater_;
 		TimerSimple invincibility_timer_;
 

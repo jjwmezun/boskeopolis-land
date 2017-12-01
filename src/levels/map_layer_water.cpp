@@ -1,22 +1,36 @@
 #include "camera.hpp"
+#include <cassert>
 #include "event_system.hpp"
-#include "health.hpp"
-#include "sprite.hpp"
 #include "map_layer_water.hpp"
+#include "water_layer_component_rising.hpp"
+#include "water_layer_component_sludge.hpp"
+#include "water_layer_component_swim.hpp"
 
-#include <iostream>
+static constexpr int MOVE_SPEED = 700;
 
-static constexpr int WATER_MOVE_MAX = 900;
-static constexpr int WATER_MOVE_MIN = 650;
+MapLayerWater* MapLayerWater::makeNormalWater( int y_blocks )
+{
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSwim() } );
+};
 
-MapLayerWater::MapLayerWater( int y_blocks, bool rising )
+MapLayerWater* MapLayerWater::makeRisingWater( int y_blocks )
+{
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSwim(), new WaterLayerComponentRising() } );
+};
+
+MapLayerWater* MapLayerWater::makeSludgeWater( int y_blocks )
+{
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSludge() }, "bg/animated_water_2.png", 255, 6 );
+};
+
+MapLayerWater::MapLayerWater( int y_blocks, ComponentGroup components, std::string gfx, Uint8 alpha, int color )
 :
 	MapLayer(),
+	components_ ( components ),
 	y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
-	rising_ ( rising ),
 	surface_
 	(
-		"bg/animated_water.png",
+		std::move( gfx ),
 		{
 			std::make_pair<int, int> ( 0, 0 ),
 			std::make_pair<int, int> ( 8, 0 ),
@@ -32,32 +46,27 @@ MapLayerWater::MapLayerWater( int y_blocks, bool rising )
 		0,
 		0,
 		8,
-		ALPHA
+		alpha
 	),
 	x_offset_ ( -8, 0, -8, true ),
 	animation_speed_ ( 16 ),
-	move_speed_ ( 700 )
+	color_ ( color )
 {};
+
+MapLayerWater::~MapLayerWater()
+{
+	for ( auto* c : components_ )
+	{
+		assert( c != nullptr );
+		delete c;
+	}
+};
 
 void MapLayerWater::interact( Sprite& sprite, Health& health )
 {
-	if ( sprite.hasType( Sprite::SpriteType::HERO ) )
+	for ( auto* c : components_ )
 	{
-		if ( sprite.centerYSubPixels() > y_ )
-		{
-			health.submerge();
-		}
-
-		if ( rising_ )
-		{
-			const int extra_speed = Unit::SubPixelsToPixels( y_ - sprite.hit_box_.y );
-			move_speed_ = std::max( std::min( WATER_MOVE_MIN + extra_speed, WATER_MOVE_MAX ), WATER_MOVE_MIN );
-		}
-	}
-
-	if ( sprite.bottomSubPixels() > y_ + 8000 )
-	{
-		sprite.in_water_ = true;
+		c->interact( *this, sprite, health );
 	}
 };
 
@@ -74,7 +83,7 @@ void MapLayerWater::render( const Camera& camera )
 		}
 		
 		relative_y += 16;		
-		Render::renderRect( { 0, relative_y, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_WIDTH_PIXELS - relative_y }, COLOR, ALPHA );
+		Render::renderRect( { 0, relative_y, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_WIDTH_PIXELS - relative_y }, color_, surface_.alpha_ );
 	}
 };
 
@@ -89,19 +98,20 @@ void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Came
 
 	animation_speed_.update();
 
-	if ( rising_ )
+	for ( auto* c : components_ )
 	{
-		y_ -= move_speed_;
+		c->update( *this );
 	}
-	else if ( events.waterShouldMove() )
+
+	if ( events.waterShouldMove() )
 	{
 		if ( events.move_water_ < y_ )
 		{
-			y_ -= move_speed_;
+			y_ -= MOVE_SPEED;
 		}
 		else if ( events.move_water_ > y_ )
 		{
-			y_ += move_speed_;
+			y_ += MOVE_SPEED;
 		}
 	}
 

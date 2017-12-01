@@ -27,6 +27,7 @@
 #include "block_component_move_water.hpp"
 #include "block_component_single_use.hpp"
 #include "block_component_sink.hpp"
+#include "block_component_sludge_water.hpp"
 #include "block_component_solid.hpp"
 #include "block_component_steep_slope_left.hpp"
 #include "block_component_steep_slope_right.hpp"
@@ -403,6 +404,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "move_water" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentMoveWater> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "sludge_water" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSludgeWater> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "door" ) )
 					{

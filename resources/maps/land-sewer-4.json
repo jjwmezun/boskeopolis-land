@@ -32,7 +32,7 @@
      "music":"sewers",
      "palette":"Subterranean Teal",
      "water_effect_height":104,
-     "water_rising":true
+     "water_effect_type":"RISING"
     },
  "propertytypes":
     {
@@ -42,7 +42,7 @@
      "music":"string",
      "palette":"string",
      "water_effect_height":"int",
-     "water_rising":"bool"
+     "water_effect_type":"string"
     },
  "renderorder":"right-down",
  "tileheight":16,

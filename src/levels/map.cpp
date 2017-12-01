@@ -187,7 +187,7 @@ Map Map::mapFromPath
 		bool blocks_work_offscreen = false;
 		bool loop_sides = false;
 		int water_effect_height = 0;
-		bool water_rising = false;
+		std::string water_effect_type = "NORMAL";
 		int wind_strength = 0;
 		bool moon_gravity = false;
 		bool show_on_off = false;
@@ -337,11 +337,11 @@ Map Map::mapFromPath
 					}
 				}
 
-				else if ( mezun::areStringsEqual( name, "water_rising" ) )
+				else if ( mezun::areStringsEqual( name, "water_effect_type" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( prop.value.IsString() )
 					{
-						water_rising = prop.value.GetBool();
+						water_effect_type = prop.value.GetString();
 					}
 				}
 
@@ -380,9 +380,17 @@ Map Map::mapFromPath
 			}
 		}
 
-		if ( water_effect_height != 0 || water_rising )
+		if ( water_effect_type == "RISING" )
 		{
-			foregrounds.emplace_back( std::make_unique<MapLayerWater> ( water_effect_height, water_rising ) );
+			foregrounds.emplace_back( std::move( MapLayerWater::makeRisingWater( water_effect_height ) ) );
+		}
+		if ( water_effect_type == "SLUDGE" )
+		{
+			foregrounds.emplace_back( std::move( MapLayerWater::makeSludgeWater( water_effect_height ) ) );
+		}
+		else if ( water_effect_height != 0 )
+		{
+			foregrounds.emplace_back( std::move( MapLayerWater::makeNormalWater( water_effect_height ) ) );
 		}
 
 

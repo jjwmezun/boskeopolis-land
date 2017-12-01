@@ -2,7 +2,6 @@
 #include "block_component_swimmable.hpp"
 #include "health.hpp"
 #include "sprite.hpp"
-#include <iostream>
 
 BlockComponentSwimmable::BlockComponentSwimmable() {};
 
