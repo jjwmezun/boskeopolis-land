@@ -1,0 +1,33 @@
+{
+		"graphics":
+		{
+			"type": "sprite",
+			"x": 9,
+			"y": 2
+		},
+		"behavior":
+		[
+			{
+				"component":
+				{
+					"type": "solid"
+				},
+				"conditions":
+				[
+					{ "type": "switch_on" }
+				]
+			},
+			{
+				"component":
+				{
+					"type": "hurt"
+				},
+				"conditions":
+				[
+					{ "type": "hero" },
+					{ "type": "collide_bottom" },
+					{ "type": "switch_on" }
+				]
+			}
+		]
+	}

@@ -5,6 +5,7 @@
 #include "map.hpp"
 #include "map_layer_tilemap.hpp"
 #include "map_layer_water.hpp"
+#include "map_layer_water_back.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
@@ -193,6 +194,7 @@ Map Map::mapFromPath
 		bool show_on_off = false;
 		int lightning_flash_color = 0;
 		std::string music = "";
+		bool warp_on_fall = false;
 
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
@@ -369,6 +371,14 @@ Map Map::mapFromPath
 					}
 				}
 
+				else if ( mezun::areStringsEqual( name, "warp_on_fall" ) )
+				{
+					if ( prop.value.IsBool() )
+					{
+						warp_on_fall = prop.value.GetBool();
+					}
+				}
+
 				else if ( mezun::areStringsEqual( name, "lightning_flash_color" ) )
 				{
 					if ( prop.value.IsInt() )
@@ -380,17 +390,24 @@ Map Map::mapFromPath
 			}
 		}
 
+		MapLayerWater* water_ptr = nullptr;
 		if ( water_effect_type == "RISING" )
 		{
-			foregrounds.emplace_back( std::move( MapLayerWater::makeRisingWater( water_effect_height ) ) );
+			water_ptr = MapLayerWater::makeRisingWater( water_effect_height );
 		}
-		if ( water_effect_type == "SLUDGE" )
+		else if ( water_effect_type == "SLUDGE" )
 		{
-			foregrounds.emplace_back( std::move( MapLayerWater::makeSludgeWater( water_effect_height ) ) );
+			water_ptr = MapLayerWater::makeSludgeWater( water_effect_height );
 		}
 		else if ( water_effect_height != 0 )
 		{
-			foregrounds.emplace_back( std::move( MapLayerWater::makeNormalWater( water_effect_height ) ) );
+			water_ptr = MapLayerWater::makeNormalWater( water_effect_height );
+		}
+
+		if ( water_ptr != nullptr )
+		{
+			backgrounds.emplace_back( std::make_unique<MapLayerWaterBack> ( water_ptr ) );
+			foregrounds.emplace_back( water_ptr );
 		}
 
 
@@ -424,7 +441,8 @@ Map Map::mapFromPath
 			moon_gravity,
 			show_on_off,
 			lightning_flash_color,
-			music
+			music,
+			warp_on_fall
 		);
 };
 
@@ -454,7 +472,8 @@ Map::Map
 	bool moon_gravity,
 	bool show_on_off,
 	int lightning_flash_color,
-	std::string music
+	std::string music,
+	bool warp_on_fall
 )
 :
 	blocks_ ( blocks ),
@@ -482,7 +501,8 @@ Map::Map
 	show_on_off_ ( show_on_off ),
 	lightning_flash_color_ ( lightning_flash_color ),
 	current_bg_ ( palette.bgN() ),
-	music_ ( music )
+	music_ ( music ),
+	warp_on_fall_ ( warp_on_fall )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -525,7 +545,8 @@ Map::Map( Map&& m ) noexcept
 	show_on_off_ ( m.show_on_off_ ),
 	lightning_flash_color_ ( m.lightning_flash_color_ ),
 	current_bg_ ( m.current_bg_ ),
-	music_ ( m.music_ )
+	music_ ( m.music_ ),
+	warp_on_fall_ ( m.warp_on_fall_ )
 {};
 
 Map::Map( const Map& c )
@@ -557,7 +578,8 @@ Map::Map( const Map& c )
 	show_on_off_ ( c.show_on_off_ ),
 	lightning_flash_color_ ( c.lightning_flash_color_ ),
 	current_bg_ ( c.current_bg_ ),
-	music_ ( c.music_ )
+	music_ ( c.music_ ),
+	warp_on_fall_ ( c.warp_on_fall_ )
 {};
 
 int Map::widthBlocks() const

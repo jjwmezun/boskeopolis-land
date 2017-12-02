@@ -128,10 +128,16 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 			door_lock_ = false;
 		}
 	}
-
 	if ( fellInBottomlessPit( lvmap ) )
 	{
-		kill();
+		if ( lvmap.warp_on_fall_ )
+		{
+			events.changeMap();
+		}
+		else
+		{
+			kill();
+		}
 	}
 	else if ( health.drowned() )
 	{

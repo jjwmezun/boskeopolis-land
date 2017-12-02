@@ -147,6 +147,14 @@ void Camera::contain( Map& m )
 		}
 	}
 
+	if ( m.bottom_limit_ > -1 )
+	{
+		if ( m.heightPixels() - m.bottom_limit_ < bottom() )
+		{
+			y_ = m.heightPixels() - m.bottom_limit_ - heightPixels();
+		}
+	}
+
 	if ( m.left_limit_ > -1 )
 	{
 		if ( m.left_limit_ > x_ )

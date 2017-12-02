@@ -58,6 +58,7 @@ class Map
 		const bool slippery_;
 		const bool moon_gravity_;
 		const bool show_on_off_;
+		const bool warp_on_fall_;
 		bool changed_;
 
 		static Map mapFromPath
@@ -130,7 +131,8 @@ class Map
 			bool moon_gravity,
 			bool show_on_off,
 			int lightning_flash_color,
-			std::string music
+			std::string music,
+			bool warp_on_fall
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera );

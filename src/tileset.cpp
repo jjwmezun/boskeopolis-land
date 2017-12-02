@@ -33,6 +33,8 @@
 #include "block_component_steep_slope_right.hpp"
 #include "block_component_swimmable.hpp"
 #include "block_component_switch.hpp"
+#include "block_component_switch_off.hpp"
+#include "block_component_switch_on.hpp"
 #include "block_component_warp.hpp"
 #include "block_condition_collide_any.hpp"
 #include "block_condition_collide_bottom.hpp"
@@ -416,6 +418,14 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "switch" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSwitch> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "switch_on" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSwitchOn> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "switch_off" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSwitchOff> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
 					{

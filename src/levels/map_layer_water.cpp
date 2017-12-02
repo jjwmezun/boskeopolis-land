@@ -20,37 +20,22 @@ MapLayerWater* MapLayerWater::makeRisingWater( int y_blocks )
 
 MapLayerWater* MapLayerWater::makeSludgeWater( int y_blocks )
 {
-	return new MapLayerWater( y_blocks, { new WaterLayerComponentSludge() }, "bg/animated_water_2.png", 255, 6 );
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSludge() }, "bg/animated_water_3.png", 255, 6 );
 };
 
 MapLayerWater::MapLayerWater( int y_blocks, ComponentGroup components, std::string gfx, Uint8 alpha, int color )
 :
 	MapLayer(),
+	src_ ( 0, 0, WIDTH, HEIGHT ),
+	dest_ ( 0, 0, WIDTH, HEIGHT ),
+	body_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
 	components_ ( components ),
+	texture_ ( gfx ),
 	y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
-	surface_
-	(
-		std::move( gfx ),
-		{
-			std::make_pair<int, int> ( 0, 0 ),
-			std::make_pair<int, int> ( 8, 0 ),
-			std::make_pair<int, int> ( 16, 0 ),
-			std::make_pair<int, int> ( 24, 0 ),
-		},
-		false,
-		false,
-		0,
-		false,
-		0,
-		0,
-		0,
-		0,
-		8,
-		alpha
-	),
-	x_offset_ ( -8, 0, -8, true ),
-	animation_speed_ ( 16 ),
-	color_ ( color )
+	color_ ( color ),
+	x_offset_ ( 0 ),
+	timer_ ( 0 ),
+	alpha_ ( alpha )
 {};
 
 MapLayerWater::~MapLayerWater()
@@ -72,37 +57,54 @@ void MapLayerWater::interact( Sprite& sprite, Health& health )
 
 void MapLayerWater::render( const Camera& camera )
 {
-	if ( Unit::SubPixelsToPixels( y_ ) < camera.bottom() )
+	if ( dest_.y < camera.bottom() )
 	{
-		int relative_y = Unit::SubPixelsToPixels( y_ ) - camera.y();
-
-		for ( int x = x_offset_(); x < Unit::WINDOW_WIDTH_PIXELS; x += 8 )
-		{
-			const sdl2::SDLRect r = { x, relative_y, 8, 16 };
-			surface_.render( r, nullptr, false );
-		}
-		
-		relative_y += 16;		
-		Render::renderRect( { 0, relative_y, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_WIDTH_PIXELS - relative_y }, color_, surface_.alpha_ );
+		Render::renderObject( texture_, src_, dest_ );
+		Render::renderRect( body_, color_, alpha_ );
 	}
 };
 
 void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
 {
-	surface_.update();
+	updateGFX( camera );
+	updateComponents();
+	updateEventMovement( events );
+};
 
-	if ( animation_speed_.hit() )
+void MapLayerWater::updateGFX( const Camera& camera )
+{
+	if ( timer_ == 3 || timer_ == 7 )
 	{
-		++x_offset_;
+		--x_offset_;
+		if ( x_offset_ <= 8 ) { x_offset_ = 0; }
+		dest_.x = x_offset_;
 	}
+	
+	if ( timer_ == 8 )
+	{
+		src_.y += HEIGHT;
+		if ( src_.y >= MAX_FRAME ) { src_.y = 0; }
+		timer_ = 0;
+	}
+	else
+	{
+		++timer_;
+	}
+	dest_.y = Unit::SubPixelsToPixels( y_ ) - camera.y();
+	body_.y = dest_.y + HEIGHT;
+	body_.h = Unit::WINDOW_HEIGHT_PIXELS - body_.y;
+};
 
-	animation_speed_.update();
-
+void MapLayerWater::updateComponents()
+{
 	for ( auto* c : components_ )
 	{
 		c->update( *this );
 	}
+};
 
+void MapLayerWater::updateEventMovement( EventSystem& events )
+{
 	if ( events.waterShouldMove() )
 	{
 		if ( events.move_water_ < y_ )
@@ -114,6 +116,5 @@ void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Came
 			y_ += MOVE_SPEED;
 		}
 	}
-
 	events.current_water_ = y_;
 };

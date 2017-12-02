@@ -10,6 +10,7 @@
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
 #include "cannon_sprite.hpp"
+#include "change_layer_sprite.hpp"
 #include "choque_sprite.hpp"
 #include "cloud_block_sprite.hpp"
 #include "cloud_monster_sprite.hpp"
@@ -353,6 +354,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 84 ):
 			return std::unique_ptr<Sprite> ( new MoonSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 85 ):
+			return std::unique_ptr<Sprite> ( ChangeLayerSprite::makeBackground( x ) );
+		break;
+		case ( SPRITE_INDEX_START + 86 ):
+			return std::unique_ptr<Sprite> ( ChangeLayerSprite::makeForeground( x ) );
+		break;
+		case ( SPRITE_INDEX_START + 87 ):
+			return std::unique_ptr<Sprite> ( ChangeLayerSprite::makeBackgroundDuo( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

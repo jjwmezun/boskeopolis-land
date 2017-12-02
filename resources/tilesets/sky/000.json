@@ -16,7 +16,11 @@
 			"component":
 			{
 				"type": "solid"
-			}
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" }
+			]
 		},
 		{
 			"component":
@@ -26,7 +30,8 @@
 			"conditions":
 			[
 				{ "type": "hero" },
-				{ "type": "collide_any" }
+				{ "type": "collide_any" },
+				{ "type": "switch_on" }
 			]
 		}
 	]
