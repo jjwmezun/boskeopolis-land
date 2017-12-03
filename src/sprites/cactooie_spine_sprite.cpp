@@ -43,6 +43,6 @@ void CactooieSpineSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void CactooieSpineSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void CactooieSpineSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 };

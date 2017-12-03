@@ -46,7 +46,7 @@ void FallingBoughSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	}
 };
 
-void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( Sprite::SpriteType::HERO ) )
 	{

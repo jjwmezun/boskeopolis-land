@@ -37,7 +37,7 @@ void FaucetSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	}
 };
 
-void FaucetSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void FaucetSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( their_collision.collideAny() )
 	{

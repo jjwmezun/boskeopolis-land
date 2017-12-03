@@ -25,7 +25,7 @@ void LightningSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void LightningSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void LightningSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) && on_ )
 	{

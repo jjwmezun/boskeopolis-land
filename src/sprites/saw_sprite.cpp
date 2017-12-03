@@ -50,7 +50,7 @@
             hit_box_.y+=1000;
     };
 
-    void SawSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+    void SawSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
     {
         if ( their_collision.collideAny() && them.hasType( SpriteType::HERO ) )
         {

@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "change_layer_sprite.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
@@ -25,7 +26,7 @@ ChangeLayerSprite* ChangeLayerSprite::makeBackgroundDuo( int x, int y )
 
 ChangeLayerSprite::ChangeLayerSprite( int x, int y, int w, int h, int frame_size, Direction::Vertical dir, std::string texture )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( std::move( texture ), 0, 4, false, ( dir == Direction::Vertical::UP ) ), x, y, w, h, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, dir, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( std::move( texture ), 0, 4, false, ( dir == Direction::Vertical::UP ), 0, true ), x, y, w, h, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, dir, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	flash_timer_ ( 0 ),
 	frame_size_ ( frame_size ),
 	activated_ ( false )
@@ -60,10 +61,11 @@ void ChangeLayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	}
 };
 
-void ChangeLayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void ChangeLayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( !activated_ && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	if ( !activated_ && ( events.switch_ == ( direction_y_ == Direction::Vertical::UP ) ) && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		activated_ = true;
+		Audio::playSound( Audio::SoundType::HEAL );
 	}
 };

@@ -9,7 +9,7 @@ class PolloDelAireCircleSprite : public Sprite
 		PolloDelAireCircleSprite( int x, int y, bool clockwise = true );
 		~PolloDelAireCircleSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
-		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health ) override;
+		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 		void deathAction( Camera& camera, EventSystem& events ) override;
 		void reset() override;
 

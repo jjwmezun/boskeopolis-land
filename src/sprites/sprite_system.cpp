@@ -607,7 +607,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 	}
 };
 
-void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health )
+void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events )
 {
 	for ( int i = 0; i < sprites_.size(); ++i )
 	{
@@ -617,8 +617,8 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 			{
 				if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
 				{
-					sprites_.at( i )->interact( *hero_, blocks, *this, lvmap, health );
-					hero_->interact( *sprites_.at( i ), blocks, *this, lvmap, health );
+					sprites_.at( i )->interact( *hero_, blocks, *this, lvmap, health, events );
+					hero_->interact( *sprites_.at( i ), blocks, *this, lvmap, health, events );
 				}
 
 				for ( int j = 0; j < sprites_.size(); ++j )
@@ -627,7 +627,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 						if ( i != j )
 							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) )
 								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
-									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health );
+									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health, events );
 				}
 			}
 		}

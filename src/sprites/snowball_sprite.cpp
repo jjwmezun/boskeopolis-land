@@ -36,6 +36,6 @@ void SnowballSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 	++counter_;
 };
 
-void SnowballSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void SnowballSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 };

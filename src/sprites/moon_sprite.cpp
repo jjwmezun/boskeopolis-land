@@ -91,7 +91,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 	}
 };
 
-void MoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void MoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( moon_state_ == MoonState::UNUSED && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

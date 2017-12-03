@@ -41,7 +41,7 @@ class SpriteSystem
 		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health );
 		void render( Camera& camera, bool priority = false );
 		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health );
-		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health );
+		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events );
 		void reset( const Level& level );
 		void spawn( SpawnSprite type, int x, int y );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );

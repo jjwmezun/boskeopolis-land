@@ -93,7 +93,7 @@ void StrongerCowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	}
 };
 
-void StrongerCowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void StrongerCowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( awake_ )
 	{

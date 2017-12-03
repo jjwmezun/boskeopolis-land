@@ -39,7 +39,7 @@ void AngryTruckSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	moveRight();
 };
 
-void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( their_collision.collideAny() )
 	{

@@ -85,7 +85,7 @@ void BirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 	propeller_animation_timer_++;
 };
 
-void BirdSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void BirdSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( wait_limit_counter_ <= WAIT_LIMIT && them.hasType( SpriteType::HERO ) )
 	{

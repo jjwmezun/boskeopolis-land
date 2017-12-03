@@ -66,6 +66,6 @@ void PipeEelSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	}
 };
 
-void PipeEelSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void PipeEelSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 };

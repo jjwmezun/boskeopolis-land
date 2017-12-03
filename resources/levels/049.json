@@ -39,8 +39,26 @@
 		},
 		{
 			"slug": "play-1-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "play-rafters.png",
+					"width": 280,
+					"height": 192,
+					"x_scroll": 0.5
+				}
+			],
 			"foregrounds":
 			[
+				{
+					"type": "image",
+					"img": "play-rafters-2.png",
+					"width": 280,
+					"height": 192,
+					"x_scroll": 0.5,
+					"alpha": 200
+				},
 				{
 					"type": "image",
 					"img": "stageplay.png",
@@ -62,8 +80,8 @@
 		}
 	],
 
-	"entrance_x": 2,
-	"entrance_y": 7,
+	"entrance_x": 0,
+	"entrance_y": 10,
 
 	"gem_challenge": 11000,
 	"time_challenge": 18

@@ -52,7 +52,7 @@ void BouncyCloudBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	hit_box_.x = original_hit_box_.x;
 };
 
-void BouncyCloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void BouncyCloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

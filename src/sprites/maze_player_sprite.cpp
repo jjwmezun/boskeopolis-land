@@ -65,7 +65,7 @@ void MazePlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	camera.adjustCart( *this, lvmap );
 };
 
-void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 };
 

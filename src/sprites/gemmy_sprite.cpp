@@ -55,7 +55,7 @@ void GemmySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 	}
 };
 
-void GemmySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void GemmySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

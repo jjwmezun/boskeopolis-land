@@ -52,7 +52,7 @@ void LevelState::stateUpdate()
 		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
 		sprites_.interact( blocks_, level_, events_, camera_, health_ );
 		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
-		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_ );
+		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
 		health_.update();
 		inventory_screen_.update( events_, health_ );
 		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );

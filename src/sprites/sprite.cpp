@@ -401,12 +401,12 @@ void Sprite::stopRunning()
 	start_speed_ = start_speed_walk_;
 };
 
-void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	Collision my_collision = testCollision( them );
 	Collision their_collision = them.testCollision( *this );
 
-	customInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health );
+	customInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health, events );
 };
 
 bool Sprite::canJump() const

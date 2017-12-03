@@ -12,7 +12,7 @@ class CloudMonsterSprite : public Sprite
 		CloudMonsterSprite( int x, int y );
 		~CloudMonsterSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health );
+		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
 		void render( Camera& camera, bool priority ) override;
 
 	private:

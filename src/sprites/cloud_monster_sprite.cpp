@@ -28,7 +28,7 @@ void CloudMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	lightning_.update( camera, lvmap, events, sprites, blocks, health );
 };
 
-void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	lightning_.changeX( lightningPosition() );
 
@@ -50,7 +50,7 @@ void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& the
 			moveLeft();
 		}
 		
-		lightning_.interact( them, blocks, sprites, lvmap, health );
+		lightning_.interact( them, blocks, sprites, lvmap, health, events );
 	}
 };
 

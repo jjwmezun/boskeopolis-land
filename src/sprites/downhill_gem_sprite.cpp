@@ -16,7 +16,7 @@ void DownhillGemSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	graphics_->rotation_ -= 3;
 };
 
-void DownhillGemSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void DownhillGemSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

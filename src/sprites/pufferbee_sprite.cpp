@@ -104,7 +104,7 @@
         }
     };
 
-    void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+    void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 	{};
 
     Direction::Rotation PufferbeeSprite::randomDirection() const

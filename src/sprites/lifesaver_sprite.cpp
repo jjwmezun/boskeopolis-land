@@ -31,7 +31,7 @@ void LifesaverSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	in_water_ = false;
 };
 
-void LifesaverSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void LifesaverSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

@@ -145,7 +145,7 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	camera.adjustCart( *this, lvmap );
 };
 
-void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
 	{

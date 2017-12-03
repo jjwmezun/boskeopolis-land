@@ -18,7 +18,7 @@ void SnowboulderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	}
 };
 
-void SnowboulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void SnowboulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( their_collision.collideBottom() )
 	{

@@ -17,7 +17,7 @@ void RotatingBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	std::cout<<graphics_->rotation_<<std::endl;
 };
 
-void RotatingBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void RotatingBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

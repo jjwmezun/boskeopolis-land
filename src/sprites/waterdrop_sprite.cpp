@@ -16,7 +16,7 @@ void WaterdropSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	moveDown();
 };
 
-void WaterdropSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void WaterdropSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( their_collision.collideAny() )
 	{

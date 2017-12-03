@@ -33,7 +33,7 @@ void FallingFistSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	hit_box_.x = original_hit_box_.x;
 };
 
-void FallingFistSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void FallingFistSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {};
 
 void FallingFistSprite::render( Camera& camera, bool priority )

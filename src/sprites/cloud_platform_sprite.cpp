@@ -75,7 +75,8 @@ void CloudPlatformSprite::customInteract
 	BlockSystem& blocks,
 	SpriteSystem& sprites,
 	Map& lvmap,
-	Health& health
+	Health& health,
+	EventSystem& events
 )
 {
 	if ( them.hasType( SpriteType::HERO ) )

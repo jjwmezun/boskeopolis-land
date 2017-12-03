@@ -24,7 +24,7 @@ void SpringSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	graphics_->current_frame_x_ = floor( ( 16000 - hit_box_.h ) / 1000 ) * 16;
 };
 
-void SpringSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void SpringSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( their_collision.collideBottom() )
 	{

@@ -189,11 +189,11 @@ void EventSystem::failEvent( Level& level )
 		(
 			new MessageState
 			(
-				"¡Failure!",
+				"Failure...",
 				false,
 				std::unique_ptr<GameState> ( new OverworldState() ),
 				false,
-				{ "Mountain Red", 2 },
+				{ "Stop Red", 2 },
 				Text::FontColor::DARK_GRAY,
 				"low"
 			)
@@ -216,7 +216,7 @@ void EventSystem::winEvent( Level& level )
 				false,
 				std::unique_ptr<GameState> ( new OverworldState() ),
 				false,
-				{ "Classic Green", 2 },
+				{ "Go Green", 2 },
 				Text::FontColor::DARK_GRAY,
 				"success"
 			)

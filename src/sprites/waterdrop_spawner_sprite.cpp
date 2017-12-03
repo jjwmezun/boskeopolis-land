@@ -24,6 +24,6 @@ void WaterdropSpawnerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	++timer_;
 };
 
-void WaterdropSpawnerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void WaterdropSpawnerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 };

@@ -49,7 +49,7 @@ void BulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	}
 };
 
-void BulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void BulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( their_collision.collideAny() )
 	{

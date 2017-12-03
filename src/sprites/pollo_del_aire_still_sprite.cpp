@@ -48,7 +48,7 @@ void PolloDelAireStillSprite::customUpdate( Camera& camera, Map& lvmap, EventSys
 	graphics_->current_frame_x_ = 24 * floor(animation_counter_ / 8 );
 };
 
-void PolloDelAireStillSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void PolloDelAireStillSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health, *this );
 };

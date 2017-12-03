@@ -83,6 +83,6 @@ void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	camera.adjust( *this, lvmap );
 };
 
-void PlayerSpriteFluttering::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void PlayerSpriteFluttering::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 };

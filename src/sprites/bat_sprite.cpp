@@ -42,7 +42,7 @@ void BatSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, S
 	}
 };
 
-void BatSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health )
+void BatSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if
 	(
