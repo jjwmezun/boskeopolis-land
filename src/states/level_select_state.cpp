@@ -302,113 +302,97 @@ void LevelSelectState::renderHeader() const
 
 void LevelSelectState::init()
 {
-	try
+	int reali = 0;
+
+	for ( int i = 0; i < Level::MAX; ++i )
 	{
-		int reali = 0;
+		assert( reali <= ( int )( Level::realLevelNum() ) );
+		const std::string lvname = Inventory::levelName( i );
 
-		for ( int i = 0; i < Level::MAX; ++i )
+		if ( !mezun::isStringEmpty( lvname ) )
 		{
-			assert( reali <= ( int )( Level::realLevelNum() ) );
-			const std::string lvname = Inventory::levelName( i );
-
-			if ( !mezun::isStringEmpty( lvname ) )
-			{
-				if ( !Inventory::beenToLevel( i ) )
-				{		
-					if ( i != 1 && !Inventory::victory( i -1 ) )
-					{
-						continue;
-					}
-				}
-
-				level_names_.emplace_back( lvname, LEVEL_NAME_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
-
-				level_ids_.emplace_back( i );
-
-				gem_scores_.emplace_back( Inventory::gemScore( i ), GEM_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
-				gem_show_.emplace_back( &gem_scores_[ reali ] );
-				time_scores_.emplace_back( Inventory::timeScore( i ), TIME_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
-				time_show_.emplace_back( &time_scores_[ reali ] );
-				gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), GEM_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
-				time_challenges_text_.emplace_back( Level::timeChallengeText( i ), TIME_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
-
-				const sdl2::SDLRect victory_rect = { VICTORY_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-				const sdl2::SDLRect diamond_rect = { DIAMOND_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-				const sdl2::SDLRect gem_challenge_rect = { GEM_ICON_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-				const sdl2::SDLRect time_challenge_rect = { TIME_ICON_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-				win_icon_dests_.emplace_back( victory_rect );
-				diamond_icon_dests_.emplace_back( diamond_rect );
-				gem_challenge_icon_dests_.emplace_back( gem_challenge_rect );
-				time_challenge_icon_dests_.emplace_back( time_challenge_rect );
-
-				if ( Inventory::victory( i ) )
+			if ( !Inventory::beenToLevel( i ) )
+			{		
+				if ( i != 1 && !Inventory::victory( i -1 ) )
 				{
-					win_icon_show_.emplace_back( &win_icon_gfx_ );
+					continue;
 				}
-				else
-				{
-					win_icon_show_.emplace_back( &no_win_icon_gfx_ );
-				}
-
-				if ( Inventory::haveDiamond( i ) )
-				{
-					diamond_icon_show_.emplace_back( &diamond_gfx_ );
-				}
-				else
-				{
-					diamond_icon_show_.emplace_back( &no_diamond_gfx_ );
-				}
-				
-				if ( Inventory::gemChallengeBeaten( i ) )
-				{
-					gem_icon_show_.emplace_back( &win_icon_gfx_ );
-					gem_scores_[ reali ].component_.reset( new TextComponentFlashing() );
-				}
-				else
-				{
-					gem_icon_show_.emplace_back( &gem_challenge_icon_gfx_ );
-				}
-
-				if ( Inventory::timeChallengeBeaten( i ) )
-				{
-					time_icon_show_.emplace_back( &win_icon_gfx_ );
-					time_scores_[ reali ].component_.reset( new TextComponentFlashing() );
-				}
-				else
-				{
-					time_icon_show_.emplace_back( &time_challenge_icon_gfx_ );
-				}
-				
-				if ( Inventory::levelComplete( i ) )
-				{
-					level_names_[ reali ].component_.reset( new TextComponentFlashing() );
-				}
-
-				++reali;
 			}
-		}
-		auto select = std::find( level_ids_.begin(), level_ids_.end(), prev_level_ );
 
-		if ( select != level_ids_.end() )
-		{
-			selection_ = std::distance( level_ids_.begin(), select );
-		}
-		else
-		{
-			selection_ = 0;
+			level_names_.emplace_back( lvname, LEVEL_NAME_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
+
+			level_ids_.emplace_back( i );
+
+			gem_scores_.emplace_back( Inventory::gemScore( i ), GEM_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
+			gem_show_.emplace_back( &gem_scores_[ reali ] );
+			time_scores_.emplace_back( Inventory::timeScore( i ), TIME_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
+			time_show_.emplace_back( &time_scores_[ reali ] );
+			gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), GEM_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
+			time_challenges_text_.emplace_back( Level::timeChallengeText( i ), TIME_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
+
+			const sdl2::SDLRect victory_rect = { VICTORY_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect diamond_rect = { DIAMOND_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect gem_challenge_rect = { GEM_ICON_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect time_challenge_rect = { TIME_ICON_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			win_icon_dests_.emplace_back( victory_rect );
+			diamond_icon_dests_.emplace_back( diamond_rect );
+			gem_challenge_icon_dests_.emplace_back( gem_challenge_rect );
+			time_challenge_icon_dests_.emplace_back( time_challenge_rect );
+
+			if ( Inventory::victory( i ) )
+			{
+				win_icon_show_.emplace_back( &win_icon_gfx_ );
+			}
+			else
+			{
+				win_icon_show_.emplace_back( &no_win_icon_gfx_ );
+			}
+
+			if ( Inventory::haveDiamond( i ) )
+			{
+				diamond_icon_show_.emplace_back( &diamond_gfx_ );
+			}
+			else
+			{
+				diamond_icon_show_.emplace_back( &no_diamond_gfx_ );
+			}
+
+			if ( Inventory::gemChallengeBeaten( i ) )
+			{
+				gem_icon_show_.emplace_back( &win_icon_gfx_ );
+				gem_scores_[ reali ].component_.reset( new TextComponentFlashing() );
+			}
+			else
+			{
+				gem_icon_show_.emplace_back( &gem_challenge_icon_gfx_ );
+			}
+
+			if ( Inventory::timeChallengeBeaten( i ) )
+			{
+				time_icon_show_.emplace_back( &win_icon_gfx_ );
+				time_scores_[ reali ].component_.reset( new TextComponentFlashing() );
+			}
+			else
+			{
+				time_icon_show_.emplace_back( &time_challenge_icon_gfx_ );
+			}
+
+			if ( Inventory::levelComplete( i ) )
+			{
+				level_names_[ reali ].component_.reset( new TextComponentFlashing() );
+			}
+
+			++reali;
 		}
 	}
-	catch ( const mezun::CantLoadLevels& e )
+	auto select = std::find( level_ids_.begin(), level_ids_.end(), prev_level_ );
+
+	if ( select != level_ids_.end() )
 	{
-		Main::pushState
-		(
-			std::move( MessageState::error
-			(
-				e.what(),
-				false,
-				std::make_unique<TitleState> (),
-				false
-			) )
-		);
+		selection_ = std::distance( level_ids_.begin(), select );
+	}
+	else
+	{
+		selection_ = 0;
 	}
 };

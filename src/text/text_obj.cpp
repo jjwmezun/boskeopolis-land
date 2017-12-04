@@ -3,7 +3,7 @@
 
 void TextObj::render( const Camera* camera ) const
 {
-	Text::renderText( words_, x_, y_, camera, color_, line_limit_, align_, shadow_, 1, chars_to_render_ );
+	Text::renderText( words_, x_, y_, camera, color_, line_limit_, align_, shadow_, char_size_, chars_to_render_ );
 };
 
 void TextObj::update()

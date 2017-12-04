@@ -11,7 +11,8 @@ namespace Audio
 	std::string current_song_ = "";
 	Mix_Music* music_ = nullptr;
 	Mix_Chunk* sounds_[ NUM_O_SOUNDS ];
-	
+	bool enable_ = true;
+
 	enum class ChannelType
 	{
 		PRIORITY = 0,
@@ -40,30 +41,41 @@ namespace Audio
 
 	Mix_Chunk* loadSound( const std::string& sound_name );
 
-	void init()
+	void init( const std::vector<std::string>& args )
 	{
-		if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+		for ( const auto& a : args )
 		{
-			printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
-			exit( -1 );
+			if ( a == "noaudio" )
+			{
+				enable_ = false;
+			}
 		}
-		Mix_AllocateChannels( MAX_CHANNELS );
-		Mix_VolumeMusic( MIX_MAX_VOLUME / 4 );
-		Mix_Volume( -1, MIX_MAX_VOLUME );
-		sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
-		sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );
-		sounds_[ ( int )( SoundType::HEAL ) ] = loadSound( "heal.wav" );
-		sounds_[ ( int )( SoundType::JUMP ) ] = loadSound( "jump.wav" );
-		sounds_[ ( int )( SoundType::BOP ) ] = loadSound( "bop.wav" );
-		sounds_[ ( int )( SoundType::DEATH ) ] = loadSound( "death.wav" );
-		sounds_[ ( int )( SoundType::PAUSE ) ] = loadSound( "pause.wav" );
-		sounds_[ ( int )( SoundType::SELECT ) ] = loadSound( "select.wav" );
-		sounds_[ ( int )( SoundType::CONFIRM ) ] = loadSound( "confirm.wav" );
-		sounds_[ ( int )( SoundType::CANCEL ) ] = loadSound( "cancel.wav" );
-		sounds_[ ( int )( SoundType::DIAMOND ) ] = loadSound( "diamond.wav" );
-		sounds_[ ( int )( SoundType::ITEM ) ] = loadSound( "item.wav" );
-		sounds_[ ( int )( SoundType::JINGLE ) ] = loadSound( "jingle.wav" );
-		sounds_[ ( int )( SoundType::BOUNCE ) ] = loadSound( "bounce.wav" );
+
+		if ( enable_ )
+		{
+			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+			{
+				printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
+				exit( -1 );
+			}
+			Mix_AllocateChannels( MAX_CHANNELS );
+			Mix_VolumeMusic( MIX_MAX_VOLUME / 4 );
+			Mix_Volume( -1, MIX_MAX_VOLUME );
+			sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
+			sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );
+			sounds_[ ( int )( SoundType::HEAL ) ] = loadSound( "heal.wav" );
+			sounds_[ ( int )( SoundType::JUMP ) ] = loadSound( "jump.wav" );
+			sounds_[ ( int )( SoundType::BOP ) ] = loadSound( "bop.wav" );
+			sounds_[ ( int )( SoundType::DEATH ) ] = loadSound( "death.wav" );
+			sounds_[ ( int )( SoundType::PAUSE ) ] = loadSound( "pause.wav" );
+			sounds_[ ( int )( SoundType::SELECT ) ] = loadSound( "select.wav" );
+			sounds_[ ( int )( SoundType::CONFIRM ) ] = loadSound( "confirm.wav" );
+			sounds_[ ( int )( SoundType::CANCEL ) ] = loadSound( "cancel.wav" );
+			sounds_[ ( int )( SoundType::DIAMOND ) ] = loadSound( "diamond.wav" );
+			sounds_[ ( int )( SoundType::ITEM ) ] = loadSound( "item.wav" );
+			sounds_[ ( int )( SoundType::JINGLE ) ] = loadSound( "jingle.wav" );
+			sounds_[ ( int )( SoundType::BOUNCE ) ] = loadSound( "bounce.wav" );
+		}
 	};
 
 	void changeSong( const std::string& song_name, bool loop, int quietness )
@@ -102,13 +114,16 @@ namespace Audio
 
 	void resumeSong()
 	{
-		if( Mix_PlayingMusic() == 0 )
+		if ( enable_ )
 		{
-			Mix_PlayMusic( music_, -1 );
-		}
-		else
-		{
-			Mix_ResumeMusic();
+			if( Mix_PlayingMusic() == 0 )
+			{
+				Mix_PlayMusic( music_, -1 );
+			}
+			else
+			{
+				Mix_ResumeMusic();
+			}
 		}
 	};
 
@@ -149,16 +164,19 @@ namespace Audio
 	
 	void playSound( SoundType sound )
 	{
-		const int channel = ( int )( sound_channels_[ ( int )( sound ) ] );
-		if ( channel == 0 )
+		if ( enable_ )
 		{
-			// Silence all channels.
-			Mix_HaltChannel( -1 );
+			const int channel = ( int )( sound_channels_[ ( int )( sound ) ] );
+			if ( channel == 0 )
+			{
+				// Silence all channels.
+				Mix_HaltChannel( -1 );
+			}
+			else
+			{
+				Mix_HaltChannel( channel );
+			}
+			Mix_PlayChannel( channel, sounds_[ ( int )( sound ) ], 0 );
 		}
-		else
-		{
-			Mix_HaltChannel( channel );
-		}
-		Mix_PlayChannel( channel, sounds_[ ( int )( sound ) ], 0 );
 	};
 };

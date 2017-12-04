@@ -11,7 +11,7 @@
 #include "time_start_state.hpp"
 
 LevelState::LevelState( int lvname )
-try :
+:
 	GameState ( StateID::LEVEL_STATE ),
 	inventory_screen_ (),
 	events_ (),
@@ -22,19 +22,6 @@ try :
 	health_ ()
 {
 	Inventory::levelStart( lvname );
-}
-catch ( const mezun::CantLoadTileset& e )
-{
-	Main::pushState
-	(
-		std::move( MessageState::error
-		(
-			e.what(),
-			false,
-			std::make_unique<OverworldState> (),
-			false
-		) )
-	);
 };
 
 LevelState::~LevelState()
@@ -43,53 +30,37 @@ LevelState::~LevelState()
 
 void LevelState::stateUpdate()
 {
-	try
+	blocks_.blocksFromMap( level_.currentMap(), camera_ );
+	blocks_.update( events_ );
+	level_.currentMap().update( events_, sprites_, blocks_, camera_ );
+	camera_.update();
+	sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+	sprites_.interact( blocks_, level_, events_, camera_, health_ );
+	sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+	sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
+	health_.update();
+	inventory_screen_.update( events_, health_ );
+	level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
+	events_.update( level_, sprites_, camera_, blocks_ );
+
+	if ( events_.paletteChanged() )
 	{
-		blocks_.blocksFromMap( level_.currentMap(), camera_ );
-		blocks_.update( events_ );
-		level_.currentMap().update( events_, sprites_, blocks_, camera_ );
-		camera_.update();
-		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
-		sprites_.interact( blocks_, level_, events_, camera_, health_ );
-		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
-		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
-		health_.update();
-		inventory_screen_.update( events_, health_ );
-		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
-		events_.update( level_, sprites_, camera_, blocks_ );
-
-		if ( events_.paletteChanged() )
-		{
-			newPalette( events_.getPalette() );
-		}
-
-		if ( events_.special_ == EventSystem::EType::TIMER_START )
-		{
-			events_.special_ = EventSystem::EType::__NULL;
-			Main::pushState
-			(
-				std::unique_ptr<GameState>
-				(
-					new TimeStartState( palette() )
-				)
-			);
-		}
-
-		testPause();
+		newPalette( events_.getPalette() );
 	}
-	catch ( const mezun::InvalidBlockType& e )
+
+	if ( events_.special_ == EventSystem::EType::TIMER_START )
 	{
+		events_.special_ = EventSystem::EType::__NULL;
 		Main::pushState
 		(
-			std::move( MessageState::error
+			std::unique_ptr<GameState>
 			(
-				e.what(),
-				false,
-				std::make_unique<OverworldState> (),
-				false
-			) )
+				new TimeStartState( palette() )
+			)
 		);
 	}
+
+	testPause();
 };
 
 void LevelState::stateRender()
@@ -106,25 +77,7 @@ void LevelState::stateRender()
 void LevelState::init()
 {
 	newPalette( level_.currentMap().palette_ );
-
-	try
-	{
-		sprites_.reset( level_ );
-	}
-	catch ( const mezun::InvalidSprite& e )
-	{
-		Main::pushState
-		(
-			std::move( MessageState::error
-			(
-				e.what(),
-				false,
-				std::make_unique<OverworldState> (),
-				false
-			) )
-		);
-	}
-
+	sprites_.reset( level_ );
 	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };

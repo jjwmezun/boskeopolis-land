@@ -44,9 +44,11 @@
 				{
 					"type": "image",
 					"img": "play-rafters.png",
-					"width": 280,
-					"height": 192,
-					"x_scroll": 0.5
+					"width": 258,
+					"height": 172,
+					"x_scroll": 0.5,
+					"y_repeat": false,
+					"x_offset": 56
 				}
 			],
 			"foregrounds":
@@ -54,10 +56,12 @@
 				{
 					"type": "image",
 					"img": "play-rafters-2.png",
-					"width": 280,
+					"width": 258,
 					"height": 192,
 					"x_scroll": 0.5,
-					"alpha": 200
+					"alpha": 200,
+					"y_repeat": false,
+					"x_offset": 56
 				},
 				{
 					"type": "image",

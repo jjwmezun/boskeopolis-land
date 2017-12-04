@@ -16,14 +16,7 @@ Palette::Palette( std::string type, int bg )
 {
 	if ( palettes_.empty() )
 	{
-		try
-		{
-			loadPalettes();
-		}
-		catch( const mezun::CantLoadPalettes& e )
-		{
-			throw e;
-		}
+		loadPalettes();
 	}
 };
 
@@ -42,22 +35,6 @@ const std::string& Palette::type() const { return type_; };
 
 int Palette::bgN() const
 {
-	/*
-	if ( bg_ >= COLOR_LIMIT )
-	{
-		if ( Main::nextFrame( 256, 8 ) )
-		{
-			return bg_ % COLOR_LIMIT;
-		}
-		else
-		{
-			return floor( bg_ / COLOR_LIMIT );
-		}
-	}
-	else
-	{
-		return bg_;
-	}*/
 	return bg_;
 };
 
@@ -83,17 +60,12 @@ void Palette::applyPalette( SDL_Surface* s ) const
 const sdl2::SDLColor& Palette::color( unsigned int n ) const
 {
 	auto p = palettes_.find( type_ );
-
-	if ( p == palettes_.end() ) throw mezun::MissingPalette( type_ );
-
-	try
+	if ( p == palettes_.end() )
 	{
-		return p->second.at( n );
+		std::cout<<"\""<<type_<<"\" is an invalid palette."<<std::endl;
+		return { 0, 0, 0, 0 };
 	}
-	catch ( const std::out_of_range& e )
-	{
-		throw mezun::InvalidColor( n, type_ );
-	}
+	return p->second.at( n );
 };
 
 const sdl2::SDLColor& Palette::bg() const

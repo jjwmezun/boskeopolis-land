@@ -4,7 +4,6 @@
 #include <ctime>
 #include "input.hpp"
 #include "main.hpp"
-#include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_math.hpp"
 #include "render.hpp"
@@ -56,12 +55,11 @@ namespace Main
 				SAVING_ALLOWED = false;
 			}
 		}
-
 		srand ( time( NULL ) );
 		setResourcePath();
 		Input::init();
 		Render::init( args );
-		Audio::init();
+		Audio::init( args );
 		firstState();
 	};
 
@@ -111,7 +109,7 @@ namespace Main
 				}
 			}
 
-			if ( SDL_GetTicks() - ticks_ >= fpsMilliseconds() )
+			if ( ( int )( SDL_GetTicks() ) - ticks_ >= fpsMilliseconds() )
 			{
 				if ( Input::pressed( Input::Action::ESCAPE ) )
 				{
@@ -210,11 +208,6 @@ namespace Main
 		states_.back()->changePalette();
 		states_.back()->backFromPop();
 		state_pop_ = false;
-	};
-
-	void tempMessage( std::string message, Palette&& palette, Text::FontColor text_color, std::string music, bool loop_music )
-	{
-		pushState( std::unique_ptr<GameState> ( new MessageState( message, true, nullptr, false, palette, text_color, music, loop_music ) ) );
 	};
 
 	int fpsMilliseconds()

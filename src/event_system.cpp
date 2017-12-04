@@ -182,22 +182,9 @@ void EventSystem::testWinLoseOrQuit( Level& level )
 void EventSystem::failEvent( Level& level )
 {
 	Inventory::fail();
-
 	Main::pushState
 	(
-		std::unique_ptr<GameState>
-		(
-			new MessageState
-			(
-				"Failure...",
-				false,
-				std::unique_ptr<GameState> ( new OverworldState() ),
-				false,
-				{ "Stop Red", 2 },
-				Text::FontColor::DARK_GRAY,
-				"low"
-			)
-		)
+		std::make_unique<MessageState> ( "Failure...", MessageState::Type::CHANGE, Palette( "Stop Red", 2 ), std::make_unique<OverworldState> (), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "low", true, false )
 	);
 	playDeathSoundIfNotAlreadyPlaying();
 };
@@ -205,29 +192,16 @@ void EventSystem::failEvent( Level& level )
 void EventSystem::winEvent( Level& level )
 {	
 	Inventory::win();
-	
 	Main::pushState
 	(
-		std::unique_ptr<GameState>
-		(
-			new MessageState
-			(
-				"¡Success!",
-				false,
-				std::unique_ptr<GameState> ( new OverworldState() ),
-				false,
-				{ "Go Green", 2 },
-				Text::FontColor::DARK_GRAY,
-				"success"
-			)
-		)
+		std::make_unique<MessageState> ( "¡Success!", MessageState::Type::CHANGE, Palette( "Go Green", 2 ), std::make_unique<OverworldState> (), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "success", true, true )
 	);
 };
 
 void EventSystem::quitEvent( Level& level )
 {	
 	Inventory::quit();
-	Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+	Main::changeState( std::make_unique<OverworldState> () );
 };
 
 bool EventSystem::waterShouldMove() const

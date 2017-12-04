@@ -21,16 +21,7 @@ namespace mezun
 	T randomListItem( const std::vector<T>& list )
 	{
 		const int r = mezun::randInt( list.size() - 1, 0 );
-		
-		try
-		{
-			return list.at( r );
-		}
-		catch ( std::out_of_range )
-		{
-			std::cout<<"SIZE: "<<list.size()<<std::endl;
-			std::cout<<"R: "<<r<<std::endl;
-		}
+		return list.at( r );
 	};
 	
 	template<typename K, typename V>

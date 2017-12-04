@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 namespace Audio
 {
@@ -20,7 +21,7 @@ namespace Audio
 		BOUNCE = 13
 	};
 
-	void init();
+	void init( const std::vector<std::string>& args );
 	void close();
 
 	void changeSong( const std::string& song_name, bool loop = true, int quietness = 4 );

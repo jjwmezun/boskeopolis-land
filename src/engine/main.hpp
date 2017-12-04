@@ -16,8 +16,6 @@ namespace Main
 	void pushState( std::unique_ptr<GameState> state );
 	void popState();
 
-	void tempMessage( std::string message, Palette&& palette, Text::FontColor text_color, std::string music = "", bool loop_music = true );
-
 	bool nextFrame( int interval = 8, int duration = 1 );
 	int frame();
 	bool nextStateFrame( int interval = 8, int duration = 1 );

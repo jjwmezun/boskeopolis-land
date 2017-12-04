@@ -3,46 +3,25 @@
 #include "input.hpp"
 #include "message_state.hpp"
 #include "render.hpp"
-
-std::unique_ptr<MessageState> MessageState::error
-(
-	std::string message,
-	bool pop,
-	std::unique_ptr<GameState> next_state,
-	bool push
-)
-{
-	return std::unique_ptr<MessageState>
-	(
-		new MessageState
-		(
-			message,
-			pop,
-			std::move( next_state ),
-			push,
-			{ "Grayscale", 6 },
-			Text::FontColor::WHITE
-		)
-	);
-};
+#include "text_component_flashing.hpp"
 
 MessageState::MessageState
 (
 	std::string message,
-	bool pop,
+	Type type,
+	Palette palette,
 	std::unique_ptr<GameState> next_state,
-	bool push,
-	const Palette& palette,
-	Text::FontColor font_color,
+	Text::FontColor text_color,
+	Text::FontColor shadow_color,
 	std::string music,
-	bool loop_music
+	bool loop_music,
+	bool flash
 )
 :
 	GameState( StateID::MESSAGE_STATE, palette ),
-	message_ ( message, 0, 0, font_color, Text::FontAlign::CENTER, Text::FontColor::__NULL, true ),
+	message_ ( message, 0, 0, text_color, Text::FontAlign::CENTER, shadow_color, true, Text::DEFAULT_LINE_LENGTH, -1, 1, ( flash ) ? std::make_unique<TextComponentFlashing> ( 4 ) : nullptr ),
 	next_state_ ( std::move( next_state ) ),
-	pop_ ( pop ),
-	push_ ( push )
+	type_ ( type )
 {
 	Audio::turnOffSong();
 	Audio::changeSong( music, loop_music );
@@ -52,19 +31,23 @@ MessageState::~MessageState() {};
 
 void MessageState::stateUpdate()
 {
+	message_.update();
+
 	if ( Input::pressedMain() )
 	{
-		if ( pop_ )
+		switch ( type_ )
 		{
-			Main::popState();
-		}
-		else if ( push_ )
-		{
-			Main::pushState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
-		}
-		else
-		{
-			Main::changeState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
+			case ( Type::CHANGE ):
+				Main::changeState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
+			break;
+
+			case ( Type::POP ):
+				Main::popState();
+			break;
+
+			case ( Type::PUSH ):
+				Main::pushState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
+			break;
 		}
 	}
 };

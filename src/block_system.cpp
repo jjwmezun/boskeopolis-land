@@ -9,15 +9,8 @@
 
 BlockSystem::BlockSystem( const Map& lvmap )
 {
-	try
-	{
-		tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
-		current_tileset_ = lvmap.tileset();
-	}
-	catch ( const mezun::CantLoadTileset& e )
-	{
-		throw e;
-	}
+	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
+	current_tileset_ = lvmap.tileset();
 };
 
 void BlockSystem::update( EventSystem& events )
