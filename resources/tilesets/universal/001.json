@@ -22,8 +22,8 @@
 			},
 			"conditions":
 			[
-				{ "type": "collide_any" },
-				{ "type": "hero" }
+				{ "type": "hero" },
+				{ "type": "collide_any" }
 			]
 		},
 		{
@@ -33,8 +33,8 @@
 			},
 			"conditions":
 			[
-				{ "type": "collide_any" },
-				{ "type": "hero" }
+				{ "type": "hero" },
+				{ "type": "collide_any" }
 			]
 		},
 		{
@@ -44,8 +44,8 @@
 			},
 			"conditions":
 			[
-				{ "type": "collide_any" },
-				{ "type": "rival" }
+				{ "type": "rival" },
+				{ "type": "collide_any" }
 			]
 		}
 	]

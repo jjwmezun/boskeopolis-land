@@ -35,32 +35,7 @@ MazePlayerSprite::~MazePlayerSprite() {};
 
 void MazePlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( Input::held( Input::Action::MOVE_LEFT ) )
-	{
-		moveLeft();
-	}
-	else if ( Input::held( Input::Action::MOVE_RIGHT ) )
-	{
-		moveRight();
-	}
-	else
-	{
-		stopX();
-	}
-
-	if ( Input::held( Input::Action::MOVE_UP ) )
-	{
-		moveUp();
-	}
-	else if ( Input::held( Input::Action::MOVE_DOWN ) )
-	{
-		moveDown();
-	}
-	else
-	{
-		stopY();
-	}
-
+	inputMoveAllDirections();
 	invincibilityFlicker( health );
 	camera.adjustCart( *this, lvmap );
 };

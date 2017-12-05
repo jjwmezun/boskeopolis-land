@@ -4,12 +4,12 @@
 		"type": "animated",
 		"frames":
 		[
-			{ "x": 0, "y": 6 },
-			{ "x": 1, "y": 6 },
-			{ "x": 2, "y": 6 },
-			{ "x": 3, "y": 6 },
-			{ "x": 4, "y": 6 },
-			{ "x": 5, "y": 6 }
+			{ "x": 0, "y": 3 },
+			{ "x": 1, "y": 3 },
+			{ "x": 2, "y": 3 },
+			{ "x": 3, "y": 3 },
+			{ "x": 4, "y": 3 },
+			{ "x": 5, "y": 3 }
 		]
 	},
 	"behavior":
@@ -18,7 +18,7 @@
 			"component":
 			{
 				"type": "money",
-				"amount": 500
+				"amount": 100
 			},
 			"conditions":
 			[
@@ -34,17 +34,6 @@
 			"conditions":
 			[
 				{ "type": "hero" },
-				{ "type": "collide_any" }
-			]
-		},
-		{
-			"component":
-			{
-				"type": "single"
-			},
-			"conditions":
-			[
-				{ "type": "rival" },
 				{ "type": "collide_any" }
 			]
 		}

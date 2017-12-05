@@ -290,14 +290,7 @@ void Sprite::boundaries( Camera& camera, Map& lvmap )
 	}
 	else
 	{
-		if ( hit_box_.x < Unit::PixelsToSubPixels( camera.x() ) )
-		{
-			collideStopXLeft( abs ( camera.x() - hit_box_.x ) );
-		}
-		if ( hit_box_.x + hit_box_.w > Unit::PixelsToSubPixels( camera.right() ) )
-		{
-			collideStopXRight( ( hit_box_.x + hit_box_.w ) - Unit::PixelsToSubPixels( camera.right() ) );
-		}
+		containCameraX( camera );
 	}
 
 	if ( hit_box_.y < -hit_box_.h )
@@ -911,5 +904,58 @@ void Sprite::moveInDirectionX()
 		case ( Direction::Horizontal::__NULL ):
 			stopX();
 		break;
+	}
+};
+
+void Sprite::inputMoveAllDirections()
+{
+	if ( Input::held( Input::Action::MOVE_LEFT ) )
+	{
+		moveLeft();
+	}
+	else if ( Input::held( Input::Action::MOVE_RIGHT ) )
+	{
+		moveRight();
+	}
+	else
+	{
+		stopX();
+	}
+
+	if ( Input::held( Input::Action::MOVE_UP ) )
+	{
+		moveUp();
+	}
+	else if ( Input::held( Input::Action::MOVE_DOWN ) )
+	{
+		moveDown();
+	}
+	else
+	{
+		stopY();
+	}
+};
+
+void Sprite::containCameraX( const Camera& camera )
+{
+	if ( hit_box_.x < Unit::PixelsToSubPixels( camera.x() ) )
+	{
+		collideStopXLeft( abs ( camera.x() - hit_box_.x ) );
+	}
+	else if ( hit_box_.x + hit_box_.w > Unit::PixelsToSubPixels( camera.right() ) )
+	{
+		collideStopXRight( ( hit_box_.x + hit_box_.w ) - Unit::PixelsToSubPixels( camera.right() ) );
+	}
+};
+
+void Sprite::containCameraY( const Camera& camera )
+{
+	if ( hit_box_.y < Unit::PixelsToSubPixels( camera.y() ) )
+	{
+		collideStopYTop( abs ( camera.y() - hit_box_.y ) );
+	}
+	else if ( hit_box_.y + hit_box_.h > Unit::PixelsToSubPixels( camera.bottom() ) )
+	{
+		collideStopYBottom( ( hit_box_.y + hit_box_.w ) - Unit::PixelsToSubPixels( camera.bottom() ) );
 	}
 };

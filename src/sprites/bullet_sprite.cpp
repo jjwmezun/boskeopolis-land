@@ -5,9 +5,9 @@
 #include "bullet_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-BulletSprite::BulletSprite( int x, int y, Direction::Simple dir, bool heros )
+BulletSprite::BulletSprite( int x, int y, Direction::Simple dir, bool heros, SpriteGraphics* gfx )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", ( ( heros ) ? 5 : 0 ), 117, false, false, 0, false, 0, 0, 1, 1 ), x, y, 4, 4, bulletType( heros ), 1600, 3000, 0, 0, Direction::simpleToHorizontal( dir ), Direction::simpleToVertical( dir ), nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, false, true ),
+	Sprite( std::unique_ptr<SpriteGraphics> ( setGFX( gfx, heros ) ), x, y, 4, 4, bulletType( heros ), 1600, 3000, 0, 0, Direction::simpleToHorizontal( dir ), Direction::simpleToVertical( dir ), nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, false, true ),
 	heros_ ( heros )
 {};
 
@@ -78,4 +78,16 @@ void BulletSprite::customInteract( Collision& my_collision, Collision& their_col
 std::vector<Sprite::SpriteType> BulletSprite::bulletType( bool heros )
 {
 	return ( heros ) ? std::vector<Sprite::SpriteType> ( { SpriteType::HEROS_BULLET } ) : std::vector<Sprite::SpriteType> ( {} );
+};
+
+SpriteGraphics* BulletSprite::setGFX( SpriteGraphics* gfx, bool heros )
+{
+	if ( gfx == nullptr )
+	{
+		return new SpriteGraphics( "sprites/cowpoker.png", ( ( heros ) ? 5 : 0 ), 117, false, false, 0, false, 0, 0, 1, 1 );
+	}
+	else
+	{
+		return gfx;
+	}
 };

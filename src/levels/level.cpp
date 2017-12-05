@@ -1,5 +1,6 @@
 #include "audio.hpp"
-#include "map_layer_constellation.hpp"
+#include "map_layer_constellation_moving.hpp"
+#include "map_layer_constellation_scrolling.hpp"
 #include "map_layer_image.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
@@ -362,7 +363,7 @@ Level Level::getLevel( int id )
 								int bgh = 128;
 								double bgxscroll = 1;
 								double bgyscroll = 1;
-
+								int bgxspeed  = 0;
 
 								if ( bg.HasMember( "width" ) && bg[ "width" ].IsInt() )
 								{
@@ -399,7 +400,6 @@ Level Level::getLevel( int id )
 									int bgframes  = 1;
 									int bgxrepeat = 255;
 									int bgyrepeat = 255;
-									int bgxspeed  = 0;
 									int bgyspeed  = 0;
 									int bganimspeed = 1;
 									bool bganimflip = false;
@@ -494,14 +494,35 @@ Level Level::getLevel( int id )
 								}
 								else if ( mezun::areStringsEqual( bgtype, "constellation" ) )
 								{
-									group.emplace_back
-									(
-										std::make_unique<MapLayerConstellation>
+									double move_speed = 0.0;
+
+									if ( bg.HasMember( "version" ) && bg[ "version" ].IsString() && strcmp( bg[ "version" ].GetString(), "moving" ) == 0 )
+									{
+										if ( bg.HasMember( "move_speed" ) && bg[ "move_speed" ].IsFloat() )
+										{
+											move_speed = bg[ "move_speed" ].GetFloat();
+										}
+										group.emplace_back
 										(
-											bgw,
-											bgh
-										)
-									);
+											std::make_unique<MapLayerConstellationMoving>
+											(
+												bgw,
+												bgh,
+												move_speed
+											)
+										);
+									}
+									else
+									{
+										group.emplace_back
+										(
+											std::make_unique<MapLayerConstellationScrolling>
+											(
+												bgw,
+												bgh
+											)
+										);
+									}
 								}
 								else if ( mezun::areStringsEqual( bgtype, "shade" ) )
 								{

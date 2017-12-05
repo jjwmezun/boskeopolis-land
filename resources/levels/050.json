@@ -1,0 +1,26 @@
+{
+	"name": "Shmup Up",
+	
+	"maps":
+	[
+		{
+			"slug": "space-2",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"version": "moving",
+					"width": 400,
+					"height": 192,
+					"move_speed": 5.0
+				}
+			]
+		}
+	],
+
+	"entrance_x": 4,
+	"entrance_y": 7,
+	
+	"gem_challenge": 15000,
+	"time_challenge": 50
+}

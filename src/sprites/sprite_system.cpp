@@ -52,6 +52,7 @@
 #include "platform_sprite.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_graphics.hpp"
+#include "player_spaceship_sprite.hpp"
 #include "player_sprite_fluttering.hpp"
 #include "pollo_sprite.hpp"
 #include "pollo_del_aire_sprite.hpp"
@@ -400,9 +401,9 @@ void SpriteSystem::spawnEnemyBullet( int x, int y, Direction::Simple direction )
 	sprites_.emplace_back( new BulletSprite( x, y, direction, false ) );
 };
 
-void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction )
+void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction, SpriteGraphics* gfx )
 {
-	sprites_.emplace_back( new BulletSprite( x, y, direction, true ) );
+	sprites_.emplace_back( new BulletSprite( x, y, direction, true, gfx ) );
 };
 
 void SpriteSystem::spritesFromMap( const Map& lvmap )
@@ -499,7 +500,7 @@ void SpriteSystem::reset( const Level& level )
 			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::SPACESHIP ):
-			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
+			hero_.reset( new PlayerSpaceshipSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::CAR ):
 			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
