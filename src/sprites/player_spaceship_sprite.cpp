@@ -1,4 +1,6 @@
 #include "camera.hpp"
+#include "collision.hpp"
+#include "health.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
 #include "player_spaceship_sprite.hpp"
@@ -16,7 +18,11 @@ void PlayerSpaceshipSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 {
 	inputMoveAllDirections();
 	camera.moveRight( 1 );
-	hit_box_.x += 1000;
+	if ( !blocksJustRight( blocks ) )
+	{
+		hit_box_.x += 1000;
+	}
+	//camera.adjust( *this, lvmap );
 
 	if ( hit_box_.x < Unit::PixelsToSubPixels( camera.x() ) )
 	{
@@ -31,11 +37,16 @@ void PlayerSpaceshipSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 
 	if ( Input::pressed( Input::Action::RUN ) && Inventory::funds() >= 100 )
 	{
-		sprites.spawnHeroBullet( rightPixels(), centerYPixels(), Direction::Simple::RIGHT, new SpriteGraphics( "tilesets/shmup.png", 32, 16, false, false, 0, false, 0, 0, 1, 1 ) );
+		sprites.spawnHeroShmupBullet( rightPixels(), centerYPixels() );
 		Inventory::loseFunds( 100 );
 	}
 	invincibilityFlicker( health );
 };
 
 void PlayerSpaceshipSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
-{};
+{
+	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
+	{
+		health.hurt();
+	}
+};

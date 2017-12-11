@@ -83,12 +83,12 @@ int Block::location() const
 	return location_;
 };
 
-void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
 {
 	if ( hasType() && areNearbyWithAllBlocks( sprite, level.currentMap() ) )
 	{
 		Collision collision = sprite.testCollision( *this );
-		type_->interact( collision, sprite, *this, level, events, camera, health, blocks );
+		type_->interact( collision, sprite, *this, level, events, camera, health, blocks, sprites );
 	}
 };
 

@@ -9,7 +9,7 @@ class BlockComponentConveyor : public BlockComponent
 	public:
 		BlockComponentConveyor( Direction::Horizontal direction, int speed = 1000 );
 		~BlockComponentConveyor();
-		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 
 	private:
 		int x_effect_;

@@ -6,6 +6,7 @@ class Health;
 class Map;
 class Sprite;
 class SpriteGraphics;
+class SpriteSystem;
 
 #include "block_type.hpp"
 #include "object.hpp"
@@ -24,7 +25,7 @@ class Block : public Object
 
 		void render( const Camera& camera, bool priority = false ) const;
 		void renderAnyPriority( const Camera& camera ) const;
-		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks );
+		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
 		int location() const;
 		int typeID() const;
 		bool hasType() const;

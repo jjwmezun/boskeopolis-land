@@ -10,6 +10,7 @@ class GameState;
 class Level;
 class Sprite;
 class SpriteGraphics;
+class SpriteSystem;
 
 #include "block_component.hpp"
 #include <map>
@@ -35,7 +36,7 @@ class BlockType
 		const BlockType&& operator= ( BlockType&& ) = delete;
 
 		void update( EventSystem& events );
-		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks );
+		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
 		void render( const Camera& camera, const Block& block, bool priority ) const;
 		void renderAnyPriority( const Camera& camera, const Block& block ) const;
 

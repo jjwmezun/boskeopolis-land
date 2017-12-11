@@ -48,7 +48,9 @@ class SpriteSystem
 		void spawnSnowball( int x, int y, Direction::Horizontal direction );
 		void spawnWaterdrop( int x, int y );
 		void spawnEnemyBullet( int x, int y, Direction::Simple direction );
-		void spawnHeroBullet( int x, int y, Direction::Simple direction, SpriteGraphics* gfx = nullptr );
+		void spawnHeroBullet( int x, int y, Direction::Simple direction );
+		void spawnShmupBullet( int x, int y, double dy, double dx );
+		void spawnHeroShmupBullet( int x, int y );
 		Sprite& hero();
 		const Sprite& hero() const;
 		void interactWithMap( Map& lvmap, Camera& camera, Health& health );

@@ -9,7 +9,7 @@ BlockComponentDiamond::BlockComponentDiamond() {};
 
 BlockComponentDiamond::~BlockComponentDiamond() {};
 
-void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
 {
 	if ( Inventory::haveDiamond() )
 	{

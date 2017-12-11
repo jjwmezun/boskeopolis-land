@@ -67,6 +67,8 @@
 #include "rotating_block_sprite.hpp"
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
+#include "shmup_bullet_sprite.hpp"
+#include "shmup_hero_bullet_sprite.hpp"
 #include "shooter_player_sprite.hpp"
 #include "shroud_sprite.hpp"
 #include "sillyfish_sprite.hpp"
@@ -401,9 +403,19 @@ void SpriteSystem::spawnEnemyBullet( int x, int y, Direction::Simple direction )
 	sprites_.emplace_back( new BulletSprite( x, y, direction, false ) );
 };
 
-void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction, SpriteGraphics* gfx )
+void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction )
 {
-	sprites_.emplace_back( new BulletSprite( x, y, direction, true, gfx ) );
+	sprites_.emplace_back( new BulletSprite( x, y, direction, true ) );
+};
+
+void SpriteSystem::spawnShmupBullet( int x, int y, double dy, double dx )
+{
+	sprites_.emplace_back( new ShmupBulletSprite( x, y, dy, dx ) );
+};
+
+void SpriteSystem::spawnHeroShmupBullet( int x, int y )
+{
+	sprites_.emplace_back( new ShmupHeroBulletSprite( x, y ) );
 };
 
 void SpriteSystem::spritesFromMap( const Map& lvmap )
@@ -446,7 +458,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
 				)
 				{
-					blocks.interact( *sprites_.at( i ), level, events, camera, health );
+					blocks.interact( *sprites_.at( i ), level, events, camera, health, *this );
 				}
 			}
 		}
@@ -454,7 +466,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 	if ( hero_->interactsWithBlocks() )
 	{
-		blocks.interact( *hero_, level, events, camera, health );
+		blocks.interact( *hero_, level, events, camera, health, *this );
 	}
 };
 

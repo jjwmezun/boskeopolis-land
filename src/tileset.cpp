@@ -25,6 +25,7 @@
 #include "block_component_message.hpp"
 #include "block_component_money.hpp"
 #include "block_component_move_water.hpp"
+#include "block_component_shmup_bullet.hpp"
 #include "block_component_single_use.hpp"
 #include "block_component_sink.hpp"
 #include "block_component_sludge_water.hpp"
@@ -419,6 +420,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentLightSwitch> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "shmup_bullet" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentShmupBullet> () );
 					}
 
 				}

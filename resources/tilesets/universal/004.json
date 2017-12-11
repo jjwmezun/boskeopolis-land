@@ -14,9 +14,9 @@
 			},
 			"conditions":
 			[
-				{ "type": "collide_any" },
 				{ "type": "hero" },
-				{ "type": "not_full_health" }
+				{ "type": "not_full_health" },
+				{ "type": "collide_any" }
 			]
 		},
 		{
@@ -27,9 +27,9 @@
 			},
 			"conditions":
 			[
-				{ "type": "collide_any" },
 				{ "type": "hero" },
-				{ "type": "not_full_health" }
+				{ "type": "not_full_health" },
+				{ "type": "collide_any" }
 			]
 		}
 	]

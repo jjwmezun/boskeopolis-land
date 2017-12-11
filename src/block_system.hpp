@@ -7,6 +7,7 @@ class Health;
 class GameState;
 class Level;
 class Sprite;
+class SpriteSystem;
 
 #include "block.hpp"
 #include "tileset.hpp"
@@ -20,7 +21,7 @@ class BlockSystem
 
 		void update( EventSystem& events );
 		void render( const Camera& camera, bool priority = false );
-		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health );
+		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites );
 
 		void changeTileset( std::string new_tileset );
 		void blocksFromMap( const Map& lvmap, const Camera& camera );

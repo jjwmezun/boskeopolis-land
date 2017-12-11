@@ -8,7 +8,7 @@ class BlockComponentWarp : public BlockComponent
 	public:
 		BlockComponentWarp();
 		~BlockComponentWarp();
-		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks ) override;
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 };
 
 #endif // BLOCK_COMPONENT_WARP_H

@@ -4,7 +4,7 @@
 BlockComponentSwitchOff::BlockComponentSwitchOff() {};
 BlockComponentSwitchOff::~BlockComponentSwitchOff() {};
 
-void BlockComponentSwitchOff::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentSwitchOff::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
 {
 	events.switch_ = false;
 };

@@ -821,6 +821,16 @@ bool Sprite::blocksJustLeft( const BlockSystem& blocks ) const
 	return blocks.blocksInTheWay( justLeft(), BlockComponent::Type::SOLID );
 };
 
+sdl2::SDLRect Sprite::justRight() const
+{
+	return { rightSubPixels() + 16000, hit_box_.y + 3000, 16000, hit_box_.h - 6000 };
+};
+
+bool Sprite::blocksJustRight( const BlockSystem& blocks ) const
+{
+	return blocks.blocksInTheWay( justRight(), BlockComponent::Type::SOLID );
+};
+
 void Sprite::drawHitBox( const Camera& camera )
 {
 	auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );

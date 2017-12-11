@@ -1,8 +1,11 @@
 #include "event_system.hpp"
-#include "input.hpp"
 #include "level_state.hpp"
+#include "sprite.hpp"
+#include "sprite_system.hpp"
 #include "stop_on_off_goal.hpp"
 #include "unit.hpp"
+
+#include <iostream>
 
 static constexpr int GO_TIME = Unit::FPS * 4;
 static constexpr int BLINK_TIME = 8;
@@ -55,10 +58,16 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 		break;
 	}
 
+	std::cout<<abs( sprites.hero().vx_ )<<std::endl;
 	switch ( events.switch_ )
 	{
 		case ( false ):
-			if ( Input::movingCharacter() )
+			if
+			(
+				abs( sprites.hero().vx_ ) > 500 ||
+				abs( sprites.hero().acceleration_x_ > 0 ) ||
+				abs( sprites.hero().acceleration_y_ > 0 )
+			)
 			{
 				events.fail();
 			}

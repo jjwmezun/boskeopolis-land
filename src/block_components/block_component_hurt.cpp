@@ -5,7 +5,7 @@ BlockComponentHurt::BlockComponentHurt() {};
 
 BlockComponentHurt::~BlockComponentHurt() {};
 
-void BlockComponentHurt::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks )
+void BlockComponentHurt::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
 {
 	health.hurt();
 };
