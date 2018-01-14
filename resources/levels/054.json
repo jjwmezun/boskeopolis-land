@@ -1,0 +1,15 @@
+{
+	"name": "Highway & Hellwater",
+	"maps":
+	[
+		{
+			"slug": "streets"
+		}
+	],
+
+	"entrance_x": 49,
+	"entrance_y": 49,
+
+	"gem_challenge": 15000,
+	"time_challenge": 50
+}

@@ -3,15 +3,6 @@
 	{
 		"type": "sprite",
 		"x": 4,
-		"y": 2
-	},
-	"behavior":
-	[
-		{
-			"component":
-			{
-				"type": "solid"
-			}
-		}
-	]
+		"y": 1
+	}
 }

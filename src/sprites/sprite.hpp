@@ -25,15 +25,11 @@ class SpriteSystem;
 #include "grounded_sprite_movement.hpp"
 #include "fluttering_sprite_movement.hpp"
 #include "swimming_sprite_movement.hpp"
+#include "angled_sprite_movement.hpp"
 
 class Sprite : public Object
 {
 	public:
-		friend class SpriteMovement;
-		friend class GroundedSpriteMovement;
-		friend class FlutteringSpriteMovement;
-		friend class SwimmingSpriteMovement;
-
 		enum class SpriteType
 		{
 			NOTYPE,
@@ -313,6 +309,7 @@ class Sprite : public Object
 		static const GroundedSpriteMovement grounded_;
 		static const FlutteringSpriteMovement fluttering_;
 		static const SwimmingSpriteMovement swimming_;
+		static const AngledSpriteMovement angled_;
 
 		sdl2::SDLRect justAbove() const;
 		bool blocksJustAbove( const BlockSystem& blocks ) const;

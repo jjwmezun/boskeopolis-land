@@ -30,6 +30,8 @@
 #include "block_component_sink.hpp"
 #include "block_component_sludge_water.hpp"
 #include "block_component_solid.hpp"
+#include "block_component_spawn_icicle.hpp"
+#include "block_component_spawn_olive.hpp"
 #include "block_component_steep_slope_left.hpp"
 #include "block_component_steep_slope_right.hpp"
 #include "block_component_swimmable.hpp"
@@ -425,7 +427,14 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentShmupBullet> () );
 					}
-
+					else if ( mezun::areStringsEqual( comp_type, "spawn_olive" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSpawnOlive> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "spawn_icicle" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSpawnIcicle> () );
+					}
 				}
 
 				std::vector<std::unique_ptr<BlockCondition>> this_condition;

@@ -10,6 +10,7 @@
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
 #include "cannon_sprite.hpp"
+#include "carrot_sprite.hpp"
 #include "change_layer_sprite.hpp"
 #include "choque_sprite.hpp"
 #include "cloud_block_sprite.hpp"
@@ -36,6 +37,7 @@
 #include "hydrant_sprite.hpp"
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
+#include "icicle_sprite.hpp"
 #include <iostream>
 #include "level.hpp"
 #include "lifesaver_sprite.hpp"
@@ -47,9 +49,12 @@
 #include "maze_chaser_sprite.hpp"
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
+#include "olive_spawner_sprite.hpp"
+#include "olive_sprite.hpp"
 #include "penguin_sprite.hpp"
 #include "pipe_eel_sprite.hpp"
 #include "platform_sprite.hpp"
+#include "player_car_sprite.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_graphics.hpp"
 #include "player_spaceship_sprite.hpp"
@@ -62,6 +67,7 @@
 #include "pufferbee_sprite.hpp"
 #include "quadrapus_sprite.hpp"
 #include "racer_sprite.hpp"
+#include "rising_ice_cube_sprite.hpp"
 #include "rolling_ball_sprite.hpp"
 #include "rope_sprite.hpp"
 #include "rotating_block_sprite.hpp"
@@ -367,6 +373,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 87 ):
 			return std::unique_ptr<Sprite> ( ChangeLayerSprite::makeBackgroundDuo( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 88 ):
+			return std::unique_ptr<Sprite> ( new RisingIceCubeSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 89 ):
+			return std::unique_ptr<Sprite> ( new CarrotSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 90 ):
+			return std::unique_ptr<Sprite> ( new OliveSpawnerSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -416,6 +431,16 @@ void SpriteSystem::spawnShmupBullet( int x, int y, double dy, double dx )
 void SpriteSystem::spawnHeroShmupBullet( int x, int y )
 {
 	sprites_.emplace_back( new ShmupHeroBulletSprite( x, y ) );
+};
+
+void SpriteSystem::spawnOlive( int x, int y )
+{
+	sprites_.emplace_back( new OliveSprite( x, y ) );
+};
+
+void SpriteSystem::spawnIcicle( int x, int y )
+{
+	sprites_.emplace_back( new IcicleSprite( x, y ) );
 };
 
 void SpriteSystem::spritesFromMap( const Map& lvmap )
@@ -515,7 +540,7 @@ void SpriteSystem::reset( const Level& level )
 			hero_.reset( new PlayerSpaceshipSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::CAR ):
-			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
+			hero_.reset( new PlayerCarSprite( level.entranceX(), level.entranceY() ) );
 		break;
 	}
 

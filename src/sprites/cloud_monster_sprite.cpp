@@ -6,7 +6,7 @@
 
 CloudMonsterSprite::CloudMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cloud_monster.png", 0, 0, false, false, 0, true ), x, y, 80, 48, {}, 60, 4200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cloud_monster.png", 0, 0, false, false, 0, true ), x, y, 80, 48, {}, 60, 4200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	lightning_ ( lightningPosition(), y + 31 )
 {
 };

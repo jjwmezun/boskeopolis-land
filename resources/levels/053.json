@@ -1,0 +1,15 @@
+{
+	"name": "Ice Box Rock",
+	"maps":
+	[
+		{
+			"slug": "snow-5"
+		}
+	],
+
+	"entrance_x": 4,
+	"entrance_y": 1,
+
+	"gem_challenge": 15000,
+	"time_challenge": 50
+}

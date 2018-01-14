@@ -15,6 +15,7 @@ const SpriteMovement Sprite::floating_ {};
 const GroundedSpriteMovement Sprite::grounded_ {};
 const FlutteringSpriteMovement Sprite::fluttering_ {};
 const SwimmingSpriteMovement Sprite::swimming_ {};
+const AngledSpriteMovement Sprite::angled_ {};
 
 double Sprite::traction_ = TRACTION_NORMAL;
 int Sprite::resistance_x_ = RESISTANCE_X_NORMAL;
@@ -720,6 +721,10 @@ const SpriteMovement* Sprite::getMovement( SpriteMovement::Type type )
 
 		case ( SpriteMovement::Type::SWIMMING ):
 			return &swimming_;
+		break;
+
+		case ( SpriteMovement::Type::ANGLED ):
+			return &angled_;
 		break;
 	}
 };

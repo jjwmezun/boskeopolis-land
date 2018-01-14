@@ -161,9 +161,9 @@ const Collision SpriteMovement::testCollision( const Sprite& me, const Object& t
 	)
 	{	
 		if ( me.centerXSubPixels() < them.centerXSubPixels() )
-			overlap_x_right = them.rightSubPixels() - me.leftSubPixels();
+			overlap_x_right = me.rightSubPixels() - them.leftSubPixels();
 		else if ( me.centerXSubPixels() > them.centerXSubPixels() )
-			overlap_x_left = me.rightSubPixels() - them.leftSubPixels();
+			overlap_x_left = them.rightSubPixels() - me.leftSubPixels();
 	}
 
 	return Collision( overlap_x_left, overlap_x_right, overlap_y_top, overlap_y_bottom );

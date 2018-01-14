@@ -14,7 +14,8 @@ class SpriteMovement
 			GROUNDED,
 			FLOATING,
 			FLUTTERING,
-			SWIMMING
+			SWIMMING,
+			ANGLED
 		};
 
 		SpriteMovement( Type type = Type::FLOATING );
@@ -28,8 +29,8 @@ class SpriteMovement
 		virtual void jump( Sprite& sprite ) const;
 		virtual void bounce( Sprite& sprite, int amount ) const;
 		virtual void position( Sprite& sprite ) const;
-		void collideStopXLeft( Sprite& sprite, int overlap ) const;
-		void collideStopXRight( Sprite& sprite, int overlap ) const;
+		virtual void collideStopXLeft( Sprite& sprite, int overlap ) const;
+		virtual void collideStopXRight( Sprite& sprite, int overlap ) const;
 		virtual void collideStopYBottom( Sprite& sprite, int overlap ) const;
 		virtual void collideStopYTop( Sprite& sprite, int overlap ) const;
 		virtual void collideStopAny( Sprite& sprite, const Collision& collision ) const;

@@ -1,7 +1,5 @@
 #pragma once
 
-class Block;
-
 #include "sprite.hpp"
 
 class TallTombstoneSprite : public Sprite
