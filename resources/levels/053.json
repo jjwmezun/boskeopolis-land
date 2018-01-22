@@ -3,12 +3,25 @@
 	"maps":
 	[
 		{
-			"slug": "snow-5"
+			"slug": "snow-5",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "fridge-bars.png",
+					"width": 400,
+					"height": 32,
+					"x_scroll": 0,
+					"y_scroll": 1.0,
+					"y_offset": 320,
+					"y_repeat": false
+				}
+			]
 		}
 	],
 
-	"entrance_x": 4,
-	"entrance_y": 1,
+	"entrance_x": 79,
+	"entrance_y": 19,
 
 	"gem_challenge": 15000,
 	"time_challenge": 50

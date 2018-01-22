@@ -4,6 +4,7 @@
 #include <iostream>
 
 static constexpr int MAX_SPEED = 3000;
+static constexpr int HEIGHT_LIMIT = Unit::BlocksToSubPixels( 8 );
 
 RisingIceCubeSprite::RisingIceCubeSprite( int x, int y )
 :
@@ -31,9 +32,9 @@ void RisingIceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 		break;
 
 		case ( State::RISING ):
-			if ( vy_ <= -MAX_SPEED )
+			if ( hit_box_.y <= original_hit_box_.y - HEIGHT_LIMIT )
 			{
-				stopY();
+				fullStopY();
 				state_ = State::FALLING;
 			}
 			else
@@ -80,12 +81,13 @@ void RisingIceCubeSprite::customInteract( Collision& my_collision, Collision& th
 		else if ( their_collision.collideTop() )
 		{
 			collideStopAny( my_collision );
+			//state_ = State::RISING;
 
 			if ( them.vy_ < 0 )
 			{
 				them.collideStopAny( their_collision );
 			}
-			state_ = State::PAUSED;
+			state_ = State::RISING;
 		}
 	}
 };
