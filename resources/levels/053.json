@@ -3,20 +3,7 @@
 	"maps":
 	[
 		{
-			"slug": "snow-5",
-			"backgrounds":
-			[
-				{
-					"type": "image",
-					"img": "fridge-bars.png",
-					"width": 400,
-					"height": 32,
-					"x_scroll": 0,
-					"y_scroll": 1.0,
-					"y_offset": 320,
-					"y_repeat": false
-				}
-			]
+			"slug": "snow-5"
 		}
 	],
 

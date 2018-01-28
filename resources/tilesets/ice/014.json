@@ -1,0 +1,19 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 4,
+		"y": 2,
+		"priority": true,
+		"flip_x": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		}
+	]
+}

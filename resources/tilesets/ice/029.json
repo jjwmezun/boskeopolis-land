@@ -1,0 +1,10 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 5,
+		"y": 3,
+		"priority": true,
+		"flip_x": true
+	}
+}
