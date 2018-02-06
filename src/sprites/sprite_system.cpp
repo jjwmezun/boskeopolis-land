@@ -35,6 +35,7 @@
 #include "heat_beam_sprite.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hydrant_sprite.hpp"
+#include "ice_box_rock_solid_hack_sprite.hpp"
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
 #include "icicle_sprite.hpp"
@@ -381,6 +382,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 90 ):
 			return std::unique_ptr<Sprite> ( new OliveSpawnerSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 91 ):
+			return std::unique_ptr<Sprite> ( new IceBoxRockSolidHackSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

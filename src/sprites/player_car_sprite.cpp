@@ -15,7 +15,7 @@
 
 PlayerCarSprite::PlayerCarSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_car.png" ), x, y, 22, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::ANGLED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_car.png" ), x, y, 22, 32, { SpriteType::HERO }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::ANGLED, CameraMovement::PERMANENT ),
 	angle_ ( 0.0 ),
 	speed_ ( 0.0 ),
 	acceleration_ ( 0.0 )
@@ -54,22 +54,22 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	if ( speed_ < MIN_SPEED ) speed_ = MIN_SPEED;
 
 	const double radians = ( M_PI / 180.0 ) * ( angle_ - 90.0 );
-	const int temp_x = hit_box_.x;
-	const int temp_y = hit_box_.y;
 	hit_box_.x += ( int )( speed_ * std::cos( radians ) );
 	hit_box_.y += ( int )( speed_ * std::sin( radians ) );
-	
-	if ( blocks.blocksInTheWay( hit_box_, BlockComponent::Type::SOLID ) )
+
+	if ( collide_top_ || collide_bottom_ || collide_left_ || collide_right_ )
 	{
-		hit_box_.x = temp_x;
-		hit_box_.y = temp_y;
-		speed_ = -speed_;
+		hit_box_.x = x_prev_prev_;
+		hit_box_.y = y_prev_prev_;
+		speed_ = -speed_ / 2;
 	}
-	
+
 	speed_ /= 1.005;
 
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
+	x_prev_prev_ = x_prev_;
+	y_prev_prev_ = y_prev_;
 };
 
 void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

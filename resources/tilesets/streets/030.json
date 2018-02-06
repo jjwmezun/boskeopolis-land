@@ -1,0 +1,35 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"off":
+		{
+			"type": "sprite",
+			"x": 2,
+			"y": 0,
+			"rotation": 90
+		},
+		"on":
+		{
+			"type": "sprite",
+			"x": 2,
+			"y": 0,
+			"rotation": 90,
+			"priority": true
+		}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

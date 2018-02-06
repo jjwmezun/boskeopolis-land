@@ -2,18 +2,16 @@
 
 #include "sprite.hpp"
 
-class PlayerCarSprite : public Sprite
+class IceBoxRockSolidHackSprite : public Sprite
 {
 	public:
-		PlayerCarSprite( int x, int y );
-		~PlayerCarSprite();
+		IceBoxRockSolidHackSprite( int x, int y );
+		~IceBoxRockSolidHackSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
+		void render( Camera& camera, bool priority = false ) override;
 
 	private:
-		double angle_;
-		double speed_;
-		double acceleration_;
-		int x_prev_prev_;
-		int y_prev_prev_;
+		static constexpr int NUMBER_OF_EXTRA_SOLIDS = 7;
+		const sdl2::SDLRect extra_solids_ [ NUMBER_OF_EXTRA_SOLIDS ];
 };

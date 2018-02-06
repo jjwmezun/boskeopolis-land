@@ -16,6 +16,7 @@ namespace Render
 	void quit();
 
 	void renderRect( const sdl2::SDLRect& box, int color = 1, int alpha = 255 );
+	void renderRectCamera( sdl2::SDLRect& box, const Camera& camera, int color, int alpha );
 	void renderObject
 	(
 		const std::string& sheet,

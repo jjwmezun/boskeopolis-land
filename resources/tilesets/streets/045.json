@@ -1,0 +1,21 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"off":
+		{
+			"type": "sprite",
+			"x": 2,
+			"y": 0,
+			"rotation": 270
+		},
+		"on":
+		{
+			"type": "sprite",
+			"x": 2,
+			"y": 0,
+			"rotation": 270,
+			"priority": true
+		}
+	}
+}

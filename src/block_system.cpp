@@ -105,18 +105,21 @@ void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& l
 	}
 };
 
+static bool testBlockInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type, const Block& b )
+{
+	return
+		b.hasComponentType( type )    &&
+		b.rightSubPixels() > r.x      &&
+		b.leftSubPixels() < r.right() &&
+		b.topSubPixels() < r.bottom() &&
+		b.bottomSubPixels() > r.y;
+};
+
 bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& r, BlockComponent::Type type ) const
 {
 	for ( auto& b : blocks_ )
 	{
-		if
-		(
-			b.hasComponentType( type )    &&
-			b.rightSubPixels() > r.x      &&
-			b.leftSubPixels() < r.right() &&
-			b.topSubPixels() < r.bottom() &&
-			b.bottomSubPixels() > r.y
-		)
+		if ( testBlockInTheWay( r, type, b ) )
 		{
 			return true;
 		}

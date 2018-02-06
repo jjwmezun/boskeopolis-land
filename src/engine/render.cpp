@@ -500,6 +500,12 @@ namespace Render
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
 		SDL_RenderFillRect( renderer_, &box_relative );
 	};
+	
+	void renderRectCamera( sdl2::SDLRect& box, const Camera& camera, int color, int alpha )
+	{
+		cameraAdjust( box, &camera );
+		renderRect( box, color, alpha );
+	};
 
 	void newPalette( Palette palette )
 	{
