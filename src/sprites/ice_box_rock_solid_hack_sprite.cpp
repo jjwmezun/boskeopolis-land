@@ -12,7 +12,7 @@ IceBoxRockSolidHackSprite::IceBoxRockSolidHackSprite( int x, int y )
 	({
 		Unit::PixelsToSubPixels( { x + 240, y - 32,  32, 128 } ),
 		Unit::PixelsToSubPixels( { x + 80,  y + 96, 320,  32 } ),
-		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
+		Unit::PixelsToSubPixels( { x, 32, 32, 160 } ),
 		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
 		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
 		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),

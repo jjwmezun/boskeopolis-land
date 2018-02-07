@@ -15,7 +15,7 @@
 
 PlayerCarSprite::PlayerCarSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_car.png" ), x, y, 22, 32, { SpriteType::HERO }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::ANGLED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_car.png", 0, 0, false, false, 0, false, 0, -5, 0, 10 ), x, y, 22, 22, { SpriteType::HERO }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::ANGLED, CameraMovement::PERMANENT ),
 	angle_ ( 0.0 ),
 	speed_ ( 0.0 ),
 	acceleration_ ( 0.0 )
