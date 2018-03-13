@@ -216,7 +216,7 @@ bool GroundedSpriteMovement::onGroundPadding( Sprite& sprite ) const
 	return sprite.on_ground_ || ( sprite.on_ground_padding_.on() && !sprite.on_ground_padding_.done() );
 };
 
-const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const Object& them ) const
+const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const sdl2::SDLRect& them ) const
 {
 	int overlap_x_left   = 0;
 	int overlap_x_right  = 0;
@@ -227,29 +227,29 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const O
 	// Keep character from catching on walls moving vertically.
 	if
 	(
-		me.leftSubPixels() + left_right_padding < them.rightSubPixels() &&
-		me.rightSubPixels() - left_right_padding > them.leftSubPixels() &&
-		me.topSubPixels() < them.bottomSubPixels() &&
-		me.bottomSubPixels() > them.topSubPixels()
+		me.leftSubPixels() + left_right_padding < them.right() &&
+		me.rightSubPixels() - left_right_padding > them.left() &&
+		me.topSubPixels() < them.bottom() &&
+		me.bottomSubPixels() > them.top()
 	)
 	{
-		if ( me.centerYSubPixels() > them.centerYSubPixels() )
-			overlap_y_top = them.bottomSubPixels() - me.topSubPixels();
+		if ( me.centerYSubPixels() > them.centerHeight() )
+			overlap_y_top = them.bottom() - me.topSubPixels();
 		else
-			overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
+			overlap_y_bottom = me.bottomSubPixels() - them.top();
 	}
 
 	// But allow character to stand on the tip-ends o' blocks.
 	if
 	(
-		me.leftSubPixels() + 1000 < them.rightSubPixels() &&
-		me.rightSubPixels() - 3000 > them.leftSubPixels() &&
-		me.topSubPixels() < them.bottomSubPixels() &&
-		me.bottomSubPixels() > them.topSubPixels()
+		me.leftSubPixels() + 1000 < them.right() &&
+		me.rightSubPixels() - 3000 > them.left() &&
+		me.topSubPixels() < them.bottom() &&
+		me.bottomSubPixels() > them.top()
 	)
 	{
-		if ( me.centerYSubPixels() < them.centerYSubPixels() )
-			overlap_y_bottom = me.bottomSubPixels() - them.topSubPixels();
+		if ( me.centerYSubPixels() < them.centerHeight() )
+			overlap_y_bottom = me.bottomSubPixels() - them.top();
 	}
 
 	// 8000 padding needed to keep Autumn from thunking sideways into ceiling while hitting it from below.
@@ -261,16 +261,16 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const O
 
 	if
 	(
-		me.leftSubPixels() < them.rightSubPixels() &&
-		me.rightSubPixels() > them.leftSubPixels() &&
-		me.topSubPixels() + top_padding < them.bottomSubPixels() &&
-		me.bottomSubPixels() - 4000 > them.topSubPixels() // Keep character from getting caught on sides o' floor blocks.
+		me.leftSubPixels() < them.right() &&
+		me.rightSubPixels() > them.left() &&
+		me.topSubPixels() + top_padding < them.bottom() &&
+		me.bottomSubPixels() - 4000 > them.top() // Keep character from getting caught on sides o' floor blocks.
 	)
 	{
-		if ( me.centerXSubPixels() < them.centerXSubPixels() )
-			overlap_x_right = me.rightSubPixels() - them.leftSubPixels();
-		else if ( me.centerXSubPixels() > them.centerXSubPixels() )
-			overlap_x_left = them.rightSubPixels() - me.leftSubPixels();
+		if ( me.centerXSubPixels() < them.centerWidth() )
+			overlap_x_right = me.rightSubPixels() - them.left();
+		else if ( me.centerXSubPixels() > them.centerWidth() )
+			overlap_x_left = them.right() - me.leftSubPixels();
 	}
 
 	return Collision( overlap_x_left, overlap_x_right, overlap_y_top, overlap_y_bottom );

@@ -15,7 +15,7 @@ class GroundedSpriteMovement : public SpriteMovement
 		void collideStopYBottom( Sprite& sprite, int overlap ) const;
 		void collideStopYTop( Sprite& sprite, int overlap ) const;
 		void collideStopAny( Sprite& sprite, const Collision& collision ) const;
-		const Collision testCollision( const Sprite& me, const Object& them ) const;
+		const Collision testCollision( const Sprite& me, const sdl2::SDLRect& them ) const;
 
 	protected:
 		GroundedSpriteMovement( Type type );

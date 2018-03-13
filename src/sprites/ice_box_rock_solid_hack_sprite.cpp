@@ -4,6 +4,7 @@
 #include "sprite_graphics.hpp"
 
 #include <iostream>
+#include "main.hpp"
 
 IceBoxRockSolidHackSprite::IceBoxRockSolidHackSprite( int x, int y )
 :
@@ -12,7 +13,7 @@ IceBoxRockSolidHackSprite::IceBoxRockSolidHackSprite( int x, int y )
 	({
 		Unit::PixelsToSubPixels( { x + 240, y - 32,  32, 128 } ),
 		Unit::PixelsToSubPixels( { x + 80,  y + 96, 320,  32 } ),
-		Unit::PixelsToSubPixels( { x, 32, 32, 160 } ),
+		Unit::PixelsToSubPixels( { x, y + 32, 32, 160 } ),
 		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
 		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
 		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
@@ -27,12 +28,18 @@ void IceBoxRockSolidHackSprite::customUpdate( Camera& camera, Map& lvmap, EventS
 
 void IceBoxRockSolidHackSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	if ( their_collision.collideAny() )
 	{
 		them.collideStopAny( their_collision );
 	}
 	for ( int i = 0; i < NUMBER_OF_EXTRA_SOLIDS; ++i )
 	{
+		const auto collision = them.movement_->testCollision( them, extra_solids_[ i ] );
+		them.collideStopAny( collision );
+		if ( them.hasType( SpriteType::ENEMY ) )
+		{
+			std::cout<<them.hit_box_.y<<std::endl;
+		}
 	}
 };
 

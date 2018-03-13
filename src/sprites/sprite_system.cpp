@@ -95,6 +95,9 @@
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 
+#include <iostream>
+#include "main.hpp"
+
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
 	hero_ (),

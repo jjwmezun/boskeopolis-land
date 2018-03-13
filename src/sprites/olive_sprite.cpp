@@ -1,6 +1,7 @@
 #include "olive_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include <iostream>
+#include "main.hpp"
 
 OliveSprite::OliveSprite( int x, int y )
 :

@@ -689,7 +689,7 @@ const Collision Sprite::testCollision( const Object& them ) const
 {
 	if ( movement_ != nullptr )
 	{
-		return movement_->testCollision( *this, them );
+		return movement_->testCollision( *this, them.hit_box_ );
 	}	
 };
 
