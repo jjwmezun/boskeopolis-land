@@ -19,11 +19,11 @@ int WindyGoal::windStrength( Direction::Horizontal direction, unsigned int wind_
 	switch( direction )
 	{
 		case ( Direction::Horizontal::RIGHT ):
-			return abs( wind_strength ); // Positive
+			return wind_strength; // Positive
 		break;
 			
 		case ( Direction::Horizontal::LEFT ):
-			return -abs( wind_strength ); // Negative
+			return -wind_strength; // Negative
 		break;
 			
 		case ( Direction::Horizontal::__NULL ):
