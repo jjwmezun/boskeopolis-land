@@ -59,7 +59,7 @@ void MapLayerWater::render( const Camera& camera )
 {
 	if ( dest_.y < camera.bottom() )
 	{
-		Render::renderObject( texture_, src_, dest_ );
+		Render::renderObject( texture_, src_, dest_, false, false, 0.0, alpha_, nullptr );
 		Render::renderRect( body_, color_, alpha_ );
 	}
 };

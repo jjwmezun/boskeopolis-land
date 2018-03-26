@@ -3,9 +3,9 @@
 #include <iostream>
 #include "main.hpp"
 
-OliveSprite::OliveSprite( int x, int y )
+OliveSprite::OliveSprite( int x, int y, Direction::Horizontal start_dir )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/olive.png" ), x, y, 16, 16, { SpriteType::ENEMY }, 1000, 1000, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, true, true )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/olive.png" ), x, y, 16, 16, { SpriteType::ENEMY }, 1000, 1000, 0, 0, start_dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, true, true )
 {};
 
 OliveSprite::~OliveSprite() {};

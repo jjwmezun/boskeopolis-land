@@ -225,6 +225,10 @@ Map Map::mapFromPath
 					{
 						bg_color = prop.value.GetInt();
 					}
+					else if ( prop.value.IsString() )
+					{
+						bg_color = std::stoi( prop.value.GetString() );
+					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "music" ) )
@@ -240,6 +244,11 @@ Map Map::mapFromPath
 					if ( prop.value.IsBool() )
 					{
 						slippery = prop.value.GetBool();
+					}
+					else if ( prop.value.IsString() )
+					{
+						std::cout<<prop.value.GetString()<<std::endl;
+						slippery = ( ( strcmp( prop.value.GetString(), "true" ) == 0 ) ? true : false );
 					}
 				}
 

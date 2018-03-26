@@ -11,13 +11,13 @@ IceBoxRockSolidHackSprite::IceBoxRockSolidHackSprite( int x, int y )
 	Sprite( nullptr, x, y, 12 * 16, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	extra_solids_
 	({
-		Unit::PixelsToSubPixels( { x + 240, y - 32,  32, 128 } ),
+		Unit::PixelsToSubPixels( { x + 240, y + 32,  64, 64 } ),
 		Unit::PixelsToSubPixels( { x + 80,  y + 96, 320,  32 } ),
 		Unit::PixelsToSubPixels( { x, y + 32, 32, 160 } ),
-		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
-		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
-		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } ),
-		Unit::PixelsToSubPixels( { 0, 0, 0, 0 } )
+		Unit::PixelsToSubPixels( { x, y + 192, 240, 16 } ),
+		Unit::PixelsToSubPixels( { x + 272, y + 192, 224, 16 } ),
+		Unit::PixelsToSubPixels( { x + 448, y + 128, 32, 64 } ),
+		Unit::PixelsToSubPixels( { x + 352, y, 128, 32 } )
 	})
 {};
 
@@ -36,21 +36,13 @@ void IceBoxRockSolidHackSprite::customInteract( Collision& my_collision, Collisi
 	{
 		const auto collision = them.movement_->testCollision( them, extra_solids_[ i ] );
 		them.collideStopAny( collision );
-		if ( them.hasType( SpriteType::ENEMY ) )
+		if ( them.hasType( SpriteType::ENEMY ) && them.hit_box_.y > 128000 )
 		{
-			std::cout<<them.hit_box_.y<<std::endl;
+			//std::cout<<them.hit_box_.y<<std::endl;
 		}
 	}
 };
 
 void IceBoxRockSolidHackSprite::render( Camera& camera, bool priority )
 {
-	auto main_box = Unit::SubPixelsToPixels( hit_box_ );
-	Render::renderRectCamera( main_box, camera, 6, 128 );
-
-	for ( int i = 0; i < NUMBER_OF_EXTRA_SOLIDS; ++i )
-	{
-		auto i_box = Unit::SubPixelsToPixels( extra_solids_[ i ] );
-		Render::renderRectCamera( i_box, camera, 6, 128 );
-	}
 };

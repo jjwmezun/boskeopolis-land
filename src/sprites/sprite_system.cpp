@@ -384,10 +384,13 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new CarrotSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 90 ):
-			return std::unique_ptr<Sprite> ( new OliveSpawnerSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new OliveSpawnerSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 91 ):
 			return std::unique_ptr<Sprite> ( new IceBoxRockSolidHackSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 92 ):
+			return std::unique_ptr<Sprite> ( new OliveSpawnerSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
@@ -440,9 +443,9 @@ void SpriteSystem::spawnHeroShmupBullet( int x, int y )
 	sprites_.emplace_back( new ShmupHeroBulletSprite( x, y ) );
 };
 
-void SpriteSystem::spawnOlive( int x, int y )
+void SpriteSystem::spawnOlive( int x, int y, Direction::Horizontal start_dir )
 {
-	sprites_.emplace_back( new OliveSprite( x, y ) );
+	sprites_.emplace_back( new OliveSprite( x, y, start_dir ) );
 };
 
 void SpriteSystem::spawnIcicle( int x, int y )
@@ -658,7 +661,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 	{
 		if ( sprites_.at( i ) != nullptr )
 		{
-			if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) || sprites_.at( i )->cameraMovement() == Sprite::CameraMovement::PERMANENT )
+			if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) || sprites_[ i ]->cameraMovement() == Sprite::CameraMovement::PERMANENT )
 			{
 				if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
 				{
@@ -670,7 +673,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 				{
 					if ( sprites_[ j ] != nullptr )
 						if ( i != j )
-							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) )
+							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) || sprites_[ j ]->cameraMovement() == Sprite::CameraMovement::PERMANENT )
 								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
 									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health, events );
 				}

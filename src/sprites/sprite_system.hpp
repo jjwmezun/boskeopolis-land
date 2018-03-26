@@ -51,7 +51,7 @@ class SpriteSystem
 		void spawnHeroBullet( int x, int y, Direction::Simple direction );
 		void spawnShmupBullet( int x, int y, double dy, double dx );
 		void spawnHeroShmupBullet( int x, int y );
-		void spawnOlive( int x, int y );
+		void spawnOlive( int x, int y, Direction::Horizontal start_dir );
 		void spawnIcicle( int x, int y );
 		Sprite& hero();
 		const Sprite& hero() const;

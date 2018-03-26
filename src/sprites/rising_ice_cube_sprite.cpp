@@ -8,7 +8,7 @@ static constexpr int HEIGHT_LIMIT = Unit::BlocksToSubPixels( 8 );
 
 RisingIceCubeSprite::RisingIceCubeSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/icecube.png" ), x, y, 32, 32, {}, 100, 5000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/icecube.png" ), x, y, 32, 32, {}, 100, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	state_ ( State::RISING )
 {
 	vy_ = 0;
@@ -59,7 +59,7 @@ void RisingIceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 			}
 			else
 			{
-				vy_ /= traction_;
+				//vy_ /= traction_;
 			}
 		break;
 	}

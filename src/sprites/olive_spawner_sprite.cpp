@@ -3,9 +3,9 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
-OliveSpawnerSprite::OliveSpawnerSprite( int x, int y )
+OliveSpawnerSprite::OliveSpawnerSprite( int x, int y, Direction::Horizontal start_dir )
 :
-	Sprite( nullptr, x, y, 16, 16, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, false )
+	Sprite( nullptr, x, y, 16, 16, { SpriteType::ENEMY }, 0, 0, 0, 0, start_dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, false )
 {};
 
 OliveSpawnerSprite::~OliveSpawnerSprite() {};
@@ -14,7 +14,7 @@ void OliveSpawnerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 {
 	if ( Main::stateFrame() % 160 == 0 )
 	{
-		sprites.spawnOlive( xPixels() + 4, yPixels() );
+		sprites.spawnOlive( xPixels() + 4, yPixels(), direction_x_ );
 	}
 };
 
