@@ -69,6 +69,29 @@ Map Map::mapFromPath
 		std::vector<std::vector<int>> fg_block_layers = {};
 		std::vector<std::vector<int>> fade_fg_block_layers = {};
 
+		std::string palette = "Grayscale";
+		int bg_color = 1;
+		std::string tileset = "urban";
+		bool slippery = false;
+		int camera_limit_top = -1;
+		int camera_limit_bottom = -1;
+		int camera_limit_left = -1;
+		int camera_limit_right = -1;
+		int scroll_loop_width = 0;
+		SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
+		Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
+		Camera::YPriority camera_y_priority = Camera::YPriority::__NULL;
+		bool blocks_work_offscreen = false;
+		bool loop_sides = false;
+		int water_effect_height = 0;
+		std::string water_effect_type = "NORMAL";
+		int wind_strength = 0;
+		bool moon_gravity = false;
+		bool show_on_off = false;
+		int lightning_flash_color = 0;
+		std::string music = "";
+		bool warp_on_fall = false;
+
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
 
@@ -173,138 +196,158 @@ Map Map::mapFromPath
 	//=============================================		
 		// Defaults
 
-		std::string palette = "Grayscale";
-		int bg_color = 1;
-		std::string tileset = "urban";
-		bool slippery = false;
-		int camera_limit_top = -1;
-		int camera_limit_bottom = -1;
-		int camera_limit_left = -1;
-		int camera_limit_right = -1;
-		int scroll_loop_width = 0;
-		SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
-		Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
-		Camera::YPriority camera_y_priority = Camera::YPriority::__NULL;
-		bool blocks_work_offscreen = false;
-		bool loop_sides = false;
-		int water_effect_height = 0;
-		std::string water_effect_type = "NORMAL";
-		int wind_strength = 0;
-		bool moon_gravity = false;
-		bool show_on_off = false;
-		int lightning_flash_color = 0;
-		std::string music = "";
-		bool warp_on_fall = false;
-
 		// Test for features.
 		if ( map_data.HasMember( "properties" ) )
 		{
-			for ( auto& prop : map_data[ "properties" ].GetObject() )
+			std::unordered_map< std::string, rapidjson::GenericValue< rapidjson::UTF8<> > > properties;
+			auto& prop_group = map_data[ "properties" ];
+
+			// For newer versions o' Tiled, where properties is an array o' objects:
+			// {
+			//  	"name": %name%,
+			//  	"type": %type%,
+			//  	"value": %value%
+			// }
+			if ( prop_group.IsArray() )
 			{
-				std::string name = prop.name.GetString();
+				for ( auto& prop_obj : prop_group.GetArray() )
+				{
+					auto prop = prop_obj.GetObject();
+					std::string name = "";
+					rapidjson::GenericValue< rapidjson::UTF8<> > value;
+
+					for ( auto& prop_item : prop )
+					{
+						auto prop_key = prop_item.name.GetString();
+						if ( mezun::areStringsEqual( prop_key, "name" ) )
+						{
+							name = prop_item.value.GetString();
+						}
+						else if ( mezun::areStringsEqual( prop_key, "value" ) )
+						{
+							value = prop_item.value;
+						}
+					}
+
+					properties[ name ] = value;
+				}
+			}
+			// For older versions o' Tiled, where properties is an object of %name%: %value% pairs.
+			else if ( prop_group.IsObject() )
+			{
+				for ( auto& prop : prop_group.GetObject() )
+				{
+					properties[ prop.name.GetString() ] = prop.value;
+				}
+			}
+
+			for ( auto& pair : properties )
+			{
+				const std::string& name = pair.first;
+				auto& value = pair.second;
 
 				if ( mezun::areStringsEqual( name, "tileset" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						tileset = prop.value.GetString();
+						tileset = value.GetString();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "palette" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						palette = prop.value.GetString();
+						palette = value.GetString();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "bg_color" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						bg_color = prop.value.GetInt();
+						bg_color = value.GetInt();
 					}
-					else if ( prop.value.IsString() )
+					else if ( value.IsString() )
 					{
-						bg_color = std::stoi( prop.value.GetString() );
+						bg_color = std::stoi( value.GetString() );
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "music" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						music = prop.value.GetString();
+						music = value.GetString();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "slippery" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( value.IsBool() )
 					{
-						slippery = prop.value.GetBool();
+						slippery = value.GetBool();
 					}
-					else if ( prop.value.IsString() )
+					else if ( value.IsString() )
 					{
-						std::cout<<prop.value.GetString()<<std::endl;
-						slippery = ( ( strcmp( prop.value.GetString(), "true" ) == 0 ) ? true : false );
+						std::cout<<value.GetString()<<std::endl;
+						slippery = ( ( strcmp( value.GetString(), "true" ) == 0 ) ? true : false );
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "camera_limit_top" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						camera_limit_top = prop.value.GetInt();
+						camera_limit_top = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "camera_limit_bottom" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						camera_limit_bottom = prop.value.GetInt();
+						camera_limit_bottom = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "camera_limit_left" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						camera_limit_left = prop.value.GetInt();
+						camera_limit_left = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "camera_limit_right" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						camera_limit_right = prop.value.GetInt();
+						camera_limit_right = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "scroll_loop_width" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						scroll_loop_width = prop.value.GetInt();
+						scroll_loop_width = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "hero_type" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						hero_type = SpriteSystem::heroType( prop.value.GetString() );
+						hero_type = SpriteSystem::heroType( value.GetString() );
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "camera_priority_x" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						const std::string camera_priority_x_string = prop.value.GetString();
+						const std::string camera_priority_x_string = value.GetString();
 						if ( camera_priority_x_string.compare( "CENTER" ) == 0 )
 						{
 							camera_x_priority = Camera::XPriority::CENTER;
@@ -314,9 +357,9 @@ Map Map::mapFromPath
 
 				else if ( mezun::areStringsEqual( name, "camera_priority_y" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						const std::string camera_priority_y_string = prop.value.GetString();
+						const std::string camera_priority_y_string = value.GetString();
 						if ( camera_priority_y_string.compare( "CENTER" ) == 0 )
 						{
 							camera_y_priority = Camera::YPriority::CENTER;
@@ -326,73 +369,73 @@ Map Map::mapFromPath
 
 				else if ( mezun::areStringsEqual( name, "blocks_work_offscreen" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( value.IsBool() )
 					{
-						blocks_work_offscreen = prop.value.GetBool();
+						blocks_work_offscreen = value.GetBool();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "loop_sides" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( value.IsBool() )
 					{
-						loop_sides = prop.value.GetBool();
+						loop_sides = value.GetBool();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "water_effect_height" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						water_effect_height = prop.value.GetInt();
+						water_effect_height = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "water_effect_type" ) )
 				{
-					if ( prop.value.IsString() )
+					if ( value.IsString() )
 					{
-						water_effect_type = prop.value.GetString();
+						water_effect_type = value.GetString();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "wind_strength" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						wind_strength = prop.value.GetInt();
+						wind_strength = value.GetInt();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "moon_gravity" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( value.IsBool() )
 					{
-						moon_gravity = prop.value.GetBool();
+						moon_gravity = value.GetBool();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "show_on_off" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( value.IsBool() )
 					{
-						show_on_off = prop.value.GetBool();
+						show_on_off = value.GetBool();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "warp_on_fall" ) )
 				{
-					if ( prop.value.IsBool() )
+					if ( value.IsBool() )
 					{
-						warp_on_fall = prop.value.GetBool();
+						warp_on_fall = value.GetBool();
 					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "lightning_flash_color" ) )
 				{
-					if ( prop.value.IsInt() )
+					if ( value.IsInt() )
 					{
-						lightning_flash_color = prop.value.GetInt();
+						lightning_flash_color = value.GetInt();
 						assert( lightning_flash_color >= 0 || lightning_flash_color < Palette::COLOR_LIMIT );
 					}
 				}
