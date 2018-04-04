@@ -4,7 +4,30 @@
 	"maps":
 	[
 		{
-			"slug": "beach-1"
+			"slug": "beach-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "beach-sunset-sky.png",
+					"width": 591,
+					"height": 256,
+					"y_scroll": 0.0,
+					"x_speed": -50,
+					"y_offset": -112,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "beach-sunset-sea.png",
+					"width": 500,
+					"height": 144,
+					"y_scroll": 0.0,
+					"x_speed": -200,
+					"y_offset": 128,
+					"y_repeat": false
+				}
+			]
 		}
 	],
 
