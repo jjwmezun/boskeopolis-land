@@ -28,17 +28,20 @@ void IceBoxRockSolidHackSprite::customUpdate( Camera& camera, Map& lvmap, EventS
 
 void IceBoxRockSolidHackSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( their_collision.collideAny() )
+	if ( !them.hasType( SpriteType::ICICLE ) )
 	{
-		them.collideStopAny( their_collision );
-	}
-	for ( int i = 0; i < NUMBER_OF_EXTRA_SOLIDS; ++i )
-	{
-		const auto collision = them.movement_->testCollision( them, extra_solids_[ i ] );
-		them.collideStopAny( collision );
-		if ( them.hasType( SpriteType::ENEMY ) && them.hit_box_.y > 128000 )
+		if ( their_collision.collideAny() )
 		{
-			//std::cout<<them.hit_box_.y<<std::endl;
+			them.collideStopAny( their_collision );
+		}
+		for ( int i = 0; i < NUMBER_OF_EXTRA_SOLIDS; ++i )
+		{
+			const auto collision = them.movement_->testCollision( them, extra_solids_[ i ] );
+			them.collideStopAny( collision );
+			if ( them.hasType( SpriteType::ENEMY ) && them.hit_box_.y > 128000 )
+			{
+				//std::cout<<them.hit_box_.y<<std::endl;
+			}
 		}
 	}
 };

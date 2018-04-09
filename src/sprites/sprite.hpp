@@ -40,7 +40,8 @@ class Sprite : public Object
 			CLOUD_PLATFORM,
 			LIGHTNING,
 			HEROS_BULLET,
-			DONT_RESPAWN
+			DONT_RESPAWN,
+			ICICLE
 		};
 
 		enum class CameraMovement

@@ -82,6 +82,7 @@
 #include "snowball_sprite.hpp"
 #include "snowboulder_sprite.hpp"
 #include "snowman_sprite.hpp"
+#include "spawn_icicle_sprite.hpp"
 #include "spike_egg_sprite.hpp"
 #include "spiky_fruit_sprite.hpp"
 #include "spring_sprite.hpp"
@@ -391,6 +392,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 92 ):
 			return std::unique_ptr<Sprite> ( new OliveSpawnerSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 93 ):
+			return std::unique_ptr<Sprite> ( new SpawnIcicleSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
