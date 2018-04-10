@@ -5,7 +5,7 @@
 
 OliveSprite::OliveSprite( int x, int y, Direction::Horizontal start_dir )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/olive.png" ), x, y, 16, 16, { SpriteType::ENEMY }, 1000, 1000, 0, 0, start_dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, true, true )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/olive.png", 0, 0, false, false, 0.0, false, -2, -2, 4, 4 ), x, y, 12, 12, { SpriteType::ENEMY }, 1000, 1000, 0, 0, start_dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, true, true )
 {};
 
 OliveSprite::~OliveSprite() {};

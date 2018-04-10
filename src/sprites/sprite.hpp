@@ -121,6 +121,7 @@ class Sprite : public Object
 		void update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		virtual void render( Camera& camera, bool priority = false );
 		void drawHitBox( const Camera& camera );
+		void renderWithHitbox( Camera& camera, bool priority );
 		void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
 
 		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) = 0;

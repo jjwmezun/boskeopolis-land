@@ -4,12 +4,12 @@
 #include <iostream>
 
 static constexpr int MAX_SPEED = 3000;
-static constexpr int HEIGHT_LIMIT = Unit::BlocksToSubPixels( 8 );
 
-RisingIceCubeSprite::RisingIceCubeSprite( int x, int y )
+RisingIceCubeSprite::RisingIceCubeSprite( int x, int y, int height_limit )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/icecube.png" ), x, y, 32, 32, {}, 100, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
-	state_ ( State::RISING )
+	state_ ( State::RISING ),
+	height_limit_ ( Unit::BlocksToSubPixels( height_limit ) )
 {
 	vy_ = 0;
 };
@@ -32,7 +32,7 @@ void RisingIceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 		break;
 
 		case ( State::RISING ):
-			if ( hit_box_.y <= original_hit_box_.y - HEIGHT_LIMIT )
+			if ( hit_box_.y <= original_hit_box_.y - height_limit_ )
 			{
 				fullStopY();
 				state_ = State::FALLING;

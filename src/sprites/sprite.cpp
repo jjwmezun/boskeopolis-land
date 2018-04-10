@@ -160,6 +160,18 @@ void Sprite::render( Camera& camera, bool priority )
 	}
 };
 
+void Sprite::renderWithHitbox( Camera& camera, bool priority )
+{
+	if ( graphics_ != nullptr )
+	{
+		if ( priority == graphics_->priority_ )
+		{
+			drawHitBox( camera );
+		}
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	}
+};
+
 void Sprite::moveLeft()
 {
 	if ( movement_ != nullptr )

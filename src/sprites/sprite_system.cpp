@@ -396,6 +396,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 93 ):
 			return std::unique_ptr<Sprite> ( new SpawnIcicleSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 94 ):
+			return std::unique_ptr<Sprite> ( new RisingIceCubeSprite( x, y, 4 ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;

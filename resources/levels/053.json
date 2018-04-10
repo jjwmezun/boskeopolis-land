@@ -26,9 +26,11 @@
 		}
 	],
 
-	"entrance_x": 123,
+	"entrance_x": 124,
 	"entrance_y": 7,
 
-	"gem_challenge": 15000,
-	"time_challenge": 50
+	"gem_challenge": 11100,
+	"time_challenge": 22,
+
+	"message": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o' her jump a bit o'a boost."
 }
