@@ -6,17 +6,12 @@
 static constexpr int LEFT_EDGE = Unit::BlocksToSubPixels( 126 );
 static constexpr int TOP_EDGE = Unit::BlocksToSubPixels( 13 );
 static constexpr int TOP_LEFT_EDGE = Unit::BlocksToSubPixels( 112 );
-
-int spawnIcicleMakeLimit()
-{
-	return mezun::randInt( 120, 80 );
-};
+static constexpr int SPAWN_SPEED = 100;
 
 SpawnIcicleSprite::SpawnIcicleSprite( int x, int y )
 :
 	Sprite( nullptr, x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	timer_ ( 0 ),
-	limit_ ( spawnIcicleMakeLimit() ),
 	go_ ( false )
 {};
 
@@ -26,11 +21,10 @@ void SpawnIcicleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 {
 	if ( go_ )
 	{
-		if ( timer_ == limit_ )
+		if ( timer_ == SPAWN_SPEED )
 		{
 			sprites.spawnIcicle( xPixels(), yPixels() );
 			timer_ = 0;
-			limit_ = spawnIcicleMakeLimit();
 		}
 		else
 		{

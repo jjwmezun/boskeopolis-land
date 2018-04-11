@@ -10,7 +10,7 @@ static constexpr int LEFT_EDGE = Unit::BlocksToSubPixels( 126 );
 
 IcicleSprite::IcicleSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/icicle.png", 0, 0, false, false, 0.0, false, -2, -2, 4, 4 ), x, y + 2, 28, 8, { SpriteType::ICICLE }, 250, 1500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/icicle.png", 0, 0, false, false, 0.0, false, -2, -2, 4, 4 ), x, y + 2, 28, 8, { SpriteType::ICICLE }, 250, 1200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false )
 {};
 
 IcicleSprite::~IcicleSprite() {};
