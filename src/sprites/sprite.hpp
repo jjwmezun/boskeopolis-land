@@ -41,7 +41,8 @@ class Sprite : public Object
 			LIGHTNING,
 			HEROS_BULLET,
 			DONT_RESPAWN,
-			ICICLE
+			ICICLE,
+			TREASURE_CHEST
 		};
 
 		enum class CameraMovement

@@ -334,6 +334,8 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 
 	input_->update();
 
+	//std::cout<<"Y: "<<graphics_->y_adjustment_<<std::endl;
+	//std::cout<<"H: "<<graphics_->h_adjustment_<<std::endl;
 };
 
 void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

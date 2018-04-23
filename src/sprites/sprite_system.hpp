@@ -53,6 +53,7 @@ class SpriteSystem
 		void spawnHeroShmupBullet( int x, int y );
 		void spawnOlive( int x, int y, Direction::Horizontal start_dir );
 		void spawnIcicle( int x, int y );
+		void heroOpenTreasureChest();
 		Sprite& hero();
 		const Sprite& hero() const;
 		void interactWithMap( Map& lvmap, Camera& camera, Health& health );

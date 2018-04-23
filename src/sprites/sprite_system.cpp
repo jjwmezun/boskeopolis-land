@@ -58,6 +58,7 @@
 #include "player_car_sprite.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_graphics.hpp"
+#include "player_open_chest_sprite.hpp"
 #include "player_spaceship_sprite.hpp"
 #include "player_sprite_fluttering.hpp"
 #include "pollo_sprite.hpp"
@@ -92,6 +93,7 @@
 #include "sprite_system.hpp"
 #include "stronger_cowpoker_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
+#include "treasure_chest_sprite.hpp"
 #include "underground_subway_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
@@ -399,6 +401,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 94 ):
 			return std::unique_ptr<Sprite> ( new RisingIceCubeSprite( x, y, 4 ) );
 		break;
+		case ( SPRITE_INDEX_START + 95 ):
+			return std::unique_ptr<Sprite> ( new TreasureChestSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -458,6 +463,12 @@ void SpriteSystem::spawnOlive( int x, int y, Direction::Horizontal start_dir )
 void SpriteSystem::spawnIcicle( int x, int y )
 {
 	sprites_.emplace_back( new IcicleSprite( x, y ) );
+};
+
+void SpriteSystem::heroOpenTreasureChest()
+{
+	//std::cout<<( int )( hero_->direction_x_ )<<std::endl;
+	hero_.reset( new PlayerOpenChestSprite( hero_->xPixels(), hero_->yPixels(), hero_->direction_x_ ) );
 };
 
 void SpriteSystem::spritesFromMap( const Map& lvmap )

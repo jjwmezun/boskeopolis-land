@@ -25,7 +25,6 @@ void PlayerGraphics::update( Sprite& sprite )
 		flip_x_ = false;
 	}
 
-
 	if ( sprite.onLadder() )
 	{
 		if ( sprite.isMoving() )
