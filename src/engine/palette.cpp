@@ -29,6 +29,7 @@ const Palette& Palette::operator= ( const Palette& p )
 {
 	type_ = p.type_;
 	bg_ = p.bg_;
+	return *this;
 };
 
 const std::string& Palette::type() const { return type_; };

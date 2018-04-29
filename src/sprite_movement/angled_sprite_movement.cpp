@@ -2,6 +2,7 @@
 #include "angled_sprite_movement.hpp"
 #include <iostream>
 
+void angledCollision( Sprite& sprite, int overlap );
 void angledCollision( Sprite& sprite, int overlap )
 {
 	if ( overlap )

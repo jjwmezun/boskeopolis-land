@@ -19,6 +19,7 @@ class SpriteMovement
 		};
 
 		SpriteMovement( Type type = Type::FLOATING );
+		virtual ~SpriteMovement();
 		Type type() const;
 		bool hasType( Type type ) const;
 

@@ -6,6 +6,7 @@ SpriteMovement::SpriteMovement( Type type )
 :
 	type_ ( type )
 {};
+SpriteMovement::~SpriteMovement() {};
 
 SpriteMovement::Type SpriteMovement::type() const { return type_; };
 
