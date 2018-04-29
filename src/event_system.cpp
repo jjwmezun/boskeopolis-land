@@ -157,9 +157,16 @@ void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera,
 {
 	if ( change_map_ )
 	{
-		level.warp( sprites, camera, *this, blocks );
-		change_map_ = false;
-		in_front_of_door_ = false;
+		if ( Main::transitionState() == Main::TransitionState::__NULL )
+		{
+			Main::startFadeOut();
+		}
+		else if ( Main::transitionState() == Main::TransitionState::FADE_IN )
+		{
+			level.warp( sprites, camera, *this, blocks );
+			change_map_ = false;
+			in_front_of_door_ = false;
+		}
 	}
 };
 

@@ -14,13 +14,6 @@
 namespace Main
 {
 	// Private Variables
-	enum class TransitionState
-	{
-		__NULL,
-		FADE_OUT,
-		FADE_IN
-	};
-
 	enum class StateChangeType
 	{
 		__NULL,
@@ -71,6 +64,21 @@ namespace Main
 
 
 	// Function Implementations
+	TransitionState transitionState()
+	{
+		return transition_state_;
+	};
+
+	void startFadeOut()
+	{
+		transition_state_ = TransitionState::FADE_OUT;
+	};
+
+	bool stillFading()
+	{
+		return transition_state_ == TransitionState::__NULL;
+	};
+
 	void stateReset()
 	{	
 		Input::reset();

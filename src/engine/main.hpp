@@ -7,6 +7,13 @@ class Palette;
 
 namespace Main
 {
+	enum class TransitionState
+	{
+		__NULL,
+		FADE_OUT,
+		FADE_IN
+	};
+
 	void quit();
 
 	void changeState( std::unique_ptr<GameState> state );
@@ -23,4 +30,7 @@ namespace Main
 	std::string savePath();
 
 	bool savingAllowed();
+	bool stillFading();
+	void startFadeOut();
+	TransitionState transitionState();
 };
