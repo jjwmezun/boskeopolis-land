@@ -63,20 +63,6 @@ OverworldState::OverworldState()
 {
 	mapData();
 
-	int level = Inventory::currentLevel();
-
-	if ( level != NULL )
-	{
-		for ( auto& l : level_tiles_ )
-		{
-			if ( l.lv() == level )
-			{
-				hero_.placeOnLv( l );
-				newPalette( lvPal( level ) );
-			}
-		}
-	}
-
 	camera_.center( hero_.x(), hero_.y(), hero_.W, hero_.H, Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
 	mapEvents();
 };
@@ -167,6 +153,18 @@ void OverworldState::stateRender()
 
 void OverworldState::init()
 {
+	int level = Inventory::currentLevel();
+	if ( level != NULL )
+	{
+		for ( auto& l : level_tiles_ )
+		{
+			if ( l.lv() == level )
+			{
+				hero_.placeOnLv( l );
+				newPalette( lvPal( level ) );
+			}
+		}
+	}
 	Audio::changeSong( "overworld" );
 };
 
@@ -447,7 +445,8 @@ void OverworldState::menu()
 		
 		Main::pushState
 		(
-			std::make_unique<LevelSelectState> ( level_selection_ )
+			std::make_unique<LevelSelectState> ( level_selection_ ),
+			true
 		);
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )

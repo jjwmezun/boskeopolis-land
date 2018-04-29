@@ -42,11 +42,11 @@ void MessageState::stateUpdate()
 			break;
 
 			case ( Type::POP ):
-				Main::popState();
+				Main::popState( true );
 			break;
 
 			case ( Type::PUSH ):
-				Main::pushState( std::unique_ptr<GameState> ( std::move( next_state_ ) ) );
+				Main::pushState( std::unique_ptr<GameState> ( std::move( next_state_ ) ), true );
 			break;
 		}
 	}

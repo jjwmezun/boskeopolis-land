@@ -6,10 +6,10 @@
 Health::Health()
 :
 	hp_ ( maxHP() ),
+	heater_ ( false ),
 	meter_ ( maxOxygen() ),
 	invincible_ ( false ),
 	lose_meter_amount_ ( -1 ),
-	heater_ ( false ),
 	invincibility_timer_ ( 48, false )
 {};
 

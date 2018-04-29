@@ -17,6 +17,7 @@ class Object
 			int width  = 16,
 			int height = 16
 		);
+		virtual ~Object();
 
 		void changeX( int new_x_pixels );
 		void changeY( int new_y_pixels );

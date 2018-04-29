@@ -331,6 +331,14 @@ namespace Render
 		SDL_RenderPresent( renderer_ );
 	};
 
+	// To prevent weird fade conflicts with palettes that replace the color white,
+	// this forces white, e'en on those palettes.
+	void stateChangeFade( int alpha )
+	{
+		SDL_SetRenderDrawColor( renderer_, 255, 255, 255, alpha );
+		SDL_RenderFillRect( renderer_, &screen_ );
+	};
+
 	void colorCanvas( int color, int alpha )
 	{
 		assert( palette_ );

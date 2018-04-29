@@ -224,7 +224,7 @@ void LevelSelectState::updateInput()
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
-		Main::popState();
+		Main::popState( true );
 		Audio::playSound( Audio::SoundType::CANCEL );
 	}
 };

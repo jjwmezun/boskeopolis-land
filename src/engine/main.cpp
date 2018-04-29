@@ -14,11 +14,27 @@
 namespace Main
 {
 	// Private Variables
-	constexpr char TITLE[] = "Boskeopolis Land";
-	bool running_ = true;
-	bool state_change_ = false;
-	bool state_is_new_ = false;
-	bool state_pop_    = false;
+	enum class TransitionState
+	{
+		__NULL,
+		FADE_OUT,
+		FADE_IN
+	};
+
+	enum class StateChangeType
+	{
+		__NULL,
+		CHANGE,
+		PUSH,
+		POP,
+		QUIT
+	};
+
+	static constexpr char TITLE[] = "Boskeopolis Land";
+	static constexpr int TRANSITION_SPEED = 16;
+	static constexpr int TRANSITION_LIMIT = 255;
+
+	StateChangeType state_change_type_ = StateChangeType::__NULL;
 
 	int ticks_ = 0;
 	int graphics_ticks_ = 0;
@@ -30,9 +46,14 @@ namespace Main
 	std::unique_ptr<GameState> new_state_ = {};
 	std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
 
+	TransitionState transition_state_ = TransitionState::__NULL;
+	int transition_level_ = 0;
+
 
 	// Private Function Declarations
-	bool init( const std::vector<std::string>& args );
+	void init( const std::vector<std::string>& args );
+	void execute();
+	void end();
 	int fpsMilliseconds();
 	void initSDL();
 	void setResourcePath();
@@ -40,11 +61,28 @@ namespace Main
 	void firstState();
 
 	void changeStateSafe();
+	void pushStateSafe();
 	void popStateSafe();
+
+	void stateReset();
+	bool running();
+	bool testTotalQuit();
+	bool canChange();
 
 
 	// Function Implementations
-	bool init( const std::vector<std::string>& args )
+	void stateReset()
+	{	
+		Input::reset();
+		state_change_type_ = StateChangeType::__NULL;
+	};
+
+	bool testTotalQuit()
+	{
+		return state_change_type_ == StateChangeType::QUIT && transition_level_ == TRANSITION_LIMIT;
+	};
+
+	void init( const std::vector<std::string>& args )
 	{
 		initSDL();
 
@@ -55,7 +93,7 @@ namespace Main
 				SAVING_ALLOWED = false;
 			}
 		}
-		srand ( time( NULL ) );
+		srand ( time( nullptr ) );
 		setResourcePath();
 		Input::init();
 		Render::init( args );
@@ -73,14 +111,14 @@ namespace Main
 
 	bool running()
 	{
-		return running_;
+		return state_change_type_ != StateChangeType::QUIT;
 	};
 
 	void execute()
 	{
 		SDL_Event event;
 
-		while ( running_ )
+		while ( !testTotalQuit() )
 		{
 			while ( SDL_PollEvent( &event ) != 0 )
 			{
@@ -113,25 +151,59 @@ namespace Main
 			{
 				if ( Input::pressed( Input::Action::ESCAPE ) )
 				{
-					running_ = false;
+					quit();
 				}
 
-				if ( state_is_new_ )
+				switch ( state_change_type_ )
 				{
-					changeStateSafe();
-				}
-				else if ( state_pop_ )
-				{
-					popStateSafe();
-				}
-
-				if ( state_change_ )
-				{
-					Input::reset();
-					state_change_ = false;
+					case ( StateChangeType::CHANGE ):
+						changeStateSafe();
+					break;
+					case ( StateChangeType::POP ):
+						popStateSafe();
+					break;
+					case ( StateChangeType::PUSH ):
+						pushStateSafe();
+					break;
 				}
 
-				states_.back()->update();
+				switch ( transition_state_ )
+				{
+					case ( TransitionState::__NULL ):
+						states_.back()->update();
+					break;
+
+					case ( TransitionState::FADE_OUT ):
+						if ( transition_level_ < TRANSITION_LIMIT )
+						{
+							transition_level_ += TRANSITION_SPEED;
+							if ( transition_level_ > TRANSITION_LIMIT )
+							{
+								transition_level_ = TRANSITION_LIMIT;
+							}
+						}
+						else
+						{
+							transition_state_ = TransitionState::FADE_IN;
+						}
+					break;
+
+					case ( TransitionState::FADE_IN ):
+						states_.back()->update();
+						if ( transition_level_ > 0 )
+						{
+							transition_level_ -= TRANSITION_SPEED;
+							if ( transition_level_ < 0 )
+							{
+								transition_level_ = 0;
+							}
+						}
+						else
+						{
+							transition_state_ = TransitionState::__NULL;
+						}
+					break;
+				}
 
 				++frames_;
 				ticks_ = SDL_GetTicks();
@@ -145,18 +217,28 @@ namespace Main
 	void render()
 	{
 		Render::clearScreen();
-		//Render::colorCanvas();
+
 		for ( auto& st : states_ )
 		{
 			st->render();
 		}
+
+		switch ( transition_state_ )
+		{
+			case ( TransitionState::FADE_IN ):
+			case ( TransitionState::FADE_OUT ):
+				Render::stateChangeFade( ( Uint8 )( transition_level_ ) );
+			break;
+		}
+
 		Render::screenBorders();
 		Render::presentScreen();
 	};
 
 	void quit()
 	{
-		running_ = false;
+		state_change_type_ = StateChangeType::QUIT;
+		transition_state_ = TransitionState::FADE_OUT;
 	};
 
 	void initSDL()
@@ -169,45 +251,82 @@ namespace Main
 
 	void changeState( std::unique_ptr<GameState> state )
 	{
+		if ( new_state_.get() != nullptr ) { return; }
 		new_state_.reset( state.release() );
-		state_change_ = true;
-		state_is_new_ = true;
+		state_change_type_ = StateChangeType::CHANGE;
+		transition_state_ = TransitionState::FADE_OUT;
+	};
+
+	bool canChange()
+	{
+		return transition_state_ == TransitionState::__NULL || ( transition_state_ == TransitionState::FADE_IN && transition_level_ == TRANSITION_LIMIT );
 	};
 
 	void changeStateSafe()
 	{
-		assert( new_state_ );
+		if ( canChange() )
+		{
+			assert( new_state_ );
 
-		states_.clear();
-		pushState( move( new_state_ ) );
-		state_is_new_ = false;
+			states_.clear();
+			pushStateSafe();
 
-		// This is a mo' important state change from the others, so we should clear out surfaces.
-		Render::clearSurfaces();
+			// This is a mo' important state change from the others, so we should clear out surfaces.
+			Render::clearSurfaces();
+		}
 	};
 
-	void pushState  ( std::unique_ptr<GameState> state )
+	void pushState( std::unique_ptr<GameState> state, bool transition )
 	{
-		states_.push_back( move(state) );
-		states_.back()->changePalette();
-		states_.back()->init();
-		state_change_ = true;
+		if ( new_state_.get() != nullptr ) { return; }
+		new_state_.reset( state.release() );
+		state_change_type_ = StateChangeType::PUSH;
+		if ( transition )
+		{
+			transition_state_ = TransitionState::FADE_OUT;
+		}
 	};
 
-	void popState()
+	void pushStateSafe()
 	{
-		state_change_ = true;
-		state_pop_    = true;
+		if ( canChange() )
+		{
+			assert( new_state_ );
+			states_.push_back( move( new_state_ ) );
+			stateReset();
+			states_.back()->changePalette();
+			states_.back()->init();
+
+			// Fixes graphical bug wherein start o' level state shows before message appears due to delay
+			// 'tween creating message state in init just before now & the next time this loop checks for
+			// state change calls.
+			if ( state_change_type_ == StateChangeType::PUSH )
+			{
+				pushStateSafe();
+			}
+		}
+	};
+
+	void popState( bool transition )
+	{
+		state_change_type_ = StateChangeType::POP;
+		if ( transition )
+		{
+			transition_state_ = TransitionState::FADE_OUT;
+		}
 	};
 
 	void popStateSafe()
 	{
-		assert ( !states_.empty() );
-		states_.pop_back();
-		assert ( !states_.empty() );
-		states_.back()->changePalette();
-		states_.back()->backFromPop();
-		state_pop_ = false;
+		if ( canChange() )
+		{
+			assert ( !states_.empty() );
+			states_.pop_back();
+			assert ( !states_.empty() );
+			states_.back()->changePalette();
+			states_.back()->backFromPop();
+			stateReset();
+		}
 	};
 
 	int fpsMilliseconds()

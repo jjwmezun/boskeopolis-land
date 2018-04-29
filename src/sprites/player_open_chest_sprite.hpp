@@ -18,11 +18,19 @@ class PlayerOpenChestSprite : public Sprite
 			MOVE_LEFT,
 			MOVE_RIGHT,
 			STOP,
-			OPENING
+			OPENING,
+			WALKING_AWAY,
+			TURNING_TOWARD_CHEST,
+			CHEST_OPENING,
+			RISING_TREASURE,
+			CELEBRATING
 		};
 		POCState state_;
 		int timer_;
 
 		bool tooFarLeft( const Sprite& them );
 		bool tooFarRight( const Sprite& them );
+		bool animationChange() const;
+		int getAnimationFrame( int speed = Unit::DEFAULT_ANIMATION_SPEED ) const;
+		void walkAnimation();
 };

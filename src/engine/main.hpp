@@ -7,14 +7,11 @@ class Palette;
 
 namespace Main
 {
-	bool running();
-	void execute();
 	void quit();
-	void end();
 
 	void changeState( std::unique_ptr<GameState> state );
-	void pushState( std::unique_ptr<GameState> state );
-	void popState();
+	void pushState( std::unique_ptr<GameState> state, bool transition = false );
+	void popState( bool transition = false );
 
 	bool nextFrame( int interval = 8, int duration = 1 );
 	int frame();

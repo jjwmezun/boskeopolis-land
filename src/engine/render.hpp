@@ -56,6 +56,7 @@ namespace Render
 		sdl2::SDLRect dest
 	);
 
+	void stateChangeFade( int alpha );
 	void colorCanvas( int color, int alpha = 255 );
 	void colorCanvas();
 	void clearScreen();

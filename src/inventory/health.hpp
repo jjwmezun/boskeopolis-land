@@ -31,10 +31,10 @@ class Health
 		static constexpr int START_MAX_HP = 2;
 
 		int hp_;
+		bool heater_;
 		int meter_;
 		bool invincible_;
 		int lose_meter_amount_;
-		bool heater_;
 		TimerSimple invincibility_timer_;
 
 		int maxOxygen() const;
