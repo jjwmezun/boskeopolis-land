@@ -4,17 +4,20 @@
 
 void Clock::update()
 {
-	if ( frames_timer_ >= Unit::FPS )
+	if ( on_ )
 	{
-		frames_timer_ = 0;
-		++total_seconds_;
-
-		if ( total_seconds_ > limit_ )
+		if ( frames_timer_ >= Unit::FPS )
 		{
-			total_seconds_ = limit_;
+			frames_timer_ = 0;
+			++total_seconds_;
+
+			if ( total_seconds_ > limit_ )
+			{
+				total_seconds_ = limit_;
+			}
 		}
+		++frames_timer_;
 	}
-	++frames_timer_;
 };
 
 void Clock::renderTime( int x, int y, int total_seconds, const Camera* camera, Text::FontColor color, Text::FontAlign align, Text::FontColor shadow, int magnification )
@@ -45,10 +48,16 @@ void Clock::reset( Direction::Vertical direction, int limit )
 	total_seconds_ = 0;
 	limit_ = limit;
 	direction_ = direction;
+	on_ = true;
 };
 
 void Clock::startMoonCountdown( int start_time )
 {
 	direction_ = Direction::Vertical::DOWN;
 	limit_ = total_seconds_ + start_time;
+};
+
+void Clock::stop()
+{
+	on_ = false;
 };

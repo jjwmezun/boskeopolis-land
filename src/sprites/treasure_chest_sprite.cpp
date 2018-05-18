@@ -1,6 +1,9 @@
+#include "audio.hpp"
 #include "treasure_chest_sprite.hpp"
+#include "clock.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
+#include "inventory.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 #include <iostream>
@@ -20,6 +23,8 @@ void TreasureChestSprite::customInteract( Collision& my_collision, Collision& th
 {
 	if ( them.on_ground_ && events.key_ && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
+		Inventory::clock().stop();
+		Audio::turnOffSong();
 		sprites.heroOpenTreasureChest();
 	}
 };

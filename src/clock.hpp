@@ -17,7 +17,8 @@ class Clock
 			frames_timer_ ( 0 ),
 			total_seconds_ ( start_time ),
 			limit_ ( limit ),
-			direction_ ( direction )
+			direction_ ( direction ),
+			on_ ( true )
 		{};
 
 		void render
@@ -46,6 +47,7 @@ class Clock
 		void update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
 		void startMoonCountdown( int start_time );
+		void stop();
 		static std::string timeToString( int total_seconds );
 
 		constexpr int secondsFromTotal() const
@@ -102,4 +104,5 @@ class Clock
 		int total_seconds_;
 		int limit_;
 		Direction::Vertical direction_;
+		bool on_;
 };
