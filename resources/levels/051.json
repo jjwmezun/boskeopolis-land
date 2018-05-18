@@ -5,6 +5,17 @@
 	[
 		{
 			"slug": "sewer-5",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "pipeline.png",
+					"width": 360,
+					"height": 160,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			],
 			"warps":
 			[
 				{
@@ -18,11 +29,82 @@
 					"entrance_x": 80,
 					"entrance_y": 43,
 					"location": [ 78, 83, 40, 45 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 98,
+					"entrance_y": 21,
+					"location": [ 96, 101, 18, 23 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 105,
+					"entrance_y": 27,
+					"location": [ 103, 108, 25, 29 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 91,
+					"entrance_y": 49,
+					"location": [ 89, 94, 47, 51 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 99,
+					"entrance_y": 57,
+					"location": [ 97, 102, 55, 59 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 111,
+					"entrance_y": 57,
+					"location": [ 109, 114, 55, 59 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 117,
+					"entrance_y": 57,
+					"location": [ 115, 120, 55, 59 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 91,
+					"entrance_y": 65,
+					"location": [ 89, 94, 63, 67 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 111,
+					"entrance_y": 85,
+					"location": [ 109, 114, 83, 87 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 123,
+					"entrance_y": 73,
+					"location": [ 121, 126, 71, 76 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 139,
+					"entrance_y": 69,
+					"location": [ 137, 142, 67, 71 ]
 				}
 			]
 		},
 		{
 			"slug": "sewer-5-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "pipeline.png",
+					"width": 360,
+					"height": 160,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			],
 			"warps":
 			[
 				{
@@ -36,6 +118,78 @@
 					"entrance_x": 80,
 					"entrance_y": 43,
 					"location": [ 78, 83, 40, 45 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 33,
+					"entrance_y": 23,
+					"location": [ 31, 36, 21, 25 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 79,
+					"entrance_y": 33,
+					"location": [ 77, 82, 31, 35 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 91,
+					"entrance_y": 49,
+					"location": [ 89, 94, 47, 51 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 99,
+					"entrance_y": 57,
+					"location": [ 97, 102, 55, 59 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 91,
+					"entrance_y": 65,
+					"location": [ 89, 94, 63, 67 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 98,
+					"entrance_y": 21,
+					"location": [ 96, 101, 19, 23 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 105,
+					"entrance_y": 27,
+					"location": [ 103, 108, 25, 29 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 111,
+					"entrance_y": 33,
+					"location": [ 109, 114, 31, 35 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 117,
+					"entrance_y": 57,
+					"location": [ 115, 120, 55, 59 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 111,
+					"entrance_y": 85,
+					"location": [ 109, 114, 83, 87 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 123,
+					"entrance_y": 73,
+					"location": [ 121, 126, 71, 75 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 139,
+					"entrance_y": 69,
+					"location": [ 137, 142, 67, 71 ]
 				}
 			]
 		}
