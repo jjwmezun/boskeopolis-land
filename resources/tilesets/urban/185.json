@@ -3,6 +3,8 @@
 	{
 		"type": "sprite",
 		"x": 5,
-		"y": 3
+		"y": 3,
+		"flip_x": true,
+		"flip_y": true
 	}
 }

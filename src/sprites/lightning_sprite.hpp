@@ -1,8 +1,5 @@
 #pragma once
 
-class Block;
-
-
 #include "sprite.hpp"
 
 class LightningSprite : public Sprite
@@ -12,8 +9,4 @@ class LightningSprite : public Sprite
 		~LightningSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
-		
-	private:
-		bool on_;
-		int counter_;
 };

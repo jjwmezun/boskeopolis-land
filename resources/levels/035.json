@@ -34,12 +34,13 @@
 					"width": 480,
 					"height": 320,
 					"frames": 16,
-					"animation_speed": 4
+					"animation_speed": 4,
+					"alpha": 128
 				}
 			]
 		}
 	],
 	
 	"entrance_x": 7,
-	"entrance_y": 33
+	"entrance_y": 31
 }

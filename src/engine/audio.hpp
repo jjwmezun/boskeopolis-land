@@ -18,7 +18,10 @@ namespace Audio
 		DIAMOND = 10,
 		ITEM = 11,
 		JINGLE = 12,
-		BOUNCE = 13
+		BOUNCE = 13,
+		CHEST_OPEN = 14,
+		CHEST_LOCK = 15,
+		LIGHTNING = 16
 	};
 
 	void init( const std::vector<std::string>& args );
@@ -30,4 +33,5 @@ namespace Audio
 	void resumeSong();
 	void closeSong();
 	void playSound( SoundType sound );
+	void fadeMusic( int milliseconds );
 };

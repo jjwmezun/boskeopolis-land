@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "player_graphics.hpp"
 #include "player_open_chest_sprite.hpp"
 #include "unit.hpp"
@@ -101,6 +102,7 @@ void PlayerOpenChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 		case ( POCState::STOP ):
 			fullStopX();
 			state_ = POCState::OPENING;
+			Audio::playSound( Audio::SoundType::CHEST_LOCK );
 			graphics_->current_frame_x_ = 128;
 			graphics_->current_frame_y_ = 26;
 		break;
@@ -146,7 +148,7 @@ void PlayerOpenChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 		break;
 	}
 
-	if ( Input::held( Input::Action::CONFIRM ) )
+	if ( Input::pressed( Input::Action::CONFIRM ) || Input::pressed( Input::Action::CANCEL ) || Input::pressed( Input::Action::MENU ) )
 	{
 		events.won_ = true;
 	}
@@ -197,6 +199,11 @@ void PlayerOpenChestSprite::customInteract( Collision& my_collision, Collision& 
 					{
 						state_ = POCState::RISING_TREASURE;
 						timer_ = 0;
+						Audio::changeSong( "keycane", false );
+					}
+					else if ( timer_ == 2 )
+					{
+						Audio::playSound( Audio::SoundType::CHEST_OPEN );
 					}
 					else
 					{
@@ -220,6 +227,10 @@ void PlayerOpenChestSprite::customInteract( Collision& my_collision, Collision& 
 				}
 			break;
 		}
+	}
+	else if ( them.hasType( SpriteType::CLOUD_MONSTER ) )
+	{
+		them.kill();
 	}
 };
 

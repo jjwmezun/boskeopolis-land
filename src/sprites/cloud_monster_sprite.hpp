@@ -16,6 +16,10 @@ class CloudMonsterSprite : public Sprite
 		void render( Camera& camera, bool priority ) override;
 
 	private:
+		bool lightning_is_on_;
+		int lightning_timer_;
 		LightningSprite lightning_;
+
 		int lightningPosition() const;
+		void lightningUpdate();
 };

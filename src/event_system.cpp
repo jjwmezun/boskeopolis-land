@@ -21,6 +21,7 @@ EventSystem::EventSystem()
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
 	new_palette_ ( mezun::emptyString(), 0 ),
+	disable_pause_ ( false ),
 	move_water_ ( -1 ),
 	current_water_ ( - 1 ),
 	in_front_of_door_ ( false ),
@@ -39,6 +40,7 @@ void EventSystem::reset()
 	message_lock_ = false;
 	key_ = false;
 	switch_ = false;
+	disable_pause_ = false;
 	move_water_ = -1;
 	current_water_ = -1;
 	in_front_of_door_ = false;

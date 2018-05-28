@@ -84,7 +84,7 @@ void LevelState::init()
 
 void LevelState::testPause()
 {
-	if ( Input::pressed( Input::Action::MENU ) )
+	if ( Input::pressed( Input::Action::MENU ) && !events_.disable_pause_ )
 	{
 		Main::pushState
 		(

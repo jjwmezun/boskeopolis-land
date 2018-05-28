@@ -13,4 +13,9 @@ class TreasureChestSprite : public Sprite
 
 	private:
 		const sdl2::SDLRect BOTTOM;
+		int key_cane_height_;
+
+		void renderKeyCane( const Camera& camera );
+		void renderChestBottomHalf( const Camera& camera );
+		void renderChestTopHalf( const Camera& camera );
 };

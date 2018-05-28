@@ -5,7 +5,7 @@
 
 namespace Audio
 {
-	static constexpr int NUM_O_SOUNDS = 14;
+	static constexpr int NUM_O_SOUNDS = 17;
 	const std::string RELATIVE_DIR = "music";
 	const std::string EXT = "mp3";
 	std::string current_song_ = "";
@@ -18,9 +18,10 @@ namespace Audio
 		PRIORITY = 0,
 		GEM = 1,
 		JUMP = 2,
-		MISC = 3
+		BOUNCE = 3,
+		MISC = 4
 	};
-	static constexpr int MAX_CHANNELS = 4;
+	static constexpr int MAX_CHANNELS = 5;
 	ChannelType sound_channels_[ NUM_O_SOUNDS ] =
 	{
 		ChannelType::GEM,
@@ -36,6 +37,9 @@ namespace Audio
 		ChannelType::MISC,
 		ChannelType::MISC,
 		ChannelType::PRIORITY,
+		ChannelType::BOUNCE,
+		ChannelType::MISC,
+		ChannelType::MISC,
 		ChannelType::MISC
 	};
 
@@ -75,6 +79,9 @@ namespace Audio
 			sounds_[ ( int )( SoundType::ITEM ) ] = loadSound( "item.wav" );
 			sounds_[ ( int )( SoundType::JINGLE ) ] = loadSound( "jingle.wav" );
 			sounds_[ ( int )( SoundType::BOUNCE ) ] = loadSound( "bounce.wav" );
+			sounds_[ ( int )( SoundType::CHEST_OPEN ) ] = loadSound( "open-chest.wav" );
+			sounds_[ ( int )( SoundType::CHEST_LOCK ) ] = loadSound( "chest-lock-2.wav" );
+			sounds_[ ( int )( SoundType::LIGHTNING ) ] = loadSound( "lightning.wav" );
 		}
 	};
 
@@ -178,5 +185,10 @@ namespace Audio
 			}
 			Mix_PlayChannel( channel, sounds_[ ( int )( sound ) ], 0 );
 		}
+	};
+
+	void fadeMusic( int milliseconds )
+	{
+		Mix_FadeOutMusic( milliseconds );
 	};
 };

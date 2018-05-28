@@ -38,6 +38,7 @@ class Sprite : public Object
 			RIVAL,
 			BOPPABLE,
 			CLOUD_PLATFORM,
+			CLOUD_MONSTER,
 			LIGHTNING,
 			HEROS_BULLET,
 			DONT_RESPAWN,
