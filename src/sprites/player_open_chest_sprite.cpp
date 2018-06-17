@@ -137,14 +137,19 @@ void PlayerOpenChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 			state_ = POCState::CHEST_OPENING;
 		break;
 		case ( POCState::CHEST_OPENING ):
-			if ( timer_ > CHEST_OPENING_ANIMATION_END / 2 )
+			if ( timer_ == CHEST_OPENING_ANIMATION_END )
+			{
+				state_ = POCState::RISING_TREASURE;
+				Audio::changeSong( "keycane", false );
+				break;
+			}
+			else if ( timer_ > CHEST_OPENING_ANIMATION_END / 2 )
 			{
 				graphics_->current_frame_x_ = 5 * 16;
 			}
 			++timer_;
 		break;
 		case ( POCState::RISING_TREASURE ):
-			++timer_;
 		break;
 	}
 
@@ -193,38 +198,12 @@ void PlayerOpenChestSprite::customInteract( Collision& my_collision, Collision& 
 				}
 			break;
 			case ( POCState::CHEST_OPENING ):
-				if ( timer_ % CHEST_OPENING_SPEED == 0 )
+				if ( them.jump_start_speed_ == 0 )
 				{
-					if ( timer_ == CHEST_OPENING_ANIMATION_END )
-					{
-						state_ = POCState::RISING_TREASURE;
-						timer_ = 0;
-						Audio::changeSong( "keycane", false );
-					}
-					else if ( timer_ == 2 )
-					{
-						Audio::playSound( Audio::SoundType::CHEST_OPEN );
-					}
-					else
-					{
-						const int FRAME = getAnimationFrame( CHEST_OPENING_SPEED ) % NUMBER_OF_TREASURE_CHEST_FRAMES;
-						them.graphics_->current_frame_x_ = TREASURE_CHEST_GFX_WIDTH * FRAME;
-					}
+					them.jump_start_speed_ = 1;
 				}
 			break;
 			case ( POCState::RISING_TREASURE ):
-				if ( timer_ % 4 == 0 )
-				{
-					if ( them.start_speed_ <= them.yPixels() - 8 )
-					{
-					}
-					else
-					{
-						--them.start_speed_;
-					}
-					const int FLASH = ( int )( floor ( ( int )( floor( timer_ / 4 ) ) / 2 ) ) % 2;
-					them.top_speed_ = ( FLASH == 1 ) ? 28 + 16 : 28;
-				}
 			break;
 		}
 	}

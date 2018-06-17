@@ -91,6 +91,7 @@ Map Map::mapFromPath
 		int lightning_flash_color = 0;
 		std::string music = "";
 		bool warp_on_fall = false;
+		int ui_bg_color = 1;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -111,7 +112,7 @@ Map Map::mapFromPath
 
 
 	// Get Map Sizes
-	//=============================================	
+	//=============================================
 
 		assert( map_data.HasMember( "width" ) );
 		assert( map_data[ "width" ].IsInt() );
@@ -120,12 +121,12 @@ Map Map::mapFromPath
 		assert( map_data.HasMember( "height" ) );
 		assert( map_data[ "height" ].IsInt() );
 		const int height = map_data[ "height" ].GetInt();
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 	// Get Blocks & Sprites
 	//=============================================================
 
@@ -176,7 +177,7 @@ Map Map::mapFromPath
 			}
 			++i;
 		}
-		
+
 		for ( auto& bg_block_layer : bg_block_layers )
 		{
 			backgrounds.emplace_back( new MapLayerTilemap( bg_block_layer, width, height ) );
@@ -193,7 +194,7 @@ Map Map::mapFromPath
 
 
 	// Misc. Features
-	//=============================================		
+	//=============================================
 		// Defaults
 
 		// Test for features.
@@ -439,6 +440,15 @@ Map Map::mapFromPath
 						assert( lightning_flash_color >= 0 || lightning_flash_color < Palette::COLOR_LIMIT );
 					}
 				}
+
+				else if ( mezun::areStringsEqual( name, "ui_bg_color" ) )
+				{
+					if ( value.IsInt() )
+					{
+						ui_bg_color = value.GetInt();
+						assert( ui_bg_color >= 0 || ui_bg_color < Palette::COLOR_LIMIT );
+					}
+				}
 			}
 		}
 
@@ -465,7 +475,7 @@ Map Map::mapFromPath
 
 
 	// Send all data
-	//=============================================	
+	//=============================================
 
 		return Map
 		(
@@ -494,7 +504,8 @@ Map Map::mapFromPath
 			show_on_off,
 			lightning_flash_color,
 			music,
-			warp_on_fall
+			warp_on_fall,
+			ui_bg_color
 		);
 };
 
@@ -525,7 +536,8 @@ Map::Map
 	bool show_on_off,
 	int lightning_flash_color,
 	std::string music,
-	bool warp_on_fall
+	bool warp_on_fall,
+	int ui_bg_color
 )
 :
 	blocks_ ( blocks ),
@@ -554,7 +566,8 @@ Map::Map
 	lightning_flash_color_ ( lightning_flash_color ),
 	current_bg_ ( palette.bgN() ),
 	music_ ( music ),
-	warp_on_fall_ ( warp_on_fall )
+	warp_on_fall_ ( warp_on_fall ),
+	ui_bg_color_ ( ui_bg_color )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -598,7 +611,8 @@ Map::Map( Map&& m ) noexcept
 	lightning_flash_color_ ( m.lightning_flash_color_ ),
 	current_bg_ ( m.current_bg_ ),
 	music_ ( m.music_ ),
-	warp_on_fall_ ( m.warp_on_fall_ )
+	warp_on_fall_ ( m.warp_on_fall_ ),
+	ui_bg_color_ ( m.ui_bg_color_ )
 {};
 
 Map::Map( const Map& c )
@@ -631,7 +645,8 @@ Map::Map( const Map& c )
 	lightning_flash_color_ ( c.lightning_flash_color_ ),
 	current_bg_ ( c.current_bg_ ),
 	music_ ( c.music_ ),
-	warp_on_fall_ ( c.warp_on_fall_ )
+	warp_on_fall_ ( c.warp_on_fall_ ),
+	ui_bg_color_ ( c.ui_bg_color_ )
 {};
 
 int Map::widthBlocks() const
@@ -704,7 +719,7 @@ int Map::indexFromXAndY( int x, int y ) const
 	{
 		x = getXIndexForLoop( x );
 	}
-	
+
 	if ( x < 0 || x >= ( int )( widthBlocks() ) || y < 0 || y > ( int )( heightBlocks() ) )
 	{
 		return -1;
@@ -763,7 +778,7 @@ void Map::updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& 
 };
 
 void Map::updateLoop( const SpriteSystem& sprites )
-{	
+{
 	if ( sprites.hero().rightPixels() > rightEdgeOfLoop() )
 	{
 		++current_loop_;
@@ -778,7 +793,7 @@ void Map::updateBGColor()
 {
 	// Default BG Color
 	current_bg_ = palette_.bgN();
-	
+
 	// Only bother with calculating flash color if we have a flash color set.
 	// Also, since we check flashing using remainder, we need to make sure we're 'bove or equal to the interval,
 	// so it doesn't flash right @ the start.
@@ -872,7 +887,7 @@ void Map::interact( Sprite& sprite, Camera& camera, Health& health )
 	{
 		f->interact( sprite, health );
 	}
-	
+
 	if ( scrollLoop() )
 	{
 		if
@@ -965,7 +980,7 @@ const std::string& Map::tileset() const
 		{
 			++loop;
 		}
-		
+
 		return loop;
 	};
 
@@ -982,7 +997,7 @@ const std::string& Map::tileset() const
 			{
 				x += scroll_loop_width_;
 			}
-			
+
 			return x % scroll_loop_width_;
 		}
 		else if ( getLoopBlocks( x ) < LOOP_CHANGE )
@@ -1027,6 +1042,6 @@ const std::string& Map::tileset() const
 				}
 			}
 		}
-		
+
 		return x;
 	};

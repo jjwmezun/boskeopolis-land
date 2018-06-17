@@ -69,7 +69,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
 {
 	// BG
-	Render::renderRect( BG_DEST, 1 );
+	Render::renderRect( BG_DEST, lvmap.ui_bg_color_ );
 
 	// VICTORY
 	if ( Inventory::victory() )

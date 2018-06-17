@@ -51,6 +51,7 @@ class Map
 		const int wind_strength_;
 		const int scroll_loop_width_;
 		const int lightning_flash_color_;
+		const int ui_bg_color_;
 		int current_loop_;
 		int current_bg_;
 		const bool blocks_work_offscreen_;
@@ -132,7 +133,8 @@ class Map
 			bool show_on_off,
 			int lightning_flash_color,
 			std::string music,
-			bool warp_on_fall
+			bool warp_on_fall,
+			int ui_bg_color
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera );

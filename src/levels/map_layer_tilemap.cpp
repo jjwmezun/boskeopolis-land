@@ -93,7 +93,7 @@ void MapLayerTilemap::render( const Camera& camera )
 
 void MapLayerTilemap::interact( Sprite& sprite, Health& health )
 {
-	if ( fade_type_ != FadeType::DONT_FADE )
+	if ( fade_type_ != FadeType::DONT_FADE && sprite.hasType( Sprite::SpriteType::HERO ) )
 	{
 		for ( auto& b : blocks_ )
 		{

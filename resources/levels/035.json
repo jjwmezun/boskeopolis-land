@@ -9,7 +9,7 @@
 			[
 				{
 					"type": "image",
-					"img": "dim_clouds.png",
+					"img": "dimmer_clouds.png",
 					"width": 128,
 					"height": 128,
 					"x_scroll": 0.1,
@@ -18,7 +18,7 @@
 				},
 				{
 					"type": "image",
-					"img": "bright_clouds.png",
+					"img": "dim_clouds.png",
 					"width": 128,
 					"height": 128,
 					"x_scroll": 0.25,
@@ -41,6 +41,14 @@
 		}
 	],
 	
-	"entrance_x": 7,
-	"entrance_y": 31
+	"goal":
+	{
+		"message": "¡Unlock the treasure!"
+	},
+	
+	"entrance_x": 21,
+	"entrance_y": 31,
+	"camera_x": 12,
+	"gem_challenge": 14000,
+	"time_challenge": 20
 }
