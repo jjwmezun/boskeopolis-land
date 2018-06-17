@@ -4,7 +4,7 @@
 		"type": "sprite",
 		"x": 6,
 		"y": 3,
-		"flip_y": true,
+		"flip_x": true,
 		"priority": true
 	}
 }
