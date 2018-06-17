@@ -7,6 +7,7 @@ class EventSystem;
 #include "fading_graphics.hpp"
 #include "rapidjson/document.h"
 #include "sprite_graphics.hpp"
+#include <iostream>
 
 class Tileset
 {
@@ -27,7 +28,7 @@ class Tileset
 
 		std::vector<std::unique_ptr<BlockType>> makeBlockTypes( const std::string& tileset ) const;
 		std::unique_ptr<BlockType> makeType( const rapidjson::Document& block, const std::string& tileset ) const;
-	
+
 	template<typename T>
 	std::unique_ptr<SpriteGraphics> getGraphics( const T& g, std::string texture ) const
 	{
@@ -144,7 +145,8 @@ class Tileset
 						0,
 						0,
 						0,
-						animation_speed
+						animation_speed,
+						alpha
 					);
 				}
 			}
