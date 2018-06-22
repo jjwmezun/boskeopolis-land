@@ -8,6 +8,8 @@ static constexpr int FRAME_WIDTH = 64;
 static constexpr int FRAME_SPEED = 4;
 static constexpr int DELAY_SPEED = 30;
 static constexpr int DISTANCE_TO_COME_BACK = Unit::BlocksToSubPixels( 8 );
+static constexpr int GOING_AWAY_DURATION = ( NUMBER_OF_FRAMES - 1 ) * FRAME_SPEED;
+static constexpr int STAND_PADDING = GOING_AWAY_DURATION / 2;
 
 PelicanSprite::PelicanSprite( int x, int y )
 :
@@ -21,12 +23,6 @@ PelicanSprite::~PelicanSprite() {};
 
 void PelicanSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	/*
-	std::cout<<"==============================="<<std::endl;
-	std::cout<<( int )( state_ )<<std::endl;
-	std::cout<<( int )( timer_ )<<std::endl;
-	std::cout<<"===============================\n\n"<<std::endl;*/
-
 	switch ( state_ )
 	{
 		case ( State::HERE ):
@@ -54,7 +50,7 @@ void PelicanSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 			const int frame = floor( timer_ / 4 );
 			graphics_->current_frame_x_ = frame * FRAME_WIDTH;
 
-			if ( timer_ >= ( NUMBER_OF_FRAMES - 1 ) * FRAME_SPEED )
+			if ( timer_ >= GOING_AWAY_DURATION )
 			{
 				state_ = State::THERE;
 				timer_ = 0;
@@ -91,10 +87,18 @@ void PelicanSprite::customInteract( Collision& my_collision, Collision& their_co
 	{
 		case ( State::HERE ):
 		{
-			if ( them.hasType( SpriteType::HERO ) && their_collision.collideBottom() )
+			if( standOnMe( their_collision, them ) )
 			{
-				them.collideStopYBottom( their_collision.overlapYBottom() );
 				stepped_on_ = true;
+			}
+		}
+		break;
+
+		case ( State::GOING_AWAY ):
+		{
+			if ( timer_ < STAND_PADDING )
+			{
+				standOnMe( their_collision, them );
 			}
 		}
 		break;
@@ -125,6 +129,16 @@ void PelicanSprite::customInteract( Collision& my_collision, Collision& their_co
 		break;
 	}
 };
+
+bool PelicanSprite::standOnMe( Collision& their_collision, Sprite& them )
+{
+	if ( them.hasType( SpriteType::HERO ) && their_collision.collideBottom() )
+	{
+		them.collideStopYBottom( their_collision.overlapYBottom() );
+		return true;
+	}
+	return false;
+}
 
 void PelicanSprite::reset()
 {

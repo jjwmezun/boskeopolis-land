@@ -4,6 +4,7 @@
 #include "block_component_change_palette.hpp"
 #include "block_component_climbable.hpp"
 #include "block_component_conveyor.hpp"
+#include "block_component_current.hpp"
 #include "block_component_diamond.hpp"
 #include "block_component_door.hpp"
 #include "block_component_force_leftward.hpp"
@@ -100,7 +101,7 @@ BlockType* Tileset::blockType( int type, int x, int y )
 
 
 std::vector<std::unique_ptr<BlockType>> Tileset::makeBlockTypes( const std::string& tileset ) const
-{	
+{
 	const std::string path = Main::resourcePath() + "tilesets" + Main::pathDivider() + tileset + Main::pathDivider();
 
 	if ( !mezun::checkDirectory( path ) )
@@ -251,7 +252,18 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					}
 					else if ( mezun::areStringsEqual( comp_type, "diamond" ) )
 					{
-						components.emplace_back( std::make_unique<BlockComponentDiamond> () );
+						if
+						(
+							comp_obj.HasMember( "replacement" ) &&
+							comp_obj[ "replacement" ].IsInt()
+						)
+						{
+							components.emplace_back( std::make_unique<BlockComponentDiamond> ( comp_obj[ "replacement" ].GetInt() ) );
+						}
+						else
+						{
+							components.emplace_back( std::make_unique<BlockComponentDiamond> () );
+						}
 					}
 					else if ( mezun::areStringsEqual( comp_type, "swim" ) )
 					{
@@ -341,8 +353,8 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 						{
 							const std::string palette = comp_obj[ "palette" ].GetString();
 							int bg_color = 1;
-							
-						
+
+
 							if
 							(
 								comp_obj.HasMember( "bg_color" ) &&
@@ -351,7 +363,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							{
 								bg_color = comp_obj[ "bg_color" ].GetInt();
 							}
-					
+
 							components.emplace_back( std::make_unique<BlockComponentChangePalette> ( Palette( palette, bg_color ) ) );
 						}
 					}
@@ -405,6 +417,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "door" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentDoor> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "current" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentCurrent> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "switch" ) )
 					{
@@ -516,7 +532,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 								int right = 0;
 								int top = 0;
 								int bottom = 0;
-								
+
 								if ( cond.HasMember( "left" ) && cond[ "left" ].IsInt() )
 								{
 									left = cond[ "left" ].GetInt();

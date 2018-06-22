@@ -4,9 +4,9 @@
 #include "collision.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
+#include <iostream>
 
-BlockComponentDiamond::BlockComponentDiamond() {};
-
+BlockComponentDiamond::BlockComponentDiamond( int replacement_block ) : replacement_block_ ( replacement_block ) {};
 BlockComponentDiamond::~BlockComponentDiamond() {};
 
 void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
@@ -14,7 +14,15 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 	if ( Inventory::haveDiamond() )
 	{
 		level.currentMap().deleteBlock( block.location() );
-		block.destroy();
+
+		if ( replacement_block_ == -1 )
+		{
+			block.destroy();
+		}
+		else
+		{
+			level.currentMap().changeBlock( block.location(), replacement_block_ );
+		}
 	}
 	else
 	{

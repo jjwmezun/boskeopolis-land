@@ -22,4 +22,6 @@ class PelicanSprite : public Sprite
 		State state_;
 		int timer_;
 		bool stepped_on_;
+
+		bool standOnMe( Collision& their_collision, Sprite& them );
 };
