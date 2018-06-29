@@ -1,6 +1,6 @@
 #pragma once
 
-class Block;    
+class Block;
 class Sprite;
 
 #include "input_component_player.hpp"
@@ -34,7 +34,6 @@ class PlayerSprite : public Sprite
 		virtual void duck();
 		virtual void unduck( const BlockSystem& blocks );
 
-	
 		void deathAction( Camera& camera, EventSystem& events ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
@@ -44,4 +43,6 @@ class PlayerSprite : public Sprite
 		void testVX();
 		void testFrameRate();
 		bool door_lock_;
+
+		void forceUnduck();
 };

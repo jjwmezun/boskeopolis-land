@@ -69,8 +69,8 @@ void LevelState::stateRender()
 	blocks_.render( camera_, false );
 	sprites_.render( camera_, false );
 	blocks_.render( camera_, true );
-	sprites_.render( camera_, true );
 	level_.currentMap().renderFG( camera_ );
+	sprites_.render( camera_, true );
 	inventory_screen_.render( events_, sprites_.hero(), camera_, level_.currentMap() );
 };
 

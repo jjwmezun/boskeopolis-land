@@ -722,10 +722,7 @@ void SpriteSystem::render( Camera& camera, bool priority )
 		}
 	}
 
-	if ( !priority )
-	{
-		hero_->render( camera );
-	}
+	hero_->render( camera, priority );
 };
 
 Sprite& SpriteSystem::hero()

@@ -40,7 +40,7 @@ PlayerSprite::PlayerSprite
 		23,
 		{ type },
 		start_speed,
-		top_speed, 
+		top_speed,
 		jump_start_speed,
 		jump_top_speed,
 		Direction::Horizontal::RIGHT,
@@ -192,7 +192,7 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	{
 		unduck( blocks );
 	}
-	
+
 	if ( !is_sliding_ )
 	{
 		if ( !input_->right() && !input_->left())
@@ -227,7 +227,7 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 				Audio::playSound( Audio::SoundType::JUMP );
 			}
 		}
-		
+
 		jump_lock_ = true;
 
 		slowFall();
@@ -265,7 +265,7 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	if ( input_->up() )
 	{
 		moveUp();
-		
+
 		if ( hasMovementType( SpriteMovement::Type::GROUNDED ) )
 		{
 			if ( onLadder() )
@@ -332,6 +332,11 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 		jump_top_speed_ *= 1.1;
 	}
 
+	if ( is_ducking_ && !on_ground_ && hasMovementType( SpriteMovement::Type::SWIMMING ) )
+	{
+		unduck( blocks );
+	}
+
 	input_->update();
 
 	//std::cout<<"Y: "<<graphics_->y_adjustment_<<std::endl;
@@ -390,25 +395,32 @@ void PlayerSprite::duck()
 	}
 };
 
+void PlayerSprite::forceUnduck()
+{
+	// Hacky way to keep player from falling through ground after gaining height from unducking.
+	if ( isDucking() )
+	{
+		hit_box_.y -= Unit::PixelsToSubPixels( 10 );
+		graphics_->y_adjustment_ = -2;
+		graphics_->h_adjustment_ = 3;
+	}
+
+	is_ducking_ = false;
+	hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 1 );
+};
+
 void PlayerSprite::unduck( const BlockSystem& blocks )
 {
 	if ( !blocksJustAbove( blocks ) )
 	{
-		// Hacky way to keep player from falling through ground after gaining height from unducking.
-		if ( isDucking() )
-		{
-			hit_box_.y -= Unit::PixelsToSubPixels( 10 );
-			graphics_->y_adjustment_ = -2;
-			graphics_->h_adjustment_ = 3;
-		}
-
-		is_ducking_ = false;
-		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 1 );
+		forceUnduck();
 	}
 };
 
 void PlayerSprite::deathAction( Camera& camera, EventSystem& events )
 {
+	forceUnduck();
+	graphics_->priority_ = true;
 	defaultDeathAction( camera );
 	events.playDeathSoundIfNotAlreadyPlaying();
 };

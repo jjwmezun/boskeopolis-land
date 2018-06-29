@@ -2,6 +2,7 @@
 #include "block_component_swimmable.hpp"
 #include "health.hpp"
 #include "sprite.hpp"
+#include <iostream>
 
 BlockComponentSwimmable::BlockComponentSwimmable() {};
 
@@ -11,7 +12,7 @@ void BlockComponentSwimmable::interact( const Collision& collision, Sprite& spri
 {
 	if ( sprite.hasType( Sprite::SpriteType::HERO ) )
 	{
-		if ( sprite.centerXSubPixels() > block.topSubPixels() )
+		if ( sprite.centerYSubPixels() > block.topSubPixels() )
 		{
 			health.submerge();
 		}
