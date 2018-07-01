@@ -2,17 +2,8 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 6,
-		"y": 5,
-		"priority": true
-	},
-	"behavior":
-	[
-		{
-			"component":
-			{
-				"type": "solid"
-			}
-		}
-	]
+		"x": 8,
+		"y": 11,
+		"flip_x": true
+	}
 }

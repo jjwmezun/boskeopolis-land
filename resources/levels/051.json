@@ -9,9 +9,9 @@
 			[
 				{
 					"type": "image",
-					"img": "pipeline.png",
-					"width": 360,
-					"height": 160,
+					"img": "boskeopolis-underground-a.png",
+					"width": 2528,
+					"height": 1488,
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
 				}
@@ -213,8 +213,8 @@
 		}
 	],
 
-	"entrance_x": 148,
-	"entrance_y": 73,
+	"entrance_x": 94,
+	"entrance_y": 7,
 
 	"gem_challenge": 15000,
 	"time_challenge": 50
