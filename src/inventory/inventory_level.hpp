@@ -54,7 +54,7 @@ class InventoryLevel
 		const SpriteGraphics gem_icon_gfx_ = SpriteGraphics( "charset.png", 32, 48 );
 		const SpriteGraphics clock_gfx_ = SpriteGraphics( "tilesets/universal.png", 96, 48 );
 
-		const SpriteGraphics key_gfx_ = SpriteGraphics( "tilesets/universal.png", 48, 8 );
+		const SpriteGraphics key_gfx_ = SpriteGraphics( "tilesets/universal.png", 40, 8 );
 		const SpriteGraphics mcguffins_gfx_ = SpriteGraphics( "tilesets/universal.png", 0, 24 );
 		const SpriteGraphics kills_gfx_ = SpriteGraphics( "tilesets/universal.png", 8, 24 );
 		const SpriteGraphics mcguffins_cross_ = SpriteGraphics( "charset.png", 8, 40 );

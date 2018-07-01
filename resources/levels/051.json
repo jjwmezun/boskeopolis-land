@@ -1,10 +1,21 @@
 {
 	"name": "Boskeopolis Underground",
-	
+
 	"maps":
 	[
 		{
 			"slug": "sewer-5",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "pipeline.png",
+					"width": 360,
+					"height": 160,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0
+				}
+			],
 			"warps":
 			[
 				{
@@ -78,6 +89,12 @@
 					"entrance_x": 139,
 					"entrance_y": 69,
 					"location": [ 137, 142, 67, 71 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 140,
+					"entrance_y": 85,
+					"location": [ 138, 143, 83, 145 ]
 				}
 			]
 		},
@@ -179,13 +196,25 @@
 					"entrance_x": 139,
 					"entrance_y": 69,
 					"location": [ 137, 142, 67, 71 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 140,
+					"entrance_y": 85,
+					"location": [ 138, 143, 83, 87 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 120,
+					"entrance_y": 81,
+					"location": [ 118, 123, 79, 83 ]
 				}
 			]
 		}
 	],
 
-	"entrance_x": 94,
-	"entrance_y": 7,
+	"entrance_x": 148,
+	"entrance_y": 73,
 
 	"gem_challenge": 15000,
 	"time_challenge": 50

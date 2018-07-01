@@ -42,6 +42,7 @@
 #include "block_condition_collide_any.hpp"
 #include "block_condition_collide_bottom.hpp"
 #include "block_condition_collide_left.hpp"
+#include "block_condition_collide_not_bottom.hpp"
 #include "block_condition_collide_right.hpp"
 #include "block_condition_collide_specific.hpp"
 #include "block_condition_collide_top.hpp"
@@ -508,6 +509,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "not_ducking" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionNotDucking> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "collide_not_bottom" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionCollideNotBottom> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "rival" ) )
 							{
