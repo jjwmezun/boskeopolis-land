@@ -10,17 +10,11 @@ void BlockComponentCurrent::interact( const Collision& collision, Sprite& sprite
 
 	if ( sprite.isDucking() )
 	{
+		// Kill the normal slide effect.
 		sprite.vx_ = 0;
 	}
 	else if ( sprite.on_ground_prev_ || sprite.on_ground_ )
 	{
-		/*
-		const int TOP_SPEED = ( int )( ( double )( sprite.top_speed_ ) * .5 );
-		if ( sprite.vx_ > TOP_SPEED )
-		{
-			sprite.vx_ = TOP_SPEED;
-		}*/
-
 		sprite.hit_box_.x -= 75;
 	}
 	else if ( sprite.collide_bottom_prev_ || sprite.collide_bottom_ )
