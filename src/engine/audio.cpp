@@ -5,7 +5,7 @@
 
 namespace Audio
 {
-	static constexpr int NUM_O_SOUNDS = 17;
+	static constexpr int NUM_O_SOUNDS = 18;
 	const std::string RELATIVE_DIR = "music";
 	const std::string EXT = "mp3";
 	std::string current_song_ = "";
@@ -40,7 +40,8 @@ namespace Audio
 		ChannelType::BOUNCE,
 		ChannelType::MISC,
 		ChannelType::MISC,
-		ChannelType::MISC
+		ChannelType::MISC,
+		ChannelType::JUMP
 	};
 
 	Mix_Chunk* loadSound( const std::string& sound_name );
@@ -82,6 +83,7 @@ namespace Audio
 			sounds_[ ( int )( SoundType::CHEST_OPEN ) ] = loadSound( "open-chest.wav" );
 			sounds_[ ( int )( SoundType::CHEST_LOCK ) ] = loadSound( "chest-lock-2.wav" );
 			sounds_[ ( int )( SoundType::LIGHTNING ) ] = loadSound( "lightning.wav" );
+			sounds_[ ( int )( SoundType::SWIM ) ] = loadSound( "swim.wav" );
 		}
 	};
 
@@ -113,7 +115,7 @@ namespace Audio
 	{
 		Mix_HaltMusic();
 	};
-	
+
 	void pauseSong()
 	{
 		Mix_PauseMusic();
@@ -168,7 +170,7 @@ namespace Audio
 		}
 		return store;
 	};
-	
+
 	void playSound( SoundType sound )
 	{
 		if ( enable_ )

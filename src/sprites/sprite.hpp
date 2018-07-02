@@ -100,10 +100,10 @@ class Sprite : public Object
 		static constexpr int GRAVITY_TOP_SPEED_MOON = 1000;
 		static int gravity_start_speed_;
 		static int gravity_top_speed_;
-		
+
 		static void moonGravityOn();
 		static void moonGravityOff();
-		
+
 		const int map_id_;
 
 		int vx_ = 0;

@@ -108,6 +108,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 		if ( input_->action1() )
 		{
 			bounce();
+			Audio::playSound( Audio::SoundType::JUMP );
 		}
 	}
 
@@ -222,10 +223,16 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 				slide_jump_ = true;
 				vx_ *= 5;
 			}
-			if ( on_ground_prev_ )
+
+			if ( hasMovementType( SpriteMovement::Type::GROUNDED ) && ( on_ground_prev_ || onGroundPadding() ) )
 			{
 				Audio::playSound( Audio::SoundType::JUMP );
 			}
+		}
+
+		if ( hasMovementType( SpriteMovement::Type::SWIMMING ) && !jump_lock_ )
+		{
+			Audio::playSound( Audio::SoundType::SWIM );
 		}
 
 		jump_lock_ = true;

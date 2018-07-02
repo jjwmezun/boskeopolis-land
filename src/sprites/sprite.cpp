@@ -86,7 +86,7 @@ Sprite::~Sprite() {};
 void Sprite::moonGravityOn()
 {
 	gravity_start_speed_ = GRAVITY_START_SPEED_MOON;
-	gravity_top_speed_ = GRAVITY_TOP_SPEED_MOON;	
+	gravity_top_speed_ = GRAVITY_TOP_SPEED_MOON;
 };
 
 void Sprite::moonGravityOff()
@@ -345,11 +345,6 @@ void Sprite::collideStopYTop( int overlap )
 };
 
 bool Sprite::onGround() const
-{
-	return on_ground_;
-};
-
-bool Sprite::onGroundPadding() const
 {
 	return on_ground_;
 };
@@ -702,7 +697,7 @@ const Collision Sprite::testCollision( const Object& them ) const
 	if ( movement_ != nullptr )
 	{
 		return movement_->testCollision( *this, them.hit_box_ );
-	}	
+	}
 };
 
 SpriteMovement::Type Sprite::movementType() const
@@ -889,7 +884,7 @@ void Sprite::turnOnEdge( const BlockSystem& blocks )
 					Unit::BlocksToSubPixels( 1 )
 
 				},
-				BlockComponent::Type::SOLID 
+				BlockComponent::Type::SOLID
 			))
 			{
 				direction_x_ = Direction::Horizontal::RIGHT;
@@ -907,7 +902,7 @@ void Sprite::turnOnEdge( const BlockSystem& blocks )
 					Unit::BlocksToSubPixels( 1 )
 
 				},
-				BlockComponent::Type::SOLID 
+				BlockComponent::Type::SOLID
 			))
 			{
 				direction_x_ = Direction::Horizontal::LEFT;
@@ -927,7 +922,7 @@ void Sprite::moveInDirectionX()
 		case ( Direction::Horizontal::RIGHT ):
 			moveRight();
 		break;
-			
+
 		case ( Direction::Horizontal::__NULL ):
 			stopX();
 		break;
@@ -985,4 +980,9 @@ void Sprite::containCameraY( const Camera& camera )
 	{
 		collideStopYBottom( ( hit_box_.y + hit_box_.w ) - Unit::PixelsToSubPixels( camera.bottom() ) );
 	}
+};
+
+bool Sprite::onGroundPadding() const
+{
+	return on_ground_ || ( on_ground_padding_.on() && !on_ground_padding_.done() );
 };

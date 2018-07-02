@@ -22,5 +22,4 @@ class GroundedSpriteMovement : public SpriteMovement
 
 	private:
 		void startJump( Sprite& sprite ) const;
-		bool onGroundPadding( Sprite& sprite ) const;
 };

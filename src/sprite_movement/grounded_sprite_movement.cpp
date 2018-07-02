@@ -26,7 +26,7 @@ void GroundedSpriteMovement::jump( Sprite& sprite ) const
 
 	if ( !sprite.onGround() || !sprite.jump_lock_ )
 	{
-		if ( ( onGroundPadding( sprite ) || sprite.onLadder() ) && !sprite.jump_lock_ )
+		if ( ( sprite.onGroundPadding() || sprite.onLadder() ) && !sprite.jump_lock_ )
 		{
 			startJump( sprite );
 		}
@@ -209,11 +209,6 @@ void GroundedSpriteMovement::collideStopAny( Sprite& sprite, const Collision& co
 			collideStopYTop( sprite, collision.overlapYTop() );
 		//}
 	}
-};
-
-bool GroundedSpriteMovement::onGroundPadding( Sprite& sprite ) const
-{
-	return sprite.on_ground_ || ( sprite.on_ground_padding_.on() && !sprite.on_ground_padding_.done() );
 };
 
 const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const sdl2::SDLRect& them ) const

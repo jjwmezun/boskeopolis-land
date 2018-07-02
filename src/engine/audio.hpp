@@ -21,7 +21,8 @@ namespace Audio
 		BOUNCE = 13,
 		CHEST_OPEN = 14,
 		CHEST_LOCK = 15,
-		LIGHTNING = 16
+		LIGHTNING = 16,
+		SWIM = 17
 	};
 
 	void init( const std::vector<std::string>& args );
