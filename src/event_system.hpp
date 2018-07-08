@@ -10,7 +10,7 @@ class SpriteSystem;
 class EventSystem
 {
 	public:
-	
+
 	enum class EType
 	{
 		__NULL,
@@ -27,7 +27,6 @@ class EventSystem
 	bool key_;
 	bool message_;
 	bool message_lock_;
-	bool change_map_;
 	bool switch_;
 	bool switch_changed_;
 	bool palette_changed_;
@@ -35,6 +34,7 @@ class EventSystem
 	bool on_conveyor_belt_;
 	bool played_death_song_;
 	bool disable_pause_;
+	int change_map_;
 	int move_water_;
 	int current_water_;
 	EType special_;
@@ -57,6 +57,7 @@ class EventSystem
 	void fail();
 	void quitLevel();
 	void changeMap();
+	void changeMapSewer();
 	void getKey();
 	void showMessage();
 	void changePalette( const Palette& new_palette );

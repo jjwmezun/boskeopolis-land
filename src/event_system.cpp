@@ -16,7 +16,7 @@ EventSystem::EventSystem()
 	key_ ( false ),
 	message_ ( false ),
 	message_lock_ ( false ),
-	change_map_ ( false ),
+	change_map_ ( 0 ),
 	switch_ ( false ),
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
@@ -35,7 +35,7 @@ void EventSystem::reset()
 	won_ = false;
 	failed_ = false;
 	quit_level_ = false;
-	change_map_ = false;
+	change_map_ = 0;
 	message_ = false;
 	message_lock_ = false;
 	key_ = false;
@@ -67,7 +67,7 @@ void EventSystem::quitLevel()
 
 void EventSystem::changeMap()
 {
-	change_map_ = true;
+	change_map_ = 1;
 };
 
 void EventSystem::getKey()
@@ -133,7 +133,7 @@ void EventSystem::update( Level& level, SpriteSystem& sprites, Camera& camera, B
 	{
 		move_water_ = WATER_NULL;
 	}
-	
+
 	testMessage( level );
 	testWarp( level, sprites, camera, blocks );
 	testWinLoseOrQuit( level );
@@ -151,7 +151,7 @@ void EventSystem::testMessage( Level& level )
 		Main::pushState( std::unique_ptr<GameState> ( new LevelMessageState( level.currentMap().palette_, level.message() ) ) );
 		message_lock_ = true;
 	}
-	
+
 	message_ = false;
 };
 
@@ -166,7 +166,7 @@ void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera,
 		else if ( Main::transitionState() == Main::TransitionState::FADE_IN )
 		{
 			level.warp( sprites, camera, *this, blocks );
-			change_map_ = false;
+			change_map_ = 0;
 			in_front_of_door_ = false;
 		}
 	}
@@ -200,7 +200,7 @@ void EventSystem::failEvent( Level& level )
 };
 
 void EventSystem::winEvent( Level& level )
-{	
+{
 	Inventory::win();
 	Main::pushState
 	(
@@ -210,7 +210,7 @@ void EventSystem::winEvent( Level& level )
 };
 
 void EventSystem::quitEvent( Level& level )
-{	
+{
 	Inventory::quit();
 	Main::changeState( std::make_unique<OverworldState> () );
 };
@@ -244,4 +244,9 @@ void EventSystem::playDeathSoundIfNotAlreadyPlaying()
 		Audio::playSound( Audio::SoundType::DEATH );
 		played_death_song_ = true;
 	}
+};
+
+void EventSystem::changeMapSewer()
+{
+	change_map_ = 2;
 };

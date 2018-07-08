@@ -104,9 +104,9 @@
 			[
 				{
 					"type": "image",
-					"img": "pipeline.png",
-					"width": 360,
-					"height": 160,
+					"img": "boskeopolis-underground-b.png",
+					"width": 2528,
+					"height": 1488,
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
 				}
