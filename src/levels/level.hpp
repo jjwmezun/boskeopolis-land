@@ -33,6 +33,7 @@ class Level
 		int cameraX() const;
 		int cameraY() const;
 		void warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks );
+		void sewerWarp( SpriteSystem& sprites, EventSystem& events );
 		const std::string& message() const;
 		int id() const;
 		int allEnemiesToKill() const;

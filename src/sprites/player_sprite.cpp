@@ -114,7 +114,18 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 
 	if ( events.in_front_of_door_ > 0 && input_->up() && !door_lock_ && on_ground_ )
 	{
-		events.change_map_ = events.in_front_of_door_;
+		switch ( events.in_front_of_door_ )
+		{
+			case ( 1 ):
+				events.changeMap();
+			break;
+			case ( 2 ):
+				events.changeMapSewer();
+				graphics_->priority_ = true;
+				vx_ = 0;
+				acceleration_x_ = 0;
+			break;
+		}
 	}
 	else if ( input_->up() )
 	{

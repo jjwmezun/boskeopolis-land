@@ -563,10 +563,11 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 
 	clearSprites();
 	spritesFromMap( level.currentMap(), events );
+
 	switch( level.currentMap().hero_type_ )
 	{
 		case ( HeroType::NORMAL ):
-			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() ) );
+			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() + 10 ) );
 		break;
 		case ( HeroType::SHOOTER ):
 			hero_.reset( new ShooterPlayerSprite( level.entranceX(), level.entranceY() ) );

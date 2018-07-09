@@ -15,7 +15,7 @@ PlayerGraphics::PlayerGraphics( std::string&& texture )
 PlayerGraphics::~PlayerGraphics() {};
 
 void PlayerGraphics::update( Sprite& sprite )
-{		
+{
 	if ( sprite.directionX() == Direction::Horizontal::RIGHT )
 	{
 		flip_x_ = true;
@@ -37,7 +37,7 @@ void PlayerGraphics::update( Sprite& sprite )
 			animation_timer_.update();
 		}
 
-		
+
 		switch ( climb_counter_.value() )
 		{
 			case 1:
@@ -135,19 +135,19 @@ void PlayerGraphics::update( Sprite& sprite )
 	{
 		switch ( swim_counter_() )
 		{
-			case ( 0 ):			
+			case ( 0 ):
 				current_frame_x_ = 64;
-				current_frame_y_ = 26;		
+				current_frame_y_ = 26;
 			break;
 
-			case ( 1 ):			
+			case ( 1 ):
 				current_frame_x_ = 80;
-				current_frame_y_ = 26;		
+				current_frame_y_ = 26;
 			break;
 
-			case ( 2 ):			
+			case ( 2 ):
 				current_frame_x_ = 96;
-				current_frame_y_ = 26;		
+				current_frame_y_ = 26;
 			break;
 		}
 

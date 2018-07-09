@@ -151,6 +151,18 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 	}
 };
 
+void Level::sewerWarp( SpriteSystem& sprites, EventSystem& events )
+{
+	current_map_ = ( current_map_ == 0 ) ? 1 : 0;
+
+	//entrance_x_ = sprites.hero().xPixels();
+	//entrance_y_ = sprites.hero().yPixels() - 9;
+	//sprites.reset( *this, events );
+
+	events.changePalette( currentMap().palette_ );
+	currentMap().changed_ = true;
+};
+
 const std::string& Level::NameOLevel( unsigned int n )
 {
 	if ( level_list_.empty() )

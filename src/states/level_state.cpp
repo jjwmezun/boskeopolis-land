@@ -32,13 +32,16 @@ void LevelState::stateUpdate()
 {
 	blocks_.blocksFromMap( level_.currentMap(), camera_ );
 	blocks_.update( events_ );
-	level_.currentMap().update( events_, sprites_, blocks_, camera_ );
-	camera_.update();
-	sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
-	sprites_.interact( blocks_, level_, events_, camera_, health_ );
-	sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
-	sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
-	health_.update();
+	if ( !events_.pause_state_movement_ )
+	{
+		level_.currentMap().update( events_, sprites_, blocks_, camera_ );
+		camera_.update();
+		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+		sprites_.interact( blocks_, level_, events_, camera_, health_ );
+		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
+		health_.update();
+	}
 	inventory_screen_.update( events_, health_ );
 	level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
 	events_.update( level_, sprites_, camera_, blocks_ );
@@ -70,6 +73,7 @@ void LevelState::stateRender()
 	sprites_.render( camera_, false );
 	blocks_.render( camera_, true );
 	level_.currentMap().renderFG( camera_ );
+	events_.renderSewer( camera_ );
 	sprites_.render( camera_, true );
 	inventory_screen_.render( events_, sprites_.hero(), camera_, level_.currentMap() );
 };

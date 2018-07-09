@@ -9,6 +9,16 @@
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
 
+static constexpr int SEWER_START_W = 64;
+static constexpr int SEWER_START_H = 64;
+static constexpr int GROW_SIZE = 32;
+
+EventSystem::SewerGFX::SewerGFX( int x, int y )
+:
+	dest_ ( x, y, SEWER_START_W, SEWER_START_H ),
+	fade_in_ ( false )
+{};
+
 EventSystem::MiscData::MiscData()
 :
 	rand_treasure_ ( { 0, 9 } )
@@ -39,9 +49,9 @@ EventSystem::EventSystem()
 	in_front_of_door_ ( 0 ),
 	on_conveyor_belt_ ( false ),
 	played_death_song_ ( false ),
+	pause_state_movement_ ( false ),
 	misc_ ()
 {
-	std::cout<<"MAKE"<<std::endl;
 	resetMisc();
 };
 
@@ -61,13 +71,17 @@ void EventSystem::reset()
 	in_front_of_door_ = 0;
 	on_conveyor_belt_ = false;
 	played_death_song_ = false;
+	pause_state_movement_ = false;
 	resetPalette();
 	resetMisc();
 };
 
 void EventSystem::resetMisc()
 {
-	std::cout<<"RESET"<<std::endl;
+	if ( misc_.type_ == MiscType::SEWER_GFX && misc_.data_.sewer_gfx_ != nullptr )
+	{
+		delete misc_.data_.sewer_gfx_;
+	}
 	memset( &misc_, 0, sizeof( EMisc ) );
 };
 
@@ -195,10 +209,21 @@ void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera,
 
 		case ( 2 ):
 		{
-			doWarp( level, sprites, camera, blocks );
+			sprites.hero().graphics_->current_frame_x_ = 128;
+			sprites.hero().graphics_->current_frame_y_ = 26;
+			if ( testSewerAnimationFinished() )
+			{
+				level.sewerWarp( sprites, *this );
+				change_map_ = 0;
+				in_front_of_door_ = 0;
+				sprites.hero().graphics_->priority_ = true;
+				misc_.data_.sewer_gfx_->fade_in_ = true;
+			}
 		}
 		break;
 	}
+
+	doSewerAnimation( sprites );
 };
 
 void EventSystem::doWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
@@ -285,6 +310,7 @@ void EventSystem::playDeathSoundIfNotAlreadyPlaying()
 void EventSystem::changeMapSewer()
 {
 	change_map_ = 2;
+	turnOnSewerAnimation();
 };
 
 void EventSystem::setFlag( MiscFlagType type )
@@ -365,4 +391,81 @@ bool EventSystem::testRandomTreasure( int id )
 {
 	setRandomTreasureIfNotAlreadySet();
 	return misc_.data_.rand_treasure_.keycane_chest_ == id;
+};
+
+bool EventSystem::testSewerAnimationFinished() const
+{
+	assert( misc_.type_ == MiscType::SEWER_GFX );
+	return misc_.data_.sewer_gfx_->dest_.w >= Unit::WINDOW_WIDTH_PIXELS*2;
+}
+
+bool EventSystem::ensureSewerPointerIsSet( int x, int y )
+{
+	if ( misc_.data_.sewer_gfx_ == nullptr )
+	{
+		misc_.data_.sewer_gfx_ = new SewerGFX( x, y );
+		return true;
+	}
+	return false;
+}
+
+void EventSystem::turnOnSewerAnimation()
+{
+	misc_.type_ = MiscType::SEWER_GFX;
+	//ensureSewerPointerIsSet();
+	pause_state_movement_ = true;
+};
+
+void EventSystem::doSewerAnimation( SpriteSystem& sprites )
+{
+	if ( misc_.type_ == MiscType::SEWER_GFX )
+	{
+		if ( !misc_.data_.sewer_gfx_->fade_in_ )
+		{
+			misc_.data_.sewer_gfx_->dest_.h += GROW_SIZE;
+			misc_.data_.sewer_gfx_->dest_.w += GROW_SIZE;
+			misc_.data_.sewer_gfx_->dest_.x -= GROW_SIZE/2;
+			misc_.data_.sewer_gfx_->dest_.y -= GROW_SIZE/2;
+		}
+		else
+		{
+			misc_.data_.sewer_gfx_->dest_.h -= GROW_SIZE;
+			misc_.data_.sewer_gfx_->dest_.w -= GROW_SIZE;
+			misc_.data_.sewer_gfx_->dest_.x += GROW_SIZE/2;
+			misc_.data_.sewer_gfx_->dest_.y += GROW_SIZE/2;
+
+			if ( misc_.data_.sewer_gfx_->dest_.w <= 0 )
+			{
+				pause_state_movement_ = false;
+				misc_.type_ = MiscType::__NULL;
+				misc_.data_.sewer_gfx_->fade_in_ = false;
+				if ( misc_.data_.sewer_gfx_ != nullptr )
+				{
+					misc_.data_.sewer_gfx_->dest_.w = SEWER_START_W;
+					misc_.data_.sewer_gfx_->dest_.h = SEWER_START_H;
+				}
+				sprites.hero().graphics_->priority_ = false;
+			}
+		}
+	}
+};
+
+void EventSystem::renderSewer( const Camera& camera )
+{
+	if ( misc_.type_ == MiscType::SEWER_GFX )
+	{
+		auto dest = misc_.data_.sewer_gfx_->dest_;
+		Render::renderObject( "sprites/sewer-hole.png", { 0, 0, 64, 64 }, dest, SDL_FLIP_NONE, 0, 255, &camera );
+	}
+}
+
+void EventSystem::setSewerPosition( int x, int y )
+{
+	x = Unit::SubPixelsToPixels( x );
+	y = Unit::SubPixelsToPixels( y );
+	if ( !ensureSewerPointerIsSet( x, y ) )
+	{
+		misc_.data_.sewer_gfx_->dest_.x = x;
+		misc_.data_.sewer_gfx_->dest_.y = y;
+	}
 };

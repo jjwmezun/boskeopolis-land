@@ -5,6 +5,7 @@
 class BlockSystem;
 class Camera;
 class Level;
+class Sprite;
 class SpriteSystem;
 
 class EventSystem
@@ -33,11 +34,18 @@ class EventSystem
 		FLAG
 	};
 
+	struct SewerGFX
+	{
+		SewerGFX( int x, int y );
+		sdl2::SDLRect dest_;
+		bool fade_in_;
+	};
+
 	union MiscData
 	{
 		MiscData();
 		RandTreasure rand_treasure_;
-		sdl2::SDLRect* sewer_gfx_;
+		SewerGFX* sewer_gfx_;
 		MiscFlagType flag_;
 	};
 
@@ -62,6 +70,7 @@ class EventSystem
 	bool on_conveyor_belt_;
 	bool played_death_song_;
 	bool disable_pause_;
+	bool pause_state_movement_;
 	int change_map_;
 	int in_front_of_door_;
 	int move_water_;
@@ -113,6 +122,12 @@ class EventSystem
 	int addRandomTreasure();
 	void setRandomTreasureIfNotAlreadySet();
 	bool testRandomTreasure( int id );
+	bool testSewerAnimationFinished() const;
+	void turnOnSewerAnimation();
+	void doSewerAnimation( SpriteSystem& sprites );
+	void renderSewer( const Camera& camera );
+	bool ensureSewerPointerIsSet( int x, int y );
+	void setSewerPosition( int x, int y );
 
 	private:
 		EMisc misc_;
