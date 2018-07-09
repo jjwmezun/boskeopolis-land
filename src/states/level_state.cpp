@@ -48,9 +48,9 @@ void LevelState::stateUpdate()
 		newPalette( events_.getPalette() );
 	}
 
-	if ( events_.special_ == EventSystem::EType::TIMER_START )
+	if ( events_.timerStart() )
 	{
-		events_.special_ = EventSystem::EType::__NULL;
+		events_.unsetFlag();
 		Main::pushState
 		(
 			std::unique_ptr<GameState>
@@ -77,7 +77,7 @@ void LevelState::stateRender()
 void LevelState::init()
 {
 	newPalette( level_.currentMap().palette_ );
-	sprites_.reset( level_ );
+	sprites_.reset( level_, events_ );
 	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };

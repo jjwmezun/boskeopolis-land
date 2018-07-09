@@ -6,19 +6,5 @@
 		"y": 4,
 		"flip_x": true,
 		"flip_y": true
-	},
-	"behavior":
-	[
-		{
-			"component":
-			{
-				"type": "door"
-			},
-			"conditions":
-			[
-				{ "type": "collide_any" },
-				{ "type": "hero" }
-			]
-		}
-	]
+	}
 }

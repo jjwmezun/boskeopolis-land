@@ -26,6 +26,7 @@
 #include "block_component_message.hpp"
 #include "block_component_money.hpp"
 #include "block_component_move_water.hpp"
+#include "block_component_sewer_door.hpp"
 #include "block_component_shmup_bullet.hpp"
 #include "block_component_single_use.hpp"
 #include "block_component_sink.hpp"
@@ -442,6 +443,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "shmup_bullet" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentShmupBullet> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "sewer_door" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSewerDoor> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "spawn_icicle" ) )
 					{

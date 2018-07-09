@@ -12,7 +12,7 @@
 		{
 			"component":
 			{
-				"type": "door"
+				"type": "sewer_door"
 			},
 			"conditions":
 			[

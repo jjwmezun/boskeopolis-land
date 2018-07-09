@@ -112,15 +112,15 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 		}
 	}
 
-	if ( events.in_front_of_door_ && input_->up() && !door_lock_ && on_ground_ )
+	if ( events.in_front_of_door_ > 0 && input_->up() && !door_lock_ && on_ground_ )
 	{
-		events.changeMap();
+		events.change_map_ = events.in_front_of_door_;
 	}
 	else if ( input_->up() )
 	{
 		door_lock_ = true;
 	}
-	events.in_front_of_door_ = false;
+	events.in_front_of_door_ = 0;
 
 	if ( door_lock_ )
 	{

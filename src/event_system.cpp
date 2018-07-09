@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include <cstring>
 #include "event_system.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
@@ -7,6 +8,17 @@
 #include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
+
+EventSystem::MiscData::MiscData()
+:
+	rand_treasure_ ( { 0, 9 } )
+{};
+
+EventSystem::EMisc::EMisc()
+:
+	type_ ( MiscType::__NULL ),
+	data_ ()
+{};
 
 EventSystem::EventSystem()
 :
@@ -24,11 +36,14 @@ EventSystem::EventSystem()
 	disable_pause_ ( false ),
 	move_water_ ( -1 ),
 	current_water_ ( - 1 ),
-	in_front_of_door_ ( false ),
-	special_ ( EType::__NULL ),
+	in_front_of_door_ ( 0 ),
 	on_conveyor_belt_ ( false ),
-	played_death_song_ ( false )
-{};
+	played_death_song_ ( false ),
+	misc_ ()
+{
+	std::cout<<"MAKE"<<std::endl;
+	resetMisc();
+};
 
 void EventSystem::reset()
 {
@@ -43,11 +58,17 @@ void EventSystem::reset()
 	disable_pause_ = false;
 	move_water_ = -1;
 	current_water_ = -1;
-	in_front_of_door_ = false;
+	in_front_of_door_ = 0;
 	on_conveyor_belt_ = false;
 	played_death_song_ = false;
-	special_ = EType::__NULL;
 	resetPalette();
+	resetMisc();
+};
+
+void EventSystem::resetMisc()
+{
+	std::cout<<"RESET"<<std::endl;
+	memset( &misc_, 0, sizeof( EMisc ) );
 };
 
 void EventSystem::win()
@@ -157,19 +178,34 @@ void EventSystem::testMessage( Level& level )
 
 void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
-	if ( change_map_ )
+	switch ( change_map_ )
 	{
-		if ( Main::transitionState() == Main::TransitionState::__NULL )
+		case ( 1 ):
 		{
-			Main::startFadeOut();
+			if ( Main::transitionState() == Main::TransitionState::__NULL )
+			{
+				Main::startFadeOut();
+			}
+			else if ( Main::transitionState() == Main::TransitionState::FADE_IN )
+			{
+				doWarp( level, sprites, camera, blocks );
+			}
 		}
-		else if ( Main::transitionState() == Main::TransitionState::FADE_IN )
+		break;
+
+		case ( 2 ):
 		{
-			level.warp( sprites, camera, *this, blocks );
-			change_map_ = 0;
-			in_front_of_door_ = false;
+			doWarp( level, sprites, camera, blocks );
 		}
+		break;
 	}
+};
+
+void EventSystem::doWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+{
+	level.warp( sprites, camera, *this, blocks );
+	change_map_ = 0;
+	in_front_of_door_ = 0;
 };
 
 void EventSystem::testWinLoseOrQuit( Level& level )
@@ -249,4 +285,84 @@ void EventSystem::playDeathSoundIfNotAlreadyPlaying()
 void EventSystem::changeMapSewer()
 {
 	change_map_ = 2;
+};
+
+void EventSystem::setFlag( MiscFlagType type )
+{
+	misc_.type_ = MiscType::FLAG;
+	misc_.data_.flag_ = type;
+};
+
+void EventSystem::unsetFlag()
+{
+	assertFlag();
+	misc_.data_.flag_ = MiscFlagType::__NULL;
+};
+
+void EventSystem::assertFlag() const
+{
+	assert( misc_.type_ == MiscType::FLAG );
+};
+
+bool EventSystem::testIsFlag() const
+{
+	return misc_.type_ == MiscType::FLAG;
+};
+
+bool EventSystem::testFlag( MiscFlagType type ) const
+{
+	return testIsFlag() &&
+		misc_.data_.flag_ == type;
+};
+
+void EventSystem::startTimer()
+{
+	setFlag( MiscFlagType::TIMER_START );
+};
+
+bool EventSystem::timerStart() const
+{
+	return testFlag( MiscFlagType::TIMER_START );
+};
+
+bool EventSystem::trainDoorPartlyOpen() const
+{
+	return
+		testIsFlag() &&
+		(
+			misc_.data_.flag_ == MiscFlagType::LOCKED_GATE_OPENING ||
+			misc_.data_.flag_ == MiscFlagType::LOCKED_GATE_OPEN
+		);
+};
+
+void EventSystem::setOpening()
+{
+	setFlag( MiscFlagType::LOCKED_GATE_OPENING );
+}
+
+void EventSystem::setOpen()
+{
+	setFlag( MiscFlagType::LOCKED_GATE_OPEN );
+};
+
+int EventSystem::addRandomTreasure()
+{
+	misc_.type_ = MiscType::RAND_TREASURE;
+	++misc_.data_.rand_treasure_.count_;
+	return misc_.data_.rand_treasure_.count_;
+};
+
+void EventSystem::setRandomTreasureIfNotAlreadySet()
+{
+	assert( misc_.type_ == MiscType::RAND_TREASURE );
+	if ( misc_.data_.rand_treasure_.keycane_chest_ == 0 )
+	{
+		misc_.data_.rand_treasure_.keycane_chest_ = mezun::randInt( misc_.data_.rand_treasure_.count_, 1 );
+	}
+}
+
+bool EventSystem::testRandomTreasure( int id )
+{
+	setRandomTreasureIfNotAlreadySet();
+	return misc_.data_.rand_treasure_.keycane_chest_ == id;
 };

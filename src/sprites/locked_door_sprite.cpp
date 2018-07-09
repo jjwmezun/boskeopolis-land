@@ -17,8 +17,8 @@ LockedDoorSprite::~LockedDoorSprite() {};
 void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	has_key_ = events.hasKey();
-	
-	if ( events.special_ == EventSystem::EType::LOCKED_GATE_OPEN || ( events.special_ == EventSystem::EType::LOCKED_GATE_OPENING && hit_box_.h >= ( 16000 * 6 ) ) )
+
+	if ( events.trainDoorPartlyOpen() && hit_box_.h >= ( 16000 * 6 ) )
 	{
 		killNoAnimation();
 		death_finished_ = true;
@@ -27,18 +27,18 @@ void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	if ( opening_ )
 	{
 		hit_box_.h = std::max( 0, hit_box_.h - 2000 );
-		events.special_ = EventSystem::EType::LOCKED_GATE_OPENING;
+		events.setOpening();
 	}
-	
+
 	if ( hit_box_.h == 0 )
 	{
 		changeMovement( SpriteMovement::Type::GROUNDED );
 		block_interact_ = false;
 	}
-	
+
 	if ( fellInBottomlessPit( lvmap ) )
 	{
-		events.special_ = EventSystem::EType::LOCKED_GATE_OPEN;
+		events.setOpen();
 	}
 };
 
@@ -48,7 +48,7 @@ void LockedDoorSprite::customInteract( Collision& my_collision, Collision& their
 	{
 		them.collideStopAny( their_collision );
 	}
-	
+
 	if ( them.hasType( SpriteType::HERO ) )
 	{
 		if ( their_collision.collideAny() && has_key_ )
@@ -64,6 +64,6 @@ void LockedDoorSprite::render( Camera& camera, bool priority )
 	{
 		Render::renderObject( "sprites/locked_door.png", { 0, 0, 16, 2 }, { xPixels(), y, 16, 2 }, SDL_FLIP_NONE, 0, 255, &camera );
 	}
-	
+
 	Render::renderObject( "sprites/locked_door.png", { 0, 2, 16, 12 }, { centerXPixels() - 8, std::max( yPixels(), centerYPixels() - 6 ), 16, 12 }, SDL_FLIP_NONE, 0, 255, &camera );
 };

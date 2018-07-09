@@ -2,10 +2,10 @@
 
 #include "block_component.hpp"
 
-class BlockComponentWarp : public BlockComponent
+class BlockComponentSewerDoor : public BlockComponent
 {
 	public:
-		BlockComponentWarp();
-		~BlockComponentWarp();
+		BlockComponentSewerDoor();
+		~BlockComponentSewerDoor();
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 };

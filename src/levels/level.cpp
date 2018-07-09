@@ -124,7 +124,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		entrance_x_ = warp->entranceX();
 		entrance_y_ = warp->entranceY();
 
-		sprites.reset( *this );
+		sprites.reset( *this, events );
 
 		int camera_x = camera.x();
 		int camera_y = camera.y();
@@ -144,7 +144,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 
 		events.changePalette( currentMap().palette_ );
 		blocks.changeTileset( currentMap().tileset() );
-		
+
 		Audio::changeSong( currentMap().music_ );
 
 		currentMap().changed_ = true;
@@ -335,7 +335,7 @@ Level Level::getLevel( int id )
 		/* LAYERS
 		==============================================================*/
 
-			// Can't rapidjson object to function, so we have to use dumb loops.								
+			// Can't rapidjson object to function, so we have to use dumb loops.
 			std::vector<std::string> map_layer_group_types = { "backgrounds", "foregrounds" };
 			std::map<std::string, std::vector<std::unique_ptr<MapLayer>>> map_layer_groups;
 
@@ -534,7 +534,7 @@ Level Level::getLevel( int id )
 										{
 											alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
 										}
-										
+
 										group.emplace_back
 										(
 											std::make_unique<MapLayerShade> ( bg[ "color" ].GetInt(), alpha )
@@ -696,7 +696,7 @@ Level Level::getLevel( int id )
 		goal = std::make_unique<Goal> ();
 	}
 
-			
+
 
 
 	/* ENTRANCES
@@ -727,7 +727,7 @@ Level Level::getLevel( int id )
 	if ( lvobj.HasMember( "camera_y" ) && lvobj[ "camera_y" ].IsInt() )
 	{
 		camera_y = Unit::BlocksToPixels( lvobj[ "camera_y" ].GetInt() );
-	}	
+	}
 
 
 
@@ -809,7 +809,7 @@ void Level::buildLevelList()
 		}
 
 	}
-	
+
 	// Debug Test
 	//checkLvList();
 };
@@ -821,12 +821,12 @@ void Level::checkLvList()
 		if ( level_list_.at( i ) != "" )
 		{
 			std::cout<<Text::formatNumDigitPadding( i, 3 )<<"    "<<level_list_.at( i );
-			
+
 			for ( int j = 0; j < 24 - ( int )( level_list_.at( i ).size() ); ++j )
 			{
 				std::cout<<" ";
 			}
-			
+
 			std::cout<<Text::formatNumCommas( Text::formatNumDigitPadding( gem_challenge_list_.at( i ), 5 ) )<<"    "<<Clock::timeToString( time_challenge_list_.at( i ) )<<std::endl;
 		}
 	}
@@ -855,6 +855,6 @@ int Level::allEnemiesToKill() const
 			}
 		}
 	}
-	
+
 	return n;
 };

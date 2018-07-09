@@ -30,7 +30,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 {
 	switch ( moon_state_ )
 	{
-		case ( MoonState::UNUSED ):	
+		case ( MoonState::UNUSED ):
 			++timer_;
 			if ( timer_ >= 4 )
 			{
@@ -62,7 +62,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 
 		case ( MoonState::FREEZE ):
 			Inventory::clock().reset( Direction::Vertical::DOWN, TIME_LIMIT );
-			events.special_ = EventSystem::EType::TIMER_START;
+			events.startTimer();
 			moon_state_ = MoonState::AFTER_FREEZE;
 		break;
 

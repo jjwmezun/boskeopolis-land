@@ -113,7 +113,7 @@ SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 
 SpriteSystem::~SpriteSystem() {};
 
-std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i, const Map& lvmap )
+std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i, const Map& lvmap, EventSystem& events )
 {
 	x = Unit::SubPixelsToPixels( x );
 	y = Unit::SubPixelsToPixels( y );
@@ -409,7 +409,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new TreasureChestSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 96 ):
-			return std::unique_ptr<Sprite> ( new RandomTreasureChestSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new RandomTreasureChestSprite( x, y, events ) );
 		break;
 		case ( SPRITE_INDEX_START + 97 ):
 			return std::unique_ptr<Sprite> ( new PelicanSprite( x, y ) );
@@ -487,7 +487,7 @@ void SpriteSystem::heroOpenTreasureChest()
 	hero_.reset( new PlayerOpenChestSprite( hero_->xPixels(), hero_->yPixels(), hero_->direction_x_ ) );
 };
 
-void SpriteSystem::spritesFromMap( const Map& lvmap )
+void SpriteSystem::spritesFromMap( const Map& lvmap, EventSystem& events )
 {
 	for ( int i = 0; i < lvmap.spritesSize(); ++i )
 	{
@@ -497,7 +497,7 @@ void SpriteSystem::spritesFromMap( const Map& lvmap )
 
 		if ( type != -1 )
 		{
-			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, lvmap ) );
+			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, lvmap, events ) );
 			sprites_.emplace_back( std::move( new_sprite ) );
 
 			/*
@@ -539,7 +539,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 	}
 };
 
-void SpriteSystem::reset( const Level& level )
+void SpriteSystem::reset( const Level& level, EventSystem& events )
 {
 	Sprite::resistance_x_ = level.currentMap().wind_strength_;
 
@@ -562,7 +562,7 @@ void SpriteSystem::reset( const Level& level )
 	}
 
 	clearSprites();
-	spritesFromMap( level.currentMap() );
+	spritesFromMap( level.currentMap(), events );
 	switch( level.currentMap().hero_type_ )
 	{
 		case ( HeroType::NORMAL ):

@@ -86,7 +86,7 @@ void StrongerCowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	}
 	else
 	{
-		if ( events.special_ == EventSystem::EType::LOCKED_GATE_OPENING || events.special_ == EventSystem::EType::LOCKED_GATE_OPEN )
+		if ( events.trainDoorPartlyOpen() )
 		{
 			awake_ = true;
 		}
@@ -135,7 +135,7 @@ void StrongerCowpokerSprite::hurt()
 		--hp_;
 		Audio::playSound( Audio::SoundType::BOP );
 		invincibility_ = 60;
-		
+
 		if ( hp_ <= 0 )
 		{
 			kill();
@@ -192,7 +192,7 @@ void StrongerCowpokerSprite::handleMovement()
 			{
 				hit_box_.x -= 1000;
 			}
-		break;	
+		break;
 
 		case ( 2 ):
 			if ( !collide_right_ && !collide_right_prev_ )
@@ -200,12 +200,12 @@ void StrongerCowpokerSprite::handleMovement()
 				hit_box_.x += 1000;
 			}
 		break;
-			
+
 		default:
 			fullStopX();
 		break;
 	}
-	
+
 	++move_counter_;
 };
 
