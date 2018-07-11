@@ -36,6 +36,7 @@ namespace Direction
 		LEFT
 	};
 	static constexpr int SIMPLE_SIZE = ( int )Simple::LEFT + 1;
+	std::string simpleString( Simple dir );
 
 	enum class Rotation
 	{
@@ -220,7 +221,7 @@ namespace Direction
 			break;
 		}
 	};
-	
+
 	constexpr Rotation horizontalAndVerticalToRotation( Horizontal h, Vertical v )
 	{
 		switch ( h )

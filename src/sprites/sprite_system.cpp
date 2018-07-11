@@ -88,6 +88,7 @@
 #include "snowboulder_sprite.hpp"
 #include "snowman_sprite.hpp"
 #include "spawn_icicle_sprite.hpp"
+#include "spider_sprite.hpp"
 #include "spike_egg_sprite.hpp"
 #include "spiky_fruit_sprite.hpp"
 #include "spring_sprite.hpp"
@@ -419,6 +420,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 99 ):
 			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 100 ):
+			return std::unique_ptr<Sprite> ( new SpiderSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

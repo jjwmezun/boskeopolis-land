@@ -29,7 +29,7 @@
          "name":"FG1",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":158,
          "x":0,
          "y":0

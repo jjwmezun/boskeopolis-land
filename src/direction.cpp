@@ -2,6 +2,18 @@
 
 namespace Direction
 {
+	std::string simpleString( Simple dir )
+	{
+		switch ( dir )
+		{
+			case( Simple::__NULL ):     return "NULL";
+			case( Simple::UP ):         return "UP";
+			case( Simple::RIGHT ):      return "RIGHT";
+			case( Simple::DOWN ):       return "DOWN";
+			case( Simple::LEFT ):       return "LEFT";
+		}
+	};
+
 	std::string rotationString( Rotation r )
 	{
 		switch ( r )
