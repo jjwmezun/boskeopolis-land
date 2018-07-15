@@ -100,6 +100,7 @@
 #include "tall_tombstone_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
 #include "underground_subway_sprite.hpp"
+#include "volcano_monster_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 
@@ -419,10 +420,16 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new CrabSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 99 ):
-			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 100 ):
 			return std::unique_ptr<Sprite> ( new SpiderSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 101 ):
+			return std::unique_ptr<Sprite> ( new VolcanoMonsterSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 102 ):
+			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
@@ -430,14 +437,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 	}
 };
 
-void SpriteSystem::spawn( SpawnSprite type, int x, int y )
+void SpriteSystem::spawn( std::unique_ptr<Sprite> sprite )
 {
-	switch( type )
-	{
-		case ( SpawnSprite::SPIKE_EGG ):
-			sprites_.emplace_back( new SpikeEggSprite( x, y ) );
-		break;
-	}
+	sprites_.emplace_back( sprite.release() );
 };
 
 void SpriteSystem::spawnCactooieSpine( int x, int y, Direction::Horizontal direction )

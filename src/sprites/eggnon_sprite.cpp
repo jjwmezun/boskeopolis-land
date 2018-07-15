@@ -91,7 +91,7 @@
 
     void EggnonSprite::DroppingState::init( EggnonSprite& e, SpriteSystem& sprites )
     {
-        sprites.spawn( SpriteSystem::SpawnSprite::SPIKE_EGG, e.xPixels(), e.yPixels() + 8 );
+        //sprites.spawn( SpriteSystem::SpawnSprite::SPIKE_EGG, e.xPixels(), e.yPixels() + 8 );
     };
 
     EggnonSprite::EggnonSprite( int x, int y )
