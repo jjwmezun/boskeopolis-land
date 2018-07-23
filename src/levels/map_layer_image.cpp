@@ -21,7 +21,8 @@ MapLayerImage::MapLayerImage
 	int move_speed_y,
 	int animation_speed,
 	bool flip,
-	Uint8 alpha
+	Uint8 alpha,
+	SDL_BlendMode blend_mode
 )
 :
 	MapLayer(),
@@ -42,7 +43,8 @@ MapLayerImage::MapLayerImage
 	current_frame_ ( Counter( 0, num_o_frames - 1, 0, !flip ) ),
 	animation_timer_ ( {} ),
 	frame_dir_ ( ( flip ) ? Direction::Vertical::UP : Direction::Vertical::__NULL ),
-	alpha_ ( alpha )
+	alpha_ ( alpha ),
+	blend_mode_ ( blend_mode )
 {};
 
 MapLayerImage::~MapLayerImage() {};
@@ -85,7 +87,7 @@ void MapLayerImage::move( int width, const sdl2::SDLRect& container )
 
 	movement_position_x_ += move_speed_x_;
 	movement_position_y_ += move_speed_y_;
-	
+
 	// To make scrolling nonrepeating BGs repeat o'er the whole map ( used in "Playing Railroad" ) & to prevent unlikely but theoretical problems
 	// o' movement_position flipping to the max value if it goes too low, causing the BG to jerk unevenly, if BG goes far 'nough left, push it forward past the right edge o' map in BG-width increments ( so that BG tiling & scrolling stays smooth ).
 	// So far this isn't needed for rightward scrolling, since no backgrounds scroll rightward yet.
@@ -176,7 +178,7 @@ void MapLayerImage::renderX( const sdl2::SDLRect& container, sdl2::SDLRect& dest
 {
 	if ( onscreen( dest, container ) )
 	{
-		Render::renderObject( texture_, source_, dest, SDL_FLIP_NONE, 0.0, alpha_ );
+		renderFinal( dest );
 	}
 
 	if ( repeat_x_ > 0 )
@@ -188,9 +190,14 @@ void MapLayerImage::renderX( const sdl2::SDLRect& container, sdl2::SDLRect& dest
 
 			if ( onscreen( dest, container ) )
 			{
-				Render::renderObject( texture_, source_, dest, SDL_FLIP_NONE, 0.0, alpha_ );
+				renderFinal( dest );
 			}
 			++i;
 		}
 	}
+};
+
+void MapLayerImage::renderFinal( sdl2::SDLRect& dest ) const
+{
+	Render::renderObject( texture_, source_, dest, SDL_FLIP_NONE, 0.0, alpha_, nullptr, blend_mode_ );
 };

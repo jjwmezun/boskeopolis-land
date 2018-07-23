@@ -56,7 +56,7 @@ Map Map::mapFromPath
 	std::string path,
 	std::vector<std::unique_ptr<MapLayer>> backgrounds,
 	std::vector<Warp> warps,
-	std::vector<std::unique_ptr<MapLayer>> foregrounds
+	std::vector<std::unique_ptr<MapLayer>> top_foregrounds
 )
 {
 
@@ -68,6 +68,7 @@ Map Map::mapFromPath
 		std::vector<std::vector<int>> bg_block_layers = {};
 		std::vector<std::vector<int>> fg_block_layers = {};
 		std::vector<std::vector<int>> fade_fg_block_layers = {};
+		std::vector<std::unique_ptr<MapLayer>> foregrounds;
 
 		std::string palette = "Grayscale";
 		int bg_color = 1;
@@ -189,6 +190,10 @@ Map Map::mapFromPath
 		for ( auto& fade_fg_block_layer : fade_fg_block_layers )
 		{
 			foregrounds.emplace_back( new MapLayerTilemap( fade_fg_block_layer, width, height, true ) );
+		}
+		for ( auto& top_foreground : top_foregrounds )
+		{
+			foregrounds.emplace_back( top_foreground.release() );
 		}
 
 

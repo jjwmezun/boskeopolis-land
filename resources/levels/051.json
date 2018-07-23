@@ -10,91 +10,27 @@
 				{
 					"type": "image",
 					"img": "boskeopolis-underground-a.png",
-					"width": 2528,
-					"height": 1488,
+					"width": 2080,
+					"height": 1456,
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
 				}
 			],
-			"warps":
+			"foregrounds":
 			[
 				{
-					"map": 1,
-					"entrance_x": 112,
-					"entrance_y": 43,
-					"location": [ 110, 115, 40, 45 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 80,
-					"entrance_y": 43,
-					"location": [ 78, 83, 40, 45 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 98,
-					"entrance_y": 21,
-					"location": [ 96, 101, 18, 23 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 105,
-					"entrance_y": 27,
-					"location": [ 103, 108, 25, 29 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 91,
-					"entrance_y": 49,
-					"location": [ 89, 94, 47, 51 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 99,
-					"entrance_y": 57,
-					"location": [ 97, 102, 55, 59 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 111,
-					"entrance_y": 57,
-					"location": [ 109, 114, 55, 59 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 117,
-					"entrance_y": 57,
-					"location": [ 115, 120, 55, 59 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 91,
-					"entrance_y": 65,
-					"location": [ 89, 94, 63, 67 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 111,
-					"entrance_y": 85,
-					"location": [ 109, 114, 83, 87 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 123,
-					"entrance_y": 73,
-					"location": [ 121, 126, 71, 76 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 139,
-					"entrance_y": 69,
-					"location": [ 137, 142, 67, 71 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 140,
-					"entrance_y": 85,
-					"location": [ 138, 143, 83, 145 ]
+					"type": "image",
+					"img": "boskeopolis-underground-spotlight.png",
+					"width": 224,
+					"height": 224,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 88,
+					"lighten": true,
+					"alpha": 0,
+					"switch": true
 				}
 			]
 		},
@@ -105,117 +41,35 @@
 				{
 					"type": "image",
 					"img": "boskeopolis-underground-b.png",
-					"width": 2528,
-					"height": 1488,
+					"width": 2080,
+					"height": 1456,
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
 				}
 			],
-			"warps":
+			"foregrounds":
 			[
 				{
-					"map": 0,
-					"entrance_x": 112,
-					"entrance_y": 43,
-					"location": [ 110, 115, 40, 45 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 80,
-					"entrance_y": 43,
-					"location": [ 78, 83, 40, 45 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 33,
-					"entrance_y": 23,
-					"location": [ 31, 36, 21, 25 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 79,
-					"entrance_y": 33,
-					"location": [ 77, 82, 31, 35 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 91,
-					"entrance_y": 49,
-					"location": [ 89, 94, 47, 51 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 99,
-					"entrance_y": 57,
-					"location": [ 97, 102, 55, 59 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 91,
-					"entrance_y": 65,
-					"location": [ 89, 94, 63, 67 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 98,
-					"entrance_y": 21,
-					"location": [ 96, 101, 19, 23 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 105,
-					"entrance_y": 27,
-					"location": [ 103, 108, 25, 29 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 111,
-					"entrance_y": 33,
-					"location": [ 109, 114, 31, 35 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 117,
-					"entrance_y": 57,
-					"location": [ 115, 120, 55, 59 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 111,
-					"entrance_y": 85,
-					"location": [ 109, 114, 83, 87 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 123,
-					"entrance_y": 73,
-					"location": [ 121, 126, 71, 75 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 139,
-					"entrance_y": 69,
-					"location": [ 137, 142, 67, 71 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 140,
-					"entrance_y": 85,
-					"location": [ 138, 143, 83, 87 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 120,
-					"entrance_y": 81,
-					"location": [ 118, 123, 79, 83 ]
+					"type": "image",
+					"img": "boskeopolis-underground-spotlight.png",
+					"width": 224,
+					"height": 224,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 88,
+					"lighten": true,
+					"alpha": 0,
+					"switch": true
 				}
 			]
 		}
 	],
 
-	"entrance_x": 94,
-	"entrance_y": 7,
+	"entrance_x": 68,
+	"entrance_y": 24,
 
-	"gem_challenge": 15000,
-	"time_challenge": 50
+	"gem_challenge": 35000,
+	"time_challenge": 60
 }

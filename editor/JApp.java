@@ -1,14 +1,16 @@
+package boskeopolis.land.editor;
+
 import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
 import javafx.scene.layout.*;
 
-public class JApp extends Application
+public class JApp //extends Application
 {
     public static void main( String[] args )
     {
         System.out.println( "Launcing JavaFX App" );
-        launch( args );
+        //launch( args );
     }
 
     public void init()

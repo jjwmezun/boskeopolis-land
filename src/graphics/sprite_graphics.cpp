@@ -14,7 +14,8 @@ SpriteGraphics::SpriteGraphics
 	int y_adjustment,
 	int w_adjustment,
 	int h_adjustment,
-	Uint8 alpha
+	Uint8 alpha,
+	SDL_BlendMode blend_mode
 )
 :
 	flip_x_ ( flip_x ),
@@ -31,7 +32,8 @@ SpriteGraphics::SpriteGraphics
 	rotation_ ( rotation ),
 	texture_ ( texture ),
 	prev_frame_x_ ( 0 ),
-	prev_frame_y_ ( 0 )
+	prev_frame_y_ ( 0 ),
+	blend_mode_ ( blend_mode )
 {};
 
 SpriteGraphics::~SpriteGraphics() {};
@@ -77,7 +79,7 @@ void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_f
 			dest.h
 		};
 
-		Render::renderObject( texture_, source, dest, flip_x_, flip_y_, rotation_, alpha, camera );
+		Render::renderObject( texture_, source, dest, flip_x_, flip_y_, rotation_, alpha, camera, blend_mode_ );
 	}
 };
 

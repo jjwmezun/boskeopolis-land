@@ -25,7 +25,8 @@ class SpriteGraphics
 			int y_adjustment = 0,
 			int w_adjustment = 0,
 			int h_adjustment = 0,
-			Uint8 alpha = 255
+			Uint8 alpha = 255,
+			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 		);
 
 		const std::string texture_;
@@ -38,6 +39,7 @@ class SpriteGraphics
 		int y_adjustment_;
 		int w_adjustment_;
 		int h_adjustment_;
+		SDL_BlendMode blend_mode_;
 		Uint8 alpha_;
 		bool flip_x_;
 		bool flip_y_;

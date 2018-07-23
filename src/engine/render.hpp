@@ -26,7 +26,8 @@ namespace Render
 		bool flip_y,
 		double rotation,
 		Uint8 alpha,
-		const Camera* camera
+		const Camera* camera,
+		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 	);
 	void renderObject
 	(
@@ -36,7 +37,8 @@ namespace Render
 		SDL_RendererFlip flip = SDL_FLIP_NONE,
 		double rotation = 0,
 		Uint8 alpha = 255,
-		const Camera* = nullptr
+		const Camera* = nullptr,
+		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 	);
 	void renderObject
 	(
@@ -46,9 +48,10 @@ namespace Render
 		SDL_RendererFlip flip = SDL_FLIP_NONE,
 		double rotation = 0,
 		Uint8 alpha = 255,
-		const Camera* = nullptr
+		const Camera* = nullptr,
+		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 	);
-	
+
 	void renderObjectNoMagnify
 	(
 		const std::string& sheet,

@@ -346,7 +346,7 @@ namespace Render
 		SDL_SetRenderDrawColor( renderer_, color_obj.r, color_obj.g, color_obj.b, alpha );
 		SDL_RenderFillRect( renderer_, &screen_ );
 	};
-	
+
 	void colorCanvas()
 	{
 		colorCanvas( palette_->bgN() );
@@ -394,7 +394,7 @@ namespace Render
 			return SDL_FLIP_NONE;
 		}
 	};
-	
+
 	void renderObject
 	(
 		const std::string& sheet,
@@ -404,10 +404,11 @@ namespace Render
 		bool flip_y,
 		double rotation,
 		Uint8 alpha,
-		const Camera* camera
+		const Camera* camera,
+		SDL_BlendMode blend_mode
 	)
 	{
-		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera );
+		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera, blend_mode );
 	};
 
 	void renderObject
@@ -418,11 +419,12 @@ namespace Render
 		SDL_RendererFlip flip,
 		double rotation,
 		Uint8 alpha,
-		const Camera* camera
+		const Camera* camera,
+		SDL_BlendMode blend_mode
 	)
 	{
 		checkTexture( sheet );
-		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera );
+		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode );
 	}
 
 	void renderObjectNoMagnify
@@ -449,7 +451,8 @@ namespace Render
 		SDL_RendererFlip flip,
 		double rotation,
 		Uint8 alpha,
-		const Camera* camera
+		const Camera* camera,
+		SDL_BlendMode blend_mode
 	)
 	{
 		SDL_SetTextureAlphaMod( texture, alpha );
@@ -461,9 +464,20 @@ namespace Render
 
 		dest = sourceRelativeToScreen( dest );
 
+		if ( blend_mode != SDL_BLENDMODE_BLEND && blend_mode != SDL_BLENDMODE_NONE )
+		{
+			SDL_SetRenderDrawBlendMode( renderer_, blend_mode );
+			SDL_SetTextureBlendMode( texture, blend_mode );
+		}
+
 		if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
 		{
 			printf( "Render failure: %s\n", SDL_GetError() );
+		}
+
+		if ( blend_mode != SDL_BLENDMODE_BLEND )
+		{
+			SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
 		}
 	};
 
@@ -508,7 +522,7 @@ namespace Render
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
 		SDL_RenderFillRect( renderer_, &box_relative );
 	};
-	
+
 	void renderRectCamera( sdl2::SDLRect& box, const Camera& camera, int color, int alpha )
 	{
 		cameraAdjust( box, &camera );

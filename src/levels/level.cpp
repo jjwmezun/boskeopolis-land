@@ -2,6 +2,7 @@
 #include "map_layer_constellation_moving.hpp"
 #include "map_layer_constellation_scrolling.hpp"
 #include "map_layer_image.hpp"
+#include "map_layer_image_switch.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
 #include "block_system.hpp"
@@ -416,6 +417,7 @@ Level Level::getLevel( int id )
 									int bganimspeed = 1;
 									bool bganimflip = false;
 									Uint8 alpha = 255;
+									SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE;
 
 									if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
 									{
@@ -479,29 +481,61 @@ Level Level::getLevel( int id )
 									{
 										bganimflip = bg[ "animation_flip" ].GetBool();
 									}
+									if ( bg.HasMember( "lighten" ) && bg[ "lighten" ].IsBool() && bg[ "lighten" ].GetBool() == true )
+									{
+										blend_mode = SDL_BLENDMODE_ADD;
+									}
 
-
-									group.emplace_back
-									(
-										std::make_unique<MapLayerImage>
+									if ( bg.HasMember( "switch" ) && bg[ "switch" ].IsBool() && bg[ "switch" ].GetBool() == true )
+									{
+										group.emplace_back
 										(
-											std::forward<std::string> ( img ),
-											bgw,
-											bgh,
-											bgxoffset,
-											bgyoffset,
-											bgxscroll,
-											bgyscroll,
-											bgframes,
-											bgxrepeat,
-											bgyrepeat,
-											bgxspeed,
-											bgyspeed,
-											bganimspeed,
-											bganimflip,
-											alpha
-										)
-									);
+											std::make_unique<MapLayerImageSwitch>
+											(
+												std::forward<std::string> ( img ),
+												bgw,
+												bgh,
+												bgxoffset,
+												bgyoffset,
+												bgxscroll,
+												bgyscroll,
+												bgframes,
+												bgxrepeat,
+												bgyrepeat,
+												bgxspeed,
+												bgyspeed,
+												bganimspeed,
+												bganimflip,
+												alpha,
+												blend_mode
+											)
+										);
+									}
+									else
+									{
+										group.emplace_back
+										(
+											std::make_unique<MapLayerImage>
+											(
+												std::forward<std::string> ( img ),
+												bgw,
+												bgh,
+												bgxoffset,
+												bgyoffset,
+												bgxscroll,
+												bgyscroll,
+												bgframes,
+												bgxrepeat,
+												bgyrepeat,
+												bgxspeed,
+												bgyspeed,
+												bganimspeed,
+												bganimflip,
+												alpha,
+												blend_mode
+											)
+										);
+									}
 
 								}
 								else if ( mezun::areStringsEqual( bgtype, "constellation" ) )

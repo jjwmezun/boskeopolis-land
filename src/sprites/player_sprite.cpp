@@ -124,6 +124,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 				graphics_->priority_ = true;
 				vx_ = 0;
 				acceleration_x_ = 0;
+				Audio::playSound( Audio::SoundType::SEWER_HOLE );
 			break;
 		}
 	}
