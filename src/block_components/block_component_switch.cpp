@@ -1,3 +1,4 @@
+#include "block.hpp"
 #include "block_component_switch.hpp"
 #include "event_system.hpp"
 
@@ -12,6 +13,7 @@ void BlockComponentSwitch::interact( const Collision& collision, Sprite& sprite,
 		events.flipSwitch();
 		ready_ = false;
 	}
+	block.hit_box_.y -= 1000;
 };
 
 void BlockComponentSwitch::update( EventSystem& events, BlockType& type )
@@ -32,4 +34,10 @@ void BlockComponentSwitch::update( EventSystem& events, BlockType& type )
 			delay_.start();
 		}
 	}
+
+	/*
+	while ( block.hit_box_.y % 16000 !== 0 )
+	{
+		block.hit_box_.y += 1000;
+	}*/
 };

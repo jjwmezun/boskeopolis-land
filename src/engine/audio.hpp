@@ -23,7 +23,8 @@ namespace Audio
 		CHEST_LOCK = 15,
 		LIGHTNING = 16,
 		SWIM = 17,
-		SEWER_HOLE = 18
+		SEWER_HOLE = 18,
+		UNLOCK = 19
 	};
 
 	void init( const std::vector<std::string>& args );

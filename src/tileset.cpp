@@ -19,6 +19,7 @@
 #include "block_component_key.hpp"
 #include "block_component_kill.hpp"
 #include "block_component_light_switch.hpp"
+#include "block_component_lock_box.hpp"
 #include "block_component_lose.hpp"
 #include "block_component_low_slope_left.hpp"
 #include "block_component_low_slope_right.hpp"
@@ -403,6 +404,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "bouncy" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentBouncy> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "lock_box" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentLockBox> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "sink" ) )
 					{

@@ -5,7 +5,7 @@
 
 namespace Audio
 {
-	static constexpr int NUM_O_SOUNDS = 19;
+	static constexpr int NUM_O_SOUNDS = 20;
 	const std::string RELATIVE_DIR = "music";
 	const std::string EXT = "mp3";
 	std::string current_song_ = "";
@@ -42,6 +42,7 @@ namespace Audio
 		ChannelType::MISC,
 		ChannelType::MISC,
 		ChannelType::JUMP,
+		ChannelType::MISC,
 		ChannelType::MISC
 	};
 
@@ -86,6 +87,7 @@ namespace Audio
 			sounds_[ ( int )( SoundType::LIGHTNING ) ] = loadSound( "lightning.wav" );
 			sounds_[ ( int )( SoundType::SWIM ) ] = loadSound( "swim.wav" );
 			sounds_[ ( int )( SoundType::SEWER_HOLE ) ] = loadSound( "sewer-hole-2.wav" );
+			sounds_[ ( int )( SoundType::UNLOCK ) ] = loadSound( "unlock.wav" );
 		}
 	};
 

@@ -67,8 +67,10 @@
 		}
 	],
 
-	"entrance_x": 68,
-	"entrance_y": 24,
+	"entrance_x": 104,
+	"entrance_y": 57,
+	"entrance_x2": 68,
+	"entrance_y2": 24,
 
 	"gem_challenge": 35000,
 	"time_challenge": 60

@@ -3,7 +3,8 @@
 	{
 		"type": "sprite",
 		"x": 0,
-		"y": 2
+		"y": 2,
+		"priority": true
 	},
 	"behavior":
 	[
@@ -22,6 +23,18 @@
 			{
 				"type": "change_block",
 				"value": 8
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" },
+				{ "type": "key" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "lock_box"
 			},
 			"conditions":
 			[

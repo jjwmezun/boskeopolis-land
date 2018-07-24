@@ -1,6 +1,6 @@
 {
 	"name": "Minty Mines",
-	
+
 	"maps":
 	[
 		{
@@ -18,11 +18,11 @@
 			]
 		}
 	],
-	
+
 	"entrance_x": 53,
 	"entrance_y": 13,
 	"camera_x": 47,
-	
+
 	"gem_challenge": 24900,
 	"time_challenge": 33
 }
