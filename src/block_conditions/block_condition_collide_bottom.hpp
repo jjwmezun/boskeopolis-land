@@ -1,5 +1,4 @@
-#ifndef BLOCK_CONDITION_COLLIDE_BOTTOM_H
-#define BLOCK_CONDITION_COLLIDE_BOTTOM_H
+#pragma once
 
 #include "block_condition.hpp"
 
@@ -8,7 +7,5 @@ class BlockConditionCollideBottom : public BlockCondition
 	public:
 		BlockConditionCollideBottom();
 		~BlockConditionCollideBottom();
-		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const override;
 };
-
-#endif // BLOCK_CONDITION_COLLIDE_BOTTOM_H

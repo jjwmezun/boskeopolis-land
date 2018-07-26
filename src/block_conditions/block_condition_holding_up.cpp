@@ -5,7 +5,7 @@ BlockConditionHoldingUp::BlockConditionHoldingUp() {};
 
 BlockConditionHoldingUp::~BlockConditionHoldingUp() {};
 
-bool BlockConditionHoldingUp::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health )
+bool BlockConditionHoldingUp::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
 {
 	return sprite.onGround();
 };

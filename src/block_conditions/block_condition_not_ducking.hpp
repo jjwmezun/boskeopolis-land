@@ -1,5 +1,4 @@
-#ifndef BLOCK_CONDITION_NOT_DUCKING_H
-#define BLOCK_CONDITION_NOT_DUCKING_H
+#pragma once
 
 #include "block_condition.hpp"
 
@@ -8,7 +7,5 @@ class BlockConditionNotDucking : public BlockCondition
 	public:
 		BlockConditionNotDucking();
 		~BlockConditionNotDucking();
-		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const override;
 };
-
-#endif // BLOCK_CONDITION_NOT_DUCKING_H

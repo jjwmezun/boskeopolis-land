@@ -7,5 +7,5 @@ class BlockConditionSwitchOn : public BlockCondition
 	public:
 		BlockConditionSwitchOn();
 		~BlockConditionSwitchOn();
-		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const override;
 };

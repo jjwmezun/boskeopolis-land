@@ -12,7 +12,7 @@ BlockConditionCollideSpecific::BlockConditionCollideSpecific( int left, int righ
 
 BlockConditionCollideSpecific::~BlockConditionCollideSpecific() {};
 
-bool BlockConditionCollideSpecific::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health )
+bool BlockConditionCollideSpecific::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
 {
 	return
 		( collision.overlapXLeft()   > left_  ||
