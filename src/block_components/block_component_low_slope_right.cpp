@@ -7,7 +7,7 @@ BlockComponentLowSlopeRight::BlockComponentLowSlopeRight(){};
 
 BlockComponentLowSlopeRight::~BlockComponentLowSlopeRight() {};
 
-void BlockComponentLowSlopeRight::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentLowSlopeRight::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	if ( collision.collideAny() )
 	{

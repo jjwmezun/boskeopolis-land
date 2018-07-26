@@ -10,7 +10,7 @@ BlockComponentSolid::BlockComponentSolid()
 
 BlockComponentSolid::~BlockComponentSolid() {};
 
-void BlockComponentSolid::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentSolid::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	sprite.collideStopAny( collision );
 };

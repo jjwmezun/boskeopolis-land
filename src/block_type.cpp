@@ -71,11 +71,6 @@ void BlockType::render( const Camera& camera, const Block& block, bool priority 
 
 void BlockType::update( EventSystem& events )
 {
-	for ( auto& c : components_ )
-	{
-		c->update( events, *this );
-	}
-
 	if ( graphics_ )
 	{
 		graphics_->update( events );

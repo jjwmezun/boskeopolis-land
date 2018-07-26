@@ -11,7 +11,7 @@ BlockComponentSingleUse::BlockComponentSingleUse( int width, int height, int cor
 
 BlockComponentSingleUse::~BlockComponentSingleUse() {};
 
-void BlockComponentSingleUse::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentSingleUse::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	for ( int y = 0; y < height_; ++y )
 	{

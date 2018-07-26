@@ -10,7 +10,7 @@ BlockComponentForceRightward::BlockComponentForceRightward()
 
 BlockComponentForceRightward::~BlockComponentForceRightward() {};
 
-void BlockComponentForceRightward::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentForceRightward::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	if ( sprite.vx_ < 0 )
 	{

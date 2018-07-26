@@ -33,11 +33,9 @@
 #include "block_component_sink.hpp"
 #include "block_component_sludge_water.hpp"
 #include "block_component_solid.hpp"
-#include "block_component_spawn_icicle.hpp"
 #include "block_component_steep_slope_left.hpp"
 #include "block_component_steep_slope_right.hpp"
 #include "block_component_swimmable.hpp"
-#include "block_component_switch.hpp"
 #include "block_component_switch_off.hpp"
 #include "block_component_switch_on.hpp"
 #include "block_component_warp.hpp"
@@ -418,10 +416,6 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentCurrent> () );
 					}
-					else if ( mezun::areStringsEqual( comp_type, "switch" ) )
-					{
-						components.emplace_back( std::make_unique<BlockComponentSwitch> () );
-					}
 					else if ( mezun::areStringsEqual( comp_type, "switch_on" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSwitchOn> () );
@@ -441,10 +435,6 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "sewer_door" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSewerDoor> () );
-					}
-					else if ( mezun::areStringsEqual( comp_type, "spawn_icicle" ) )
-					{
-						components.emplace_back( std::make_unique<BlockComponentSpawnIcicle> () );
 					}
 				}
 

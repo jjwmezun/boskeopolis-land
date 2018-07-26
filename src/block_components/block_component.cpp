@@ -10,8 +10,6 @@ BlockComponent::BlockComponent
 
 BlockComponent::~BlockComponent() {};
 
-void BlockComponent::update( EventSystem& events, BlockType& type ) {};
-
 BlockComponent::Type BlockComponent::type() const
 {
 	return type_;

@@ -4,7 +4,7 @@
 BlockComponentCurrent::BlockComponentCurrent() {};
 BlockComponentCurrent::~BlockComponentCurrent() {};
 
-void BlockComponentCurrent::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentCurrent::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	sprite.hit_box_.x -= 910;
 

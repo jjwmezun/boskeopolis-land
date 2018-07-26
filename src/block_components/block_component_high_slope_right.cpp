@@ -7,7 +7,7 @@ BlockComponentHighSlopeRight::BlockComponentHighSlopeRight(){};
 
 BlockComponentHighSlopeRight::~BlockComponentHighSlopeRight() {};
 
-void BlockComponentHighSlopeRight::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentHighSlopeRight::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	if ( collision.collideAny() )
 	{

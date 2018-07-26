@@ -5,7 +5,7 @@ BlockComponentMessage::BlockComponentMessage() {};
 
 BlockComponentMessage::~BlockComponentMessage() {};
 
-void BlockComponentMessage::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockComponentMessage::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	events.showMessage();
 };
