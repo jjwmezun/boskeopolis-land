@@ -26,7 +26,6 @@
 #include "block_component_mcguffin.hpp"
 #include "block_component_message.hpp"
 #include "block_component_money.hpp"
-#include "block_component_move_water.hpp"
 #include "block_component_sewer_door.hpp"
 #include "block_component_shmup_bullet.hpp"
 #include "block_component_single_use.hpp"
@@ -399,10 +398,6 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "sink" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSink> () );
-					}
-					else if ( mezun::areStringsEqual( comp_type, "move_water" ) )
-					{
-						components.emplace_back( std::make_unique<BlockComponentMoveWater> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "sludge_water" ) )
 					{

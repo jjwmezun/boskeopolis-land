@@ -52,6 +52,7 @@
 #include "maze_chaser_sprite.hpp"
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
+#include "move_water_sprite.hpp"
 #include "olive_spawner_sprite.hpp"
 #include "olive_sprite.hpp"
 #include "pelican_sprite.hpp"
@@ -434,6 +435,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 103 ):
 			return std::unique_ptr<Sprite> ( new SwitchBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 104 ):
+			return std::unique_ptr<Sprite> ( new MoveWaterSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

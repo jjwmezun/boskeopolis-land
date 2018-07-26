@@ -9,6 +9,7 @@
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
 
+static constexpr int WATER_NULL = -1;
 static constexpr int SEWER_START_W = 64;
 static constexpr int SEWER_START_H = 64;
 static constexpr int GROW_SIZE = 32;
@@ -44,8 +45,8 @@ EventSystem::EventSystem()
 	palette_changed_ ( false ),
 	new_palette_ ( mezun::emptyString(), 0 ),
 	disable_pause_ ( false ),
-	move_water_ ( -1 ),
-	current_water_ ( - 1 ),
+	move_water_ ( WATER_NULL ),
+	current_water_ ( WATER_NULL ),
 	in_front_of_door_ ( 0 ),
 	on_conveyor_belt_ ( false ),
 	played_death_song_ ( false ),

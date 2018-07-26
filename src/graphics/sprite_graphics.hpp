@@ -4,6 +4,7 @@ class Camera;
 class EventSystem;
 class Sprite;
 
+#include "direction.hpp"
 #include "render.hpp"
 
 class SpriteGraphics
@@ -55,4 +56,5 @@ class SpriteGraphics
 		void renderAnyPriorityOverrideAlpha( const sdl2::SDLRect& bound_box, Uint8 alpha, const Camera* camera = nullptr ) const;
 		sdl2::SDLRect adjustBoundBox( const sdl2::SDLRect& r ) const;
 		void masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha = 255 ) const;
+		void rotate( Direction::Clockwise dir, int amount = 5 );
 };

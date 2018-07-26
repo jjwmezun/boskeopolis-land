@@ -93,3 +93,17 @@ sdl2::SDLRect SpriteGraphics::adjustBoundBox( const sdl2::SDLRect& r ) const
 		r.h + h_adjustment_
 	};
 };
+
+void SpriteGraphics::rotate( Direction::Clockwise dir, int amount )
+{
+	switch ( dir )
+	{
+		case ( Direction::Clockwise::CLOCKWISE ):
+			rotation_ += amount;
+		break;
+
+		case ( Direction::Clockwise::COUNTERCLOCKWISE ):
+			rotation_ -= amount;
+		break;
+	}
+};

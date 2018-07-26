@@ -79,7 +79,7 @@ void MapLayerWater::updateGFX( const Camera& camera )
 		if ( x_offset_ <= 8 ) { x_offset_ = 0; }
 		dest_.x = x_offset_;
 	}
-	
+
 	if ( timer_ == 8 )
 	{
 		src_.y += HEIGHT;
@@ -109,11 +109,11 @@ void MapLayerWater::updateEventMovement( EventSystem& events )
 	{
 		if ( events.move_water_ < y_ )
 		{
-			y_ -= MOVE_SPEED;
+			y_ = std::max( events.move_water_, y_ - MOVE_SPEED );
 		}
 		else if ( events.move_water_ > y_ )
 		{
-			y_ += MOVE_SPEED;
+			y_ = std::min( events.move_water_, y_ + MOVE_SPEED );
 		}
 	}
 	events.current_water_ = y_;

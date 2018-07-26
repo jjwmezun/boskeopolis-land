@@ -41,19 +41,11 @@ class BlockType
 		void renderAnyPriority( const Camera& camera, const Block& block ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;
-		void rotate( Direction::Clockwise direction );
-		void readjust();
 		const SpriteGraphics* graphics() const;
 
 
 	private:
-		static constexpr int BLOCK_SIZE = 16;
-		static constexpr int MINI_BLOCK_SIZE = 8;
-		static constexpr int NUM_O_MINI_BLOCKS = 4;
-
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::vector<std::unique_ptr<BlockComponent>> components_;
 		std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
-
-		Direction::Clockwise prev_direction_;
 };

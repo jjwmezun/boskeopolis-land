@@ -35,7 +35,7 @@ void Health::update()
 			meter_ = std::min( meter_ + restorePoint(), maxOxygen() );
 		break;
 	}
-	
+
 	switch ( heater_ )
 	{
 		case ( true ):
@@ -164,7 +164,7 @@ int Health::losePoint() const
 			return 10;
 		break;
 
-		default:	
+		default:
 			return 1;
 		break;
 	}
@@ -178,7 +178,7 @@ int Health::restorePoint() const
 			return 10;
 		break;
 
-		default:	
+		default:
 			return maxOxygen() / 100;
 		break;
 	}

@@ -56,8 +56,6 @@ class EventSystem
 		MiscData data_;
 	};
 
-	static constexpr int WATER_NULL = -1;
-
 	bool won_;
 	bool failed_;
 	bool quit_level_;

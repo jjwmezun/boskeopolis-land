@@ -7,6 +7,10 @@
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 
+static constexpr int BLOCK_SIZE = 16;
+static constexpr int MINI_BLOCK_SIZE = 8;
+static constexpr int NUM_O_MINI_BLOCKS = 4;
+
 BlockType::BlockType
 (
 	std::unique_ptr<SpriteGraphics> graphics,
@@ -16,8 +20,7 @@ BlockType::BlockType
 :
 	graphics_   ( std::move( graphics ) ),
 	components_ ( std::move( components ) ),
-	conditions_ ( std::move( conditions ) ),
-	prev_direction_ ( prev_direction_ = Direction::Clockwise::__NULL )
+	conditions_ ( std::move( conditions ) )
 {};
 
 BlockType::~BlockType() {};
@@ -75,7 +78,6 @@ void BlockType::update( EventSystem& events )
 	{
 		graphics_->update( events );
 	}
-
 };
 
 bool BlockType::hasComponentType( BlockComponent::Type type ) const
@@ -88,34 +90,6 @@ bool BlockType::hasComponentType( BlockComponent::Type type ) const
 
 	// If all don't, false.
 	return false;
-};
-
-void BlockType::rotate( Direction::Clockwise direction )
-{
-	if ( graphics_ )
-	{
-		int amount = 5;
-
-		if ( direction == Direction::Clockwise::COUNTERCLOCKWISE )
-		{
-			amount *= -1;
-		}
-
-		graphics_->rotation_ += amount;
-	}
-
-	prev_direction_ = direction;
-};
-
-void BlockType::readjust()
-{
-	if ( graphics_ )
-	{
-		if ( !mezun::isAtRightAngle( ( int )graphics_->rotation_ ) )
-		{
-			rotate( prev_direction_ );
-		}
-	}
 };
 
 const SpriteGraphics* BlockType::graphics() const
