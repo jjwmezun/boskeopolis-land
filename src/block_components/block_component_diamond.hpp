@@ -10,5 +10,5 @@ class BlockComponentDiamond : public BlockComponent
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 
 	private:
-		int replacement_block_;
+		const int replacement_block_;
 };

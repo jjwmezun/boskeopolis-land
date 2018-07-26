@@ -1,5 +1,4 @@
-#ifndef BLOCK_COMPONENT_SINGLE_USE_H
-#define BLOCK_COMPONENT_SINGLE_USE_H
+#pragma once
 
 #include "block_component.hpp"
 
@@ -11,10 +10,7 @@ class BlockComponentSingleUse : public BlockComponent
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 
 	private:
-		int width_;
-		int height_;
-		int corner_;
+		const int width_;
+		const int height_;
+		const int corner_;
 };
-
-#endif // BLOCK_COMPONENT_SINGLE_USE_H
-

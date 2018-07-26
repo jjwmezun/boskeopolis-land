@@ -1,18 +1,11 @@
-#ifndef BLOCK_COMPONENT_HEAL_H
-#define BLOCK_COMPONENT_HEAL_H
+#pragma once
 
 #include "block_component.hpp"
 
 class BlockComponentHeal : public BlockComponent
 {
 	public:
-		BlockComponentHeal( int amount = 1 );
+		BlockComponentHeal();
 		~BlockComponentHeal();
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
-
-	private:
-		int amount_;
 };
-
-#endif // BLOCK_COMPONENT_HEAL_H
-

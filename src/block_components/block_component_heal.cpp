@@ -1,7 +1,7 @@
 #include "block_component_heal.hpp"
 #include "health.hpp"
 
-BlockComponentHeal::BlockComponentHeal( int amount ) : amount_ ( amount ) {};
+BlockComponentHeal::BlockComponentHeal() {};
 
 BlockComponentHeal::~BlockComponentHeal() {};
 

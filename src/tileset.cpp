@@ -232,18 +232,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					}
 					else if ( mezun::areStringsEqual( comp_type, "heal" ) )
 					{
-						if
-						(
-							comp_obj.HasMember( "amount" ) &&
-							comp_obj[ "amount" ].IsInt()
-						)
-						{
-							components.emplace_back( std::make_unique<BlockComponentHeal> ( comp_obj[ "amount" ].GetInt() ) );
-						}
-						else
-						{
-							components.emplace_back( std::make_unique<BlockComponentHeal> () );
-						}
+						components.emplace_back( std::make_unique<BlockComponentHeal> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "hurt" ) )
 					{

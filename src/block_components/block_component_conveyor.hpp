@@ -12,8 +12,7 @@ class BlockComponentConveyor : public BlockComponent
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 
 	private:
-		int x_effect_;
+		const int x_effect_;
 };
 
 #endif // BLOCK_COMPONENT_CONVEYOR_H
-

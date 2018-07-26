@@ -1,5 +1,4 @@
-#ifndef BLOCK_COMPONENT_MONEY_H
-#define BLOCK_COMPONENT_MONEY_H
+#pragma once
 
 #include "block_component.hpp"
 
@@ -11,8 +10,5 @@ class BlockComponentMoney : public BlockComponent
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) override;
 
 	private:
-		int amount_;
+		const int amount_;
 };
-
-#endif // BLOCK_COMPONENT_MONEY_H
-

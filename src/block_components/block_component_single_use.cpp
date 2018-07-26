@@ -15,15 +15,15 @@ void BlockComponentSingleUse::interact( const Collision& collision, Sprite& spri
 {
 	for ( int y = 0; y < height_; ++y )
 	{
-		int cy = floor( corner_ / width_ );
-		int ly = ( level.currentMap().mapY( block.location() ) - cy + y ) * level.currentMap().widthBlocks();
+		const int cy = floor( corner_ / width_ );
+		const int ly = ( level.currentMap().mapY( block.location() ) - cy + y ) * level.currentMap().widthBlocks();
 
 		for ( int x = 0; x < width_; ++x )
 		{
-			int cx = corner_ % width_;
-			int lx = ( level.currentMap().mapX( block.location() ) - cx + x );
+			const int cx = corner_ % width_;
+			const int lx = ( level.currentMap().mapX( block.location() ) - cx + x );
 
-			int location = ly + lx;
+			const int location = ly + lx;
 
 			level.currentMap().deleteBlock( location );
 			block.destroy();
