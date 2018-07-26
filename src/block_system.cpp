@@ -57,10 +57,8 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 				for ( int x = first_x; x < last_x; ++x )
 				{
 					const int xp = Unit::BlocksToPixels( x );
-
 					const int i = lvmap.indexFromXAndY( x, y );
 					const int type = lvmap.block( i ) - 1;
-
 					addBlock( xp, yp, i, type, blocks_ );
 				}
 			}
@@ -74,14 +72,12 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 			for ( int i = 0; i < lvmap.blocksSize(); ++i )
 			{
 				const int type = lvmap.block( i ) - 1;
-				
+
 				if ( type > -1 )
 				{
 					const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 					const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
-
 					addBlock( x, y, i, type, blocks_ );
-
 				}
 			}
 		}
@@ -98,7 +94,6 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& list )
 {
 	BlockType* block_type = getTileset().blockType( type, x, y );
-
 	if ( block_type != nullptr )
 	{
 		list.emplace_back( x, y, block_type, i, type );
@@ -132,7 +127,7 @@ void BlockSystem::changeTileset( std::string new_tileset )
 	// See if tileset already exists.
 	auto i = tilesets_.find( new_tileset );
 
-	// If Tileset doesn't already exist, try making 1.	
+	// If Tileset doesn't already exist, try making 1.
 	if ( i == tilesets_.end() )
 	{
 		tilesets_.insert( std::make_pair( new_tileset, ( new_tileset ) ) );
