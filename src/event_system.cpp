@@ -56,6 +56,11 @@ EventSystem::EventSystem()
 	resetMisc();
 };
 
+EventSystem::~EventSystem()
+{
+	resetMisc();
+};
+
 void EventSystem::reset()
 {
 	won_ = false;

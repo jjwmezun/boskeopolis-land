@@ -84,6 +84,7 @@ class EventSystem
 	bool waterShouldStop() const;
 
 	EventSystem();
+	~EventSystem();
 	void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 	void reset();
 	Palette getPalette();
