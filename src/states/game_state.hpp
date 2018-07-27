@@ -16,13 +16,15 @@ class GameState
 			LEVEL_STATE,
 			MESSAGE_STATE,
 			PAUSE_STATE,
-			TIME_START_STATE
+			TIME_START_STATE,
+			OPTIONS_STATE
 		};
 
 		GameState
 		(
 			StateID id = __NULL,
-			const Palette& palette = { "Grayscale", 1 }
+			const Palette& palette = { "Grayscale", 1 },
+			bool render_below = true
 		);
 		virtual ~GameState();
 
@@ -40,6 +42,7 @@ class GameState
 		const Palette& palette() const;
 		bool nextFrame( int interval = 8, int duration = 1 ) const;
 		int frame() const;
+		bool testRenderBelow() const;
 
 	protected:
 		const StateID id_;
@@ -47,4 +50,5 @@ class GameState
 	private:
 		Palette palette_;
 		int frame_counter_;
+		const bool render_below_;
 };

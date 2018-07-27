@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include "title_state.hpp"
 #include <vector>
+#include <iostream>
 
 namespace Main
 {
@@ -62,6 +63,9 @@ namespace Main
 	bool testTotalQuit();
 	bool canChange();
 
+	void renderStates();
+	void renderTransition();
+
 
 	// Function Implementations
 	TransitionState transitionState()
@@ -80,7 +84,7 @@ namespace Main
 	};
 
 	void stateReset()
-	{	
+	{
 		Input::reset();
 		state_change_type_ = StateChangeType::__NULL;
 	};
@@ -225,12 +229,30 @@ namespace Main
 	void render()
 	{
 		Render::clearScreen();
+		renderStates();
+		renderTransition();
+		Render::screenBorders();
+		Render::presentScreen();
+	};
 
-		for ( auto& st : states_ )
+	void renderStates()
+	{
+		int i = states_.size() - 1;
+		while ( i > 0 )
 		{
-			st->render();
+			if ( !states_[ i ]->testRenderBelow() ) { break; }
+			--i;
 		}
 
+		while ( i < states_.size() )
+		{
+			states_[ i ]->render();
+			++i;
+		}
+	};
+
+	void renderTransition()
+	{
 		switch ( transition_state_ )
 		{
 			case ( TransitionState::FADE_IN ):
@@ -238,9 +260,6 @@ namespace Main
 				Render::stateChangeFade( ( Uint8 )( transition_level_ ) );
 			break;
 		}
-
-		Render::screenBorders();
-		Render::presentScreen();
 	};
 
 	void quit()

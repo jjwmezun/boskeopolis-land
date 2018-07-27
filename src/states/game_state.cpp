@@ -5,12 +5,14 @@
 GameState::GameState
 (
 	StateID id,
-	const Palette& palette
+	const Palette& palette,
+	bool render_below
 )
 :
 	id_ ( id ),
 	palette_ ( palette ),
-	frame_counter_ ( 0 )
+	frame_counter_ ( 0 ),
+	render_below_ ( render_below )
 {};
 
 GameState::~GameState() {};
@@ -78,4 +80,9 @@ bool GameState::nextFrame( int interval, int duration ) const
 int GameState::frame() const
 {
 	return frame_counter_;
+};
+
+bool GameState::testRenderBelow() const
+{
+	return render_below_;
 };

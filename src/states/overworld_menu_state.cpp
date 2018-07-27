@@ -1,29 +1,40 @@
 #include "audio.hpp"
 #include "input.hpp"
 #include "main.hpp"
+#include "options_state.hpp"
 #include "overworld_menu_state.hpp"
 #include "title_state.hpp"
 
-static constexpr int BG_WIDTH = 24;
-static constexpr int BG_HEIGHT = 11;
+static constexpr int BG_WIDTH_MINIBLOCKS = 24;
+static constexpr int BG_HEIGHT_MINIBLOCKS = OverworldMenuState::NUM_O_OPTIONS * 2 + 3;
+static constexpr int BG_WIDTH = Unit::MiniBlocksToPixels( BG_WIDTH_MINIBLOCKS );
+static constexpr int BG_HEIGHT = Unit::MiniBlocksToPixels( BG_HEIGHT_MINIBLOCKS );
+static constexpr int START_X = Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( BG_WIDTH_MINIBLOCKS / 2 ) );
+static constexpr int START_Y = Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( BG_HEIGHT_MINIBLOCKS / 2 ) );
+static constexpr int OPTION_X = START_X + 8;
+
+static std::string getOptionName( int i );
+static int getOptionY( int i );
+static TextObj getOption( int i );
 
 OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal )
 :
-	GameState( StateID::OVERWORLD_MENU_STATE, pal ),	
-	bg_
-	(
-		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( BG_WIDTH / 2 ) ),
-		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( BG_HEIGHT / 2 ) ),
-		Unit::MiniBlocksToPixels( BG_WIDTH ),
-		Unit::MiniBlocksToPixels( BG_HEIGHT )
-	),
+	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
 	option_text_
 	({{
-		TextObj( "Continue", bg_.x + 8, bg_.y + 16, Text::FontColor::LIGHT_MID_GRAY ),
-		TextObj( "Level List", bg_.x + 8, bg_.y + 32, Text::FontColor::LIGHT_MID_GRAY ),
-		TextObj( "Camera View", bg_.x + 8, bg_.y + 48, Text::FontColor::LIGHT_MID_GRAY ),
-		TextObj( "Quit", bg_.x + 8, bg_.y + 64, Text::FontColor::LIGHT_MID_GRAY )
+		getOption( 0 ),
+		getOption( 1 ),
+		getOption( 2 ),
+		getOption( 3 ),
+		getOption( 4 )
 	}}),
+	bg_
+	(
+		START_X,
+		START_Y,
+		BG_WIDTH,
+		BG_HEIGHT
+	),
 	go_to_list_ ( go_to_list ),
 	camera_mode_ ( camera_mode ),
 	option_selection_ ( ( int )( Option::CONTINUE ) )
@@ -51,7 +62,7 @@ void OverworldMenuState::stateUpdate()
 		--option_selection_;
 		Audio::playSound( Audio::SoundType::SELECT );
 	}
-	
+
 	if ( option_selection_ >= NUM_O_OPTIONS )
 	{
 		option_selection_ = 0;
@@ -79,6 +90,10 @@ void OverworldMenuState::stateUpdate()
 				Main::popState();
 			break;
 
+			case ( ( int )( Option::OPTIONS ) ):
+				Main::pushState( std::make_unique<OptionsState> () );
+			break;
+
 			case ( ( int )( Option::QUIT ) ):
 				Main::changeState( std::make_unique<TitleState> () );
 			break;
@@ -102,4 +117,26 @@ void OverworldMenuState::stateRender()
 
 		option_text_[ i ].render( nullptr );
 	}
+};
+
+static std::string getOptionName( int i )
+{
+	switch ( i )
+	{
+		case ( 0 ): { return "Continue";    } break;
+		case ( 1 ): { return "Level List";  } break;
+		case ( 2 ): { return "Camera View"; } break;
+		case ( 3 ): { return "Options";     } break;
+		case ( 4 ): { return "Quit";        } break;
+	}
+};
+
+static int getOptionY( int i )
+{
+	return START_Y + 16 + ( 16 * i );
+};
+
+static TextObj getOption( int i )
+{
+	return TextObj( getOptionName( i ), OPTION_X, getOptionY( i ), Text::FontColor::LIGHT_MID_GRAY );
 };

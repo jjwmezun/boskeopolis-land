@@ -3,6 +3,7 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include <fstream>
+#include "options_state.hpp"
 #include "overworld_state.hpp"
 #include "render.hpp"
 #include "title_state.hpp"
@@ -107,13 +108,17 @@ void TitleState::stateUpdate()
 				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
 			break;
 
+			case ( Option::OPTIONS ):
+				Main::pushState( std::make_unique<OptionsState> () );
+			break;
+
 			case ( Option::QUIT ):
 				Main::quit();
 			break;
 		}
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
-	
+
 	cloud_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
 	skyline_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
 	skyscrapers_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
@@ -140,7 +145,7 @@ void TitleState::stateRender()
 				case ( 0 ):
 				case ( 1 ):
 					bg_color = 4;
-					shade = Text::FontColor::LIGHT_GRAY;					
+					shade = Text::FontColor::LIGHT_GRAY;
 				break;
 				case ( 2 ):
 				case ( 3 ):
@@ -170,7 +175,7 @@ void TitleState::stateRender()
 				case ( 2 ):
 				case ( 3 ):
 					bg_color = 3;
-					shade = Text::FontColor::LIGHT_MID_GRAY;				
+					shade = Text::FontColor::LIGHT_MID_GRAY;
 				break;
 				case ( 4 ):
 				case ( 5 ):
@@ -216,7 +221,7 @@ void TitleState::init()
 	}
 
 	ifs.close();
-	
+
 	Inventory::reset();
 };
 

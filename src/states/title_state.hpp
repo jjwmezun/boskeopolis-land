@@ -41,11 +41,12 @@ class TitleState : public GameState
 		int prev_selection_;
 		int selection_timer_;
 		bool can_load_;
-		
+
 		void addToSelection();
 		void subtractFromSelection();
 		inline bool invalidOption( int i )
 		{
-			return i == ( int )( Option::OPTIONS ) || ( !can_load_ && i == ( int )( Option::LOAD ) );
+			//return i == ( int )( Option::OPTIONS ) || ( !can_load_ && i == ( int )( Option::LOAD ) );
+			return false;
 		};
 };
