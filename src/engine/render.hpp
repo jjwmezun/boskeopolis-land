@@ -78,4 +78,11 @@ namespace Render
 	void releaseRenderTarget();
 	void renderRenderBox( SDL_Texture* texture );
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src );
+
+	int getMaxMagnification();
+	int getMagnification();
+	bool isFullscreen();
+	void setWindowed();
+	void setFullscreen();
+	void setMagnification( int magnification );
 };

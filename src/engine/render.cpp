@@ -16,7 +16,7 @@ namespace Render
 	static constexpr Uint8 FULL_OPACITY = 255;
 	static sdl2::SDLRect window_box_magnified_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
 
-	static Uint32 WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;
+	static Uint32 window_type_ = SDL_WINDOW_FULLSCREEN_DESKTOP;
 	static int FORCE_MAGNIFICATION = -1;
 
 	static const std::string IMG_RELATIVE_DIR = "img";
@@ -31,8 +31,9 @@ namespace Render
 	static std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
 
 	static int magnification_ = 1;
-	static int left_edge_ = 0;
-	static int top_edge_ = 0;
+	static int max_magnification_ = 1;
+	static int monitor_width_ = 0;
+	static int monitor_height_ = 0;
 	static sdl2::SDLRect top_bar_ = { 0, 0, 0, 0 };
 	static sdl2::SDLRect bottom_bar_ = { 0, 0, 0, 0 };
 	static sdl2::SDLRect left_bar_ = { 0, 0, 0, 0 };
@@ -48,10 +49,10 @@ namespace Render
 
 	int magnified( int n );
 	void adjustMagnification();
+	void adjustScreenToMagnification();
 	int calculateMagnification( int monitor_width, int monitor_height );
-	void adjustScreen( int monitor_width, int monitor_height );
-	void calculateScreenEdges( int monitor_width, int monitor_height );
-	void adjustBorderBars( int monitor_width, int monitor_height );
+	void calculateScreenEdges();
+	void adjustBorderBars();
 
 	void loadSurface( const std::string& sheet );
 	void clearTextures();
@@ -88,11 +89,11 @@ namespace Render
 		{
 			if ( args.at( 1 ) == "full" )
 			{
-				WINDOW_TYPE = SDL_WINDOW_FULLSCREEN_DESKTOP;
+				window_type_ = SDL_WINDOW_FULLSCREEN_DESKTOP;
 			}
 			else if ( args.at( 1 ) == "window" )
 			{
-				WINDOW_TYPE = SDL_WINDOW_RESIZABLE;
+				window_type_ = SDL_WINDOW_RESIZABLE;
 			}
 			else
 			{
@@ -130,7 +131,7 @@ namespace Render
 			0,
 			magnified( Unit::WINDOW_WIDTH_PIXELS ),
 			magnified( Unit::WINDOW_HEIGHT_PIXELS ),
-			WINDOW_TYPE
+			window_type_
 		);
 
 		if ( !window_ )
@@ -147,30 +148,40 @@ namespace Render
 
 		void adjustMagnification()
 		{
-			int monitor_width = Unit::WINDOW_WIDTH_PIXELS;
-			int monitor_height = Unit::WINDOW_HEIGHT_PIXELS;
-
-			sdl2::SDLRect r;
-			if ( FORCE_MAGNIFICATION > -1 )
-			{
-				magnification_ = FORCE_MAGNIFICATION;
-			}
-			else if ( SDL_GetDisplayBounds( 0, &r ) != 0 )
+			sdl2::SDLRect monitor_rect;
+			bool monitor_check_code = SDL_GetDisplayBounds( 0, &monitor_rect );
+			if ( monitor_check_code != 0 )
 			{
 				SDL_Log( "SDL_GetDisplayBounds failed: %s", SDL_GetError() );
-				magnification_ = 1;
+				max_magnification_ = 1;
 			}
 			else
 			{
-				monitor_width = r.w;
-				monitor_height = r.h;
+				monitor_width_ = monitor_rect.w;
+				monitor_height_ = monitor_rect.h;
+				max_magnification_ = calculateMagnification( monitor_width_, monitor_height_ );
+			}
+			magnification_ = ( FORCE_MAGNIFICATION > -1 ) ? FORCE_MAGNIFICATION : max_magnification_;
+			adjustScreenToMagnification();
+		};
 
-				magnification_ = calculateMagnification( monitor_width, monitor_height );
+		void adjustScreenToMagnification()
+		{
+			if ( monitor_width_ == 0 || monitor_height_ == 0 )
+			{
+				window_type_ = SDL_WINDOW_RESIZABLE;
 			}
 
-			adjustScreen( monitor_width, monitor_height );
-			adjustBorderBars( monitor_width, monitor_height );
+			calculateScreenEdges();
+			adjustBorderBars();
 			window_box_magnified_ = sourceRelativeToScreen( window_box_ );
+
+			SDL_SetWindowSize
+			(
+				window_,
+				magnified( Unit::WINDOW_WIDTH_PIXELS ),
+				magnified( Unit::WINDOW_HEIGHT_PIXELS )
+			);
 		};
 
 		int calculateMagnification( int monitor_width, int monitor_height )
@@ -188,36 +199,28 @@ namespace Render
 			}
 		};
 
-		void adjustScreen( int monitor_width, int monitor_height )
+		void calculateScreenEdges()
 		{
-			calculateScreenEdges( monitor_width, monitor_height );
-
-			screen_.x = left_edge_;
-			screen_.y = top_edge_;
+			if ( window_type_ == SDL_WINDOW_RESIZABLE )
+			{
+				screen_.x = 0;
+				screen_.y = 0;
+			}
+			else
+			{
+				screen_.x = ( monitor_width_ - magnified( Unit::WINDOW_WIDTH_PIXELS ) ) / 2;
+				screen_.y = ( monitor_height_ - magnified( Unit::WINDOW_HEIGHT_PIXELS ) ) / 2;
+			}
 			screen_.w = magnified( Unit::WINDOW_WIDTH_PIXELS );
 			screen_.h = magnified( Unit::WINDOW_HEIGHT_PIXELS );
 		};
 
-		void calculateScreenEdges( int monitor_width, int monitor_height )
+		void adjustBorderBars()
 		{
-			if ( WINDOW_TYPE == SDL_WINDOW_RESIZABLE )
-			{
-				left_edge_ = 0;
-				top_edge_ = 0;
-			}
-			else
-			{
-				left_edge_ = ( monitor_width - magnified( Unit::WINDOW_WIDTH_PIXELS ) ) / 2;
-				top_edge_ = ( monitor_height - magnified( Unit::WINDOW_HEIGHT_PIXELS ) ) / 2;
-			}
-		};
-
-		void adjustBorderBars( int monitor_width, int monitor_height )
-		{
-			top_bar_ = { 0, 0, monitor_width, top_edge_ };
-			bottom_bar_ = { 0, screen_.y + screen_.h, monitor_width, monitor_height - ( screen_.y + screen_.h ) };
-			left_bar_ = { 0, 0, left_edge_, monitor_height };
-			right_bar_ = { screen_.x + screen_.w, 0, monitor_width - ( screen_.x + screen_.w ), monitor_height };
+			top_bar_ = { 0, 0, monitor_width_, screen_.y };
+			bottom_bar_ = { 0, screen_.y + screen_.h, monitor_width_, monitor_height_ - ( screen_.y + screen_.h ) };
+			left_bar_ = { 0, 0, screen_.x, monitor_height_ };
+			right_bar_ = { screen_.x + screen_.w, 0, monitor_width_ - ( screen_.x + screen_.w ), monitor_height_ };
 		};
 
 		int magnified( int n )
@@ -316,7 +319,7 @@ namespace Render
 
 	void screenBorders()
 	{
-		if ( WINDOW_TYPE == SDL_WINDOW_FULLSCREEN_DESKTOP )
+		if ( window_type_ == SDL_WINDOW_FULLSCREEN_DESKTOP )
 		{
 			SDL_SetRenderDrawColor( renderer_, 0, 0, 0, FULL_OPACITY );
 			SDL_RenderFillRect( renderer_, &top_bar_ );
@@ -368,8 +371,8 @@ namespace Render
 	{
 		return
 		{
-			magnified( source.x ) + left_edge_,
-			magnified( source.y ) + top_edge_,
+			magnified( source.x ) + screen_.x,
+			magnified( source.y ) + screen_.y,
 			magnified( source.w ),
 			magnified( source.h ),
 		};
@@ -587,5 +590,40 @@ namespace Render
 		{
 			printf( "Failed to draw render box: %s\n", SDL_GetError() );
 		}
+	};
+
+	int getMaxMagnification()
+	{
+		return max_magnification_;
+	};
+
+	int getMagnification()
+	{
+		return magnification_;
+	};
+
+	bool isFullscreen()
+	{
+		return window_type_ == SDL_WINDOW_FULLSCREEN_DESKTOP;
+	};
+
+	void setWindowed()
+	{
+		window_type_ = SDL_WINDOW_RESIZABLE;
+		SDL_SetWindowFullscreen( window_, 0 );
+		adjustScreenToMagnification();
+	};
+
+	void setFullscreen()
+	{
+		window_type_ = SDL_WINDOW_FULLSCREEN_DESKTOP;
+		SDL_SetWindowFullscreen( window_, SDL_WINDOW_FULLSCREEN_DESKTOP );
+		adjustScreenToMagnification();
+	};
+
+	void setMagnification( int magnification )
+	{
+		magnification_ = magnification;
+		adjustScreenToMagnification();
 	};
 };

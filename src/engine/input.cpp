@@ -32,7 +32,7 @@ namespace Input
 	//Action action_x_positive_ = Action::MOVE_RIGHT;
 	//Action action_y_negative_ = Action::MOVE_UP;
 	//Action action_y_positive_ = Action::MOVE_DOWN;
-	
+
 	//std::vector<SDL_Joystick*> joysticks_;
 
 	bool actions_pressed_ [ NUM_O_ACTIONS ];
@@ -50,7 +50,7 @@ namespace Input
 	bool movingCharacterFunction( bool ( *f )( Action a ) );
 
 
-	// Function Implementations	
+	// Function Implementations
 	template<typename T>
 	void eachKey( T key, const std::vector<T>* list, void ( *f )( Action ) )
 	{
@@ -75,7 +75,7 @@ namespace Input
 		}*/
 		reset();
 	};
-	
+
 	void close()
 	{/*
 		for ( auto j : joysticks_ )
@@ -96,7 +96,7 @@ namespace Input
 	};
 
 	void update()
-	{	
+	{
 		resetList( actions_pressed_ );
 		resetList( actions_released_ );
 	};
@@ -133,12 +133,12 @@ namespace Input
 	{
 		movingCharacterFunction( &held );
 	};
-	
+
 	bool movingCharacterNoHold()
 	{
 		movingCharacterFunction( &pressed );
 	};
-	
+
 	bool movingCharacterFunction( bool ( *f )( Action a ) )
 	{
 		return
@@ -171,7 +171,7 @@ namespace Input
 	{
 		actions_held_[ ( int )( action ) ] = true;
 	};
-	
+
 	void keyPress( SDL_Keycode key )
 	{
 		eachKey( key, key_map_, registerKeyPress );
@@ -201,9 +201,9 @@ namespace Input
 	{
 		eachKey( button, controller_button_map_, registerKeyHold );
 	};
-	
+
 	void registerAxis( Sint16 value, Action negative, Action positive )
-	{		
+	{
 		switch ( value )
 		{
 			case ( AXIS_NEGATIVE ):
@@ -217,14 +217,14 @@ namespace Input
 				registerKeyHold( positive );
 				registerKeyRelease( negative );
 			break;
-				
+
 			case ( 0 ):
 				registerKeyRelease( negative );
 				registerKeyRelease( positive );
 			break;
 		}
 	};
-	
+
 	void axis( const SDL_JoyAxisEvent& axis_event )
 	{
 		switch ( axis_event.axis )

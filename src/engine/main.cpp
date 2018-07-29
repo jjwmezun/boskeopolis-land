@@ -270,7 +270,7 @@ namespace Main
 
 	void initSDL()
 	{
-		if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) != 0 )
+		if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK ) != 0 )
 		{
 			SDL_Log( "SDL_Initialization failed: %s", SDL_GetError() );
 		}
