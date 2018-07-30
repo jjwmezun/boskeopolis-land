@@ -29,11 +29,11 @@ namespace Direction
 
 	enum class Simple
 	{
-		__NULL,
-		UP,
-		RIGHT,
-		DOWN,
-		LEFT
+		__NULL = 0,
+		UP     = 1,
+		RIGHT  = 2,
+		DOWN   = 3,
+		LEFT   = 4
 	};
 	static constexpr int SIMPLE_SIZE = ( int )Simple::LEFT + 1;
 	std::string simpleString( Simple dir );

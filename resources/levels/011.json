@@ -1,48 +1,25 @@
 {
-	"name": "Stormy Streets",
-	
+	"name": "Conveyor Slayer",
+
 	"maps":
 	[
 		{
-			"slug": "city-2",
+			"slug": "factory-1",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "neon-city_2.png",
-					"width": 416,
-					"height": 224,
-					"y_repeat": false,
-					"y_scroll": 0.0,
-					"x_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "neon-city.png",
-					"width": 824,
-					"height": 224,
-					"y_repeat": false,
-					"y_scroll": 0.0,
-					"x_scroll": 0.5
-				}
-			],
-			"foregrounds":
-			[
-				{
-					"type": "image",
-					"img": "rain.png",
-					"width": 8,
-					"height": 8,
-					"frames": 16,
-					"animation_speed": 4
+					"img": "factory-blocks.png",
+					"width": 48,
+					"height": 48
 				}
 			]
 		}
 	],
-	
-	"entrance_x": 1,
-	"entrance_y": 11,
-	
-	"gem_challenge": 10000,
-	"time_challenge": 40
+
+	"entrance_x": 18,
+	"entrance_y": 31,
+
+	"gem_challenge": 33000,
+	"time_challenge": 16
 }

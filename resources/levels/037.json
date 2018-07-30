@@ -1,18 +1,49 @@
 {
-	"name": "Mt. Volcocoa",
+	"name": "Rooftop Rumble",
 	
 	"maps":
 	[
 		{
-			"slug": "mountain-4"
+			"slug": "city-4",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"width": 320,
+					"height": 16
+				},
+				{
+					"type": "image",
+					"img": "skyline.png",
+					"width": 264,
+					"height": 224,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "rain.png",
+					"width": 480,
+					"height": 320,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			]
 		}
 	],
-
+	
 	"goal":
 	{
-		"type": "heat"
+		"message": "¡Get to the Keycane before \"Dagny\"!"
 	},
 	
-	"entrance_x": 67,
-	"entrance_y": -32
+	"entrance_x": 23,
+	"entrance_y": 8,
+	"camera_x": 17,
+	
+	"gem_challenge": 7000,
+	"time_challenge": 30
 }

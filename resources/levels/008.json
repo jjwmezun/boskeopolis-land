@@ -1,27 +1,36 @@
 {
-	"name": "Porcelain Dreams",
-	
+	"name": "Ice Box Rock",
 	"maps":
 	[
 		{
-			"slug": "sewer-2",
+			"slug": "snow-5",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "pipeline.png",
-					"width": 360,
-					"height": 160,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
+					"img": "ice-box-rock-2.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "ice-box-rock-3.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25
 				}
 			]
 		}
 	],
-	
-	"entrance_x": 172,
-	"entrance_y": -2,
-	
-	"gem_challenge": 10000,
-	"time_challenge": 25
+
+	"entrance_x": 4,
+	"entrance_y": 0,
+
+	"gem_challenge": 11100,
+	"time_challenge": 22,
+
+	"message": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o' her jump a bit o'a boost."
 }

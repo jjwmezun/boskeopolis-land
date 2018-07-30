@@ -1,19 +1,14 @@
 {
-	"name": "Stop & Go Space Station",
+	"name": "S.S. Syrup",
 	"maps":
 	[
 		{
-			"slug": "space-3"
+			"slug": "pirate-2"
 		}
 	],
-	
-	"goal":
-	{
-		"type": "stop_on_off"
-	},
-	
-	"entrance_x": 3,
-	"entrance_y": 48,
-	"gem_challenge": 10000,
-	"time_challenge": 40
+
+	"entrance_x": 73,
+	"entrance_y": 40,
+	"gem_challenge": 15000,
+	"time_challenge": 50
 }

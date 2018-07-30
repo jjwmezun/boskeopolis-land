@@ -1,20 +1,20 @@
 {
-	"name": "Bough Down",
-	
+	"name": "Windy Woods",
+
 	"maps":
 	[
 		{
-			"slug": "woods-2",
+			"slug": "woods-4",
 			"backgrounds":
 			[
 				{
 					"type": "image",
 					"img": "shady_firs.png",
 					"width": 461,
-					"height": 256,
-					"y_offset": -24,
+					"height": 300,
+					"y_offset": -64,
 					"x_scroll": 0.1,
-					"y_scroll": 0.5
+					"y_scroll": 0.25
 				},
 				{
 					"type": "image",
@@ -34,9 +34,9 @@
 		}
 	],
 	
-	"entrance_x": 1,
-	"entrance_y": 15,
+	"entrance_x": 5,
+	"entrance_y": 18,
 	
-	"gem_challenge": 14650,
-	"time_challenge": 28
+	"gem_challenge": 7850,
+	"time_challenge": 20
 }

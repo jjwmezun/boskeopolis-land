@@ -1,32 +1,16 @@
 {
-	"name": "The Minus Touch",
+	"name": "Petrol Pond Place",
 	
 	"maps":
 	[
 		{
-			"slug": "mines-2",
-			"backgrounds":
-			[
-				{
-					"type": "image",
-					"img": "mines-bg-2.png",
-					"width": 114,
-					"height": 112,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
-				}
-			]
+			"slug": "harbor-1"
 		}
 	],
-	
-	"entrance_x": 88,
-	"entrance_y": -32,
 
-	"goal":
-	{
-		"type": "avoid_money"
-	},
+	"entrance_x": 10,
+	"entrance_y": 4,
 	
-	"gem_challenge": 0,
-	"time_challenge": 70
+	"gem_challenge": 15000,
+	"time_challenge": 50
 }

@@ -88,6 +88,7 @@
 #include "snowball_sprite.hpp"
 #include "snowboulder_sprite.hpp"
 #include "snowman_sprite.hpp"
+#include "spawn_anchor_missile_sprite.hpp"
 #include "spawn_icicle_sprite.hpp"
 #include "spider_sprite.hpp"
 #include "spike_egg_sprite.hpp"
@@ -438,6 +439,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 104 ):
 			return std::unique_ptr<Sprite> ( new MoveWaterSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 105 ):
+			return std::unique_ptr<Sprite> ( new SpawnAnchorMissileSprite( x, y, SpawnAnchorMissileSprite::AMType::LEFT_AND_RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 106 ):
+			return std::unique_ptr<Sprite> ( new SpawnAnchorMissileSprite( x, y, SpawnAnchorMissileSprite::AMType::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 107 ):
+			return std::unique_ptr<Sprite> ( new SpawnAnchorMissileSprite( x, y, SpawnAnchorMissileSprite::AMType::DOWN ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

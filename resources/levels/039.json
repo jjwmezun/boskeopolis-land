@@ -1,9 +1,10 @@
 {
-	"name": "Ice Mines",
+	"name": "The Minus Touch",
+	
 	"maps":
 	[
 		{
-			"slug": "snow-4",
+			"slug": "mines-2",
 			"backgrounds":
 			[
 				{
@@ -17,10 +18,15 @@
 			]
 		}
 	],
+	
+	"entrance_x": 88,
+	"entrance_y": -32,
 
-	"entrance_x": 72,
-	"entrance_y": 71,
-
-	"gem_challenge": 15000,
-	"time_challenge": 50
+	"goal":
+	{
+		"type": "avoid_money"
+	},
+	
+	"gem_challenge": 0,
+	"time_challenge": 70
 }

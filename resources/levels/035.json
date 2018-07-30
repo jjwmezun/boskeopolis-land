@@ -1,54 +1,51 @@
 {
-	"name": "Crying Lightning",
+	"name": "Warm Up",
 	
 	"maps":
 	[
 		{
-			"slug": "sky-4",
+			"slug": "factory-2",
+			"palette_set": { "palette_type": "FIERY_RED", "bg_color": 6 },
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "dimmer_clouds.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.1,
-					"y_scroll": 0.1,
-					"x_speed": 800
+					"img": "fireglow.png",
+					"width": 16,
+					"height": 32,
+					"x_offset": 0,
+					"y_offset": 160,
+					"x_scroll": 1,
+					"y_scroll": 1,
+					"frames": 6,
+					"x_repeat": true,
+					"y_repeat": false,
+					"x_speed": 0,
+					"y_speed": 0,
+					"animation_speed": 1,
+					"animation_flip": true
 				},
 				{
 					"type": "image",
-					"img": "dim_clouds.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25,
-					"x_speed": -1600
-				}
-			],
-			"foregrounds":
-			[
-				{
-					"type": "image",
-					"img": "rain.png",
-					"width": 480,
-					"height": 320,
-					"frames": 16,
-					"animation_speed": 4,
-					"alpha": 128
+					"img": "grill.png",
+					"width": 8,
+					"height": 8
 				}
 			]
 		}
 	],
 	
+	
 	"goal":
 	{
-		"message": "¡Unlock the treasure!"
+		"type": "survive_time",
+		"amount": 30,
+		"message": "¡Last 30 seconds without being cooked!"
 	},
 	
-	"entrance_x": 21,
-	"entrance_y": 31,
-	"camera_x": 12,
-	"gem_challenge": 14000,
-	"time_challenge": 20
+	"entrance_x": 7,
+	"entrance_y": -2,
+	
+	"gem_challenge": 3000,
+	"time_challenge": 30
 }

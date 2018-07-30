@@ -1,0 +1,32 @@
+{
+	"name": "Grotto Lot o' Gloomy",
+	"maps":
+	[
+		{
+			"slug": "mines-4",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "mines-bg-2.png",
+					"width": 114,
+					"height": 112,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "shade",
+					"color": 6,
+					"alpha": 224
+				}
+			]
+		}
+	],
+	"entrance_x": 0,
+	"entrance_y": 13,
+	"gem_challenge": 19000,
+	"time_challenge": 25
+}

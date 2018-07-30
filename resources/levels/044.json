@@ -1,23 +1,26 @@
 {
-	"name": "Maybe I'm a Maze",
-	
+	"name": "Ice Mines",
 	"maps":
 	[
 		{
-			"slug": "maze-1"
+			"slug": "snow-4",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "mines-bg-2.png",
+					"width": 114,
+					"height": 112,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			]
 		}
 	],
-	
-	"goal":
-	{
-		"type": "collect",
-		"amount": 66900,
-		"message": "¡Collect everything & dodge the eyes!"
-	},
-	
-	"entrance_x": 19,
-	"entrance_y": 17,
-	
-	"gem_challenge": 66900,
-	"time_challenge": 120
+
+	"entrance_x": 72,
+	"entrance_y": 71,
+
+	"gem_challenge": 15000,
+	"time_challenge": 50
 }

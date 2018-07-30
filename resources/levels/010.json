@@ -1,10 +1,10 @@
 {
-	"name": "Flush Flood",
+	"name": "Porcelain Dreams",
 	
 	"maps":
 	[
 		{
-			"slug": "sewer-4",
+			"slug": "sewer-2",
 			"backgrounds":
 			[
 				{
@@ -19,8 +19,9 @@
 		}
 	],
 	
-	"entrance_x": 13,
-	"entrance_y": 99,
-	"gem_challenge": 4000,
-	"time_challenge": 28
+	"entrance_x": 172,
+	"entrance_y": -2,
+	
+	"gem_challenge": 10000,
+	"time_challenge": 25
 }

@@ -1,32 +1,48 @@
 {
-	"name": "Grotto Lot o' Gloomy",
+	"name": "Stormy Streets",
+	
 	"maps":
 	[
 		{
-			"slug": "mines-4",
+			"slug": "city-2",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "mines-bg-2.png",
-					"width": 114,
-					"height": 112,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
+					"img": "neon-city_2.png",
+					"width": 416,
+					"height": 224,
+					"y_repeat": false,
+					"y_scroll": 0.0,
+					"x_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "neon-city.png",
+					"width": 824,
+					"height": 224,
+					"y_repeat": false,
+					"y_scroll": 0.0,
+					"x_scroll": 0.5
 				}
 			],
 			"foregrounds":
 			[
 				{
-					"type": "shade",
-					"color": 6,
-					"alpha": 224
+					"type": "image",
+					"img": "rain.png",
+					"width": 8,
+					"height": 8,
+					"frames": 16,
+					"animation_speed": 4
 				}
 			]
 		}
 	],
-	"entrance_x": 0,
-	"entrance_y": 13,
-	"gem_challenge": 19000,
-	"time_challenge": 25
+	
+	"entrance_x": 1,
+	"entrance_y": 11,
+	
+	"gem_challenge": 10000,
+	"time_challenge": 40
 }

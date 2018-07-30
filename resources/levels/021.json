@@ -1,37 +1,46 @@
 {
-	"name": "Citric Acid City",
+	"name": "Tubboat Blues",
 	
 	"maps":
 	[
 		{
-			"slug": "city-3",
+			"slug": "pirate-1",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "neon-city_2.png",
-					"width": 416,
-					"height": 224,
-					"y_repeat": false,
-					"y_scroll": 0.0,
-					"x_scroll": 0.25
+					"img": "tile.png",
+					"width": 32,
+					"height": 32
 				},
 				{
 					"type": "image",
-					"img": "neon-city.png",
-					"width": 824,
-					"height": 224,
-					"y_repeat": false,
-					"y_scroll": 0.0,
-					"x_scroll": 0.5
+					"img": "bathtub.png",
+					"width": 64,
+					"height": 272,
+					"y_offset": 512,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "bathtub_stuff.png",
+					"width": 512,
+					"height": 192,
+					"y_offset": 320,
+					"y_repeat": false
 				}
 			]
 		}
 	],
 	
-	"entrance_x": 2,
-	"entrance_y": 8,
+	"goal":
+	{
+		"message": "¡Turn off the faucet!"
+	},
 	
-	"gem_challenge": 10000,
-	"time_challenge": 40
+	"entrance_x": 1,
+	"entrance_y": 30,
+	
+	"gem_challenge": 15000,
+	"time_challenge": 18
 }

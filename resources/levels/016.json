@@ -1,25 +1,30 @@
 {
-	"name": "Frigid Frigates",
+	"name": "Peperoncini Pyramid",
 	
 	"maps":
 	[
 		{
-			"slug": "snow-2",
+			"slug": "desert-3",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "mintlines.png",
-					"width": 64,
-					"height": 64
+					"img": "pyramid_bg.png",
+					"width": 16,
+					"height": 16
 				}
 			]
 		}
 	],
-	
-	"entrance_x": 1,
-	"entrance_y": 15,
-	
-	"gem_challenge": 8000,
-	"time_challenge": 35
+
+	"goal":
+	{
+		"type": "warp",
+		"message": "¡Get the silver moon & then 'scape 'fore time\nruns out!"
+	},
+
+	"entrance_x": 5,
+	"entrance_y": 38,
+	"gem_challenge": 14000,
+	"time_challenge": 25
 }

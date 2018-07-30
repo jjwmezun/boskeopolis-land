@@ -1,25 +1,44 @@
 {
-	"name": "Conveyor Slayer",
+	"name": "Fortune Beach",
 
 	"maps":
 	[
 		{
-			"slug": "factory-1",
+			"slug": "beach-1",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "factory-blocks.png",
-					"width": 48,
-					"height": 48
+					"img": "beach-sunset-sky.png",
+					"width": 591,
+					"height": 256,
+					"y_scroll": 0.0,
+					"x_speed": -50,
+					"y_offset": -112,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "beach-sunset-sea.png",
+					"width": 500,
+					"height": 144,
+					"y_scroll": 0.0,
+					"x_speed": -200,
+					"y_offset": 128,
+					"y_repeat": false
 				}
 			]
 		}
 	],
 
-	"entrance_x": 18,
-	"entrance_y": 31,
+	"entrance_x": 22,
+	"entrance_y": 32,
 
-	"gem_challenge": 33000,
-	"time_challenge": 16
+	"gem_challenge": 18000,
+	"time_challenge": 5,
+
+	"goal":
+	{
+		"message": "¡Find the chest with the Keycane!"
+	}
 }
