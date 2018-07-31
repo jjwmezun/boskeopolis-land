@@ -10,6 +10,7 @@
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
 #include "cannon_sprite.hpp"
+#include "capn_syrup_sprite.hpp"
 #include "carrot_sprite.hpp"
 #include "change_layer_sprite.hpp"
 #include "choque_sprite.hpp"
@@ -448,6 +449,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 107 ):
 			return std::unique_ptr<Sprite> ( new SpawnAnchorMissileSprite( x, y, SpawnAnchorMissileSprite::AMType::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 108 ):
+			return std::unique_ptr<Sprite> ( new CapnSyrupSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

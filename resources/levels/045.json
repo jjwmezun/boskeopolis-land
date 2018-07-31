@@ -3,12 +3,12 @@
 	"maps":
 	[
 		{
-			"slug": "pirate-2"
+			"slug": "pirate-2-2"
 		}
 	],
 
-	"entrance_x": 73,
-	"entrance_y": 40,
+	"entrance_x": 3,
+	"entrance_y": 8,
 	"gem_challenge": 15000,
 	"time_challenge": 50
 }
