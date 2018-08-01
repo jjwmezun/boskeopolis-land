@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <string>
 
 namespace Input
 {
@@ -29,6 +30,9 @@ namespace Input
 	bool held( Action action );
 	bool movingCharacter();
 	bool movingCharacterNoHold();
+	std::string getActionName( Action action );
+	int calculateMaxActionNameLength();
+	std::string getKeyName( Action action );
 
 	void init();
 	void close();
@@ -38,8 +42,8 @@ namespace Input
 	void keyPress( SDL_Keycode key );
 	void keyRelease( SDL_Keycode key );
 	void keyHold( SDL_Keycode key );
-	//void buttonPress( Uint8 button );
-	//void buttonRelease( Uint8 button );
-	//void buttonHold( Uint8 button );
-	//void axis( const SDL_JoyAxisEvent& axis_event );
+	void buttonPress( Uint8 button );
+	void buttonRelease( Uint8 button );
+	void buttonHold( Uint8 button );
+	void axis( const SDL_JoyAxisEvent& axis_event );
 };

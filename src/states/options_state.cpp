@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "controls_option_state.hpp"
 #include "input.hpp"
 #include "main.hpp"
 #include "options_state.hpp"
@@ -33,7 +34,11 @@ void OptionsState::init() {};
 
 void OptionsState::updateInput()
 {
-	if ( Input::pressed( Input::Action::CONFIRM ) )
+	if ( Input::pressed( Input::Action::CANCEL ) )
+	{
+		Main::popState();
+	}
+	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 		switch ( ( Option )( options_.selection() ) )
 		{
@@ -41,7 +46,7 @@ void OptionsState::updateInput()
 				Main::pushState( std::make_unique<ScreenOptionState> () );
 			break;
 			case ( Option::CONTROLS ):
-				Main::popState();
+				Main::pushState( std::make_unique<ControlsOptionState> () );
 			break;
 			case ( Option::SOUND ):
 				Main::popState();

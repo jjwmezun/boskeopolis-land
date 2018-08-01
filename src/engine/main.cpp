@@ -147,14 +147,14 @@ namespace Main
 						Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
 					break;
 					case ( SDL_JOYAXISMOTION ):
-						//Input::axis( event.jaxis );
+						Input::axis( event.jaxis );
 					break;
 					case ( SDL_JOYBUTTONDOWN ):
-						//Input::buttonPress( event.jbutton.button );
-						//Input::buttonHold( event.jbutton.button );
+						Input::buttonPress( event.jbutton.button );
+						Input::buttonHold( event.jbutton.button );
 					break;
 					case ( SDL_JOYBUTTONUP ):
-						//Input::buttonRelease( event.jbutton.button );
+						Input::buttonRelease( event.jbutton.button );
 					break;
 				}
 			}

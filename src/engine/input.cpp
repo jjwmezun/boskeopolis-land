@@ -4,10 +4,28 @@
 
 namespace Input
 {
-	//constexpr Uint8  AXIS_X        = 0;
-	//constexpr Uint8  AXIS_Y        = 1;
-	//constexpr Sint16 AXIS_POSITIVE = 32767;
-	//constexpr Sint16 AXIS_NEGATIVE = -32768;
+	constexpr Uint8  AXIS_X        = 0;
+	constexpr Uint8  AXIS_Y        = 1;
+	constexpr Sint16 AXIS_POSITIVE = 32767;
+	constexpr Sint16 AXIS_NEGATIVE = -32768;
+
+	const std::string action_names_[ NUM_O_ACTIONS ] =
+	{
+		"Confirm",
+		"Cancel",
+		"Menu",
+		"Jump",
+		"Run",
+		"Up",
+		"Right",
+		"Down",
+		"Left",
+		"Camera Left",
+		"Camera Right",
+		"Camera Up",
+		"Camera Down",
+		"Quit"
+	};
 
 	// Private Variables
 	std::vector<SDL_Keycode> key_map_ [ NUM_O_ACTIONS ] =
@@ -28,17 +46,34 @@ namespace Input
 		/* ESCAPE       */ { SDLK_ESCAPE }
 	};
 
-	//Action action_x_negative_ = Action::MOVE_LEFT;
-	//Action action_x_positive_ = Action::MOVE_RIGHT;
-	//Action action_y_negative_ = Action::MOVE_UP;
-	//Action action_y_positive_ = Action::MOVE_DOWN;
-
-	//std::vector<SDL_Joystick*> joysticks_;
+	Action action_x_negative_ = Action::MOVE_LEFT;
+	Action action_x_positive_ = Action::MOVE_RIGHT;
+	Action action_y_negative_ = Action::MOVE_UP;
+	Action action_y_positive_ = Action::MOVE_DOWN;
+	std::vector<SDL_Joystick*> joysticks_;
 
 	bool actions_pressed_ [ NUM_O_ACTIONS ];
 	bool actions_pressed_before_released_ [ NUM_O_ACTIONS ];
 	bool actions_released_ [ NUM_O_ACTIONS ];
 	bool actions_held_ [ NUM_O_ACTIONS ];
+
+	std::vector<Uint8> controller_button_map_ [ NUM_O_ACTIONS ] =
+	{
+		/* CONFIRM      */ { 0 }      ,
+		/* CANCEL       */ { 1 }      ,
+		/* MENU         */ { 2 }      ,
+		/* JUMP         */ { 3 }      ,
+		/* RUN          */ { 4 }      ,
+		/* MOVE_UP      */ { 5 }     ,
+		/* MOVE_RIGHT   */ { 6 }  ,
+		/* MOVE_DOWN    */ { 7 }   ,
+		/* MOVE_LEFT    */ { 8 }   ,
+		/* CAMERA_LEFT  */ { 9 }      ,
+		/* CAMERA_RIGHT */ { 10 }      ,
+		/* CAMERA_UP    */ { 11 }      ,
+		/* CAMERA_DOWN  */ { 12 }      ,
+		/* ESCAPE       */ { 13 }
+	};
 
 
 	// Private Function Declarations
@@ -68,16 +103,15 @@ namespace Input
 
 	void init()
 	{
-		/*SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 		for ( int i = 0; i < SDL_NumJoysticks(); ++i )
 		{
 			joysticks_.push_back( SDL_JoystickOpen( i ) );
-		}*/
+		}
 		reset();
 	};
 
 	void close()
-	{/*
+	{
 		for ( auto j : joysticks_ )
 		{
 			if ( j != nullptr )
@@ -85,7 +119,7 @@ namespace Input
 				SDL_JoystickClose( j );
 			}
 		}
-		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );*/
+		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
 	};
 
 	void reset()
@@ -150,6 +184,48 @@ namespace Input
 		);
 	};
 
+	std::string getActionName( Action action )
+	{
+		/*
+		switch ( action )
+		{
+			case ( CONFIRM      ): { return "Confirm";      } break;
+			case ( CANCEL       ): { return "Cancel";       } break;
+			case ( MENU         ): { return "Menu";         } break;
+			case ( JUMP         ): { return "Jump";         } break;
+			case ( RUN          ): { return "Run";          } break;
+			case ( MOVE_UP      ): { return "Up";           } break;
+			case ( MOVE_RIGHT   ): { return "Right";        } break;
+			case ( MOVE_DOWN    ): { return "Down";         } break;
+			case ( MOVE_LEFT    ): { return "Left";         } break;
+			case ( CAMERA_LEFT  ): { return "Camera Left";  } break;
+			case ( CAMERA_RIGHT ): { return "Camera Right"; } break;
+			case ( CAMERA_UP    ): { return "Camera Up";    } break;
+			case ( CAMERA_DOWN  ): { return "Camera Down";  } break;
+			case ( ESCAPE       ): { return "Quit";         } break;
+		}*/
+		return action_names_[ ( int )( action ) ];
+	};
+
+	int calculateMaxActionNameLength()
+	{
+		int length = 0;
+		for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+		{
+			if ( length < action_names_[ i ].size() )
+			{
+				length = action_names_[ i ].size();
+			}
+		}
+		return length;
+	};
+
+	std::string getKeyName( Action action )
+	{
+		SDL_Keycode k = key_map_[ ( int )( action ) ][ 0 ];
+		return SDL_GetKeyName( k );
+	};
+
 	void registerKeyPress( Action action )
 	{
 		if ( !actions_pressed_before_released_[ ( int )( action ) ] )
@@ -186,7 +262,7 @@ namespace Input
 	{
 		eachKey( key, key_map_, registerKeyHold );
 	};
-	/*
+
 	void buttonPress( Uint8 button )
 	{
 		eachKey( button, controller_button_map_, registerKeyPress );
@@ -237,5 +313,5 @@ namespace Input
 				registerAxis( axis_event.value, action_y_negative_, action_y_positive_ );
 			break;
 		}
-	};*/
+	};
 };
