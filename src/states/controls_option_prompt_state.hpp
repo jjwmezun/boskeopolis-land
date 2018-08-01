@@ -1,12 +1,13 @@
 #pragma once
 
 #include "game_state.hpp"
+#include "input.hpp"
 #include "text_obj_basic.hpp"
 
 class ControlsOptionPromptState : public GameState
 {
 	public:
-		ControlsOptionPromptState();
+		ControlsOptionPromptState( Input::Action action );
 		~ControlsOptionPromptState();
 
 		void stateUpdate() override;
@@ -16,4 +17,5 @@ class ControlsOptionPromptState : public GameState
 	private:
 		TextObjBasic text_;
 		sdl2::SDLRect bg_;
+		Input::Action action_;
 };

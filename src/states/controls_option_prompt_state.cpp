@@ -1,5 +1,4 @@
 #include "controls_option_prompt_state.hpp"
-#include "input.hpp"
 #include "main.hpp"
 #include "render.hpp"
 
@@ -8,11 +7,12 @@ static constexpr int HEIGHT = 5 * Text::CHAR_SIZE_PIXELS;
 static constexpr int X = ( Unit::WINDOW_WIDTH_PIXELS - WIDTH ) / 2;
 static constexpr int Y = ( Unit::WINDOW_HEIGHT_PIXELS - HEIGHT ) / 2;
 
-ControlsOptionPromptState::ControlsOptionPromptState()
+ControlsOptionPromptState::ControlsOptionPromptState( Input::Action action )
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 } ),
 	text_ ( "Press Any Key", 0, 0, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::__NULL, true ),
-	bg_ ( X, Y, WIDTH, HEIGHT )
+	bg_ ( X, Y, WIDTH, HEIGHT ),
+	action_ ( action )
 {};
 
 ControlsOptionPromptState::~ControlsOptionPromptState() {};
