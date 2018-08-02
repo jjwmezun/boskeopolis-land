@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-//#define USE_CONTROLLER
+#define USE_CONTROLLER
 
 namespace Input
 {
@@ -35,6 +35,7 @@ namespace Input
 	std::string getActionName( Action action );
 	int calculateMaxActionNameLength();
 	std::string getKeyName( Action action );
+	std::string getButtonName( Action action );
 
 	void init();
 	void close();

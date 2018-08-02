@@ -89,6 +89,7 @@ namespace Input
 	void registerAxis( Sint16 value, Action negative, Action positive );
 	bool movingCharacterFunction( bool ( *f )( Action a ) );
 	void setKeycodeChangeFinish( SDL_Keycode key );
+	void setButtonChangeFinish( Uint8 button );
 
 
 	// Function Implementations
@@ -154,6 +155,14 @@ namespace Input
 	{
 		assert( keycode_change_ >= 0 && keycode_change_ < NUM_O_ACTIONS );
 		key_map_[ keycode_change_ ][ 0 ] = key;
+		keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
+		waiting_for_press_ = false;
+	};
+
+	void setButtonChangeFinish( Uint8 button )
+	{
+		assert( keycode_change_ >= 0 && keycode_change_ < NUM_O_ACTIONS );
+		controller_button_map_[ keycode_change_ ][ 0 ] = button;
 		keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
 		waiting_for_press_ = false;
 	};
@@ -236,6 +245,12 @@ namespace Input
 		return SDL_GetKeyName( k );
 	};
 
+	std::string getButtonName( Action action )
+	{
+		Uint8 button = controller_button_map_[ ( int )( action ) ][ 0 ];
+		return std::to_string( button );
+	};
+
 	void registerKeyPress( Action action )
 	{
 		if ( !actions_pressed_before_released_[ ( int )( action ) ] )
@@ -300,12 +315,32 @@ namespace Input
 
 	void buttonRelease( Uint8 button )
 	{
-		eachKey( button, controller_button_map_, registerKeyRelease );
+		if ( keycode_change_ != DEFAULT_KEYCODE_CHANGE_VALUE )
+		{
+			if ( button == controller_button_map_[ ( int )( Action::CONFIRM ) ][ 0 ] )
+			{
+				waiting_for_press_ = true;
+			}
+		}
+		else
+		{
+			eachKey( button, controller_button_map_, registerKeyRelease );
+		}
 	};
 
 	void buttonHold( Uint8 button )
 	{
-		eachKey( button, controller_button_map_, registerKeyHold );
+		if ( keycode_change_ != DEFAULT_KEYCODE_CHANGE_VALUE )
+		{
+			if ( waiting_for_press_ )
+			{
+				setButtonChangeFinish( button );
+			}
+		}
+		else
+		{
+			eachKey( button, controller_button_map_, registerKeyHold );
+		}
 	};
 
 	void registerAxis( Sint16 value, Action negative, Action positive )

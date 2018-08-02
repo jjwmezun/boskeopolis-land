@@ -57,6 +57,16 @@ ControlsOptionState::ControlsOptionState()
 			Text::FontColor::BLACK
 		);
 
+		button_names_.emplace_back
+		(
+			Input::getButtonName( ( Input::Action )( i ) ),
+			Unit::WINDOW_WIDTH_PIXELS - 32,
+			y,
+			Text::FontColor::WHITE,
+			Text::FontAlign::LEFT,
+			Text::FontColor::BLACK
+		);
+
 		y += Text::CHAR_SIZE_PIXELS;
 	}
 };
@@ -114,6 +124,7 @@ void ControlsOptionState::renderOptions() const
 	{
 		option_names_[ i ].render();
 		key_names_[ i ].render();
+		button_names_[ i ].render();
 	}
 };
 
@@ -122,6 +133,7 @@ void ControlsOptionState::resetOptionNames()
 	for ( int i = 0; i < Input::NUM_O_ACTIONS; i++ )
 	{
 		key_names_[ i ].words_ = Input::getKeyName( ( Input::Action )( i ) );
+		button_names_[ i ].words_ = Input::getButtonName( ( Input::Action )( i ) );
 	}
 };
 
