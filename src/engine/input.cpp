@@ -1,9 +1,11 @@
+#include <cassert>
 #include "input.hpp"
 #include <iostream>
 #include <vector>
 
 namespace Input
 {
+	constexpr int DEFAULT_KEYCODE_CHANGE_VALUE = -1;
 	constexpr Uint8  AXIS_X        = 0;
 	constexpr Uint8  AXIS_Y        = 1;
 	constexpr Sint16 AXIS_POSITIVE = 32767;
@@ -75,6 +77,9 @@ namespace Input
 		/* ESCAPE       */ { 13 }
 	};
 
+	int keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
+	bool waiting_for_press_ = false;
+
 
 	// Private Function Declarations
 	void resetList( bool* list );
@@ -83,6 +88,7 @@ namespace Input
 	void registerKeyHold( Action action );
 	void registerAxis( Sint16 value, Action negative, Action positive );
 	bool movingCharacterFunction( bool ( *f )( Action a ) );
+	void setKeycodeChangeFinish( SDL_Keycode key );
 
 
 	// Function Implementations
@@ -103,23 +109,27 @@ namespace Input
 
 	void init()
 	{
-		for ( int i = 0; i < SDL_NumJoysticks(); ++i )
-		{
-			joysticks_.push_back( SDL_JoystickOpen( i ) );
-		}
+		#ifdef USE_CONTROLLER
+			for ( int i = 0; i < SDL_NumJoysticks(); ++i )
+			{
+				joysticks_.push_back( SDL_JoystickOpen( i ) );
+			}
+		#endif
 		reset();
 	};
 
 	void close()
 	{
-		for ( auto j : joysticks_ )
-		{
-			if ( j != nullptr )
+		#ifdef USE_CONTROLLER
+			for ( auto j : joysticks_ )
 			{
-				SDL_JoystickClose( j );
+				if ( j != nullptr )
+				{
+					SDL_JoystickClose( j );
+				}
 			}
-		}
-		SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
+			SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
+		#endif
 	};
 
 	void reset()
@@ -133,6 +143,24 @@ namespace Input
 	{
 		resetList( actions_pressed_ );
 		resetList( actions_released_ );
+	};
+
+	void setKeycodeChangeStart( Action action )
+	{
+		keycode_change_ = ( int )( action );
+	};
+
+	void setKeycodeChangeFinish( SDL_Keycode key )
+	{
+		assert( keycode_change_ >= 0 && keycode_change_ < NUM_O_ACTIONS );
+		key_map_[ keycode_change_ ][ 0 ] = key;
+		keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
+		waiting_for_press_ = false;
+	};
+
+	bool testKeycodeChangeDone()
+	{
+		return keycode_change_ == DEFAULT_KEYCODE_CHANGE_VALUE;
 	};
 
 	void resetList( bool* list )
@@ -186,24 +214,6 @@ namespace Input
 
 	std::string getActionName( Action action )
 	{
-		/*
-		switch ( action )
-		{
-			case ( CONFIRM      ): { return "Confirm";      } break;
-			case ( CANCEL       ): { return "Cancel";       } break;
-			case ( MENU         ): { return "Menu";         } break;
-			case ( JUMP         ): { return "Jump";         } break;
-			case ( RUN          ): { return "Run";          } break;
-			case ( MOVE_UP      ): { return "Up";           } break;
-			case ( MOVE_RIGHT   ): { return "Right";        } break;
-			case ( MOVE_DOWN    ): { return "Down";         } break;
-			case ( MOVE_LEFT    ): { return "Left";         } break;
-			case ( CAMERA_LEFT  ): { return "Camera Left";  } break;
-			case ( CAMERA_RIGHT ): { return "Camera Right"; } break;
-			case ( CAMERA_UP    ): { return "Camera Up";    } break;
-			case ( CAMERA_DOWN  ): { return "Camera Down";  } break;
-			case ( ESCAPE       ): { return "Quit";         } break;
-		}*/
 		return action_names_[ ( int )( action ) ];
 	};
 
@@ -250,12 +260,32 @@ namespace Input
 
 	void keyPress( SDL_Keycode key )
 	{
-		eachKey( key, key_map_, registerKeyPress );
+		if ( keycode_change_ != DEFAULT_KEYCODE_CHANGE_VALUE )
+		{
+			if ( waiting_for_press_ )
+			{
+				setKeycodeChangeFinish( key );
+			}
+		}
+		else
+		{
+			eachKey( key, key_map_, registerKeyPress );
+		}
 	};
 
 	void keyRelease( SDL_Keycode key )
 	{
-		eachKey( key, key_map_, registerKeyRelease );
+		if ( keycode_change_ != DEFAULT_KEYCODE_CHANGE_VALUE )
+		{
+			if ( key == key_map_[ ( int )( Action::CONFIRM ) ][ 0 ] )
+			{
+				waiting_for_press_ = true;
+			}
+		}
+		else
+		{
+			eachKey( key, key_map_, registerKeyRelease );
+		}
 	};
 
 	void keyHold( SDL_Keycode key )
@@ -280,38 +310,42 @@ namespace Input
 
 	void registerAxis( Sint16 value, Action negative, Action positive )
 	{
-		switch ( value )
-		{
-			case ( AXIS_NEGATIVE ):
-				registerKeyPress( negative );
-				registerKeyHold( negative );
-				registerKeyRelease( positive );
-			break;
+		#ifdef USE_CONTROLLER
+			switch ( value )
+			{
+				case ( AXIS_NEGATIVE ):
+					registerKeyPress( negative );
+					registerKeyHold( negative );
+					registerKeyRelease( positive );
+				break;
 
-			case ( AXIS_POSITIVE ):
-				registerKeyPress( positive );
-				registerKeyHold( positive );
-				registerKeyRelease( negative );
-			break;
+				case ( AXIS_POSITIVE ):
+					registerKeyPress( positive );
+					registerKeyHold( positive );
+					registerKeyRelease( negative );
+				break;
 
-			case ( 0 ):
-				registerKeyRelease( negative );
-				registerKeyRelease( positive );
-			break;
-		}
+				case ( 0 ):
+					registerKeyRelease( negative );
+					registerKeyRelease( positive );
+				break;
+			}
+		#endif
 	};
 
 	void axis( const SDL_JoyAxisEvent& axis_event )
 	{
-		switch ( axis_event.axis )
-		{
-			case ( AXIS_X ):
-				registerAxis( axis_event.value, action_x_negative_, action_x_positive_ );
-			break;
+		#ifdef USE_CONTROLLER
+			switch ( axis_event.axis )
+			{
+				case ( AXIS_X ):
+					registerAxis( axis_event.value, action_x_negative_, action_x_positive_ );
+				break;
 
-			case ( AXIS_Y ):
-				registerAxis( axis_event.value, action_y_negative_, action_y_positive_ );
-			break;
-		}
+				case ( AXIS_Y ):
+					registerAxis( axis_event.value, action_y_negative_, action_y_positive_ );
+				break;
+			}
+		#endif
 	};
 };

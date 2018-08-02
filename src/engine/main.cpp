@@ -24,6 +24,12 @@ namespace Main
 		QUIT
 	};
 
+	#ifdef USE_CONTROLLER
+		static constexpr Uint32 SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK;
+	#else
+		static constexpr Uint32 SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
+	#endif
+
 	static constexpr char TITLE[] = "Boskeopolis Land";
 	static constexpr int TRANSITION_SPEED = 16;
 	static constexpr int TRANSITION_LIMIT = 255;
@@ -270,7 +276,7 @@ namespace Main
 
 	void initSDL()
 	{
-		if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK ) != 0 )
+		if ( SDL_Init( SDL_INIT_FLAGS ) != 0 )
 		{
 			SDL_Log( "SDL_Initialization failed: %s", SDL_GetError() );
 		}

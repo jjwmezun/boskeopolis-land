@@ -13,17 +13,15 @@ ControlsOptionPromptState::ControlsOptionPromptState( Input::Action action )
 	text_ ( "Press Any Key", 0, 0, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::__NULL, true ),
 	bg_ ( X, Y, WIDTH, HEIGHT ),
 	action_ ( action )
-{};
+{
+	Input::setKeycodeChangeStart( action_ );
+};
 
 ControlsOptionPromptState::~ControlsOptionPromptState() {};
 
 void ControlsOptionPromptState::stateUpdate()
 {
-	if ( Input::pressed( Input::Action::CANCEL ) )
-	{
-		Main::popState();
-	}
-	else if ( Input::pressed( Input::Action::CONFIRM ) )
+	if ( Input::testKeycodeChangeDone() )
 	{
 		Main::popState();
 	}

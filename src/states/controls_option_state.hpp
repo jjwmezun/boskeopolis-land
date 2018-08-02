@@ -22,8 +22,11 @@ class ControlsOptionState : public GameState
 		std::vector<TextObjBasic> key_names_;
 		std::vector<TextObjBasic> button_names_;
 		OptionSelection selection_;
+		bool reset_option_names_;
 
 		void updateSelection();
 		void updateInput();
 		void renderOptions() const;
+		void testResetOptionNames();
+		void resetOptionNames();
 };

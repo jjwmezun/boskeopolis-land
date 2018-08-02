@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+//#define USE_CONTROLLER
+
 namespace Input
 {
 	enum Action
@@ -38,6 +40,8 @@ namespace Input
 	void close();
 	void update();
 	void reset();
+	void setKeycodeChangeStart( Action action );
+	bool testKeycodeChangeDone();
 
 	void keyPress( SDL_Keycode key );
 	void keyRelease( SDL_Keycode key );
