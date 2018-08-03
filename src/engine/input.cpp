@@ -83,8 +83,6 @@ namespace Input
 			/* ESCAPE       */ 13
 		};
 
-		static std::vector<Action> button_map_ [ 256 ] = {};
-
 		static int keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
 		static bool waiting_for_press_ = false;
 
@@ -400,12 +398,5 @@ namespace Input
 					break;
 				}
 			#endif
-		};
-
-		void setPreferedButtonConfig()
-		{
-			button_map_ [ 0 ] = { Action::CONFIRM, Action::JUMP };
-			button_map_ [ 1 ] = { Action::CANCEL, Action::RUN };
-			button_map_ [ 2 ] = { Action::MENU };
 		};
 };
