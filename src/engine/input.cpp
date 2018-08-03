@@ -11,7 +11,13 @@ namespace Input
 	//////////////////////////////////////////////////////////
 
 		static constexpr int DEFAULT_KEYCODE_CHANGE_VALUE = -1;
+
 		static constexpr Uint8  NULL_BUTTON   = 255;
+		static constexpr Uint8  AXIS_X_POSITIVE_BUTTON = 254;
+		static constexpr Uint8  AXIS_X_NEGATIVE_BUTTON = 253;
+		static constexpr Uint8  AXIS_Y_POSITIVE_BUTTON = 252;
+		static constexpr Uint8  AXIS_Y_NEGATIVE_BUTTON = 251;
+
 		static constexpr Uint8  AXIS_X        = 0;
 		static constexpr Uint8  AXIS_Y        = 1;
 		static constexpr Sint16 AXIS_POSITIVE = 32767;
@@ -54,10 +60,6 @@ namespace Input
 			/* ESCAPE       */ SDLK_ESCAPE
 		};
 
-		static Action action_x_negative_ = Action::MOVE_LEFT;
-		static Action action_x_positive_ = Action::MOVE_RIGHT;
-		static Action action_y_negative_ = Action::MOVE_UP;
-		static Action action_y_positive_ = Action::MOVE_DOWN;
 		static std::vector<SDL_Joystick*> joysticks_;
 
 		static bool actions_pressed_ [ NUM_O_ACTIONS ];
@@ -72,15 +74,15 @@ namespace Input
 			/* MENU         */ 2      ,
 			/* JUMP         */ 3      ,
 			/* RUN          */ 4      ,
-			/* MOVE_UP      */ NULL_BUTTON     ,
-			/* MOVE_RIGHT   */ NULL_BUTTON  ,
-			/* MOVE_DOWN    */ NULL_BUTTON   ,
-			/* MOVE_LEFT    */ NULL_BUTTON   ,
+			/* MOVE_UP      */ AXIS_Y_NEGATIVE_BUTTON,
+			/* MOVE_RIGHT   */ AXIS_X_POSITIVE_BUTTON,
+			/* MOVE_DOWN    */ AXIS_Y_POSITIVE_BUTTON,
+			/* MOVE_LEFT    */ AXIS_X_NEGATIVE_BUTTON,
 			/* CAMERA_LEFT  */ 9      ,
 			/* CAMERA_RIGHT */ 10      ,
 			/* CAMERA_UP    */ 11      ,
 			/* CAMERA_DOWN  */ 12      ,
-			/* ESCAPE       */ 13
+			/* ESCAPE       */ NULL_BUTTON
 		};
 
 		static int keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
@@ -96,7 +98,9 @@ namespace Input
 		void registerKeyPress( Action action );
 		void registerKeyRelease( Action action );
 		void registerKeyHold( Action action );
-		void registerAxis( Sint16 value, Action negative, Action positive );
+		void registerAxisPress( Uint8 axis, Sint16 value );
+		void registerSingleAxisPress( Sint16 value, Uint8 negative, Uint8 positive );
+		void registerAxisChange( Uint8 axis, Sint16 value );
 		bool movingCharacterFunction( bool ( *f )( Action a ) );
 		void setKeycodeChangeFinish( SDL_Keycode key );
 		void setButtonChangeFinish( Uint8 button );
@@ -260,11 +264,40 @@ namespace Input
 		std::string getButtonName( Action action )
 		{
 			Uint8 button = controller_button_map_[ ( int )( action ) ];
-			if ( button == NULL_BUTTON )
+
+			switch ( button )
 			{
-				return "--";
+				case ( AXIS_X_NEGATIVE_BUTTON ):
+				{
+					return "AXIS X-";
+				}
+				break;
+				case ( AXIS_X_POSITIVE_BUTTON ):
+				{
+					return "AXIS X+";
+				}
+				break;
+				case ( AXIS_Y_NEGATIVE_BUTTON ):
+				{
+					return "AXIS Y-";
+				}
+				break;
+				case ( AXIS_Y_POSITIVE_BUTTON ):
+				{
+					return "AXIS Y+";
+				}
+				break;
+				case ( NULL_BUTTON ):
+				{
+					return "--";
+				}
+				break;
+				default:
+				{
+					return std::to_string( button );
+				}
+				break;
 			}
-			return std::to_string( button );
 		};
 
 		void registerKeyPress( Action action )
@@ -359,44 +392,106 @@ namespace Input
 			}
 		};
 
-		void registerAxis( Sint16 value, Action negative, Action positive )
+		void axis( const SDL_JoyAxisEvent& axis_event )
+		{
+			#ifdef USE_CONTROLLER
+				const Uint8  axis  = axis_event.axis;
+				const Sint16 value = axis_event.value;
+
+				if ( keycode_change_ != DEFAULT_KEYCODE_CHANGE_VALUE )
+				{
+					registerAxisChange( axis, value );
+				}
+				else
+				{
+					registerAxisPress( axis, value );
+				}
+			#endif
+		};
+
+		void registerAxisPress( Uint8 axis, Sint16 value )
+		{
+			#ifdef USE_CONTROLLER
+				switch ( axis )
+				{
+					case ( AXIS_X ):
+						registerSingleAxisPress( value, AXIS_X_NEGATIVE_BUTTON, AXIS_X_POSITIVE_BUTTON );
+					break;
+
+					case ( AXIS_Y ):
+						registerSingleAxisPress( value, AXIS_Y_NEGATIVE_BUTTON, AXIS_Y_POSITIVE_BUTTON );
+					break;
+				}
+			#endif
+		}
+
+		void registerSingleAxisPress( Sint16 value, Uint8 negative, Uint8 positive )
 		{
 			#ifdef USE_CONTROLLER
 				switch ( value )
 				{
 					case ( AXIS_NEGATIVE ):
-						registerKeyPress( negative );
-						registerKeyHold( negative );
-						registerKeyRelease( positive );
+						eachKey( negative, controller_button_map_, registerKeyPress );
+						eachKey( negative, controller_button_map_, registerKeyHold );
+						eachKey( positive, controller_button_map_, registerKeyRelease );
 					break;
 
 					case ( AXIS_POSITIVE ):
-						registerKeyPress( positive );
-						registerKeyHold( positive );
-						registerKeyRelease( negative );
+
+					eachKey( positive, controller_button_map_, registerKeyPress );
+					eachKey( positive, controller_button_map_, registerKeyHold );
+					eachKey( negative, controller_button_map_, registerKeyRelease );
 					break;
 
 					case ( 0 ):
-						registerKeyRelease( negative );
-						registerKeyRelease( positive );
+						eachKey( positive, controller_button_map_, registerKeyRelease );
+						eachKey( negative, controller_button_map_, registerKeyRelease );
 					break;
 				}
 			#endif
 		};
 
-		void axis( const SDL_JoyAxisEvent& axis_event )
+		void registerAxisChange( Uint8 axis, Sint16 value )
 		{
 			#ifdef USE_CONTROLLER
-				switch ( axis_event.axis )
+				switch ( axis )
 				{
 					case ( AXIS_X ):
-						registerAxis( axis_event.value, action_x_negative_, action_x_positive_ );
+					{
+						switch ( value )
+						{
+							case ( AXIS_NEGATIVE ):
+							{
+								setButtonChangeFinish( AXIS_X_NEGATIVE_BUTTON );
+							}
+							break;
+							case ( AXIS_POSITIVE ):
+							{
+								setButtonChangeFinish( AXIS_X_POSITIVE_BUTTON );
+							}
+							break;
+						}
+					}
 					break;
 
 					case ( AXIS_Y ):
-						registerAxis( axis_event.value, action_y_negative_, action_y_positive_ );
+					{
+						switch ( value )
+						{
+							case ( AXIS_NEGATIVE ):
+							{
+								setButtonChangeFinish( AXIS_Y_NEGATIVE_BUTTON );
+							}
+							break;
+							case ( AXIS_POSITIVE ):
+							{
+								setButtonChangeFinish( AXIS_Y_POSITIVE_BUTTON );
+							}
+							break;
+						}
+					}
 					break;
 				}
 			#endif
-		};
+		}
 };

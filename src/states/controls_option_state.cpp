@@ -29,13 +29,13 @@ ControlsOptionState::ControlsOptionState()
 	option_names_ (),
 	key_names_ (),
 	button_names_ (),
-	selection_ ( Input::NUM_O_ACTIONS - 1 ),
+	selection_ ( Input::NUM_O_ACTIONS - 2 ),
 	reset_option_names_ ( false )
 {
 	const int KEY_NAME_X = calculateKeyNameX();
 	int y = OPTION_NAME_START_Y;
 
-	for ( int i = 0; i < Input::NUM_O_ACTIONS; i++ )
+	for ( int i = 0; i < Input::NUM_O_ACTIONS - 1; i++ )
 	{
 		option_names_.emplace_back
 		(
@@ -60,7 +60,7 @@ ControlsOptionState::ControlsOptionState()
 		button_names_.emplace_back
 		(
 			Input::getButtonName( ( Input::Action )( i ) ),
-			Unit::WINDOW_WIDTH_PIXELS - 32,
+			Unit::WINDOW_WIDTH_PIXELS - 72,
 			y,
 			Text::FontColor::WHITE,
 			Text::FontAlign::LEFT,
@@ -92,7 +92,7 @@ void ControlsOptionState::init() {};
 void ControlsOptionState::updateSelection()
 {
 	selection_.update();
-	for ( int i = 0; i < Input::NUM_O_ACTIONS; i++ )
+	for ( int i = 0; i < Input::NUM_O_ACTIONS - 1; i++ )
 	{
 		if ( i == selection_.selection() )
 		{
@@ -120,7 +120,7 @@ void ControlsOptionState::updateInput()
 
 void ControlsOptionState::renderOptions() const
 {
-	for ( int i = 0; i < Input::NUM_O_ACTIONS; ++i )
+	for ( int i = 0; i < Input::NUM_O_ACTIONS - 1; ++i )
 	{
 		option_names_[ i ].render();
 		key_names_[ i ].render();
@@ -130,7 +130,7 @@ void ControlsOptionState::renderOptions() const
 
 void ControlsOptionState::resetOptionNames()
 {
-	for ( int i = 0; i < Input::NUM_O_ACTIONS; i++ )
+	for ( int i = 0; i < Input::NUM_O_ACTIONS - 1; i++ )
 	{
 		key_names_[ i ].words_ = Input::getKeyName( ( Input::Action )( i ) );
 		button_names_[ i ].words_ = Input::getButtonName( ( Input::Action )( i ) );
