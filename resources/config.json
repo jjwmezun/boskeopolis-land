@@ -1,0 +1,21 @@
+{
+	"keys":
+	{
+		"confirm": 122,
+		"cancel": 120,
+		"menu": 99,
+		"jump": 122,
+		"run": 120,
+		"move_up": 1073741906,
+		"move_right": 1073741903,
+		"move_down": 1073741905,
+		"move_left": 1073741904,
+		"camera_up": 119,
+		"camera_right": 100,
+		"camera_down": 115,
+		"camera_left": 97
+	},
+	"buttons":
+	{
+	}
+}

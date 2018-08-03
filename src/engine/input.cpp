@@ -1,6 +1,10 @@
 #include <cassert>
+#include <fstream>
 #include "input.hpp"
 #include <iostream>
+#include "main.hpp"
+#include "rapidjson/document.h"
+#include "rapidjson/istreamwrapper.h"
 #include <vector>
 
 namespace Input
@@ -69,20 +73,20 @@ namespace Input
 
 		static Uint8 controller_button_map_ [ NUM_O_ACTIONS ] =
 		{
-			/* CONFIRM      */ 0      ,
-			/* CANCEL       */ 1      ,
-			/* MENU         */ 2      ,
-			/* JUMP         */ 3      ,
-			/* RUN          */ 4      ,
-			/* MOVE_UP      */ AXIS_Y_NEGATIVE_BUTTON,
-			/* MOVE_RIGHT   */ AXIS_X_POSITIVE_BUTTON,
-			/* MOVE_DOWN    */ AXIS_Y_POSITIVE_BUTTON,
-			/* MOVE_LEFT    */ AXIS_X_NEGATIVE_BUTTON,
-			/* CAMERA_LEFT  */ 9      ,
-			/* CAMERA_RIGHT */ 10      ,
-			/* CAMERA_UP    */ 11      ,
-			/* CAMERA_DOWN  */ 12      ,
-			/* ESCAPE       */ NULL_BUTTON
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON,
+			NULL_BUTTON
 		};
 
 		static int keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
@@ -94,6 +98,8 @@ namespace Input
 	//
 	//////////////////////////////////////////////////////////
 
+		void loadJoysticks();
+		void loadConfig();
 		void resetList( bool* list );
 		void registerKeyPress( Action action );
 		void registerKeyRelease( Action action );
@@ -126,12 +132,8 @@ namespace Input
 
 		void init()
 		{
-			#ifdef USE_CONTROLLER
-				for ( int i = 0; i < SDL_NumJoysticks(); ++i )
-				{
-					joysticks_.push_back( SDL_JoystickOpen( i ) );
-				}
-			#endif
+			loadJoysticks();
+			loadConfig();
 			reset();
 		};
 
@@ -147,6 +149,36 @@ namespace Input
 				}
 				SDL_QuitSubSystem( SDL_INIT_JOYSTICK );
 			#endif
+		};
+
+		void loadJoysticks()
+		{
+			#ifdef USE_CONTROLLER
+				for ( int i = 0; i < SDL_NumJoysticks(); ++i )
+				{
+					joysticks_.push_back( SDL_JoystickOpen( i ) );
+				}
+			#endif
+		};
+
+		void loadConfig()
+		{
+			const std::string file_path = Main::resourcePath() + "config.json";
+			std::ifstream ifs( file_path );
+			if ( ifs.is_open() )
+			{
+				rapidjson::IStreamWrapper ifs_wrap( ifs );
+				rapidjson::Document document;
+				document.ParseStream( ifs_wrap );
+				if ( document.IsObject() )
+				{
+					auto document_object = document.GetObject();
+					if ( document_object.HasMember( "keys" ) && document_object[ "keys" ].IsObject() )
+					{
+						auto keys = document_object[ "keys" ].GetObject();
+					}
+				}
+			}
 		};
 
 		void reset()
