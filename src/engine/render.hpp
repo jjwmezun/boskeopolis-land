@@ -78,6 +78,7 @@ namespace Render
 	void releaseRenderTarget();
 	void renderRenderBox( SDL_Texture* texture );
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src );
+	const sdl2::SDLRect& getScreen();
 
 	int getMaxMagnification();
 	int getMagnification();

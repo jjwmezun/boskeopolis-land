@@ -12,6 +12,7 @@ static constexpr int START_Y = 64;
 ScreenOptionState::ScreenOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
+	bg_ (),
 	title_ ( "Screen Resolution", 0, 16, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
 	fullscreen_option_ ( "Fullscreen", START_Y, FULL_OR_WINDOW_OPTION_WIDTH, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
 	window_option_ ( "Windowed", START_Y, FULL_OR_WINDOW_OPTION_WIDTH, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
@@ -36,6 +37,7 @@ ScreenOptionState::~ScreenOptionState() {};
 
 void ScreenOptionState::stateUpdate()
 {
+	bg_.update();
 	selection_.update();
 	updateOptions();
 	updateInput();
@@ -43,7 +45,7 @@ void ScreenOptionState::stateUpdate()
 
 void ScreenOptionState::stateRender()
 {
-	Render::colorCanvas( 2 );
+	bg_.render();
 	fullscreen_option_.render();
 	window_option_.render();
 	for ( const auto& other_option : other_options_ )

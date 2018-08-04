@@ -626,4 +626,9 @@ namespace Render
 		magnification_ = magnification;
 		adjustScreenToMagnification();
 	};
+
+	const sdl2::SDLRect& getScreen()
+	{
+		return screen_;
+	};
 };

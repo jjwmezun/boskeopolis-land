@@ -11,21 +11,23 @@ static constexpr int NUMBER_OF_OPTIONS = 3;
 OptionsState::OptionsState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
+	bg_ (),
 	title_ ( "Options", 0, 16, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
-	options_ ( { "Screen Resolution", "Controls", "Sound" }, 20, 64 )
+	options_ ( { "Screen Resolution", "Controls" }, 20, 64 )
 {};
 
 OptionsState::~OptionsState() {};
 
 void OptionsState::stateUpdate()
 {
+	bg_.update();
 	options_.update();
 	updateInput();
 };
 
 void OptionsState::stateRender()
 {
-	Render::colorCanvas( 2 );
+	bg_.render();
 	options_.render();
 	title_.render();
 };
@@ -47,9 +49,6 @@ void OptionsState::updateInput()
 			break;
 			case ( Option::CONTROLS ):
 				Main::pushState( std::make_unique<ControlsOptionState> () );
-			break;
-			case ( Option::SOUND ):
-				Main::popState();
 			break;
 		}
 		Audio::playSound( Audio::SoundType::CONFIRM );

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_state.hpp"
+#include "options_bg.hpp"
 #include "option_selection.hpp"
 #include "option_system.hpp"
 #include "text_obj.hpp"
@@ -17,6 +18,7 @@ class ScreenOptionState : public GameState
 
 
 	private:
+		OptionsBG bg_;
 		TextObj title_;
 		OptionBox fullscreen_option_;
 		OptionBox window_option_;

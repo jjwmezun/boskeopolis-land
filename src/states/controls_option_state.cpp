@@ -17,6 +17,7 @@ static int calculateKeyNameX()
 ControlsOptionState::ControlsOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
+	bg_ (),
 	title_
 	(
 		"Controls",
@@ -75,6 +76,7 @@ ControlsOptionState::~ControlsOptionState() {};
 
 void ControlsOptionState::stateUpdate()
 {
+	bg_.update();
 	testResetOptionNames();
 	updateSelection();
 	updateInput();
@@ -82,7 +84,7 @@ void ControlsOptionState::stateUpdate()
 
 void ControlsOptionState::stateRender()
 {
-	Render::colorCanvas( 2 );
+	bg_.render();
 	renderOptions();
 	title_.render();
 };

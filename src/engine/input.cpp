@@ -294,10 +294,13 @@ namespace Input
 		};
 
 		template <typename T>
-		void setChangeFinish( T key, T* key_map )
+		void setChangeFinish( T key, T* key_map, bool change = true )
 		{
 			assert( keycode_change_ >= 0 && keycode_change_ < NUM_O_ACTIONS );
-			key_map[ keycode_change_ ] = key;
+			if ( change )
+			{
+				key_map[ keycode_change_ ] = key;
+			}
 			keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
 			waiting_for_press_ = false;
 			saveConfig();
@@ -305,7 +308,7 @@ namespace Input
 
 		void setKeycodeChangeFinish( SDL_Keycode key )
 		{
-			setChangeFinish( key, key_map_ );
+			setChangeFinish( key, key_map_, key != SDLK_ESCAPE );
 		};
 
 		void setButtonChangeFinish( Uint8 button )

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_state.hpp"
+#include "options_bg.hpp"
 #include "option_system.hpp"
 #include "text_obj.hpp"
 
@@ -18,10 +19,10 @@ class OptionsState : public GameState
 		enum class Option
 		{
 			RESOLUTION,
-			CONTROLS,
-			SOUND
+			CONTROLS
 		};
 
+		OptionsBG bg_;
 		TextObj title_;
 		OptionSystem options_;
 		void updateInput();
