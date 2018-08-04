@@ -1,6 +1,4 @@
-
-#ifndef MEZUN_HELPERS_H
-#define MEZUN_HELPERS_H
+#pragma once
 
 #include <dirent.h>
 #include "mezun_math.hpp"
@@ -16,36 +14,38 @@ namespace mezun
 	{
 		return "";
 	};
-	
+
+	std::string addLine( const std::string& string, int indent_level = 0 );
+
 	template<typename T>
 	T randomListItem( const std::vector<T>& list )
 	{
 		const int r = mezun::randInt( list.size() - 1, 0 );
 		return list.at( r );
 	};
-	
+
 	template<typename K, typename V>
 	bool notInMap( const std::map<K, V>& container, const K& item )
 	{
 		return container.find( item ) == container.end();
 	};
-	
+
 	inline bool areStringsEqual( const std::string& one, const std::string& two )
 	{
 		return ( one.compare( two ) == 0 );
 	}
-	
+
 	inline bool isStringEmpty( const std::string& text )
 	{
 		return areStringsEqual( text, "" );
 	}
-	
+
 	inline bool checkDirectory( const std::string& path )
 	{
 		const auto cpath = path.c_str();
-	
+
 		bool test = false;
-	
+
 		DIR* dir = opendir( cpath );
 
 		if ( dir )
@@ -53,9 +53,7 @@ namespace mezun
 			test = true;
 			closedir( dir );
 		}
-		
+
 		return test;
 	};
 };
-
-#endif // MEZUN_HELPERS_H

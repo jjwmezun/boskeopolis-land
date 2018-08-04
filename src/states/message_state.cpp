@@ -5,6 +5,18 @@
 #include "render.hpp"
 #include "text_component_flashing.hpp"
 
+MessageState* MessageState::errorMessage( std::string message )
+{
+	return new MessageState
+	(
+		message,
+		Type::POP,
+		{ "Grayscale", 6 },
+		nullptr,
+		Text::FontColor::WHITE
+	);
+};
+
 MessageState::MessageState
 (
 	std::string message,

@@ -43,6 +43,11 @@
          "value":6
         }, 
         {
+         "name":"music",
+         "type":"string",
+         "value":"desert3"
+        }, 
+        {
          "name":"palette",
          "type":"string",
          "value":"Dark Sahara Yellow"

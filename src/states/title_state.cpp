@@ -96,3 +96,8 @@ void TitleState::init()
 
 	Inventory::reset();
 };
+
+void TitleState::backFromPop()
+{
+	Audio::changeSong( "title" );
+};

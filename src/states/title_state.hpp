@@ -17,6 +17,7 @@ class TitleState : public GameState
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
+		void backFromPop() override;
 
 
 	private:

@@ -8,11 +8,6 @@
 			"backgrounds":
 			[
 				{
-					"type": "constellation",
-					"width": 256,
-					"height": 256
-				},
-				{
 					"type": "image",
 					"img": "dim_clouds.png",
 					"width": 128,
@@ -37,10 +32,10 @@
 			]
 		}
 	],
-	
+
 	"entrance_x": 63,
 	"entrance_y": -32,
-	
+
 	"gem_challenge": 16950,
 	"time_challenge": 45
 }

@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
+#include <deque>
 #include "input.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
@@ -43,7 +44,7 @@ namespace Main
 	std::string path_divider_ = "/";
 	bool SAVING_ALLOWED = true;
 
-	std::unique_ptr<GameState> new_state_ = {};
+	std::deque< std::unique_ptr<GameState> > push_states_ = {};
 	std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
 
 	TransitionState transition_state_ = TransitionState::__NULL;
@@ -113,10 +114,10 @@ namespace Main
 		}
 		srand ( time( nullptr ) );
 		setResourcePath();
-		Input::init();
 		Render::init( args );
 		Audio::init( args );
 		firstState();
+		Input::init();
 	};
 
 	void end()
@@ -167,7 +168,7 @@ namespace Main
 
 			if ( ( int )( SDL_GetTicks() ) - ticks_ >= fpsMilliseconds() )
 			{
-				if ( Input::pressed( Input::Action::ESCAPE ) )
+				if ( Input::exitButtonHeldLongEnough() )
 				{
 					quit();
 				}
@@ -236,6 +237,7 @@ namespace Main
 	{
 		Render::clearScreen();
 		renderStates();
+		Input::renderQuitText();
 		renderTransition();
 		Render::screenBorders();
 		Render::presentScreen();
@@ -284,8 +286,7 @@ namespace Main
 
 	void changeState( std::unique_ptr<GameState> state )
 	{
-		if ( new_state_.get() != nullptr ) { return; }
-		new_state_.reset( state.release() );
+		push_states_.emplace_back( std::unique_ptr<GameState> ( state.release() ) );
 		state_change_type_ = StateChangeType::CHANGE;
 		transition_state_ = TransitionState::FADE_OUT;
 	};
@@ -299,8 +300,6 @@ namespace Main
 	{
 		if ( canChange() )
 		{
-			assert( new_state_ );
-
 			states_.clear();
 			pushStateSafe();
 
@@ -311,8 +310,7 @@ namespace Main
 
 	void pushState( std::unique_ptr<GameState> state, bool transition )
 	{
-		if ( new_state_.get() != nullptr ) { return; }
-		new_state_.reset( state.release() );
+		push_states_.emplace_back( std::unique_ptr<GameState> ( state.release() ) );
 		state_change_type_ = StateChangeType::PUSH;
 		if ( transition )
 		{
@@ -324,18 +322,22 @@ namespace Main
 	{
 		if ( canChange() )
 		{
-			assert( new_state_ );
-			states_.push_back( move( new_state_ ) );
-			stateReset();
-			states_.back()->changePalette();
-			states_.back()->init();
+			if ( !push_states_.empty() )
+			{
+				states_.push_back( move( push_states_[ 0 ] ) );
+				stateReset();
+				states_.back()->changePalette();
+				states_.back()->init();
+				push_states_.pop_front();
+				pushStateSafe();
+			}
 
 			// Fixes graphical bug wherein start o' level state shows before message appears due to delay
 			// 'tween creating message state in init just before now & the next time this loop checks for
 			// state change calls.
 			if ( state_change_type_ == StateChangeType::PUSH )
 			{
-				pushStateSafe();
+				//pushStateSafe();
 			}
 		}
 	};

@@ -13,6 +13,8 @@ class MessageState : public GameState
 			PUSH
 		};
 
+		static MessageState* errorMessage( std::string message );
+
 		MessageState
 		(
 			std::string message,

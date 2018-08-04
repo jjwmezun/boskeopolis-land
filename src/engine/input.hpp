@@ -21,10 +21,9 @@ namespace Input
 		CAMERA_LEFT,
 		CAMERA_RIGHT,
 		CAMERA_UP,
-		CAMERA_DOWN,
-		ESCAPE
+		CAMERA_DOWN
 	};
-	static constexpr int NUM_O_ACTIONS = ( int )( Action::ESCAPE + 1 );
+	static constexpr int NUM_O_ACTIONS = ( int )( Action::CAMERA_DOWN + 1 );
 
 	bool pressed( Action action );
 	bool pressedMain();
@@ -41,6 +40,7 @@ namespace Input
 	void close();
 	void update();
 	void reset();
+	void renderQuitText();
 	void setKeycodeChangeStart( Action action );
 	bool testKeycodeChangeDone();
 
@@ -51,4 +51,5 @@ namespace Input
 	void buttonRelease( Uint8 button );
 	void buttonHold( Uint8 button );
 	void axis( const SDL_JoyAxisEvent& axis_event );
+	bool exitButtonHeldLongEnough();
 };

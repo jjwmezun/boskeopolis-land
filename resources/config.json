@@ -1,21 +1,34 @@
 {
 	"keys":
 	{
-		"confirm": 122,
-		"cancel": 120,
-		"menu": 99,
-		"jump": 122,
-		"run": 120,
-		"move_up": 1073741906,
-		"move_right": 1073741903,
-		"move_down": 1073741905,
-		"move_left": 1073741904,
-		"camera_up": 119,
-		"camera_right": 100,
-		"camera_down": 115,
-		"camera_left": 97
+		"Confirm": 122,
+		"Cancel": 120,
+		"Menu": 99,
+		"Jump": 122,
+		"Run": 120,
+		"Up": 1073741906,
+		"Right": 1073741903,
+		"Down": 1073741905,
+		"Left": 1073741904,
+		"Camera Left": 97,
+		"Camera Right": 100,
+		"Camera Up": 119,
+		"Camera Down": 115
 	},
 	"buttons":
 	{
+		"Confirm": 0,
+		"Cancel": 2,
+		"Menu": 7,
+		"Jump": 0,
+		"Run": 2,
+		"Up": 251,
+		"Right": 254,
+		"Down": 252,
+		"Left": 253,
+		"Camera Left": 4,
+		"Camera Right": 5,
+		"Camera Up": 3,
+		"Camera Down": 1
 	}
 }

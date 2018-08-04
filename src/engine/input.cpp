@@ -3,6 +3,8 @@
 #include "input.hpp"
 #include <iostream>
 #include "main.hpp"
+#include "mezun_helpers.hpp"
+#include "mezun_json.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include <vector>
@@ -15,6 +17,7 @@ namespace Input
 	//////////////////////////////////////////////////////////
 
 		static constexpr int DEFAULT_KEYCODE_CHANGE_VALUE = -1;
+		static constexpr int ESCAPE_TIMER_THRESHOLD = 30;
 
 		static constexpr Uint8  NULL_BUTTON   = 255;
 		static constexpr Uint8  AXIS_X_POSITIVE_BUTTON = 254;
@@ -41,8 +44,7 @@ namespace Input
 			"Camera Left",
 			"Camera Right",
 			"Camera Up",
-			"Camera Down",
-			"Quit"
+			"Camera Down"
 		};
 
 		// Private Variables
@@ -60,8 +62,7 @@ namespace Input
 			/* CAMERA_LEFT  */ SDLK_a      ,
 			/* CAMERA_RIGHT */ SDLK_d      ,
 			/* CAMERA_UP    */ SDLK_w      ,
-			/* CAMERA_DOWN  */ SDLK_s      ,
-			/* ESCAPE       */ SDLK_ESCAPE
+			/* CAMERA_DOWN  */ SDLK_s
 		};
 
 		static std::vector<SDL_Joystick*> joysticks_;
@@ -85,12 +86,14 @@ namespace Input
 			NULL_BUTTON,
 			NULL_BUTTON,
 			NULL_BUTTON,
-			NULL_BUTTON,
 			NULL_BUTTON
 		};
 
 		static int keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
 		static bool waiting_for_press_ = false;
+		static bool escape_held_ = false;
+		static int escape_timer_ = 0;
+
 
 
 	//
@@ -100,7 +103,11 @@ namespace Input
 
 		void loadJoysticks();
 		void loadConfig();
+		void loadConfigFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& document_object );
+		void saveConfig();
+		std::string getConfigFilename();
 		void resetList( bool* list );
+		void updateEscape();
 		void registerKeyPress( Action action );
 		void registerKeyRelease( Action action );
 		void registerKeyHold( Action action );
@@ -161,24 +168,76 @@ namespace Input
 			#endif
 		};
 
-		void loadConfig()
+		template<typename T>
+		void loadConfigType( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& document_object, const char* type, T* key_map )
 		{
-			const std::string file_path = Main::resourcePath() + "config.json";
-			std::ifstream ifs( file_path );
-			if ( ifs.is_open() )
+			if ( document_object.HasMember( type ) && document_object[ type ].IsObject() )
 			{
-				rapidjson::IStreamWrapper ifs_wrap( ifs );
-				rapidjson::Document document;
-				document.ParseStream( ifs_wrap );
-				if ( document.IsObject() )
+				auto keys = document_object[ type ].GetObject();
+				for ( int i = 0; i < NUM_O_ACTIONS; ++i )
 				{
-					auto document_object = document.GetObject();
-					if ( document_object.HasMember( "keys" ) && document_object[ "keys" ].IsObject() )
+					const char* input_name = action_names_[ i ].c_str();
+					if ( keys.HasMember( input_name ) && keys[ input_name ].IsInt() )
 					{
-						auto keys = document_object[ "keys" ].GetObject();
+						key_map[ i ] = ( T )( keys[ input_name ].GetInt() );
 					}
 				}
 			}
+		};
+
+		void loadConfig()
+		{
+			mezun::loadJSON
+			(
+				getConfigFilename(),
+				loadConfigFunction,
+				"Input configuration is missing. Trying to replace config file...",
+				"Input configuration file has been corruped. Trying to replace config file...",
+				saveConfig,
+				saveConfig
+			);
+		};
+
+		void loadConfigFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& document_object )
+		{
+			loadConfigType( document_object, "keys", key_map_ );
+			loadConfigType( document_object, "buttons", controller_button_map_ );
+		};
+
+		template <typename T>
+		std::string saveConfigType( const std::string& type, T* key_map, bool last = false )
+		{
+			std::string text = mezun::addLine( "\"" + type + "\":", 1 );
+			text += mezun::addLine( "{", 1 );
+			for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+			{
+				const std::string& input_name = action_names_[ i ];
+				const std::string input_value = std::to_string( ( int )( key_map[ i ] ) );
+				const std::string end = ( i == NUM_O_ACTIONS - 1 ) ? "" : ",";
+				text += mezun::addLine( "\"" + input_name + "\": " + input_value + end, 2 );
+			}
+			text += ( last ) ? mezun::addLine( "}", 1 ) : mezun::addLine( "},", 1 );
+			return text;
+		};
+
+		void saveConfig()
+		{
+			std::ofstream ofs( getConfigFilename() );
+
+			std::string text = "";
+
+			text += mezun::addLine( "{", 0 );
+			text += saveConfigType( "keys", key_map_ );
+			text += saveConfigType( "buttons", controller_button_map_, true );
+			text += mezun::addLine( "}", 0 );
+
+			ofs << text;
+			ofs.close();
+		}
+
+		std::string getConfigFilename()
+		{
+			return Main::resourcePath() + "config.json";
 		};
 
 		void reset()
@@ -188,10 +247,45 @@ namespace Input
 			resetList( actions_held_ );
 		};
 
+		void renderQuitText()
+		{
+			if ( escape_timer_ > 0 )
+			{
+				Text::renderText
+				(
+					"Quitting...",
+					8,
+					Unit::WINDOW_HEIGHT_PIXELS - 16,
+					nullptr,
+					Text::FontColor::WHITE,
+					Text::DEFAULT_LINE_LENGTH,
+					Text::FontAlign::LEFT,
+					Text::FontColor::BLACK
+				);
+			}
+		};
+
 		void update()
 		{
+			updateEscape();
 			resetList( actions_pressed_ );
 			resetList( actions_released_ );
+		};
+
+		void updateEscape()
+		{
+			if ( escape_held_ )
+			{
+				++escape_timer_;
+			}
+			else
+			{
+				--escape_timer_;
+				if ( escape_timer_ < 0 )
+				{
+					escape_timer_ = 0;
+				}
+			}
 		};
 
 		void setKeycodeChangeStart( Action action )
@@ -199,20 +293,24 @@ namespace Input
 			keycode_change_ = ( int )( action );
 		};
 
-		void setKeycodeChangeFinish( SDL_Keycode key )
+		template <typename T>
+		void setChangeFinish( T key, T* key_map )
 		{
 			assert( keycode_change_ >= 0 && keycode_change_ < NUM_O_ACTIONS );
-			key_map_[ keycode_change_ ] = key;
+			key_map[ keycode_change_ ] = key;
 			keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
 			waiting_for_press_ = false;
+			saveConfig();
+		};
+
+		void setKeycodeChangeFinish( SDL_Keycode key )
+		{
+			setChangeFinish( key, key_map_ );
 		};
 
 		void setButtonChangeFinish( Uint8 button )
 		{
-			assert( keycode_change_ >= 0 && keycode_change_ < NUM_O_ACTIONS );
-			controller_button_map_[ keycode_change_ ] = button;
-			keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
-			waiting_for_press_ = false;
+			setChangeFinish( button, controller_button_map_ );
 		};
 
 		bool testKeycodeChangeDone()
@@ -371,6 +469,10 @@ namespace Input
 
 		void keyRelease( SDL_Keycode key )
 		{
+			if ( key == SDLK_ESCAPE )
+			{
+				escape_held_ = false;
+			}
 			if ( keycode_change_ != DEFAULT_KEYCODE_CHANGE_VALUE )
 			{
 				if ( key == key_map_[ ( int )( Action::CONFIRM ) ] )
@@ -386,6 +488,10 @@ namespace Input
 
 		void keyHold( SDL_Keycode key )
 		{
+			if ( key == SDLK_ESCAPE )
+			{
+				escape_held_ = true;
+			}
 			eachKey( key, key_map_, registerKeyHold );
 		};
 
@@ -525,5 +631,10 @@ namespace Input
 					break;
 				}
 			#endif
+		}
+
+		bool exitButtonHeldLongEnough()
+		{
+			return escape_timer_ >= ESCAPE_TIMER_THRESHOLD;
 		}
 };
