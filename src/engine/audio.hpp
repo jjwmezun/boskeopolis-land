@@ -24,7 +24,9 @@ namespace Audio
 		LIGHTNING = 16,
 		SWIM = 17,
 		SEWER_HOLE = 18,
-		UNLOCK = 19
+		UNLOCK = 19,
+		BUMP = 20,
+		SWITCH = 21
 	};
 
 	void init( const std::vector<std::string>& args );

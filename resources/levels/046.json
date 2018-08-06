@@ -1,6 +1,5 @@
 {
 	"name": "Boskeopolis Underground",
-
 	"maps":
 	[
 		{
@@ -67,9 +66,8 @@
 		}
 	],
 
-	"entrance_x": 52,
-	"entrance_y": 43,
-
+	"entrance_x": 68,
+	"entrance_y": 24,
 	"gem_challenge": 35000,
 	"time_challenge": 60
 }

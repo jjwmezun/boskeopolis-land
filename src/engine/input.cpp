@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include <cassert>
 #include <fstream>
 #include "input.hpp"
@@ -191,8 +192,8 @@ namespace Input
 			(
 				getConfigFilename(),
 				loadConfigFunction,
-				"Input configuration is missing. Trying to replace config file...",
-				"Input configuration file has been corruped. Trying to replace config file...",
+				"Input configuration is missing.\nConfig file has been replaced with default.",
+				"Input configuration file has been corruped.\nConfig file has been replaced with default.",
 				saveConfig,
 				saveConfig
 			);
@@ -300,6 +301,11 @@ namespace Input
 			if ( change )
 			{
 				key_map[ keycode_change_ ] = key;
+				Audio::playSound( Audio::SoundType::CONFIRM );
+			}
+			else
+			{
+				Audio::playSound( Audio::SoundType::CANCEL );
 			}
 			keycode_change_ = DEFAULT_KEYCODE_CHANGE_VALUE;
 			waiting_for_press_ = false;

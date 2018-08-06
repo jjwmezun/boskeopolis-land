@@ -31,7 +31,7 @@ MessageState::MessageState
 )
 :
 	GameState( StateID::MESSAGE_STATE, palette ),
-	message_ ( message, 0, 0, text_color, Text::FontAlign::CENTER, shadow_color, true, Text::DEFAULT_LINE_LENGTH, -1, 1, ( flash ) ? std::make_unique<TextComponentFlashing> ( 4 ) : nullptr ),
+	message_ ( message, 0, 0, text_color, Text::FontAlign::CENTER, shadow_color, true, Text::DEFAULT_LINE_LENGTH - 4, -1, 1, ( flash ) ? std::make_unique<TextComponentFlashing> ( 4 ) : nullptr ),
 	next_state_ ( std::move( next_state ) ),
 	type_ ( type )
 {

@@ -96,14 +96,8 @@ void ControlsOptionState::updateSelection()
 	selection_.update();
 	for ( int i = 0; i < Input::NUM_O_ACTIONS; i++ )
 	{
-		if ( i == selection_.selection() )
-		{
-			key_names_[ i ].color_ = Text::FontColor::LIGHT_GRAY;
-		}
-		else
-		{
-			key_names_[ i ].color_ = Text::FontColor::WHITE;
-		}
+		const Text::FontColor color = ( i == selection_.selection() ) ? Text::FontColor::LIGHT_GRAY : Text::FontColor::WHITE;
+		key_names_[ i ].color_ = option_names_[ i ].color_ = button_names_[ i ].color_ = color;
 	}
 }
 
@@ -111,11 +105,13 @@ void ControlsOptionState::updateInput()
 {
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
+		Audio::playSound( Audio::SoundType::CANCEL );
 		Main::popState();
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 		reset_option_names_ = true;
+		Audio::playSound( Audio::SoundType::CONFIRM );
 		Main::pushState( std::make_unique<ControlsOptionPromptState> ( ( Input::Action )( selection_.selection() ) ) );
 	}
 };

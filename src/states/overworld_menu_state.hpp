@@ -12,6 +12,7 @@ class OverworldMenuState : public GameState
 		~OverworldMenuState();
 		void stateUpdate() override;
 		void stateRender() override;
+		void backFromPop() override;
 
 		enum class Option
 		{

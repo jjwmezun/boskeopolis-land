@@ -241,7 +241,7 @@ namespace Text
 	};
 
 	int centerX( unsigned int line_length )
-	{	
+	{
 		// Center = half o' line length left o' middle (half window width), half on right.
 		// [     *    |    )     ]
 		// * is left-most point we want to return.
@@ -252,7 +252,7 @@ namespace Text
 
 	int centerY( const std::string& words, unsigned int line_limit )
 	{
-		unsigned int text_height = 0;
+		unsigned int text_height = 1;
 
 		unsigned int col = 0;
 		for ( unsigned int i = 0; i < words.length(); ++i )
@@ -276,10 +276,7 @@ namespace Text
 			}
 		}
 
-		return Unit::MiniBlocksToPixels
-		(
-			ceil( ( Unit::WINDOW_HEIGHT_MINIBLOCKS - text_height ) / 2 )
-		);
+		return Unit::MiniBlocksToPixels( floor( ( Unit::WINDOW_HEIGHT_MINIBLOCKS - text_height ) / 2 ) ) + ( CHAR_SIZE_PIXELS / 2 );
 	};
 
 	void renderNumber( int n, int x, int y, int digits, FontColor color, const Camera* camera, FontColor shadow )

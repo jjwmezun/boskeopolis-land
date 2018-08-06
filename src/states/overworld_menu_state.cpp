@@ -119,6 +119,11 @@ void OverworldMenuState::stateRender()
 	}
 };
 
+void OverworldMenuState::backFromPop()
+{
+	Audio::changeSong( "overworld" );
+};
+
 static std::string getOptionName( int i )
 {
 	switch ( i )

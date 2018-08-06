@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "event_system.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
@@ -54,6 +55,7 @@ void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& thei
 			{
 				events.flipSwitch();
 				ready_ = false;
+				Audio::playSound( Audio::SoundType::SWITCH );
 			}
 
 			hit_box_.y -= their_collision.overlapYTop() / 2;

@@ -17,5 +17,6 @@ class ControlsOptionPromptState : public GameState
 	private:
 		TextObjBasic text_;
 		sdl2::SDLRect bg_;
+		sdl2::SDLRect shadow_;
 		Input::Action action_;
 };

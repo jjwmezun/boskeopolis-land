@@ -14,7 +14,9 @@ OptionsState::OptionsState()
 	bg_ (),
 	title_ ( "Options", 0, 16, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
 	options_ ( { "Screen Resolution", "Controls" }, 20, 64 )
-{};
+{
+	Audio::changeSong( "level-select" );
+};
 
 OptionsState::~OptionsState() {};
 
@@ -38,6 +40,7 @@ void OptionsState::updateInput()
 {
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
+		Audio::playSound( Audio::SoundType::CANCEL );
 		Main::popState();
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )

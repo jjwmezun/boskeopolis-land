@@ -109,6 +109,7 @@ void ScreenOptionState::updateInput()
 {
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
+		Audio::playSound( Audio::SoundType::CANCEL );
 		Main::popState();
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )

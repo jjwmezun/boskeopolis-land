@@ -2,8 +2,28 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 2,
+		"x": 1,
 		"y": 1,
 		"priority": true
-	}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "kill"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		}
+	]
 }

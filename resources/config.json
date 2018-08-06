@@ -17,18 +17,18 @@
 	},
 	"buttons":
 	{
-		"Confirm": 0,
-		"Cancel": 2,
-		"Menu": 7,
-		"Jump": 0,
-		"Run": 2,
-		"Up": 251,
-		"Right": 254,
-		"Down": 252,
-		"Left": 253,
-		"Camera Left": 4,
-		"Camera Right": 5,
-		"Camera Up": 3,
-		"Camera Down": 1
+		"Confirm": 255,
+		"Cancel": 255,
+		"Menu": 255,
+		"Jump": 255,
+		"Run": 255,
+		"Up": 255,
+		"Right": 255,
+		"Down": 255,
+		"Left": 255,
+		"Camera Left": 255,
+		"Camera Right": 255,
+		"Camera Up": 255,
+		"Camera Down": 255
 	}
 }

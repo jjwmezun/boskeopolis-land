@@ -80,7 +80,7 @@ void OverworldState::stateUpdate()
 			camera_mode_ = false;
 			camera_trans_ = true;
 		}
-		
+
 		camera_.move( Unit::BlocksToPixels( map_width_ ), Unit::BlocksToPixels( map_height_ ) );
 	}
 	else if ( camera_trans_ )
@@ -125,7 +125,7 @@ void OverworldState::stateRender()
 		for ( int x = x_init; x < x_end; ++x )
 		{
 			const int i = mezun::nOfXY( x, y, map_width_ );
-			
+
 			if ( i < tiles_.size() )
 			{
 				tiles_.at( i ).render( camera_ );
@@ -144,7 +144,7 @@ void OverworldState::stateRender()
 
 	hero_.render( camera_ );
 	inventory_screen_.render( level_selection_ );
-	
+
 	if ( camera_mode_ )
 	{
 		renderCameraArrows();
@@ -183,7 +183,7 @@ void OverworldState::mapData()
 	assert( map_data.IsObject() );
 
 	// Get Map Sizes
-	//=============================================	
+	//=============================================
 
 	assert( map_data.HasMember( "width" ) );
 	assert( map_data[ "width" ].IsInt() );
@@ -193,7 +193,7 @@ void OverworldState::mapData()
 	assert( map_data[ "height" ].IsInt() );
 	map_height_ = map_data[ "height" ].GetInt();
 
-	
+
 	// Get Layers
 	//=============================================
 
@@ -222,7 +222,7 @@ void OverworldState::mapData()
 					else if ( i == LEVELS_INDEX )
 					{
 						const int l = list[ j ].GetInt();
-						
+
 						if ( l >= 32 && l < 32 + 64 )
 						{
 							level_tiles_.emplace_back( list[ j ].GetInt() - 33, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ), lv_gfx_ );
@@ -260,7 +260,7 @@ void OverworldState::interactions()
 		for ( int x = x_init; x < x_end; ++x )
 		{
 			const int i = mezun::nOfXY( x, y, map_width_ );
-			
+
 			if ( i < tiles_.size() )
 			{
 				tiles_.at( i ).interact( hero_, testCollision( hero_.coords(), tiles_.at( i ).coords() ) );
@@ -290,24 +290,24 @@ void OverworldState::interactions()
 			{
 				case ( 0 ):
 				break;
-					
+
 				case ( 1 ):
 					pal = "Overworld Green";
 				break;
-					
+
 				case ( 2 ):
 					pal = "Overworld Yellow";
 				break;
-					
+
 				case ( 3 ):
 					pal = "Overworld Blue";
 				break;
-					
+
 				case ( 4 ):
 					pal = "Overworld Gray";
 				break;
 			}
-			
+
 			newPalette( { pal, 2 } );
 		}
 	}
@@ -442,7 +442,7 @@ void OverworldState::menu()
 	if ( go_to_list_ )
 	{
 		go_to_list_ = false;
-		
+
 		Main::pushState
 		(
 			std::make_unique<LevelSelectState> ( level_selection_ ),
@@ -483,7 +483,7 @@ Palette OverworldState::lvPal( int id )
 			pal = "Overworld Gray";
 		break;
 	}
-	
+
 	return { pal, 2 };
 };
 
