@@ -1,0 +1,34 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 4, "y": 6 },
+			{ "x": 5, "y": 6 },
+			{ "x": 6, "y": 6 },
+			{ "x": 7, "y": 6 },
+			{ "x": 3, "y": 7 },
+			{ "x": 3, "y": 7 },
+			{ "x": 7, "y": 6 },
+			{ "x": 6, "y": 6 },
+			{ "x": 5, "y": 6 },
+			{ "x": 4, "y": 6 }
+		],
+		"priority": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "kill"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}
