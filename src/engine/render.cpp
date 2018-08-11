@@ -25,6 +25,10 @@ namespace Render
 	static std::map<std::string, SDL_Texture*> textures_ = {};
 	static std::map<std::string, SDL_Surface*> surfaces_ = {};
 
+	static std::vector<sdl2::SDLRect> rect_layer_1_;
+	static std::vector<sdl2::SDLRect> rect_layer_2_;
+	static std::vector<sdl2::SDLRect> rect_layer_3_;
+
 	static SDL_Renderer* renderer_ = nullptr;
 	static SDL_Window* window_ = nullptr;
 	static sdl2::SDLRect screen_;

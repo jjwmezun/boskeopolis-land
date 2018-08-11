@@ -13,7 +13,8 @@
 
     #include "collision.hpp"
     #include "rope_sprite.hpp"
-    #include "rope_graphics.hpp"
+    #include "sprite_graphics.hpp"
+    #include <iostream>
 
 
 // STATIC PROPERTIES
@@ -25,10 +26,12 @@
 
     RopeSprite::RopeSprite( int x, int y, int height, int distance, int speed )
     :
-        Sprite( std::make_unique<RopeGraphics> (), x, y, 8, Unit::BlocksToPixels( height ), {}, speed, speed, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
+        Sprite( std::make_unique<SpriteGraphics> ( "sprites/rope-sprite.png", 0, 288 - Unit::BlocksToPixels( height ) ), x, y, 8, Unit::BlocksToPixels( height ), {}, speed, speed, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
         on_ ( false ),
         action_ ( distance )
-    {};
+    {
+        std::cout<<height<<std::endl;
+};
 
     RopeSprite::~RopeSprite() {};
 
