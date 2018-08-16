@@ -4,7 +4,7 @@
 
 CapnClearbeardSprite::CapnClearbeardSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/capn-clearbeard.png" ), x, y, 18, 30, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 50, 5000, 2000, 5000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/capn-clearbeard.png" ), x, y, 18, 30, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1000, 8000, 2000, 5000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
 	jump_timer_ ( 0 ),
 	move_ ( true )
 {
@@ -21,28 +21,19 @@ void CapnClearbeardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	{
 		moveInDirectionX();
 	}
-	else
-	{
-		if ( jump_timer_ <= 0 && on_ground_ )
-		{
-			direction_x_ = Direction::switchHorizontal( direction_x_ );
-			move_ = true;
-		}
-	}
 
-	if ( collide_left_ || collide_left_prev_ || collide_right_ || collide_right_prev_ )
+	if ( collide_left_ || collide_left_prev_ )
 	{
-		jump_timer_ = 15;
+		//direction_x_ = Direction::Horizontal::RIGHT;
 		move_ = false;
+		acceleration_x_ = 0;
 	}
-
-	if ( jump_timer_ > 0 )
+	else if ( collide_right_ || collide_right_prev_ )
 	{
-		jump();
-		--jump_timer_;
+		//direction_x_ = Direction::Horizontal::LEFT;
+		move_ = false;
+		acceleration_x_ = 0;
 	}
-
-	std::cout<<jump_timer_<<std::endl;
 };
 
 void CapnClearbeardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

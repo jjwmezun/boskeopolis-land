@@ -24,7 +24,7 @@ void FaucetSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	{
 		--invincibility_;
 	}
-	
+
 	graphics_->current_frame_y_ = hits_;
 
 	if ( invincibility_ % INVINCIBILITY_FLICKER_SPEED == 1 ) // 1 chosen 'cause least likely for invincibility to end with 1 as remainder.
@@ -42,9 +42,9 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 	if ( their_collision.collideAny() )
 	{
 		them.collideStopAny( their_collision );
-		
+
 		if ( them.hasType( SpriteType::HERO ) )
-		{	
+		{
 			if ( them.isSlidingPrev() )
 			{
 				if ( slide_lock_ <= 0 && invincibility_ <= 0 )
@@ -54,7 +54,7 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 				}
 				slide_lock_ = SLIDE_LOCK_TIME;
 			}
-			
+
 			if ( slide_lock_ > 0 )
 			{
 				slide_lock_ = SLIDE_LOCK_TIME;
@@ -66,4 +66,9 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 	{
 		--slide_lock_;
 	}
-};	
+};
+
+void FaucetSprite::render( Camera& camera, bool priority )
+{
+	graphics_->render( hit_box_, &camera, priority );
+};

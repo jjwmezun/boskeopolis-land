@@ -9,7 +9,8 @@ class FaucetSprite : public Sprite
 		~FaucetSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
-		
+		void render( Camera& camera, bool priority = false ) override;
+
 	private:
 		static constexpr int NUM_O_HITS = 3;
 		static constexpr int INVINCIBILITY_FLICKER_SPEED = 4;

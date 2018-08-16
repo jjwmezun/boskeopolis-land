@@ -14,7 +14,7 @@ void FaucetGraphics::update( Sprite& sprite )
 	if ( animation_timer_.hit() )
 	{
 		current_frame_x_ += 16;
-		
+
 		if ( current_frame_x_ > 240 )
 		{
 			current_frame_x_ = 0;
