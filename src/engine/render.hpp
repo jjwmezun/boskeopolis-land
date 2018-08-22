@@ -27,7 +27,8 @@ namespace Render
 		double rotation,
 		Uint8 alpha,
 		const Camera* camera,
-		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
+		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
+		SDL_Texture* alt_texture = nullptr
 	);
 	void renderObject
 	(
@@ -38,7 +39,8 @@ namespace Render
 		double rotation = 0,
 		Uint8 alpha = 255,
 		const Camera* = nullptr,
-		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
+		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
+		SDL_Texture* alt_texture = nullptr
 	);
 	void renderObject
 	(
@@ -49,7 +51,8 @@ namespace Render
 		double rotation = 0,
 		Uint8 alpha = 255,
 		const Camera* = nullptr,
-		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
+		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
+		SDL_Texture* alt_texture = nullptr
 	);
 
 	void renderObjectNoMagnify

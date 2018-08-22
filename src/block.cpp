@@ -57,11 +57,11 @@ Block& Block::operator=( const Block& c )
 	destroyed_ = c.destroyed_;
 };
 
-void Block::render( const Camera& camera, bool priority ) const
+void Block::render( const Camera& camera, bool priority, SDL_Texture* texture ) const
 {
 	if ( hasType() )
 	{
-		type_->render( camera, *this, priority );
+		type_->render( camera, *this, priority, texture );
 	}
 };
 

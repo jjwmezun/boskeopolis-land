@@ -23,7 +23,7 @@ class Block : public Object
 		Block& operator=( Block&& m );
 		Block& operator=( const Block& c );
 
-		void render( const Camera& camera, bool priority = false ) const;
+		void render( const Camera& camera, bool priority = false, SDL_Texture* texture = nullptr ) const;
 		void renderAnyPriority( const Camera& camera ) const;
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
 		int location() const;

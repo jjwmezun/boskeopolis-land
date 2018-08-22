@@ -7,7 +7,12 @@
 #include "sprite.hpp"
 #include <utility>
 
+static constexpr int CAMERA_PADDING = 8;
+
 BlockSystem::BlockSystem( const Map& lvmap )
+:
+	lower_texture_ ( nullptr ),
+	higher_texture_ ( nullptr )
 {
 	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
 	current_tileset_ = lvmap.tileset();
@@ -20,11 +25,15 @@ void BlockSystem::update( EventSystem& events )
 
 void BlockSystem::render( const Camera& camera, bool priority )
 {
+};
+
+void BlockSystem::renderBlocks( const Camera& camera, bool priority )
+{
 	for ( auto& b : blocks_ )
 	{
 		if ( camera.onscreen( b.hitBox() ) )
 		{
-			b.render( camera, priority );
+			b.render( camera, priority, ( priority ) ? higher_texture_ : lower_texture_ );
 		}
 	}
 };

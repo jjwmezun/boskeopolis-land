@@ -30,14 +30,15 @@ class BlockSystem
 
 
 	private:
-		static constexpr int CAMERA_PADDING = 4;
-
+		SDL_Texture* lower_texture_;
+		SDL_Texture* higher_texture_;
 		std::vector<Block> blocks_;
 
 		std::map<std::string, Tileset> tilesets_;
 		std::string current_tileset_;
 
 		Tileset& getTileset();
+		void renderBlocks( const Camera& camera, bool priority );
 
 		int debug_num_ = 0;
 };

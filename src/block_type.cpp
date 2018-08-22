@@ -64,11 +64,11 @@ void BlockType::renderAnyPriority( const Camera& camera, const Block& block ) co
 	}
 };
 
-void BlockType::render( const Camera& camera, const Block& block, bool priority ) const
+void BlockType::render( const Camera& camera, const Block& block, bool priority, SDL_Texture* texture ) const
 {
 	if ( graphics_ )
 	{
-		graphics_->render( Unit::SubPixelsToPixels( block.hitBox() ), &camera, priority );
+		graphics_->render( Unit::SubPixelsToPixels( block.hitBox() ), &camera, priority, texture );
 	}
 };
 

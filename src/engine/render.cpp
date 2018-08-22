@@ -413,10 +413,11 @@ namespace Render
 		double rotation,
 		Uint8 alpha,
 		const Camera* camera,
-		SDL_BlendMode blend_mode
+		SDL_BlendMode blend_mode,
+		SDL_Texture* alt_texture
 	)
 	{
-		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera, blend_mode );
+		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera, blend_mode, alt_texture );
 	};
 
 	void renderObject
@@ -428,11 +429,12 @@ namespace Render
 		double rotation,
 		Uint8 alpha,
 		const Camera* camera,
-		SDL_BlendMode blend_mode
+		SDL_BlendMode blend_mode,
+		SDL_Texture* alt_texture
 	)
 	{
 		checkTexture( sheet );
-		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode );
+		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode, alt_texture );
 	}
 
 	void renderObjectNoMagnify
@@ -460,32 +462,45 @@ namespace Render
 		double rotation,
 		Uint8 alpha,
 		const Camera* camera,
-		SDL_BlendMode blend_mode
+		SDL_BlendMode blend_mode,
+		SDL_Texture* alt_texture
 	)
 	{
-		SDL_SetTextureAlphaMod( texture, alpha );
-
-		if ( !cameraAdjust( dest, camera ) )
+		if ( alt_texture != nullptr )
 		{
-			return;
-		};
-
-		dest = sourceRelativeToScreen( dest );
-
-		if ( blend_mode != SDL_BLENDMODE_BLEND && blend_mode != SDL_BLENDMODE_NONE )
-		{
-			SDL_SetRenderDrawBlendMode( renderer_, blend_mode );
-			SDL_SetTextureBlendMode( texture, blend_mode );
+			SDL_SetRenderTarget( renderer_, alt_texture );
+			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
+			{
+				printf( "Render failure: %s\n", SDL_GetError() );
+			}
+			SDL_SetRenderTarget( renderer_, target_ );
 		}
-
-		if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
+		else
 		{
-			printf( "Render failure: %s\n", SDL_GetError() );
-		}
+			SDL_SetTextureAlphaMod( texture, alpha );
 
-		if ( blend_mode != SDL_BLENDMODE_BLEND )
-		{
-			SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
+			if ( !cameraAdjust( dest, camera ) )
+			{
+				return;
+			};
+
+			dest = sourceRelativeToScreen( dest );
+
+			if ( blend_mode != SDL_BLENDMODE_BLEND && blend_mode != SDL_BLENDMODE_NONE )
+			{
+				SDL_SetRenderDrawBlendMode( renderer_, blend_mode );
+				SDL_SetTextureBlendMode( texture, blend_mode );
+			}
+
+			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
+			{
+				printf( "Render failure: %s\n", SDL_GetError() );
+			}
+
+			if ( blend_mode != SDL_BLENDMODE_BLEND )
+			{
+				SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
+			}
 		}
 	};
 
