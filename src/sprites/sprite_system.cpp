@@ -104,6 +104,7 @@
 #include "stronger_cowpoker_sprite.hpp"
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
+#include "top_down_player_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
 #include "underground_subway_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
@@ -623,6 +624,9 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		case ( HeroType::CAR ):
 			hero_.reset( new PlayerCarSprite( level.entranceX(), level.entranceY() ) );
 		break;
+		case ( HeroType::TOP_DOWN ):
+			hero_.reset( new TopDownPlayerSprite( level.entranceX(), level.entranceY() ) );
+		break;
 	}
 
 };
@@ -801,6 +805,10 @@ SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 	else if ( property.compare( "CAR" ) == 0 )
 	{
 		return HeroType::CAR;
+	}
+	else if ( property.compare( "TOP_DOWN" ) == 0 )
+	{
+		return HeroType::TOP_DOWN;
 	}
 
 	return HeroType::NORMAL;

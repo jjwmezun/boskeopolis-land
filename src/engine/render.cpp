@@ -651,4 +651,9 @@ namespace Render
 	{
 		return screen_;
 	};
+
+	SDL_Texture* createTexture()
+	{
+		return SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, screen_.w, screen_.h );
+	}
 };

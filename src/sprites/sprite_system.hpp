@@ -23,7 +23,8 @@ class SpriteSystem
 			FLUTTERING,
 			SHOOTER,
 			SPACESHIP,
-			CAR
+			CAR,
+			TOP_DOWN
 		};
 
 		static HeroType heroType( const std::string& property );

@@ -90,7 +90,7 @@ void PolloDelAireSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	{
 		graphics_->current_frame_x_ = 0;
 	}
-	
+
 	++animation_counter_;
 	if ( animation_counter_ >= 16 ) animation_counter_ = 0;
 	graphics_->current_frame_x_ += 24 * floor(animation_counter_ / 8 );
@@ -160,6 +160,7 @@ void PolloDelAireSprite::polloReset( Sprite& me )
 	me.graphics_->y_adjustment_ = -6;
 	me.graphics_->w_adjustment_ = 2;
 	me.graphics_->h_adjustment_ = 8;
+	me.graphics_->current_frame_y_ = 32;
 };
 
 void PolloDelAireSprite::polloDeath( Camera& camera, Sprite& me )
@@ -171,7 +172,7 @@ void PolloDelAireSprite::polloDeath( Camera& camera, Sprite& me )
 	me.graphics_->h_adjustment_ = 11;
 	me.graphics_->current_frame_x_ = 96;
 	me.graphics_->current_frame_y_ = 36;
-	
+
 	me.acceleration_x_ = 0;
 	me.vx_ = 0;
 	me.block_interact_ = false;

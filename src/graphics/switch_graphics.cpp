@@ -28,7 +28,7 @@ void SwitchGraphics::update( const EventSystem& events )
 	current_gfx_->update( events );
 };
 
-void SwitchGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
+void SwitchGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, SDL_Texture* texture ) const
 {
 	current_gfx_->render( bound_box, camera, priority );
 };

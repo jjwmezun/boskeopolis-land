@@ -11,8 +11,8 @@ static constexpr int CAMERA_PADDING = 8;
 
 BlockSystem::BlockSystem( const Map& lvmap )
 :
-	lower_texture_ ( nullptr ),
-	higher_texture_ ( nullptr )
+	lower_texture_ ( Render::createTexture() ),
+	higher_texture_ ( Render::createTexture() )
 {
 	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
 	current_tileset_ = lvmap.tileset();
@@ -25,17 +25,36 @@ void BlockSystem::update( EventSystem& events )
 
 void BlockSystem::render( const Camera& camera, bool priority )
 {
-};
-
-void BlockSystem::renderBlocks( const Camera& camera, bool priority )
-{
+	//auto src = Render::getScreen();
+	//auto dest = Render::getScreen();
+	//Render::renderObject( ( priority ) ? higher_texture_ : lower_texture_, src, dest );
 	for ( auto& b : blocks_ )
 	{
 		if ( camera.onscreen( b.hitBox() ) )
 		{
-			b.render( camera, priority, ( priority ) ? higher_texture_ : lower_texture_ );
+			b.render( camera, priority );
 		}
 	}
+};
+
+void BlockSystem::renderBlocks( const Camera& camera )
+{
+	/*
+	for ( auto& b : blocks_ )
+	{
+		if ( camera.onscreen( b.hitBox() ) )
+		{
+			b.render( camera, false, lower_texture_ );
+		}
+	}
+
+	for ( auto& b : blocks_ )
+	{
+		if ( camera.onscreen( b.hitBox() ) )
+		{
+			b.render( camera, true, higher_texture_ );
+		}
+	}*/
 };
 
 void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites )
@@ -98,6 +117,8 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 			}
 		}
 	}
+
+	renderBlocks( camera );
 };
 
 void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& list )

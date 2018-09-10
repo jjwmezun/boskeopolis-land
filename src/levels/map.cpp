@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
@@ -9,6 +10,7 @@
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
+#include <iostream>
 
 static constexpr int LOOP_CHANGE = 3;
 static constexpr int FLASH_INTERVAL = 200;
@@ -80,8 +82,8 @@ Map Map::mapFromPath
 		int camera_limit_right = -1;
 		int scroll_loop_width = 0;
 		SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
-		Camera::XPriority camera_x_priority = Camera::XPriority::__NULL;
-		Camera::YPriority camera_y_priority = Camera::YPriority::__NULL;
+		bool camera_center_x = false;
+		bool camera_center_y = false;
 		bool blocks_work_offscreen = false;
 		bool loop_sides = false;
 		int water_effect_height = 0;
@@ -93,6 +95,7 @@ Map Map::mapFromPath
 		std::string music = "";
 		bool warp_on_fall = false;
 		int ui_bg_color = 1;
+		bool scroll_lock = false;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -354,10 +357,7 @@ Map Map::mapFromPath
 					if ( value.IsString() )
 					{
 						const std::string camera_priority_x_string = value.GetString();
-						if ( camera_priority_x_string.compare( "CENTER" ) == 0 )
-						{
-							camera_x_priority = Camera::XPriority::CENTER;
-						}
+						camera_center_x = ( camera_priority_x_string.compare( "CENTER" ) == 0 );
 					}
 				}
 
@@ -366,10 +366,7 @@ Map Map::mapFromPath
 					if ( value.IsString() )
 					{
 						const std::string camera_priority_y_string = value.GetString();
-						if ( camera_priority_y_string.compare( "CENTER" ) == 0 )
-						{
-							camera_y_priority = Camera::YPriority::CENTER;
-						}
+						camera_center_y = ( camera_priority_y_string.compare( "CENTER" ) == 0 );
 					}
 				}
 
@@ -454,6 +451,11 @@ Map Map::mapFromPath
 						assert( ui_bg_color >= 0 || ui_bg_color < Palette::COLOR_LIMIT );
 					}
 				}
+
+				else if ( mezun::areStringsEqual( name, "scroll_lock" ) )
+				{
+					scroll_lock = ( value.IsBool() && value.GetBool() );
+				}
 			}
 		}
 
@@ -478,6 +480,20 @@ Map Map::mapFromPath
 		}
 
 
+		Camera::Type camera_type = Camera::Type::NORMAL;
+		if ( scroll_lock )
+		{
+			camera_type = Camera::Type::SCROLL_LOCK;
+		}
+		else if ( camera_center_x )
+		{
+			camera_type = Camera::Type::CENTER_X;
+		}
+		else if ( camera_center_y )
+		{
+			camera_type = Camera::Type::CENTER_Y;
+		}
+
 
 	// Send all data
 	//=============================================
@@ -500,8 +516,7 @@ Map Map::mapFromPath
 			camera_limit_right,
 			hero_type,
 			scroll_loop_width,
-			camera_x_priority,
-			camera_y_priority,
+			camera_type,
 			blocks_work_offscreen,
 			loop_sides,
 			wind_strength,
@@ -532,8 +547,7 @@ Map::Map
 	int right_limit,
 	SpriteSystem::HeroType hero_type,
 	int scroll_loop_width,
-	Camera::XPriority camera_x_priority,
-	Camera::YPriority camera_y_priority,
+	Camera::Type camera_type,
 	bool blocks_work_offscreen,
 	bool loop_sides,
 	int wind_strength,
@@ -561,8 +575,7 @@ Map::Map
 	scroll_loop_width_ ( scroll_loop_width ),
 	current_loop_ ( 0 ),
 	changed_ ( true ),
-	camera_x_priority_ ( camera_x_priority ),
-	camera_y_priority_ ( camera_y_priority ),
+	camera_type_ ( camera_type ),
 	blocks_work_offscreen_ ( blocks_work_offscreen ),
 	loop_sides_ ( loop_sides ),
 	wind_strength_ ( wind_strength ),
@@ -605,8 +618,7 @@ Map::Map( Map&& m ) noexcept
 	hero_type_ ( m.hero_type_ ),
 	scroll_loop_width_ ( m.scroll_loop_width_ ),
 	current_loop_ ( m.current_loop_ ),
-	camera_x_priority_ ( m.camera_x_priority_ ),
-	camera_y_priority_ ( m.camera_y_priority_ ),
+	camera_type_ ( m.camera_type_ ),
 	blocks_work_offscreen_ ( m.blocks_work_offscreen_ ),
 	loop_sides_ ( m.loop_sides_ ),
 	wind_strength_ ( m.wind_strength_ ),
@@ -639,8 +651,7 @@ Map::Map( const Map& c )
 	hero_type_ ( c.hero_type_ ),
 	scroll_loop_width_ ( c.scroll_loop_width_ ),
 	current_loop_ ( c.current_loop_ ),
-	camera_x_priority_ ( c.camera_x_priority_ ),
-	camera_y_priority_ ( c.camera_y_priority_ ),
+	camera_type_ ( c.camera_type_ ),
 	blocks_work_offscreen_ ( c.blocks_work_offscreen_ ),
 	loop_sides_ ( c.loop_sides_ ),
 	wind_strength_ ( c.wind_strength_ ),

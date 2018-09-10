@@ -290,25 +290,28 @@ void Sprite::position()
 
 void Sprite::boundaries( Camera& camera, Map& lvmap )
 {
-	if ( lvmap.loop_sides_ )
+	if ( lvmap.camera_type_ != Camera::Type::SCROLL_LOCK )
 	{
-		if ( hit_box_.x + hit_box_.w < Unit::PixelsToSubPixels( camera.x() ) )
+		if ( lvmap.loop_sides_ )
 		{
-			hit_box_.x = Unit::PixelsToSubPixels( camera.right() );
+			if ( hit_box_.x + hit_box_.w < Unit::PixelsToSubPixels( camera.x() ) )
+			{
+				hit_box_.x = Unit::PixelsToSubPixels( camera.right() );
+			}
+			if ( hit_box_.x > Unit::PixelsToSubPixels( camera.right() ) )
+			{
+				hit_box_.x = Unit::PixelsToSubPixels( camera.x() ) - hit_box_.w;
+			}
 		}
-		if ( hit_box_.x > Unit::PixelsToSubPixels( camera.right() ) )
+		else
 		{
-			hit_box_.x = Unit::PixelsToSubPixels( camera.x() ) - hit_box_.w;
+			containCameraX( camera );
 		}
-	}
-	else
-	{
-		containCameraX( camera );
-	}
 
-	if ( hit_box_.y < -hit_box_.h )
-	{
-		hit_box_.y = -hit_box_.h;
+		if ( hit_box_.y < -hit_box_.h )
+		{
+			hit_box_.y = -hit_box_.h;
+		}
 	}
 };
 

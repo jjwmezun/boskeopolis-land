@@ -17,7 +17,7 @@ LevelState::LevelState( int lvname )
 	events_ (),
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
-	sprites_ ( level_.entranceX(), level_.entranceY() ),
+	sprites_ ( level_.entranceX(), level_.entranceY(), level_ ),
 	blocks_ ( level_.currentMap() ),
 	health_ ()
 {
@@ -32,35 +32,43 @@ void LevelState::stateUpdate()
 {
 	blocks_.blocksFromMap( level_.currentMap(), camera_ );
 	blocks_.update( events_ );
-	if ( !events_.pause_state_movement_ )
-	{
-		level_.currentMap().update( events_, sprites_, blocks_, camera_ );
-		camera_.update();
-		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
-		sprites_.interact( blocks_, level_, events_, camera_, health_ );
-		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
-		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
-		health_.update();
-	}
-	inventory_screen_.update( events_, health_ );
-	level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
-	events_.update( level_, sprites_, camera_, blocks_ );
 
-	if ( events_.paletteChanged() )
+	if ( camera_.testPause() )
 	{
-		newPalette( events_.getPalette() );
+		camera_.scroll( level_.currentMap() );
 	}
-
-	if ( events_.timerStart() )
+	else
 	{
-		events_.unsetFlag();
-		Main::pushState
-		(
-			std::unique_ptr<GameState>
+		if ( !events_.pause_state_movement_ )
+		{
+			level_.currentMap().update( events_, sprites_, blocks_, camera_ );
+			camera_.update();
+			sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+			sprites_.interact( blocks_, level_, events_, camera_, health_ );
+			sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+			sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
+			health_.update();
+		}
+		inventory_screen_.update( events_, health_ );
+		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
+		events_.update( level_, sprites_, camera_, blocks_ );
+
+		if ( events_.paletteChanged() )
+		{
+			newPalette( events_.getPalette() );
+		}
+
+		if ( events_.timerStart() )
+		{
+			events_.unsetFlag();
+			Main::pushState
 			(
-				new TimeStartState( palette() )
-			)
-		);
+				std::unique_ptr<GameState>
+				(
+					new TimeStartState( palette() )
+				)
+			);
+		}
 	}
 
 	testPause();

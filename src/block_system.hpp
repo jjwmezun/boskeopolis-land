@@ -38,7 +38,7 @@ class BlockSystem
 		std::string current_tileset_;
 
 		Tileset& getTileset();
-		void renderBlocks( const Camera& camera, bool priority );
+		void renderBlocks( const Camera& camera );
 
 		int debug_num_ = 0;
 };

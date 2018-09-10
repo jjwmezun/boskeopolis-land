@@ -13,7 +13,7 @@ class FaucetGraphics : public SpriteGraphics
 		~FaucetGraphics();
 
 		void update( Sprite& sprite );
-		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const override;
+		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false, SDL_Texture* texture = nullptr ) const override;
 
 	private:
 		TimerRepeat animation_timer_;

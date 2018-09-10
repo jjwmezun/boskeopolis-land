@@ -112,7 +112,7 @@ void LevelSelectState::updateEntries()
 		{
 			time_show_[ i ] = &time_scores_[ i ];
 		}
-		
+
 		if ( !Inventory::gemChallengeBeaten( level_ids_[ i ] ) )
 		{
 			if ( i == selection_ )
@@ -124,7 +124,7 @@ void LevelSelectState::updateEntries()
 				gem_icon_show_[ i ] = &gem_challenge_icon_gfx_;
 			}
 		}
-		
+
 		if ( !Inventory::timeChallengeBeaten( level_ids_[ i ] ) )
 		{
 			if ( i == selection_ )
@@ -136,7 +136,7 @@ void LevelSelectState::updateEntries()
 				time_icon_show_[ i ] = &time_challenge_icon_gfx_;
 			}
 		}
-		
+
 		if ( !Inventory::victory( level_ids_[ i ] ) )
 		{
 			if ( i == selection_ )
@@ -148,7 +148,7 @@ void LevelSelectState::updateEntries()
 				win_icon_show_[ i ] = &no_win_icon_gfx_;
 			}
 		}
-		
+
 		if ( !Inventory::haveDiamond( level_ids_[ i ] ) )
 		{
 			if ( i == selection_ )
@@ -208,7 +208,7 @@ void LevelSelectState::updateInput()
 		changed_selection_ = true;
 	}
 	show_challenges_prev_ = show_challenges_;
-	
+
 	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 		if ( Inventory::beenToLevel( level_ids_.at( selection_ ) ) )
@@ -312,7 +312,7 @@ void LevelSelectState::init()
 		if ( !mezun::isStringEmpty( lvname ) )
 		{
 			if ( !Inventory::beenToLevel( i ) )
-			{		
+			{
 				if ( i != 1 && !Inventory::victory( i -1 ) )
 				{
 					continue;

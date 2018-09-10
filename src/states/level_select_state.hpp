@@ -1,5 +1,6 @@
 #pragma once
 
+#include "camera.hpp"
 #include "game_state.hpp"
 #include "level.hpp"
 #include "map_layer_image.hpp"
@@ -52,7 +53,7 @@ class LevelSelectState : public GameState
 		const sdl2::SDLRect INVENTORY_BG_DEST;
 		const sdl2::SDLRect HEADER_BG_DEST;
 		sdl2::SDLRect highlight_dest_;
-		
+
 		SpriteGraphics* all_wins_icon_;
 		SpriteGraphics* all_diamonds_icon_;
 		SpriteGraphics* all_gem_challenges_icon_;

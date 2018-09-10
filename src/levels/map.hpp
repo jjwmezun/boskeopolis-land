@@ -40,8 +40,7 @@ class Map
 		std::string music_;
 		const Palette palette_;
 		const SpriteSystem::HeroType hero_type_;
-		const Camera::XPriority camera_x_priority_;
-		const Camera::YPriority camera_y_priority_;
+		const Camera::Type camera_type_;
 		const int width_;
 		const int height_;
 		const int top_limit_;
@@ -101,9 +100,10 @@ class Map
 		void deleteSprite( int where );
 
 		void interact( Sprite& sprite, Camera& camera, Health& health );
-		
+
 		bool scrollLoop() const;
 		int scrollLoopWidthPixels() const;
+
 
 	private:
 		Map
@@ -124,8 +124,7 @@ class Map
 			int right_limit,
 			SpriteSystem::HeroType hero_type,
 			int scroll_loop_width,
-			Camera::XPriority camera_x_priority,
-			Camera::YPriority camera_y_priority,
+			Camera::Type camera_type,
 			bool blocks_work_offscreen,
 			bool loop_sides,
 			int wind_strength,
@@ -153,5 +152,5 @@ class Map
 		int getXIndexForLoop( int x ) const;
 		int spriteLoopPosition( int x ) const;
 		bool inBounds( int n ) const;
-		
+
 };
