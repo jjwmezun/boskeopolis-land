@@ -107,9 +107,11 @@
 #include "top_down_player_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
 #include "underground_subway_sprite.hpp"
+#include "urban_bird_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
+#include "weight_platform_sprite.hpp"
 
 #include <iostream>
 #include "main.hpp"
@@ -461,6 +463,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 110 ):
 			return std::unique_ptr<Sprite> ( new CircleBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 111 ):
+			return std::unique_ptr<Sprite> ( new WeightPlatformSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 112 ):
+			return std::unique_ptr<Sprite> ( new UrbanBirdSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

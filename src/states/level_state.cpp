@@ -17,7 +17,7 @@ LevelState::LevelState( int lvname )
 	events_ (),
 	level_ ( Level::getLevel( lvname ) ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
-	sprites_ ( level_.entranceX(), level_.entranceY(), level_ ),
+	sprites_ ( level_.entranceX(), level_.entranceY() ),
 	blocks_ ( level_.currentMap() ),
 	health_ ()
 {

@@ -1,37 +1,16 @@
 {
 	"name": "Citric Acid City",
-	
+
 	"maps":
 	[
 		{
-			"slug": "city-3",
-			"backgrounds":
-			[
-				{
-					"type": "image",
-					"img": "neon-city_2.png",
-					"width": 416,
-					"height": 224,
-					"y_repeat": false,
-					"y_scroll": 0.0,
-					"x_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "neon-city.png",
-					"width": 824,
-					"height": 224,
-					"y_repeat": false,
-					"y_scroll": 0.0,
-					"x_scroll": 0.5
-				}
-			]
+			"slug": "city-3"
 		}
 	],
-	
-	"entrance_x": 2,
-	"entrance_y": 8,
-	
-	"gem_challenge": 10000,
-	"time_challenge": 40
+
+	"entrance_x": 3,
+	"entrance_y": 15,
+
+	"gem_challenge": 0,
+	"time_challenge": 0
 }
