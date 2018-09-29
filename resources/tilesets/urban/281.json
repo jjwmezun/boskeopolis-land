@@ -11,7 +11,7 @@
 		{
 			"component":
 			{
-				"type": "flat_slope_highest"
+				"type": "slope_shallow_left_highest"
 			}
 		}
 	]

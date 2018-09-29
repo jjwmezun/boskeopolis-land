@@ -2,8 +2,9 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 0,
+		"x": 1,
 		"y": 12,
+		"flip_x": true,
 		"priority": true
 	},
 	"behavior":
@@ -11,7 +12,7 @@
 		{
 			"component":
 			{
-				"type": "slope_shallow_left_lowest"
+				"type": "slope_shallow_right_lower"
 			}
 		}
 	]
