@@ -323,6 +323,38 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( generateBlockComponentShallowSlopeRightHighest() );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_highest" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeLeftHighest() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_higher" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeLeftHigher() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_lower" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeLeftLower() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_lowest" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeLeftLowest() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_right_highest" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeRightHighest() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_right_higher" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeRightHigher() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_right_lower" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeRightLower() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_right_lowest" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingShallowSlopeRightLowest() );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "conveyor" ) )
 					{
 						if

@@ -2,7 +2,7 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 3,
+		"x": 4,
 		"y": 12
 	},
 	"behavior":
@@ -10,7 +10,7 @@
 		{
 			"component":
 			{
-				"type": "slope_shallow_left_highest"
+				"type": "solid"
 			}
 		}
 	]

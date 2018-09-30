@@ -3,14 +3,14 @@
 	{
 		"type": "sprite",
 		"x": 3,
-		"y": 12
+		"y": 13
 	},
 	"behavior":
 	[
 		{
 			"component":
 			{
-				"type": "slope_shallow_left_highest"
+				"type": "slope_bottom_shallow_left_highest"
 			}
 		}
 	]

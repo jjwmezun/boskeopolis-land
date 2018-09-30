@@ -6,6 +6,7 @@
 #include "direction.hpp"
 #include <memory>
 #include "sprite.hpp"
+#include <iostream>
 
 constexpr int getYBaselineFromX( int relative_height, int slope_width )
 {
@@ -22,6 +23,22 @@ inline bool testSpritePositionWithinBlocksXThreshold( const Sprite& sprite, cons
 	return sprite.centerXSubPixels() >= block.leftSubPixels() && sprite.centerXSubPixels() <= block.rightSubPixels();
 };
 
+template <Direction::Horizontal direction>
+inline int getYAdjustFromSpritesRelativeXPosition( const Sprite& sprite, const Block& block )
+{
+	// For left slope, calculate # o' pixels left o' left end;
+	// for right slope, calculate # o' pixels from right end.
+	return ( direction == Direction::Horizontal::LEFT )
+		? sprite.centerXSubPixels() - block.leftSubPixels()
+		: block.rightSubPixels() - sprite.centerXSubPixels();
+};
+
+template <Direction::Horizontal direction, int slope_width>
+inline int getSlopeYChangeFromX( const Sprite& sprite, const Block& block )
+{
+	return getYAdjustFromSpritesRelativeXPosition<direction> ( sprite, block ) / slope_width;
+};
+
 template <Direction::Horizontal direction, int slope_width, int extra_push, int relative_height, int resistance_percentage>
 class BlockComponentSlope : public BlockComponent
 {
@@ -32,6 +49,12 @@ class BlockComponentSlope : public BlockComponent
 		{
 			if ( collision.collideAny() )
 			{
+				// Prevent high slopes from being clipped from below 'bove low ceilings.
+				if ( ( relative_height == 4 || relative_height == 3 ) && collision.collideTop() )
+				{
+					return;
+				}
+
 				sprite.on_slope_ = direction;
 				if ( testSpritePositionWithinBlocksXThreshold( sprite, block ) )
 				{
@@ -58,18 +81,9 @@ class BlockComponentSlope : public BlockComponent
 			return
 				block.bottomSubPixels() -
 				getYBaselineFromX( relative_height, slope_width ) -
-				( getYAdjustFromSpritesRelativeXPosition( sprite, block ) / slope_width ) -
+				getSlopeYChangeFromX<direction, slope_width> ( sprite, block ) -
 				sprite.heightSubPixels();
 		}
-
-		int getYAdjustFromSpritesRelativeXPosition( const Sprite& sprite, const Block& block ) const
-		{
-			// For left slope, calculate # o' pixels left o' left end;
-			// for right slope, calculate # o' pixels from right end.
-			return ( direction == Direction::Horizontal::LEFT )
-				? sprite.centerXSubPixels() - block.leftSubPixels()
-				: block.rightSubPixels() - sprite.centerXSubPixels();
-		};
 
 		void adjustSpritesSpeed( Sprite& sprite ) const
 		{
@@ -115,6 +129,52 @@ class BlockComponentSlope : public BlockComponent
 			// added to that factor.
 			//
 			return 1.0 + ( ( double )( resistance_percentage ) / 100.0 );
+		}
+};
+
+template <Direction::Horizontal direction, int slope_width, int relative_height>
+class BlockComponentCeilingSlope : public BlockComponent
+{
+	public:
+		BlockComponentCeilingSlope() {};
+		~BlockComponentCeilingSlope() {};
+
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+		{
+			if ( collision.collideAny() )
+			{
+				if ( testSpritePositionWithinBlocksXThreshold( sprite, block ) )
+				{
+					if ( sprite.vy_ <= 0 )
+					{
+						stopSpriteAtSlopeBottom( sprite, block );
+					}
+				}
+			}
+		};
+
+	private:
+		void stopSpriteAtSlopeBottom( Sprite& sprite, const Block& block ) const
+		{
+			const int slope_bottom = getSlopeBottomFromX( sprite, block );
+			if ( sprite.hit_box_.y <= slope_bottom )
+			{
+				sprite.hit_box_.y = slope_bottom;
+				sprite.collideStopYTop( 0 );
+			}
+		};
+
+		int getSlopeBottomFromX( const Sprite& sprite, const Block& block ) const
+		{
+			return
+				block.hit_box_.y +
+				getYBaselineFromX( getMirrorOfRelativeHeight(), slope_width ) +
+				getSlopeYChangeFromX<direction, slope_width> ( sprite, block );
+		};
+
+		int getMirrorOfRelativeHeight() const
+		{
+			return slope_width - relative_height + 1;
 		}
 };
 
@@ -204,4 +264,44 @@ inline std::unique_ptr<BlockComponent> generateBlockComponentShallowSlopeRightHi
 inline std::unique_ptr<BlockComponent> generateBlockComponentShallowSlopeRightHighest()
 {
 	return generateBlockComponentShallowSlope<Direction::Horizontal::RIGHT, 4>();
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeLeftLowest()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 4, 1> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeLeftLower()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 4, 2> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeLeftHigher()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 4, 3> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeLeftHighest()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 4, 4> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeRightLowest()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 4, 1> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeRightLower()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 4, 2> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeRightHigher()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 4, 3> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeRightHighest()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 4, 4> () );
 };
