@@ -33,6 +33,7 @@
 #include "fishstick_sprite.hpp"
 #include "gemmy_sprite.hpp"
 #include "ghost_sprite.hpp"
+#include "gorilla_sprite.hpp"
 #include "guard_sprite.hpp"
 #include "handgun_sprite.hpp"
 #include "health.hpp"
@@ -469,6 +470,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 112 ):
 			return std::unique_ptr<Sprite> ( new UrbanBirdSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 113 ):
+			return std::unique_ptr<Sprite> ( new GorillaSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
