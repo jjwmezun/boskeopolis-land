@@ -1,5 +1,6 @@
 #include "angry_truck_sprite.hpp"
 #include "bad_apple_sprite.hpp"
+#include "barrel_o_gorillas_sprite.hpp"
 #include "bat_sprite.hpp"
 #include "bird_sprite.hpp"
 #include "block_system.hpp"
@@ -473,6 +474,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 113 ):
 			return std::unique_ptr<Sprite> ( new GorillaSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 114 ):
+			return std::unique_ptr<Sprite> ( new BarrelOGorillasSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

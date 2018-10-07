@@ -43,7 +43,8 @@ class Sprite : public Object
 			HEROS_BULLET,
 			DONT_RESPAWN,
 			ICICLE,
-			TREASURE_CHEST
+			TREASURE_CHEST,
+			PHASE_THROUGH
 		};
 
 		enum class CameraMovement
