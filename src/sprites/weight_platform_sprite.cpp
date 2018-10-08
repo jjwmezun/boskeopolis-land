@@ -7,11 +7,12 @@
 
 static constexpr int WEIGHT_WIDTH = 48;
 static constexpr int WEIGHT_HEIGHT = 8;
-static constexpr int WEIGHT_SPACE_APART = 48;
-static constexpr int LEFT_BAR_X = 22;
+static constexpr int WEIGHT_SPACE_APART = 80;
+static constexpr int LEFT_BAR_X = WEIGHT_WIDTH / 2 - 2;
 static constexpr int RIGHT_BAR_X = LEFT_BAR_X + WEIGHT_WIDTH + WEIGHT_SPACE_APART;
+static constexpr int TOTAL_WIDTH = WEIGHT_WIDTH * 2 + WEIGHT_SPACE_APART;
 
-WeightPlatformSprite::WeightPlatformSprite( int x, int y )
+WeightPlatformSprite::WeightPlatformSprite( int x, int y, Direction::Horizontal direction )
 :
 	// Master sprite's hit box is big enough to include the full width & height o' the platforms, from the highest to lowest point.
 	// This is 'cause sprite interaction & update works when the hit box is in-camera,
@@ -19,12 +20,12 @@ WeightPlatformSprite::WeightPlatformSprite( int x, int y )
 	// so you don't fall through any platform.
 	// This is mo' efficient than having this sprite code run for every instance whether or not it's in-camera
 	// & makes other calculations, like drawing the bars, simpler as well.
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/weight-platform.png" ), x, y - Unit::BlocksToPixels( 4 ), WEIGHT_WIDTH * 2 + WEIGHT_SPACE_APART, Unit::BlocksToPixels( 8 ), {}, 25, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/weight-platform.png" ), x, y - Unit::BlocksToPixels( 4 ), TOTAL_WIDTH, Unit::BlocksToPixels( 8 ), {}, 25, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	broken_higher_bar_ ( nullptr ),
 	break_timer_ ( 0 ),
 	wheel_rotation_ ( 0.0 ),
-	left_ ( Unit::PixelsToSubPixels( { x, y - Unit::BlocksToPixels( 2 ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) ),
-	right_ ( Unit::PixelsToSubPixels( { x + WEIGHT_WIDTH + WEIGHT_SPACE_APART, y + Unit::BlocksToPixels( 2 ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) )
+	left_ ( Unit::PixelsToSubPixels( { x, ( direction == Direction::Horizontal::LEFT ) ? ( y - Unit::BlocksToPixels( 2 ) ) : ( y + Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) ),
+	right_ ( Unit::PixelsToSubPixels( { x + WEIGHT_WIDTH + WEIGHT_SPACE_APART, ( direction == Direction::Horizontal::LEFT ) ? ( y + Unit::BlocksToPixels( 2 ) ) : ( y - Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) )
 {};
 
 WeightPlatformSprite::~WeightPlatformSprite() {};
@@ -66,7 +67,7 @@ void WeightPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 
 void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::HERO ) )
+	if ( !them.hasType( SpriteType::PHASE_THROUGH ) )
 	{
 		bool neither_is_pressed_on = true;
 		Collision left_collision = movement_->testCollision( them, left_ );
@@ -93,7 +94,7 @@ void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& t
 			}
 		}
 
-		if ( !isBroken() )
+		if ( them.hasType( SpriteType::HERO ) && !isBroken() )
 		{
 			// If left platform is at bottom limit.
 			if ( left_.y + std::min( top_speed_downward_, vy_ + acceleration_y_ ) > bottomSubPixels() )
@@ -181,10 +182,9 @@ void WeightPlatformSprite::renderPlatform( const Camera& camera, const sdl2::SDL
 
 void WeightPlatformSprite::renderTopBar( const Camera& camera ) const
 {
-	//Render::renderRect( camera.relativeRect( { xPixels() + LEFT_BAR_X + 1, wheelMachineY(), 96, 2 } ), 2 );
 	const int height = ( isBroken() && broken_higher_bar_ == &left_ ) ? 6 : Unit::SubPixelsToPixels( std::min( original_hit_box_.h, ( left_.y - original_hit_box_.y ) ) ) + 9;
 	graphics_->current_frame_x_ = height;
-	graphics_->render( { xPixels() + LEFT_BAR_X + 1, wheelMachineY() - 1, 96, 4 }, &camera, graphics_->priority_ );
+	graphics_->render( { xPixels() + LEFT_BAR_X + 1, wheelMachineY() - 1, WEIGHT_WIDTH + WEIGHT_SPACE_APART, 4 }, &camera, graphics_->priority_ );
 };
 
 void WeightPlatformSprite::renderLeftBar( const Camera& camera ) const
@@ -203,8 +203,7 @@ void WeightPlatformSprite::renderSideBar( const Camera& camera, int x_offset, co
 	// was when the thing broke. Otherwise, make as high as top of bar thing to platform or bottom limit,
 	// whichever is higher ( smaller ).
 	const int height = ( isBroken() && broken_higher_bar_ == &side ) ? 6 : Unit::SubPixelsToPixels( std::min( original_hit_box_.h, ( side.y - original_hit_box_.y ) ) ) + 9;
-	//Render::renderRect( camera.relativeRect( { xPixels() + x_offset, wheelMachineY() + 1, 2, height } ), 2 );
-	graphics_->current_frame_y_ = (96*2) - height;
+	graphics_->current_frame_y_ = ( 96 * 2 ) - height;
 	graphics_->render( { xPixels() + x_offset, wheelMachineY() + 1, 4, height }, &camera, graphics_->priority_ );
 };
 

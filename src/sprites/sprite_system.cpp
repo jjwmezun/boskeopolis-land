@@ -467,7 +467,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new CircleBlockSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 111 ):
-			return std::unique_ptr<Sprite> ( new WeightPlatformSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new WeightPlatformSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 112 ):
 			return std::unique_ptr<Sprite> ( new UrbanBirdSprite( x, y ) );
@@ -477,6 +477,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 114 ):
 			return std::unique_ptr<Sprite> ( new BarrelOGorillasSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 115 ):
+			return std::unique_ptr<Sprite> ( new WeightPlatformSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -4,7 +4,7 @@
 
 GorillaSprite::GorillaSprite( int x, int y )
 :
-	Sprite( std::unique_ptr<SpriteGraphics> ( new AnimatedGraphics( "sprites/gorilla.png", { std::make_pair( 0, 0 ), std::make_pair( 16, 0 ) } ) ), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 800, 3000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true )
+	Sprite( std::unique_ptr<SpriteGraphics> ( new AnimatedGraphics( "sprites/gorilla.png", { std::make_pair( 0, 0 ), std::make_pair( 16, 0 ) } ) ), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 800, 3000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true )
 {};
 
 GorillaSprite::~GorillaSprite() {};

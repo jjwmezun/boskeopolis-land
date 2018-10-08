@@ -4,14 +4,50 @@
 	"maps":
 	[
 		{
-			"slug": "city-3"
+			"slug": "city-3",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "gradient.png",
+					"width": 8,
+					"height": 160,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_offset": 32,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "skyline.png",
+					"width": 264,
+					"height": 224,
+					"x_scroll": 0.5,
+					"y_scroll": 0.0,
+					"y_offset": 32,
+					"y_repeat": false
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "rain.png",
+					"width": 480,
+					"height": 320,
+					"frames": 16,
+					"animation_speed": 4,
+					"alpha": 128
+				}
+			]
 		}
 	],
 
 	"entrance_xb": 3,
 	"entrance_yb": 35,
-	"entrance_x": 67,
-	"entrance_y": 8,
+
+	"entrance_x": 161,
+	"entrance_y": 19,
 
 	"gem_challenge": 0,
 	"time_challenge": 0

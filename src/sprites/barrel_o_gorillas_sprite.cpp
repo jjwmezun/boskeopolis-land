@@ -7,16 +7,16 @@
 
 static int getRandomTimeLimit()
 {
-	return mezun::randInt( 140, 40 );
+	return mezun::randInt( 160, 80 );
 }
 
 BarrelOGorillasSprite::BarrelOGorillasSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/barrel-o-gorillas.png", 0, 0, false, false, 0, true, 0, -24, 0, 24 ), x, y + 24, 32, 8, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/barrel-o-gorillas.png", 0, 0, false, false, 0, true, 0, -24, 0, 24 ), x, y + 24, 32, 8, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	top_hit_box_ ( Unit::PixelsToSubPixels({ x, y, 32, 8 }) ),
 	right_hit_box_ ( Unit::PixelsToSubPixels({ x + 24, y, 8, 32 }) ),
 	spawn_timer_ ( 0 ),
-	spawn_limit_ ( mezun::randInt( 140, 40 ) )
+	spawn_limit_ ( getRandomTimeLimit() )
 {};
 
 BarrelOGorillasSprite::~BarrelOGorillasSprite() {};
@@ -26,7 +26,7 @@ void BarrelOGorillasSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 	if ( spawn_timer_ >= spawn_limit_ )
 	{
 		sprites.spawn( std::make_unique<GorillaSprite> ( xPixels() + 8, yPixels() - 16 ) );
-		spawn_limit_ = mezun::randInt( 80, 20 );
+		spawn_limit_ = getRandomTimeLimit();
 		spawn_timer_ = 0;
 	}
 	else
