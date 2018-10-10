@@ -80,6 +80,7 @@
 #include "racer_sprite.hpp"
 #include "random_treasure_chest_sprite.hpp"
 #include "rising_ice_cube_sprite.hpp"
+#include "rising_platform_sprite.hpp"
 #include "rolling_ball_sprite.hpp"
 #include "rope_sprite.hpp"
 #include "rotating_block_sprite.hpp"
@@ -143,7 +144,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new PlatformSprite( x, y, Direction::Simple::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 3 ):
-			return std::unique_ptr<Sprite> ( new PlatformSprite( x, y, Direction::Simple::UP, 64000 ) );
+			return std::unique_ptr<Sprite> ( new RisingPlatformSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 4 ):
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::LEFT ) );

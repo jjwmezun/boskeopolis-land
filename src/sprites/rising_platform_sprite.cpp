@@ -2,11 +2,11 @@
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
 
-static constexpr MOVEMENT_AMOUNT = Unit::BlocksToSubPixels( 8 );
+static constexpr int MOVEMENT_AMOUNT = Unit::BlocksToSubPixels( 8 );
 
 RisingPlatformSprite::RisingPlatformSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/weight-platform.png" ), x, y, 48, 16, {}, 500, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/weight-platform.png" ), x, y, 48, 8, {}, 200, 1600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
 {};
 
 RisingPlatformSprite::~RisingPlatformSprite() {};
@@ -18,9 +18,9 @@ void RisingPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 		case ( Direction::Vertical::UP ):
 		{
 			moveUp();
-			if ( hit_box_.y < original_hit_box_.y - MOVEMENT_AMOUNT )
+			if ( hit_box_.y <= original_hit_box_.y - MOVEMENT_AMOUNT )
 			{
-				
+				direction_y_ = Direction::Vertical::DOWN;
 			}
 		}
 		break;
@@ -28,6 +28,10 @@ void RisingPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 		case ( Direction::Vertical::DOWN ):
 		{
 			moveDown();
+			if ( hit_box_.y >= original_hit_box_.y )
+			{
+				direction_y_ = Direction::Vertical::UP;
+			}
 		}
 		break;
 	}
@@ -38,5 +42,9 @@ void RisingPlatformSprite::customInteract( Collision& my_collision, Collision& t
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		them.collideStopAny( their_collision );
+		if ( their_collision.collideTop() )
+		{
+			them.hit_box_.y += vy_;
+		}
 	}
 };

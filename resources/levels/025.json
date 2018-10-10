@@ -43,11 +43,11 @@
 		}
 	],
 
-	"entrance_xb": 3,
-	"entrance_yb": 35,
+	"entrance_x": 3,
+	"entrance_y": 35,
 
-	"entrance_x": 161,
-	"entrance_y": 19,
+	"entrance_xb": 161,
+	"entrance_yb": 19,
 
 	"gem_challenge": 0,
 	"time_challenge": 0
