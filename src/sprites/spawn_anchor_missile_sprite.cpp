@@ -3,6 +3,7 @@
 #include "direction.hpp"
 #include "mezun_math.hpp"
 #include "spawn_anchor_missile_sprite.hpp"
+#include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
 static int newTargetTime()

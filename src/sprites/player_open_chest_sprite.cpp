@@ -4,7 +4,7 @@
 #include "unit.hpp"
 #include "event_system.hpp"
 #include "input.hpp"
-#include <iostream>
+#include "sprite_graphics.hpp"
 
 static constexpr int TIMER_LIMIT = 30;
 static constexpr int CHEST_OPENING_SPEED = 2;

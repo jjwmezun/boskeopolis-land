@@ -6,13 +6,11 @@ class Sprite;
 #include "input_component_player.hpp"
 #include "player_graphics.hpp"
 #include "sprite.hpp"
+#include "sprite_graphics.hpp"
 
 class PlayerSprite : public Sprite
 {
 	public:
-		static constexpr int PLAYER_DEFAULT_JUMP_START_SPEED = 1000;
-		static constexpr int PLAYER_DEFAULT_JUMP_TOP_SPEED   = 6000;
-
 		PlayerSprite
 		(
 			int x,
@@ -22,7 +20,7 @@ class PlayerSprite : public Sprite
 			std::unique_ptr<InputComponent> input
 				= std::unique_ptr<InputComponentPlayer>
 				(),
-			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<PlayerGraphics> ( "sprites/autumn.png" ),
+			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<SpriteGraphics> ( "sprites/autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,
 			int top_speed = 2000
@@ -39,10 +37,26 @@ class PlayerSprite : public Sprite
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		std::unique_ptr<InputComponent> input_;
 
+	protected:
+		PlayerGraphics player_gfx_;
+
 	private:
-		void testVX();
-		void testFrameRate();
 		bool door_lock_;
 
 		void forceUnduck();
+		void handleCameraMovement( Camera& camera );
+		void handleDoorBehavior( EventSystem& events );
+		void handleChasmBehavior( const Map& lvmap, EventSystem& events );
+		void handleDrowningBehavior( const Health& health );
+		void handleWaterEnteringAndExiting();
+		void resetBopsOnLanding() const;
+		void handleLadderBehavior( EventSystem& events );
+		void handleDucking( const BlockSystem& blocks );
+		void adjustJumpSpeed();
+		void dontDuckWhileSwimming( const BlockSystem& blocks );
+		void handleRunning();
+		void handleWalking();
+		void handleDuckingAndSliding( const BlockSystem& blocks );
+		void handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events );
+		void handleLookingUp();
 };

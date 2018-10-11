@@ -1,5 +1,6 @@
 #include "mezun_math.hpp"
 #include "spawn_icicle_sprite.hpp"
+#include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 #include "unit.hpp"
 

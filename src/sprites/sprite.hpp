@@ -115,7 +115,6 @@ class Sprite : public Object
 		Direction::Vertical direction_y_;
 
 		bool jump_lock_ = true; // Not needed
-		bool touching_ladder_ = false; // Not needed
 		bool on_ground_ = false;
 		bool is_sliding_ = false; // Not needed
 		bool in_water_ = false;
@@ -138,10 +137,6 @@ class Sprite : public Object
 		bool isJumping() const;
 		bool isJumpingPrev() const;
 		bool isDucking() const; // Not needed
-		bool onLadder() const; // Not needed
-		bool onLadderPrev() const; // Not needed
-		bool touchingLadder() const; // Not needed
-		bool touchingLadderPrev() const; // Not needed
 		bool lookingUp() const; // Not needed
 
 		bool isMoving() const;
@@ -151,7 +146,7 @@ class Sprite : public Object
 		bool hasMovementType( SpriteMovement::Type type ) const;
 
 		bool isDead() const;
-		bool fellInBottomlessPit( Map& lvmap ) const;
+		bool fellInBottomlessPit( const Map& lvmap ) const;
 
 		bool collidedAny() const;
 		bool collidedLeft() const;
@@ -275,9 +270,7 @@ class Sprite : public Object
 		bool is_bouncing_prev_ = false;
 		bool slide_jump_ = false; // Not needed
 		bool is_ducking_ = false; // Not needed
-		bool touching_ladder_prev_ = false; // Not needed
 		bool on_ladder_ = false; // Not needed
-		bool on_ladder_prev_ = false; // Not needed
 		bool looking_up_ = false; // Not needed
 		bool is_sliding_prev_ = false; // Not needed
 

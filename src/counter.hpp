@@ -1,5 +1,4 @@
-#ifndef COUNTER_H
-#define COUNTER_H
+#pragma once
 
 class Counter
 {
@@ -200,5 +199,3 @@ class Counter
 			return n;
 		};
 };
-
-#endif // COUNTER_H

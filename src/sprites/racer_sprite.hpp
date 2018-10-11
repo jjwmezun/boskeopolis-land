@@ -7,7 +7,6 @@ class Block;
 class RacerSprite : public PlayerSprite
 {
 	public:
-		static const bool DEBUG = false;
 		RacerSprite( int x, int y );
 		~RacerSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );

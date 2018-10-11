@@ -1,31 +1,32 @@
 #include "player_graphics.hpp"
 #include "sprite.hpp"
+#include "sprite_graphics.hpp"
 
-PlayerGraphics::PlayerGraphics( std::string&& texture )
+PlayerGraphics::PlayerGraphics()
 :
-	SpriteGraphics ( std::forward<std::string> ( texture ), 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
+	//SpriteGraphics ( std::forward<std::string> ( texture ), 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
 	animation_timer_ (),
-	walk_counter_  ( 0, 3, 0, true ),
-	climb_counter_ ( 0, 1, 0, true ),
-	blink_counter_ ( 0, 11, 0, true ),
-	swim_counter_  ( 0, 2, 0, true ),
+	walk_counter_  (),
+	climb_counter_ (),
+	blink_counter_ (),
+	swim_counter_  (),
 	swim_timer_    ( NULL, false )
 {};
 
 PlayerGraphics::~PlayerGraphics() {};
 
-void PlayerGraphics::update( Sprite& sprite )
+void PlayerGraphics::update( const Sprite& sprite, SpriteGraphics* graphics )
 {
 	if ( sprite.directionX() == Direction::Horizontal::RIGHT )
 	{
-		flip_x_ = true;
+		graphics->flip_x_ = true;
 	}
 	else
 	{
-		flip_x_ = false;
+		graphics->flip_x_ = false;
 	}
 
-	if ( sprite.onLadder() )
+	if ( sprite.on_ladder_ )
 	{
 		if ( sprite.isMoving() )
 		{
@@ -37,24 +38,13 @@ void PlayerGraphics::update( Sprite& sprite )
 			animation_timer_.update();
 		}
 
-
-		switch ( climb_counter_.value() )
-		{
-			case 1:
-				current_frame_x_ = 128;
-			break;
-
-			default:
-				current_frame_x_ = 96;
-			break;
-		}
-
-		current_frame_y_ = 0;
+		graphics->current_frame_x_ = ( climb_counter_.value() == 1 ) ? 128 : 96;
+		graphics->current_frame_y_ = 0;
 	}
 	else if ( sprite.isSlidingPrev() )
 	{
-		current_frame_x_ = 48;
-		current_frame_y_ = 26;
+		graphics->current_frame_x_ = 48;
+		graphics->current_frame_y_ = 26;
 	}
 	else if ( sprite.isDucking() )
 	{
@@ -65,21 +55,21 @@ void PlayerGraphics::update( Sprite& sprite )
 
 		animation_timer_.update();
 
-		switch ( blink_counter_.value() )
+		if ( blink_counter_ == 3 )
 		{
-			case 3:
-				current_frame_x_ = 0;
-				current_frame_y_ = 32;
-				break;
-			default:
-				current_frame_x_ = 64;
-				current_frame_y_ = 6;
+			graphics->current_frame_x_ = 0;
+			graphics->current_frame_y_ = 32;
+		}
+		else
+		{
+			graphics->current_frame_x_ = 64;
+			graphics->current_frame_y_ = 6;
 		}
 	}
 	else if ( !sprite.onGroundPrev() )
 	{
-		current_frame_x_ = 48;
-		current_frame_y_ = 0;
+		graphics->current_frame_x_ = 48;
+		graphics->current_frame_y_ = 0;
 	}
 	else if ( sprite.isMoving() )
 	{
@@ -93,19 +83,20 @@ void PlayerGraphics::update( Sprite& sprite )
 		switch ( walk_counter_.value() )
 		{
 			case 1:
-				current_frame_x_ = 0;
-				break;
+				graphics->current_frame_x_ = 0;
+			break;
 			case 2:
-				current_frame_x_ = 32;
-				break;
+				graphics->current_frame_x_ = 32;
+			break;
 			case 3:
-				current_frame_x_ = 0;
-				break;
+				graphics->current_frame_x_ = 0;
+			break;
 			default:
-				current_frame_x_ = 16;
+				graphics->current_frame_x_ = 16;
+			break;
 		}
 
-		current_frame_y_ = 0;
+		graphics->current_frame_y_ = 0;
 	}
 	else
 	{
@@ -119,16 +110,16 @@ void PlayerGraphics::update( Sprite& sprite )
 		switch ( blink_counter_.value() )
 		{
 			case 3:
-				current_frame_x_ = 112;
+				graphics->current_frame_x_ = 112;
 				break;
 			default:
 				if ( sprite.lookingUp() )
-					current_frame_x_ = 80;
+					graphics->current_frame_x_ = 80;
 				else
-					current_frame_x_ = 0;
+					graphics->current_frame_x_ = 0;
 		}
 
-		current_frame_y_ = 0;
+		graphics->current_frame_y_ = 0;
 	}
 
 	if ( sprite.hasMovementType( SpriteMovement::Type::SWIMMING ) && !sprite.onGroundPrev() )
@@ -136,18 +127,18 @@ void PlayerGraphics::update( Sprite& sprite )
 		switch ( swim_counter_() )
 		{
 			case ( 0 ):
-				current_frame_x_ = 64;
-				current_frame_y_ = 26;
+				graphics->current_frame_x_ = 64;
+				graphics->current_frame_y_ = 26;
 			break;
 
 			case ( 1 ):
-				current_frame_x_ = 80;
-				current_frame_y_ = 26;
+				graphics->current_frame_x_ = 80;
+				graphics->current_frame_y_ = 26;
 			break;
 
 			case ( 2 ):
-				current_frame_x_ = 96;
-				current_frame_y_ = 26;
+				graphics->current_frame_x_ = 96;
+				graphics->current_frame_y_ = 26;
 			break;
 		}
 
@@ -188,7 +179,7 @@ void PlayerGraphics::update( Sprite& sprite )
 
 	if ( sprite.isDead() )
 	{
-		current_frame_x_ = 16;
-		current_frame_y_ = 26;
+		graphics->current_frame_x_ = 16;
+		graphics->current_frame_y_ = 26;
 	}
 };

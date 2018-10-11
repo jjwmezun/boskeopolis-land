@@ -26,7 +26,7 @@ void GroundedSpriteMovement::jump( Sprite& sprite ) const
 
 	if ( !sprite.onGround() || !sprite.jump_lock_ )
 	{
-		if ( ( sprite.onGroundPadding() || sprite.onLadder() ) && !sprite.jump_lock_ )
+		if ( ( sprite.onGroundPadding() || sprite.on_ladder_ ) && !sprite.jump_lock_ )
 		{
 			startJump( sprite );
 		}
@@ -66,22 +66,11 @@ void GroundedSpriteMovement::bounce( Sprite& sprite, int amount ) const
 };
 
 void GroundedSpriteMovement::position( Sprite& sprite ) const
-{/*
-	if ( sprite.slide_jump_ )
-	{
-		sprite.vx_ *= 5;
-	}*/
-
+{
 	if ( !sprite.onGround() )
 	{
-		if ( sprite.isRunning() )
-		{
-			sprite.top_speed_ = sprite.top_speed_run_ * .75;
-		}
-		else
-		{
-			sprite.top_speed_ = sprite.top_speed_walk_ * .75;
-		}
+		const int top_speed_modifier = ( sprite.isRunning() ) ? sprite.top_speed_run_ : sprite.top_speed_walk_;
+		sprite.top_speed_ = top_speed_modifier * 0.75;
 	}
 
 	if ( sprite.isDucking() && !sprite.slide_jump_ )
@@ -89,7 +78,7 @@ void GroundedSpriteMovement::position( Sprite& sprite ) const
 		sprite.acceleration_x_ /= 1.5;
 	}
 
-	if ( !sprite.onGround() && !sprite.isJumping() && !sprite.onLadder() && !sprite.is_bouncing_ )
+	if ( !sprite.onGround() && !sprite.isJumping() && !sprite.on_ladder_ && !sprite.is_bouncing_ )
 	{
 		sprite.acceleration_y_ = sprite.fall_start_speed_;
 	}
@@ -115,13 +104,6 @@ void GroundedSpriteMovement::position( Sprite& sprite ) const
 	{
 		sprite.on_ground_padding_.stop();
 	}
-
-	if ( sprite.onLadder() )
-	{
-		sprite.vy_ = 0;
-	}
-	sprite.touching_ladder_prev_ = sprite.touching_ladder_;
-	sprite.touching_ladder_ = false;
 
 
 	// UNIVERSAL
@@ -164,7 +146,7 @@ void GroundedSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) c
 		sprite.on_ground_ = true;
 	}
 
-	if ( sprite.onLadder() )
+	if ( sprite.on_ladder_ )
 	{
 		sprite.hit_box_.y -= sprite.LADDER_SPEED;
 	}

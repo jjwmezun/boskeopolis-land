@@ -12,11 +12,9 @@
 #include "input_component_sequence.hpp"
 #include "inventory_level.hpp"
 #include "inventory.hpp"
-#include <iostream>
 #include "level.hpp"
 #include "map.hpp"
 #include "player_sprite.hpp"
-#include "racer_sprite.hpp"
 
 PlayerSprite::PlayerSprite
 (
@@ -57,6 +55,7 @@ PlayerSprite::PlayerSprite
 	input_ ( std::move( input ) ),
 	door_lock_ ( true )
 {
+	// Be absolutely sure input component is set.
 	if ( input_ == nullptr )
 	{
 		input_.reset( new InputComponentPlayer() );
@@ -68,17 +67,74 @@ PlayerSprite::~PlayerSprite() {};
 void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	heroActions( camera, lvmap, events, sprites, blocks, health );
+	player_gfx_.update( *this, graphics_.get() );
 };
 
+// Actions only performed by hero version.
 void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( on_ground_ )
-	{
-		Inventory::clearBops();
-	}
-
+	resetBopsOnLanding();
 	actions( blocks, events );
+	handleLookingUp();
+	handleCameraMovement( camera );
+	handleWaterEnteringAndExiting();
+	handleDoorBehavior( events );
+	handleChasmBehavior( lvmap, events );
+	handleDrowningBehavior( health );
+	invincibilityFlicker( health );
+	boundaries( camera, lvmap );
+	camera.adjust( *this, lvmap );
+};
 
+// Actions performed by all player sprites, including Dagny.
+void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
+{
+	handleRunning();
+	handleWalking();
+	handleDuckingAndSliding( blocks );
+	handleJumpingAndFalling( blocks, events );
+	events.on_conveyor_belt_ = false;
+	handleLadderBehavior( events );
+	adjustJumpSpeed();
+	dontDuckWhileSwimming( blocks );
+	input_->update();
+};
+
+void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+{
+	if ( them.hasType( SpriteType::ENEMY ) )
+	{
+		if ( them.hasType( SpriteType::BOPPABLE ) )
+		{
+			if ( collideBottomOnly( my_collision, them ) )
+			{
+				them.kill();
+				bounce();
+				Inventory::bop();
+				Audio::playSound( Audio::SoundType::BOP );
+			}
+			else if ( my_collision.collideAny() && isSlidingPrev() )
+			{
+				them.kill();
+				Audio::playSound( Audio::SoundType::BOP );
+			}
+			else if ( my_collision.collideAny() && !them.isDead() )
+			{
+				health.hurt();
+			}
+		}
+		else
+		{
+			if ( my_collision.collideAny() && !them.isDead() )
+			{
+				health.hurt();
+			}
+		}
+	}
+};
+
+void PlayerSprite::handleCameraMovement( Camera& camera )
+{
 	if ( input_->cLeft() )
 	{
 		camera.moveLeft();
@@ -95,23 +151,10 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 	{
 		camera.moveDown();
 	}
+};
 
-	if ( !is_dead_ && in_water_ )
-	{
-		changeMovement( SpriteMovement::Type::SWIMMING );
-		in_water_ = false;
-	}
-	else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
-	{
-		changeMovement( SpriteMovement::Type::GROUNDED );
-
-		if ( input_->action1() )
-		{
-			bounce();
-			Audio::playSound( Audio::SoundType::JUMP );
-		}
-	}
-
+void PlayerSprite::handleDoorBehavior( EventSystem& events )
+{
 	if ( events.in_front_of_door_ > 0 && input_->up() && !door_lock_ && on_ground_ )
 	{
 		switch ( events.in_front_of_door_ )
@@ -141,6 +184,10 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 			door_lock_ = false;
 		}
 	}
+};
+
+void PlayerSprite::handleChasmBehavior( const Map& lvmap, EventSystem& events )
+{
 	if ( fellInBottomlessPit( lvmap ) )
 	{
 		if ( lvmap.warp_on_fall_ )
@@ -152,18 +199,146 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 			kill();
 		}
 	}
-	else if ( health.drowned() )
+};
+
+void PlayerSprite::handleDrowningBehavior( const Health& health )
+{
+	if ( health.drowned() )
 	{
 		kill();
 	}
+}
 
-	invincibilityFlicker( health );
+void PlayerSprite::handleWaterEnteringAndExiting()
+{
+	if ( !is_dead_ && in_water_ )
+	{
+		changeMovement( SpriteMovement::Type::SWIMMING );
+		in_water_ = false;
+	}
+	else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
+	{
+		changeMovement( SpriteMovement::Type::GROUNDED );
 
-	boundaries( camera, lvmap );
-	camera.adjust( *this, lvmap );
+		if ( input_->action1() )
+		{
+			bounce();
+			Audio::playSound( Audio::SoundType::JUMP );
+		}
+	}
 };
 
-void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
+void PlayerSprite::duck()
+{
+	// Can continue ducking while in air, but only start duck on ground.
+	if ( isDucking() || onGround() )
+	{
+		// Hacky way to make player warp to the right position after height changes.
+		if ( !isDucking() )
+		{
+			hit_box_.y += Unit::PixelsToSubPixels( 9 );
+			graphics_->y_adjustment_ = -6;
+			graphics_->h_adjustment_ = 8;
+		}
+
+		is_ducking_ = true;
+
+		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 11 );
+	}
+};
+
+void PlayerSprite::resetBopsOnLanding() const
+{
+	if ( on_ground_ )
+	{
+		Inventory::clearBops();
+	}
+}
+
+void PlayerSprite::handleLadderBehavior( EventSystem& events )
+{
+	if ( input_->up() )
+	{
+		if ( events.touching_ladder_ )
+		{
+			grabLadder();
+		}
+
+		if ( on_ladder_ && hasMovementType( SpriteMovement::Type::GROUNDED ) )
+		{
+			if ( isJumping() )
+			{
+				acceleration_y_ = -LADDER_SPEED * 2;
+			}
+			else
+			{
+				acceleration_y_ = -LADDER_SPEED;
+			}
+		}
+	}
+	else if ( on_ladder_ )
+	{
+		if ( input_->down() )
+		{
+			acceleration_y_ = LADDER_SPEED;
+		}
+		else
+		{
+			stopY();
+		}
+	}
+
+	if ( !events.touching_ladder_ )
+	{
+		releaseLadder();
+	}
+
+	if ( on_ladder_ )
+	{
+		vy_ = 0;
+	}
+	events.touching_ladder_prev_ = events.touching_ladder_;
+	events.touching_ladder_ = false;
+};
+
+void PlayerSprite::handleLookingUp()
+{
+	if ( onGround() && input_->up() )
+	{
+		lookUp();
+	}
+	else
+	{
+		stopLookingUp();
+	}
+}
+
+void PlayerSprite::adjustJumpSpeed()
+{
+	if ( isDucking() )
+	{
+		jump_top_speed_ = JUMP_DUCK_TOP_SPEED;
+	}
+	else
+	{
+		jump_top_speed_ = jump_top_speed_normal_;
+	}
+
+	if ( abs( vx_ ) > top_speed_walk_ )
+	{
+		jump_top_speed_ *= 1.1;
+	}
+};
+
+void PlayerSprite::dontDuckWhileSwimming( const BlockSystem& blocks )
+{
+	if ( is_ducking_ && !on_ground_ && hasMovementType( SpriteMovement::Type::SWIMMING ) )
+	{
+		unduck( blocks );
+	}
+}
+
+void PlayerSprite::handleRunning()
 {
 	if ( input_->action2() )
 	{
@@ -173,7 +348,10 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	{
 		stopRunning();
 	}
+};
 
+void PlayerSprite::handleWalking()
+{
 	if ( input_->left() && !input_->right() && ( !isDucking() || !onGround() ) )
 	{
 		moveLeft();
@@ -183,21 +361,36 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	{
 		moveRight();
 	}
+};
 
+void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks )
+{
 	if ( input_->down() )
 	{
 		switch ( on_slope_ )
 		{
+			case ( Direction::Horizontal::__NULL ):
+			{
+				duck();
+			}
+			break;
 			case ( Direction::Horizontal::LEFT ):
-				if ( isDucking() ) unduck( blocks );
+			{
+				if ( isDucking() )
+				{
+					unduck( blocks );
+				}
 				slideLeft();
+			}
 			break;
 			case ( Direction::Horizontal::RIGHT ):
-				if ( isDucking() ) unduck( blocks );
+			{
+				if ( isDucking() )
+				{
+					unduck( blocks );
+				}
 				slideRight();
-			break;
-			case ( Direction::Horizontal::__NULL ):
-				duck();
+			}
 			break;
 		}
 	}
@@ -211,9 +404,13 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 		if ( !input_->right() && !input_->left())
 		{
 			if ( isDucking() )
+			{
 				stopDucking();
+			}
 			else
+			{
 				stopX();
+			}
 		}
 	}
 
@@ -221,7 +418,10 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	{
 		top_speed_ = top_speed_run_;
 	}
+};
 
+void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events )
+{
 	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocksJustAbove( blocks ) ) )
 	{
 		jump();
@@ -266,152 +466,6 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 		}
 		jump_lock_ = false;
 	}
-	events.on_conveyor_belt_ = false;
-
-	if ( input_->up() )
-	{
-		if ( touching_ladder_ )
-		{
-			grabLadder();
-		}
-	}
-
-	if ( Input::released( Input::Action::MOVE_UP ) )
-	{
-		stopLookingUp();
-	}
-
-	if ( input_->up() )
-	{
-		moveUp();
-
-		if ( hasMovementType( SpriteMovement::Type::GROUNDED ) )
-		{
-			if ( onLadder() )
-			{
-				if ( isJumping() )
-				{
-					acceleration_y_ = -LADDER_SPEED * 2;
-				}
-				else
-				{
-					acceleration_y_ = -LADDER_SPEED;
-				}
-			}
-			else if ( onGround() )
-			{
-				lookUp();
-			}
-		}
-	}
-	else if ( input_->down() )
-	{
-		moveDown();
-
-		if ( onLadder() )
-		{
-			acceleration_y_ = LADDER_SPEED;
-		}
-	}
-	else
-	{
-		if ( onLadder() )
-		{
-			stopY();
-		}
-	}
-
-	/*
-	// In case player gets stuck 'tween 2 blocks with just 1 empty block 'tween them vertically.
-	// Makes player automatically move to the side till out o' space ala Super Mario Bros. 3.
-	if ( collide_top_prev_ && collide_bottom_prev_ && !isDucking() )
-	{
-		if ( directionX() == Direction::Horizontal::RIGHT )
-			vx_ = 1000;
-		else
-			vx_ = -1000;
-
-		stopX();
-	}*/
-
-	if ( !touching_ladder_ )
-		releaseLadder();
-
-	if ( isDucking() )
-	{
-		jump_top_speed_ = JUMP_DUCK_TOP_SPEED;
-	}
-	else
-	{
-		jump_top_speed_ = jump_top_speed_normal_;
-	}
-
-	if ( abs( vx_ ) > top_speed_walk_ )
-	{
-		jump_top_speed_ *= 1.1;
-	}
-
-	if ( is_ducking_ && !on_ground_ && hasMovementType( SpriteMovement::Type::SWIMMING ) )
-	{
-		unduck( blocks );
-	}
-
-	input_->update();
-
-	//std::cout<<"Y: "<<graphics_->y_adjustment_<<std::endl;
-	//std::cout<<"H: "<<graphics_->h_adjustment_<<std::endl;
-};
-
-void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
-{
-	if ( them.hasType( SpriteType::ENEMY ) )
-	{
-		if ( them.hasType( SpriteType::BOPPABLE ) )
-		{
-			if ( collideBottomOnly( my_collision, them ) )
-			{
-				them.kill();
-				bounce();
-				Inventory::bop();
-				Audio::playSound( Audio::SoundType::BOP );
-			}
-			else if ( my_collision.collideAny() && isSlidingPrev() )
-			{
-				them.kill();
-				Audio::playSound( Audio::SoundType::BOP );
-			}
-			else if ( my_collision.collideAny() && !them.isDead() )
-			{
-				health.hurt();
-			}
-		}
-		else
-		{
-			if ( my_collision.collideAny() && !them.isDead() )
-			{
-				health.hurt();
-			}
-		}
-	}
-};
-
-void PlayerSprite::duck()
-{
-	// Can continue ducking while in air, but only start duck on ground.
-	if ( isDucking() || onGround() )
-	{
-		// Hacky way to make player warp to the right position after height changes.
-		if ( !isDucking() )
-		{
-			hit_box_.y += Unit::PixelsToSubPixels( 9 );
-			graphics_->y_adjustment_ = -6;
-			graphics_->h_adjustment_ = 8;
-		}
-
-		is_ducking_ = true;
-
-		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 11 );
-	}
 };
 
 void PlayerSprite::forceUnduck()
@@ -438,18 +492,10 @@ void PlayerSprite::unduck( const BlockSystem& blocks )
 
 void PlayerSprite::deathAction( Camera& camera, EventSystem& events )
 {
+	graphics_->current_frame_x_ = 16;
+	graphics_->current_frame_y_ = 26;
 	forceUnduck();
 	graphics_->priority_ = true;
 	defaultDeathAction( camera );
 	events.playDeathSoundIfNotAlreadyPlaying();
-};
-
-void PlayerSprite::testVX()
-{
-	std::cout<<vx_<<std::endl;
-};
-
-void PlayerSprite::testFrameRate()
-{
-	std::cout<<Main::frame()<<std::endl;
 };

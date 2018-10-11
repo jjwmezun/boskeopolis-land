@@ -69,6 +69,8 @@ class EventSystem
 	bool played_death_song_;
 	bool disable_pause_;
 	bool pause_state_movement_;
+	bool touching_ladder_;
+	bool touching_ladder_prev_;
 	int change_map_;
 	int in_front_of_door_;
 	int move_water_;

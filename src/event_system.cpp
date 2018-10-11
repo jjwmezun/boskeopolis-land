@@ -51,6 +51,8 @@ EventSystem::EventSystem()
 	on_conveyor_belt_ ( false ),
 	played_death_song_ ( false ),
 	pause_state_movement_ ( false ),
+	touching_ladder_ ( false ),
+	touching_ladder_prev_ ( false ),
 	misc_ ()
 {
 	resetMisc();
@@ -78,6 +80,8 @@ void EventSystem::reset()
 	on_conveyor_belt_ = false;
 	played_death_song_ = false;
 	pause_state_movement_ = false;
+	touching_ladder_ = false;
+	touching_ladder_prev_ = false;
 	resetPalette();
 	resetMisc();
 };

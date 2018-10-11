@@ -1,6 +1,7 @@
 #include "event_system.hpp"
 #include "input.hpp"
 #include "shooter_player_sprite.hpp"
+#include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
 ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
@@ -21,11 +22,10 @@ ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
 	is_shooting_up_ ( false ),
 	shoot_delay_count_ ( 0 ),
 	is_shooting_count_ ( 0 ),
-	animation_timer_ (),
-	walk_counter_  ( 0, 3, 0, true ),
-	climb_counter_ ( 0, 1, 0, true )
+	walk_counter_  (),
+	climb_counter_ (),
+	animation_timer_ ()
 {
-	direction_x_ = Direction::Horizontal::RIGHT;
 };
 
 ShooterPlayerSprite::~ShooterPlayerSprite() {};
@@ -52,12 +52,12 @@ void ShooterPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	{
 		--shoot_delay_count_;
 	}
-	
+
 	if ( shoot_delay_count_ == 0 && Input::pressed( Input::Action::RUN ) )
 	{
 		if ( lookingUp() )
 		{
-			sprites.spawnHeroBullet( centerXPixels(), yPixels() + 2, Direction::Simple::UP );	
+			sprites.spawnHeroBullet( centerXPixels(), yPixels() + 2, Direction::Simple::UP );
 			is_shooting_up_ = true;
 		}
 		else
@@ -86,7 +86,7 @@ void ShooterPlayerSprite::updateGFX()
 		break;
 	}
 
-	if ( onLadder() )
+	if ( on_ladder_ )
 	{
 		if ( isMoving() )
 		{
@@ -98,7 +98,7 @@ void ShooterPlayerSprite::updateGFX()
 			animation_timer_.update();
 		}
 
-		
+
 		switch ( climb_counter_.value() )
 		{
 			case 1:
@@ -162,7 +162,7 @@ void ShooterPlayerSprite::updateGFX()
 		}
 	}
 	else
-	{		
+	{
 		if ( lookingUp() )
 		{
 			graphics_->current_frame_x_ = 182;
@@ -172,7 +172,7 @@ void ShooterPlayerSprite::updateGFX()
 			graphics_->current_frame_x_ = 0;
 		}
 	}
-	
+
 	if ( is_shooting_ )
 	{
 		graphics_->current_frame_y_ = 28;

@@ -95,7 +95,7 @@ void Sprite::moonGravityOff()
 	gravity_top_speed_ = GRAVITY_TOP_SPEED_NORMAL;
 };
 
-bool Sprite::fellInBottomlessPit( Map& lvmap ) const
+bool Sprite::fellInBottomlessPit( const Map& lvmap ) const
 {
 	return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
 };
@@ -441,31 +441,6 @@ bool Sprite::onGroundPrev() const
 bool Sprite::isMoving() const
 {
 	return is_moving_;
-};
-
-bool Sprite::onLadder() const
-{
-	return on_ladder_;
-};
-
-bool Sprite::onLadderPrev() const
-{
-	return on_ladder_prev_;
-};
-
-bool Sprite::touchingLadder() const
-{
-	return touching_ladder_;
-};
-
-bool Sprite::touchingLadderPrev() const
-{
-	return touching_ladder_prev_;
-};
-
-void Sprite::touchLadder()
-{
-	touching_ladder_ = true;
 };
 
 void Sprite::grabLadder()
