@@ -91,7 +91,7 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 {
 	handleRunning();
 	handleWalking();
-	handleDuckingAndSliding( blocks );
+	handleDuckingAndSliding( blocks, events );
 	handleJumpingAndFalling( blocks, events );
 	events.on_conveyor_belt_ = false;
 	handleLadderBehavior( events );
@@ -363,7 +363,7 @@ void PlayerSprite::handleWalking()
 	}
 };
 
-void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks )
+void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, const EventSystem& events )
 {
 	if ( input_->down() )
 	{
@@ -371,7 +371,14 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks )
 		{
 			case ( Direction::Horizontal::__NULL ):
 			{
-				duck();
+				if ( events.can_climb_down_ )
+				{
+					on_ladder_ = true;
+				}
+				else
+				{
+					duck();
+				}
 			}
 			break;
 			case ( Direction::Horizontal::LEFT ):
@@ -498,4 +505,9 @@ void PlayerSprite::deathAction( Camera& camera, EventSystem& events )
 	graphics_->priority_ = true;
 	defaultDeathAction( camera );
 	events.playDeathSoundIfNotAlreadyPlaying();
+};
+
+bool PlayerSprite::canJump() const
+{
+	return ( onGroundPadding() || on_ladder_ ) && !jump_lock_;
 };

@@ -26,7 +26,7 @@ void GroundedSpriteMovement::jump( Sprite& sprite ) const
 
 	if ( !sprite.onGround() || !sprite.jump_lock_ )
 	{
-		if ( ( sprite.onGroundPadding() || sprite.on_ladder_ ) && !sprite.jump_lock_ )
+		if ( sprite.canJump() )
 		{
 			startJump( sprite );
 		}

@@ -415,7 +415,7 @@ void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites,
 
 bool Sprite::canJump() const
 {
-	return can_jump_;
+	return onGroundPadding();
 };
 
 bool Sprite::isDucking() const

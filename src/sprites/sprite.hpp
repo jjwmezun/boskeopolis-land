@@ -133,7 +133,7 @@ class Sprite : public Object
 		bool onGround() const;
 		bool onGroundPrev() const;
 		bool onGroundPadding() const;
-		bool canJump() const;
+		virtual bool canJump() const;
 		bool isJumping() const;
 		bool isJumpingPrev() const;
 		bool isDucking() const; // Not needed
@@ -261,7 +261,6 @@ class Sprite : public Object
 		int jump_top_speed_;
 		int bounce_height_ = 0;
 		bool on_ground_prev_ = false;
-		bool can_jump_ = false;
 		bool is_jumping_ = false;
 		bool is_jumping_prev_ = false;
 		bool jump_start_ = false;

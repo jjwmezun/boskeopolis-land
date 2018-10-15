@@ -25,6 +25,17 @@
 			},
 			"conditions":
 			[
+				{ "type": "not_on_ladder" },
+				{ "type": "collide_bottom" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "climb_down"
+			},
+			"conditions":
+			[
 				{ "type": "collide_bottom" }
 			]
 		}

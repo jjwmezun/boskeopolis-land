@@ -31,6 +31,7 @@ class PlayerSprite : public Sprite
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 		virtual void duck();
 		virtual void unduck( const BlockSystem& blocks );
+		virtual bool canJump() const override;
 
 		void deathAction( Camera& camera, EventSystem& events ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
@@ -56,7 +57,7 @@ class PlayerSprite : public Sprite
 		void dontDuckWhileSwimming( const BlockSystem& blocks );
 		void handleRunning();
 		void handleWalking();
-		void handleDuckingAndSliding( const BlockSystem& blocks );
+		void handleDuckingAndSliding( const BlockSystem& blocks, const EventSystem& events );
 		void handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events );
 		void handleLookingUp();
 };

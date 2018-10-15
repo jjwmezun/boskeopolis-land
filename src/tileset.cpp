@@ -2,6 +2,7 @@
 #include "block_component_change_block.hpp"
 #include "block_component_change_direction.hpp"
 #include "block_component_change_palette.hpp"
+#include "block_component_climb_down.hpp"
 #include "block_component_climbable.hpp"
 #include "block_component_conveyor.hpp"
 #include "block_component_current.hpp"
@@ -47,6 +48,7 @@
 #include "block_condition_key.hpp"
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_not_full_health.hpp"
+#include "block_condition_not_on_ladder.hpp"
 #include "block_condition_rival.hpp"
 #include "block_condition_switch_off.hpp"
 #include "block_condition_switch_on.hpp"
@@ -371,6 +373,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							components.emplace_back( std::make_unique<BlockComponentConveyor> ( Direction::Horizontal::LEFT ) );
 						}
 					}
+					else if ( mezun::areStringsEqual( comp_type, "climb_down" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentClimbDown> () );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "change_direction" ) )
 					{
 						if
@@ -554,6 +560,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "not_ducking" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionNotDucking> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "not_on_ladder" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionNotOnLadder> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "collide_not_bottom" ) )
 							{
