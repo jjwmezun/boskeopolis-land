@@ -5,28 +5,34 @@
 #include "sprite_graphics.hpp"
 #include "urban_bird_sprite.hpp"
 
-static constexpr int STRUGGLE_LIMIT = 50;
+#include <iostream>
+
+static constexpr int STRUGGLE_LIMIT = 30;
 
 static int getRandomDelay()
 {
 	return mezun::randInt( 200, 100 );
 };
 
-UrbanBirdSprite::UrbanBirdSprite( int x, int y )
+UrbanBirdSprite::UrbanBirdSprite( int x, int y, Sprite* hero_address )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0, true ), x, y, 16, 16, { SpriteType::PHASE_THROUGH }, 200, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	left_pressed_before_ ( false ),
+	right_pressed_before_ ( false ),
+	jump_pressed_before_ ( false ),
 	reset_timer_ ( 0 ),
 	reset_delay_ ( 0 ),
 	remember_x_ ( 0 ),
 	remember_y_ ( 0 ),
 	struggle_counter_ ( 0 ),
-	last_pressed_ ( InputType::__NULL )
+	hero_address_ ( hero_address )
 {};
 
 UrbanBirdSprite::~UrbanBirdSprite() {};
 
 void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
+	std::cout<<struggle_counter_<<std::endl;
 	if ( reset_timer_ >= reset_delay_ )
 	{
 		setNewPosition( camera, lvmap );
@@ -42,15 +48,41 @@ void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 
 	if ( remember_x_ > 0 )
 	{
-		if ( Input::held( Input::Action::MOVE_LEFT  ) && last_pressed_ != ( InputType )( Input::Action::MOVE_LEFT  ) )
+		if
+		(
+			( Input::held( Input::Action::MOVE_LEFT  ) && !left_pressed_before_  ) ||
+			( Input::held( Input::Action::MOVE_RIGHT ) && !right_pressed_before_ ) ||
+			( Input::held( Input::Action::JUMP       ) && !jump_pressed_before_  )
+		)
 		{
 			++struggle_counter_;
-			last_pressed_ = ( InputType )( Input::Action::MOVE_LEFT );
 		}
-		else if ( Input::held( Input::Action::MOVE_RIGHT ) && last_pressed_ != ( InputType )( Input::Action::MOVE_RIGHT ) )
+		left_pressed_before_ = Input::held( Input::Action::MOVE_LEFT );
+		right_pressed_before_ = Input::held( Input::Action::MOVE_RIGHT );
+		jump_pressed_before_ = Input::held( Input::Action::JUMP );
+
+		if ( hero_address_ != nullptr )
 		{
-			++struggle_counter_;
-			last_pressed_ = ( InputType )( Input::Action::MOVE_LEFT );
+			// This is where it drops you off when it takes you to the leftmost side or if you struggle 'nough.
+			if ( hit_box_.x < 64000 || struggle_counter_ >= STRUGGLE_LIMIT )
+			{
+				// Make bird unable to grab you till it resets
+				// so it can't grab you right after releasing yourself from it.
+				remember_x_ = -1;
+				remember_y_ = 0;
+				hero_address_->graphics_->priority_ = false;
+				struggle_counter_ = 0;
+				hero_address_->sprite_interact_ = true;
+				hero_address_->block_interact_ = true;
+			}
+			else
+			{
+				hero_address_->graphics_->priority_ = true;
+				hero_address_->hit_box_.x = hit_box_.x - remember_x_; // Keep their x position relative to bird.
+				hero_address_->hit_box_.y = remember_y_; // Keep them to their y position when they were grabbed.
+				hero_address_->sprite_interact_ = false;
+				hero_address_->block_interact_ = false;
+			}
 		}
 	}
 };
@@ -65,26 +97,8 @@ void UrbanBirdSprite::customInteract( Collision& my_collision, Collision& their_
 			{
 				remember_x_ = hit_box_.x - them.hit_box_.x;
 				remember_y_ = them.hit_box_.y;
-			}
-		}
-		// If negative, it can't grab you.
-		else if ( remember_x_ > 0 )
-		{
-			// This is where it drops you off when it takes you to the leftmost side or if you struggle 'nough.
-			if ( hit_box_.x < 64000 || struggle_counter_ >= STRUGGLE_LIMIT )
-			{
-				// Make bird unable to grab you till it resets
-				// so it can't grab you right after releasing yourself from it.
-				remember_x_ = -1;
-				remember_y_ = 0;
-				them.graphics_->priority_ = false;
-				struggle_counter_ = 0;
-			}
-			else
-			{
-				them.graphics_->priority_ = true;
-				them.hit_box_.x = hit_box_.x - remember_x_; // Keep their x position relative to bird.
-				them.hit_box_.y = remember_y_; // Keep them to their y position when they were grabbed.
+				them.sprite_interact_ = false;
+				them.block_interact_ = false;
 			}
 		}
 	}

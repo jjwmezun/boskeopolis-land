@@ -470,7 +470,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new WeightPlatformSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 112 ):
-			return std::unique_ptr<Sprite> ( new UrbanBirdSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new UrbanBirdSprite( x, y, hero_.get() ) );
 		break;
 		case ( SPRITE_INDEX_START + 113 ):
 			return std::unique_ptr<Sprite> ( new GorillaSprite( x, y ) );
@@ -612,9 +612,6 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		Sprite::traction_ = Sprite::TRACTION_NORMAL;
 	}
 
-	clearSprites();
-	spritesFromMap( level.currentMap(), events );
-
 	switch( level.currentMap().hero_type_ )
 	{
 		case ( HeroType::NORMAL ):
@@ -643,6 +640,8 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		break;
 	}
 
+	clearSprites();
+	spritesFromMap( level.currentMap(), events );
 };
 
 void SpriteSystem::clearSprites()
