@@ -77,9 +77,9 @@ void LevelState::stateUpdate()
 void LevelState::stateRender()
 {
 	level_.currentMap().renderBG( camera_ );
-	blocks_.render( camera_, false );
+	blocks_.render( level_.currentMap(), camera_, false );
 	sprites_.render( camera_, false );
-	blocks_.render( camera_, true );
+	blocks_.render( level_.currentMap(), camera_, true );
 	sprites_.render( camera_, true );
 	level_.currentMap().renderFG( camera_ );
 	events_.renderSewer( camera_ );

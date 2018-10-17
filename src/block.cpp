@@ -4,7 +4,6 @@
 #include "level.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
-#include <iostream>
 
 Block::Block
 (
@@ -14,48 +13,8 @@ Block::Block
 	Object( x, y, Unit::PIXELS_PER_BLOCK, Unit::PIXELS_PER_BLOCK ),
 	type_ ( type ),
 	location_ ( location ),
-	type_id_ ( type_id ),
-	destroyed_ ( false )
+	type_id_ ( type_id )
 {};
-
-// DO NOT DELETE BLOCK TYPE. Owned by other class; this holds just a copy.
-Block::~Block() {};
-
-Block::Block( Block&& m )
-:
-	Object( Unit::SubPixelsToPixels( m.hit_box_.x ), Unit::SubPixelsToPixels( m.hit_box_.y ), Unit::PIXELS_PER_BLOCK, Unit::PIXELS_PER_BLOCK ),
-	type_ ( m.type_ ),
-	location_ ( m.location_ ),
-	type_id_ ( m.type_id_ ),
-	destroyed_ ( m.destroyed_ )
-{};
-
-Block::Block( const Block& c )
-:
-	Object( Unit::SubPixelsToPixels( c.hit_box_.x ), Unit::SubPixelsToPixels( c.hit_box_.y ), Unit::PIXELS_PER_BLOCK, Unit::PIXELS_PER_BLOCK ),
-	type_ ( c.type_ ),
-	location_ ( c.location_ ),
-	type_id_ ( c.type_id_ ),
-	destroyed_ ( c.destroyed_ )
-{};
-
-Block& Block::operator=( Block&& m )
-{
-	hit_box_ = m.hit_box_;
-	type_ = m.type_;
-	location_ = m.location_;
-	type_id_ = m.type_id_;
-	destroyed_ = m.destroyed_;
-};
-
-Block& Block::operator=( const Block& c )
-{
-	hit_box_ = c.hit_box_;
-	type_ = c.type_;
-	location_ = c.location_;
-	type_id_ = c.type_id_;
-	destroyed_ = c.destroyed_;
-};
 
 void Block::render( const Camera& camera, bool priority, SDL_Texture* texture ) const
 {
@@ -75,7 +34,8 @@ void Block::renderAnyPriority( const Camera& camera ) const
 
 void Block::destroy()
 {
-	destroyed_ = true;
+	type_ = nullptr;
+	type_id_ = -1;
 };
 
 int Block::location() const
@@ -85,7 +45,7 @@ int Block::location() const
 
 void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
 {
-	if ( hasType() && areNearbyWithAllBlocks( sprite, level.currentMap() ) )
+	if ( hasType() )
 	{
 		Collision collision = sprite.testCollision( *this );
 		type_->interact( collision, sprite, *this, level, events, camera, health, blocks, sprites );
@@ -115,12 +75,7 @@ const BlockType* Block::type() const
 	return type_;
 };
 
-bool Block::areNearbyWithAllBlocks( const Object& other, const Map& lvmap ) const
+bool Block::isDestroyed() const
 {
-	return
-		!lvmap.blocks_work_offscreen_ ||
-		(
-			other.rightSubPixels() > hit_box_.x - Unit::WINDOW_WIDTH_SUBPIXELS &&
-			other.hit_box_.x < rightSubPixels() + Unit::WINDOW_WIDTH_SUBPIXELS
-		);
-};
+	return !hasType();
+}
