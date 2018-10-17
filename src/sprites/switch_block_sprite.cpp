@@ -1,6 +1,5 @@
 #include "audio.hpp"
 #include "event_system.hpp"
-#include "collision.hpp"
 #include "sprite_graphics.hpp"
 #include "switch_block_sprite.hpp"
 
@@ -13,53 +12,16 @@ SwitchBlockSprite::~SwitchBlockSprite() {};
 
 void SwitchBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( !ready_ )
-	{
-		if ( delay_.done() )
-		{
-			ready_ = true;
-			delay_.stop();
-		}
-		else if ( delay_.on() )
-		{
-			delay_.update();
-		}
-		else
-		{
-			delay_.start();
-		}
-	}
-
+	bump_under_block_component.update( *this );
 	graphics_->current_frame_x_ = ( events.switchOn() ) ? 0 : 16;
-
-	if ( hit_box_.y < original_hit_box_.y )
-	{
-		hit_box_.y += 500;
-	}
-
-	if ( hit_box_.y > original_hit_box_.y )
-	{
-		hit_box_.y = original_hit_box_.y;
-	}
 };
 
 void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
+	if ( hit )
 	{
-		them.collideStopAny( their_collision );
-
-		if ( their_collision.collideTop() )
-		{
-			if ( ready_ )
-			{
-				events.flipSwitch();
-				ready_ = false;
-				Audio::playSound( Audio::SoundType::SWITCH );
-			}
-
-			hit_box_.y -= their_collision.overlapYTop() / 2;
-
-		}
+		events.flipSwitch();
+		Audio::playSound( Audio::SoundType::SWITCH );
 	}
 };

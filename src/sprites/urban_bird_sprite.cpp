@@ -5,11 +5,11 @@
 #include "sprite_graphics.hpp"
 #include "urban_bird_sprite.hpp"
 
-static constexpr int STRUGGLE_LIMIT = 80;
+static constexpr int STRUGGLE_LIMIT = 50;
 
 static int getRandomDelay()
 {
-	return mezun::randInt( 120, 48 );
+	return mezun::randInt( 200, 100 );
 };
 
 UrbanBirdSprite::UrbanBirdSprite( int x, int y )

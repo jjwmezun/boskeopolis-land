@@ -198,3 +198,8 @@ int Health::restorePoint() const
 		break;
 	}
 };
+
+bool Health::hasFullHealth() const
+{
+	return hp_ >= maxHP();
+};

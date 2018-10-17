@@ -21,6 +21,7 @@ class Health
 		bool drowned() const;
 		bool overheated() const;
 		double oxygenPercent() const;
+		bool hasFullHealth() const;
 
 		static int maxHP();
 
