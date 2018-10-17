@@ -117,9 +117,6 @@
 #include "waterdrop_spawner_sprite.hpp"
 #include "weight_platform_sprite.hpp"
 
-#include <iostream>
-#include "main.hpp"
-
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
 	hero_ (),
@@ -544,7 +541,6 @@ void SpriteSystem::spawnIcicle( int x, int y )
 
 void SpriteSystem::heroOpenTreasureChest()
 {
-	//std::cout<<( int )( hero_->direction_x_ )<<std::endl;
 	hero_.reset( new PlayerOpenChestSprite( hero_->xPixels(), hero_->yPixels(), hero_->direction_x_ ) );
 };
 
@@ -560,16 +556,6 @@ void SpriteSystem::spritesFromMap( const Map& lvmap, EventSystem& events )
 		{
 			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, lvmap, events ) );
 			sprites_.emplace_back( std::move( new_sprite ) );
-
-			/*
-			// DEBUG
-			const int n = sprites_.size() - 1;
-			if ( sprites_[ n ]->hasType( Sprite::SpriteType::DONT_RESPAWN ) )
-			{
-				std::cout<<sprites_[ n ]->map_id_<<std::endl;
-			}
-			// DEBUG
-			*/
 		}
 	}
 };
@@ -861,12 +847,12 @@ void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera, Health& health )
 	}
 };
 
-void SpriteSystem::testNumOSprites() const
-{
-	std::cout<<"Num o' sprites: "<<sprites_.size()<<std::endl;
-};
-
 int SpriteSystem::permanentlyKilledEnemies() const
 {
 	return permanently_killed_enemies_;
+};
+
+int SpriteSystem::numberOfSprites() const
+{
+	return sprites_.size();
 };

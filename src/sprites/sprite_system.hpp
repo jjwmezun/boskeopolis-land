@@ -59,6 +59,7 @@ class SpriteSystem
 		const Sprite& hero() const;
 		void interactWithMap( Map& lvmap, Camera& camera, Health& health );
 		int permanentlyKilledEnemies() const;
+		int numberOfSprites() const;
 
 
 	private:
@@ -73,6 +74,4 @@ class SpriteSystem
 		void destroySprite( int n, Map& lvmap );
 		void spritesFromMap( const Map& lvmap, EventSystem& events );
 		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, const Map& lvmap, EventSystem& events );
-
-		void testNumOSprites() const;
 };

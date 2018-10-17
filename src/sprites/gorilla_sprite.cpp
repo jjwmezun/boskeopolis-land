@@ -14,6 +14,10 @@ void GorillaSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	turnOnCollide();
 	moveInDirectionX();
 	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
+	if ( fellInBottomlessPit( lvmap ) )
+	{
+		kill();
+	}
 };
 
 void GorillaSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

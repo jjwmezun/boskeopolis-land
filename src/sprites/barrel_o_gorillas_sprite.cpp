@@ -25,7 +25,10 @@ void BarrelOGorillasSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 {
 	if ( spawn_timer_ >= spawn_limit_ )
 	{
-		sprites.spawn( std::make_unique<GorillaSprite> ( xPixels() + 8, yPixels() - 16 ) );
+		if ( sprites.numberOfSprites() < 30 )
+		{
+			sprites.spawn( std::make_unique<GorillaSprite> ( xPixels() + 8, yPixels() - 16 ) );
+		}
 		spawn_limit_ = getRandomTimeLimit();
 		spawn_timer_ = 0;
 	}
