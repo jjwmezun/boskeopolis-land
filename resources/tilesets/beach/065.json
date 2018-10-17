@@ -22,7 +22,8 @@
 			{ "x": 15, "y": 7, "alpha": 128, "priority": true }
 		],
 		"alpha": 128,
-		"priority": true
+		"priority": true,
+		"rotation": 180
 	},
 	"behavior":
 	[
@@ -39,7 +40,7 @@
 		{
 			"component":
 			{
-				"type": "current_left"
+				"type": "current_right"
 			},
 			"conditions":
 			[

@@ -3,13 +3,16 @@
 #include "inventory.hpp"
 #include "health.hpp"
 
+static constexpr int NORMAL_OXYGEN_STATUS = -1;
+static constexpr int GAINING_OXYGEN = -2;
+
 Health::Health()
 :
 	hp_ ( maxHP() ),
 	heater_ ( false ),
 	meter_ ( maxOxygen() ),
 	invincible_ ( false ),
-	lose_meter_amount_ ( -1 ),
+	lose_meter_amount_ ( NORMAL_OXYGEN_STATUS ),
 	invincibility_timer_ ( 48, false )
 {};
 
@@ -46,7 +49,11 @@ void Health::update()
 		break;
 	}
 
-	lose_meter_amount_ = -1;
+	// If gaining oxygen, don't turn back to normal, 'less you've already hit max.
+	if ( lose_meter_amount_ != GAINING_OXYGEN || meter_ >= maxOxygen())
+	{
+		lose_meter_amount_ = NORMAL_OXYGEN_STATUS;
+	}
 };
 
 bool Health::flickerOff() const
@@ -99,7 +106,15 @@ void Health::hurt()
 
 void Health::submerge( int amount )
 {
-	lose_meter_amount_ = amount;
+	if ( lose_meter_amount_ != GAINING_OXYGEN )
+	{
+		lose_meter_amount_ = amount;
+	}
+};
+
+void Health::refillOxygen()
+{
+	lose_meter_amount_ = GAINING_OXYGEN;
 };
 
 void Health::heatUp()
@@ -110,7 +125,7 @@ void Health::heatUp()
 
 bool Health::losingMeter() const
 {
-	return lose_meter_amount_ > -1;
+	return lose_meter_amount_ > NORMAL_OXYGEN_STATUS;
 };
 
 bool Health::drowned() const

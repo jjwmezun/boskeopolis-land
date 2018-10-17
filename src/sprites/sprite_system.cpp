@@ -5,6 +5,7 @@
 #include "bird_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
+#include "bubble_sprite.hpp"
 #include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
 #include "cactooie_spine_sprite.hpp"
@@ -481,6 +482,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 115 ):
 			return std::unique_ptr<Sprite> ( new WeightPlatformSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 116 ):
+			return std::unique_ptr<Sprite> ( new BubbleSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

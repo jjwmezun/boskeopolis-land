@@ -35,7 +35,7 @@ namespace Inventory
 
 	void saveBinary();
 	void loadBinary();
-	
+
 
 	// Private Variables
 	static constexpr bool DEFAULT_VICTORY        = false;
@@ -70,10 +70,10 @@ namespace Inventory
 	static int time_scores_[ Level::MAX ];
 
 	static Clock clock_ = Clock();
-	
+
 	static int bops_ = 0;
 
-	
+
 	// Function Implementations
 	void reset()
 	{
@@ -87,7 +87,7 @@ namespace Inventory
 			gem_scores_[ i ] = DEFAULT_GEM_SCORE;
 			time_scores_[ i ] = DEFAULT_TIME_SCORE;
 		}
-		
+
 		funds_shown_ = 0;
 		total_funds_shown_ = 0;
 		current_level_ = 0;
@@ -96,7 +96,7 @@ namespace Inventory
 		oxygen_upgrade_ = false;
 		bops_ = 0;
 	};
-	
+
 	std::string levelName( int level )
 	{
 		const std::string name = Level::NameOLevel( level );
@@ -219,7 +219,7 @@ namespace Inventory
 	{
 		return victories_[ current_level_() ];
 	};
-	
+
 	bool victory( int level )
 	{
 		return victories_[ level ];
@@ -489,7 +489,7 @@ namespace Inventory
 
 
 	void loadBinary()
-	{	
+	{
 		// Sorry this code is messy: I'm still working on it.
 		// Also note that trying to load a save from a time when there were fewer levels than now will cause the program to crash due to the assertions.
 		// Since levels are added & rearranged not in the order I add them, adding levels will mess up save files, anyway,
@@ -657,7 +657,7 @@ namespace Inventory
 			fail();
 		}
 	};
-	
+
 	void addFunds( int n )
 	{
 		funds_ += n;
@@ -677,12 +677,12 @@ namespace Inventory
 	{
 		funds_ = n;
 	};
-	
+
 	Clock& clock()
 	{
 		return clock_;
 	};
-	
+
 	int heartUpgrades()
 	{
 		return heart_upgrades_();
@@ -703,7 +703,7 @@ namespace Inventory
 			addFunds( ( int )( 100 * pow( 2, bops_ - 2 ) ) );
 		}
 	};
-	
+
 	bool bopsMultiplier()
 	{
 		return bops_ > 1 && bops_ <= MAX_BOPS;

@@ -14,6 +14,7 @@ class Health
 		void heal();
 		void fullHeal();
 
+		void refillOxygen();
 		bool losingMeter() const;
 		void submerge( int amount = 1 );
 		void heatUp();

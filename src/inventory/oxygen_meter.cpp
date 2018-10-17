@@ -5,7 +5,7 @@
 #include "health.hpp"
 
 OxygenMeter::OxygenMeter( int y )
-:		
+:
 	gfx_left_bar_ ( "tilesets/universal.png", 0, 16 ),
 	gfx_middle_bar_ ( "tilesets/universal.png", 8, 16 ),
 	gfx_right_bar_ ( "tilesets/universal.png", 0, 16, true ),
@@ -66,7 +66,7 @@ void OxygenMeter::renderMeter() const
 };
 
 void OxygenMeter::renderShell() const
-{	
+{
 	for ( int i = 0; i < width_mini_blocks(); ++i )
 	{
 

@@ -474,9 +474,21 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentDoor> () );
 					}
-					else if ( mezun::areStringsEqual( comp_type, "current" ) )
+					else if ( mezun::areStringsEqual( comp_type, "current_left" ) )
 					{
-						components.emplace_back( std::make_unique<BlockComponentCurrent> () );
+						components.emplace_back( generateBlockComponentCurrentLeftward() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "current_right" ) )
+					{
+						components.emplace_back( generateBlockComponentCurrentRightward() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "current_up" ) )
+					{
+						components.emplace_back( generateBlockComponentCurrentUpward() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "current_down" ) )
+					{
+						components.emplace_back( generateBlockComponentCurrentDownward() );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "switch_on" ) )
 					{

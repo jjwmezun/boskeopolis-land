@@ -1,0 +1,16 @@
+{
+	"name": "Current Demo",
+
+	"maps":
+	[
+		{
+			"slug": "beach-2"
+		}
+	],
+
+	"entrance_x": 7,
+	"entrance_y": 2,
+
+	"gem_challenge": 0,
+	"time_challenge": 0
+}
