@@ -1,9 +1,8 @@
-#include "weight_platform_sprite.hpp"
 #include "collision.hpp"
+#include "inventory.hpp"
 #include "sprite_graphics.hpp"
-#include "main.hpp"
-
-#include <iostream>
+#include "text.hpp"
+#include "weight_platform_sprite.hpp"
 
 static constexpr int WEIGHT_WIDTH = 48;
 static constexpr int WEIGHT_HEIGHT = 8;
@@ -11,6 +10,11 @@ static constexpr int WEIGHT_SPACE_APART = 80;
 static constexpr int LEFT_BAR_X = WEIGHT_WIDTH / 2 - 2;
 static constexpr int RIGHT_BAR_X = LEFT_BAR_X + WEIGHT_WIDTH + WEIGHT_SPACE_APART;
 static constexpr int TOTAL_WIDTH = WEIGHT_WIDTH * 2 + WEIGHT_SPACE_APART;
+static constexpr int NUMBER_OF_DIGITS_IN_SCORE = 3;
+static constexpr int SCORE_WIDTH = NUMBER_OF_DIGITS_IN_SCORE * Text::CHAR_SIZE_PIXELS;
+static constexpr int SCORE_X_ADDITION = ( WEIGHT_WIDTH - SCORE_WIDTH ) / 2;
+static constexpr int SHOW_SCORE_TIMER_LIMIT = 40;
+static constexpr int SHOW_SCORE_TIMER_RISING_LIMIT = SHOW_SCORE_TIMER_LIMIT - 10;
 
 WeightPlatformSprite::WeightPlatformSprite( int x, int y, Direction::Horizontal direction )
 :
@@ -21,8 +25,8 @@ WeightPlatformSprite::WeightPlatformSprite( int x, int y, Direction::Horizontal 
 	// This is mo' efficient than having this sprite code run for every instance whether or not it's in-camera
 	// & makes other calculations, like drawing the bars, simpler as well.
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/weight-platform.png" ), x, y - Unit::BlocksToPixels( 4 ), TOTAL_WIDTH, Unit::BlocksToPixels( 8 ), {}, 25, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
-	broken_higher_bar_ ( nullptr ),
 	break_timer_ ( 0 ),
+	broken_higher_bar_ ( nullptr ),
 	wheel_rotation_ ( 0.0 ),
 	left_ ( Unit::PixelsToSubPixels( { x, ( direction == Direction::Horizontal::LEFT ) ? ( y - Unit::BlocksToPixels( 2 ) ) : ( y + Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) ),
 	right_ ( Unit::PixelsToSubPixels( { x + WEIGHT_WIDTH + WEIGHT_SPACE_APART, ( direction == Direction::Horizontal::LEFT ) ? ( y + Unit::BlocksToPixels( 2 ) ) : ( y - Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) )
@@ -38,6 +42,10 @@ void WeightPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 		top_speed_ = 3000;
 		left_.y  += top_speed_;
 		right_.y += top_speed_;
+		if ( break_timer_ <= SHOW_SCORE_TIMER_LIMIT )
+		{
+			++break_timer_;
+		}
 	}
 	else
 	{
@@ -51,6 +59,7 @@ void WeightPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 		if ( break_timer_ == 15 )
 		{
 			broken_higher_bar_ = ( left_.y < right_.y ) ? &left_ : &right_;
+			Inventory::addFunds( 500 );
 		}
 	}
 
@@ -129,6 +138,14 @@ void WeightPlatformSprite::render( Camera& camera, bool priority )
 		renderBars( camera );
 		renderPlatforms( camera );
 		renderWheels( camera );
+	}
+
+	if ( priority )
+	{
+		if ( isBroken() && break_timer_ < SHOW_SCORE_TIMER_LIMIT )
+		{
+			renderScore( camera );
+		}
 	}
 };
 
@@ -221,3 +238,16 @@ void WeightPlatformSprite::renderWheel( const Camera& camera, int x_offset ) con
 {
 	graphics_->render( { xPixels() + x_offset, wheelMachineY(), 8, 8 }, &camera, graphics_->priority_ );
 };
+
+void WeightPlatformSprite::renderScore( const Camera& camera ) const
+{
+	const int x = Unit::SubPixelsToPixels( ( broken_higher_bar_ == &right_ ) ? left_.x : right_.x );
+	Text::renderText
+	(
+		"500",
+		x + SCORE_X_ADDITION,
+		bottomPixels() - std::min( SHOW_SCORE_TIMER_RISING_LIMIT, break_timer_ ),
+		&camera,
+		Text::FontColor::WHITE
+	);
+}

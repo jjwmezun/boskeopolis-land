@@ -12,8 +12,8 @@ class WeightPlatformSprite : public Sprite
 		void render( Camera& camera, bool priority ) override;
 
 	private:
-		sdl2::SDLRect* broken_higher_bar_;
 		int break_timer_;
+		sdl2::SDLRect* broken_higher_bar_;
 		double wheel_rotation_;
 		sdl2::SDLRect left_;
 		sdl2::SDLRect right_;
@@ -32,6 +32,7 @@ class WeightPlatformSprite : public Sprite
 		void renderLeftWheel( const Camera& camera ) const;
 		void renderRightWheel( const Camera& camera ) const;
 		void renderWheel( const Camera& camera, int x_offset ) const;
+		void renderScore( const Camera& camera ) const;
 
 		constexpr int wheelMachineY() const
 		{
