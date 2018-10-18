@@ -7,17 +7,14 @@
 #include "text_component_gradual.hpp"
 #include <memory>
 
-static constexpr int MESSAGE_BOX_WIDTH_MINIBLOCKS = 44;
 static constexpr int MESSAGE_BOX_HEIGHT_MINIBLOCKS = 12;
-static constexpr int MESSAGE_BOX_WIDTH_PIXELS = Unit::MiniBlocksToPixels( MESSAGE_BOX_WIDTH_MINIBLOCKS );
+static constexpr int MESSAGE_BOX_WIDTH_PIXELS = Unit::MiniBlocksToPixels( LevelMessageState::MESSAGE_BOX_WIDTH_MINIBLOCKS );
 static constexpr int MESSAGE_BOX_HEIGHT_PIXELS = Unit::MiniBlocksToPixels( MESSAGE_BOX_HEIGHT_MINIBLOCKS );
-static constexpr int MESSAGE_BOX_PADDING_MINIBLOCKS = 2;
-static constexpr int MESSAGE_BOX_PADDING_PIXELS = Unit::MiniBlocksToPixels( MESSAGE_BOX_PADDING_MINIBLOCKS );
+static constexpr int MESSAGE_BOX_PADDING_PIXELS = Unit::MiniBlocksToPixels( LevelMessageState::MESSAGE_BOX_PADDING_MINIBLOCKS );
 static constexpr int MESSAGE_BOX_X = ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - ( MESSAGE_BOX_WIDTH_PIXELS / 2 );
 static constexpr int MESSAGE_BOX_Y = ( ( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevel::HEIGHT ) / 2 ) - ( MESSAGE_BOX_HEIGHT_PIXELS / 2 );
 static constexpr int TEXT_X = MESSAGE_BOX_X + MESSAGE_BOX_PADDING_PIXELS;
 static constexpr int TEXT_Y = MESSAGE_BOX_Y + MESSAGE_BOX_PADDING_PIXELS;
-static constexpr int LINE_LIMIT = MESSAGE_BOX_WIDTH_MINIBLOCKS - ( MESSAGE_BOX_PADDING_MINIBLOCKS * 2 );
 static constexpr int BORDER_WIDTH = 8;
 
 LevelMessageState::LevelMessageState( const Palette& palette, std::string message )
@@ -63,7 +60,7 @@ void LevelMessageState::stateUpdate()
 	{
 		Main::popState();
 	}
-	
+
 	message_.update();
 };
 

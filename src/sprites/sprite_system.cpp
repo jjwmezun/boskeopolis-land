@@ -57,6 +57,7 @@
 #include "map.hpp"
 #include "maze_player_sprite.hpp"
 #include "maze_chaser_sprite.hpp"
+#include "message_block_sprite.hpp"
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
 #include "move_water_sprite.hpp"
@@ -486,6 +487,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 117 ):
 			return std::unique_ptr<Sprite> ( new FullHealBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 118 ):
+			return std::unique_ptr<Sprite> ( new MessageBlockSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -405,4 +405,9 @@ namespace Text
 
 		return limit;
 	};
+
+	std::string autoformat( const std::string& words, unsigned int line_limit )
+	{
+		return words;
+	};
 }

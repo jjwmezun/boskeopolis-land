@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "level_message_state.hpp"
 #include "map_layer_constellation_moving.hpp"
 #include "map_layer_constellation_scrolling.hpp"
 #include "map_layer_image.hpp"
@@ -155,11 +156,6 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 void Level::sewerWarp( SpriteSystem& sprites, EventSystem& events )
 {
 	current_map_ = ( current_map_ == 0 ) ? 1 : 0;
-
-	//entrance_x_ = sprites.hero().xPixels();
-	//entrance_y_ = sprites.hero().yPixels() - 9;
-	//sprites.reset( *this, events );
-
 	events.changePalette( currentMap().palette_ );
 	currentMap().changed_ = true;
 };
@@ -170,7 +166,6 @@ const std::string& Level::NameOLevel( unsigned int n )
 	{
 		buildLevelList();
 	}
-
 	assert( n < level_list_.size() );
 	return level_list_.at( n );
 };
@@ -181,9 +176,7 @@ int Level::gemChallenge( unsigned int n )
 	{
 		buildLevelList();
 	}
-
 	assert( n < level_list_.size() );
-
 	return gem_challenge_list_.at( n );
 };
 
@@ -198,9 +191,7 @@ int Level::timeChallenge( unsigned int n )
 	{
 		buildLevelList();
 	}
-
 	assert( n < level_list_.size() );
-
 	return time_challenge_list_.at( n );
 };
 
@@ -235,7 +226,6 @@ unsigned int Level::realLevelNum()
 	{
 		buildLevelList();
 	}
-
 	return real_level_num_;
 };
 
@@ -783,7 +773,7 @@ Level Level::getLevel( int id )
 
 	if ( lvobj.HasMember( "message" ) && lvobj[ "message" ].IsString() )
 	{
-		message = lvobj[ "message" ].GetString();
+		message = Text::autoformat( lvobj[ "message" ].GetString(), LevelMessageState::LINE_LIMIT );
 	}
 
 

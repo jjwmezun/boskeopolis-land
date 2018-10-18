@@ -75,6 +75,7 @@ namespace Text
 	int numODigits( int n );
 	int centerX( unsigned int line_length );
 	int centerY( const std::string& words, unsigned int line_limit );
+	std::string autoformat( const std::string& words, unsigned int line_limit );
 
 	// Get d digit place for n #.
 	constexpr int getDigit( int n, int d, int remain )
