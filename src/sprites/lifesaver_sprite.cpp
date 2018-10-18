@@ -35,20 +35,14 @@ void LifesaverSprite::customInteract( Collision& my_collision, Collision& their_
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-		if ( their_collision.collideLeft() || their_collision.collideRight() )
+		if ( their_collision.collideBottom() )
 		{
-			//hit_box_.x += them.vx_ * 5;
+			them.collideStopYBottom( their_collision.overlapYBottom() );
+			hit_box_.y += ( int )( them.vy_ / 3 );
 		}
-
-		if ( their_collision.collideTop() || their_collision.collideBottom() )
-		{
-			hit_box_.y += them.vy_ / 3;
-		}
-
-		if ( their_collision.collideAny() )
+		else
 		{
 			them.collideStopAny( their_collision );
-			//them.changeY( hit_box_.y - them.heightSubPixels() );
 		}
 	}
 };

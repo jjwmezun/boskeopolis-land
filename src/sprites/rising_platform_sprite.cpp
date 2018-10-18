@@ -41,10 +41,13 @@ void RisingPlatformSprite::customInteract( Collision& my_collision, Collision& t
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
-		if ( their_collision.collideTop() )
+		if ( their_collision.collideBottom() )
 		{
-			them.hit_box_.y += vy_;
+			them.collideStopYBottom( their_collision.overlapYBottom() );
+		}
+		else
+		{
+			them.collideStopAny( their_collision );
 		}
 	}
 };
