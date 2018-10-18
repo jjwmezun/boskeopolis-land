@@ -57,7 +57,7 @@ class PlayerSprite : public Sprite
 		void dontDuckWhileSwimming( const BlockSystem& blocks );
 		void handleRunning();
 		void handleWalking();
-		void handleDuckingAndSliding( const BlockSystem& blocks, const EventSystem& events );
+		void handleDuckingAndSliding( const BlockSystem& blocks, EventSystem& events );
 		void handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events );
 		void handleLookingUp();
 };

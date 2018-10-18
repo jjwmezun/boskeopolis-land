@@ -363,7 +363,7 @@ void PlayerSprite::handleWalking()
 	}
 };
 
-void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, const EventSystem& events )
+void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSystem& events )
 {
 	if ( input_->down() )
 	{
@@ -425,6 +425,8 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, const Eve
 	{
 		top_speed_ = top_speed_run_;
 	}
+
+	events.can_climb_down_ = false;
 };
 
 void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events )
