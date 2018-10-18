@@ -5,8 +5,6 @@
 #include "sprite_graphics.hpp"
 #include "urban_bird_sprite.hpp"
 
-#include <iostream>
-
 static constexpr int STRUGGLE_LIMIT = 30;
 
 static int getRandomDelay()
@@ -32,7 +30,6 @@ UrbanBirdSprite::~UrbanBirdSprite() {};
 
 void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	std::cout<<struggle_counter_<<std::endl;
 	if ( reset_timer_ >= reset_delay_ )
 	{
 		setNewPosition( camera, lvmap );
@@ -46,7 +43,7 @@ void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 		moveLeft();
 	}
 
-	if ( remember_x_ > 0 )
+	if ( remember_y_ > 0 )
 	{
 		if
 		(
@@ -68,8 +65,8 @@ void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 			{
 				// Make bird unable to grab you till it resets
 				// so it can't grab you right after releasing yourself from it.
-				remember_x_ = -1;
-				remember_y_ = 0;
+				remember_y_ = -1;
+				remember_x_ = -3200;
 				hero_address_->graphics_->priority_ = false;
 				struggle_counter_ = 0;
 				hero_address_->sprite_interact_ = true;
@@ -91,7 +88,7 @@ void UrbanBirdSprite::customInteract( Collision& my_collision, Collision& their_
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-		if ( remember_x_ == 0 )
+		if ( remember_y_ == 0 )
 		{
 			if ( their_collision.collideAny() )
 			{
@@ -119,5 +116,5 @@ void UrbanBirdSprite::setNewPosition( const Camera& camera, const Map& lvmap )
 	hit_box_.y = Unit::PixelsToSubPixels( mezun::randInt( std::min( camera.bottom() - heightPixels(), lvmap.heightPixels() - 80 ), camera.y() ) );
 
 	// Set bird able to grab you 'gain.
-	remember_x_ = 0;
+	remember_y_ = 0;
 }
