@@ -406,8 +406,56 @@ namespace Text
 		return limit;
 	};
 
-	std::string autoformat( const std::string& words, unsigned int line_limit )
+	std::string autoformat( std::string words, unsigned int line_limit )
 	{
+		int n = 0;
+		int x = 0;
+		int line_length = ( int )( line_limit );
+		int text_length = ( int )( words.length() );
+
+		while ( n != text_length )
+		{
+			if ( x == line_length )
+			{
+				if ( words[ n ] == ' ' || words[ n ] == '\n' )
+				{
+					words.erase( words.begin() + n );
+					++x;
+				}
+				else
+				{
+					while ( true )
+					{
+						if ( words[ n ] == ' ' )
+						{
+							words[ n ] = '\n';
+							++n; // Back to 1 after end o' this line.
+							x = 0; // Back to start o' new line.
+							break;
+						}
+						// Reached start o' line without finding space.
+						else if ( x == 0 )
+						{
+							words.insert( words.begin() + n + line_length - 2, '-' );
+							n += line_length - 1;
+							break;
+						}
+						--x;
+						--n;
+					}
+				}
+			}
+			else if ( words[ n ] == '\n' )
+			{
+				x = 0;
+				++n;
+			}
+			else
+			{
+				++x;
+				++n;
+			}
+		}
 		return words;
 	};
 }
