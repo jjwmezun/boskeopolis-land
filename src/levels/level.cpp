@@ -773,7 +773,7 @@ Level Level::getLevel( int id )
 
 	if ( lvobj.HasMember( "message" ) && lvobj[ "message" ].IsString() )
 	{
-		message = Text::autoformat( lvobj[ "message" ].GetString(), LevelMessageState::LINE_LIMIT );
+		message = lvobj[ "message" ].GetString(), LevelMessageState::LINE_LIMIT;
 	}
 
 

@@ -546,6 +546,13 @@ namespace Render
 		SDL_RenderFillRect( renderer_, &box_relative );
 	};
 
+	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color )
+	{
+		sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
+		SDL_SetRenderDrawColor( renderer_, color.r, color.g, color.b, color.a );
+		SDL_RenderFillRect( renderer_, &box_relative );
+	};
+
 	void renderRectCamera( sdl2::SDLRect& box, const Camera& camera, int color, int alpha )
 	{
 		cameraAdjust( box, &camera );

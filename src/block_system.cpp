@@ -63,7 +63,7 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 {
 	if ( !level.currentMap().blocks_work_offscreen_ )
 	{
-		for ( auto& block : blocks_ )
+		for ( Block& block : blocks_ )
 		{
 			block.interact( sprite, level, events, camera, health, *this, sprites );
 		}
@@ -79,7 +79,7 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 		{
 			for ( int x = first_x; x < last_x; ++x )
 			{
-				int n = y * level.currentMap().widthBlocks() + x;
+				const int n = y * level.currentMap().widthBlocks() + x;
 				if ( n < blocks_.size() )
 				{
 					Block& block = blocks_[ n ];

@@ -13,6 +13,7 @@ static constexpr int TOTAL_WIDTH = WEIGHT_WIDTH * 2 + WEIGHT_SPACE_APART;
 static constexpr int NUMBER_OF_DIGITS_IN_SCORE = 3;
 static constexpr int SCORE_WIDTH = NUMBER_OF_DIGITS_IN_SCORE * Text::CHAR_SIZE_PIXELS;
 static constexpr int SCORE_X_ADDITION = ( WEIGHT_WIDTH - SCORE_WIDTH ) / 2;
+static constexpr int BREAK_LIMIT = 15;
 static constexpr int SHOW_SCORE_TIMER_LIMIT = 40;
 static constexpr int SHOW_SCORE_TIMER_RISING_LIMIT = SHOW_SCORE_TIMER_LIMIT - 10;
 
@@ -56,7 +57,7 @@ void WeightPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 		// right when the platforms break, & not any time after
 		// ( as the y position will be changing after they break ),
 		// so we can't just check that the platforms are broken.
-		if ( break_timer_ == 15 )
+		if ( break_timer_ == BREAK_LIMIT )
 		{
 			broken_higher_bar_ = ( left_.y < right_.y ) ? &left_ : &right_;
 			Inventory::addFunds( 500 );
@@ -151,7 +152,7 @@ void WeightPlatformSprite::render( Camera& camera, bool priority )
 
 bool WeightPlatformSprite::isBroken() const
 {
-	return break_timer_ > 15;
+	return break_timer_ > BREAK_LIMIT;
 };
 
 void WeightPlatformSprite::renderPlatforms( const Camera& camera ) const
