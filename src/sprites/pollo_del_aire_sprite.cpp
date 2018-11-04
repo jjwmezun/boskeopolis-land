@@ -1,13 +1,14 @@
 #include "audio.hpp"
+#include "camera.hpp"
 #include "collision.hpp"
 #include "health.hpp"
 #include "inventory.hpp"
 #include "pollo_del_aire_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-PolloDelAireSprite::PolloDelAireSprite( int x, int y, Direction::Horizontal dir_x, Direction::Vertical dir_y )
+PolloDelAireSprite::PolloDelAireSprite( int x, int y, Direction::Horizontal dir_x, Direction::Vertical dir_y, int map_id, bool despawn_when_dead )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, ( dir_x == Direction::Horizontal::RIGHT ), false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, {}, 500, 1000, 500, 4000, dir_x, ( dir_y == Direction::Vertical::DOWN ) ? Direction::Vertical::DOWN : Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, ( dir_x == Direction::Horizontal::RIGHT ), false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, dir_x, ( dir_y == Direction::Vertical::DOWN ) ? Direction::Vertical::DOWN : Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, false, .2, false, false, map_id ),
 	vertical_too_ ( dir_y != Direction::Vertical::__NULL ),
 	switch_from_ ( Direction::Horizontal::__NULL ),
 	animation_counter_ ( 0 )
@@ -15,9 +16,9 @@ PolloDelAireSprite::PolloDelAireSprite( int x, int y, Direction::Horizontal dir_
 
 PolloDelAireSprite::~PolloDelAireSprite() {};
 
-void PolloDelAireSprite::deathAction( Camera& camera, EventSystem& events )
+void PolloDelAireSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
-	polloDeath( camera, *this );
+	polloDeath( camera, *this, lvmap );
 };
 
 void PolloDelAireSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
@@ -163,7 +164,7 @@ void PolloDelAireSprite::polloReset( Sprite& me )
 	me.graphics_->current_frame_y_ = 32;
 };
 
-void PolloDelAireSprite::polloDeath( Camera& camera, Sprite& me )
+void PolloDelAireSprite::polloDeath( const Camera& camera, Sprite& me, const Map& lvmap )
 {
 	me.hit_box_.h = 17000;
 	me.graphics_->x_adjustment_ = -2;
@@ -178,5 +179,9 @@ void PolloDelAireSprite::polloDeath( Camera& camera, Sprite& me )
 	me.block_interact_ = false;
 	me.sprite_interact_ = false;
 	me.movement_ = me.getMovement( SpriteMovement::Type::GROUNDED );
-	// NOTE: Don't finish death.
+
+	if ( me.despawn_when_dead_ && camera.offscreen( me.hit_box_ ) )
+	{
+		me.death_finished_ = true;
+	}
 };

@@ -499,7 +499,7 @@ void PlayerSprite::unduck( const BlockSystem& blocks )
 	}
 };
 
-void PlayerSprite::deathAction( Camera& camera, EventSystem& events )
+void PlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
 	graphics_->current_frame_x_ = 16;
 	graphics_->current_frame_y_ = 26;

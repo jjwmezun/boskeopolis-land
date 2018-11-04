@@ -41,7 +41,7 @@ class Sprite : public Object
 			CLOUD_MONSTER,
 			LIGHTNING,
 			HEROS_BULLET,
-			DONT_RESPAWN,
+			DEATH_COUNT,
 			ICICLE,
 			TREASURE_CHEST,
 			PHASE_THROUGH
@@ -295,8 +295,8 @@ class Sprite : public Object
 		bool death_finished_ = false;
 		bool dead_no_animation_ = false;
 		TimerSimple death_timer_ = TimerSimple( 32, false );
-		virtual void deathAction( Camera& camera, EventSystem& events );
-		void defaultDeathAction( Camera& camera );
+		virtual void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap );
+		void defaultDeathAction( const Camera& camera );
 		void resetPosition();
 		void invincibilityFlicker( const Health& health );
 

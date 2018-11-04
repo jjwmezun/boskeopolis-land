@@ -3,6 +3,8 @@
 #include "maze_player_sprite.hpp"
 #include "animated_graphics.hpp"
 
+static constexpr int DEATH_SPIN_SPEED = 20;
+
 MazePlayerSprite::MazePlayerSprite( int x, int y )
 :
 	Sprite
@@ -28,8 +30,7 @@ MazePlayerSprite::MazePlayerSprite( int x, int y )
 		800, 3000, 1000, 6000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true, true, false, 0, 2, 2
 	),
 	death_spins_ ( 0 )
-{
-};
+{};
 
 MazePlayerSprite::~MazePlayerSprite() {};
 
@@ -41,11 +42,10 @@ void MazePlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 };
 
 void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
-{
-};
+{};
 
-void MazePlayerSprite::deathAction( Camera& camera, EventSystem& events )
-{	
+void MazePlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+{
 	block_interact_ = false;
 
 	if ( camera.offscreen( hit_box_ ) )

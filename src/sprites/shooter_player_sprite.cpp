@@ -215,7 +215,7 @@ void ShooterPlayerSprite::unduck( const BlockSystem& blocks )
 	hit_box_.h = original_hit_box_.h;
 };
 
-void ShooterPlayerSprite::deathAction( Camera& camera, EventSystem& events )
+void ShooterPlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
 	graphics_->current_frame_x_ = 208;
 	graphics_->current_frame_y_ = 0;

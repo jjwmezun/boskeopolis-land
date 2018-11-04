@@ -4,17 +4,17 @@
 #include "pollo_del_aire_vertical_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-PolloDelAireVerticalSprite::PolloDelAireVerticalSprite( int x, int y, Direction::Vertical dir_y )
+PolloDelAireVerticalSprite::PolloDelAireVerticalSprite( int x, int y, Direction::Vertical dir_y, int map_id, bool despawn_when_dead )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, false, false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, {}, 500, 1000, 500, 4000, Direction::Horizontal::LEFT, dir_y, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, false, false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, Direction::Horizontal::LEFT, dir_y, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, false, .2, false, false, map_id ),
 	animation_counter_ ( 0 )
 {};
 
 PolloDelAireVerticalSprite::~PolloDelAireVerticalSprite() {};
 
-void PolloDelAireVerticalSprite::deathAction( Camera& camera, EventSystem& events )
+void PolloDelAireVerticalSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
-	PolloDelAireSprite::polloDeath( camera, *this );
+	PolloDelAireSprite::polloDeath( camera, *this, lvmap );
 };
 
 void PolloDelAireVerticalSprite::reset()

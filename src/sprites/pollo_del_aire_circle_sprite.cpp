@@ -5,18 +5,18 @@
 #include "sprite_graphics.hpp"
 #include <iostream>
 
-PolloDelAireCircleSprite::PolloDelAireCircleSprite( int x, int y, bool clockwise )
+PolloDelAireCircleSprite::PolloDelAireCircleSprite( int x, int y, bool clockwise, int map_id, bool despawn_when_dead )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, clockwise, false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, {}, 500, 1000, 500, 4000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, clockwise, false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, false, .2, false, false, map_id ),
 	clockwise_ ( clockwise ),
 	animation_counter_ ( 0 )
 {};
 
 PolloDelAireCircleSprite::~PolloDelAireCircleSprite() {};
 
-void PolloDelAireCircleSprite::deathAction( Camera& camera, EventSystem& events )
+void PolloDelAireCircleSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
-	PolloDelAireSprite::polloDeath( camera, *this );
+	PolloDelAireSprite::polloDeath( camera, *this, lvmap );
 };
 
 void PolloDelAireCircleSprite::reset()
@@ -25,7 +25,7 @@ void PolloDelAireCircleSprite::reset()
 };
 
 void PolloDelAireCircleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
-{	
+{
 	hit_box_.x = original_hit_box_.x + ( hit_box_.w / 2 ) + ( std::cos( angle() ) * 50000 );
 	hit_box_.y = original_hit_box_.y + ( hit_box_.h / 2 ) + ( std::sin( angle() ) * 50000 );
 

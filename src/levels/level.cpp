@@ -872,7 +872,6 @@ void Level::checkLvList()
 int Level::allEnemiesToKill() const
 {
 	int n = 0;
-
 	for ( auto& m : maps_ )
 	{
 		for ( int i = 0; i < m.spritesSize(); ++i )
@@ -880,13 +879,13 @@ int Level::allEnemiesToKill() const
 			if
 			(
 				( m.sprite( i ) > 449 && m.sprite( i ) < 457 ) ||
-				( m.sprite( i ) > 457 && m.sprite( i ) < 470 )
+				( m.sprite( i ) > 457 && m.sprite( i ) < 470 ) ||
+				( m.sprite( i ) > 518 && m.sprite( i ) < 532 )
 			)
 			{
 				++n;
 			}
 		}
 	}
-
 	return n;
 };

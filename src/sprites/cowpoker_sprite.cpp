@@ -15,7 +15,7 @@ std::unique_ptr<Sprite> CowpokerSprite::ShortCowpokerSprite( int x, int y, int m
 
 CowpokerSprite::CowpokerSprite( int x, int y, int w, int h, CowpokerType type, std::unique_ptr<SpriteGraphics>&& gfx, int map_id )
 :
-	Sprite( std::move( gfx ), x, y, w, h, { SpriteType::ENEMY, SpriteType::BOPPABLE, SpriteType::DONT_RESPAWN }, 500, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false, .2, false, false, map_id ),
+	Sprite( std::move( gfx ), x, y, w, h, { SpriteType::ENEMY, SpriteType::BOPPABLE, SpriteType::DEATH_COUNT }, 500, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false, .2, false, false, map_id ),
 	type_ ( type ),
 	throw_time_ ( 0 ),
 	throw_counter_ ( 0 ),
@@ -37,7 +37,7 @@ void CowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 			graphics_->flip_x_ = false;
 		break;
 	}
-	
+
 	if ( is_shooting_ )
 	{
 		graphics_->current_frame_x_ = 17;
@@ -46,7 +46,7 @@ void CowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 	{
 		graphics_->current_frame_x_ = 0;
 	}
-	
+
 	if ( is_shooting_ )
 	{
 		if ( is_shooting_counter_ >= 8 )
@@ -92,7 +92,7 @@ void CowpokerSprite::handleThrowing( SpriteSystem& sprites )
 		{
 			bullet_y += 3;
 		}
-		
+
 		throw_counter_ = 0;
 		throw_time_ = throwTime();
 		sprites.spawnEnemyBullet( centerXPixels(), bullet_y, Direction::horizontalToSimple( direction_x_ ) );

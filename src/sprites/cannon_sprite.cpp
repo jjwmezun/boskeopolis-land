@@ -8,7 +8,7 @@
 
 CannonSprite::CannonSprite( int x, int y, Direction::Vertical dir, int map_id )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", 0, typeGFX( dir ), false, false, 0, true, 0, 0, 0, 0 ), x, y, 16, 16, { SpriteType::DONT_RESPAWN }, 100, 2000, 0, 0, Direction::Horizontal::__NULL, dir, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false, 2.0, false, false, map_id ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", 0, typeGFX( dir ), false, false, 0, true, 0, 0, 0, 0 ), x, y, 16, 16, { SpriteType::DEATH_COUNT }, 100, 2000, 0, 0, Direction::Horizontal::__NULL, dir, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false, 2.0, false, false, map_id ),
 	deactivated_ ( false ),
 	shoot_time_ ( 0 ),
 	shoot_counter_ ( 0 ),
@@ -41,7 +41,7 @@ void CannonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	if ( deactivated_ )
 	{
 		graphics_->current_frame_x_ = 16;
-		
+
 		if ( collide_top_prev_ )
 		{
 			block_interact_ = false;
@@ -59,7 +59,7 @@ void CannonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 			graphics_->current_frame_x_ = 0;
 		}
 	}
-	
+
 	if ( fellInBottomlessPit( lvmap ) )
 	{
 		kill();

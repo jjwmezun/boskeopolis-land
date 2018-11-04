@@ -33,7 +33,7 @@ class PlayerSprite : public Sprite
 		virtual void unduck( const BlockSystem& blocks );
 		virtual bool canJump() const override;
 
-		void deathAction( Camera& camera, EventSystem& events ) override;
+		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		std::unique_ptr<InputComponent> input_;

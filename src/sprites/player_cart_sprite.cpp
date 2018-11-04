@@ -204,7 +204,7 @@ void PlayerCartSprite::unduck()
 };
 
 
-void PlayerCartSprite::deathAction( Camera& camera, EventSystem& events )
+void PlayerCartSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
 	defaultDeathAction( camera );
 	events.playDeathSoundIfNotAlreadyPlaying();

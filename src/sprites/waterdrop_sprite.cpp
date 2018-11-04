@@ -12,7 +12,7 @@ WaterdropSprite::WaterdropSprite( int x, int y )
 WaterdropSprite::~WaterdropSprite() {};
 
 void WaterdropSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
-{	
+{
 	moveDown();
 };
 
@@ -29,7 +29,7 @@ void WaterdropSprite::customInteract( Collision& my_collision, Collision& their_
 	}
 };
 
-void WaterdropSprite::deathAction( Camera& camera, EventSystem& events )
+void WaterdropSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
 	fullStopY();
 

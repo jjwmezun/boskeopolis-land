@@ -306,43 +306,43 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new SpringSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 57 ):
-			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::LEFT ) );
+			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::LEFT, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 58 ):
-			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::RIGHT ) );
+			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::RIGHT, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 59 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 60 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 61 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::UP ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::UP, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 62 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::DOWN ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::DOWN, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 63 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireStillSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireStillSprite( x, y, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 64 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::UP ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::UP, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 65 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::DOWN ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 66 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::UP ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::UP, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 67 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 68 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, true ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, true, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 69 ):
-			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, false ) );
+			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, false, i, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 70 ):
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::RIGHT ) );
@@ -490,6 +490,45 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 118 ):
 			return std::unique_ptr<Sprite> ( new MessageBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 119 ):
+			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::LEFT, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 120 ):
+			return std::unique_ptr<Sprite> ( new PolloSprite( x, y, Direction::Horizontal::RIGHT, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 121 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 122 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 123 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::UP, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 124 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireVerticalSprite( x, y, Direction::Vertical::DOWN, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 125 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireStillSprite( x, y, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 126 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::UP, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 127 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 128 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::UP, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 129 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireSprite( x, y, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 130 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, true, i, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 131 ):
+			return std::unique_ptr<Sprite> ( new PolloDelAireCircleSprite( x, y, false, i, true ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
@@ -655,7 +694,7 @@ void SpriteSystem::clearSprites()
 
 void SpriteSystem::destroySprite( int n, Map& lvmap )
 {
-	if ( sprites_.at( n )->map_id_ > -1 )
+	if ( sprites_.at( n )->hasType( Sprite::SpriteType::DEATH_COUNT ) )
 	{
 		lvmap.deleteSprite( sprites_.at( n )->map_id_ );
 		++permanently_killed_enemies_;
