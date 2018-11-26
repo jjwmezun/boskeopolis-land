@@ -149,8 +149,6 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 		std::unique_ptr<SpriteGraphics> graphics = nullptr;
 		const std::string texture = "tilesets" + Main::pathDivider() + tileset + ".png";
 
-		auto thing = BlockComponentSlope<Direction::Horizontal::LEFT, 1, 3, 1, 8> ();
-
 		if ( block.HasMember( "graphics" ) && block[ "graphics" ].IsObject() )
 		{
 			auto g = block[ "graphics" ].GetObject();
@@ -324,6 +322,22 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "slope_shallow_right_highest" ) )
 					{
 						components.emplace_back( generateBlockComponentShallowSlopeRightHighest() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_left_lower" ) )
+					{
+						components.emplace_back( generateBlockComponentVerySteepSlopeLeftLow() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_left_higher" ) )
+					{
+						components.emplace_back( generateBlockComponentVerySteepSlopeLeftHigh() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_right_lower" ) )
+					{
+						components.emplace_back( generateBlockComponentVerySteepSlopeRightLow() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_right_higher" ) )
+					{
+						components.emplace_back( generateBlockComponentVerySteepSlopeRightHigh() );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_highest" ) )
 					{
