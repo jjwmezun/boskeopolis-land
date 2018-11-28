@@ -76,10 +76,6 @@ class BlockComponentSlope : public BlockComponent
 
 				if ( testSpritePositionWithinBlocksXThreshold<steep, direction, relative_height, slope_width> ( sprite, block ) )
 				{
-					if ( steep )
-					{
-						std::cout<<"STEEP"<<std::endl;
-					}
 					sprite.on_slope_ = direction;
 					sprite.collideStopYBottom( 0 );
 					if ( sprite.vy_ >= 0 )

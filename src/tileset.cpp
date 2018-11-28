@@ -28,6 +28,7 @@
 #include "block_component_single_use.hpp"
 #include "block_component_sink.hpp"
 #include "block_component_slope.hpp"
+#include "block_component_very_steep.hpp"
 #include "block_component_sludge_water.hpp"
 #include "block_component_solid.hpp"
 #include "block_component_swimmable.hpp"
@@ -325,19 +326,19 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_left_lower" ) )
 					{
-						components.emplace_back( generateBlockComponentVerySteepSlopeLeftLow() );
+						components.emplace_back( new BlockComponentVerySteep( Direction::Horizontal::LEFT, 2, 1, 32, 20 ) );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_left_higher" ) )
 					{
-						components.emplace_back( generateBlockComponentVerySteepSlopeLeftHigh() );
+						components.emplace_back( new BlockComponentVerySteep( Direction::Horizontal::LEFT, 2, 2, 32, 20 ) );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_right_lower" ) )
 					{
-						components.emplace_back( generateBlockComponentVerySteepSlopeRightLow() );
+						components.emplace_back( new BlockComponentVerySteep( Direction::Horizontal::RIGHT, 2, 1, 32, 20 ) );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_very_steep_right_higher" ) )
 					{
-						components.emplace_back( generateBlockComponentVerySteepSlopeRightHigh() );
+						components.emplace_back( new BlockComponentVerySteep( Direction::Horizontal::RIGHT, 2, 2, 32, 20 ) );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_highest" ) )
 					{
