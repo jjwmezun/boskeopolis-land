@@ -50,13 +50,14 @@
 		}
 	],
 
-	"entrance_x": 47,
-	"entrance_y": 27,
-	"camera_x": 35,
+	"entrance_x": 43,
+	"entrance_y": 31,
+	"camera_x": 31,
 
 	"goal":
 	{
-		"type": "kill_all"
+		"type": "kill_all",
+		"message": "¡Knock out all the Noko no Pollos!"
 	},
 
 	"gem_challenge": 0,

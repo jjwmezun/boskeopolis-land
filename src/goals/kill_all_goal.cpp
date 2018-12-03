@@ -4,9 +4,9 @@
 #include "level.hpp"
 #include "sprite_system.hpp"
 
-KillAllGoal::KillAllGoal()
+KillAllGoal::KillAllGoal( std::string message )
 :
-	Goal( "¡Shoot out all the Cowpokers &\nsentry guns!" ),
+	Goal( message ),
 	sprites_to_kill_ ( 99 )
 {};
 

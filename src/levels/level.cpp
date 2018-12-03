@@ -714,7 +714,15 @@ Level Level::getLevel( int id )
 			}
 			else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
 			{
-				goal = std::make_unique<KillAllGoal> ();
+				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				{
+					const std::string message = lvg[ "message" ].GetString();
+					goal = std::make_unique<KillAllGoal> ( message );
+				}
+				else
+				{
+					goal = std::make_unique<KillAllGoal> ();
+				}
 			}
 			else if ( mezun::areStringsEqual( goaltype, "stop_on_off" ) )
 			{
@@ -878,9 +886,9 @@ int Level::allEnemiesToKill() const
 		{
 			if
 			(
-				( m.sprite( i ) > 449 && m.sprite( i ) < 457 ) ||
-				( m.sprite( i ) > 457 && m.sprite( i ) < 470 ) ||
-				( m.sprite( i ) > 518 && m.sprite( i ) < 532 )
+				( m.sprite( i ) == 450 || m.sprite( i ) == 451 ) ||
+				( m.sprite( i ) > 452 && m.sprite( i ) < 457 ) ||
+				( m.sprite( i ) > 519 && m.sprite( i ) < 533 )
 			)
 			{
 				++n;
