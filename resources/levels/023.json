@@ -1,0 +1,22 @@
+{
+	"name": "Warehouse of London",
+	"maps":
+	[
+		{
+			"slug": "factory-3",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "factory-blocks.png",
+					"width": 48,
+					"height": 48
+				}
+			]
+		}
+	],
+	"entrance_x": 129,
+	"entrance_y": 174,
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

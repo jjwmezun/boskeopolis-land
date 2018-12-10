@@ -14,29 +14,9 @@ AngryTruckSprite::~AngryTruckSprite() {};
 
 void AngryTruckSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	/*
-	if ( direction_x_ == Direction::Horizontal::RIGHT )
-	{
-		graphics_->flip_x_ = true;
-		moveRight();
-	}
-	else
-	{
-		graphics_->flip_x_ = false;
-		moveLeft();
-	}
-
-	if ( rightSubPixels() > original_hit_box_.right() + Unit::BlocksToSubPixels( 4 ) )
-	{
-		direction_x_ = Direction::Horizontal::LEFT;
-	}
-	if ( hit_box_.x < original_hit_box_.x - Unit::BlocksToSubPixels( 4 ) )
-	{
-		direction_x_ = Direction::Horizontal::RIGHT;
-	}
-	*/	
-	graphics_->flip_x_ = true;
-	moveRight();
+	turnOnCollide();
+	moveInDirectionX();
+	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
 };
 
 void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -45,7 +25,7 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 	{
 		them.collideStopAny( their_collision );
 		them.hit_box_.x += vx_;
-		
+
 		if ( them.hasType( SpriteType::HERO ) && !their_collision.collideBottom() )
 		{
 			health.hurt();
