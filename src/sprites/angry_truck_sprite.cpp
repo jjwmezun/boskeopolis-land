@@ -23,8 +23,11 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 {
 	if ( their_collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
-		them.hit_box_.x += vx_;
+		if ( their_collision.collideBottom() )
+		{
+			them.hit_box_.x += vx_;
+			them.collideStopAny( their_collision );
+		}
 
 		if ( them.hasType( SpriteType::HERO ) && !their_collision.collideBottom() )
 		{
