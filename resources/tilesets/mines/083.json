@@ -1,0 +1,22 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 0,
+		"y": 0,
+		"priority": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "honey"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

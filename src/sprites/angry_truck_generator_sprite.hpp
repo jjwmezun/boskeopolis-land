@@ -1,17 +1,15 @@
 #pragma once
 
-class Block;
-
 #include "sprite.hpp"
 
-class AngryTruckSprite : public Sprite
+class AngryTruckGeneratorSprite : public Sprite
 {
 	public:
-		AngryTruckSprite( int x, int y );
-		~AngryTruckSprite();
+		AngryTruckGeneratorSprite( int x, int y );
+		~AngryTruckGeneratorSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 
 	private:
-		bool parked_;
+		int timer_;
 };

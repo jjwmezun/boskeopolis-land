@@ -15,7 +15,8 @@ class SpriteMovement
 			FLOATING,
 			FLUTTERING,
 			SWIMMING,
-			ANGLED
+			ANGLED,
+			STUCK
 		};
 
 		SpriteMovement( Type type = Type::FLOATING );
@@ -23,8 +24,8 @@ class SpriteMovement
 		Type type() const;
 		bool hasType( Type type ) const;
 
-		void moveLeft( Sprite& sprite ) const;
-		void moveRight( Sprite& sprite ) const;
+		virtual void moveLeft( Sprite& sprite ) const;
+		virtual void moveRight( Sprite& sprite ) const;
 		virtual void moveUp( Sprite& sprite ) const;
 		virtual void moveDown( Sprite& sprite ) const;
 		virtual void jump( Sprite& sprite ) const;

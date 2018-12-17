@@ -26,6 +26,7 @@ class SpriteSystem;
 #include "fluttering_sprite_movement.hpp"
 #include "swimming_sprite_movement.hpp"
 #include "angled_sprite_movement.hpp"
+#include "stuck_sprite_movement.hpp"
 
 class Sprite : public Object
 {
@@ -44,7 +45,8 @@ class Sprite : public Object
 			DEATH_COUNT,
 			ICICLE,
 			TREASURE_CHEST,
-			PHASE_THROUGH
+			PHASE_THROUGH,
+			TRUCK_PLATFORM
 		};
 
 		enum class CameraMovement
@@ -203,7 +205,7 @@ class Sprite : public Object
 		void boundaries( Camera& camera, Map& lvmap );
 		void setPosition( int x, int y );
 		void changeMovement( SpriteMovement::Type type );
-		const SpriteMovement* getMovement( SpriteMovement::Type type );
+		static const SpriteMovement* getMovement( SpriteMovement::Type type );
 
 		Direction::Horizontal directionX() const;
 		Direction::Vertical directionY() const;
@@ -307,6 +309,7 @@ class Sprite : public Object
 		static const FlutteringSpriteMovement fluttering_;
 		static const SwimmingSpriteMovement swimming_;
 		static const AngledSpriteMovement angled_;
+		static const StuckSpriteMovement stuck_movement_;
 
 		sdl2::SDLRect justAbove() const;
 		bool blocksJustAbove( const BlockSystem& blocks ) const;

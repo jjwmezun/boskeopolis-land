@@ -14,6 +14,7 @@
 #include "block_component_full_heal.hpp"
 #include "block_component_goal.hpp"
 #include "block_component_heal.hpp"
+#include "block_component_honey.hpp"
 #include "block_component_hurt.hpp"
 #include "block_component_key.hpp"
 #include "block_component_kill.hpp"
@@ -512,6 +513,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "switch_off" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSwitchOff> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "honey" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentHoney> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
 					{
