@@ -17,7 +17,7 @@ void AngryTruckGeneratorSprite::customUpdate( Camera& camera, Map& lvmap, EventS
 {
 	if ( timer_ >= TIMER_LIMIT )
 	{
-		sprites.spawn( std::make_unique<AngryTruckSprite> ( xPixels(), yPixels() ) );
+		sprites.spawn( std::make_unique<AngryTruckSprite> ( xPixels(), yPixels(), true ) );
 		timer_ = 0;
 	}
 	++timer_;

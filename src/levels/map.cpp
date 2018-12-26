@@ -10,7 +10,6 @@
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
-#include <iostream>
 
 static constexpr int LOOP_CHANGE = 3;
 static constexpr int FLASH_INTERVAL = 200;
@@ -299,7 +298,6 @@ Map Map::mapFromPath
 					}
 					else if ( value.IsString() )
 					{
-						std::cout<<value.GetString()<<std::endl;
 						slippery = ( ( strcmp( value.GetString(), "true" ) == 0 ) ? true : false );
 					}
 				}

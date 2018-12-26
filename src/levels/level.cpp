@@ -36,6 +36,8 @@
 #include "warp_goal.hpp"
 #include "windy_goal.hpp"
 
+#include <iostream>
+
 static std::vector<std::string> level_list_;
 static std::vector<int> gem_challenge_list_;
 static std::vector<int> time_challenge_list_;
@@ -51,7 +53,8 @@ Level::Level ( Level&& m )
 	camera_x_ ( m.camera_x_ ),
 	camera_y_ ( m.camera_y_ ),
 	message_ ( m.message_ ),
-	current_map_ ( m.current_map_ )
+	current_map_ ( m.current_map_ ),
+	start_on_ ( m.start_on_ )
 {};
 
 Level::Level
@@ -63,7 +66,8 @@ Level::Level
 	int entrance_y,
 	int camera_x,
 	int camera_y,
-	std::string message
+	std::string message,
+	bool start_on
 )
 :
 	id_ ( id ),
@@ -74,7 +78,8 @@ Level::Level
 	camera_x_ ( camera_x ),
 	camera_y_ ( camera_y ),
 	message_ ( message ),
-	current_map_ ( 0 )
+	current_map_ ( 0 ),
+	start_on_ ( start_on )
 {};
 
 Level::~Level() {};
@@ -786,10 +791,20 @@ Level Level::getLevel( int id )
 
 
 
+	/* OTHER
+	==============================================================*/
+	const bool start_on = ( lvobj.HasMember( "start_on" ) && lvobj[ "start_on" ].IsBool() && lvobj[ "start_on" ].GetBool() );
+	if ( lvobj.HasMember( "start_on" ) )
+	{
+		std::cout<<lvobj[ "start_on" ].GetBool()<<std::endl;
+	}
+
+
+
 	/* CONCLUDE
 	==============================================================*/
 	ifs.close();
-	return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message );
+	return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message, start_on );
 };
 
 void Level::buildLevelList()
@@ -897,3 +912,8 @@ int Level::allEnemiesToKill() const
 	}
 	return n;
 };
+
+bool Level::startOn() const
+{
+	return start_on_;
+}

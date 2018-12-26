@@ -1,0 +1,48 @@
+{
+	"name": "Snow Mountain",
+	"maps":
+	[
+		{
+			"slug": "snow-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "mountain.png",
+					"width": 256,
+					"height": 320,
+					"y_repeat": false,
+					"x_scroll": 0.5,
+					"y_scroll": 0.15,
+					"y_offset": 72
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "snow-mountain-gradient.png",
+					"width": 400,
+					"height": 192,
+					"x_scroll": 0.1,
+					"y_scroll": 0.0,
+					"lighten": true,
+					"alpha": 200
+				},
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			]
+		}
+	],
+
+	"entrance_x": 1,
+	"entrance_y": 9,
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

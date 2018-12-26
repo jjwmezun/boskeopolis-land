@@ -23,12 +23,12 @@ class LevelState : public GameState
 
 	private:
 		InventoryLevel inventory_screen_;
-		EventSystem events_;
 		Level level_;
+		EventSystem events_;
 		Camera camera_;
 		SpriteSystem sprites_;
 		BlockSystem blocks_;
 		Health health_;
-		
+
 		void testPause();
 };

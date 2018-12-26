@@ -29,6 +29,7 @@
 #include "eggnon_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
 #include "event_system.hpp"
+#include "falling_snow_boulder_spawn_sprite.hpp"
 #include "faucet_sprite.hpp"
 #include "falling_bough_sprite.hpp"
 #include "falling_fist_sprite.hpp"
@@ -351,7 +352,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 71 ):
-			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y, false ) );
 		break;
 		case ( SPRITE_INDEX_START + 72 ):
 			return std::unique_ptr<Sprite> ( new ChoqueSprite( x, y ) );
@@ -541,6 +542,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 134 ):
 			return std::unique_ptr<Sprite> ( new AngryTruckGeneratorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 135 ):
+			return std::unique_ptr<Sprite> ( new FallingSnowBoulderSpawnSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

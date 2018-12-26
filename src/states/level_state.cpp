@@ -14,8 +14,8 @@ LevelState::LevelState( int lvname )
 :
 	GameState ( StateID::LEVEL_STATE ),
 	inventory_screen_ (),
-	events_ (),
 	level_ ( Level::getLevel( lvname ) ),
+	events_ ( level_.startOn() ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
 	blocks_ ( level_.currentMap() ),

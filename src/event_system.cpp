@@ -31,7 +31,7 @@ EventSystem::EMisc::EMisc()
 	data_ ()
 {};
 
-EventSystem::EventSystem()
+EventSystem::EventSystem( bool start_on )
 :
 	won_ ( false ),
 	failed_ ( false ),
@@ -40,7 +40,7 @@ EventSystem::EventSystem()
 	message_ ( false ),
 	message_lock_ ( false ),
 	change_map_ ( 0 ),
-	switch_ ( false ),
+	switch_ ( start_on ),
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
 	new_palette_ ( mezun::emptyString(), 0 ),

@@ -17,7 +17,6 @@ class Level
 {
 	public:
 		static constexpr int MAX = 64;
-		static Level getLevel( int id );
 
 		~Level();
 		Level( Level&& m );
@@ -25,9 +24,10 @@ class Level
 		Level&& operator=( Level&& ) = delete;
 		const Level& operator=( const Level& ) = delete;
 
+		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
+		void updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health, LevelState& state );
 		Map& currentMap();
 		const Map& currentMap() const;
-
 		int entranceX() const;
 		int entranceY() const;
 		int cameraX() const;
@@ -37,10 +37,9 @@ class Level
 		const std::string& message() const;
 		int id() const;
 		int allEnemiesToKill() const;
+		bool startOn() const;
 
-		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
-		void updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health, LevelState& state );
-
+		static Level getLevel( int id );
 		static const std::string& NameOLevel( unsigned int n );
 		static unsigned int realLevelNum();
 		static int gemChallenge( unsigned int n );
@@ -58,6 +57,7 @@ class Level
 		const int camera_y_;
 		int entrance_x_;
 		int entrance_y_;
+		const bool start_on_;
 
 		Level
 		(
@@ -68,9 +68,9 @@ class Level
 			int entrance_y = 0,
 			int camera_x = 0,
 			int camera_y = 0,
-			std::string message = ""
+			std::string message = "",
+			bool start_on = false
 		);
-
 		unsigned int testCurrentMap() const;
 
 		static void buildLevelList();

@@ -86,7 +86,7 @@ class EventSystem
 	bool waterShouldMove() const;
 	bool waterShouldStop() const;
 
-	EventSystem();
+	EventSystem( bool start_on = false );
 	~EventSystem();
 	void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 	void reset();

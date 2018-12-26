@@ -4,11 +4,9 @@
 #include "health.hpp"
 #include "sprite_graphics.hpp"
 
-#include <iostream>
-
-AngryTruckSprite::AngryTruckSprite( int x, int y )
+AngryTruckSprite::AngryTruckSprite( int x, int y, bool permanent )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/angry_truck.png" ), x, y, 40, 32, {}, 2000, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/angry_truck.png" ), x, y, 40, 32, {}, 2000, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::RESET_OFFSCREEN_AND_AWAY ) ),
 	parked_ ( false )
 {};
 
@@ -29,13 +27,13 @@ void AngryTruckSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	if ( fellInBottomlessPit( lvmap ) )
 	{
-		kill();
+		killNoAnimation();
 	}
 };
 
 void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::TRUCK_PLATFORM ) )
+	if ( them.hasType( SpriteType::TRUCK_PLATFORM ) && their_collision.collideAny() )
 	{
 		if ( hit_box_.x > them.hit_box_.x + 16000 )
 		{
