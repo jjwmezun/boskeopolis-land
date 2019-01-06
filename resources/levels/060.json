@@ -47,6 +47,7 @@
 
 	"entrance_x": 24,
 	"entrance_y": 18,
+	"camera_x": 20,
 	"gem_challenge": 0,
 	"time_challenge": 0,
 	"start_on": true
