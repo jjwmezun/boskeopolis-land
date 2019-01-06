@@ -29,3 +29,10 @@ void RisingPackageSprite::customInteract( Collision& my_collision, Collision& th
 		}
 	}
 };
+
+void RisingPackageSprite::reset()
+{
+	resetPosition();
+	rise_ = false;
+	fullStopY();
+};
