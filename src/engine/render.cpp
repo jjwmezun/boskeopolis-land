@@ -48,7 +48,6 @@ namespace Render
 
 
 	// Private Function Declarations
-	void consoleArguments( const std::vector<std::string>& args );
 	void createRenderer();
 	void createWindow();
 
@@ -72,11 +71,11 @@ namespace Render
 
 
 	// Function Implementations
-	void init( const std::vector<std::string>& args )
+	void init( bool windowed, int magnification )
 	{
 		img_path_ = setImgPath();
-
-		consoleArguments( args );
+		window_type_ = ( windowed ) ? SDL_WINDOW_RESIZABLE : SDL_WINDOW_FULLSCREEN_DESKTOP;
+		FORCE_MAGNIFICATION = magnification;
 		adjustMagnification();
 		createWindow();
 		createRenderer();
@@ -85,31 +84,6 @@ namespace Render
 		{
 			SDL_Log( "IMG_Initialization failed: %s", SDL_GetError() );
 			exit( 1 );
-		}
-	};
-
-	void consoleArguments( const std::vector<std::string>& args )
-	{
-		if ( args.size() >= 2 )
-		{
-			if ( args.at( 1 ) == "full" )
-			{
-				window_type_ = SDL_WINDOW_FULLSCREEN_DESKTOP;
-			}
-			else if ( args.at( 1 ) == "window" )
-			{
-				window_type_ = SDL_WINDOW_RESIZABLE;
-			}
-			else
-			{
-				std::cout<<"ERROR: Invalid 2nd argument. (Should be \"full\" or \"window\".";
-			}
-		}
-
-		if ( args.size() >= 3 )
-		{
-			int mag_size = std::stoi( args.at( 2 ) );
-			FORCE_MAGNIFICATION = std::stoi( args.at( 2 ) );
 		}
 	};
 

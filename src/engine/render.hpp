@@ -12,7 +12,7 @@ class Palette;
 namespace Render
 {
 	static constexpr sdl2::SDLRect window_box_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
-	void init( const std::vector<std::string>& args );
+	void init( bool windowed, int magnification );
 	void quit();
 
 	void renderRect( const sdl2::SDLRect& box, int color = 1, int alpha = 255 );

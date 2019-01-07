@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
+#include "console_arguments.hpp"
 #include <deque>
 #include "input.hpp"
 #include "main.hpp"
@@ -52,7 +53,7 @@ namespace Main
 
 
 	// Private Function Declarations
-	void init( const std::vector<std::string>& args );
+	void init( int argc, char** argv );
 	void execute();
 	void end();
 	int fpsMilliseconds();
@@ -101,21 +102,14 @@ namespace Main
 		return state_change_type_ == StateChangeType::QUIT && transition_level_ == TRANSITION_LIMIT;
 	};
 
-	void init( const std::vector<std::string>& args )
+	void init( int argc, char** argv )
 	{
 		initSDL();
-
-		if ( args.size() >= 4 )
-		{
-			if ( mezun::areStringsEqual( args.at( 3 ), "no-save" ) )
-			{
-				SAVING_ALLOWED = false;
-			}
-		}
-		srand ( time( nullptr ) );
+		const ConsoleArguments args( argc, argv );
+		mezun::initRand();
 		setResourcePath();
-		Render::init( args );
-		Audio::init( args );
+		Render::init( args.windowed(), args.magnification() );
+		Audio::init( args.noaudio() );
 		firstState();
 		Input::init();
 	};
@@ -436,13 +430,7 @@ namespace Main
 
 int main( int argc, char* argv[] )
 {
-	std::vector<std::string> args;
-	for ( int i = 0; i < argc; ++i )
-	{
-		args.push_back( argv[ i ] );
-	}
-
-    Main::init( args );
+    Main::init( argc, argv );
 
     // If game starts without running, there was an error.
     if ( !Main::running() )

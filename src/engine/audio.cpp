@@ -50,16 +50,9 @@ namespace Audio
 
 	Mix_Chunk* loadSound( const std::string& sound_name );
 
-	void init( const std::vector<std::string>& args )
+	void init( bool noaudio )
 	{
-		for ( const auto& a : args )
-		{
-			if ( a == "noaudio" )
-			{
-				enable_ = false;
-			}
-		}
-
+		enable_ = !noaudio;
 		if ( enable_ )
 		{
 			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )

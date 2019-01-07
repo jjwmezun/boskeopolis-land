@@ -29,7 +29,7 @@ namespace Audio
 		SWITCH = 21
 	};
 
-	void init( const std::vector<std::string>& args );
+	void init( bool noaudio );
 	void close();
 
 	void changeSong( const std::string& song_name, bool loop = true, int quietness = 4 );

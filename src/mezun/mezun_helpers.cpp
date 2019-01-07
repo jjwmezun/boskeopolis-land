@@ -1,3 +1,4 @@
+#include <cctype>
 #include "mezun_helpers.hpp"
 
 namespace mezun
@@ -11,4 +12,17 @@ namespace mezun
 		}
 		return text + string + "\n";
 	}
+
+	bool isCStringOnlyNumeric( const char* c_string )
+	{
+		while ( c_string != nullptr )
+		{
+			if ( !isdigit( *c_string ) )
+			{
+				return false;
+			}
+			++c_string;
+		}
+		return true;
+	};
 }

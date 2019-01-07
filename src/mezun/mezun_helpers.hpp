@@ -40,6 +40,11 @@ namespace mezun
 		return areStringsEqual( text, "" );
 	}
 
+	inline bool areCStringsEqual( const char* one, const char* two )
+	{
+		return strcmp( one, two ) == 0;
+	}
+
 	inline bool checkDirectory( const std::string& path )
 	{
 		const auto cpath = path.c_str();
@@ -56,4 +61,6 @@ namespace mezun
 
 		return test;
 	};
+
+	bool isCStringOnlyNumeric( const char* c_string );
 };
