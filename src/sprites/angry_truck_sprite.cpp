@@ -73,3 +73,9 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 		}
 	}
 };
+
+void AngryTruckSprite::reset()
+{
+	hit_box_ = original_hit_box_;
+	parked_ = false;
+};

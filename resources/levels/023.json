@@ -1,5 +1,5 @@
 {
-	"name": "Warehouse of London",
+	"name": "The Amazon Jungle",
 	"maps":
 	[
 		{
@@ -15,7 +15,7 @@
 			]
 		}
 	],
-	"entrance_x": 60,
+	"entrance_x": 64,
 	"entrance_y": 52,
 	"gem_challenge": 0,
 	"time_challenge": 0
