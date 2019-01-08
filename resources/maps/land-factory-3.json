@@ -43,6 +43,11 @@
          "value":true
         }, 
         {
+         "name":"music",
+         "type":"string",
+         "value":"factory"
+        }, 
+        {
          "name":"palette",
          "type":"string",
          "value":"Warm Purple"

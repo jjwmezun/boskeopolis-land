@@ -29,7 +29,8 @@ namespace Main
 	std::string pathDivider();
 	std::string savePath();
 
-	bool savingAllowed();
+	bool nosave();
+	bool noharm();
 	bool stillFading();
 	void startFadeOut();
 	TransitionState transitionState();

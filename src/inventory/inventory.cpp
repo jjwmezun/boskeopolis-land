@@ -404,7 +404,7 @@ namespace Inventory
 
 	void save()
 	{
-		if ( Main::savingAllowed() )
+		if ( !Main::nosave() )
 		{
 			saveBinary();
 		}

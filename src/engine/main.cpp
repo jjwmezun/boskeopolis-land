@@ -43,7 +43,8 @@ namespace Main
 	int frames_ = 0;
 	std::string resource_path_ = "";
 	std::string path_divider_ = "/";
-	bool SAVING_ALLOWED = true;
+	bool NOSAVE = false;
+	bool NOHARM = false;
 
 	std::deque< std::unique_ptr<GameState> > push_states_ = {};
 	std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
@@ -106,6 +107,8 @@ namespace Main
 	{
 		initSDL();
 		const ConsoleArguments args( argc, argv );
+		NOSAVE = args.nosave();
+		NOHARM = args.noharm();
 		mezun::initRand();
 		setResourcePath();
 		Render::init( args.windowed(), args.magnification() );
@@ -417,9 +420,14 @@ namespace Main
 		return path_divider_;
 	};
 
-	bool savingAllowed()
+	bool nosave()
 	{
-		return SAVING_ALLOWED;
+		return NOSAVE;
+	};
+
+	bool noharm()
+	{
+		return NOHARM;
 	};
 
 	std::string savePath()

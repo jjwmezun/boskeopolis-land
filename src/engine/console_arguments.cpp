@@ -8,6 +8,7 @@ ConsoleArguments::ConsoleArguments( int argc, char** argv )
 	windowed_ ( false ),
 	noaudio_ ( false ),
 	nosave_ ( false ),
+	noharm_ ( false ),
 	magnification_ ( -1 )
 {
 	for ( int i = 0; i < argc; ++i )
@@ -24,6 +25,10 @@ ConsoleArguments::ConsoleArguments( int argc, char** argv )
 		if ( mezun::areCStringsEqual( arg, "--nosave" ) )
 		{
 			nosave_ = true;
+		}
+		if ( mezun::areCStringsEqual( arg, "--noharm" ) )
+		{
+			noharm_ = true;
 		}
 		if ( mezun::areCStringsEqual( arg, "-m" ) )
 		{
@@ -71,6 +76,11 @@ bool ConsoleArguments::noaudio() const
 bool ConsoleArguments::nosave() const
 {
 	return nosave_;
+};
+
+bool ConsoleArguments::noharm() const
+{
+	return noharm_;
 };
 
 int ConsoleArguments::magnification() const

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "inventory.hpp"
 #include "health.hpp"
+#include "main.hpp"
 
 static constexpr int NORMAL_OXYGEN_STATUS = -1;
 static constexpr int GAINING_OXYGEN = -2;
@@ -91,7 +92,7 @@ void Health::fullHeal()
 
 void Health::hurt()
 {
-	if ( !invincible_ )
+	if ( !Main::noharm() && !invincible_ )
 	{
 		--hp_;
 
