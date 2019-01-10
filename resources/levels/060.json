@@ -3,7 +3,7 @@
 	"maps":
 	[
 		{
-			"slug": "snow-6",
+			"slug": "snow-7",
 			"backgrounds":
 			[
 				{
@@ -45,10 +45,9 @@
 		}
 	],
 
-	"entrance_x": 24,
-	"entrance_y": 18,
+	"entrance_x": 45,
+	"entrance_y": 46,
 	"camera_x": 20,
 	"gem_challenge": 0,
-	"time_challenge": 0,
-	"start_on": true
+	"time_challenge": 0
 }
