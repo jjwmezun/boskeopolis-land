@@ -1,5 +1,5 @@
 {
-	"name": "Ice Mines 2",
+	"name": "Chillblain Caves",
 	"maps":
 	[
 		{
@@ -8,46 +8,17 @@
 			[
 				{
 					"type": "image",
-					"img": "mines-bg-2.png",
-					"width": 114,
-					"height": 112,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
-				}
-			],
-			"foregrounds":
-			[
-				{
-					"type": "image",
-					"img": "fog_2.png",
-					"alpha": 32,
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.1,
-					"y_scroll": 0.1,
-					"x_speed": -40,
-					"y_speed": -20,
-					"lighten": true
-				},
-				{
-					"type": "image",
-					"img": "fog_1.png",
-					"alpha": 32,
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25,
-					"x_speed": -80,
-					"y_speed": -40,
-					"lighten": true
+					"img": "mintlines.png",
+					"width": 64,
+					"height": 64
 				}
 			]
 		}
 	],
 
-	"entrance_x": 45,
-	"entrance_y": 46,
+	"entrance_x": 56,
+	"entrance_y": 26,
 	"camera_x": 20,
-	"gem_challenge": 0,
-	"time_challenge": 0
+	"gem_challenge": 12000,
+	"time_challenge": 22
 }

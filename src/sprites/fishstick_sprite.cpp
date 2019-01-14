@@ -5,7 +5,7 @@
 
 FishstickSprite::FishstickSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fishstick.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 20, 12, { SpriteType::ENEMY }, 600, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fishstick.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 20, 12, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
 	move_timer_ ( { 16, true } ),
 	pause_timer_ ( { 8, false } )
 {};
@@ -55,8 +55,4 @@ void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 
 void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
-	{
-		health.hurt();
-	}
 };

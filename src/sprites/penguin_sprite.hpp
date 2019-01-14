@@ -1,43 +1,18 @@
+#pragma once
 
+#include "sprite.hpp"
 
-// Name
-//===================================
-//
-// PenguinSprite
-//
+class Block;
 
-#ifndef PENGUIN_SPRITE_H
-#define PENGUIN_SPRITE_H
+class PenguinSprite : public Sprite
+{
+    public:
+        PenguinSprite( int x, int y );
+        ~PenguinSprite();
+        void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
+        void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
 
-
-// FORWARD DECLARATIONS
-//===================================
-
-    class Block;
-    
-
-
-// DEPENDENCIES
-//===================================
-
-    #include "sprite.hpp"
-
-
-// CLASS
-//===================================
-
-    class PenguinSprite : public Sprite
-    {
-        public:
-            PenguinSprite( int x, int y );
-            ~PenguinSprite();
-            void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-            void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
-
-        private:
-            bool turning_;
-            TimerSimple delay_;
-    };
-
-
-#endif // PENGUIN_SPRITE_H
+    private:
+        bool turning_;
+        TimerSimple delay_;
+};

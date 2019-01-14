@@ -16,6 +16,11 @@ void SwimmingSpriteMovement::jump( Sprite& sprite ) const
 	}
 };
 
+void SwimmingSpriteMovement::bounce( Sprite& sprite, int amount ) const
+{
+	jump( sprite );
+}
+
 void SwimmingSpriteMovement::position( Sprite& sprite ) const
 {
 

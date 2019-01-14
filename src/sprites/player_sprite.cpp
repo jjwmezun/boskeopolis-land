@@ -110,7 +110,10 @@ void PlayerSprite::customInteract( Collision& my_collision, Collision& their_col
 			{
 				them.kill();
 				bounce();
-				Inventory::bop();
+				if ( movementType() != SpriteMovement::Type::SWIMMING )
+				{
+					Inventory::bop();
+				}
 				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else if ( my_collision.collideAny() && isSlidingPrev() )
