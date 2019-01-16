@@ -311,6 +311,35 @@ inline std::unique_ptr<BlockComponent> generateBlockComponentVerySteepSlopeRight
 	return generateBlockComponentVerySteepSlope<Direction::Horizontal::RIGHT, 2>();
 };
 
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingSteepSlopeLeft()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 1, 1> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingSteepSlopeRight()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 1, 1> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingMediumSlopeLeftLow()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 2, 1> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingMediumSlopeLeftHigh()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::LEFT, 2, 2> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingMediumSlopeRightLow()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 2, 1> () );
+};
+
+inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingMediumSlopeRightHigh()
+{
+	return std::unique_ptr<BlockComponent> ( new BlockComponentCeilingSlope<Direction::Horizontal::RIGHT, 2, 2> () );
+};
 
 inline std::unique_ptr<BlockComponent> generateBlockComponentCeilingShallowSlopeLeftLowest()
 {

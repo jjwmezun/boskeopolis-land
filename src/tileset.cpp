@@ -341,6 +341,30 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( new BlockComponentVerySteep( Direction::Horizontal::RIGHT, 2, 2, 32, 20 ) );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_medium_left_high" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingMediumSlopeLeftHigh() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_steep_left" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingSteepSlopeLeft() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_steep_right" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingSteepSlopeRight() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_medium_left_low" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingMediumSlopeLeftLow() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_medium_right_high" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingMediumSlopeRightHigh() );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_medium_right_low" ) )
+					{
+						components.emplace_back( generateBlockComponentCeilingMediumSlopeRightLow() );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "slope_bottom_shallow_left_highest" ) )
 					{
 						components.emplace_back( generateBlockComponentCeilingShallowSlopeLeftHighest() );
