@@ -8,15 +8,28 @@
 			[
 				{
 					"type": "image",
-					"img": "mintlines.png",
-					"width": 64,
-					"height": 64
+					"img": "ice-bg.png",
+					"width": 431,
+					"height": 192
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "ice-light.png",
+					"width": 1058,
+					"height": 655,
+					"x_offset": 64,
+					"x_repeat": false,
+					"y_repeat": false,
+					"alpha": 128
 				}
 			]
 		}
 	],
 
-	"entrance_x": 56,
+	"entrance_x": 59,
 	"entrance_y": 26,
 	"camera_x": 20,
 	"gem_challenge": 12000,
