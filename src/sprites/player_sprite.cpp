@@ -376,6 +376,10 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 			{
 				if ( events.can_climb_down_ )
 				{
+					if ( isDucking() )
+					{
+						unduck( blocks );
+					}
 					on_ladder_ = true;
 				}
 				else
