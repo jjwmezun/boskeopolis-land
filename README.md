@@ -1,8 +1,12 @@
 # Boskeopolis Land
 
-A dumb li'l platformer game made with C++ & SDL2.
+## ¿What Is this Game?
 
-You play as Autumn Springer & go round levels collecting gems, diamonds, & accomplishing goals. Most levels just require you to get the striped Keycane @ the end, while others have zanier goals, like collecting a certain # o' PTS from gems or racing opponents to a goal.
+A simple platformer based on the short-story series, (_Boskeopolis Stories_)[https://boskeopolis-stories.com/].
+
+You play as thief Autumn Springer in her rhymin' & stealin' ventures round Boskeopolis, collecting gems, diamonds, & accomplishing each level's goal to continue on to the next level. Most levels just require you to get the red-&-white-striped delectable "Keycane" @ the end, while others have zanier goals, like collecting a certain # o' PTS ( Boskeopoleon currency ) from gems, collecting a key & reaching a treasure chest, or surviving for a certain amount o' time. These goals are shouted @ you @ the start o' every level like a _WarioWare_ minigame.
+
+## 'Bout the Development o' this Game
 
 For some reason, I chose to make this game have a monochrome palette system. Each "GameState" has a palette which is used to paint all the textures by indexed color.
 
@@ -32,17 +36,6 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Dumb Things I Gotta Do Someday
 
-### Basic Code
-* Fix glitch wherein Autumn can't move upward on a ladder after a map transition.
-* Sprite class still a mess -- look into organizing states ( isJumping, isDucking, onLadder, etc. ) into finite state machine ).
-* Timers kinda wonky. In particular, I want to find a way to encapsulate common "if hit; else if on, update; else, start" pattern in the class itself so I don't have to keep typing it. Sometimes the stopping mechanism for TimerSimple is wonky ( see SewerMonster class ).
-
-### Levels to Do Soon
-* Petrol Pond Place
-* Donut Dungeon
-* Foul Fowl Farm
-* Stop & Go Space Station
-
 ## Credits
 
 ### Music
@@ -56,26 +49,31 @@ Maybe temporary, maybe not.
 * Level Select: Too Cool
 * Success: Happy Happy Game Show
 * Failure: Lobby Time
-* City1, City4: District Four
-* Woods1, Woods2: Twisted
+* City1, City2, City4: District Four
+* City3: Nouvelle Noel
+* Woods1, Woods2: Breakdown
 * Woods3: Nightmare Machine
-* Mines1, Mines3, Mines4: Chillin Hard
+* Mines1, Mines3, Mines4: Secrets of the Schoolyard
 * Desert1: Wepa
 * Desert2: Mischief Maker, Clash Defiant
+* Desert3: DD Groove
 * Desert4: The Show Must Be Go
-* Mountain1: Groundwork
-* Sky1, Sky2, Sky3, Sky4: Nowhere Land
+* Mountain1 & Mountain2: Groundwork
+* Sky1, Sky2, Sky3: Nowhere Land
+* Sky4: Dreamer
 * Space1: Disco Lounge
-* Ice1: Nouvelle Noel
-* Ice2: Crinoline Dreams
+* Ice1 & Ice2: Crinoline Dreams
+* Ice3 & Ice4: Chillin Hard
 * Pirate1, Pirate3: Salty Ditty
-* Pirate2: Funin and Sunin
+* Pirate2: Rocket Power
 * Sewers1, Sewers2, Sewers3: RetroFuture Nasty
+* Sewers4: Raw
 * Factory1: Robozo
 * Factory3: Noise Attack
-* Factory4: Corruption
+* Factory4: Furious Freak
 * Palace1: Obliteration
 * Palace3: Kool Kats
+* Palace4: Take the Lead
 * Mart: Got Funk
 * Maze: Reformat
 
