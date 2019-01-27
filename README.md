@@ -34,8 +34,6 @@ Editing or creating new map files requires a recent version o' Tiled ( must allo
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Dumb Things I Gotta Do Someday
-
 ## Credits
 
 ### Music
