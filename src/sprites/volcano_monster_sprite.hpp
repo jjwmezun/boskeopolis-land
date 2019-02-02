@@ -15,6 +15,7 @@ class VolcanoMonsterSprite : public Sprite
 	private:
 		int timer_;
 		int next_spit_;
+		int animation_timer_;
 
 		void spawn( SpriteSystem& sprites );
 };

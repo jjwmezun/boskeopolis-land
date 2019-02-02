@@ -1,3 +1,4 @@
+#include "block_system.hpp"
 #include "collision.hpp"
 #include "desert_hawk_sprite.hpp"
 #include "health.hpp"
@@ -60,12 +61,33 @@ void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their
 	{
 		if ( their_collision.collideBottom() )
 		{
-			them.collideStopYBottom( their_collision.overlapYBottom() );
-			them.hit_box_.x += vx_;
-			if ( them.hit_box_.x < 0 )
+			if
+			(
+				!blocks.blocksInTheWay
+				(
+					{
+						them.rightSubPixels(),
+						them.topSubPixels(),
+						1000,
+						them.heightSubPixels()
+					},
+					BlockComponent::Type::SOLID
+				) &&
+				!blocks.blocksInTheWay
+				(
+					{
+						them.leftSubPixels() - 1000,
+						them.topSubPixels(),
+						1000,
+						them.heightSubPixels()
+					},
+					BlockComponent::Type::SOLID
+				)
+			)
 			{
-				them.hit_box_.x = 0;
+				them.hit_box_.x += vx_;
 			}
+			them.collideStopAny( their_collision );
 		}
 		else if ( their_collision.collideAny() )
 		{

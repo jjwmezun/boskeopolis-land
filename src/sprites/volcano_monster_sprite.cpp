@@ -11,9 +11,10 @@ static int randFireball()
 
 VolcanoMonsterSprite::VolcanoMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/volcano-monster.png", 0, 0, false, false, 0, true ), x, y, 16, 16, { SpriteType::ENEMY }, 400, 800, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/volcano-monster.png", 0, 0, false, false, 0, true ), x, y, 16, 17, { SpriteType::ENEMY }, 400, 800, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED ),
 	timer_ ( 0 ),
-	next_spit_ ( randFireball() )
+	next_spit_ ( randFireball() ),
+	animation_timer_ ( 0 )
 {};
 
 VolcanoMonsterSprite::~VolcanoMonsterSprite() {};
@@ -29,6 +30,16 @@ void VolcanoMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	else
 	{
 		++timer_;
+	}
+
+	if ( animation_timer_ == 8 )
+	{
+		graphics_->current_frame_x_ = ( graphics_->current_frame_x_ == 0 ) ? 16 : 0;
+		animation_timer_ = 0;
+	}
+	else
+	{
+		++animation_timer_;
 	}
 };
 
