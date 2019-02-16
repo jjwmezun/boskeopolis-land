@@ -15,7 +15,7 @@ namespace mezun
 
 	bool isCStringOnlyNumeric( const char* c_string )
 	{
-		while ( c_string != nullptr )
+		while ( *c_string )
 		{
 			if ( !isdigit( *c_string ) )
 			{
