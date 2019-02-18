@@ -6,7 +6,6 @@
 #include "direction.hpp"
 #include <memory>
 #include "sprite.hpp"
-#include <iostream>
 
 constexpr int getYBaselineFromX( int relative_height, int slope_width, bool steep )
 {
@@ -24,7 +23,6 @@ template <bool steep, Direction::Horizontal direction, int relative, int slope_w
 inline bool testSpritePositionWithinBlocksXThreshold( const Sprite& sprite, const Block& block )
 {
 	const int change = ( int )( floor( Unit::SUBPIXELS_PER_BLOCK / slope_width ) ) * ( relative - 1 );
-	std::cout<<change<<std::endl;
 	return ( steep )
 		?
 			(

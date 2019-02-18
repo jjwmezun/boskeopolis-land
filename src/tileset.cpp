@@ -24,6 +24,7 @@
 #include "block_component_mcguffin.hpp"
 #include "block_component_message.hpp"
 #include "block_component_money.hpp"
+#include "block_component_push_down.hpp"
 #include "block_component_sewer_door.hpp"
 #include "block_component_shmup_bullet.hpp"
 #include "block_component_single_use.hpp"
@@ -416,6 +417,19 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "climb_down" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentClimbDown> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "push_down" ) )
+					{
+						int force = 500;
+						if
+						(
+							comp_obj.HasMember( "force" ) &&
+							comp_obj[ "force" ].IsInt()
+						)
+						{
+							force = comp_obj[ "force" ].GetInt();
+						}
+						components.emplace_back( std::make_unique<BlockComponentPushDown> ( force ) );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "change_direction" ) )
 					{

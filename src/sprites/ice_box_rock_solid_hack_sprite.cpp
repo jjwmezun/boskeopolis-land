@@ -1,10 +1,8 @@
-#include "ice_box_rock_solid_hack_sprite.hpp"
 #include "collision.hpp"
+#include "ice_box_rock_solid_hack_sprite.hpp"
+#include "main.hpp"
 #include "render.hpp"
 #include "sprite_graphics.hpp"
-
-#include <iostream>
-#include "main.hpp"
 
 IceBoxRockSolidHackSprite::IceBoxRockSolidHackSprite( int x, int y )
 :
@@ -38,10 +36,6 @@ void IceBoxRockSolidHackSprite::customInteract( Collision& my_collision, Collisi
 		{
 			const auto collision = them.movement_->testCollision( them, extra_solids_[ i ] );
 			them.collideStopAny( collision );
-			if ( them.hasType( SpriteType::ENEMY ) && them.hit_box_.y > 128000 )
-			{
-				//std::cout<<them.hit_box_.y<<std::endl;
-			}
 		}
 	}
 };

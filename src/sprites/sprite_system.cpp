@@ -1,5 +1,6 @@
 #include "angry_truck_sprite.hpp"
 #include "angry_truck_generator_sprite.hpp"
+#include "ant_sprite.hpp"
 #include "bad_apple_sprite.hpp"
 #include "barrel_o_gorillas_sprite.hpp"
 #include "bat_sprite.hpp"
@@ -81,6 +82,7 @@
 #include "pollo_del_aire_still_sprite.hpp"
 #include "pollo_del_aire_vertical_sprite.hpp"
 #include "pufferbee_sprite.hpp"
+#include "pufferbee_square_sprite.hpp"
 #include "quadrapus_sprite.hpp"
 #include "racer_sprite.hpp"
 #include "random_treasure_chest_sprite.hpp"
@@ -545,6 +547,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 135 ):
 			return std::unique_ptr<Sprite> ( new FallingSnowBoulderSpawnSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 136 ):
+			return std::unique_ptr<Sprite> ( new PufferbeeSquareSprite( x, y, Direction::Simple::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 137 ):
+			return std::unique_ptr<Sprite> ( new PufferbeeSquareSprite( x, y, Direction::Simple::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 138 ):
+			return std::unique_ptr<Sprite> ( new AntSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

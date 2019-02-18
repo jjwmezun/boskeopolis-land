@@ -2,7 +2,6 @@
 #include "block.hpp"
 #include "collision.hpp"
 #include "sprite.hpp"
-#include <iostream>
 
 BlockComponentVerySteep::BlockComponentVerySteep( Direction::Horizontal direction, int height, int relative, int resistance, int extra_push )
 :
@@ -53,7 +52,6 @@ int BlockComponentVerySteep::getSlopeTopFromX( const Sprite& sprite, const Block
 		? sprite.centerXSubPixels() - ( block.leftSubPixels() + ( ( 16000 / height_ ) * ( relative_ - 1)) )
 		: ( block.rightSubPixels() - sprite.centerXSubPixels() - ( ( 16000 / height_ ) * ( relative_ - 1)) );
 	const int V = std::min( std::max( ( L * height_ ) + 2000, 0 ), 16000 );
-	std::cout<<V<<std::endl;
 	return V;
 }
 

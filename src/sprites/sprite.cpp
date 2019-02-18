@@ -1,4 +1,3 @@
-#include <iostream>
 #include "block.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"

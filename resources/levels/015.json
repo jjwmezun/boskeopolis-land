@@ -3,12 +3,23 @@
 	"maps":
 	[
 		{
-			"slug": "mines-5"
+			"slug": "mines-5",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "hive_bg.png",
+					"width": 460,
+					"height": 280,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25
+				}
+			]
 		}
 	],
 
-	"entrance_x": 6,
-	"entrance_y": 44,
-	"gem_challenge": 0,
-	"time_challenge": 0
+	"entrance_x": 7,
+	"entrance_y": 54,
+	"gem_challenge": 9000,
+	"time_challenge": 20
 }

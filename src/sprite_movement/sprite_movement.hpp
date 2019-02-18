@@ -4,6 +4,7 @@ class Object;
 class Collision;
 class Sprite;
 
+#include <string>
 #include "unit.hpp"
 
 class SpriteMovement
@@ -23,6 +24,7 @@ class SpriteMovement
 		virtual ~SpriteMovement();
 		Type type() const;
 		bool hasType( Type type ) const;
+		std::string typeName() const;
 
 		virtual void moveLeft( Sprite& sprite ) const;
 		virtual void moveRight( Sprite& sprite ) const;

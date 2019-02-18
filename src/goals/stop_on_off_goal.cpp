@@ -5,8 +5,6 @@
 #include "stop_on_off_goal.hpp"
 #include "unit.hpp"
 
-#include <iostream>
-
 static constexpr int GO_TIME = Unit::FPS * 4;
 static constexpr int BLINK_TIME = 8;
 static constexpr int NUM_O_BLINKS = 3;
@@ -20,7 +18,7 @@ StopOnOffGoal::~StopOnOffGoal() {};
 void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	const int round_time = state.frame() % TOTAL_ROUND_TIME;
-	
+
 	switch ( round_time )
 	{
 		case ( 0 ):
@@ -58,7 +56,6 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 		break;
 	}
 
-	std::cout<<abs( sprites.hero().vx_ )<<std::endl;
 	switch ( events.switch_ )
 	{
 		case ( false ):

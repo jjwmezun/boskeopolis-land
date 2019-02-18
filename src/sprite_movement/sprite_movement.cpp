@@ -160,7 +160,7 @@ const Collision SpriteMovement::testCollision( const Sprite& me, const sdl2::SDL
 		me.topSubPixels() + SMOOTH_MOVEMENT_PADDING < them.bottom() &&
 		me.bottomSubPixels() - SMOOTH_MOVEMENT_PADDING > them.top()
 	)
-	{	
+	{
 		if ( me.centerXSubPixels() < them.centerWidth() )
 			overlap_x_right = me.rightSubPixels() - them.left();
 		else if ( me.centerXSubPixels() > them.centerWidth() )
@@ -169,3 +169,17 @@ const Collision SpriteMovement::testCollision( const Sprite& me, const sdl2::SDL
 
 	return Collision( overlap_x_left, overlap_x_right, overlap_y_top, overlap_y_bottom );
 };
+
+std::string SpriteMovement::typeName() const
+{
+	switch ( type_ )
+	{
+		case ( Type::GROUNDED   ): { return "GROUNDED";   } break;
+		case ( Type::FLOATING   ): { return "FLOATING";   } break;
+		case ( Type::FLUTTERING ): { return "FLUTTERING"; } break;
+		case ( Type::SWIMMING   ): { return "SWIMMING";   } break;
+		case ( Type::ANGLED     ): { return "ANGLED";     } break;
+		case ( Type::STUCK      ): { return "STUCK";      } break;
+		default                  : { return "INVALID";    } break;
+	}
+}

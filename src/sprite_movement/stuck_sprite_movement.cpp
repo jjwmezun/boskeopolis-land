@@ -1,4 +1,5 @@
 #include "collision.hpp"
+#include "input.hpp"
 #include "sprite.hpp"
 #include "stuck_sprite_movement.hpp"
 
@@ -25,8 +26,11 @@ void StuckSpriteMovement::moveRight( Sprite& sprite ) const
 
 void StuckSpriteMovement::jump( Sprite& sprite ) const
 {
-	sprite.changeMovement( Type::GROUNDED );
-	Sprite::getMovement( Type::GROUNDED )->jump( sprite );
+	if ( Input::pressed( Input::Action::JUMP ) )
+	{
+		sprite.changeMovement( Type::GROUNDED );
+		Sprite::getMovement( Type::GROUNDED )->jump( sprite );
+	}
 };
 
 void StuckSpriteMovement::bounce( Sprite& sprite, int amount ) const
@@ -35,20 +39,10 @@ void StuckSpriteMovement::bounce( Sprite& sprite, int amount ) const
 
 void StuckSpriteMovement::position( Sprite& sprite ) const
 {
+	sprite.on_ground_ = true;
 	sprite.vx_ = 0;
 	sprite.vy_ = 0;
-};
-
-void StuckSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) const
-{
-};
-
-void StuckSpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) const
-{
-};
-
-void StuckSpriteMovement::collideStopAny( Sprite& sprite, const Collision& collision ) const
-{
+	sprite.acceleration_y_ = 0;
 };
 
 const Collision StuckSpriteMovement::testCollision( const Sprite& me, const sdl2::SDLRect& them ) const

@@ -2,7 +2,6 @@
 #include "event_system.hpp"
 #include "faucet_sprite.hpp"
 #include "faucet_graphics.hpp"
-#include <iostream>
 
 FaucetSprite::FaucetSprite( int x, int y )
 :
@@ -59,7 +58,6 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 			{
 				slide_lock_ = SLIDE_LOCK_TIME;
 			}
-			std::cout<<slide_lock_<<std::endl;
 		}
 	}
 	else if ( them.hasType( SpriteType::HERO ) )
