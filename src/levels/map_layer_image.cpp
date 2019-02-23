@@ -56,7 +56,7 @@ void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Came
 
 void MapLayerImage::move( int width, const sdl2::SDLRect& container )
 {
-	if ( Main::nextFrame( 8 / animation_speed_ ) )
+	if ( Main::nextFrame( animation_speed_ ) )
 	{
 		switch( frame_dir_ )
 		{
