@@ -18,6 +18,9 @@ static bool testBlockInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type t
 };
 
 BlockSystem::BlockSystem( const Map& lvmap )
+:
+	blocks_work_offscreen_ ( lvmap.blocks_work_offscreen_ ),
+	map_width_ ( lvmap.widthBlocks() )
 {
 	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
 	current_tileset_ = lvmap.tileset();
@@ -28,9 +31,16 @@ void BlockSystem::update( EventSystem& events )
 	getTileset().update( events );
 };
 
+void BlockSystem::reset( const Map& lvmap )
+{
+	changeTileset( lvmap.tileset() );
+	blocks_work_offscreen_ = lvmap.blocks_work_offscreen_;
+	map_width_ = lvmap.widthBlocks();
+};
+
 void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority )
 {
-	if ( !lvmap.blocks_work_offscreen_ )
+	if ( !blocks_work_offscreen_ )
 	{
 		for ( const auto& block : blocks_ )
 		{
@@ -61,7 +71,7 @@ void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority 
 
 void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites )
 {
-	if ( !level.currentMap().blocks_work_offscreen_ )
+	if ( !blocks_work_offscreen_ )
 	{
 		for ( Block& block : blocks_ )
 		{
@@ -92,7 +102,7 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 
 void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 {
-	if ( !lvmap.blocks_work_offscreen_ )
+	if ( !blocks_work_offscreen_ )
 	{
 		if ( camera.changed() || lvmap.changed_ )
 		{
@@ -145,11 +155,37 @@ void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& l
 
 bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const
 {
-	for ( const auto& block : blocks_ )
+	if ( !blocks_work_offscreen_ )
 	{
-		if ( testBlockInTheWay( rect, type, block ) )
+		for ( const auto& block : blocks_ )
 		{
-			return true;
+			if ( testBlockInTheWay( rect, type, block ) )
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		// Only test blocks near the rect.
+		const int first_x = floor( rect.x        / Unit::SUBPIXELS_PER_BLOCK ) - 3; // Block x a bit left o' rect.
+		const int first_y = floor( rect.y        / Unit::SUBPIXELS_PER_BLOCK ) - 3; // Block y a bit 'bove rect.
+		const int last_x  = ceil ( rect.right()  / Unit::SUBPIXELS_PER_BLOCK ) + 3; // Block x a bit right o' rect.
+		const int last_y  = ceil ( rect.bottom() / Unit::SUBPIXELS_PER_BLOCK ) + 3; // Block y a bit below rect.
+		for ( int y = first_y; y < last_y; ++y )
+		{
+			for ( int x = first_x; x < last_x; ++x )
+			{
+				const int n = y * map_width_ + x;
+				if ( n < blocks_.size() )
+				{
+					const Block& block = blocks_[ n ];
+					if ( testBlockInTheWay( rect, type, block ) )
+					{
+						return true;
+					}
+				}
+			}
 		}
 	}
 	return false;

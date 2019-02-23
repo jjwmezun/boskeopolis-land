@@ -150,7 +150,7 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		camera.adjust( sprites.hero(), currentMap() );
 
 		events.changePalette( currentMap().palette_ );
-		blocks.changeTileset( currentMap().tileset() );
+		blocks.reset( currentMap() );
 
 		Audio::changeSong( currentMap().music_ );
 
