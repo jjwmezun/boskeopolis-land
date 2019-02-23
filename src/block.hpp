@@ -25,6 +25,7 @@ class Block : public Object
 		const BlockType* type() const;
 		bool isDestroyed() const;
 		bool hasComponentType( BlockComponent::Type type ) const;
+		void init( Map& lvmap );
 
 	private:
 		BlockType* type_; // COPY; owned by other object.

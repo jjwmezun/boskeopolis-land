@@ -9,6 +9,7 @@ class EventSystem;
 class Health;
 class GameState;
 class Level;
+class Map;
 class Sprite;
 class SpriteSystem;
 
@@ -24,6 +25,7 @@ class BlockComponent
 		BlockComponent( Type type = Type::NOTYPE );
 		virtual ~BlockComponent();
 		virtual void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const = 0;
+		virtual void init( Block& block, Map& lvmap ) const;
 		Type type() const;
 
 	protected:

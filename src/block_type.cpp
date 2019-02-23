@@ -96,3 +96,11 @@ const SpriteGraphics* BlockType::graphics() const
 {
 	return graphics_.get();
 };
+
+void BlockType::init( Block& block, Map& lvmap ) const
+{
+	for ( const auto& component : components_ )
+	{
+		component->init( block, lvmap );
+	}
+};

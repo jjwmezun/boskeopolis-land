@@ -79,3 +79,11 @@ bool Block::isDestroyed() const
 {
 	return !hasType();
 }
+
+void Block::init( Map& lvmap )
+{
+	if ( type_ != nullptr )
+	{
+		type_->init( *this, lvmap );
+	}
+};

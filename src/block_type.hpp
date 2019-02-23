@@ -39,6 +39,7 @@ class BlockType
 		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
 		void render( const Camera& camera, const Block& block, bool priority, SDL_Texture* texture = nullptr ) const;
 		void renderAnyPriority( const Camera& camera, const Block& block ) const;
+		void init( Block& block, Map& lvmap ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;
 		const SpriteGraphics* graphics() const;

@@ -14,3 +14,5 @@ BlockComponent::Type BlockComponent::type() const
 {
 	return type_;
 };
+
+void BlockComponent::init( Block& block, Map& lvmap ) const {};

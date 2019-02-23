@@ -22,7 +22,7 @@ class BlockSystem
 		void render( const Map& lvmap, const Camera& camera, bool priority = false );
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites );
 		void reset( const Map& lvmap );
-		void blocksFromMap( const Map& lvmap, const Camera& camera );
+		void blocksFromMap( Map& lvmap, const Camera& camera );
 		bool blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const;
 		void addBlock( int x, int y, int i, int type, std::vector<Block>& list, bool accept_all_blocks = false );
 

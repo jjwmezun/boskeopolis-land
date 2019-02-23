@@ -100,7 +100,7 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 	}
 };
 
-void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
+void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 {
 	if ( !blocks_work_offscreen_ )
 	{
@@ -139,6 +139,7 @@ void BlockSystem::blocksFromMap( const Map& lvmap, const Camera& camera )
 				const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 				const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
 				addBlock( x, y, i, type, blocks_, true );
+				blocks_[ i ].init( lvmap );
 			}
 		}
 	}

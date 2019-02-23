@@ -13,16 +13,7 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 {
 	if ( Inventory::haveDiamond() )
 	{
-		level.currentMap().deleteBlock( block.location() );
-
-		if ( replacement_block_ == -1 )
-		{
-			block.destroy();
-		}
-		else
-		{
-			level.currentMap().changeBlock( block.location(), replacement_block_ );
-		}
+		removeDiamond( block, level.currentMap() );
 	}
 	else
 	{
@@ -31,5 +22,27 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 			Inventory::getDiamond();
 			Audio::playSound( Audio::SoundType::DIAMOND );
 		}
+	}
+};
+
+void BlockComponentDiamond::init( Block& block, Map& lvmap ) const
+{
+	if ( Inventory::haveDiamond() )
+	{
+		removeDiamond( block, lvmap );
+	}
+};
+
+void BlockComponentDiamond::removeDiamond( Block& block, Map& lvmap ) const
+{
+	lvmap.deleteBlock( block.location() );
+
+	if ( replacement_block_ == -1 )
+	{
+		block.destroy();
+	}
+	else
+	{
+		lvmap.changeBlock( block.location(), replacement_block_ );
 	}
 };
