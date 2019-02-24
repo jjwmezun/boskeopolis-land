@@ -46,7 +46,8 @@ class Sprite : public Object
 			ICICLE,
 			TREASURE_CHEST,
 			PHASE_THROUGH,
-			TRUCK_PLATFORM
+			TRUCK_PLATFORM,
+			CRAB
 		};
 
 		enum class CameraMovement

@@ -1,0 +1,32 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 12,
+		"y": 0,
+		"priority": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "force_upward"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "sticky"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

@@ -33,6 +33,7 @@
 #include "block_component_very_steep.hpp"
 #include "block_component_sludge_water.hpp"
 #include "block_component_solid.hpp"
+#include "block_component_sticky.hpp"
 #include "block_component_swimmable.hpp"
 #include "block_component_switch_off.hpp"
 #include "block_component_switch_on.hpp"
@@ -552,9 +553,9 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentSwitchOff> () );
 					}
-					else if ( mezun::areStringsEqual( comp_type, "honey" ) )
+					else if ( mezun::areStringsEqual( comp_type, "sticky" ) )
 					{
-						components.emplace_back( std::make_unique<BlockComponentHoney> () );
+						components.emplace_back( std::make_unique<BlockComponentSticky> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
 					{

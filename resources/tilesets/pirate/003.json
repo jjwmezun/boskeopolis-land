@@ -10,7 +10,7 @@
 		{
 			"component":
 			{
-				"type": "solid"
+				"type": "slope_bottom_steep_left"
 			}
 		}
 	]

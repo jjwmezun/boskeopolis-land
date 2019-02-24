@@ -34,6 +34,8 @@ Editing or creating new map files requires a recent version o' Tiled ( must allo
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
 
+All artwork, including graphics & text, are released under Creative Commons Attribution-ShareAlike 4.0 International ( https://creativecommons.org/licenses/by-sa/4.0/ )
+
 ## Credits
 
 ### Music
@@ -75,4 +77,7 @@ Maybe temporary, maybe not.
 * Mart: Got Funk
 * Maze: Reformat
 
-The 1 exception is "Play in the Background"'s music, which a rendition o' Mozart's "Rondo alla turca" from Musopen @ https://musopen.org/music/2079/wolfgang-amadeus-mozart/rondo-alla-turca-from-sonata-kv-331/.
+Other songs used:
+
+* "Play in the Background": a rendition o' Mozart's "Rondo alla turca" from Musopen @ https://musopen.org/music/2079/wolfgang-amadeus-mozart/rondo-alla-turca-from-sonata-kv-331/.
+* "Good Shop Lifestyle": "Skyhawk Beach" by Blue Wave Theory @ http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in. Released under Creative Commons Attribution-ShareAlike 4.0 International ( https://creativecommons.org/licenses/by-sa/4.0/ ).

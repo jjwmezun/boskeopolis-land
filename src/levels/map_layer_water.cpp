@@ -80,7 +80,7 @@ void MapLayerWater::updateGFX( const Camera& camera )
 		dest_.x = x_offset_;
 	}
 
-	if ( timer_ == 8 )
+	if ( timer_ == 7 )
 	{
 		src_.y += HEIGHT;
 		if ( src_.y >= MAX_FRAME ) { src_.y = 0; }

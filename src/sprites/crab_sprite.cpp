@@ -4,7 +4,7 @@
 
 CrabSprite::CrabSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/crab.png", 0, 0, false, false, 0, false, 0, 0, 0, 2 ), x, y, 16, 14, { SpriteType::ENEMY }, 100, 800, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/crab.png", 0, 0, false, false, 0, false, 0, 0, 0, 2 ), x, y, 16, 14, { SpriteType::ENEMY, SpriteType::CRAB }, 100, 800, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	next_direction_ ( Direction::Horizontal::__NULL ),
 	timer_ ( 0 ),
 	animation_timer_ ( 0 )
@@ -51,7 +51,7 @@ void CrabSprite::customInteract( Collision& my_collision, Collision& their_colli
 			next_direction_ = Direction::Horizontal::LEFT;
 		}
 	}
-	else if ( them.hasType( SpriteType::ENEMY ) )
+	else if ( them.hasType( SpriteType::CRAB ) )
 	{
 		if ( their_collision.collideLeft() || their_collision.collideRight() )
 		{
