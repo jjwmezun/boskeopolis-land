@@ -16,11 +16,11 @@ Block::Block
 	type_id_ ( type_id )
 {};
 
-void Block::render( const Camera& camera, bool priority, SDL_Texture* texture ) const
+void Block::render( const Camera& camera, bool priority ) const
 {
 	if ( hasType() )
 	{
-		type_->render( camera, *this, priority, texture );
+		type_->render( Unit::SubPixelsToPixels( hitBox() ), priority, &camera );
 	}
 };
 
@@ -28,7 +28,7 @@ void Block::renderAnyPriority( const Camera& camera ) const
 {
 	if ( hasType() )
 	{
-		type_->renderAnyPriority( camera, *this );
+		type_->renderAnyPriority( Unit::SubPixelsToPixels( hitBox() ), &camera );
 	}
 };
 

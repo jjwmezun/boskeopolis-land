@@ -24,7 +24,7 @@ class BlockSystem
 		void reset( const Map& lvmap );
 		void blocksFromMap( Map& lvmap, const Camera& camera );
 		bool blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const;
-		void addBlock( int x, int y, int i, int type, std::vector<Block>& list, bool accept_all_blocks = false );
+		BlockType* getBlockType( int type );
 
 	private:
 		std::vector<Block> blocks_;
@@ -34,5 +34,6 @@ class BlockSystem
 		bool blocks_work_offscreen_;
 
 		Tileset& getTileset();
+		void addBlock( int x, int y, int i, int type, bool accept_all_blocks = false );
 		void changeTileset( std::string new_tileset );
 };

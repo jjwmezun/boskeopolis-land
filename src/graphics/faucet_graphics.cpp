@@ -30,7 +30,7 @@ void FaucetGraphics::update( Sprite& sprite )
 	}
 };
 
-void FaucetGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, SDL_Texture* texture ) const
+void FaucetGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
 	masterRender( bound_box, 256, 0, camera, priority );
 

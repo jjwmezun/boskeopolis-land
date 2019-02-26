@@ -121,7 +121,7 @@ void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 					const int x_pixels = Unit::BlocksToPixels( x );
 					const int i = lvmap.indexFromXAndY( x, y );
 					const int type = lvmap.block( i ) - 1;
-					addBlock( x_pixels, y_pixels, i, type, blocks_, false );
+					addBlock( x_pixels, y_pixels, i, type, false );
 				}
 			}
 
@@ -138,21 +138,26 @@ void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 				const int type = lvmap.block( i ) - 1;
 				const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 				const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
-				addBlock( x, y, i, type, blocks_, true );
+				addBlock( x, y, i, type, true );
 				blocks_[ i ].init( lvmap );
 			}
 		}
 	}
 };
 
-void BlockSystem::addBlock( int x, int y, int i, int type, std::vector<Block>& list, bool accept_all_blocks )
+void BlockSystem::addBlock( int x, int y, int i, int type, bool accept_all_blocks )
 {
-	BlockType* block_type = getTileset().blockType( type, x, y );
+	BlockType* block_type = getBlockType( type );
 	if ( accept_all_blocks || block_type != nullptr )
 	{
-		list.emplace_back( x, y, block_type, i, type );
+		blocks_.emplace_back( x, y, block_type, i, type );
 	}
 };
+
+BlockType* BlockSystem::getBlockType( int type )
+{
+	return getTileset().blockType( type );
+}
 
 bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const
 {

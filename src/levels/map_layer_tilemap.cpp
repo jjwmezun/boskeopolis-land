@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include "block_system.hpp"
+#include "block_type.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "map_layer_tilemap.hpp"
@@ -43,10 +44,12 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 				if ( tiles_.at( i ) > 0 )
 				{
 					const int xp = Unit::BlocksToPixels( x );
-
 					const int type = tiles_.at( i ) - 1;
-
-					blocks.addBlock( xp, yp, i, type, blocks_ );
+					BlockType* block_type = blocks.getBlockType( type );
+					if ( block_type != nullptr )
+					{
+						blocks_.emplace_back( xp, yp, block_type, i, type );
+					}
 				}
 			}
 		}

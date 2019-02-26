@@ -11,7 +11,7 @@ class SwitchGraphics : public SpriteGraphics
 			std::unique_ptr<SpriteGraphics> gfx_on
 		);
 		void update( const EventSystem& events ) override;
-		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false, SDL_Texture* texture = nullptr ) const override;
+		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const override;
 
 	private:
 		std::unique_ptr<SpriteGraphics> gfx_off_;

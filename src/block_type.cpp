@@ -56,19 +56,19 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 	}
 };
 
-void BlockType::renderAnyPriority( const Camera& camera, const Block& block ) const
+void BlockType::renderAnyPriority( const sdl2::SDLRect& dest, const Camera* camera ) const
 {
 	if ( graphics_ )
 	{
-		graphics_->renderAnyPriority( Unit::SubPixelsToPixels( block.hitBox() ), &camera );
+		graphics_->renderAnyPriority( dest, camera );
 	}
 };
 
-void BlockType::render( const Camera& camera, const Block& block, bool priority, SDL_Texture* texture ) const
+void BlockType::render( const sdl2::SDLRect& dest, bool priority, const Camera* camera ) const
 {
 	if ( graphics_ )
 	{
-		graphics_->render( Unit::SubPixelsToPixels( block.hitBox() ), &camera, priority, texture );
+		graphics_->render( dest, camera, priority );
 	}
 };
 

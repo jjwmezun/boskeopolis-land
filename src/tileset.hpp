@@ -15,7 +15,7 @@ class Tileset
 		Tileset( std::string tileset = "urban" );
 
 		void update( EventSystem& events );
-		BlockType* blockType( int type, int x, int y );
+		BlockType* blockType( int type );
 
 	private:
 		static constexpr int EMPTY_BLOCK = -1;

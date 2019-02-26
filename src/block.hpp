@@ -15,7 +15,7 @@ class Block : public Object
 {
 	public:
 		Block( int x, int y, BlockType* type, int location, int type_id );
-		void render( const Camera& camera, bool priority = false, SDL_Texture* texture = nullptr ) const;
+		void render( const Camera& camera, bool priority = false ) const;
 		void renderAnyPriority( const Camera& camera ) const;
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
 		void destroy();

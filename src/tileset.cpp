@@ -84,7 +84,7 @@ void Tileset::update( EventSystem& events )
 	}
 };
 
-BlockType* Tileset::blockType( int type, int x, int y )
+BlockType* Tileset::blockType( int type )
 {
 	if ( type <= EMPTY_BLOCK )
 	{

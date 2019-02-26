@@ -5,6 +5,7 @@
 #include "mezun_helpers.hpp"
 #include "map.hpp"
 #include "map_layer_tilemap.hpp"
+#include "map_layer_tilemap_image.hpp"
 #include "map_layer_water.hpp"
 #include "map_layer_water_back.hpp"
 #include "rapidjson/document.h"
@@ -34,6 +35,7 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 			const std::string bg_line = std::string( std::string( "BG" ) + std::to_string( i ) );
 			const std::string fg_line = std::string( std::string( "FG" ) + std::to_string( i ) );
 			const std::string fade_fg_line = std::string( std::string( "Fade FG" ) + std::to_string( i ) );
+			const std::string bg_img_line = std::string( std::string( "BGIMG" ) + std::to_string( i ) );
 
 			if ( layer_name == bg_line )
 			{
@@ -46,6 +48,10 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 			else if ( layer_name == fade_fg_line )
 			{
 				return { LayerType::FADE_FOREGROUND, i };
+			}
+			else if ( layer_name == bg_img_line )
+			{
+				return { LayerType::BACKGROUND_IMAGE, i };
 			}
 		}
 	}
@@ -67,6 +73,7 @@ Map Map::mapFromPath
 		std::vector<int> blocks = {};
 		std::vector<int> sprites = {};
 		std::vector<std::vector<int>> bg_block_layers = {};
+		std::vector<std::vector<int>> bg_block_img_layers = {};
 		std::vector<std::vector<int>> fg_block_layers = {};
 		std::vector<std::vector<int>> fade_fg_block_layers = {};
 		std::vector<std::unique_ptr<MapLayer>> foregrounds;
@@ -175,6 +182,13 @@ Map Map::mapFromPath
 							}
 							fade_fg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
 						break;
+						case ( LayerType::BACKGROUND_IMAGE ):
+							while ( bg_block_img_layers.size() < layer_info.n )
+							{
+								bg_block_img_layers.emplace_back( std::vector<int> () );
+							}
+							bg_block_img_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
+						break;
 					}
 				}
 			}
@@ -184,6 +198,10 @@ Map Map::mapFromPath
 		for ( auto& bg_block_layer : bg_block_layers )
 		{
 			backgrounds.emplace_back( new MapLayerTilemap( bg_block_layer, width, height ) );
+		}
+		for ( auto& bg_block_img_layer : bg_block_img_layers )
+		{
+			backgrounds.emplace_back( new MapLayerTilemapImage( bg_block_img_layer, width, height ) );
 		}
 		for ( auto& fg_block_layer : fg_block_layers )
 		{

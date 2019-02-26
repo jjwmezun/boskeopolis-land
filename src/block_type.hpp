@@ -37,8 +37,8 @@ class BlockType
 
 		void update( EventSystem& events );
 		void interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
-		void render( const Camera& camera, const Block& block, bool priority, SDL_Texture* texture = nullptr ) const;
-		void renderAnyPriority( const Camera& camera, const Block& block ) const;
+		void render( const sdl2::SDLRect& dest, bool priority, const Camera* camera = nullptr ) const;
+		void renderAnyPriority( const sdl2::SDLRect& dest, const Camera* camera = nullptr ) const;
 		void init( Block& block, Map& lvmap ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;

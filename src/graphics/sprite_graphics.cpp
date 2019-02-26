@@ -50,7 +50,7 @@ void SpriteGraphics::update( const EventSystem& events )
 	update();
 };
 
-void SpriteGraphics::renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera  ) const
+void SpriteGraphics::renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera ) const
 {
 	render( bound_box, camera, priority_ );
 };
@@ -60,7 +60,7 @@ void SpriteGraphics::renderAnyPriorityOverrideAlpha( const sdl2::SDLRect& bound_
 	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority_, alpha );
 };
 
-void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority, SDL_Texture* texture ) const
+void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
 {
 	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha_ );
 };

@@ -22,7 +22,8 @@ class Map
 			SPRITES,
 			BACKGROUND,
 			FOREGROUND,
-			FADE_FOREGROUND
+			FADE_FOREGROUND,
+			BACKGROUND_IMAGE
 		};
 
 		struct LayerInfo
