@@ -129,7 +129,11 @@ SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
 	hero_ (),
 	permanently_killed_enemies_ ( 0 )
-{};
+{
+	// Minimize chances o' sprite # going past space
+	// & forcing slow vector relocation.
+	sprites_.reserve( 50 );
+};
 
 SpriteSystem::~SpriteSystem() {};
 
@@ -729,7 +733,12 @@ void SpriteSystem::destroySprite( int n, Map& lvmap )
 
 	if ( n < sprites_.size() )
 	{
-		sprites_.erase( sprites_.begin() + n );
+		// Save time by just replacing dying sprite with last sprite & just
+		// popping off last sprite ( which is null now, anyway ),
+		// saving us from having to slowly shift every sprite back
+		// with vector's native erase method.
+		sprites_[ n ].reset( sprites_[ sprites_.size() - 1 ].release() );
+		sprites_.pop_back();
 	}
 };
 

@@ -42,10 +42,8 @@
 		}
 	],
 
-	"entrance_x": 102,
-	"entrance_y": 5,
-	"entrance_x2": 44,
-	"entrance_y2": 31,
+	"entrance_x": 44,
+	"entrance_y": 31,
 	"camera_x": 38,
 	"gem_challenge": 20000,
 	"time_challenge": 40
