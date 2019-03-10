@@ -76,6 +76,7 @@
 #include "player_open_chest_sprite.hpp"
 #include "player_spaceship_sprite.hpp"
 #include "player_sprite_fluttering.hpp"
+#include "pi_block_sprite.hpp"
 #include "pollo_sprite.hpp"
 #include "pollo_del_aire_sprite.hpp"
 #include "pollo_del_aire_circle_sprite.hpp"
@@ -560,6 +561,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 138 ):
 			return std::unique_ptr<Sprite> ( new AntSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 139 ):
+			return std::unique_ptr<Sprite> ( new PiBlockSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
