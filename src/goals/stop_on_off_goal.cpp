@@ -5,11 +5,11 @@
 #include "stop_on_off_goal.hpp"
 #include "unit.hpp"
 
-static constexpr int GO_TIME = Unit::FPS * 4;
-static constexpr int BLINK_TIME = 8;
-static constexpr int NUM_O_BLINKS = 3;
+static constexpr int GO_TIME = 60;
+static constexpr int BLINK_TIME = 4;
+static constexpr int NUM_O_BLINKS = 5;
 static constexpr int NUM_O_BLINKS_BOTH_COLORS = NUM_O_BLINKS * 2;
-static constexpr int STOP_TIME = Unit::FPS * 2;
+static constexpr int STOP_TIME = 30;
 static constexpr int TOTAL_ROUND_TIME = GO_TIME + ( NUM_O_BLINKS_BOTH_COLORS * BLINK_TIME ) + STOP_TIME;
 
 StopOnOffGoal::StopOnOffGoal() : Goal( "¡Don't move when the light's red!" ) {};
@@ -59,6 +59,7 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 	switch ( events.switch_ )
 	{
 		case ( false ):
+		{
 			if
 			(
 				abs( sprites.hero().vx_ ) > 500 ||
@@ -68,6 +69,7 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 			{
 				events.fail();
 			}
+		}
 		break;
 	}
 };
