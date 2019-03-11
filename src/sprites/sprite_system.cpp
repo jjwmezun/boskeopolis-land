@@ -97,6 +97,7 @@
 #include "sewer_monster_sprite.hpp"
 #include "shmup_bullet_sprite.hpp"
 #include "shmup_hero_bullet_sprite.hpp"
+#include "shmup_shooter_sprite.hpp"
 #include "shooter_player_sprite.hpp"
 #include "shroud_sprite.hpp"
 #include "sillyfish_sprite.hpp"
@@ -565,12 +566,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 139 ):
 			return std::unique_ptr<Sprite> ( new PiBlockSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 140 ):
+			return std::unique_ptr<Sprite> ( new ShmupShooterSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
 	}
 };
-
+asfsdfsa
 void SpriteSystem::spawn( std::unique_ptr<Sprite> sprite )
 {
 	sprites_.emplace_back( sprite.release() );

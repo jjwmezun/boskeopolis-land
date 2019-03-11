@@ -51,9 +51,13 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 6 ) ):
-			events.switch_ = false;
 			state.newPalette( "Stop Red" );
 		break;
+	}
+
+	if ( round_time > GO_TIME + ( BLINK_TIME * 6 ) + 8 )
+	{
+		events.switch_ = false;
 	}
 
 	switch ( events.switch_ )

@@ -66,6 +66,8 @@ namespace Render
 	void stateChangeFade( int alpha );
 	void colorCanvas( int color, int alpha = 255 );
 	void colorCanvas();
+	void colorCanvasForceColor( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha );
+	void colorCanvasMultiply( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha );
 	void clearScreen();
 	void clearScreenTransparency();
 	void screenBorders();

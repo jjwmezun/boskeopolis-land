@@ -4,6 +4,7 @@
 #include "map_layer_constellation_scrolling.hpp"
 #include "map_layer_image.hpp"
 #include "map_layer_image_switch.hpp"
+#include "map_layer_neon.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
 #include "block_system.hpp"
@@ -581,6 +582,13 @@ Level Level::getLevel( int id )
 											std::make_unique<MapLayerShade> ( bg[ "color" ].GetInt(), alpha )
 										);
 									}
+								}
+								else if ( mezun::areStringsEqual( bgtype, "neon" ) )
+								{
+									group.emplace_back
+									(
+										std::make_unique<MapLayerNeon> ()
+									);
 								}
 
 							}
