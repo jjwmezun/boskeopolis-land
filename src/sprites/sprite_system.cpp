@@ -13,6 +13,7 @@
 #include "cactooie_spine_sprite.hpp"
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
+#include "change_camera_autoscroll_sprite.hpp"
 #include "cannon_sprite.hpp"
 #include "capn_clearbeard_sprite.hpp"
 #include "carrot_sprite.hpp"
@@ -96,7 +97,6 @@
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
 #include "shmup_bullet_sprite.hpp"
-#include "shmup_hero_bullet_sprite.hpp"
 #include "shmup_shooter_sprite.hpp"
 #include "shooter_player_sprite.hpp"
 #include "shroud_sprite.hpp"
@@ -569,12 +569,24 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 140 ):
 			return std::unique_ptr<Sprite> ( new ShmupShooterSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 141 ):
+			return std::unique_ptr<Sprite> ( new ChangeCameraAutoscrollSprite( x, y, Direction::Simple::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 142 ):
+			return std::unique_ptr<Sprite> ( new ChangeCameraAutoscrollSprite( x, y, Direction::Simple::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 143 ):
+			return std::unique_ptr<Sprite> ( new ChangeCameraAutoscrollSprite( x, y, Direction::Simple::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 144 ):
+			return std::unique_ptr<Sprite> ( new ChangeCameraAutoscrollSprite( x, y, Direction::Simple::UP ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
 	}
 };
-asfsdfsa
+
 void SpriteSystem::spawn( std::unique_ptr<Sprite> sprite )
 {
 	sprites_.emplace_back( sprite.release() );
@@ -608,11 +620,6 @@ void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction )
 void SpriteSystem::spawnShmupBullet( int x, int y, double dy, double dx )
 {
 	sprites_.emplace_back( new ShmupBulletSprite( x, y, dy, dx ) );
-};
-
-void SpriteSystem::spawnHeroShmupBullet( int x, int y )
-{
-	sprites_.emplace_back( new ShmupHeroBulletSprite( x, y ) );
 };
 
 void SpriteSystem::spawnOlive( int x, int y, Direction::Horizontal start_dir )

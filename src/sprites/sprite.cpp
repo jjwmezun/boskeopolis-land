@@ -805,6 +805,16 @@ bool Sprite::blocksJustAbove( const BlockSystem& blocks ) const
 	return blocks.blocksInTheWay( justAbove(), BlockComponent::Type::SOLID );
 };
 
+sdl2::SDLRect Sprite::justBelow() const
+{
+	return { hit_box_.x + 3000, bottomSubPixels(), hit_box_.w - 6000, 16000 };
+};
+
+bool Sprite::blocksJustBelow( const BlockSystem& blocks ) const
+{
+	return blocks.blocksInTheWay( justBelow(), BlockComponent::Type::SOLID );
+};
+
 sdl2::SDLRect Sprite::justLeft() const
 {
 	return { hit_box_.x - 16000, hit_box_.y + 3000, 16000, hit_box_.h - 6000 };

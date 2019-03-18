@@ -2,7 +2,7 @@
 #include "shmup_bullet_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-#define SPEED 4000.0
+#define SPEED 6000.0
 
 ShmupBulletSprite::ShmupBulletSprite( int x, int y, double dy, double dx )
 :

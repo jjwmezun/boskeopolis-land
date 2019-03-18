@@ -47,7 +47,8 @@ class Sprite : public Object
 			TREASURE_CHEST,
 			PHASE_THROUGH,
 			TRUCK_PLATFORM,
-			CRAB
+			CRAB,
+			CAMERA_MOVE
 		};
 
 		enum class CameraMovement
@@ -314,6 +315,8 @@ class Sprite : public Object
 
 		sdl2::SDLRect justAbove() const;
 		bool blocksJustAbove( const BlockSystem& blocks ) const;
+		sdl2::SDLRect justBelow() const;
+		bool blocksJustBelow( const BlockSystem& blocks ) const;
 		sdl2::SDLRect justLeft() const;
 		bool blocksJustLeft( const BlockSystem& blocks ) const;
 		sdl2::SDLRect justRight() const;
