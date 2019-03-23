@@ -97,6 +97,7 @@
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
 #include "shmup_bullet_sprite.hpp"
+#include "shmup_enemy_sprite.hpp"
 #include "shmup_shooter_sprite.hpp"
 #include "shooter_player_sprite.hpp"
 #include "shroud_sprite.hpp"
@@ -580,6 +581,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 144 ):
 			return std::unique_ptr<Sprite> ( new ChangeCameraAutoscrollSprite( x, y, Direction::Simple::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 145 ):
+			return std::unique_ptr<Sprite> ( new ShmupEnemySprite() );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
