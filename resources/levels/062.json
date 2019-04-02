@@ -1,0 +1,14 @@
+{
+	"name": "Star Lake",
+	"maps":
+	[
+		{
+			"slug": "space-4"
+		}
+	],
+
+	"entrance_x": 23,
+	"entrance_y": 7,
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

@@ -15,6 +15,11 @@ void SpikyFruitSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	{
 		graphics_->rotation_ += 5;
 	}
+	else
+	{
+		// Make it not affected by wind.
+		hit_box_.x = original_hit_box_.x;
+	}
 };
 
 void SpikyFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

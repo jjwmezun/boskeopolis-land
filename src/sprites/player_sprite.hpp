@@ -49,7 +49,7 @@ class PlayerSprite : public Sprite
 		void handleDoorBehavior( EventSystem& events );
 		void handleChasmBehavior( const Map& lvmap, EventSystem& events );
 		void handleDrowningBehavior( const Health& health );
-		void handleWaterEnteringAndExiting();
+		void handleWaterEnteringAndExiting( const Map& lvmap );
 		void resetBopsOnLanding() const;
 		void handleLadderBehavior( EventSystem& events );
 		void handleDucking( const BlockSystem& blocks );

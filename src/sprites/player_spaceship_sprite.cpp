@@ -148,7 +148,7 @@ void PlayerSpaceshipSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 			break;
 		}
 
-		sprites.spawn( std::make_unique<ShmupHeroBulletSprite> ( x, y, direction_ ) );
+		sprites.spawn( std::make_unique<ShmupHeroBulletSprite> ( x, y, direction_, SpriteType::HEROS_BULLET ) );
 		Inventory::loseFunds( 100 );
 	}
 	invincibilityFlicker( health );

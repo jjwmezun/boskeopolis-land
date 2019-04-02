@@ -18,6 +18,11 @@ void RopeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
     {
         action_.update( *this, *graphics_ );
     }
+    else
+    {
+		// Make it not affected by wind.
+		hit_box_.x = original_hit_box_.x;
+    }
 };
 
 void RopeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

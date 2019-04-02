@@ -11,14 +11,6 @@ QuadrapusSprite::~QuadrapusSprite() {};
 
 void QuadrapusSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( ySubPixels() < ( 16 * 16000 ) )
-	{
-		collideStopYTop( ySubPixels() - ( 16 * 16000 ) );
-	}
-	if ( ySubPixels() > ( 29 * 16000 ) )
-	{
-		collideStopYBottom( ySubPixels() - ( 29 * 16000 ) );
-	}
 };
 
 void QuadrapusSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

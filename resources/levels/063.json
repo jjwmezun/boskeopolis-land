@@ -1,0 +1,14 @@
+{
+	"name": "Mind Your Manors",
+	"maps":
+	[
+		{
+			"slug": "mansion-1"
+		}
+	],
+
+	"entrance_x": 3,
+	"entrance_y": 8,
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

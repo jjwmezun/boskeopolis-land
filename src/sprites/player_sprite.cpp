@@ -77,7 +77,7 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 	actions( blocks, events );
 	handleLookingUp();
 	handleCameraMovement( camera );
-	handleWaterEnteringAndExiting();
+	handleWaterEnteringAndExiting( lvmap );
 	handleDoorBehavior( events );
 	handleChasmBehavior( lvmap, events );
 	handleDrowningBehavior( health );
@@ -212,21 +212,31 @@ void PlayerSprite::handleDrowningBehavior( const Health& health )
 	}
 }
 
-void PlayerSprite::handleWaterEnteringAndExiting()
+void PlayerSprite::handleWaterEnteringAndExiting( const Map& lvmap )
 {
-	if ( !is_dead_ && in_water_ )
+	if ( lvmap.watery_ )
 	{
-		changeMovement( SpriteMovement::Type::SWIMMING );
-		in_water_ = false;
-	}
-	else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
-	{
-		changeMovement( SpriteMovement::Type::GROUNDED );
-
-		if ( input_->action1() )
+		if ( !hasMovementType( SpriteMovement::Type::SWIMMING ) )
 		{
-			bounce();
-			Audio::playSound( Audio::SoundType::JUMP );
+			changeMovement( SpriteMovement::Type::SWIMMING );
+		}
+	}
+	else
+	{
+		if ( !is_dead_ && in_water_ )
+		{
+			changeMovement( SpriteMovement::Type::SWIMMING );
+			in_water_ = false;
+		}
+		else if ( hasMovementType( SpriteMovement::Type::SWIMMING ) )
+		{
+			changeMovement( SpriteMovement::Type::GROUNDED );
+
+			if ( input_->action1() )
+			{
+				bounce();
+				Audio::playSound( Audio::SoundType::JUMP );
+			}
 		}
 	}
 };

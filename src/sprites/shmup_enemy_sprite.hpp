@@ -15,6 +15,8 @@ class ShmupEnemySprite : public Sprite
 
 	private:
 		bool reset_;
+		int shoot_timer_;
+		int shoot_timer_target_;
 
 		void doReset( const Camera& camera );
 };

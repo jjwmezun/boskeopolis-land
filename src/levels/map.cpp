@@ -102,6 +102,8 @@ Map Map::mapFromPath
 		bool warp_on_fall = false;
 		int ui_bg_color = 1;
 		bool scroll_lock = false;
+		bool watery = false;
+		bool oxygen = false;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -472,6 +474,16 @@ Map Map::mapFromPath
 				{
 					scroll_lock = ( value.IsBool() && value.GetBool() );
 				}
+
+				else if ( mezun::areStringsEqual( name, "watery" ) )
+				{
+					watery = ( value.IsBool() && value.GetBool() );
+				}
+
+				else if ( mezun::areStringsEqual( name, "oxygen" ) )
+				{
+					oxygen = ( value.IsBool() && value.GetBool() );
+				}
 			}
 		}
 
@@ -541,7 +553,9 @@ Map Map::mapFromPath
 			lightning_flash_color,
 			music,
 			warp_on_fall,
-			ui_bg_color
+			ui_bg_color,
+			watery,
+			oxygen
 		);
 };
 
@@ -572,7 +586,9 @@ Map::Map
 	int lightning_flash_color,
 	std::string music,
 	bool warp_on_fall,
-	int ui_bg_color
+	int ui_bg_color,
+	bool watery,
+	bool oxygen
 )
 :
 	blocks_ ( blocks ),
@@ -601,7 +617,9 @@ Map::Map
 	current_bg_ ( palette.bgN() ),
 	music_ ( music ),
 	warp_on_fall_ ( warp_on_fall ),
-	ui_bg_color_ ( ui_bg_color )
+	ui_bg_color_ ( ui_bg_color ),
+	watery_ ( watery ),
+	oxygen_ ( oxygen )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -645,7 +663,9 @@ Map::Map( Map&& m ) noexcept
 	current_bg_ ( m.current_bg_ ),
 	music_ ( m.music_ ),
 	warp_on_fall_ ( m.warp_on_fall_ ),
-	ui_bg_color_ ( m.ui_bg_color_ )
+	ui_bg_color_ ( m.ui_bg_color_ ),
+	watery_ ( m.watery_ ),
+	oxygen_ ( m.oxygen_ )
 {};
 
 Map::Map( const Map& c )
@@ -678,7 +698,9 @@ Map::Map( const Map& c )
 	current_bg_ ( c.current_bg_ ),
 	music_ ( c.music_ ),
 	warp_on_fall_ ( c.warp_on_fall_ ),
-	ui_bg_color_ ( c.ui_bg_color_ )
+	ui_bg_color_ ( c.ui_bg_color_ ),
+	watery_ ( c.watery_ ),
+	oxygen_ ( c.oxygen_ )
 {};
 
 int Map::widthBlocks() const

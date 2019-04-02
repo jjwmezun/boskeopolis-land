@@ -1,9 +1,10 @@
 #include "shmup_hero_bullet_sprite.hpp"
 #include "sprite_graphics.hpp"
+#include <iostream>
 
-ShmupHeroBulletSprite::ShmupHeroBulletSprite( int x, int y, Direction::Simple direction )
+ShmupHeroBulletSprite::ShmupHeroBulletSprite( int x, int y, Direction::Simple direction, SpriteType type )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/shmup.png", 32, 16 ), x, y, 5, 4, { SpriteType::HEROS_BULLET }, 1600, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, false, false, true ),
+	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/shmup.png", 32, ( ( type == SpriteType::ENEMY ) ? 20 : 16 ) ), x, y, 5, 4, { type }, 1600, ( ( type == SpriteType::ENEMY ) ? 6000 : 3000 ), 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, false, false, true ),
 	direction_ ( direction )
 {};
 
@@ -11,6 +12,7 @@ ShmupHeroBulletSprite::~ShmupHeroBulletSprite() {};
 
 void ShmupHeroBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
+	std::cout<<"YO"<<std::endl;
 	switch ( direction_ )
 	{
 		case ( Direction::Simple::UP ):
