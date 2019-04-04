@@ -1,6 +1,6 @@
 {
 	"name": "Blueberry Burroughs",
-	
+
 	"maps":
 	[
 		{
@@ -55,7 +55,6 @@
 		},
 		{
 			"slug": "city-1-2",
-			"palette_set": { "palette_type": "Golden Yellow", "bg_color": 4 },
 			"backgrounds":
 			[
 				{
@@ -87,20 +86,20 @@
 			]
 		}
 	],
-	
-	
+
+
 	"goal":
 	{
 		"type": "collect",
 		"amount": 10000
 	},
-	
+
 	"entrance_x": 14,
 	"entrance_y": 11,
 	"camera_x": 10,
-	
+
 	"message": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
-	
+
 	"gem_challenge": 10000,
 	"time_challenge": 40
 }

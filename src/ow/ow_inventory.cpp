@@ -11,7 +11,7 @@ constexpr sdl2::SDLRect OWInventory::AREA;
 void OWInventory::update( int lv_select )
 {
 	Inventory::update();
-	
+
 	if ( !Input::held( Input::Action::CANCEL ) )
 	{
 		show_challenges_lock_ = false;
@@ -20,7 +20,7 @@ void OWInventory::update( int lv_select )
 	{
 		show_challenges_lock_ = true;
 	}
-	
+
 	if ( !show_challenges_lock_ && Input::held( Input::Action::CANCEL ) )
 	{
 		show_challenges_ = true;
@@ -35,7 +35,7 @@ void OWInventory::update( int lv_select )
 		show_challenges_ = false;
 		sound_lock_ = false;
 	}
-	
+
 	if ( color_animation_timer_ >= COLOR_TIMER_LIMIT )
 	{
 		color_animation_timer_ = 0;
@@ -67,7 +67,7 @@ void OWInventory::update( int lv_select )
 void OWInventory::render( int lv_select )
 {
 	Render::renderRect( AREA );
-	
+
 	if ( lv_select > 0 )
 	{
 		Text::FontColor name_shade = Text::FontColor::BLACK;
@@ -76,7 +76,7 @@ void OWInventory::render( int lv_select )
 
 		std::string gem_score;
 		std::string time_score;
-		
+
 		if ( show_challenges_ )
 		{
 			gem_score  = Level::gemChallengeText( lv_select );
@@ -89,17 +89,17 @@ void OWInventory::render( int lv_select )
 		{
 			gem_score  = Inventory::gemScore( lv_select );
 			time_score = Inventory::timeScore( lv_select );
-			
+
 			if ( Inventory::levelComplete( lv_select ) )
 			{
 				name_shade = ( Text::FontColor )( color_animation_ );
 			}
-			
+
 			if ( Inventory::gemChallengeBeaten( lv_select ) )
 			{
 				gem_shade = ( Text::FontColor )( color_animation_ );
 			}
-			
+
 			if ( Inventory::timeChallengeBeaten( lv_select ) )
 			{
 				time_shade = ( Text::FontColor )( color_animation_ );
@@ -110,10 +110,10 @@ void OWInventory::render( int lv_select )
 
 		gem_icon_gfx_.render( { RIGHT_EDGE - ( 12 * 8 ), ROW_1, 8, 8 } );
 		Text::renderText( gem_score, RIGHT_EDGE - ( 11 * 8 ), ROW_1, nullptr, gem_shade );
-		
+
 		time_icon_gfx_.render( { RIGHT_EDGE - ( 5 * 8 ), ROW_1, 8, 8 } );
 		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1, nullptr, time_shade );
-		
+
 		win_icon_gfx_.current_frame_x_ = DONT_HAVE_X;
 		if ( Inventory::victory( lv_select ) )
 		{
@@ -130,7 +130,7 @@ void OWInventory::render( int lv_select )
 	}
 
 	gem_icon_gfx_.render( { LEFT_EDGE, ROW_2, 8, 8 } );
-	
+
 	if ( Inventory::totalFundsShown() < 0 )
 	{
 		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontColor::DARK_MID_GRAY );

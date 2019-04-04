@@ -6,12 +6,15 @@
 #include "inventory.hpp"
 #include "level_select_state.hpp"
 #include "level_state.hpp"
+#include "message_state.hpp"
 #include "mezun_math.hpp"
 #include "overworld_state.hpp"
 #include "overworld_menu_state.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
+#include "mezun_exceptions.hpp"
+#include <iostream>
 
 static constexpr int SMOOTH_MOVEMENT_PADDING = 4;
 
@@ -104,10 +107,29 @@ void OverworldState::stateUpdate()
 		menu();
 		if ( level_selection_ > 0 )
 		{
-			if ( Input::pressed( Input::Action::CONFIRM ) )
+			try
 			{
-				Main::changeState( std::unique_ptr<GameState> ( new LevelState( level_selection_ ) ) );
-				Audio::playSound( Audio::SoundType::CONFIRM );
+				if ( Input::pressed( Input::Action::CONFIRM ) )
+				{
+					Main::changeState( std::unique_ptr<GameState> ( new LevelState( level_selection_ ) ) );
+					Audio::playSound( Audio::SoundType::CONFIRM );
+				}
+			}
+			catch( const mezun::MissingLevel e )
+			{
+				Main::pushState
+				(
+					std::unique_ptr<MessageState> ( MessageState::errorMessage( e.what() ) ),
+					true
+				);
+			}
+			catch( const mezun::BrokenLevelFile e )
+			{
+				Main::pushState
+				(
+					std::unique_ptr<MessageState> ( MessageState::errorMessage( e.what() ) ),
+					true
+				);
 			}
 		}
 	}

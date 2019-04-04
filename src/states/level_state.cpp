@@ -4,7 +4,6 @@
 #include "main.hpp"
 #include "level_state.hpp"
 #include "message_state.hpp"
-#include "mezun_exceptions.hpp"
 #include "overworld_state.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
@@ -22,7 +21,7 @@ LevelState::LevelState( int lvname )
 	health_ ()
 {
 	Inventory::levelStart( lvname );
-};
+}
 
 LevelState::~LevelState()
 {

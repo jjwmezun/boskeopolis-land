@@ -1,8 +1,11 @@
 #include "audio.hpp"
-#include "main.hpp"
+#include <fstream>
 #include "input.hpp"
 #include "inventory.hpp"
-#include <fstream>
+#include "level.hpp"
+#include "main.hpp"
+#include "message_state.hpp"
+#include "mezun_exceptions.hpp"
 #include "options_state.hpp"
 #include "overworld_state.hpp"
 #include "render.hpp"
@@ -81,8 +84,19 @@ void TitleState::stateRender()
 
 void TitleState::init()
 {
-	std::ifstream ifs( Main::savePath() );
+	try
+	{
+		Level::buildLevelList();
+	}
+	catch ( const mezun::CantLoadLevelNames e )
+	{
+		Main::changeState
+		(
+			std::unique_ptr<MessageState> ( MessageState::errorMessage( e.what() ) )
+		);
+	}
 
+	std::ifstream ifs( Main::savePath() );
 	if ( ifs.is_open() )
 	{
 		can_load_ = true;
@@ -91,9 +105,7 @@ void TitleState::init()
 	{
 		can_load_ = false;
 	}
-
 	ifs.close();
-
 	Inventory::reset();
 };
 

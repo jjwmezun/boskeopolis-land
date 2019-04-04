@@ -46,6 +46,7 @@ class Level
 		static int timeChallenge( unsigned int n );
 		static std::string gemChallengeText( unsigned int n );
 		static std::string timeChallengeText( unsigned int n );
+		static void buildLevelList();
 
 	private:
 		std::vector<Map> maps_;
@@ -72,7 +73,4 @@ class Level
 			bool start_on = false
 		);
 		unsigned int testCurrentMap() const;
-
-		static void buildLevelList();
-		static void checkLvList();
 };

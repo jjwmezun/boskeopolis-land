@@ -168,10 +168,6 @@ void Level::sewerWarp( SpriteSystem& sprites, EventSystem& events )
 
 const std::string& Level::NameOLevel( unsigned int n )
 {
-	if ( level_list_.empty() )
-	{
-		buildLevelList();
-	}
 	assert( n < level_list_.size() );
 	return level_list_.at( n );
 };
@@ -242,20 +238,29 @@ Level Level::getLevel( int id )
 
 	std::ifstream ifs( file_path );
 
-	assert( ifs.is_open() );
+	if( !ifs.is_open() )
+	{
+		throw mezun::MissingLevel( id );
+	}
 
 	rapidjson::IStreamWrapper ifs_wrap( ifs );
 	rapidjson::Document lv;
 	lv.ParseStream( ifs_wrap );
 
-	assert( lv.IsObject() );
+	if ( !lv.IsObject() )
+	{
+		throw mezun::BrokenLevelFile( id );
+	}
 
 	auto lvobj = lv.GetObject();
 
 	/* MAP
 	==============================================================*/
 
-	assert( lvobj.HasMember( "maps" ) && lvobj[ "maps" ].IsArray() );
+	if ( !lvobj.HasMember( "maps" ) || !lvobj[ "maps" ].IsArray() )
+	{
+		throw mezun::BrokenLevelFile( id );
+	}
 
 	std::vector<Map> maps;
 	std::string slug = "";
@@ -817,17 +822,15 @@ Level Level::getLevel( int id )
 
 void Level::buildLevelList()
 {
-
 	const std::string path = Main::resourcePath() + "levels" + Main::pathDivider();
 
 	if ( !mezun::checkDirectory( path ) )
 	{
-		throw mezun::CantLoadLevels();
+		throw mezun::CantLoadLevelNames();
 	}
 
 	for ( int i = 0; i < MAX; ++i )
 	{
-
 		const std::string file_path = path + Text::formatNumDigitPadding( i, 3 ) + ".json";
 
 		std::ifstream ifs( file_path );
@@ -870,32 +873,11 @@ void Level::buildLevelList()
 		}
 		else
 		{
-			level_list_.emplace_back( "" );
+			level_list_.emplace_back( "=BROKEN_LEVEL=" );
 			gem_challenge_list_.emplace_back( 0 );
 			time_challenge_list_.emplace_back( 0 );
 		}
 
-	}
-
-	// Debug Test
-	//checkLvList();
-};
-
-void Level::checkLvList()
-{
-	for ( unsigned int i = 0; i < level_list_.size(); ++i )
-	{
-		if ( level_list_.at( i ) != "" )
-		{
-			std::cout<<Text::formatNumDigitPadding( i, 3 )<<"    "<<level_list_.at( i );
-
-			for ( int j = 0; j < 24 - ( int )( level_list_.at( i ).size() ); ++j )
-			{
-				std::cout<<" ";
-			}
-
-			std::cout<<Text::formatNumCommas( Text::formatNumDigitPadding( gem_challenge_list_.at( i ), 5 ) )<<"    "<<Clock::timeToString( time_challenge_list_.at( i ) )<<std::endl;
-		}
 	}
 };
 
