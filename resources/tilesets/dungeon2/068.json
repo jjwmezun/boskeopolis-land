@@ -1,0 +1,16 @@
+{
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "switch_on"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

@@ -4,15 +4,26 @@
 	"maps":
 	[
 		{
-			"slug": "dungeon-3"
+			"slug": "dungeon-3",
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "dungeon-walls.png",
+					"width": 400,
+					"height": 192,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0
+				}
+			]
 		}
 	],
 
-	"entrance_x": 11,
-	"entrance_y": 41,
+	"entrance_x": 62,
+	"entrance_y": 81,
 
 	"gem_challenge": 0,
 	"time_challenge": 0,
-	"camera_x": 0,
-	"camera_y": 36
+	"camera_x": 50,
+	"camera_y": 72
 }
