@@ -18,7 +18,7 @@ class SpriteSystem;
 #include "object.hpp"
 #include <SDL2/SDL.h>
 #include "sprite_component.hpp"
-#include "timer_simple.hpp"
+#include "timer_simple_t.hpp"
 #include "unit.hpp"
 
 #include "sprite_movement.hpp"
@@ -93,36 +93,16 @@ class Sprite : public Object
 
 		static constexpr double TRACTION_NORMAL = 1.2;
 		static constexpr double TRACTION_ICY = 1.025;
-		static double traction_;
-
 		static constexpr int RESISTANCE_X_NORMAL = 0;
 		static constexpr int RESISTANCE_X_WINDY = 100;
-		static int resistance_x_;
 
 		static constexpr int GRAVITY_START_SPEED_NORMAL = 500;
 		static constexpr int GRAVITY_TOP_SPEED_NORMAL = 4000;
 		static constexpr int GRAVITY_START_SPEED_MOON = 200;
 		static constexpr int GRAVITY_TOP_SPEED_MOON = 1000;
-		static int gravity_start_speed_;
-		static int gravity_top_speed_;
 
 		static void moonGravityOn();
 		static void moonGravityOff();
-
-		const int map_id_;
-
-		int vx_ = 0;
-		int vy_ = 0;
-
-		Direction::Simple direction_;
-		Direction::Horizontal direction_x_;
-		Direction::Vertical direction_y_;
-
-		bool jump_lock_ = true; // Not needed
-		bool on_ground_ = false;
-		bool is_sliding_ = false; // Not needed
-		bool in_water_ = false;
-		Direction::Horizontal on_slope_ = Direction::Horizontal::__NULL;
 
 		void update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		virtual void render( Camera& camera, bool priority = false );
@@ -230,81 +210,18 @@ class Sprite : public Object
 
 		static const int JUMP_DUCK_TOP_SPEED = 5500;
 		static const int LADDER_SPEED = 1000;
-
-		int x_prev_ = -123456789;
-		int y_prev_ = -123456789;
-		const sdl2::SDLRect original_hit_box_;
-
-		const std::vector<SpriteType> types_;
-		const CameraMovement camera_movement_;
-		const bool despawn_when_dead_;
-		std::unique_ptr<SpriteGraphics> graphics_;
-		std::unique_ptr<SpriteComponent> component_;
-		const SpriteMovement* movement_;
-
-		const Direction::Horizontal direction_x_orig_;
-		const Direction::Vertical direction_y_orig_;
-
-		const bool impervious_;
-		const int start_speed_walk_;
-		const int top_speed_walk_;
-		const int start_speed_run_; // Not needed
-		const int top_speed_run_; // Not needed
-		int start_speed_;
-		int top_speed_;
-		int top_speed_upward_;
-		int top_speed_downward_;
-		const double bounce_;
-
-		int acceleration_x_ = 0;
-		int acceleration_y_ = 0;
-		int fall_start_speed_ = gravity_start_speed_; // Not needed
-		int fall_top_speed_ = gravity_top_speed_; // Not needed
-		int jump_start_speed_;
-		int jump_top_speed_normal_;
-		int jump_top_speed_;
-		int bounce_height_ = 0;
-		bool on_ground_prev_ = false;
-		bool is_jumping_ = false;
-		bool is_jumping_prev_ = false;
-		bool jump_start_ = false;
-		bool jump_end_ = false;
-		bool is_bouncing_ = false;
-		bool is_bouncing_prev_ = false;
-		bool slide_jump_ = false; // Not needed
-		bool is_ducking_ = false; // Not needed
-		bool on_ladder_ = false; // Not needed
-		bool looking_up_ = false; // Not needed
-		bool is_sliding_prev_ = false; // Not needed
-
-		bool collide_top_ = false;
-		bool collide_bottom_ = false;
-		bool collide_top_prev_ = false;
-		bool collide_bottom_prev_ = false;
-		bool collide_left_ = false;
-		bool collide_right_ = false;
-		bool collide_left_prev_ = false;
-		bool collide_right_prev_ = false;
-
-		bool block_interact_ = true;
-		bool sprite_interact_ = true;
-		bool is_running_ = false;
-		bool is_moving_ = false;
+		static int gravity_start_speed_;
+		static int gravity_top_speed_;
+		static double traction_;
+		static int resistance_x_;
 
 		void position();
 		void positionX();
 		void positionY();
-
-		bool is_dead_ = false;
-		bool death_finished_ = false;
-		bool dead_no_animation_ = false;
-		TimerSimple death_timer_ = TimerSimple( 32, false );
 		virtual void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap );
 		void defaultDeathAction( const Camera& camera );
 		void resetPosition();
 		void invincibilityFlicker( const Health& health );
-
-		TimerSimple on_ground_padding_;
 
 		static const SpriteMovement floating_;
 		static const GroundedSpriteMovement grounded_;
@@ -328,4 +245,74 @@ class Sprite : public Object
 		void inputMoveAllDirections();
 		void containCameraX( const Camera& camera );
 		void containCameraY( const Camera& camera );
+
+		const bool impervious_;
+		const bool despawn_when_dead_;
+		bool jump_lock_; // Not needed
+		bool on_ground_;
+		bool is_sliding_; // Not needed
+		bool in_water_;
+		bool on_ground_prev_ = false;
+		bool is_jumping_ = false;
+		bool is_jumping_prev_ = false;
+		bool jump_start_ = false;
+		bool jump_end_ = false;
+		bool is_bouncing_ = false;
+		bool is_bouncing_prev_ = false;
+		bool slide_jump_ = false; // Not needed
+		bool is_ducking_ = false; // Not needed
+		bool on_ladder_ = false; // Not needed
+		bool looking_up_ = false; // Not needed
+		bool is_sliding_prev_ = false; // Not needed
+		bool collide_top_ = false;
+		bool collide_bottom_ = false;
+		bool collide_top_prev_ = false;
+		bool collide_bottom_prev_ = false;
+		bool collide_left_ = false;
+		bool collide_right_ = false;
+		bool collide_left_prev_ = false;
+		bool collide_right_prev_ = false;
+		bool block_interact_ = true;
+		bool sprite_interact_ = true;
+		bool is_running_ = false;
+		bool is_moving_ = false;
+		bool is_dead_ = false;
+		bool death_finished_ = false;
+		bool dead_no_animation_ = false;
+		const int map_id_;
+		const int start_speed_walk_;
+		const int top_speed_walk_;
+		const int start_speed_run_; // Not needed
+		const int top_speed_run_; // Not needed
+		int vx_;
+		int vy_;
+		int x_prev_;
+		int y_prev_;
+		int start_speed_;
+		int top_speed_;
+		int top_speed_upward_;
+		int top_speed_downward_;
+		int acceleration_x_;
+		int acceleration_y_;
+		int fall_start_speed_ = gravity_start_speed_; // Not needed
+		int fall_top_speed_ = gravity_top_speed_; // Not needed
+		int jump_start_speed_;
+		int jump_top_speed_normal_;
+		int jump_top_speed_;
+		int bounce_height_ = 0;
+		const Direction::Horizontal direction_x_orig_;
+		const Direction::Vertical direction_y_orig_;
+		Direction::Simple direction_;
+		Direction::Horizontal direction_x_;
+		Direction::Vertical direction_y_;
+		Direction::Horizontal on_slope_;
+		const CameraMovement camera_movement_;
+		const SpriteMovement* movement_;
+		std::unique_ptr<SpriteGraphics> graphics_;
+		std::unique_ptr<SpriteComponent> component_;
+		const std::vector<SpriteType> types_;
+		const double bounce_;
+		const sdl2::SDLRect original_hit_box_;
+		TimerSimpleT<32, false> death_timer_;
+		TimerSimpleT<4, false> on_ground_padding_;
 };

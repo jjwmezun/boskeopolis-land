@@ -74,11 +74,23 @@ Sprite::Sprite
 	sprite_interact_ ( sprite_interact ),
 	impervious_ ( impervious ),
 	bounce_ ( bounce ),
-	on_ground_padding_ ( { 4, false } ),
+	on_ground_padding_ (),
 	direction_ ( Direction::Simple::__NULL ),
 	top_speed_downward_ ( 0 ),
 	top_speed_upward_ ( 0 ),
-	map_id_ ( map_id )
+	map_id_ ( map_id ),
+	vx_ ( 0 ),
+	vy_ ( 0 ),
+	on_ground_ ( false ),
+	on_slope_ ( Direction::Horizontal::__NULL ),
+	x_prev_ ( -123456789 ),
+	y_prev_ ( -123456789 ),
+	jump_lock_ ( false ),
+	in_water_ ( false ),
+	is_sliding_ ( false ),
+	acceleration_x_ ( 0 ),
+	acceleration_y_ ( 0 ),
+	death_timer_ ()
 {};
 
 Sprite::~Sprite() {};
