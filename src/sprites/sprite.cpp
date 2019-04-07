@@ -87,7 +87,6 @@ Sprite::Sprite
 	y_prev_ ( -123456789 ),
 	jump_lock_ ( false ),
 	in_water_ ( false ),
-	is_sliding_ ( false ),
 	acceleration_x_ ( 0 ),
 	acceleration_y_ ( 0 ),
 	death_timer_ ()
@@ -160,8 +159,6 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 	}
 
 	on_slope_ = Direction::Horizontal::__NULL;
-	is_sliding_prev_ = is_sliding_;
-	is_sliding_ = false;
 };
 
 void Sprite::render( Camera& camera, bool priority )
@@ -567,22 +564,6 @@ void Sprite::resetPosition()
 	hit_box_.y = original_hit_box_.y;
 };
 
-void Sprite::slideLeft()
-{
-	is_sliding_ = true;
-	top_speed_ = top_speed_run_;
-	start_speed_ = start_speed_run_;
-	moveLeft();
-};
-
-void Sprite::slideRight()
-{
-	is_sliding_ = true;
-	top_speed_ = top_speed_run_;
-	start_speed_ = start_speed_run_;
-	moveRight();
-};
-
 bool Sprite::collideTopOnly( const Collision& collision, const Object& them ) const
 {
 	return collision.collideTop() && prevBottomSubPixels() >= them.ySubPixels() - 1000;
@@ -675,11 +656,6 @@ void Sprite::bounceDownward( int overlap )
 		hit_box_.y -= vy_;
 		vy_ = -( vy_ * ( bounce_ * 3 ) );
 	}
-};
-
-bool Sprite::isSlidingPrev() const
-{
-	return is_sliding_prev_;
 };
 
 const Collision Sprite::testCollision( const Object& them ) const

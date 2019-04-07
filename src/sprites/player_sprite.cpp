@@ -67,7 +67,7 @@ PlayerSprite::~PlayerSprite() {};
 void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	heroActions( camera, lvmap, events, sprites, blocks, health );
-	player_gfx_.update( *this, graphics_.get() );
+	player_gfx_.update( *this, graphics_.get(), &events );
 };
 
 // Actions only performed by hero version.
@@ -84,6 +84,8 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 	invincibilityFlicker( health );
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
+	events.is_sliding_prev_ = events.is_sliding_;
+	events.is_sliding_ = false;
 };
 
 // Actions performed by all player sprites, including Dagny.
@@ -116,7 +118,7 @@ void PlayerSprite::customInteract( Collision& my_collision, Collision& their_col
 				}
 				Audio::playSound( Audio::SoundType::BOP );
 			}
-			else if ( my_collision.collideAny() && isSlidingPrev() )
+			else if ( my_collision.collideAny() && events.is_sliding_prev_ )
 			{
 				them.kill();
 				Audio::playSound( Audio::SoundType::BOP );
@@ -404,7 +406,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 				{
 					unduck( blocks );
 				}
-				slideLeft();
+				slideLeft( events );
 			}
 			break;
 			case ( Direction::Horizontal::RIGHT ):
@@ -413,7 +415,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 				{
 					unduck( blocks );
 				}
-				slideRight();
+				slideRight( events );
 			}
 			break;
 		}
@@ -423,7 +425,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 		unduck( blocks );
 	}
 
-	if ( !is_sliding_ )
+	if ( !events.is_sliding_ )
 	{
 		if ( !input_->right() && !input_->left())
 		{
@@ -456,7 +458,7 @@ void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, const Eve
 		{
 			on_ladder_ = false;
 
-			if ( is_sliding_ )
+			if ( events.is_sliding_ )
 			{
 				slide_jump_ = true;
 				vx_ *= 5;
@@ -529,4 +531,20 @@ void PlayerSprite::deathAction( const Camera& camera, EventSystem& events, const
 bool PlayerSprite::canJump() const
 {
 	return ( onGroundPadding() || on_ladder_ ) && !jump_lock_;
+};
+
+void PlayerSprite::slideLeft( EventSystem& events )
+{
+	events.is_sliding_ = true;
+	top_speed_ = top_speed_run_;
+	start_speed_ = start_speed_run_;
+	moveLeft();
+};
+
+void PlayerSprite::slideRight( EventSystem& events )
+{
+	events.is_sliding_ = true;
+	top_speed_ = top_speed_run_;
+	start_speed_ = start_speed_run_;
+	moveRight();
 };

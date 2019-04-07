@@ -72,6 +72,8 @@ class EventSystem
 	bool touching_ladder_;
 	bool touching_ladder_prev_;
 	bool can_climb_down_;
+	bool is_sliding_;
+	bool is_sliding_prev_;
 	int change_map_;
 	int in_front_of_door_;
 	int move_water_;

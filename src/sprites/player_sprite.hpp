@@ -1,6 +1,7 @@
 #pragma once
 
 class Block;
+class EventSystem;
 class Sprite;
 
 #include "input_component_player.hpp"
@@ -60,4 +61,6 @@ class PlayerSprite : public Sprite
 		void handleDuckingAndSliding( const BlockSystem& blocks, EventSystem& events );
 		void handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events );
 		void handleLookingUp();
+		void slideLeft( EventSystem& events );
+		void slideRight( EventSystem& events );
 };

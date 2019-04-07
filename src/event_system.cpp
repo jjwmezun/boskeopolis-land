@@ -54,6 +54,8 @@ EventSystem::EventSystem( bool start_on )
 	touching_ladder_ ( false ),
 	touching_ladder_prev_ ( false ),
 	can_climb_down_ ( false ),
+	is_sliding_ ( false ),
+	is_sliding_prev_ ( false ),
 	misc_ ()
 {
 	resetMisc();
@@ -84,6 +86,8 @@ void EventSystem::reset()
 	touching_ladder_ = false;
 	touching_ladder_prev_ = false;
 	can_climb_down_ = false;
+	is_sliding_ = false;
+	is_sliding_prev_ = false;
 	resetPalette();
 	resetMisc();
 };

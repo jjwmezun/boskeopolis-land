@@ -1,21 +1,21 @@
+#include "event_system.hpp"
 #include "player_graphics.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
 
 PlayerGraphics::PlayerGraphics()
 :
-	//SpriteGraphics ( std::forward<std::string> ( texture ), 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
 	animation_timer_ (),
 	walk_counter_  (),
 	climb_counter_ (),
 	blink_counter_ (),
 	swim_counter_  (),
-	swim_timer_    ( NULL, false )
+	swim_timer_    ()
 {};
 
 PlayerGraphics::~PlayerGraphics() {};
 
-void PlayerGraphics::update( const Sprite& sprite, SpriteGraphics* graphics )
+void PlayerGraphics::update( const Sprite& sprite, SpriteGraphics* graphics, const EventSystem* events )
 {
 	if ( sprite.directionX() == Direction::Horizontal::RIGHT )
 	{
@@ -41,7 +41,7 @@ void PlayerGraphics::update( const Sprite& sprite, SpriteGraphics* graphics )
 		graphics->current_frame_x_ = ( climb_counter_.value() == 1 ) ? 128 : 96;
 		graphics->current_frame_y_ = 0;
 	}
-	else if ( sprite.isSlidingPrev() )
+	else if ( events != nullptr && events->is_sliding_prev_ )
 	{
 		graphics->current_frame_x_ = 48;
 		graphics->current_frame_y_ = 26;

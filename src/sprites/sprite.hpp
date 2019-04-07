@@ -125,7 +125,6 @@ class Sprite : public Object
 
 		bool isMoving() const;
 		bool isRunning() const; // Not needed
-		bool isSlidingPrev() const; // Not needed
 		SpriteMovement::Type movementType() const;
 		bool hasMovementType( SpriteMovement::Type type ) const;
 
@@ -173,8 +172,6 @@ class Sprite : public Object
 		void touchLadder(); // Not needed
 		void grabLadder(); // Not needed
 		void releaseLadder(); // Not needed
-		void slideLeft(); // Not needed
-		void slideRight(); // Not needed
 		void lookUp(); // Not needed
 		void stopLookingUp(); // Not needed
 
@@ -250,7 +247,6 @@ class Sprite : public Object
 		const bool despawn_when_dead_;
 		bool jump_lock_; // Not needed
 		bool on_ground_;
-		bool is_sliding_; // Not needed
 		bool in_water_;
 		bool on_ground_prev_ = false;
 		bool is_jumping_ = false;
@@ -263,7 +259,6 @@ class Sprite : public Object
 		bool is_ducking_ = false; // Not needed
 		bool on_ladder_ = false; // Not needed
 		bool looking_up_ = false; // Not needed
-		bool is_sliding_prev_ = false; // Not needed
 		bool collide_top_ = false;
 		bool collide_bottom_ = false;
 		bool collide_top_prev_ = false;

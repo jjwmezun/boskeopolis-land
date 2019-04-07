@@ -1,6 +1,7 @@
 #include "audio.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
+#include "event_system.hpp"
 #include "health.hpp"
 #include "inventory.hpp"
 #include "pollo_del_aire_sprite.hpp"
@@ -99,11 +100,11 @@ void PolloDelAireSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 
 void PolloDelAireSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	polloInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health, *this );
+	polloInteract( my_collision, their_collision, them, health, events, *this );
 };
 
 
-void PolloDelAireSprite::polloInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, Sprite& me )
+void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Collision& their_collision, Sprite& them, Health& health, const EventSystem& events, Sprite& me )
 {
 	if ( !me.isDead() )
 	{
@@ -116,7 +117,7 @@ void PolloDelAireSprite::polloInteract( Collision& my_collision, Collision& thei
 				Inventory::bop();
 				Audio::playSound( Audio::SoundType::BOP );
 			}
-			else if ( them.isSlidingPrev() )
+			else if ( events.is_sliding_prev_ )
 			{
 				me.kill();
 				Audio::playSound( Audio::SoundType::BOP );

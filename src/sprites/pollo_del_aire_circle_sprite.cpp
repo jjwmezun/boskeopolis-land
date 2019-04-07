@@ -45,5 +45,5 @@ void PolloDelAireCircleSprite::customUpdate( Camera& camera, Map& lvmap, EventSy
 
 void PolloDelAireCircleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health, *this );
+	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, health, events, *this );
 };
