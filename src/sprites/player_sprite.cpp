@@ -318,14 +318,7 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 
 void PlayerSprite::handleLookingUp()
 {
-	if ( onGround() && input_->up() )
-	{
-		lookUp();
-	}
-	else
-	{
-		stopLookingUp();
-	}
+	is_looking_up_ = ( onGround() && input_->up() );
 }
 
 void PlayerSprite::adjustJumpSpeed()
@@ -547,4 +540,9 @@ void PlayerSprite::slideRight( EventSystem& events )
 	top_speed_ = top_speed_run_;
 	start_speed_ = start_speed_run_;
 	moveRight();
+};
+
+bool PlayerSprite::isLookingUp() const
+{
+	return is_looking_up_;
 };

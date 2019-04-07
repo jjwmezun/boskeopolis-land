@@ -37,13 +37,15 @@ class PlayerSprite : public Sprite
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-		std::unique_ptr<InputComponent> input_;
+		bool isLookingUp() const;
 
 	protected:
 		PlayerGraphics player_gfx_;
 
 	private:
 		bool door_lock_;
+		bool is_looking_up_;
+		std::unique_ptr<InputComponent> input_;
 
 		void forceUnduck();
 		void handleCameraMovement( Camera& camera );

@@ -80,10 +80,7 @@ class Sprite : public Object
 			bool despawn_when_dead = true,
 			bool block_interact = true,
 			bool sprite_interact = true,
-			bool impervious = false,
 			double bounce_ = .2,
-			bool rotate_on_slopes = false,
-			bool ignore_on_camera = false,
 			int map_id = -1
 		);
 
@@ -243,7 +240,6 @@ class Sprite : public Object
 		void containCameraX( const Camera& camera );
 		void containCameraY( const Camera& camera );
 
-		const bool impervious_;
 		const bool despawn_when_dead_;
 		bool jump_lock_; // Not needed
 		bool on_ground_;
@@ -258,7 +254,6 @@ class Sprite : public Object
 		bool slide_jump_ = false; // Not needed
 		bool is_ducking_ = false; // Not needed
 		bool on_ladder_ = false; // Not needed
-		bool looking_up_ = false; // Not needed
 		bool collide_top_ = false;
 		bool collide_bottom_ = false;
 		bool collide_top_prev_ = false;
@@ -294,7 +289,7 @@ class Sprite : public Object
 		int jump_start_speed_;
 		int jump_top_speed_normal_;
 		int jump_top_speed_;
-		int bounce_height_ = 0;
+		int bounce_height_;
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;
 		Direction::Simple direction_;

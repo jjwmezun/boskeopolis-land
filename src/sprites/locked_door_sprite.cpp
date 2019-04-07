@@ -7,7 +7,7 @@
 
 LockedDoorSprite::LockedDoorSprite( int x, int y, int map_id )
 :
-	Sprite( nullptr, x, y, 16, 16 * 6, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false, 2.0, false, false ),
+	Sprite( nullptr, x, y, 16, 16 * 6, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
 	has_key_ ( false ),
 	opening_ ( false )
 {};

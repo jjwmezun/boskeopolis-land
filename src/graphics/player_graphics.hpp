@@ -1,7 +1,7 @@
 #pragma once
 
 class EventSystem;
-class Sprite;
+class PlayerSprite;
 class SpriteGraphics;
 
 #include "counter_t.hpp"
@@ -13,7 +13,7 @@ class PlayerGraphics
 	public:
 		PlayerGraphics();
 		~PlayerGraphics();
-		void update( const Sprite& sprite, SpriteGraphics* graphics, const EventSystem* events = nullptr );
+		void update( const PlayerSprite& sprite, SpriteGraphics* graphics, const EventSystem* events = nullptr );
 
 	private:
 		TimerRepeat animation_timer_;

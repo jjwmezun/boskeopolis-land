@@ -15,7 +15,7 @@ std::unique_ptr<Sprite> CowpokerSprite::ShortCowpokerSprite( int x, int y, int m
 
 CowpokerSprite::CowpokerSprite( int x, int y, int w, int h, CowpokerType type, std::unique_ptr<SpriteGraphics>&& gfx, int map_id )
 :
-	Sprite( std::move( gfx ), x, y, w, h, { SpriteType::ENEMY, SpriteType::BOPPABLE, SpriteType::DEATH_COUNT }, 500, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false, .2, false, false, map_id ),
+	Sprite( std::move( gfx ), x, y, w, h, { SpriteType::ENEMY, SpriteType::BOPPABLE, SpriteType::DEATH_COUNT }, 500, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, .2, map_id ),
 	type_ ( type ),
 	throw_time_ ( 0 ),
 	throw_counter_ ( 0 ),

@@ -6,7 +6,7 @@
 
 PolloSprite::PolloSprite( int x, int y, Direction::Horizontal dir_x, int map_id, bool despawn_when_dead )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 0, ( dir_x == Direction::Horizontal::RIGHT ), false, 0, false, -1, -6, 2, 7 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 3000, 500, 4000, dir_x, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, false, .2, false, false, map_id ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 0, ( dir_x == Direction::Horizontal::RIGHT ), false, 0, false, -1, -6, 2, 7 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 3000, 500, 4000, dir_x, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, .2, map_id ),
 	switch_from_ ( Direction::Horizontal::__NULL )
 {
 	jump_lock_ = false;

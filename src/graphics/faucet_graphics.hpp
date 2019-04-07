@@ -1,19 +1,17 @@
 #pragma once
 
-class Sprite;
+class Camera;
+class FaucetSprite;
+class SpriteGraphics;
 
-#include "counter.hpp"
-#include "sprite_graphics.hpp"
 #include "timer_repeat.hpp"
 
-class FaucetGraphics : public SpriteGraphics
+class FaucetGraphics
 {
 	public:
 		FaucetGraphics();
-		~FaucetGraphics();
-
-		void update( Sprite& sprite );
-		void render( const sdl2::SDLRect& bound_box, const Camera* camera = nullptr, bool priority = false ) const override;
+		void update( const FaucetSprite& sprite, SpriteGraphics* graphics );
+		void render( const SpriteGraphics* graphics, const Camera* camera, bool priority, int x, int y ) const;
 
 	private:
 		TimerRepeat animation_timer_;

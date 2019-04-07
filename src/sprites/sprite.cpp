@@ -42,10 +42,7 @@ Sprite::Sprite
 	bool despawn_when_dead,
 	bool block_interact,
 	bool sprite_interact,
-	bool impervious,
 	double bounce,
-	bool rotate_on_slopes,
-	bool ignore_on_camera,
 	int map_id
 )
 :
@@ -72,7 +69,6 @@ Sprite::Sprite
 	despawn_when_dead_ ( despawn_when_dead ),
 	block_interact_ ( block_interact ),
 	sprite_interact_ ( sprite_interact ),
-	impervious_ ( impervious ),
 	bounce_ ( bounce ),
 	on_ground_padding_ (),
 	direction_ ( Direction::Simple::__NULL ),
@@ -89,7 +85,8 @@ Sprite::Sprite
 	in_water_ ( false ),
 	acceleration_x_ ( 0 ),
 	acceleration_y_ ( 0 ),
-	death_timer_ ()
+	death_timer_ (),
+	bounce_height_ ( 0 )
 {};
 
 Sprite::~Sprite() {};
@@ -477,21 +474,6 @@ void Sprite::moveDown()
 	{
 		movement_->moveDown( *this );
 	}
-};
-
-void Sprite::lookUp()
-{
-	looking_up_ = true;
-};
-
-bool Sprite::lookingUp() const
-{
-	return looking_up_;
-};
-
-void Sprite::stopLookingUp()
-{
-	looking_up_ = false;
 };
 
 void Sprite::kill()

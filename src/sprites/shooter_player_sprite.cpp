@@ -55,7 +55,7 @@ void ShooterPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 
 	if ( shoot_delay_count_ == 0 && Input::pressed( Input::Action::RUN ) )
 	{
-		if ( lookingUp() )
+		if ( isLookingUp() )
 		{
 			sprites.spawnHeroBullet( centerXPixels(), yPixels() + 2, Direction::Simple::UP );
 			is_shooting_up_ = true;
@@ -163,7 +163,7 @@ void ShooterPlayerSprite::updateGFX()
 	}
 	else
 	{
-		if ( lookingUp() )
+		if ( isLookingUp() )
 		{
 			graphics_->current_frame_x_ = 182;
 		}

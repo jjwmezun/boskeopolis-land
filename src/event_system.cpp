@@ -485,3 +485,8 @@ void EventSystem::setSewerPosition( int x, int y )
 		misc_.data_.sewer_gfx_->dest_.y = y;
 	}
 };
+
+bool EventSystem::onUpperLayer() const
+{
+	return misc_.data_.flag_ == MiscFlagType::UPPER_LAYER;
+};

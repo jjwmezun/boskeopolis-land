@@ -1,23 +1,21 @@
+#include "faucet_sprite.hpp"
 #include "faucet_graphics.hpp"
-#include "sprite.hpp"
+#include "sprite_graphics.hpp"
+#include <iostream>
 
 FaucetGraphics::FaucetGraphics()
 :
-	SpriteGraphics ( "sprites/faucet.png", 0, 0 ),
 	animation_timer_ ()
 {};
 
-FaucetGraphics::~FaucetGraphics() {};
-
-void FaucetGraphics::update( Sprite& sprite )
+void FaucetGraphics::update( const FaucetSprite& sprite, SpriteGraphics* graphics )
 {
 	if ( animation_timer_.hit() )
 	{
-		current_frame_x_ += 16;
-
-		if ( current_frame_x_ > 240 )
+		graphics->current_frame_x_ += 16;
+		if ( graphics->current_frame_x_ > 240 )
 		{
-			current_frame_x_ = 0;
+			graphics->current_frame_x_ = 0;
 		}
 	}
 	else if ( animation_timer_.on() )
@@ -28,23 +26,17 @@ void FaucetGraphics::update( Sprite& sprite )
 	{
 		animation_timer_.start();
 	}
+	graphics->current_frame_y_ = sprite.getHits() * 80;
 };
 
-void FaucetGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
+void FaucetGraphics::render( const SpriteGraphics* graphics, const Camera* camera, bool priority, int x, int y ) const
 {
-	masterRender( bound_box, 256, 0, camera, priority );
-
 	if ( priority )
 	{
-		auto waterfall_box = bound_box;
-		waterfall_box.x -= ( 16 * 3 );
-
-		for ( int i = 0; i < 4; ++i )
-		{
-			waterfall_box.y += 16;
-			masterRender( waterfall_box, current_frame_x_, current_frame_y_ * 32, camera, false );
-		}
-		waterfall_box.y += 16;
-		masterRender( waterfall_box, current_frame_x_, ( current_frame_y_ * 32 ) + 16, camera, false );
+		graphics->masterRender( { x -= ( 16 * 3 ), y + 16, 16, 80 }, graphics->current_frame_x_, graphics->current_frame_y_, camera, !priority );
+	}
+	else
+	{
+		graphics->masterRender( { x, y, 16, 16 }, 256, 0, camera, priority );
 	}
 }

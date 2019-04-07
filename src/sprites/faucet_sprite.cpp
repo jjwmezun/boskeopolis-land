@@ -1,11 +1,17 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "faucet_sprite.hpp"
-#include "faucet_graphics.hpp"
+#include "sprite_graphics.hpp"
+
+static constexpr int NUM_O_HITS = 3;
+static constexpr int INVINCIBILITY_FLICKER_SPEED = 4;
+static constexpr int INVINCIBILITY_TIME = 45;
+static constexpr int SLIDE_LOCK_TIME = 5;
 
 FaucetSprite::FaucetSprite( int x, int y )
 :
-	Sprite( std::make_unique<FaucetGraphics> (), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, true, false, 0.0, false, true ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/faucet.png", 256, 0 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false, true, 0.0 ),
+	gfx_component_ (),
 	hits_ ( 0 ),
 	invincibility_ ( 0 ),
 	slide_lock_ ( 0 )
@@ -34,6 +40,7 @@ void FaucetSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	{
 		graphics_->visible_ = true;
 	}
+	gfx_component_.update( *this, graphics_.get() );
 };
 
 void FaucetSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -68,5 +75,10 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 
 void FaucetSprite::render( Camera& camera, bool priority )
 {
-	graphics_->render( hit_box_, &camera, priority );
+	gfx_component_.render( graphics_.get(), &camera, priority, xPixels(), yPixels() );
+};
+
+int FaucetSprite::getHits() const
+{
+	return hits_;
 };

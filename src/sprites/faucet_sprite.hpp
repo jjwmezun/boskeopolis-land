@@ -1,5 +1,6 @@
 #pragma once
 
+#include "faucet_graphics.hpp"
 #include "sprite.hpp"
 
 class FaucetSprite : public Sprite
@@ -10,13 +11,10 @@ class FaucetSprite : public Sprite
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
 		void render( Camera& camera, bool priority = false ) override;
+		int getHits() const;
 
 	private:
-		static constexpr int NUM_O_HITS = 3;
-		static constexpr int INVINCIBILITY_FLICKER_SPEED = 4;
-		static constexpr int INVINCIBILITY_TIME = 45;
-		static constexpr int SLIDE_LOCK_TIME = 5;
-
+		FaucetGraphics gfx_component_;
 		int hits_;
 		int invincibility_;
 		int slide_lock_;

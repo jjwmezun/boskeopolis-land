@@ -17,7 +17,8 @@ class EventSystem
 		__NULL,
 		LOCKED_GATE_OPENING,
 		LOCKED_GATE_OPEN,
-		TIMER_START
+		TIMER_START,
+		UPPER_LAYER
 	};
 
 	struct RandTreasure
@@ -132,6 +133,7 @@ class EventSystem
 	void renderSewer( const Camera& camera );
 	bool ensureSewerPointerIsSet( int x, int y );
 	void setSewerPosition( int x, int y );
+	bool onUpperLayer() const;
 
 	private:
 		EMisc misc_;

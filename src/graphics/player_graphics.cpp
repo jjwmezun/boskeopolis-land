@@ -1,6 +1,6 @@
 #include "event_system.hpp"
 #include "player_graphics.hpp"
-#include "sprite.hpp"
+#include "player_sprite.hpp"
 #include "sprite_graphics.hpp"
 
 PlayerGraphics::PlayerGraphics()
@@ -15,7 +15,7 @@ PlayerGraphics::PlayerGraphics()
 
 PlayerGraphics::~PlayerGraphics() {};
 
-void PlayerGraphics::update( const Sprite& sprite, SpriteGraphics* graphics, const EventSystem* events )
+void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphics, const EventSystem* events )
 {
 	if ( sprite.directionX() == Direction::Horizontal::RIGHT )
 	{
@@ -110,13 +110,15 @@ void PlayerGraphics::update( const Sprite& sprite, SpriteGraphics* graphics, con
 		switch ( blink_counter_.value() )
 		{
 			case 3:
+			{
 				graphics->current_frame_x_ = 112;
-				break;
+			}
+			break;
 			default:
-				if ( sprite.lookingUp() )
-					graphics->current_frame_x_ = 80;
-				else
-					graphics->current_frame_x_ = 0;
+			{
+				graphics->current_frame_x_ = ( sprite.isLookingUp() ) ? 80 : 0;
+			}
+			break;
 		}
 
 		graphics->current_frame_y_ = 0;

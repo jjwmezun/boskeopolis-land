@@ -9,7 +9,7 @@
 
 PolloDelAireSprite::PolloDelAireSprite( int x, int y, Direction::Horizontal dir_x, Direction::Vertical dir_y, int map_id, bool despawn_when_dead )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, ( dir_x == Direction::Horizontal::RIGHT ), false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, dir_x, ( dir_y == Direction::Vertical::DOWN ) ? Direction::Vertical::DOWN : Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, false, .2, false, false, map_id ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, ( dir_x == Direction::Horizontal::RIGHT ), false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, dir_x, ( dir_y == Direction::Vertical::DOWN ) ? Direction::Vertical::DOWN : Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, .2, map_id ),
 	vertical_too_ ( dir_y != Direction::Vertical::__NULL ),
 	switch_from_ ( Direction::Horizontal::__NULL ),
 	animation_counter_ ( 0 )
