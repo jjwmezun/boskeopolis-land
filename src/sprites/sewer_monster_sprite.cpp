@@ -30,9 +30,9 @@ SewerMonsterSprite::SewerMonsterSprite( int x, int y )
 		true
 	),
 	state_ ( MonsterState::SLEEPING ),
-	waking_timer_ ( NUM_O_WAKING_FRAMES * FRAME_SPEED, false ),
-	attack_timer_ ( NUM_O_ATTACK_FRAMES * FRAME_SPEED, false ),
-	falling_asleep_timer_ ( NUM_O_FALLING_ASLEEP_FRAMES * FRAME_SPEED, false )
+	waking_timer_ (),
+	attack_timer_ (),
+	falling_asleep_timer_ ()
 {};
 
 SewerMonsterSprite::~SewerMonsterSprite() {};
@@ -45,7 +45,7 @@ void SewerMonsterSprite::stateGraphics()
 			graphics_->current_frame_x_ = 0;
 			graphics_->priority_ = false;
 		break;
-			
+
 		case ( MonsterState::WAKING ):
 			graphics_->current_frame_x_ = getXImg( WAKING_FRAMES[ getFrame( waking_timer_.counter() ) ] );
 			graphics_->priority_ = true;
@@ -55,7 +55,7 @@ void SewerMonsterSprite::stateGraphics()
 			graphics_->current_frame_x_ = 10*80;
 			graphics_->priority_ = true;
 		break;
-			
+
 		case ( MonsterState::FALLING_ASLEEP ):
 			graphics_->priority_ = true;
 			graphics_->current_frame_x_ = getXImg( FALLING_ASLEEP_FRAMES[ getFrame( falling_asleep_timer_.counter() ) ] );
@@ -65,12 +65,12 @@ void SewerMonsterSprite::stateGraphics()
 
 void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	
+
 	switch( state_ )
 	{
 		case ( MonsterState::SLEEPING ):
 		break;
-			
+
 		case ( MonsterState::WAKING ):
 			if ( waking_timer_.done() )
 			{
@@ -104,7 +104,7 @@ void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 				attack_timer_.start();
 			}
 		break;
-			
+
 		case ( MonsterState::FALLING_ASLEEP ):
 			if ( falling_asleep_timer_.done() )
 			{
@@ -122,7 +122,7 @@ void SewerMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 		break;
 	}
 
-	stateGraphics();	
+	stateGraphics();
 };
 
 void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -144,7 +144,7 @@ void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& the
 				break;
 			}
 		}
-		
+
 		if ( them.isDead() )
 		{
 			attack_timer_.stop(); // Don't reopen mouth.

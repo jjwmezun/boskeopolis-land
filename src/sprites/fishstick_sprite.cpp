@@ -6,8 +6,8 @@
 FishstickSprite::FishstickSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fishstick.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 20, 12, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
-	move_timer_ ( { 16, true } ),
-	pause_timer_ ( { 8, false } )
+	move_timer_ (),
+	pause_timer_ ()
 {};
 
 FishstickSprite::~FishstickSprite() {};
@@ -29,19 +29,19 @@ void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	if ( move_timer_.on() )
 	{
 		move_timer_.update();
-
 		switch( directionX() )
 		{
 			case ( Direction::Horizontal::LEFT ):
+			{
 				moveLeft();
 				graphics_->flip_x_ = false;
+			}
 			break;
 			case ( Direction::Horizontal::RIGHT ):
+			{
 				moveRight();
 				graphics_->flip_x_ = true;
-			break;
-			case ( Direction::Horizontal::__NULL ):
-				// Do Nothing.
+			}
 			break;
 		}
 	}
@@ -53,6 +53,4 @@ void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
-{
-};
+void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};

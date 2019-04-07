@@ -3,7 +3,7 @@
 class Block;
 
 #include "sprite.hpp"
-#include "timers/timer.hpp"
+#include "timer_simple_t.hpp"
 
 class FallingBoughSprite : public Sprite
 {
@@ -16,5 +16,5 @@ class FallingBoughSprite : public Sprite
 
 	private:
 		bool fall_;
-		TimerSimple falling_timer_;
+		TimerSimpleT<8, false> falling_timer_;
 };

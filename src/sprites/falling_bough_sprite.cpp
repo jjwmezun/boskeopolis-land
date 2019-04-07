@@ -4,22 +4,10 @@
 
 FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal direction, bool fall )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/woods.png", 104, 32 ), x, y, 24, 8, {}, 10, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/woods.png", 104, 32, ( direction == Direction::Horizontal::RIGHT ) ), ( direction == Direction::Horizontal::RIGHT ) ? x : x - 8, y, 24, 8, {}, 10, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	fall_ ( fall ),
-	falling_timer_ ( 8, false )
-{
-	switch ( direction )
-	{
-		case ( Direction::Horizontal::RIGHT ):
-			graphics_->flip_x_ = true;
-		break;
-
-		default:
-			hit_box_.x -= 8000;
-		break;
-	}
-};
-
+	falling_timer_ ()
+{};
 FallingBoughSprite::~FallingBoughSprite() {};
 
 void FallingBoughSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
@@ -28,22 +16,11 @@ void FallingBoughSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	{
 		falling_timer_.update();
 	}
-
 	if ( falling_timer_.done() )
 	{
 		changeMovement( SpriteMovement::Type::GROUNDED );
 	}
-
-	switch ( direction_x_ )
-	{
-		case ( Direction::Horizontal::RIGHT ):
-			hit_box_.x = original_hit_box_.x;
-		break;
-
-		default:
-			hit_box_.x = original_hit_box_.x - 8000;
-		break;
-	}
+	hit_box_.x = original_hit_box_.x;
 };
 
 void FallingBoughSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

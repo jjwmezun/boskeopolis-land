@@ -6,8 +6,8 @@ IceBlockSprite::IceBlockSprite( int x, int y )
 :
     Sprite( std::make_unique<SpriteGraphics> ( "sprites/iceblock.png" ), x, y, 16, 16, {}, 400, 1200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false, true, true ),
     crack_state_ ( CrackState::NORMAL ),
-    delay_ ( { 16, false } ),
-    grow_delay_ ( { 64, false } )
+    delay_ (),
+    grow_delay_ ()
 {};
 
 IceBlockSprite::~IceBlockSprite() {};
@@ -17,6 +17,7 @@ void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
     switch ( crack_state_ )
     {
         case ( CrackState::CRACKING_GROWING ):
+        {
             if ( delay_.done() )
             {
                 crack_state_ = CrackState::NORMAL;
@@ -33,9 +34,11 @@ void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
                 graphics_->visible_ = true;
                 sprite_interact_ = true;
             }
+        }
         break;
 
         case ( CrackState::GONE_GROWING ):
+        {
             if ( grow_delay_.done() )
             {
                 crack_state_ = CrackState::CRACKING_GROWING;
@@ -50,15 +53,19 @@ void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
             {
                 grow_delay_.start();
             }
+        }
         break;
 
         case ( CrackState::SHATTERED ):
+        {
             changeMovement( SpriteMovement::Type::GROUNDED );
             sprite_interact_ = false;
             graphics_->current_frame_x_ = 32;
+        }
         break;
 
         case ( CrackState::CRACKING_HEAD ):
+        {
             if ( delay_.done() )
             {
                 // Do Nothing.
@@ -72,9 +79,11 @@ void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
                 delay_.start();
                 graphics_->current_frame_x_ = 16;
             }
+        }
         break;
 
         case ( CrackState::CRACKING_FEET ):
+        {
             if ( delay_.done() )
             {
                 crack_state_ = CrackState::SHATTERED;
@@ -89,10 +98,13 @@ void IceBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
                 delay_.start();
                 graphics_->current_frame_x_ = 16;
             }
+        }
         break;
 
         case ( CrackState::NORMAL ):
+        {
             graphics_->current_frame_x_ = 0;
+        }
         break;
     }
 };

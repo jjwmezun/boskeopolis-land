@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "timer_simple_t.hpp"
 
 class Block;
 
@@ -14,5 +15,5 @@ class PenguinSprite : public Sprite
 
     private:
         bool turning_;
-        TimerSimple delay_;
+        TimerSimpleT<48, false> delay_;
 };

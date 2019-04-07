@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "timer_simple_t.hpp"
 
 class Block;
 
@@ -24,6 +25,6 @@ class IceBlockSprite : public Sprite
             GONE_GROWING
         };
         CrackState crack_state_;
-        TimerSimple delay_;
-        TimerSimple grow_delay_;
+        TimerSimpleT<16, false> delay_;
+        TimerSimpleT<64, false> grow_delay_;
 };

@@ -44,7 +44,7 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 
 		if ( them.hasType( SpriteType::HERO ) )
 		{
-			if ( them.isSlidingPrev() )
+			if ( events.is_sliding_prev_ )
 			{
 				if ( slide_lock_ <= 0 && invincibility_ <= 0 )
 				{

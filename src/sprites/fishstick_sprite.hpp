@@ -2,8 +2,8 @@
 
 class Block;
 
-
 #include "sprite.hpp"
+#include "timer_simple_t.hpp"
 
 class FishstickSprite : public Sprite
 {
@@ -14,6 +14,6 @@ class FishstickSprite : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
 
 	private:
-		TimerSimple move_timer_;
-		TimerSimple pause_timer_;
+		TimerSimpleT<16, true> move_timer_;
+		TimerSimpleT<8, false> pause_timer_;
 };
