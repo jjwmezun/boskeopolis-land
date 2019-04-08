@@ -40,7 +40,7 @@ void MapLayerTilemapImage::update( EventSystem& events, BlockSystem& blocks, con
 					block_dest.y = Unit::BlocksToPixels( y );
 					tile_src.x = type->graphics()->current_frame_x_;
 					tile_src.y = type->graphics()->current_frame_y_;
-					Render::renderObjectNoMagnify( type->graphics()->texture_, tile_src, block_dest );
+					Render::renderObject( type->graphics()->texture_, tile_src, block_dest );
 				}
 			}
 		}

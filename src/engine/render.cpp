@@ -10,11 +10,13 @@
 #include <SDL2/SDL_image.h>
 #include "timers/timer_repeat.hpp"
 
+#define magnified( n ) ( ( n ) * ( magnification_ ) )
+
 namespace Render
 {
 	// Private Variables
 	static constexpr Uint8 FULL_OPACITY = 255;
-	static sdl2::SDLRect window_box_magnified_ = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
+	static constexpr sdl2::SDLRect WINDOW_BOX = { 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS };
 
 	static Uint32 window_type_ = SDL_WINDOW_FULLSCREEN_DESKTOP;
 	static int FORCE_MAGNIFICATION = -1;
@@ -25,38 +27,28 @@ namespace Render
 	static std::map<std::string, SDL_Texture*> textures_ = {};
 	static std::map<std::string, SDL_Surface*> surfaces_ = {};
 
-	static std::vector<sdl2::SDLRect> rect_layer_1_;
-	static std::vector<sdl2::SDLRect> rect_layer_2_;
-	static std::vector<sdl2::SDLRect> rect_layer_3_;
-
 	static SDL_Renderer* renderer_ = nullptr;
 	static SDL_Window* window_ = nullptr;
 	static sdl2::SDLRect screen_;
-	static TimerRepeat animation_frame_ = {};
 	static std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
 
 	static int magnification_ = 1;
 	static int max_magnification_ = 1;
 	static int monitor_width_ = 0;
 	static int monitor_height_ = 0;
-	static sdl2::SDLRect top_bar_ = { 0, 0, 0, 0 };
-	static sdl2::SDLRect bottom_bar_ = { 0, 0, 0, 0 };
-	static sdl2::SDLRect left_bar_ = { 0, 0, 0, 0 };
-	static sdl2::SDLRect right_bar_ = { 0, 0, 0, 0 };
 
 	static SDL_Texture* target_ = nullptr;
+	static SDL_Texture* final_target_ = nullptr;
 
 
 	// Private Function Declarations
 	void createRenderer();
 	void createWindow();
 
-	int magnified( int n );
 	void adjustMagnification();
 	void adjustScreenToMagnification();
 	int calculateMagnification( int monitor_width, int monitor_height );
 	void calculateScreenEdges();
-	void adjustBorderBars();
 
 	void loadSurface( const std::string& sheet );
 	void clearTextures();
@@ -64,7 +56,6 @@ namespace Render
 
 	const std::string imgAddress( const std::string& relative_path );
 	const std::string setImgPath();
-	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source );
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
 	bool cameraAdjust( sdl2::SDLRect& dest, const Camera* camera );
 	void checkTexture( const std::string& sheet );
@@ -98,7 +89,9 @@ namespace Render
 		}
 
 		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
-		target_ = SDL_GetRenderTarget( renderer_ );
+		final_target_ = SDL_GetRenderTarget( renderer_ );
+		target_ = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS );
+		SDL_SetRenderTarget( renderer_, target_ );
 	};
 
 	void createWindow()
@@ -152,8 +145,6 @@ namespace Render
 			}
 
 			calculateScreenEdges();
-			adjustBorderBars();
-			window_box_magnified_ = sourceRelativeToScreen( window_box_ );
 
 			SDL_SetWindowSize
 			(
@@ -192,19 +183,6 @@ namespace Render
 			}
 			screen_.w = magnified( Unit::WINDOW_WIDTH_PIXELS );
 			screen_.h = magnified( Unit::WINDOW_HEIGHT_PIXELS );
-		};
-
-		void adjustBorderBars()
-		{
-			top_bar_ = { 0, 0, monitor_width_, screen_.y };
-			bottom_bar_ = { 0, screen_.y + screen_.h, monitor_width_, monitor_height_ - ( screen_.y + screen_.h ) };
-			left_bar_ = { 0, 0, screen_.x, monitor_height_ };
-			right_bar_ = { screen_.x + screen_.w, 0, monitor_width_ - ( screen_.x + screen_.w ), monitor_height_ };
-		};
-
-		int magnified( int n )
-		{
-			return n * magnification_;
 		};
 
 
@@ -296,20 +274,13 @@ namespace Render
 		surfaces_.clear();
 	};
 
-	void screenBorders()
-	{
-		if ( window_type_ == SDL_WINDOW_FULLSCREEN_DESKTOP )
-		{
-			SDL_SetRenderDrawColor( renderer_, 0, 0, 0, FULL_OPACITY );
-			SDL_RenderFillRect( renderer_, &top_bar_ );
-			SDL_RenderFillRect( renderer_, &bottom_bar_ );
-			SDL_RenderFillRect( renderer_, &left_bar_ );
-			SDL_RenderFillRect( renderer_, &right_bar_ );
-		}
-	};
-
 	void presentScreen()
 	{
+		SDL_SetRenderTarget( renderer_, final_target_ );
+		if ( SDL_RenderCopy( renderer_, target_, &WINDOW_BOX, &screen_ ) != 0 )
+		{
+			printf( "Failed to render final texture: %s\n", SDL_GetError() );
+		}
 		SDL_RenderPresent( renderer_ );
 	};
 
@@ -318,7 +289,7 @@ namespace Render
 	void stateChangeFade( int alpha )
 	{
 		SDL_SetRenderDrawColor( renderer_, 255, 255, 255, alpha );
-		SDL_RenderFillRect( renderer_, &screen_ );
+		SDL_RenderFillRect( renderer_, &WINDOW_BOX );
 	};
 
 	void colorCanvas( int color, int alpha )
@@ -336,7 +307,7 @@ namespace Render
 	void colorCanvasForceColor( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha )
 	{
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
-		SDL_RenderFillRect( renderer_, &screen_ );
+		SDL_RenderFillRect( renderer_, &WINDOW_BOX );
 	};
 
 	void colorCanvasMultiply( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha )
@@ -348,25 +319,16 @@ namespace Render
 
 	void clearScreen()
 	{
+		SDL_SetRenderTarget( renderer_, final_target_ );
 		SDL_SetRenderDrawColor( renderer_, 0, 0, 0, FULL_OPACITY );
 		SDL_RenderClear( renderer_ );
+		SDL_SetRenderTarget( renderer_, target_ );
 	};
 
 	void clearScreenTransparency()
 	{
 		SDL_SetRenderDrawColor( renderer_, 0, 0, 0, 0 );
 		SDL_RenderClear( renderer_ );
-	};
-
-	sdl2::SDLRect sourceRelativeToScreen( const sdl2::SDLRect& source )
-	{
-		return
-		{
-			magnified( source.x ) + screen_.x,
-			magnified( source.y ) + screen_.y,
-			magnified( source.w ),
-			magnified( source.h ),
-		};
 	};
 
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y )
@@ -423,22 +385,6 @@ namespace Render
 		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode, alt_texture );
 	}
 
-	void renderObjectNoMagnify
-	(
-		const std::string& sheet,
-		sdl2::SDLRect source,
-		sdl2::SDLRect dest
-	)
-	{
-		checkTexture( sheet );
-		SDL_Texture* texture = textures_.at( sheet );
-
-		if ( SDL_RenderCopy( renderer_, texture, &source, &dest ) != 0 )
-		{
-			printf( "Failure to render\"%s\": %s\n", sheet.c_str(), SDL_GetError() );
-		}
-	}
-
 	void renderObject
 	(
 		SDL_Texture* texture,
@@ -469,8 +415,6 @@ namespace Render
 			{
 				return;
 			};
-
-			dest = sourceRelativeToScreen( dest );
 
 			if ( blend_mode != SDL_BLENDMODE_BLEND && blend_mode != SDL_BLENDMODE_NONE )
 			{
@@ -527,16 +471,14 @@ namespace Render
 		const Uint8 g = palette_->color( color ).g;
 		const Uint8 b = palette_->color( color ).b;
 
-		sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
-		SDL_RenderFillRect( renderer_, &box_relative );
+		SDL_RenderFillRect( renderer_, &box );
 	};
 
 	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color )
 	{
-		sdl2::SDLRect box_relative = sourceRelativeToScreen( box );
 		SDL_SetRenderDrawColor( renderer_, color.r, color.g, color.b, color.a );
-		SDL_RenderFillRect( renderer_, &box_relative );
+		SDL_RenderFillRect( renderer_, &box );
 	};
 
 	void renderRectCamera( sdl2::SDLRect& box, const Camera& camera, int color, int alpha )
@@ -559,30 +501,28 @@ namespace Render
 		SDL_DestroyWindow( window_ );
 	};
 
-	SDL_Texture* createRenderBoxMagnified( int width, int height )
-	{
-		return createRenderBox( magnified( width ), magnified( height ) );
-	};
-
 	SDL_Texture* createRenderBox( int width, int height )
 	{
 		SDL_Texture* temp = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height );
-
 		if ( temp == nullptr )
 		{
 			printf( "Failed to allocate render box: %s\n", SDL_GetError() );
 		}
-
 		SDL_SetTextureBlendMode( temp, SDL_BLENDMODE_BLEND );
-
 		return temp;
 	};
 
+	// Used to start generating textures.
+	// When this is set, all drawing will be done on user-given texture
+	// 'stead o' screen texture used for main drawing.
 	void setRenderTarget( SDL_Texture* texture )
 	{
 		SDL_SetRenderTarget( renderer_, texture );
 	};
 
+	// Make sure this is called when done rendering to custom texture
+	// or game rendering will glitch up for a frame
+	// & the custom texture will be corrupted by all other game graphics.
 	void releaseRenderTarget()
 	{
 		SDL_SetRenderTarget( renderer_, target_ );
@@ -590,7 +530,7 @@ namespace Render
 
 	void renderRenderBox( SDL_Texture* texture )
 	{
-		if ( SDL_RenderCopy( renderer_, texture, &window_box_magnified_, &window_box_magnified_ ) )
+		if ( SDL_RenderCopy( renderer_, texture, &WINDOW_BOX, &WINDOW_BOX ) )
 		{
 			printf( "Failed to draw render box: %s\n", SDL_GetError() );
 		}
@@ -598,8 +538,7 @@ namespace Render
 
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src )
 	{
-		const sdl2::SDLRect dest = sourceRelativeToScreen( src );
-		if ( SDL_RenderCopy( renderer_, texture, &src, &dest ) )
+		if ( SDL_RenderCopy( renderer_, texture, &src, &WINDOW_BOX ) )
 		{
 			printf( "Failed to draw render box: %s\n", SDL_GetError() );
 		}
@@ -644,9 +583,4 @@ namespace Render
 	{
 		return screen_;
 	};
-
-	SDL_Texture* createTexture()
-	{
-		return SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, screen_.w, screen_.h );
-	}
 };

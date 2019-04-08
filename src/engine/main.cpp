@@ -236,7 +236,6 @@ namespace Main
 		renderStates();
 		Input::renderQuitText();
 		renderTransition();
-		Render::screenBorders();
 		Render::presentScreen();
 	};
 

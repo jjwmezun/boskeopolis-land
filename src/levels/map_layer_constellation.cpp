@@ -51,7 +51,7 @@ namespace MapLayerConstellation
 				{
 					source.x = ( ( int )( star ) % 3 ) * TILE_SIZE;
 					source.y = floor( ( int )( star ) / 3 ) * TILE_SIZE;
-					Render::renderObjectNoMagnify( img, source, dest );
+					Render::renderObject( img, source, dest );
 				}
 
 				dest.x += TILE_SIZE;
@@ -66,7 +66,7 @@ namespace MapLayerConstellation
 		source.h = dest.h = 16;
 		dest.x = MOON_START_X * TILE_SIZE;
 		dest.y = MOON_START_Y * TILE_SIZE;
-		Render::renderObjectNoMagnify( img, source, dest );
+		Render::renderObject( img, source, dest );
 	};
 
 	StarType drawStar()
@@ -104,7 +104,7 @@ namespace MapLayerConstellation
 			return StarType::NO_STAR;
 		}
 	};
-	
+
 	std::string graphicsPath()
 	{
 		return "bg" + Main::pathDivider() + "constellation.png";

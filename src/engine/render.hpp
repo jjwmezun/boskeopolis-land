@@ -56,13 +56,6 @@ namespace Render
 		SDL_Texture* alt_texture = nullptr
 	);
 
-	void renderObjectNoMagnify
-	(
-		const std::string& sheet,
-		sdl2::SDLRect source,
-		sdl2::SDLRect dest
-	);
-
 	void stateChangeFade( int alpha );
 	void colorCanvas( int color, int alpha = 255 );
 	void colorCanvas();
@@ -70,7 +63,6 @@ namespace Render
 	void colorCanvasMultiply( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha );
 	void clearScreen();
 	void clearScreenTransparency();
-	void screenBorders();
 	void presentScreen();
 
 	void newPalette( Palette palette );
@@ -79,13 +71,11 @@ namespace Render
 	void loadTexture( const std::string& sheet );
 
 	SDL_Texture* createRenderBox( int width = Unit::WINDOW_WIDTH_PIXELS, int height = Unit::WINDOW_HEIGHT_PIXELS );
-	SDL_Texture* createRenderBoxMagnified( int width = Unit::WINDOW_WIDTH_PIXELS, int height = Unit::WINDOW_HEIGHT_PIXELS );
 	void setRenderTarget( SDL_Texture* texture );
 	void releaseRenderTarget();
 	void renderRenderBox( SDL_Texture* texture );
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src );
 	const sdl2::SDLRect& getScreen();
-	SDL_Texture* createTexture();
 
 	int getMaxMagnification();
 	int getMagnification();

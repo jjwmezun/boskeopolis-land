@@ -1,6 +1,5 @@
 #include "shmup_hero_bullet_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 ShmupHeroBulletSprite::ShmupHeroBulletSprite( int x, int y, Direction::Simple direction, SpriteType type )
 :
@@ -12,7 +11,6 @@ ShmupHeroBulletSprite::~ShmupHeroBulletSprite() {};
 
 void ShmupHeroBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	std::cout<<"YO"<<std::endl;
 	switch ( direction_ )
 	{
 		case ( Direction::Simple::UP ):
