@@ -34,6 +34,6 @@ class BlockSystem
 		bool blocks_work_offscreen_;
 
 		Tileset& getTileset();
-		void addBlock( int x, int y, int i, int type, bool accept_all_blocks = false );
+		void addBlock( int x, int y, int i, int type );
 		void changeTileset( std::string new_tileset );
 };

@@ -73,9 +73,24 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 {
 	if ( !blocks_work_offscreen_ )
 	{
-		for ( Block& block : blocks_ )
+		// Only test sprite interaction with blocks round it.
+		static constexpr int grid_width = Unit::WINDOW_WIDTH_BLOCKS + CAMERA_PADDING * 2;
+		static constexpr int padding = 3 + CAMERA_PADDING;
+		const int first_x = floor( camera.relativeX( sprite.xPixels()      ) / Unit::PIXELS_PER_BLOCK ) - padding; // Block x a bit left o' sprite.
+		const int first_y = floor( camera.relativeY( sprite.yPixels()      ) / Unit::PIXELS_PER_BLOCK ) - padding; // Block y a bit 'bove sprite.
+		const int last_x  = ceil ( camera.relativeX( sprite.rightPixels()  ) / Unit::PIXELS_PER_BLOCK ) + padding; // Block x a bit right o' sprite.
+		const int last_y  = ceil ( camera.relativeY( sprite.bottomPixels() ) / Unit::PIXELS_PER_BLOCK ) + padding; // Block y a bit below sprite.
+		for ( int y = first_y; y < last_y; ++y )
 		{
-			block.interact( sprite, level, events, camera, health, *this, sprites );
+			for ( int x = first_x; x < last_x; ++x )
+			{
+				const int n = y * grid_width + x;
+				if ( n < blocks_.size() )
+				{
+					Block& block = blocks_[ n ];
+					block.interact( sprite, level, events, camera, health, *this, sprites );
+				}
+			}
 		}
 	}
 	else
@@ -121,7 +136,7 @@ void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 					const int x_pixels = Unit::BlocksToPixels( x );
 					const int i = lvmap.indexFromXAndY( x, y );
 					const int type = lvmap.block( i ) - 1;
-					addBlock( x_pixels, y_pixels, i, type, false );
+					addBlock( x_pixels, y_pixels, i, type );
 				}
 			}
 
@@ -138,20 +153,17 @@ void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 				const int type = lvmap.block( i ) - 1;
 				const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 				const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
-				addBlock( x, y, i, type, true );
+				addBlock( x, y, i, type );
 				blocks_[ i ].init( lvmap );
 			}
 		}
 	}
 };
 
-void BlockSystem::addBlock( int x, int y, int i, int type, bool accept_all_blocks )
+void BlockSystem::addBlock( int x, int y, int i, int type )
 {
 	BlockType* block_type = getBlockType( type );
-	if ( accept_all_blocks || block_type != nullptr )
-	{
-		blocks_.emplace_back( x, y, block_type, i, type );
-	}
+	blocks_.emplace_back( x, y, block_type, i, type );
 };
 
 BlockType* BlockSystem::getBlockType( int type )
