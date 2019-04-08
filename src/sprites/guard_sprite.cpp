@@ -2,7 +2,6 @@
 #include "block_system.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
-#include "guard_graphics.hpp"
 #include "guard_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -11,10 +10,12 @@ static const int DISTANCE_LIMIT_Y = 16000;
 
 GuardSprite::GuardSprite( int x, int y )
 :
-    Sprite( std::make_unique<GuardGraphics> (), x, y, 16, 24, { SpriteType::ENEMY }, 400, 1200, 0, 0, Direction::Horizontal::LEFT ),
+    Sprite( std::make_unique<SpriteGraphics> ( "sprites/guard.png", 0, 0, false, false, 0, false, 0, 0, 0, 0 ), x, y, 16, 24, { SpriteType::ENEMY }, 400, 1200, 0, 0, Direction::Horizontal::LEFT ),
     stunned_ ( false ),
     distance_limit_y_ ( DISTANCE_LIMIT_Y ),
-    stun_timer_ ()
+    animation_frame_ (),
+    stun_timer_ (),
+    animation_timer_ ()
 {};
 GuardSprite::~GuardSprite() {};
 
@@ -45,6 +46,7 @@ void GuardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
             stunned_ = false;
         }
     }
+    updateGraphics();
 };
 
 void GuardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -117,3 +119,14 @@ void GuardSprite::customInteract( Collision& my_collision, Collision& their_coll
         }
     }
 };
+
+void GuardSprite::updateGraphics()
+{
+	flipGraphicsOnRight();
+	if ( animation_timer_.hit() )
+	{
+		++animation_frame_;
+        graphics_->current_frame_x_ = ( animation_frame_() ) ? 16 : 0;
+	}
+	animation_timer_.update();
+}

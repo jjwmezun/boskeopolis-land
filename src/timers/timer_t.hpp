@@ -81,9 +81,6 @@ class TimerT
 
 
     protected:
-        bool on_;
-        int  counter_;
-
         void tick()
         {
             if ( on_ )
@@ -110,4 +107,8 @@ class TimerT
         };
 
         virtual void event( bool hit ) = 0;
+
+
+        bool on_;
+        int  counter_;
 };

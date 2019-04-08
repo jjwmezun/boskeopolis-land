@@ -1,4 +1,3 @@
-#include <iostream>
 #include "map_layer_image.hpp"
 #include "camera.hpp"
 #include "main.hpp"

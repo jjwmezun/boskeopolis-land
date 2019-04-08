@@ -4,13 +4,18 @@
 #include "health.hpp"
 #include "map.hpp"
 #include "maze_chaser_sprite.hpp"
-#include "maze_chaser_graphics.hpp"
+#include "sprite_graphics.hpp"
+
+static constexpr int mazeChaserImgXFrame( MazeChaserSprite::Type type )
+{
+	return ( int )( type ) * 16;
+};
 
 MazeChaserSprite::MazeChaserSprite( int x, int y, Type type )
 :
 	Sprite
 	(
-		std::make_unique<MazeChaserGraphics> ( type ),
+		std::make_unique<SpriteGraphics> ( "sprites/eyeball.png", mazeChaserImgXFrame( type ), 0, false, false, 0, false, -1, -1, 2, 2 ),
 		x,
 		y,
 		14,
@@ -31,7 +36,7 @@ MazeChaserSprite::MazeChaserSprite( int x, int y, Type type )
 		true
 	),
 	type_ ( type ),
-	state_timer_ ( STATE_LENGTH, true ),
+	state_timer_ (),
 	current_tile_ ( getChaserPosition() ),
 	target_ ( std::make_pair<int, int> ( 0, 0 ) ),
 	speed_ ( SPEED_SLOW ),
@@ -200,10 +205,11 @@ void MazeChaserSprite::customUpdate
 		hit_box_.x = Unit::BlocksToSubPixels( std::get<PAIR_POS_X> ( rand_tile ) );
 		hit_box_.y = Unit::BlocksToSubPixels( std::get<PAIR_POS_Y> ( rand_tile ) );
 	}
+	updateGraphics();
 };
 
 void MazeChaserSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
-{	
+{
 	if ( them.hasType( SpriteType::HERO ) )
 	{
 		// Default ( Shadow/Blinky )
@@ -325,7 +331,7 @@ const bool MazeChaserSprite::evenTile()
 	const std::pair<int, int> TILE_ON_NOW = getChaserPosition();
 
 	switch ( Direction::SimpleIsOfWhatType( direction_ ) )
-	{		
+	{
 		case ( Direction::Type::HORIZONTAL ):
 			if ( std::get<PAIR_POS_X> ( TILE_ON_NOW ) != std::get<PAIR_POS_X> ( current_tile_ ) )
 			{
@@ -371,7 +377,7 @@ void MazeChaserSprite::testDirection( const BlockSystem& blocks )
 	for ( int j = 1; j < Direction::SIMPLE_SIZE; ++j )
 	{
 		if ( directions_possible_.at( j ) )
-		{	
+		{
 			const int distance = distanceOfCoordinates( getNextChaserPosition( (Direction::Simple)j ), target_ );
 
 			if ( distance < lowest_distance )
@@ -404,3 +410,33 @@ std::array<bool, Direction::SIMPLE_SIZE> MazeChaserSprite::defaultPossibleDirect
 	// Whittle down other 4 as they're proven to be inapplicable.
 	return { { false, true, true, true, true } };
 };
+
+void MazeChaserSprite::updateGraphics()
+{
+	// Defaults
+	graphics_->flip_x_ = false;
+	graphics_->flip_y_ = false;
+	graphics_->rotation_ = 0;
+
+	switch( direction_ )
+	{
+		case ( Direction::Simple::DOWN ):
+		{
+			graphics_->rotation_ = -90;
+		}
+		break;
+
+		case ( Direction::Simple::UP ):
+		{
+			graphics_->rotation_ = -90;
+			graphics_->flip_x_ = true; // Must be X, 'cause it's rotated.
+		}
+		break;
+
+		case ( Direction::Simple::RIGHT ):
+		{
+			graphics_->flip_x_ = true;
+		}
+		break;
+	}
+}

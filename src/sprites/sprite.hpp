@@ -160,7 +160,6 @@ class Sprite : public Object
 		void collideStopXRight( int overlap );
 		void collideStopYBottom( int overlap );
 		void collideStopYTop( int overlap );
-
 		bool collideBottomOnly( const Collision& collision, const Object& other ) const;
 
 		void slowFall();
@@ -217,13 +216,6 @@ class Sprite : public Object
 		void resetPosition();
 		void invincibilityFlicker( const Health& health );
 
-		static const SpriteMovement floating_;
-		static const GroundedSpriteMovement grounded_;
-		static const FlutteringSpriteMovement fluttering_;
-		static const SwimmingSpriteMovement swimming_;
-		static const AngledSpriteMovement angled_;
-		static const StuckSpriteMovement stuck_movement_;
-
 		sdl2::SDLRect justAbove() const;
 		bool blocksJustAbove( const BlockSystem& blocks ) const;
 		sdl2::SDLRect justBelow() const;
@@ -239,6 +231,14 @@ class Sprite : public Object
 		void inputMoveAllDirections();
 		void containCameraX( const Camera& camera );
 		void containCameraY( const Camera& camera );
+		void flipGraphicsOnRight();
+
+		static const SpriteMovement floating_;
+		static const GroundedSpriteMovement grounded_;
+		static const FlutteringSpriteMovement fluttering_;
+		static const SwimmingSpriteMovement swimming_;
+		static const AngledSpriteMovement angled_;
+		static const StuckSpriteMovement stuck_movement_;
 
 		const bool despawn_when_dead_;
 		bool jump_lock_; // Not needed

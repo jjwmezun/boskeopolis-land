@@ -816,17 +816,21 @@ void Sprite::turnOnCollide()
 	switch ( direction_x_ )
 	{
 		case ( Direction::Horizontal::LEFT ):
+		{
 			if ( collidedLeft() )
 			{
 				direction_x_ = Direction::Horizontal::RIGHT;
 			}
+		}
 		break;
 
 		case ( Direction::Horizontal::RIGHT ):
+		{
 			if ( collidedRight() )
 			{
 				direction_x_ = Direction::Horizontal::LEFT;
 			}
+		}
 		break;
 	}
 };
@@ -948,3 +952,8 @@ bool Sprite::onGroundPadding() const
 {
 	return on_ground_ || ( on_ground_padding_.on() && !on_ground_padding_.done() );
 };
+
+void Sprite::flipGraphicsOnRight()
+{
+	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
+}

@@ -2,7 +2,9 @@
 
 class Block;
 
+#include "counter_t.hpp"
 #include "sprite.hpp"
+#include "timer_repeat_t.hpp"
 #include "timer_simple_t.hpp"
 
 class GuardSprite : public Sprite
@@ -14,7 +16,11 @@ class GuardSprite : public Sprite
         void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
 
     private:
+        void updateGraphics();
+
         bool stunned_;
         int distance_limit_y_;
+		CounterT<1, 0, 0, true> animation_frame_;
         TimerSimpleT<8, false> stun_timer_;
+		TimerRepeatT<16> animation_timer_;
 };

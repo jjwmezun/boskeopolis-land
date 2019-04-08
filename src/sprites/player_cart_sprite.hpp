@@ -15,8 +15,9 @@ class PlayerCartSprite : public Sprite
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
 	private:
-		static const int JUMP_LIMIT = Unit::BlocksToSubPixels( 32 );
-		bool reached_height_ = false;
 		void duck();
 		void unduck();
+		void updateGraphics();
+
+		bool reached_height_ = false;
 };

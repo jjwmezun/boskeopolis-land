@@ -7,14 +7,15 @@
 #include "input.hpp"
 #include "map.hpp"
 #include "player_cart_sprite.hpp"
-#include "player_cart_graphics.hpp"
+#include "sprite_graphics.hpp"
+
+static constexpr int JUMP_LIMIT = Unit::BlocksToSubPixels( 32 );
 
 PlayerCartSprite::PlayerCartSprite( int x, int y )
 :
-	Sprite( std::make_unique<PlayerCartGraphics> (), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
 {
 	run();
-	direction_x_ = Direction::Horizontal::RIGHT;
 };
 
 PlayerCartSprite::~PlayerCartSprite() {};
@@ -143,6 +144,7 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	invincibilityFlicker( health );
 	camera.adjustCart( *this, lvmap );
+	updateGraphics();
 };
 
 void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -208,4 +210,32 @@ void PlayerCartSprite::deathAction( const Camera& camera, EventSystem& events, c
 {
 	defaultDeathAction( camera );
 	events.playDeathSoundIfNotAlreadyPlaying();
+};
+
+void PlayerCartSprite::updateGraphics()
+{
+	if ( is_ducking_ )
+	{
+		graphics_->current_frame_x_ = 48;
+		graphics_->current_frame_y_ = 8;
+	}
+	else
+	{
+		switch ( direction_x_ )
+		{
+			case ( Direction::Horizontal::LEFT ):
+			{
+				graphics_->current_frame_x_ = 96;
+				graphics_->current_frame_y_ = 0;
+			}
+			break;
+
+			case ( Direction::Horizontal::RIGHT ):
+			{
+				graphics_->current_frame_x_ = 0;
+				graphics_->current_frame_y_ = 0;
+			}
+			break;
+		}
+	}
 };

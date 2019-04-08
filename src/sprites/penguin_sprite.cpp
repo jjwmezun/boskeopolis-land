@@ -1,15 +1,15 @@
 #include "collision.hpp"
-#include "penguin_graphics.hpp"
 #include "penguin_sprite.hpp"
 #include "sprite_graphics.hpp"
 
 PenguinSprite::PenguinSprite( int x, int y )
 :
-    Sprite( std::make_unique<PenguinGraphics> (), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1200, 4000, 0, 0, Direction::Horizontal::LEFT ),
+    Sprite( std::make_unique<SpriteGraphics> ( "sprites/penguin.png" ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1200, 4000, 0, 0, Direction::Horizontal::LEFT ),
     turning_ ( false ),
-    delay_ ()
+    animation_frame_ (),
+    delay_ (),
+    animation_timer_ ()
 {};
-
 PenguinSprite::~PenguinSprite() {};
 
 void PenguinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
@@ -58,6 +58,36 @@ void PenguinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
             break;
         }
     }
+    updateGraphics();
 };
 
 void PenguinSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+
+void PenguinSprite::updateGraphics()
+{
+	flipGraphicsOnRight();
+	if ( animation_timer_.hit() )
+	{
+		++animation_frame_;
+		switch ( animation_frame_() )
+		{
+			case ( 0 ):
+			case ( 2 ):
+			{
+				graphics_->current_frame_x_ = 0;
+			}
+			break;
+			case ( 1 ):
+			{
+				graphics_->current_frame_x_ = 16;
+			}
+			break;
+			case ( 3 ):
+			{
+				graphics_->current_frame_x_ = 32;
+			}
+			break;
+		}
+	}
+	animation_timer_.update();
+};

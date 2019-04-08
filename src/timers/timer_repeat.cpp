@@ -1,61 +1,42 @@
+#include "timer_repeat.hpp"
 
-// Name
-//===================================
-//
-// TimerRepeat
-//
+TimerRepeat::TimerRepeat( int limit, bool starts_on, int start_count, Direction::Vertical direction )
+:
+    Timer( limit, starts_on, start_count, direction ),
+	hit_ ( false ),
+	num_o_hits_ ( 0 )
+{};
 
+TimerRepeat::~TimerRepeat() {};
 
-// DEPENDENCIES
-//===================================
+void TimerRepeat::start()
+{
+    on_ = true;
+    restartCounter();
+    hit_ = false;
+};
 
-    #include "timer_repeat.hpp"
+void TimerRepeat::stop()
+{
+    on_ = false;
+    restartCounter();
+    hit_ = false;
+};
 
-
-// STATIC PROPERTIES
-//===================================
-
-
-// METHODS
-//===================================
-
-    TimerRepeat::TimerRepeat( int limit, bool starts_on, int start_count, Direction::Vertical direction )
-    :
-        Timer( limit, starts_on, start_count, direction ),
-		hit_ ( false ),
-		num_o_hits_ ( 0 )
-    {};
-
-    TimerRepeat::~TimerRepeat() {};
-
-    void TimerRepeat::start()
+void TimerRepeat::event( bool hit )
+{
+    if ( hit )
     {
-        on_ = true;
+        hit_ = true;
+		++num_o_hits_;
         restartCounter();
-        hit_ = false;
-    };
-
-    void TimerRepeat::stop()
+    }
+    else
     {
-        on_ = false;
-        restartCounter();
         hit_ = false;
-    };
+    }
+};
 
-    void TimerRepeat::event( bool hit )
-    {
-        if ( hit )
-        {
-            hit_ = true;
-			++num_o_hits_;
-            restartCounter();
-        }
-        else
-        {
-            hit_ = false;
-        }
-    };
+bool TimerRepeat::hit() const { return hit_; };
 
-    bool TimerRepeat::hit() const { return hit_; };
-
-	int TimerRepeat::numOHits() const { return num_o_hits_; };
+int TimerRepeat::numOHits() const { return num_o_hits_; };
