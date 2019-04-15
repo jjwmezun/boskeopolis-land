@@ -5,13 +5,47 @@
 #include "top_down_bullet_sprite.hpp"
 #include "top_down_player_sprite.hpp"
 
+#include <iostream>
+
+constexpr int FRAME_LENGTH = 8;
+
+constexpr int getDirectionGraphics( Direction::Simple direction )
+{
+	switch ( direction )
+	{
+		case( Direction::Simple::UP ):
+		{
+			return 16;
+		}
+		break;
+
+		case( Direction::Simple::RIGHT ):
+		{
+			return 48;
+		}
+		break;
+
+		case( Direction::Simple::LEFT ):
+		{
+			return 32;
+		}
+		break;
+
+		default:
+		{
+			return 0;
+		}
+		break;
+	}
+}
+
 TopDownPlayerSprite::TopDownPlayerSprite( int x, int y )
 :
 	Sprite
 	(
 		std::make_unique<SpriteGraphics>
 		(
-			"sprites/autumn_maze.png",
+			"sprites/autumn-dungeon.png",
 			0,
 			0,
 			false,
@@ -29,7 +63,7 @@ TopDownPlayerSprite::TopDownPlayerSprite( int x, int y )
 		14,
 		{ SpriteType::HERO },
 		500,
-		4000,
+		3000,
 		0,
 		0,
 		Direction::Horizontal::__NULL,
@@ -38,12 +72,23 @@ TopDownPlayerSprite::TopDownPlayerSprite( int x, int y )
 		SpriteMovement::Type::FLOATING,
 		CameraMovement::PERMANENT
 	),
-	direction_ ( Direction::Simple::DOWN )
+	direction_ ( Direction::Simple::DOWN ),
+	animation_timer_ ( 0 ),
+	shoot_animation_timer_ ( -1 ),
+	is_shooting_ ( false )
 {};
 
 TopDownPlayerSprite::~TopDownPlayerSprite() {};
 
 void TopDownPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+{
+	handleMovement();
+	handleShooting( sprites );
+	camera.adjust( *this, lvmap );
+	updateGraphics();
+};
+
+void TopDownPlayerSprite::handleMovement()
 {
 	switch ( direction_ )
 	{
@@ -68,7 +113,11 @@ void TopDownPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 		}
 		break;
 	}
+}
 
+void TopDownPlayerSprite::handleShooting( SpriteSystem& sprites )
+{
+	is_shooting_ = false;
 	if ( Input::pressed( Input::Action::CAMERA_UP ) )
 	{
 		shoot( sprites, Direction::Simple::UP );
@@ -89,13 +138,37 @@ void TopDownPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	{
 		shoot( sprites, direction_ );
 	}
-
-	camera.adjust( *this, lvmap );
-};
+}
 
 void TopDownPlayerSprite::shoot( SpriteSystem& sprites, Direction::Simple direction )
 {
-	sprites.spawn( std::make_unique<TopDownBulletSprite> ( centerXPixels(), centerYPixels(), direction ) );
+	int x = centerXPixels();
+	int y = centerYPixels();
+	switch ( direction )
+	{
+		case( Direction::Simple::UP ):
+		{
+			y = yPixels();
+		}
+		break;
+		case( Direction::Simple::RIGHT ):
+		{
+			x = rightPixels();
+		}
+		break;
+		case( Direction::Simple::DOWN ):
+		{
+			y = bottomPixels();
+		}
+		break;
+		case( Direction::Simple::LEFT ):
+		{
+			x = xPixels();
+		}
+		break;
+	}
+	sprites.spawn( std::make_unique<TopDownBulletSprite> ( x, y, direction ) );
+	is_shooting_ = true;
 };
 
 void TopDownPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -167,4 +240,46 @@ bool TopDownPlayerSprite::testForMovement( Direction::Simple direction )
 	}
 
 	return false;
+}
+
+void TopDownPlayerSprite::updateGraphics()
+{
+	graphics_->current_frame_y_ = getDirectionGraphics( direction_ );
+
+	int shoot_animation_adjust = 0;
+	if ( is_shooting_ )
+	{
+		shoot_animation_timer_ = 0;
+	}
+
+	if ( shoot_animation_timer_ > -1 )
+	{
+		shoot_animation_adjust = 30;
+		if ( shoot_animation_timer_ >= FRAME_LENGTH )
+		{
+			shoot_animation_timer_ = -1;
+		}
+		else
+		{
+			++shoot_animation_timer_;
+		}
+	}
+
+	if ( is_moving_ )
+	{
+		if ( animation_timer_ >= FRAME_LENGTH )
+		{
+			graphics_->current_frame_x_ = ( ( graphics_->current_frame_x_ == 0 ) ? 15 : 0 ) + shoot_animation_adjust;
+			animation_timer_ = 0;
+		}
+		else
+		{
+			++animation_timer_;
+		}
+	}
+	else
+	{
+		graphics_->current_frame_x_ = shoot_animation_adjust;
+		animation_timer_ = 0;
+	}
 }

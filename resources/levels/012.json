@@ -15,6 +15,38 @@
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
 				}
+			],
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 4,
+					"entrance_y": 63,
+					"location": [ 3, 5, 62, 64 ]
+				}
+			]
+		},
+		{
+			"slug": "dungeon-3-2",
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "dungeon-walls.png",
+					"width": 400,
+					"height": 192,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 4,
+					"entrance_y": 63,
+					"location": [ 3, 5, 62, 64 ]
+				}
 			]
 		}
 	],

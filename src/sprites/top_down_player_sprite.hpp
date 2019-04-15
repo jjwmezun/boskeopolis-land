@@ -12,9 +12,15 @@ class TopDownPlayerSprite : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 
 	private:
-		Direction::Simple direction_;
-
+		void handleMovement();
+		void handleShooting( SpriteSystem& sprites );
 		void testDirectionsList( std::vector<Direction::Simple>&& directions );
 		bool testForMovement( Direction::Simple direction );
 		void shoot( SpriteSystem& sprites, Direction::Simple direction );
+		void updateGraphics();
+
+		Direction::Simple direction_;
+		int animation_timer_;
+		int shoot_animation_timer_;
+		bool is_shooting_;
 };
