@@ -18,6 +18,7 @@
 #include "block_component_hurt.hpp"
 #include "block_component_key.hpp"
 #include "block_component_kill.hpp"
+#include "block_component_layer.hpp"
 #include "block_component_light_switch.hpp"
 #include "block_component_lock_box.hpp"
 #include "block_component_lose.hpp"
@@ -50,6 +51,7 @@
 #include "block_condition_fade_out.hpp"
 #include "block_condition_hero.hpp"
 #include "block_condition_key.hpp"
+#include "block_condition_layer.hpp"
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_not_full_health.hpp"
 #include "block_condition_not_on_ladder.hpp"
@@ -529,6 +531,17 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentDoor> () );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "layer" ) )
+					{
+						if
+						(
+							comp_obj.HasMember( "layer" ) &&
+							comp_obj[ "layer" ].IsInt()
+						)
+						{
+							components.emplace_back( std::make_unique<BlockComponentLayer> ( comp_obj[ "layer" ].GetInt() ) );
+						}
+					}
 					else if ( mezun::areStringsEqual( comp_type, "current_left" ) )
 					{
 						components.emplace_back( generateBlockComponentCurrentLeftward() );
@@ -639,6 +652,13 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "collide_not_bottom" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionCollideNotBottom> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "layer" ) )
+							{
+								if ( cond.HasMember( "layer" ) && cond[ "layer" ].IsInt() )
+								{
+									this_condition.emplace_back( std::make_unique<BlockConditionLayer> ( cond[ "layer" ].GetInt() ) );
+								}
 							}
 							else if ( mezun::areStringsEqual( cond_type, "rival" ) )
 							{

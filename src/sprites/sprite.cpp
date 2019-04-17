@@ -86,7 +86,8 @@ Sprite::Sprite
 	acceleration_x_ ( 0 ),
 	acceleration_y_ ( 0 ),
 	death_timer_ (),
-	bounce_height_ ( 0 )
+	bounce_height_ ( 0 ),
+	layer_ ( 1 )
 {};
 
 Sprite::~Sprite() {};

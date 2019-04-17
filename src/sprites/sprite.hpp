@@ -290,6 +290,7 @@ class Sprite : public Object
 		int jump_top_speed_normal_;
 		int jump_top_speed_;
 		int bounce_height_;
+		int layer_;
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;
 		Direction::Simple direction_;

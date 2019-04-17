@@ -1,20 +1,10 @@
 {
 	"graphics":
 	{
-		"type": "switch",
-		"off":
-		{
-			"type": "sprite",
-			"x": 0,
-			"y": 2
-		},
-		"on":
-		{
-			"type": "sprite",
-			"x": 0,
-			"y": 2,
-			"priority": true
-		}
+		"type": "sprite",
+		"x": 0,
+		"y": 2,
+		"priority": true
 	},
 	"behavior":
 	[
@@ -25,7 +15,7 @@
 			},
 			"conditions":
 			[
-				{ "type": "switch_off" }
+				{ "type": "layer", "layer": "1" }
 			]
 		}
 	]
