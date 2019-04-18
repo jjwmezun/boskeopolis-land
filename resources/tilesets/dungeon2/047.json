@@ -2,8 +2,8 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 0,
-		"y": 2,
+		"x": 1,
+		"y": 3,
 		"priority": true
 	},
 	"behavior":
@@ -15,7 +15,7 @@
 			},
 			"conditions":
 			[
-				{ "type": "layer", "layer": 2 }
+				{ "type": "layer", "layer": 1 }
 			]
 		}
 	]

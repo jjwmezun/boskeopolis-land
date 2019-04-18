@@ -4,7 +4,8 @@
 		{
 			"component":
 			{
-				"type": "switch_off"
+				"type": "layer",
+				"layer": 2
 			},
 			"conditions":
 			[

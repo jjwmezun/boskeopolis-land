@@ -5,18 +5,5 @@
 		"x": 1,
 		"y": 1,
 		"priority": true
-	},
-	"behavior":
-	[
-		{
-			"component":
-			{
-				"type": "solid"
-			},
-			"conditions":
-			[
-				{ "type": "switch_on" }
-			]
-		}
-	]
+	}
 }
