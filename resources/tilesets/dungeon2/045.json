@@ -6,5 +6,18 @@
 		"y": 0,
 		"flip_x": true,
 		"priority": true
-	}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "not_hero" }
+			]
+		}
+	]
 }

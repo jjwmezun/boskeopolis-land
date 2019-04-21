@@ -878,6 +878,33 @@ void Sprite::turnOnEdge( const BlockSystem& blocks )
 	}
 };
 
+void Sprite::moveInDirection()
+{
+	switch ( direction_ )
+	{
+		case ( Direction::Simple::UP ):
+		{
+			moveUp();
+		}
+		break;
+		case ( Direction::Simple::RIGHT ):
+		{
+			moveRight();
+		}
+		break;
+		case ( Direction::Simple::DOWN ):
+		{
+			moveDown();
+		}
+		break;
+		case ( Direction::Simple::LEFT ):
+		{
+			moveLeft();
+		}
+		break;
+	}
+}
+
 void Sprite::moveInDirectionX()
 {
 	switch ( direction_x_ )

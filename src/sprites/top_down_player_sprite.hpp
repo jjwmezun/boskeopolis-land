@@ -19,7 +19,6 @@ class TopDownPlayerSprite : public Sprite
 		void shoot( SpriteSystem& sprites, Direction::Simple direction );
 		void updateGraphics();
 
-		Direction::Simple direction_;
 		int animation_timer_;
 		int shoot_animation_timer_;
 		bool is_shooting_;

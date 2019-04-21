@@ -49,6 +49,7 @@ class MazeChaserSprite : public Sprite
 		bool can_turn_;
 		Type type_;
 		int speed_;
+		Direction::Simple direction_;
 		Direction::Simple direction_prev_;
 		std::pair<int, int> current_tile_;
 		std::pair<int, int> target_;

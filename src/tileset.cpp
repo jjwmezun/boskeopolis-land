@@ -54,6 +54,7 @@
 #include "block_condition_layer.hpp"
 #include "block_condition_not_ducking.hpp"
 #include "block_condition_not_full_health.hpp"
+#include "block_condition_not_hero.hpp"
 #include "block_condition_not_on_ladder.hpp"
 #include "block_condition_rival.hpp"
 #include "block_condition_switch_off.hpp"
@@ -652,6 +653,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "collide_not_bottom" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionCollideNotBottom> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "not_hero" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionNotHero> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "layer" ) )
 							{

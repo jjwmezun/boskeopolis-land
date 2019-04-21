@@ -228,6 +228,7 @@ class Sprite : public Object
 		void turnOnEdge( const BlockSystem& blocks );
 		void turnOnCollide();
 		void moveInDirectionX();
+		void moveInDirection();
 		void inputMoveAllDirections();
 		void containCameraX( const Camera& camera );
 		void containCameraY( const Camera& camera );

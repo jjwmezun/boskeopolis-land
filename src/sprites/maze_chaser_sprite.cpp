@@ -40,12 +40,11 @@ MazeChaserSprite::MazeChaserSprite( int x, int y, Type type )
 	current_tile_ ( getChaserPosition() ),
 	target_ ( std::make_pair<int, int> ( 0, 0 ) ),
 	speed_ ( SPEED_SLOW ),
+	direction_ ( Direction::Simple::DOWN ),
 	direction_prev_ ( Direction::Simple::DOWN ),
 	directions_possible_ ( defaultPossibleDirections() ),
 	can_turn_ ( true )
-{
-	direction_ = direction_prev_;
-};
+{};
 
 MazeChaserSprite::~MazeChaserSprite() {};
 

@@ -1,11 +1,11 @@
 #include "camera.hpp"
+#include "collision.hpp"
+#include "health.hpp"
 #include "input.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 #include "top_down_bullet_sprite.hpp"
 #include "top_down_player_sprite.hpp"
-
-#include <iostream>
 
 constexpr int FRAME_LENGTH = 8;
 
@@ -72,11 +72,12 @@ TopDownPlayerSprite::TopDownPlayerSprite( int x, int y )
 		SpriteMovement::Type::FLOATING,
 		CameraMovement::PERMANENT
 	),
-	direction_ ( Direction::Simple::DOWN ),
 	animation_timer_ ( 0 ),
 	shoot_animation_timer_ ( -1 ),
 	is_shooting_ ( false )
-{};
+{
+	direction_ = Direction::Simple::DOWN;
+};
 
 TopDownPlayerSprite::~TopDownPlayerSprite() {};
 
@@ -86,6 +87,7 @@ void TopDownPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	handleShooting( sprites );
 	camera.adjust( *this, lvmap );
 	updateGraphics();
+	invincibilityFlicker( health );
 };
 
 void TopDownPlayerSprite::handleMovement()
@@ -167,12 +169,19 @@ void TopDownPlayerSprite::shoot( SpriteSystem& sprites, Direction::Simple direct
 		}
 		break;
 	}
-	sprites.spawn( std::make_unique<TopDownBulletSprite> ( x, y, direction ) );
+	sprites.spawn( std::make_unique<TopDownBulletSprite> ( x, y, direction, SpriteType::HEROS_BULLET ) );
 	is_shooting_ = true;
 };
 
 void TopDownPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
+	if ( them.hasType( SpriteType::ENEMY ) )
+	{
+		if ( my_collision.collideAny() && !them.isDead() )
+		{
+			health.hurt();
+		}
+	}
 };
 
 void TopDownPlayerSprite::testDirectionsList( std::vector<Direction::Simple>&& directions )
