@@ -121,6 +121,7 @@
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
 #include "top_down_player_sprite.hpp"
+#include "top_down_moveable_block_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
 #include "truck_platform_sprite.hpp"
 #include "underground_subway_sprite.hpp"
@@ -592,6 +593,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 147 ):
 			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 148 ):
+			return std::unique_ptr<Sprite> ( new TopDownMoveableBlockSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
