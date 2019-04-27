@@ -10,12 +10,6 @@
 		{
 			"component":
 			{
-				"type": "solid"
-			}
-		},
-		{
-			"component":
-			{
 				"type": "hole"
 			}
 		}

@@ -11,6 +11,10 @@ BlockComponentHole::~BlockComponentHole() {};
 
 void BlockComponentHole::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
+	if ( sprite.hasType( Sprite::SpriteType::HERO ) )
+	{
+		sprite.collideStopAny( collision );
+	}
 	if ( sprite.hasType( Sprite::SpriteType::MOVEABLE_BLOCK ) )
 	{
 		const bool condition = sprite.hit_box_.x + 2000 > block.hit_box_.x &&
