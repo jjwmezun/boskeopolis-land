@@ -48,7 +48,8 @@ class Sprite : public Object
 			PHASE_THROUGH,
 			TRUCK_PLATFORM,
 			CRAB,
-			CAMERA_MOVE
+			CAMERA_MOVE,
+			MOVEABLE_BLOCK
 		};
 
 		enum class CameraMovement

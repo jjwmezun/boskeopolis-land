@@ -14,6 +14,7 @@
 #include "block_component_full_heal.hpp"
 #include "block_component_goal.hpp"
 #include "block_component_heal.hpp"
+#include "block_component_hole.hpp"
 #include "block_component_honey.hpp"
 #include "block_component_hurt.hpp"
 #include "block_component_key.hpp"
@@ -582,6 +583,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "sewer_door" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSewerDoor> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "hole" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentHole> () );
 					}
 				}
 
