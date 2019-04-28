@@ -2,11 +2,13 @@
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
 
-TopDownBulletSprite::TopDownBulletSprite( int x, int y, Direction::Simple direction, Sprite::SpriteType type )
+TopDownBulletSprite::TopDownBulletSprite( int x, int y, Direction::Simple direction, Sprite::SpriteType type, int layer )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/top-down-bullet.png" ), x, y, 4, 4, { type }, 800, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, true, false ),
 	direction_ ( direction )
-{};
+{
+	layer_ = layer;
+};
 
 TopDownBulletSprite::~TopDownBulletSprite() {};
 

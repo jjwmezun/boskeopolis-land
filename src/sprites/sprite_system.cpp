@@ -592,10 +592,13 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new DungeonSwitchSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 147 ):
-			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 1 ) );
 		break;
 		case ( SPRITE_INDEX_START + 148 ):
 			return std::unique_ptr<Sprite> ( new TopDownMoveableBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 149 ):
+			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 2 ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

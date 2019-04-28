@@ -169,13 +169,13 @@ void TopDownPlayerSprite::shoot( SpriteSystem& sprites, Direction::Simple direct
 		}
 		break;
 	}
-	sprites.spawn( std::make_unique<TopDownBulletSprite> ( x, y, direction, SpriteType::HEROS_BULLET ) );
+	sprites.spawn( std::make_unique<TopDownBulletSprite> ( x, y, direction, SpriteType::HEROS_BULLET, layer_ ) );
 	is_shooting_ = true;
 };
 
 void TopDownPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::ENEMY ) )
+	if ( layer_ == them.layer_ && them.hasType( SpriteType::ENEMY ) )
 	{
 		if ( my_collision.collideAny() && !them.isDead() )
 		{
