@@ -691,14 +691,7 @@ const SpriteMovement* Sprite::getMovement( SpriteMovement::Type type )
 
 void Sprite::invincibilityFlicker( const Health& health )
 {
-	if ( health.flickerOff() )
-	{
-		graphics_->visible_ = false;
-	}
-	else
-	{
-		graphics_->visible_ = true;
-	}
+	graphics_->visible_ = !health.flickerOff();
 };
 
 int Sprite::prevRightPixels() const

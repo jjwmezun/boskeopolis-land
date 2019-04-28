@@ -5,6 +5,12 @@
 #include "sprite_system.hpp"
 #include "top_down_bullet_sprite.hpp"
 
+static constexpr int MAX_HP = 3;
+static constexpr int NORMAL_OXYGEN_LIMIT = 720;
+static constexpr int STRONGER_OXYGEN_LIMIT = 720 + 360;
+static constexpr int HEAT_LIMIT = 500;
+static constexpr int START_MAX_HP = 2;
+
 static inline int generateWalkDelay()
 {
 	return mezun::randInt( 320, 60 );
@@ -20,8 +26,10 @@ DungeonEnemySprite::DungeonEnemySprite( int x, int y, int layer )
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0, false, 1, 1, 5, 2 ), x, y, 14, 14, { SpriteType::ENEMY }, 250, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	walk_delay_ ( generateWalkDelay() ),
 	walk_timer_ ( 0 ),
+	hp_ ( MAX_HP ),
 	state_ ( State::WALK ),
-	next_state_ ( State::CHANGE )
+	next_state_ ( State::CHANGE ),
+	invincibility_timer_ ()
 {
 	direction_ = Direction::Simple::DOWN;
 	layer_ = layer;
@@ -31,18 +39,16 @@ DungeonEnemySprite::~DungeonEnemySprite() {};
 
 void DungeonEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
+	updateInvincibility();
 	updateActions( sprites );
 	updateGraphics();
 };
 
 void DungeonEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.layer_ == layer_ )
+	if ( them.layer_ == layer_ && them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
 	{
-		if ( them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
-		{
-			kill();
-		}
+		hurt();
 	}
 };
 
@@ -181,6 +187,7 @@ void DungeonEnemySprite::shoot( SpriteSystem& sprites )
 void DungeonEnemySprite::updateGraphics()
 {
 	graphics_->priority_ = layer_ == 2;
+	graphics_->visible_ = !invincibilityFlickerOff();
 	switch ( direction_ )
 	{
 		case ( Direction::Simple::UP ):
@@ -208,4 +215,33 @@ void DungeonEnemySprite::updateGraphics()
 		}
 		break;
 	}
+}
+
+void DungeonEnemySprite::updateInvincibility()
+{
+	if ( invincibility_timer_.on() )
+	{
+		invincibility_timer_.update();
+	}
+}
+
+void DungeonEnemySprite::hurt()
+{
+	if ( !invincibility_timer_.on() )
+	{
+		--hp_;
+		if ( hp_ <= 0 )
+		{
+			kill();
+		}
+		else
+		{
+			invincibility_timer_.start();
+		}
+	}
+}
+
+bool DungeonEnemySprite::invincibilityFlickerOff() const
+{
+	return invincibility_timer_.counter() % 4 == 1;
 }

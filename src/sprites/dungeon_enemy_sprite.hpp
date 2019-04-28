@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "timer_simple_t.hpp"
 
 class SpriteSystem;
 
@@ -24,9 +25,14 @@ class DungeonEnemySprite : public Sprite
 		void updateGraphics();
 		void changeDirection();
 		void shoot( SpriteSystem& sprites );
+		void updateInvincibility();
+		void hurt();
+		bool invincibilityFlickerOff() const;
 
 		int walk_delay_;
 		int walk_timer_;
+		int hp_;
 		State state_;
 		State next_state_;
+		TimerSimpleT<48, false> invincibility_timer_;
 };

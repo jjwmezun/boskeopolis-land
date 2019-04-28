@@ -1,6 +1,6 @@
 #pragma once
 
-#include "timers/timer_simple.hpp"
+#include "timers/timer_simple_t.hpp"
 
 class Health
 {
@@ -27,19 +27,13 @@ class Health
 
 
 	private:
-		static constexpr int NORMAL_OXYGEN_LIMIT = 720;
-		static constexpr int STRONGER_OXYGEN_LIMIT = 720 + 360;
-		static constexpr int HEAT_LIMIT = 500;
-		static constexpr int START_MAX_HP = 2;
-
-		int hp_;
-		bool heater_;
-		int meter_;
-		bool invincible_;
-		int lose_meter_amount_;
-		TimerSimple invincibility_timer_;
-
 		int maxOxygen() const;
 		int restorePoint() const;
 		int losePoint() const;
+
+		bool heater_;
+		int hp_;
+		int meter_;
+		int lose_meter_amount_;
+		TimerSimpleT<48, false> invincibility_timer_;
 };

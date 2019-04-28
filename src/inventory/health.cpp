@@ -6,48 +6,34 @@
 
 static constexpr int NORMAL_OXYGEN_STATUS = -1;
 static constexpr int GAINING_OXYGEN = -2;
+static constexpr int NORMAL_OXYGEN_LIMIT = 720;
+static constexpr int STRONGER_OXYGEN_LIMIT = 720 + 360;
+static constexpr int HEAT_LIMIT = 500;
+static constexpr int START_MAX_HP = 2;
 
 Health::Health()
 :
 	hp_ ( maxHP() ),
 	heater_ ( false ),
 	meter_ ( maxOxygen() ),
-	invincible_ ( false ),
 	lose_meter_amount_ ( NORMAL_OXYGEN_STATUS ),
-	invincibility_timer_ ( 48, false )
+	invincibility_timer_ ()
 {};
 
 void Health::update()
 {
-	if ( invincible_ )
+	if ( invincibility_timer_.on() )
 	{
 		invincibility_timer_.update();
-
-		if ( invincibility_timer_.done() )
-		{
-			invincible_ = false;
-		}
 	}
 
-	switch ( losingMeter() )
-	{
-		case ( true ):
-			meter_ = std::max( meter_ - ( losePoint() * lose_meter_amount_ ), 0 );
-		break;
+	meter_ = ( losingMeter() )
+		? std::max( meter_ - ( losePoint() * lose_meter_amount_ ), 0 )
+		: std::min( meter_ + restorePoint(), maxOxygen() );
 
-		default:
-			meter_ = std::min( meter_ + restorePoint(), maxOxygen() );
-		break;
-	}
-
-	switch ( heater_ )
+	if ( heater_ && meter_ <= 0 )
 	{
-		case ( true ):
-			if ( meter_ <= 0 )
-			{
-				hurt();
-			}
-		break;
+		hurt();
 	}
 
 	// If gaining oxygen, don't turn back to normal, 'less you've already hit max.
@@ -70,7 +56,6 @@ int Health::hp() const
 void Health::heal()
 {
 	++hp_;
-
 	if ( hp_ > maxHP() )
 	{
 		hp_ = maxHP();
@@ -92,13 +77,11 @@ void Health::fullHeal()
 
 void Health::hurt()
 {
-	if ( !Main::noharm() && !invincible_ )
+	if ( !Main::noharm() && !invincibility_timer_.on() )
 	{
 		--hp_;
-
 		if ( hp_ > 0 )
 		{
-			invincible_ = true;
 			invincibility_timer_.start();
 			Audio::playSound( Audio::SoundType::HURT );
 		}
@@ -151,53 +134,21 @@ int Health::maxHP()
 
 int Health::maxOxygen() const
 {
-	switch( heater_ )
-	{
-		case ( true ):
-			return HEAT_LIMIT;
-		break;
-
-		default:
-			switch( Inventory::haveOxygenUpgrade() )
-			{
-				case ( true ):
-					return STRONGER_OXYGEN_LIMIT;
-				break;
-
-				default:
-					return NORMAL_OXYGEN_LIMIT;
-				break;
-			}
-		break;
-	}
+	return ( heater_ )
+		? HEAT_LIMIT
+		: ( Inventory::haveOxygenUpgrade() )
+			? STRONGER_OXYGEN_LIMIT
+			: NORMAL_OXYGEN_LIMIT;
 };
 
 int Health::losePoint() const
 {
-	switch( heater_ )
-	{
-		case ( true ):
-			return 10;
-		break;
-
-		default:
-			return 1;
-		break;
-	}
+	return ( heater_ ) ? 10 : 1;
 };
 
 int Health::restorePoint() const
 {
-	switch( heater_ )
-	{
-		case ( true ):
-			return 10;
-		break;
-
-		default:
-			return maxOxygen() / 100;
-		break;
-	}
+	return ( heater_ ) ? 10 : ( int )( ( float )( maxOxygen() ) / 100 );
 };
 
 bool Health::hasFullHealth() const

@@ -3,7 +3,12 @@
 #include "heat_beam_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-HeatBeamSprite::HeatBeamSprite( int x, int y, Type type )
+static inline TimerSwitch timerType( const HeatBeamSprite::Type& type )
+{
+	return TimerSwitch( HeatBeamSprite::STATE_DURATION, HeatBeamSprite::TRANS_DURATION, type == HeatBeamSprite::Type::EVEN );
+};
+
+HeatBeamSprite::HeatBeamSprite( int x, int y, HeatBeamSprite::Type type )
 :
 	Sprite
 	(
@@ -28,8 +33,8 @@ HeatBeamSprite::HeatBeamSprite( int x, int y, Type type )
 	type_ ( type ),
 	state_ ( State::OFF ),
 	state_timer_ ( timerType( type ) ),
-	timer_start_delay_ ( DELAY_DURATION ),
-	timer_speed_up_ ( FRAMES_TILL_SPEED_UP )
+	timer_start_delay_ (),
+	timer_speed_up_ ()
 {
 };
 
@@ -52,7 +57,7 @@ void HeatBeamSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 		}
 		else if ( state_timer_.transPercent() < .66 )
 		{
-			graphics_->current_frame_x_ = 32;	
+			graphics_->current_frame_x_ = 32;
 		}
 		else
 		{
@@ -118,16 +123,4 @@ void HeatBeamSprite::customInteract( Collision& my_collision, Collision& their_c
 			}
 		}
 	}
-};
-
-TimerSwitch HeatBeamSprite::timerType( const Type& type ) const
-{
-	bool starts_on = false;
-
-	if ( type == Type::EVEN )
-	{
-		starts_on = true;
-	}
-
-	return TimerSwitch( STATE_DURATION, TRANS_DURATION, starts_on );
 };
