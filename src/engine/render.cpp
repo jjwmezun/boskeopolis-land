@@ -481,7 +481,7 @@ namespace Render
 		SDL_RenderFillRect( renderer_, &box );
 	};
 
-	void renderRectCamera( sdl2::SDLRect& box, const Camera& camera, int color, int alpha )
+	void renderRectCamera( sdl2::SDLRect box, const Camera& camera, int color, int alpha )
 	{
 		cameraAdjust( box, &camera );
 		renderRect( box, color, alpha );

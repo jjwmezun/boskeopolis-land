@@ -416,7 +416,6 @@ void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites,
 {
 	Collision my_collision = testCollision( them );
 	Collision their_collision = them.testCollision( *this );
-
 	customInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health, events );
 };
 
