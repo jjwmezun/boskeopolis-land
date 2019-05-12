@@ -1,0 +1,13 @@
+{
+	"name": "Brambles",
+
+	"maps":
+	[
+		{
+			"slug": "sky-5"
+		}
+	],
+
+	"entrance_x": 56,
+	"entrance_y": 49
+}

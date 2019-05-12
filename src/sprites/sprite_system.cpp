@@ -113,6 +113,7 @@
 #include "spider_sprite.hpp"
 #include "spike_egg_sprite.hpp"
 #include "spiky_fruit_sprite.hpp"
+#include "spring_enemy_sprite.hpp"
 #include "spring_sprite.hpp"
 #include "sprite_component_circle.hpp"
 #include "sprite_component_right_and_left.hpp"
@@ -603,6 +604,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 150 ):
 			return std::unique_ptr<Sprite> ( new FirebarSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 151 ):
+			return std::unique_ptr<Sprite> ( new SpringEnemySprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

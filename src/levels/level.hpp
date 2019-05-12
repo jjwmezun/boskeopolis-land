@@ -16,7 +16,7 @@ class SpriteSystem;
 class Level
 {
 	public:
-		static constexpr int MAX = 64;
+		static constexpr int MAX = 80;
 
 		~Level();
 		Level( Level&& m );

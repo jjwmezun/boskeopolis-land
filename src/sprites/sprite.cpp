@@ -610,23 +610,15 @@ bool Sprite::collideBottomOnly( const Collision& collision, const Object& other 
 void Sprite::bounceLeft( int overlap )
 {
 	stopX();
-
-	if ( vx_ < 0 )
-	{
-		hit_box_.x -= vx_;
-		vx_ = -( vx_ * ( bounce_ * 3 ) );
-	}
+	vx_ = -vx_ + std::max( overlap, 0 ) * 8;
+	hit_box_.x += vx_;
 };
 
 void Sprite::bounceRight( int overlap )
 {
 	stopX();
-
-	if ( vx_ > 0 )
-	{
-		hit_box_.x -= vx_;
-		vx_ = -( vx_ * ( bounce_ * 3 ) );
-	}
+	vx_ = -vx_ + std::min( overlap, 0 ) * 8;
+	hit_box_.x += vx_;
 };
 
 void Sprite::bounceDownward( int overlap )
