@@ -44,7 +44,7 @@ MapLayerImageSwitch::MapLayerImageSwitch
 
 MapLayerImageSwitch::~MapLayerImageSwitch() {};
 
-void MapLayerImageSwitch::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerImageSwitch::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	if ( events.switchOn() )
 	{

@@ -21,7 +21,7 @@ void MapLayerWaterBack::render( const Camera& camera )
 	}
 };
 
-void MapLayerWaterBack::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerWaterBack::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	src_.y = MapLayerWater::MAX_FRAME + ( ( water_ptr_->src_.y / MapLayerWater::HEIGHT ) * HEIGHT );
 	dest_.y = water_ptr_->dest_.y - 1;

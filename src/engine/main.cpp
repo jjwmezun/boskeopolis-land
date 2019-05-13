@@ -433,6 +433,11 @@ namespace Main
 	{
 		return resourcePath() + "saves" + pathDivider() + "save.bin";
 	};
+
+	const Palette& getPalette()
+	{
+		return states_.back()->palette();
+	}
 };
 
 int main( int argc, char* argv[] )

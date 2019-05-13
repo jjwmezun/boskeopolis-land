@@ -2,6 +2,7 @@
 #include "level_message_state.hpp"
 #include "map_layer_constellation_moving.hpp"
 #include "map_layer_constellation_scrolling.hpp"
+#include "map_layer_doom.hpp"
 #include "map_layer_image.hpp"
 #include "map_layer_image_switch.hpp"
 #include "map_layer_neon.hpp"
@@ -593,6 +594,13 @@ Level Level::getLevel( int id )
 									group.emplace_back
 									(
 										std::make_unique<MapLayerNeon> ()
+									);
+								}
+								else if ( mezun::areStringsEqual( bgtype, "doom" ) )
+								{
+									group.emplace_back
+									(
+										std::make_unique<MapLayerDoom> ()
 									);
 								}
 

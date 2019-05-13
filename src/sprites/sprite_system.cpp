@@ -76,6 +76,7 @@
 #include "platform_sprite.hpp"
 #include "player_car_sprite.hpp"
 #include "player_cart_sprite.hpp"
+#include "player_doom_sprite.hpp"
 #include "player_graphics.hpp"
 #include "player_open_chest_sprite.hpp"
 #include "player_spaceship_sprite.hpp"
@@ -754,6 +755,9 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		case ( HeroType::TOP_DOWN ):
 			hero_.reset( new TopDownPlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
+		case ( HeroType::DOOM ):
+			hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
+		break;
 	}
 
 	clearSprites();
@@ -943,6 +947,10 @@ SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 	else if ( property.compare( "TOP_DOWN" ) == 0 )
 	{
 		return HeroType::TOP_DOWN;
+	}
+	else if ( property.compare( "DOOM" ) == 0 )
+	{
+		return HeroType::DOOM;
 	}
 
 	return HeroType::NORMAL;

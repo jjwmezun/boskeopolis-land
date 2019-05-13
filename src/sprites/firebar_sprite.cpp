@@ -1,9 +1,9 @@
 #include "firebar_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 
-static constexpr double DOUBLE_PI = 6.28318530718;
 static constexpr double SWING_SPEED = 0.1;
 static constexpr int HIT_BOX_PADDING = 2000;
 
@@ -40,7 +40,7 @@ void FirebarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 		circle.update();
 	}
 	const double angle = circles_[ 0 ].getAngle();
-	const double angle_percent = angle / DOUBLE_PI;
+	const double angle_percent = angle / mezun::DOUBLE_PI;
 	graphics_->rotation_ = 360 * angle_percent;
 };
 

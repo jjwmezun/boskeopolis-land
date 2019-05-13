@@ -8,6 +8,14 @@
 
 namespace mezun
 {
+    constexpr double PI = 3.14159;
+    constexpr double DOUBLE_PI = PI * 2;
+
+    constexpr double convertDegreesToRadians( double degrees )
+    {
+        return ( PI / ( double )( 180.0 ) ) * degrees;
+    };
+
     inline void initRand()
     {
         srand ( time( nullptr ) );

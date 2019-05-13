@@ -41,7 +41,7 @@ class MapLayerWater : public MapLayer
 	MapLayerWater( MapLayerWater&& ) = delete;
 	MapLayerWater& operator= ( const MapLayerWater& ) = delete;
 	MapLayerWater& operator= ( MapLayerWater&& ) = delete;
-	void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
+	void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
 	void render( const Camera& camera ) override;
 	void interact( Sprite& sprite, Health& health ) override;
 

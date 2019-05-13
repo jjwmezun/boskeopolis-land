@@ -12,7 +12,7 @@ void MapLayerNeon::render( const Camera& camera )
 	Render::colorCanvasMultiply( color_.r, color_.g, color_.b, 255 );
 };
 
-void MapLayerNeon::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerNeon::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	++hue_;
 	if ( hue_ > 360 )

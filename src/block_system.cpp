@@ -40,6 +40,11 @@ void BlockSystem::reset( const Map& lvmap )
 
 void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority )
 {
+	if ( lvmap.hide_ )
+	{
+		return;
+	}
+
 	if ( !blocks_work_offscreen_ )
 	{
 		for ( const auto& block : blocks_ )

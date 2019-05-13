@@ -10,7 +10,7 @@ void MapLayerShade::render( const Camera& camera )
 	Render::colorCanvas( shade_, alpha_ );
 };
 
-void MapLayerShade::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerShade::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	if ( events.testLightSwitch() )
 	{

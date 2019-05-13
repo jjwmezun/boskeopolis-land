@@ -64,7 +64,7 @@ void MapLayerWater::render( const Camera& camera )
 	}
 };
 
-void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	updateGFX( camera );
 	updateComponents();

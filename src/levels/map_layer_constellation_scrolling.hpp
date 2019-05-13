@@ -12,7 +12,7 @@ class MapLayerConstellationScrolling : public MapLayer
 			int map_height_blocks
 		);
 		~MapLayerConstellationScrolling();
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
+		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
 		void render( const Camera& camera ) override;
 
 	private:

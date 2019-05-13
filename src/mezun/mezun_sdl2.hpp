@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include <memory>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -93,6 +93,16 @@ namespace sdl2
                 return y + h;
             };
     };
+}
+
+inline std::ostream &operator<<( std::ostream &os, const sdl2::SDLRect &r )
+{
+    return os << "{ " << r.x << ", " << r.y << ", " << r.w << ", " << r.h << " }";
+}
+
+inline std::ostream &operator<<( std::ostream &os, const sdl2::SDLColor &c )
+{
+    return os << "{ " << ( int )( c.r ) << ", " << ( int )( c.g ) << ", " << ( int )( c.b ) << ", " << ( int )( c.a ) << " }";
 }
 
 #endif // BOSK_SDL2

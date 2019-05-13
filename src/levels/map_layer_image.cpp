@@ -48,7 +48,7 @@ MapLayerImage::MapLayerImage
 
 MapLayerImage::~MapLayerImage() {};
 
-void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	move( lvmap.widthPixels(), camera.rect() );
 };

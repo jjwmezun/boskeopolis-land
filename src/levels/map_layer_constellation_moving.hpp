@@ -8,7 +8,7 @@ class MapLayerConstellationMoving : public MapLayer
 	public:
 		MapLayerConstellationMoving( int width, int height, double move_speed );
 		~MapLayerConstellationMoving();
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
+		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
 		void render( const Camera& camera ) override;
 
 	private:

@@ -34,4 +34,5 @@ namespace Main
 	bool stillFading();
 	void startFadeOut();
 	TransitionState transitionState();
+	const Palette& getPalette();
 };

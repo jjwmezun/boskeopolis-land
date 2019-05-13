@@ -23,7 +23,7 @@ MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, 
 
 MapLayerTilemap::~MapLayerTilemap() {};
 
-void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	if ( camera.changed() )
 	{

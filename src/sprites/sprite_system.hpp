@@ -24,7 +24,8 @@ class SpriteSystem
 			SHOOTER,
 			SPACESHIP,
 			CAR,
-			TOP_DOWN
+			TOP_DOWN,
+			DOOM
 		};
 
 		static HeroType heroType( const std::string& property );

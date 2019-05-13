@@ -40,7 +40,7 @@ MapLayerConstellationScrolling::~MapLayerConstellationScrolling()
 	SDL_DestroyTexture( texture_ );
 };
 
-void MapLayerConstellationScrolling::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerConstellationScrolling::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	if ( texture_ == nullptr )
 	{
@@ -60,7 +60,7 @@ void MapLayerConstellationScrolling::render( const Camera& camera )
 		Render::renderObject( texture_, src_, dest_ );
 	}
 };
-									  
+
 // CONSTRUCTOR FUNCTIONS
 //=============================================================
 

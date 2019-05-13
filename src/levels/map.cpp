@@ -104,6 +104,7 @@ Map Map::mapFromPath
 		bool scroll_lock = false;
 		bool watery = false;
 		bool oxygen = false;
+		bool hide = true;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -484,6 +485,11 @@ Map Map::mapFromPath
 				{
 					oxygen = ( value.IsBool() && value.GetBool() );
 				}
+
+				else if ( mezun::areStringsEqual( name, "hide" ) )
+				{
+					hide = value.IsBool() && value.GetBool();
+				}
 			}
 		}
 
@@ -555,7 +561,8 @@ Map Map::mapFromPath
 			warp_on_fall,
 			ui_bg_color,
 			watery,
-			oxygen
+			oxygen,
+			hide
 		);
 };
 
@@ -588,7 +595,8 @@ Map::Map
 	bool warp_on_fall,
 	int ui_bg_color,
 	bool watery,
-	bool oxygen
+	bool oxygen,
+	bool hide
 )
 :
 	blocks_ ( blocks ),
@@ -619,7 +627,8 @@ Map::Map
 	warp_on_fall_ ( warp_on_fall ),
 	ui_bg_color_ ( ui_bg_color ),
 	watery_ ( watery ),
-	oxygen_ ( oxygen )
+	oxygen_ ( oxygen ),
+	hide_ ( hide )
 {
 	for ( auto& b : backgrounds )
 	{
@@ -665,7 +674,8 @@ Map::Map( Map&& m ) noexcept
 	warp_on_fall_ ( m.warp_on_fall_ ),
 	ui_bg_color_ ( m.ui_bg_color_ ),
 	watery_ ( m.watery_ ),
-	oxygen_ ( m.oxygen_ )
+	oxygen_ ( m.oxygen_ ),
+	hide_ ( m.hide_ )
 {};
 
 Map::Map( const Map& c )
@@ -700,7 +710,8 @@ Map::Map( const Map& c )
 	warp_on_fall_ ( c.warp_on_fall_ ),
 	ui_bg_color_ ( c.ui_bg_color_ ),
 	watery_ ( c.watery_ ),
-	oxygen_ ( c.oxygen_ )
+	oxygen_ ( c.oxygen_ ),
+	hide_ ( c.hide_ )
 {};
 
 int Map::widthBlocks() const
@@ -813,21 +824,21 @@ bool Map::inBounds( int n ) const
 
 void Map::update( EventSystem& events, const SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
 {
-	updateLayers( events, blocks, camera );
+	updateLayers( events, blocks, camera, sprites );
 	updateLoop( sprites );
 	updateBGColor();
 	changed_ = false;
 };
 
-void Map::updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera )
+void Map::updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera, const SpriteSystem& sprites )
 {
 	for ( auto b : backgrounds_ )
 	{
-		b->update( events, blocks, camera, *this );
+		b->update( events, blocks, camera, *this, sprites );
 	}
 	for ( auto f : foregrounds_ )
 	{
-		f->update( events, blocks, camera, *this );
+		f->update( events, blocks, camera, *this, sprites );
 	}
 };
 

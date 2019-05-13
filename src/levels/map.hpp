@@ -62,6 +62,7 @@ class Map
 		const bool warp_on_fall_;
 		const bool watery_;
 		const bool oxygen_;
+		const bool hide_;
 		bool changed_;
 
 		static Map mapFromPath
@@ -138,10 +139,11 @@ class Map
 			bool warp_on_fall,
 			int ui_bg_color,
 			bool watery,
-			bool oxygen
+			bool oxygen,
+			bool hide
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
-		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera );
+		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera, const SpriteSystem& sprites );
 		void updateLoop( const SpriteSystem& sprites );
 		void updateBGColor();
 		void renderBGColor() const;

@@ -1,0 +1,17 @@
+{
+	"name": "Doom",
+
+	"maps":
+	[
+		{
+			"slug": "dungeon-4",
+			"backgrounds":
+			[
+				{ "type": "doom" }
+			]
+		}
+	],
+
+	"entrance_x": 11,
+	"entrance_y": 6
+}

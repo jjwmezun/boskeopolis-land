@@ -18,7 +18,7 @@ MapLayerTilemapImage::MapLayerTilemapImage( const std::vector<int>& tiles, int w
 
 MapLayerTilemapImage::~MapLayerTilemapImage() {};
 
-void MapLayerTilemapImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap )
+void MapLayerTilemapImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	if ( texture_ == nullptr )
 	{

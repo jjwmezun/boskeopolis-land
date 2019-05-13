@@ -26,5 +26,5 @@ class MapLayerImageSwitch : public MapLayerImage
 			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 		);
 		~MapLayerImageSwitch();
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap ) override;
+		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
 };
