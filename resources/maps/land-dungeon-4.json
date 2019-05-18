@@ -29,6 +29,11 @@
          "name":"hide",
          "type":"bool",
          "value":true
+        }, 
+        {
+         "name":"palette",
+         "type":"string",
+         "value":"Choco Brown"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.1.4",

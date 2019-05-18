@@ -13,6 +13,10 @@ class MapLayerDoom : public MapLayer
 	public:
 		MapLayerDoom();
 		~MapLayerDoom();
+		MapLayerDoom( const MapLayerDoom& ) = delete;
+		MapLayerDoom( MapLayerDoom&& ) = delete;
+		MapLayerDoom& operator=( const MapLayerDoom& ) = delete;
+		MapLayerDoom& operator=( MapLayerDoom&& ) = delete;
 		void render( const Camera& camera ) override;
 		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
 
@@ -29,6 +33,6 @@ class MapLayerDoom : public MapLayer
 		std::array<int, RAY_MAX> texture_coordinate_;
 		std::array<sdl2::SDLRect, RAY_MAX> lines_;
 		Uint8 floor_and_ceiling_pixels_[ Unit::WINDOW_HEIGHT_PIXELS - 32 ][ RAY_MAX * 4 ];
-		int floor_and_ceiling_x_[ Unit::WINDOW_HEIGHT_PIXELS - 32 ][ RAY_MAX ];
-		int floor_and_ceiling_y_[ Unit::WINDOW_HEIGHT_PIXELS - 32 ][ RAY_MAX ];
+		Uint8 floor_graphics_[ Unit::PIXELS_PER_BLOCK ][ Unit::PIXELS_PER_BLOCK * 4 ];
+		Uint8 ceiling_graphics_[ Unit::PIXELS_PER_BLOCK ][ Unit::PIXELS_PER_BLOCK * 4 ];
 };

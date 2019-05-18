@@ -401,7 +401,7 @@ namespace Render
 		if ( alt_texture != nullptr )
 		{
 			SDL_SetRenderTarget( renderer_, alt_texture );
-			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
+			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, nullptr, flip ) != 0 )
 			{
 				printf( "Render failure: %s\n", SDL_GetError() );
 			}
@@ -422,7 +422,7 @@ namespace Render
 				SDL_SetTextureBlendMode( texture, blend_mode );
 			}
 
-			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, 0, flip ) != 0 )
+			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, nullptr, flip ) != 0 )
 			{
 				printf( "Render failure: %s\n", SDL_GetError() );
 			}
@@ -503,7 +503,7 @@ namespace Render
 
 	SDL_Texture* createRenderBox( int width, int height )
 	{
-		SDL_Texture* temp = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height );
+		SDL_Texture* temp = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, width, height );
 		if ( temp == nullptr )
 		{
 			printf( "Failed to allocate render box: %s\n", SDL_GetError() );
@@ -538,7 +538,7 @@ namespace Render
 
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src )
 	{
-		if ( SDL_RenderCopy( renderer_, texture, &src, &WINDOW_BOX ) )
+		if ( SDL_RenderCopy( renderer_, texture, &src, &src ) )
 		{
 			printf( "Failed to draw render box: %s\n", SDL_GetError() );
 		}
@@ -582,5 +582,10 @@ namespace Render
 	const sdl2::SDLRect& getScreen()
 	{
 		return screen_;
+	};
+
+	SDL_Surface* getSurface( std::string sheet )
+	{
+		return surfaces_.at( sheet );
 	};
 };

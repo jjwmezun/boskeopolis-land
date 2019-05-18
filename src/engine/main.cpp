@@ -245,7 +245,7 @@ namespace Main
 
 	void renderStates()
 	{
-		int i = states_.size() - 1;
+		unsigned int i = states_.size() - 1;
 		while ( i > 0 )
 		{
 			if ( !states_[ i ]->testRenderBelow() ) { break; }
