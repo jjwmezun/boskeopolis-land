@@ -28,6 +28,7 @@ class MapLayerDoom : public MapLayer
 		std::array<int, RAY_MAX> colors_;
 		std::array<int, RAY_MAX> texture_coordinate_;
 		std::array<sdl2::SDLRect, RAY_MAX> lines_;
+		Uint8 floor_and_ceiling_pixels_[ Unit::WINDOW_HEIGHT_PIXELS - 32 ][ RAY_MAX * 4 ];
 		int floor_and_ceiling_x_[ Unit::WINDOW_HEIGHT_PIXELS - 32 ][ RAY_MAX ];
 		int floor_and_ceiling_y_[ Unit::WINDOW_HEIGHT_PIXELS - 32 ][ RAY_MAX ];
 };

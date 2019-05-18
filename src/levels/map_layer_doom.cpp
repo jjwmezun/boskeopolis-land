@@ -10,8 +10,8 @@
 
 #include <iostream>
 
-#define SCREEN_HEIGHT Unit::WINDOW_HEIGHT_PIXELS - 32
-#define SCREEN_HEIGHT_D ( double )( SCREEN_HEIGHT )
+#define SCREEN_HEIGHT ( ( Unit::WINDOW_HEIGHT_PIXELS ) - ( 32 ) )
+#define SCREEN_HEIGHT_D ( ( double )( SCREEN_HEIGHT ) )
 
 static constexpr int FLOOR_TEXTURE_SIZE = 8;
 static const int FLOOR_TEXTURE[ FLOOR_TEXTURE_SIZE ][ FLOOR_TEXTURE_SIZE ] =
@@ -80,6 +80,7 @@ MapLayerDoom::MapLayerDoom()
 	colors_ { 0 },
 	texture_coordinate_ { 0 },
 	lines_ {{ 0, 0, 0, 0 }},
+	floor_and_ceiling_pixels_ { 255 },
 	floor_and_ceiling_x_ { 0 },
 	floor_and_ceiling_y_ { 0 }
 {};
@@ -88,7 +89,7 @@ MapLayerDoom::~MapLayerDoom() {};
 
 void MapLayerDoom::render( const Camera& camera )
 {
-	Render::renderRenderBox( floor_and_ceiling_ );
+	//Render::renderRenderBox( floor_and_ceiling_ );
 	for ( int i = 0; i < RAY_MAX; ++i )
 	{
 		//Render::renderRect( lines_[ i ], colors_[ i ] + 4 );
@@ -114,6 +115,7 @@ void MapLayerDoom::render( const Camera& camera )
 
 void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
+	// Update animation
 	if ( animation_timer_.hit() )
 	{
 		item_src_.x += 16;
@@ -125,44 +127,42 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	animation_timer_.update();
 
 	const Sprite& hero = sprites.hero();
-
 	// If hero hasn't moved, no need to update walls or items.
 	if ( !hero.jump_lock_ )
 	{
 		return;
 	}
 
+	// Update walls
 	items_.clear();
 	const double hero_x = ( double )( hero.centerXSubPixels() ) / 16000.0;
 	const double hero_y = ( double )( hero.centerYSubPixels() ) / 16000.0;
-	const double direction_x = ( double )( hero.direction_x_ ) / PlayerDoomSprite::CONVERSION_PRECISION;
-	const double direction_y = ( double )( hero.direction_y_ ) / PlayerDoomSprite::CONVERSION_PRECISION;
-	const double plane_x = ( double )( hero.jump_top_speed_ ) / PlayerDoomSprite::CONVERSION_PRECISION;
-	const double plane_y = ( double )( hero.jump_top_speed_normal_ ) / PlayerDoomSprite::CONVERSION_PRECISION;
+	const double direction_x = ( double )( hero.direction_x_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
+	const double direction_y = ( double )( hero.direction_y_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
+	const double plane_x = ( double )( hero.jump_top_speed_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
+	const double plane_y = ( double )( hero.jump_top_speed_normal_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 	auto block_map = lvmap.blocks_;
 
 	for ( int ray_x = 0; ray_x < RAY_MAX; ++ray_x )
 	{
+		// Make camera x go from 1.0 to -1.0.
 		const double camera_x  = -1.0 * ( ( 2.0 * ( ( double )( ray_x ) / RAY_MAX_D ) ) - 1.0 );
 		const double ray_dir_x = direction_x + plane_x * camera_x;
 		const double ray_dir_y = direction_y + plane_y * camera_x;
 		const double delta_dist_x = std::abs( 1.0 / ray_dir_x );
 		const double delta_dist_y = std::abs( 1.0 / ray_dir_y );
-		const bool negative_ray_dir_x = ( ray_dir_x < 0 );
-		const bool negative_ray_dir_y = ( ray_dir_y < 0 );
+		const bool negative_ray_dir_x = ( ray_dir_x < 0.0 );
+		const bool negative_ray_dir_y = ( ray_dir_y < 0.0 );
 		const int step_x = ( negative_ray_dir_x ) ? -1 : 1;
 		const int step_y = ( negative_ray_dir_y ) ? -1 : 1;
 
 		int map_x = ( int )( hero_x );
 		int map_y = ( int )( hero_y );
-
 		double side_dist_x = calcSideDist( negative_ray_dir_x, hero_x, ( double )( map_x ), delta_dist_x );
 		double side_dist_y = calcSideDist( negative_ray_dir_y, hero_y, ( double )( map_y ), delta_dist_y );
-		//std::cout<<side_dist_x<<", "<<side_dist_y<<std::endl;
 		int side;
 
 		// DDA
-		const bool is_middle = ray_x == ( int )( RAY_MAX_D / 2 );
 		bool took_item = false;
 		for ( int t = 0; t < 1000; ++t ) // Just to make sure we don't get any rare infinite loops.
 		{
@@ -185,6 +185,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			{
 				break;
 			}
+			/*
 			else if ( !took_item && block == 1 )
 			{
 				const double perp_wall_dist = ( side == 0 )
@@ -195,15 +196,16 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				const int draw_start_x = ( int )( ( double )( ray_x ) / 2 ) - ( int )( ( double )( line_height ) / 2 );
 				items_.push_back( { ray_x, draw_start_y, line_height, line_height } );
 				block_map[ lvmap.indexFromXAndY( map_x, map_y ) ] = 0;
-			}
+			}*/
 		}
 
 		const double perp_wall_dist = ( side == 0 )
 			? calcPerpWallDist( map_x, hero_x, step_x, ray_dir_x )
 			: calcPerpWallDist( map_y, hero_y, step_y, ray_dir_y );
 		const int line_height = ( perp_wall_dist != 0.0 && perp_wall_dist != -0.0 )
-			? std::min( SCREEN_HEIGHT, ( int )( SCREEN_HEIGHT_D / perp_wall_dist ) )
+			? std::min( SCREEN_HEIGHT*2, ( int )( SCREEN_HEIGHT_D / perp_wall_dist ) )
 			: SCREEN_HEIGHT;
+		std::cout<<SCREEN_HEIGHT<<std::endl;
 		const int draw_start = ( int )( SCREEN_HEIGHT_D / 2.0 ) - ( int )( ( double )( line_height ) / 2.0 );
 
 		const double wall_x = ( side == 0 )
@@ -214,6 +216,11 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			? 16 - calcBaseTextureX( wall_x_remain ) - 1
 			: calcBaseTextureX( wall_x_remain ) ) % 16;
 
+		colors_[ ray_x ] = side;
+		lines_[ ray_x ] = { ray_x, draw_start, 1, line_height };
+		texture_coordinate_[ ray_x ] = texture_x;
+
+		/*
 		const Direction::Simple wall_dir =
 			  ( side == 0 && ray_dir_x > 0 ) ? Direction::Simple::RIGHT
 			: ( side == 0 && ray_dir_x < 0 ) ? Direction::Simple::LEFT
@@ -241,28 +248,24 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const int floor_texture_y = calcFloorTexture( current_floor_y );
 			floor_and_ceiling_x_[ y ][ ray_x ] = floor_and_ceiling_x_[ SCREEN_HEIGHT - y ][ ray_x ] = floor_texture_x;
 			floor_and_ceiling_y_[ y ][ ray_x ] = floor_and_ceiling_y_[ SCREEN_HEIGHT - y ][ ray_x ] = floor_texture_y;
-		}
-
-		colors_[ ray_x ] = side;
-		lines_[ ray_x ] = { ray_x, draw_start, 1, line_height };
-		texture_coordinate_[ ray_x ] = texture_x;
+		}*/
 	}
 
+	/*
 	std::sort( items_.begin(), items_.end(), &sortItems );
-
 	const Palette& palette = Main::getPalette();
-	Uint8 pixels[ SCREEN_HEIGHT ][ RAY_MAX * 4 ] = { 255 };
 	for ( int y = 0; y < SCREEN_HEIGHT; ++y )
 	{
 		for ( int x = 0; x < RAY_MAX; ++x )
 		{
 			const int color_index = FLOOR_TEXTURE[ floor_and_ceiling_y_[ y ][ x ] ][ floor_and_ceiling_x_[ y ][ x ] ];
 			const sdl2::SDLColor& color = palette.color( color_index );
-			pixels[ y ][ x * 4 ] = color.a;
-			pixels[ y ][ ( x * 4 ) + 1 ] = color.b;
-			pixels[ y ][ ( x * 4 ) + 2 ] = color.g;
-			pixels[ y ][ ( x * 4 ) + 3 ] = color.r;
+			floor_and_ceiling_pixels_[ y ][ x * 4 ] = color.a;
+			floor_and_ceiling_pixels_[ y ][ ( x * 4 ) + 1 ] = color.b;
+			floor_and_ceiling_pixels_[ y ][ ( x * 4 ) + 2 ] = color.g;
+			floor_and_ceiling_pixels_[ y ][ ( x * 4 ) + 3 ] = color.r;
 		}
 	}
-	SDL_UpdateTexture( floor_and_ceiling_, NULL, pixels, RAY_MAX * 4 * sizeof( Uint8 ) );
+	SDL_UpdateTexture( floor_and_ceiling_, NULL, floor_and_ceiling_pixels_, RAY_MAX * 4 * sizeof( Uint8 ) );
+	*/
 };

@@ -136,6 +136,7 @@ namespace Main
 
 		while ( !testTotalQuit() )
 		{
+			const int frame_start_time = SDL_GetTicks();
 			while ( SDL_PollEvent( &event ) != 0 )
 			{
 				switch ( event.type )
@@ -226,6 +227,9 @@ namespace Main
 
 				Input::update();
 				render();
+				const int frame_end_time = SDL_GetTicks();
+				const int frame_speed = frame_end_time - frame_start_time;
+				//std::cout<<"Frame Speed: "<<frame_speed<<std::endl;
 			}
 		}
 	};

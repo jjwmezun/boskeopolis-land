@@ -104,7 +104,7 @@ Map Map::mapFromPath
 		bool scroll_lock = false;
 		bool watery = false;
 		bool oxygen = false;
-		bool hide = true;
+		bool hide = false;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";

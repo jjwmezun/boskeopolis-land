@@ -2,7 +2,8 @@
 #include "input.hpp"
 #include "player_doom_sprite.hpp"
 
-static constexpr double ROTATION_SPEED = mezun::DOUBLE_PI / 360; // 1 degree in radians.
+static constexpr double ROTATION_SPEED = mezun::DOUBLE_PI / 360.0; // 1° in radians.
+static constexpr double N90DEGREES = ROTATION_SPEED * 90.0; // 90°
 
 PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 :
@@ -40,17 +41,26 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 {
 	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
-		acceleration_y_ = ( int )( ( double )( start_speed_ ) * ddiry_ );
-		acceleration_x_ = ( int )( ( double )( start_speed_ ) * ddirx_ );
+		acceleration_y_ = getAccelerationAdjustedByAngle( ddiry_ );
+		acceleration_x_ = getAccelerationAdjustedByAngle( ddirx_ );
 	}
 	else if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
-		acceleration_y_ = -( int )( ( double )( start_speed_ ) * ddiry_ );
-		acceleration_x_ = -( int )( ( double )( start_speed_ ) * ddirx_ );
+		acceleration_y_ = -getAccelerationAdjustedByAngle( ddiry_ );
+		acceleration_x_ = -getAccelerationAdjustedByAngle( ddirx_ );
 	}
 	else
 	{
 		acceleration_y_ = acceleration_x_ = 0;
+	}
+
+	if ( Input::held( Input::Action::CAMERA_RIGHT ) )
+	{
+		moveSideways( 1.0 );
+	}
+	else if ( Input::held( Input::Action::CAMERA_LEFT ) )
+	{
+		moveSideways( -1.0 );
 	}
 
 	if ( Input::held( Input::Action::MOVE_LEFT ) )
@@ -93,3 +103,18 @@ void PlayerDoomSprite::render( Camera& camera, bool priority )
 {
 	//Render::renderRectDebug( Unit::SubPixelsToPixels( hit_box_ ), { 255, 0, 0, 255 } );
 };
+
+double PlayerDoomSprite::getAccelerationAdjustedByAngle( double angle )
+{
+	return ( int )( ( double )( start_speed_ ) * angle );
+};
+
+void PlayerDoomSprite::moveSideways( double multiplier )
+{
+	const double right_angle_x = ddirx_ * cos( N90DEGREES ) - ddiry_ * sin( N90DEGREES );
+	const double right_angle_y = ddirx_ * sin( N90DEGREES ) + ddiry_ * cos( N90DEGREES );
+	const int y_change = multiplier * getAccelerationAdjustedByAngle( right_angle_y );
+	const int x_change = multiplier * getAccelerationAdjustedByAngle( right_angle_x );
+	acceleration_y_ += y_change;
+	acceleration_x_ += x_change;
+}

@@ -28,4 +28,6 @@ class PlayerDoomSprite : public Sprite
 		int prevposy_;
 
 		void rotate( double rotation_speed );
+		double getAccelerationAdjustedByAngle( double angle );
+		void moveSideways( double multiplier );
 };
