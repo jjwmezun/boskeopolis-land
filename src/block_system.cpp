@@ -233,3 +233,8 @@ Tileset& BlockSystem::getTileset()
 	assert( t != tilesets_.end() );
 	return t->second;
 };
+
+const std::vector<Block>& BlockSystem::getBlocksList() const
+{
+	return blocks_;
+}

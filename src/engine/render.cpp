@@ -586,6 +586,7 @@ namespace Render
 
 	SDL_Surface* getSurface( std::string sheet )
 	{
+		checkTexture( sheet );
 		return surfaces_.at( sheet );
 	};
 };

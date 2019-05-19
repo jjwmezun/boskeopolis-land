@@ -25,6 +25,7 @@ class BlockSystem
 		void blocksFromMap( Map& lvmap, const Camera& camera );
 		bool blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const;
 		BlockType* getBlockType( int type );
+		const std::vector<Block>& getBlocksList() const;
 
 	private:
 		std::vector<Block> blocks_;

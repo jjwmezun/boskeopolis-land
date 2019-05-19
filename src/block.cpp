@@ -16,6 +16,8 @@ Block::Block
 	type_id_ ( type_id )
 {};
 
+Block::~Block() {};
+
 void Block::render( const Camera& camera, bool priority ) const
 {
 	if ( hasType() )
@@ -63,6 +65,7 @@ bool Block::hasComponentType( BlockComponent::Type type ) const
 	{
 		return type_->hasComponentType( type );
 	}
+	return false;
 };
 
 bool Block::hasType() const
