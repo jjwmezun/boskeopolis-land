@@ -29,6 +29,7 @@
 #include "direction.hpp"
 #include "downhill_gem_sprite.hpp"
 #include "dungeon_enemy_sprite.hpp"
+#include "dungeon_enemy_walls_sprite.hpp"
 #include "dungeon_switch_sprite.hpp"
 #include "eggnon_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
@@ -608,6 +609,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 151 ):
 			return std::unique_ptr<Sprite> ( new SpringEnemySprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 152 ):
+			return std::unique_ptr<Sprite> ( new DungeonEnemyWallsSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

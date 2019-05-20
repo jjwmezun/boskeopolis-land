@@ -17,6 +17,16 @@
 			[
 				{ "type": "layer", "layer": 1 }
 			]
+		},
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "not_hero" }
+			]
 		}
 	]
 }
