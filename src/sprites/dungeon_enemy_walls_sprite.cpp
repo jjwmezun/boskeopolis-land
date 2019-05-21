@@ -1,6 +1,7 @@
 #include "dungeon_enemy_walls_sprite.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
+#include "sprite_system.hpp"
 
 DungeonEnemyWallsSprite::DungeonEnemyWallsSprite( int x, int y )
 :
@@ -10,7 +11,15 @@ DungeonEnemyWallsSprite::DungeonEnemyWallsSprite( int x, int y )
 DungeonEnemyWallsSprite::~DungeonEnemyWallsSprite() {};
 
 void DungeonEnemyWallsSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
-{};
+{
+	if ( !sprites.spritesOnScreen( camera, SpriteType::ENEMY ) )
+	{
+		if ( hit_box_.y > original_hit_box_.y - hit_box_.h )
+		{
+			hit_box_.y -= 250;
+		}
+	}
+};
 
 void DungeonEnemyWallsSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {

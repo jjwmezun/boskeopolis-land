@@ -8,7 +8,7 @@ class SpriteSystem;
 class DungeonEnemySprite : public Sprite
 {
 	public:
-		DungeonEnemySprite( int x, int y, int layer );
+		DungeonEnemySprite( int x, int y, int layer, bool stationary = false );
 		~DungeonEnemySprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
@@ -29,6 +29,7 @@ class DungeonEnemySprite : public Sprite
 		void hurt();
 		bool invincibilityFlickerOff() const;
 
+		bool stationary_;
 		int walk_delay_;
 		int walk_timer_;
 		int hp_;

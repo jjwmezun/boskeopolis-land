@@ -60,6 +60,7 @@ class SpriteSystem
 		void interactWithMap( Map& lvmap, Camera& camera, Health& health );
 		int permanentlyKilledEnemies() const;
 		int numberOfSprites() const;
+		bool spritesOnScreen( const Camera& camera, const Sprite::SpriteType type ) const;
 
 
 	private:

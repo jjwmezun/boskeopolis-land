@@ -613,6 +613,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 152 ):
 			return std::unique_ptr<Sprite> ( new DungeonEnemyWallsSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 153 ):
+			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 1, true ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -991,4 +994,16 @@ int SpriteSystem::permanentlyKilledEnemies() const
 int SpriteSystem::numberOfSprites() const
 {
 	return sprites_.size();
+};
+
+bool SpriteSystem::spritesOnScreen( const Camera& camera, const Sprite::SpriteType type ) const
+{
+	for ( const auto& sprite : sprites_ )
+	{
+		if ( camera.onscreen( sprite->hitBox() ) && sprite->hasType( type ) )
+		{
+			return true;
+		}
+	}
+	return false;
 };

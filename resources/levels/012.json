@@ -53,13 +53,13 @@
 
 	"entrance_x2": 62,
 	"entrance_y2": 81,
-		"entrance_x": 102,
-		"entrance_y": 41,
+		"entrance_x": 21,
+		"entrance_y": 17,
 
 	"gem_challenge": 0,
 	"time_challenge": 0,
 	"camera_x2": 50,
 	"camera_y2": 72,
-	"camera_x": 100,
-	"camera_y": 36
+	"camera_x": 0,
+	"camera_y": 12
 }

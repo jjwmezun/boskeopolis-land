@@ -13,15 +13,15 @@ static constexpr int START_MAX_HP = 2;
 
 static inline int generateWalkDelay()
 {
-	return mezun::randInt( 320, 60 );
+	return mezun::randInt( 120, 30 );
 };
 
 static inline int testShoot()
 {
-	return mezun::testRandomWithinPercentage( 75 );
+	return mezun::testRandomWithinPercentage( 50 );
 }
 
-DungeonEnemySprite::DungeonEnemySprite( int x, int y, int layer )
+DungeonEnemySprite::DungeonEnemySprite( int x, int y, int layer, bool stationary )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0, false, 1, 1, 5, 2 ), x, y, 14, 14, { SpriteType::ENEMY }, 250, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	walk_delay_ ( generateWalkDelay() ),
@@ -29,7 +29,8 @@ DungeonEnemySprite::DungeonEnemySprite( int x, int y, int layer )
 	hp_ ( MAX_HP ),
 	state_ ( State::WALK ),
 	next_state_ ( State::CHANGE ),
-	invincibility_timer_ ()
+	invincibility_timer_ (),
+	stationary_ ( stationary )
 {
 	direction_ = Direction::Simple::DOWN;
 	layer_ = layer;
@@ -58,6 +59,12 @@ void DungeonEnemySprite::updateActions( SpriteSystem& sprites )
 	{
 		case ( State::WALK ):
 		{
+			if ( stationary_ )
+			{
+				state_ = State::CHANGE;
+				break;
+			}
+
 			moveInDirection();
 			if ( walk_timer_ >= walk_delay_ )
 			{
@@ -110,7 +117,10 @@ void DungeonEnemySprite::updateActions( SpriteSystem& sprites )
 					{
 						walk_delay_ = generateWalkDelay();
 						walk_timer_ = 0;
-						direction_ = Direction::randomSimple( false );
+						if ( !stationary_ )
+						{
+							direction_ = Direction::randomSimple( false );
+						}
 						next_state_ = State::CHANGE;
 						state_ = State::WALK;
 					}
