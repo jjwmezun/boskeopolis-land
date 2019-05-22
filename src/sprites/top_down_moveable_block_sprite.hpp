@@ -10,4 +10,12 @@ class TopDownMoveableBlockSprite : public Sprite
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 		void reset() override;
+
+	private:
+		bool blocksInTheWay( const BlockSystem& blocks, const sdl2::SDLRect boundary );
+		bool spritesOnOtherSide( const SpriteSystem& sprites, const sdl2::SDLRect boundary ) const;
+		sdl2::SDLRect getLeftBoundarySpace() const;
+		sdl2::SDLRect getRightBoundarySpace() const;
+		sdl2::SDLRect getTopBoundarySpace() const;
+		sdl2::SDLRect getBottomBoundarySpace() const;
 };

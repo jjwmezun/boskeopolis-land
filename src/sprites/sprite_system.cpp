@@ -1007,3 +1007,8 @@ bool SpriteSystem::spritesOnScreen( const Camera& camera, const Sprite::SpriteTy
 	}
 	return false;
 };
+
+const std::vector<std::unique_ptr<Sprite>>& SpriteSystem::getSpritesList() const
+{
+	return sprites_;
+};

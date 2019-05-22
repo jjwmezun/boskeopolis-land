@@ -969,3 +969,12 @@ void Sprite::flipGraphicsOnRight()
 {
 	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
 }
+
+bool Sprite::inBox( const sdl2::SDLRect& box ) const
+{
+	return
+		hit_box_.x < box.right()
+		&& rightSubPixels() > box.x
+		&& hit_box_.y < box.bottom()
+		&& bottomSubPixels() > box.y;
+};

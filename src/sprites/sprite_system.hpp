@@ -61,6 +61,7 @@ class SpriteSystem
 		int permanentlyKilledEnemies() const;
 		int numberOfSprites() const;
 		bool spritesOnScreen( const Camera& camera, const Sprite::SpriteType type ) const;
+		const std::vector<std::unique_ptr<Sprite>>& getSpritesList() const;
 
 
 	private:

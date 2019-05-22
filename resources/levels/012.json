@@ -23,6 +23,14 @@
 					"entrance_x": 4,
 					"entrance_y": 63,
 					"location": [ 3, 5, 62, 64 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 87,
+					"entrance_y": 19,
+					"location": [ 85, 89, 19, 21 ],
+					"camera_x": 1200,
+					"camera_y": 0
 				}
 			]
 		},
@@ -46,6 +54,14 @@
 					"entrance_x": 4,
 					"entrance_y": 63,
 					"location": [ 3, 5, 62, 64 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 87,
+					"entrance_y": 19,
+					"location": [ 85, 89, 19, 21 ],
+					"camera_x": 1200,
+					"camera_y": 0
 				}
 			]
 		}
@@ -53,13 +69,13 @@
 
 	"entrance_x2": 62,
 	"entrance_y2": 81,
-		"entrance_x": 21,
+		"entrance_x": 79,
 		"entrance_y": 17,
 
 	"gem_challenge": 0,
 	"time_challenge": 0,
 	"camera_x2": 50,
 	"camera_y2": 72,
-	"camera_x": 0,
+	"camera_x": 75,
 	"camera_y": 12
 }

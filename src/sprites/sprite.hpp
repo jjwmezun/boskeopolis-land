@@ -225,6 +225,7 @@ class Sprite : public Object
 		bool blocksJustLeft( const BlockSystem& blocks ) const;
 		sdl2::SDLRect justRight() const;
 		bool blocksJustRight( const BlockSystem& blocks ) const;
+		bool inBox( const sdl2::SDLRect& box ) const;
 
 		void turnOnEdge( const BlockSystem& blocks );
 		void turnOnCollide();
