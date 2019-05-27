@@ -10,7 +10,7 @@ static constexpr int CAMERA_PADDING = 8;
 static bool testBlockInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type, const Block& b )
 {
 	return
-		b.hasComponentType( type )       &&
+		( type == BlockComponent::Type::NOTYPE || b.hasComponentType( type ) ) &&
 		b.rightSubPixels() > rect.x      &&
 		b.leftSubPixels() < rect.right() &&
 		b.topSubPixels() < rect.bottom() &&

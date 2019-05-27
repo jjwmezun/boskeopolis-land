@@ -14,7 +14,7 @@
 					"height": 300,
 					"y_offset": -64,
 					"x_scroll": 0.1,
-					"y_scroll": 0.25
+					"y_scroll": 0.1
 				},
 				{
 					"type": "image",
@@ -36,7 +36,6 @@
 
 	"entrance_x": 7,
 	"entrance_y": 26,
-
 	"gem_challenge": 7850,
 	"time_challenge": 20
 }

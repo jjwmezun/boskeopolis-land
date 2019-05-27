@@ -23,7 +23,7 @@ class BlockSystem
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites );
 		void reset( const Map& lvmap );
 		void blocksFromMap( Map& lvmap, const Camera& camera );
-		bool blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const;
+		bool blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type = BlockComponent::Type::NOTYPE ) const;
 		BlockType* getBlockType( int type );
 		const std::vector<Block>& getBlocksList() const;
 

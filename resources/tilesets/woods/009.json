@@ -11,8 +11,12 @@
 		{
 			"component":
 			{
-				"type": "solid"
-			}
+				"type": "force_upward"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
 		}
 	]
 }

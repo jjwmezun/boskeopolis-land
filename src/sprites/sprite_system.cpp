@@ -7,6 +7,7 @@
 #include "bird_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
+#include "bouncing_spike_fruit_sprite.hpp"
 #include "bubble_sprite.hpp"
 #include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
@@ -170,7 +171,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 5 ):
-			return std::unique_ptr<Sprite> ( new SpikyFruitSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new SpikyFruitSprite( x, y, lvmap ) );
 		break;
 		case ( SPRITE_INDEX_START + 6 ):
 			return std::unique_ptr<Sprite> ( new RacerSprite( x, y ) );
@@ -615,6 +616,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 153 ):
 			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 1, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 154 ):
+			return std::unique_ptr<Sprite> ( new BouncingSpikeFruitSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

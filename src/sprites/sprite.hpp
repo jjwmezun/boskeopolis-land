@@ -49,7 +49,8 @@ class Sprite : public Object
 			TRUCK_PLATFORM,
 			CRAB,
 			CAMERA_MOVE,
-			MOVEABLE_BLOCK
+			MOVEABLE_BLOCK,
+			FALLING_BOUGH
 		};
 
 		enum class CameraMovement

@@ -17,7 +17,9 @@ HydrantSprite::~HydrantSprite() {};
 void HydrantSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	if ( isDead() )
+	{
 		block_interact_ = false;
+	}
 
 	if ( awake_ && delay_.done() )
 	{

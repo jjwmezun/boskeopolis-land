@@ -12,6 +12,7 @@ FullHealBlockSprite::~FullHealBlockSprite() {};
 
 void FullHealBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
+	hit_box_.x = original_hit_box_.x; // Undo wind.
 	bump_under_block_component.update( *this );
 };
 
