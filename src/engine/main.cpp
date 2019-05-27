@@ -94,7 +94,7 @@ namespace Main
 
 	void stateReset()
 	{
-		Input::reset();
+		//Input::reset();
 		state_change_type_ = StateChangeType::__NULL;
 	};
 

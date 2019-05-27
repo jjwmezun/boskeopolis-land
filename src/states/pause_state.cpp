@@ -59,11 +59,19 @@ void PauseState::stateUpdate()
 		{
 			events_.quitLevel();
 		}
+		else
+		{
+			// Only keep playing song if continuing level.
+			Audio::resumeSong();
+		}
+		Input::reset();
 		Main::popState();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
+		Input::reset();
+		Audio::resumeSong();
 		Main::popState();
 		Audio::playSound( Audio::SoundType::CANCEL );
 	}

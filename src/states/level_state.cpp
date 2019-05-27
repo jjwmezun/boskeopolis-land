@@ -110,5 +110,4 @@ void LevelState::testPause()
 void LevelState::backFromPop()
 {
 	Audio::changeSong( level_.currentMap().music_ );
-	Audio::resumeSong();
 };

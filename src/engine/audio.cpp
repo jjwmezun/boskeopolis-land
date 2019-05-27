@@ -61,7 +61,7 @@ namespace Audio
 				exit( -1 );
 			}
 			Mix_AllocateChannels( MAX_CHANNELS );
-			Mix_VolumeMusic( MIX_MAX_VOLUME / 4 );
+			Mix_VolumeMusic( MIX_MAX_VOLUME / 2 );
 			Mix_Volume( -1, MIX_MAX_VOLUME );
 			sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
 			sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );
