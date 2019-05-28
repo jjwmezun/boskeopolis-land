@@ -620,6 +620,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 154 ):
 			return std::unique_ptr<Sprite> ( new BouncingSpikeFruitSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 155 ):
+			return std::unique_ptr<Sprite> ( new RopeSprite( x, y, 16, 34, 1000 ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;

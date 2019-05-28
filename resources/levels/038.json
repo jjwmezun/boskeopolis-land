@@ -1,5 +1,5 @@
 {
-	"name": "Windy Woods",
+	"name": "Through the Sharp Hawthorn Blow the Winds",
 
 	"maps":
 	[
@@ -30,12 +30,29 @@
 					"height": 256,
 					"x_scroll": 0.5
 				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "windy-leaves.png",
+					"width": 406,
+					"height": 196,
+					"x_scroll": 1,
+					"y_scroll": 1,
+					"x_speed": -3000,
+					"y_speed": 1500,
+					"frames": 6,
+					"animation_speed": 16
+				}
 			]
 		}
 	],
 
-	"entrance_x": 7,
+	"entrance_x": 24,
 	"entrance_y": 26,
-	"gem_challenge": 7850,
-	"time_challenge": 20
+	"camera_x": 13,
+
+	"gem_challenge": 20000,
+	"time_challenge": 35
 }

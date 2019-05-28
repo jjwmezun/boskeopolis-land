@@ -20,13 +20,12 @@ static constexpr int X_PADDING = 8;
 static constexpr int X = X_PADDING;
 static constexpr int END_X = Unit::WINDOW_WIDTH_PIXELS - X_PADDING;
 static constexpr int VICTORY_X = X;
-static constexpr int DIAMOND_X = VICTORY_X + CHAR_SIZE;
-static constexpr int LEVEL_NAME_X = DIAMOND_X + ( CHAR_SIZE * 2 );
+static constexpr int LEVEL_NAME_X = VICTORY_X + ( CHAR_SIZE * 2 );
 static constexpr int TIME_LETTER_SIZE = 4;
 static constexpr int GEM_DIGIT_LIMIT = 5;
 static constexpr int TIME_CHALLENGE_TEXT_X = END_X - ( TIME_LETTER_SIZE * CHAR_SIZE );
 static constexpr int TIME_ICON_X = TIME_CHALLENGE_TEXT_X - CHAR_SIZE;
-static constexpr int GEM_CHALLENGE_TEXT_X = TIME_ICON_X - CHAR_SIZE - ( GEM_DIGIT_LIMIT * CHAR_SIZE );
+static constexpr int GEM_CHALLENGE_TEXT_X = END_X - ( GEM_DIGIT_LIMIT * CHAR_SIZE );
 static constexpr int GEM_ICON_X = GEM_CHALLENGE_TEXT_X - CHAR_SIZE;
 static constexpr int FUNDS_ICON_X = X;
 static constexpr int FUNDS_X = FUNDS_ICON_X + ( CHAR_SIZE * 2 );
@@ -54,7 +53,7 @@ LevelSelectState::LevelSelectState( int level )
 	selection_ ( level ),
 	INVENTORY_BG_DEST ( 0, INVENTORY_Y, Unit::WINDOW_WIDTH_PIXELS, 24 ),
 	HEADER_BG_DEST ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, START_Y ),
-	highlight_dest_ ( 0, START_Y, Unit::WINDOW_WIDTH_PIXELS, 8 ),
+	highlight_dest_ ( 0, START_Y, Unit::WINDOW_WIDTH_PIXELS, 16 ),
 	prev_level_ ( level ),
 	delay_length_ ( 16 ),
 	delay_ ( 0 ),
@@ -231,15 +230,15 @@ void LevelSelectState::updateInput()
 
 void LevelSelectState::updateHighlighter()
 {
-	highlight_dest_.y = ( 8 * selection_ );
+	highlight_dest_.y = ( 16 * selection_ );
 
 	if ( highlight_dest_.y + highlight_dest_.h > camera_.bottom() )
 	{
-		camera_.moveDown( 8 );
+		camera_.moveDown( 16 );
 	}
 	if ( highlight_dest_.y < camera_.y() )
 	{
-		camera_.moveUp( 8 );
+		camera_.moveUp( 16 );
 	}
 
 	highlight_dest_.y = camera_.relativeY( highlight_dest_ );
@@ -254,19 +253,18 @@ void LevelSelectState::updateCameraEntryLimits()
 
 int LevelSelectState::calculateFirstEntryOnCamera() const
 {
-	return Unit::PixelsToMiniBlocks( camera_.y() );
+	return Unit::PixelsToBlocks( camera_.y() );
 };
 
 int LevelSelectState::calculateEndEntryOnCamera() const
 {
-	return std::min( ( int )( level_ids_.size() ), Unit::PixelsToMiniBlocks( camera_.heightPixels() ) + first_entry_on_camera_ );
+	return std::min( ( int )( level_ids_.size() ), Unit::PixelsToBlocks( camera_.heightPixels() ) + first_entry_on_camera_ );
 };
 
 void LevelSelectState::stateRender()
 {
 	bg_.render( Render::window_box_ );
 	Render::renderRect( highlight_dest_, 6 );
-
 	for ( int i = first_entry_on_camera_; i < end_entry_on_camera_; ++i )
 	{
 		win_icon_show_[ i ]->render( win_icon_dests_[ i ], &camera_ );
@@ -277,7 +275,6 @@ void LevelSelectState::stateRender()
 		time_icon_show_[ i ]->render( time_challenge_icon_dests_[ i ], &camera_ );
 		time_show_[ i ]->render( &camera_ );
 	}
-
 	renderInventory();
 	renderHeader();
 };
@@ -319,21 +316,21 @@ void LevelSelectState::init()
 				}
 			}
 
-			level_names_.emplace_back( lvname, LEVEL_NAME_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
+			level_names_.emplace_back( Text::autoformat( lvname, 39 ), LEVEL_NAME_X, Unit::BlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK, false, 39 );
 
 			level_ids_.emplace_back( i );
 
-			gem_scores_.emplace_back( Inventory::gemScore( i ), GEM_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
+			gem_scores_.emplace_back( Inventory::gemScore( i ), GEM_CHALLENGE_TEXT_X, Unit::BlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
 			gem_show_.emplace_back( &gem_scores_[ reali ] );
-			time_scores_.emplace_back( Inventory::timeScore( i ), TIME_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
+			time_scores_.emplace_back( Inventory::timeScore( i ), TIME_CHALLENGE_TEXT_X, Unit::BlocksToPixels( reali ) + 8, Text::FontColor::WHITE, Text::FontAlign::LEFT, Text::FontColor::BLACK );
 			time_show_.emplace_back( &time_scores_[ reali ] );
-			gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), GEM_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
-			time_challenges_text_.emplace_back( Level::timeChallengeText( i ), TIME_CHALLENGE_TEXT_X, Unit::MiniBlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
+			gem_challenges_text_.emplace_back( Level::gemChallengeText( i ), GEM_CHALLENGE_TEXT_X, Unit::BlocksToPixels( reali ), Text::FontColor::LIGHT_GRAY );
+			time_challenges_text_.emplace_back( Level::timeChallengeText( i ), TIME_CHALLENGE_TEXT_X, Unit::BlocksToPixels( reali ) + 8, Text::FontColor::LIGHT_GRAY );
 
-			const sdl2::SDLRect victory_rect = { VICTORY_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-			const sdl2::SDLRect diamond_rect = { DIAMOND_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-			const sdl2::SDLRect gem_challenge_rect = { GEM_ICON_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
-			const sdl2::SDLRect time_challenge_rect = { TIME_ICON_X, Unit::MiniBlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect victory_rect = { VICTORY_X, Unit::BlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect diamond_rect = { VICTORY_X, Unit::BlocksToPixels( reali ) + 8, CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect gem_challenge_rect = { GEM_ICON_X, Unit::BlocksToPixels( reali ), CHAR_SIZE, CHAR_SIZE };
+			const sdl2::SDLRect time_challenge_rect = { TIME_ICON_X, Unit::BlocksToPixels( reali ) + 8, CHAR_SIZE, CHAR_SIZE };
 			win_icon_dests_.emplace_back( victory_rect );
 			diamond_icon_dests_.emplace_back( diamond_rect );
 			gem_challenge_icon_dests_.emplace_back( gem_challenge_rect );

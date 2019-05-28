@@ -48,7 +48,7 @@ class LevelSelectState : public GameState
 		std::vector<SpriteGraphics*> diamond_icon_show_;
 		std::vector<SpriteGraphics*> gem_icon_show_;
 		std::vector<SpriteGraphics*> time_icon_show_;
-		std::vector<int>  level_ids_;
+		std::vector<int> level_ids_;
 
 		const sdl2::SDLRect INVENTORY_BG_DEST;
 		const sdl2::SDLRect HEADER_BG_DEST;

@@ -4,9 +4,28 @@
 #include "level.hpp"
 #include "ow_inventory.hpp"
 #include "render.hpp"
-#include "text.hpp"
 
-constexpr sdl2::SDLRect OWInventory::AREA;
+OWInventory::OWInventory()
+:
+	win_icon_gfx_ ( "tilesets/universal.png", HAVE_X, 8 ),
+	diamond_gfx_ ( "tilesets/universal.png", HAVE_X, 0 ),
+	gem_icon_gfx_ ( "charset.png", 32, 16 ),
+	time_icon_gfx_ ( "tilesets/universal.png", 40, 0 ),
+	level_name_ ( "" ),
+	area_ ( AREA ),
+	win_icon_pos_ ( LEFT_EDGE, ROW_1, 8, 8 ),
+	diamond_icon_pos_ ( LEFT_EDGE, ROW_1+8, 8, 8 ),
+	gem_icon_pos_ ( RIGHT_EDGE - ( 6 * 8 ), ROW_1, 8, 8 ),
+	time_icon_pos_ ( RIGHT_EDGE - ( 5 * 8 ), ROW_1 + 8, 8, 8 ),
+	pts_icon_pos_ ( LEFT_EDGE, ROW_2, 8, 8 ),
+	color_animation_ ( COLOR_START ),
+	color_animation_timer_ ( 0 ),
+	prev_level_select_ ( 0 ),
+	show_challenges_ ( false ),
+	show_challenges_lock_ ( true ),
+	color_going_up_ ( true ),
+	sound_lock_ ( false )
+{};
 
 void OWInventory::update( int lv_select )
 {
@@ -66,14 +85,18 @@ void OWInventory::update( int lv_select )
 
 void OWInventory::render( int lv_select )
 {
-	Render::renderRect( AREA );
+	Render::renderRect( area_ );
+	renderLevelInfo( lv_select );
+	renderPts();
+};
 
+void OWInventory::renderLevelInfo( int lv_select )
+{
 	if ( lv_select > 0 )
 	{
 		Text::FontColor name_shade = Text::FontColor::BLACK;
 		Text::FontColor gem_shade = Text::FontColor::BLACK;
 		Text::FontColor time_shade = Text::FontColor::BLACK;
-
 		std::string gem_score;
 		std::string time_score;
 
@@ -105,38 +128,41 @@ void OWInventory::render( int lv_select )
 				time_shade = ( Text::FontColor )( color_animation_ );
 			}
 		}
-		
-		Text::renderText( Level::NameOLevel( ( unsigned int )( lv_select ) ), LEFT_EDGE + 24, ROW_1, nullptr, name_shade );
 
-		gem_icon_gfx_.render( { RIGHT_EDGE - ( 12 * 8 ), ROW_1, 8, 8 } );
-		Text::renderText( gem_score, RIGHT_EDGE - ( 11 * 8 ), ROW_1, nullptr, gem_shade );
+		if ( prev_level_select_ != lv_select )
+		{
+			level_name_ = { Text::autoformat( Level::NameOLevel( ( unsigned int )( lv_select ) ), 39 ), LEFT_EDGE + 16, ROW_1, name_shade, Text::FontAlign::LEFT, Text::FontColor::__NULL, false, 39 };
+			prev_level_select_ = lv_select;
+		}
+		level_name_.render( nullptr );
 
-		time_icon_gfx_.render( { RIGHT_EDGE - ( 5 * 8 ), ROW_1, 8, 8 } );
-		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1, nullptr, time_shade );
+		gem_icon_gfx_.render( gem_icon_pos_ );
+		Text::renderText( gem_score, RIGHT_EDGE - ( 5 * 8 ), ROW_1, nullptr, gem_shade );
+
+		time_icon_gfx_.render( time_icon_pos_ );
+		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1 + 8, nullptr, time_shade );
 
 		win_icon_gfx_.current_frame_x_ = DONT_HAVE_X;
 		if ( Inventory::victory( lv_select ) )
 		{
 			win_icon_gfx_.current_frame_x_ = HAVE_X;
 		}
-		win_icon_gfx_.render( { LEFT_EDGE, ROW_1, 8, 8 } );
+		win_icon_gfx_.render( win_icon_pos_ );
 
 		diamond_gfx_.current_frame_x_ = DONT_HAVE_X;
 		if ( Inventory::haveDiamond( lv_select ) )
 		{
 			diamond_gfx_.current_frame_x_ = HAVE_X;
 		}
-		diamond_gfx_.render( { LEFT_EDGE + 8, ROW_1, 8, 8 } );
+		diamond_gfx_.render( diamond_icon_pos_ );
 	}
+}
 
-	gem_icon_gfx_.render( { LEFT_EDGE, ROW_2, 8, 8 } );
-
-	if ( Inventory::totalFundsShown() < 0 )
-	{
-		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9, Text::FontColor::DARK_MID_GRAY );
-	}
-	else
-	{
-		Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9 );
-	}
-};
+void OWInventory::renderPts()
+{
+	gem_icon_gfx_.render( pts_icon_pos_ );
+	const Text::FontColor color = ( Inventory::totalFundsShown() < 0 )
+		? Text::FontColor::DARK_MID_GRAY
+		: Text::FontColor::BLACK;
+	Text::renderNumber( Inventory::totalFundsShown(), AREA.x + 24, ROW_2, 9, color );
+}
