@@ -26,6 +26,7 @@
 #include "cloud_platform_sprite.hpp"
 #include "cowpoker_sprite.hpp"
 #include "crab_sprite.hpp"
+#include "crane_crate_sprite.hpp"
 #include "desert_hawk_sprite.hpp"
 #include "direction.hpp"
 #include "downhill_gem_sprite.hpp"
@@ -139,7 +140,8 @@
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
 	hero_ (),
-	permanently_killed_enemies_ ( 0 )
+	permanently_killed_enemies_ ( 0 ),
+	sprites_ ()
 {
 	// Minimize chances o' sprite # going past space
 	// & forcing slow vector relocation.
@@ -623,6 +625,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 155 ):
 			return std::unique_ptr<Sprite> ( new RopeSprite( x, y, 16, 34, 1000 ) );
 		break;
+		case ( SPRITE_INDEX_START + 156 ):
+			return std::unique_ptr<Sprite> ( new CraneCrateSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -697,7 +702,7 @@ void SpriteSystem::spritesFromMap( const Map& lvmap, EventSystem& events )
 
 void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health )
 {
-	for ( int i = 0; i < sprites_.size(); ++i )
+	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i ) != nullptr )
 		{
@@ -791,7 +796,7 @@ void SpriteSystem::destroySprite( int n, Map& lvmap )
 		++permanently_killed_enemies_;
 	}
 
-	if ( n < sprites_.size() )
+	if ( ( std::vector<std::unique_ptr<Sprite> >::size_type )( n ) < sprites_.size() )
 	{
 		// Save time by just replacing dying sprite with last sprite & just
 		// popping off last sprite ( which is null now, anyway ),
@@ -804,7 +809,7 @@ void SpriteSystem::destroySprite( int n, Map& lvmap )
 
 void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health )
 {
-	for ( int i = 0; i < sprites_.size(); ++i )
+	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i )->despawnWhenDead() )
 		{
@@ -884,7 +889,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 
 void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events )
 {
-	for ( int i = 0; i < sprites_.size(); ++i )
+	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i ) != nullptr )
 		{
@@ -896,7 +901,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 					hero_->interact( *sprites_.at( i ), blocks, *this, lvmap, health, events );
 				}
 
-				for ( int j = 0; j < sprites_.size(); ++j )
+				for ( auto j = 0; j < sprites_.size(); ++j )
 				{
 					if ( sprites_[ j ] != nullptr )
 						if ( i != j )
@@ -911,7 +916,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 
 void SpriteSystem::render( Camera& camera, bool priority )
 {
-	for ( int i = 0; i < sprites_.size(); ++i )
+	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i ) != nullptr )
 		{
