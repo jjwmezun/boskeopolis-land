@@ -24,6 +24,7 @@ class PlayerDoomSprite : public Sprite
 		double planey_;
 		double prevdirx_;
 		double prevdiry_;
+		double angle_;
 		int prevposx_;
 		int prevposy_;
 

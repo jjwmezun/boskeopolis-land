@@ -1,9 +1,11 @@
+#include "camera.hpp"
 #include <cmath>
 #include "input.hpp"
 #include "player_doom_sprite.hpp"
 
-static constexpr double ROTATION_SPEED = mezun::DOUBLE_PI / 360.0; // 1° in radians.
-static constexpr double N90DEGREES = ROTATION_SPEED * 90.0; // 90°
+static constexpr double DEG_ROTATION_SPEED = mezun::DOUBLE_PI * 2;
+static constexpr double ROTATION_SPEED = DEG_ROTATION_SPEED / 360.0; // 1° in radians.
+static constexpr double N90DEGREES = mezun::DOUBLE_PI / 4; // 90°
 
 PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 :
@@ -26,13 +28,15 @@ PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 	prevposx_ ( 0 ),
 	prevposy_ ( 0 ),
 	prevdirx_ ( 0 ),
-	prevdiry_ ( 0 )
+	prevdiry_ ( 0 ),
+	angle_ ( 0 )
 {
 	direction_x_ = ( Direction::Horizontal )( ddirx_ * CONVERSION_PRECISION );
 	direction_y_ = ( Direction::Vertical )( ddiry_ * CONVERSION_PRECISION );
 	jump_top_speed_ = ( int )( planex_ * CONVERSION_PRECISION );
 	jump_top_speed_normal_ = ( int )( planey_ * CONVERSION_PRECISION );
 	jump_lock_ = true;
+	bounce_height_ = ( int )( angle_ * CONVERSION_PRECISION );
 };
 
 PlayerDoomSprite::~PlayerDoomSprite() {};
@@ -77,6 +81,7 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	prevdiry_ = ddiry_;
 	prevposx_ = hit_box_.x;
 	prevposy_ = hit_box_.y;
+	camera.adjustCart( *this, lvmap );
 };
 
 void PlayerDoomSprite::rotate( double rotation_speed )
@@ -87,6 +92,7 @@ void PlayerDoomSprite::rotate( double rotation_speed )
 	ddiry_ = old_dirx * sin( rotation_speed ) + ddiry_ * cos( rotation_speed );
 	planex_ = planex_ * cos( rotation_speed ) - planey_ * sin( rotation_speed );
 	planey_ = old_planex * sin( rotation_speed ) + planey_ * cos( rotation_speed );
+	angle_ += rotation_speed * 60.0;
 
 	// MapLayerDoom can only recognize this is a generic sprite, thanks to polymorphism.
 	// These are generic sprite values, so it can reach these.
@@ -94,6 +100,7 @@ void PlayerDoomSprite::rotate( double rotation_speed )
 	direction_y_ = ( Direction::Vertical )( ddiry_ * CONVERSION_PRECISION );
 	jump_top_speed_ = ( int )( planex_ * CONVERSION_PRECISION );
 	jump_top_speed_normal_ = ( int )( planey_ * CONVERSION_PRECISION );
+	bounce_height_ = ( int )( angle_ * CONVERSION_PRECISION );
 }
 
 void PlayerDoomSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

@@ -43,8 +43,11 @@ class MapLayerDoom : public MapLayer
 		static bool sortItems( const Item& lhs, const Item& rhs );
 
 		SDL_Texture* floor_and_ceiling_;
+		SDL_Texture* map_;
 		std::vector<Item> items_;
 		sdl2::SDLRect texture_source_;
+		const sdl2::SDLRect render_screen_;
+		const sdl2::SDLRect map_dest_;
 		double wall_distances_[ RAY_MAX ];
 		TextureSlice wall_items_[ RAY_MAX ];
 		Uint8 floor_and_ceiling_pixels_[ SCREEN_HEIGHT ][ RAY_MAX * NUMBER_OF_COLOR_CHANNELS ];

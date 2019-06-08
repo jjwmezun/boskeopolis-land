@@ -12,9 +12,14 @@
 
 #include <iostream>
 
-static constexpr int TEXTURE_WIDTH = 160;
+static constexpr int TEXTURE_WIDTH = 164;
 static constexpr int FLOOR_TEXTURE_X_OFFSET = 32;
 static constexpr int CEILING_TEXTURE_X_OFFSET = 48;
+static constexpr int MAP_WIDTH = Unit::WINDOW_WIDTH_PIXELS / 4;
+static constexpr int MAP_HEIGHT = ( Unit::WINDOW_HEIGHT_PIXELS - 32 ) / 4;
+static constexpr int MAP_PADDING = 8;
+static constexpr int MAP_X = Unit::WINDOW_WIDTH_PIXELS - MAP_WIDTH - MAP_PADDING;
+static constexpr int MAP_Y = Unit::WINDOW_HEIGHT_PIXELS - MAP_HEIGHT - MAP_PADDING - 32;
 
 static constexpr double calcSideDist( bool negative, double player_pos, double map_pos, double delta )
 {
@@ -62,8 +67,11 @@ static constexpr int calcFloorTexture( double floor )
 MapLayerDoom::MapLayerDoom()
 :
 	floor_and_ceiling_ ( Render::createRenderBox( RAY_MAX, SCREEN_HEIGHT ) ),
+	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	items_ (),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
+	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
+	map_dest_ ( MAP_X, MAP_Y, MAP_WIDTH, MAP_HEIGHT ),
 	wall_distances_ (),
 	wall_items_ (),
 	floor_and_ceiling_pixels_ { 255 },
@@ -81,7 +89,7 @@ MapLayerDoom::~MapLayerDoom()
 
 void MapLayerDoom::render( const Camera& camera )
 {
-	Render::renderRenderBox( floor_and_ceiling_, { 0, 0, RAY_MAX, SCREEN_HEIGHT } );
+	Render::renderRenderBox( floor_and_ceiling_, render_screen_ );
 	for ( const auto& slice : wall_items_ )
 	{
 		texture_source_.x = slice.texture_index;
@@ -102,6 +110,7 @@ void MapLayerDoom::render( const Camera& camera )
 			item.position
 		);
 	}
+	Render::renderRenderBox( map_, { 0, 0, MAP_WIDTH, MAP_HEIGHT }, map_dest_ );
 };
 
 void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
@@ -157,7 +166,9 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		const double plane_y = ( double )( hero.jump_top_speed_normal_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 
 		auto block_list = lvmap.blocks_;
-		std::vector<int> items;
+		bool items[ block_list.size() ] = { false };
+		int mapxs[ RAY_MAX ];
+		int mapys[ RAY_MAX ];
 		for ( int ray_x = 0; ray_x < RAY_MAX; ++ray_x )
 		{
 			// Make camera x go from 1.0 to -1.0.
@@ -198,43 +209,13 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				const int block = lvmap.block( block_index );
 				if ( block == 10 )
 				{
+					mapxs[ ray_x ] = map_x;
+					mapys[ ray_x ] = map_y;
 					break;
 				}
 				else if ( block == 1 )
 				{
-					items.push_back( block_index );
-					/*
-					const double item_x = ( double )( map_x );
-					const double item_y = ( double )( map_y );
-					const double item_distance =
-						( hero_x - item_x )
-						* ( hero_x - item_x )
-						+ ( hero_y - item_y )
-						* ( hero_y - item_y );
-					const double item_x_relative = item_x - hero_x;
-					const double item_y_relative = item_y - hero_y;
-					const double inverse_delta = 1.0 / ( plane_x * direction_y - direction_x * plane_y );
-					const double transform_x = inverse_delta * ( direction_y * item_x_relative - direction_x * item_y_relative );
-					const double transform_y = inverse_delta * ( -plane_y * item_x_relative + plane_x * item_y_relative );
-					const double item_screen_x = ( RAY_MAX / 2.0 ) * ( 1.0 + transform_x / transform_y );
-					const int item_height = ( int )( abs( SCREEN_HEIGHT_D / transform_y ) );
-					const int item_draw_start_y = ( int )( SCREEN_HEIGHT_D / 2.0 - ( double )( item_height ) / 2.0 );
-					const int item_draw_start_x = ( int )( item_screen_x - ( double )( item_height ) / 2.0 );
-
-					const double step = 16.0 / ( double )( item_height );
-					for ( int x = 0; x < item_height; x++ )
-					{
-						const int texture_x = int( ( double )( x ) * step );
-						const int relative_x = item_draw_start_x + x;
-						const sdl2::SDLRect position = { relative_x, item_draw_start_y, 1, item_height };
-						items_.push_back
-						({
-							{ position, texture_x + 64 },
-							transform_y,
-							ray_x
-						});
-					}
-					block_list[ map_y * lvmap.widthBlocks() + map_x ] = 0;*/
+					items[ block_index ] = true;
 				}
 			}
 
@@ -258,7 +239,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 
 
 		//
-		//  Floor plans
+		//  Floor Plans
 		//
 		/////////////////////////////////////////////////////////
 
@@ -294,8 +275,11 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	}
 
 	items_.clear();
-	for ( const int item : items )
+	int item = 0;
+	for ( const int i : items )
 	{
+		if ( i )
+		{
 		const double x = ( double )( lvmap.mapX( item ) );
 		const double y = ( double )( lvmap.mapY( item ) );
 		const double distance_x = abs( x - hero_x );
@@ -328,7 +312,6 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			}
 			//source_left = ( double )( line_height - lx ) / ( double )( line_height );
 		}
-		*/
 		for ( int lx = 0; lx < line_height; ++lx )
 		{
 			const int screen_x = draw_start_x + lx;
@@ -342,17 +325,71 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			}
 			source_left = ( double )( line_height - lx ) / ( double )( line_height );
 		}
+		*/
 
 		const int clipped_source_width = ( int )( 16.0 * source_left );
 		const int clipped_source_x = 64 + ( 16 - clipped_source_width );
 		const int clipped_width = ( int )( line_height * source_left );
-		const int clipped_x = item_screen_x;
+		const int clipped_x = item_screen_x + ( int )( line_height ) - clipped_width;
 
 		items_.push_back({ { clipped_x, draw_start_y, clipped_width, line_height }, { clipped_source_x, 0, clipped_source_width, 16 }, distance, 1 });
+		}
+		++item;
 	}
 	std::sort( items_.begin(), items_.end(), sortItems );
 
 	SDL_UpdateTexture( floor_and_ceiling_, nullptr, &floor_and_ceiling_pixels_, RAY_MAX * NUMBER_OF_COLOR_CHANNELS * sizeof( Uint8 ) );
+
+
+	// Update Map
+
+	Render::setRenderTarget( map_ );
+		Render::renderRect( { 0, 0, MAP_WIDTH, MAP_HEIGHT }, 1 );
+
+		const std::vector<Block>& block_obj_list = blocks.getBlocksList();
+		for ( const Block& b : block_obj_list )
+		{
+			if ( b.typeID() == 9 || b.typeID() == 0 )
+			{
+				Render::renderRect
+				(
+					{
+						camera.relativeX( Unit::SubPixelsToPixels( b.hit_box_ ) ) / 4,
+						camera.relativeY( Unit::SubPixelsToPixels( b.hit_box_ ) ) / 4,
+						4,
+						4
+					},
+					( b.typeID() == 9 ) ? 5 : 2
+				);
+			}
+		}
+
+		const double map_icon_angle = ( double )( hero.bounce_height_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
+		const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
+		const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
+		const int map_line_y = ( direction_y + 1.0 ) * ( MAP_HEIGHT / 2 );
+		const int map_line_x = ( direction_x + 1.0 ) * ( MAP_WIDTH / 2 );
+		for ( int x = 0; x < RAY_MAX; ++x )
+		{
+			const int mx = ( mapxs[ x ] * 16 - camera.x() ) / 4;
+			const int my = ( mapys[ x ] * 16 - camera.y() ) / 4;
+			Render::renderLine( mx, my, map_icon_x + 2, map_icon_y + 2, 4 );
+		}
+		Render::renderObject
+		(
+			"tilesets/dungeon3.png",
+			{ 160, 0, 4, 4 },
+			{
+				map_icon_x,
+				map_icon_y,
+				4,
+				4
+			},
+			SDL_FLIP_NONE,
+			map_icon_angle
+		);
+
+	Render::releaseRenderTarget();
 };
 
 bool MapLayerDoom::sortItems( const Item& lhs, const Item& rhs )

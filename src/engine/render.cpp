@@ -59,6 +59,7 @@ namespace Render
 	SDL_RendererFlip convertFlip( int flip_x, int flip_y );
 	bool cameraAdjust( sdl2::SDLRect& dest, const Camera* camera );
 	void checkTexture( const std::string& sheet );
+	void setColor( int color, Uint8 alpha = 255 );
 
 
 	// Function Implementations
@@ -463,16 +464,24 @@ namespace Render
 		}
 	};
 
-	void renderRect( const sdl2::SDLRect& box, int color, int alpha )
+	void setColor( int color, Uint8 alpha )
 	{
-		assert( palette_ );
-
 		const Uint8 r = palette_->color( color ).r;
 		const Uint8 g = palette_->color( color ).g;
 		const Uint8 b = palette_->color( color ).b;
-
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
+	};
+
+	void renderRect( const sdl2::SDLRect& box, int color, int alpha )
+	{
+		setColor( color, alpha );
 		SDL_RenderFillRect( renderer_, &box );
+	};
+
+	void renderLine( int x1, int y1, int x2, int y2, int color )
+	{
+		setColor( color );
+		SDL_RenderDrawLine( renderer_, x1, y1, x2, y2 );
 	};
 
 	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color )
@@ -539,6 +548,14 @@ namespace Render
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src )
 	{
 		if ( SDL_RenderCopy( renderer_, texture, &src, &src ) )
+		{
+			printf( "Failed to draw render box: %s\n", SDL_GetError() );
+		}
+	};
+
+	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src, sdl2::SDLRect dest )
+	{
+		if ( SDL_RenderCopy( renderer_, texture, &src, &dest ) )
 		{
 			printf( "Failed to draw render box: %s\n", SDL_GetError() );
 		}
