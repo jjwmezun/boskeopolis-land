@@ -137,6 +137,8 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		}
 	}
 
+
+
 	//
 	//  Update animation
 	//
@@ -166,9 +168,12 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		const double plane_y = ( double )( hero.jump_top_speed_normal_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 
 		auto block_list = lvmap.blocks_;
-		bool items[ block_list.size() ] = { false };
+		bool items_caught[ block_list.size() ] = { false };
+		std::vector<int> items = {};
 		int mapxs[ RAY_MAX ];
 		int mapys[ RAY_MAX ];
+
+		// RAY LOOP START
 		for ( int ray_x = 0; ray_x < RAY_MAX; ++ray_x )
 		{
 			// Make camera x go from 1.0 to -1.0.
@@ -213,18 +218,20 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					mapys[ ray_x ] = map_y;
 					break;
 				}
-				else if ( block == 1 )
+				else if ( block == 1 && !items_caught[ block_index ] )
 				{
-					items[ block_index ] = true;
+					items.push_back( block_index );
+					items_caught[ block_index ] = true;
 				}
 			}
 
 			const double perp_wall_dist = ( side == 0 )
 				? calcPerpWallDist( map_x, hero_x, step_x, ray_dir_x )
 				: calcPerpWallDist( map_y, hero_y, step_y, ray_dir_y );
-			wall_distances_[ ray_x ] = perp_wall_dist;
 
-			const int line_height = ( int )( SCREEN_HEIGHT_D / perp_wall_dist );
+			const double line_height_d = SCREEN_HEIGHT_D / perp_wall_dist;
+			const int line_height = ( int )( line_height_d );
+			wall_distances_[ ray_x ] = line_height_d; // We'll need this for items later.
 			const int draw_start = ( int )( SCREEN_HEIGHT_D / 2.0 ) - ( int )( ( double )( line_height ) / 2.0 );
 
 			double wall_x = ( side == 0 )
@@ -272,124 +279,137 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				memcpy( ( void* )( &floor_and_ceiling_pixels_[ y ][ ray_x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &floor_graphics_[ floor_texture_y ][ floor_texture_x * NUMBER_OF_COLOR_CHANNELS ] ), PIXEL_SIZE );
 				memcpy( ( void* )( &floor_and_ceiling_pixels_[ SCREEN_HEIGHT - y - 1 ][ ray_x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &ceiling_graphics_[ floor_texture_y ][ floor_texture_x * NUMBER_OF_COLOR_CHANNELS ] ), PIXEL_SIZE );
 			}
+
 	}
-
-	items_.clear();
-	int item = 0;
-	for ( const int i : items )
-	{
-		if ( i )
-		{
-		const double x = ( double )( lvmap.mapX( item ) );
-		const double y = ( double )( lvmap.mapY( item ) );
-		const double distance_x = abs( x - hero_x );
-		const double distance_y = abs( y - hero_y );
-		const double distance = sqrt( distance_x * distance_x + distance_y * distance_y );
-		const double item_x_relative = x - hero_x;
-		const double item_y_relative = y - hero_y;
-		const double inverse_delta = 1.0 / ( plane_x * direction_y - direction_x * plane_y );
-		const double transform_x = inverse_delta * ( direction_y * item_x_relative - direction_x * item_y_relative );
-		const double transform_y = inverse_delta * ( -plane_y * item_x_relative + plane_x * item_y_relative );
-		const double item_screen_x = RAY_MAX - ( ( RAY_MAX / 2.0 ) * ( 1.0 + transform_x / transform_y ) );
-		const int line_height = ( int )( SCREEN_HEIGHT_D / transform_y );
-		const int draw_start_y = ( int )( SCREEN_HEIGHT_D / 2.0 ) - ( int )( ( double )( line_height ) / 2.0 );
-		const int draw_start_x = item_screen_x - ( double )( line_height ) / 2.0;
-
-		double source_left = 1.0;
-		double source_right = 0;
-
-		/*
-		for ( int lx = 0; lx < line_height; ++lx )
-		{
-			const double slice_distance_x = abs( x + int( floor( ( double )( lx ) / 2.0 ) ) - hero_x );
-			const double slice_distance = sqrt( slice_distance_x * slice_distance_x + distance_y * distance_y );
-			const int screen_x = draw_start_x + lx;
-			if ( screen_x < 0 || screen_x >= RAY_MAX ) { continue; }
-			if ( slice_distance < wall_distances_[ screen_x ] )
-			{
-				show = true;
-				break;
-			}
-			//source_left = ( double )( line_height - lx ) / ( double )( line_height );
-		}
-		for ( int lx = 0; lx < line_height; ++lx )
-		{
-			const int screen_x = draw_start_x + lx;
-			const double relative_x = ( ( double )( lx ) / ( double )( line_height ) ) - 0.5;
-			const double slice_x = x + relative_x;
-			const double slice_distance_x = abs( relative_x - hero_x );
-			const double slice_distance = sqrt( slice_distance_x * slice_distance_x + distance_y * distance_y );
-			if ( slice_distance < wall_distances_[ screen_x ] )
-			{
-				break;
-			}
-			source_left = ( double )( line_height - lx ) / ( double )( line_height );
-		}
-		*/
-
-		const int clipped_source_width = ( int )( 16.0 * source_left );
-		const int clipped_source_x = 64 + ( 16 - clipped_source_width );
-		const int clipped_width = ( int )( line_height * source_left );
-		const int clipped_x = item_screen_x + ( int )( line_height ) - clipped_width;
-
-		items_.push_back({ { clipped_x, draw_start_y, clipped_width, line_height }, { clipped_source_x, 0, clipped_source_width, 16 }, distance, 1 });
-		}
-		++item;
-	}
-	std::sort( items_.begin(), items_.end(), sortItems );
+	// RAY LOOP END
 
 	SDL_UpdateTexture( floor_and_ceiling_, nullptr, &floor_and_ceiling_pixels_, RAY_MAX * NUMBER_OF_COLOR_CHANNELS * sizeof( Uint8 ) );
 
 
-	// Update Map
+	//
+	//  ITEMS
+	//
+	/////////////////////////////////////////////////////////
 
-	Render::setRenderTarget( map_ );
-		Render::renderRect( { 0, 0, MAP_WIDTH, MAP_HEIGHT }, 1 );
-
-		const std::vector<Block>& block_obj_list = blocks.getBlocksList();
-		for ( const Block& b : block_obj_list )
+		items_.clear();
+		for ( const int item : items )
 		{
-			if ( b.typeID() == 9 || b.typeID() == 0 )
+			const double x = ( double )( lvmap.mapX( item ) ) + .5;
+			const double y = ( double )( lvmap.mapY( item ) ) + .5;
+			const double distance_x = abs( x - hero_x );
+			const double distance_y = abs( y - hero_y );
+			const double distance = sqrt( distance_x * distance_x + distance_y * distance_y );
+			const double item_x_relative = x - hero_x;
+			const double item_y_relative = y - hero_y;
+			const double inverse_delta = 1.0 / ( plane_x * direction_y - direction_x * plane_y );
+			const double transform_x = inverse_delta * ( direction_y * item_x_relative - direction_x * item_y_relative );
+			const double transform_y = inverse_delta * ( -plane_y * item_x_relative + plane_x * item_y_relative );
+			const double line_height_d = abs( SCREEN_HEIGHT_D / transform_y );
+			const int line_height = ( int )( line_height_d );
+			const int item_screen_x =
+				RAY_MAX
+				-
+					( int )
+					(
+						( ( double )( RAY_MAX ) / 2.0 )
+						* ( 1.0 + transform_x / transform_y )
+					);
+			const int draw_start_y = ( int )( SCREEN_HEIGHT_D / 2.0 ) - ( int )( ( double )( line_height ) / 2.0 );
+			const int draw_start_x = item_screen_x - ( int )( ( double )( line_height ) / 2.0 );
+
+			double source_left = 1.0;
+			double source_right = 0;
+			double right_clip = 0;
+
+			int lx = 0;
+			// Test for left clipping
+			while ( lx < line_height )
 			{
-				Render::renderRect
-				(
-					{
-						camera.relativeX( Unit::SubPixelsToPixels( b.hit_box_ ) ) / 4,
-						camera.relativeY( Unit::SubPixelsToPixels( b.hit_box_ ) ) / 4,
-						4,
-						4
-					},
-					( b.typeID() == 9 ) ? 5 : 2
-				);
+				const int screen_x = draw_start_x + lx;
+				if ( screen_x > 0 && screen_x < RAY_MAX && line_height_d >= wall_distances_[ screen_x ] )
+				{
+					break;
+				}
+				source_left = ( double )( line_height - lx ) / ( double )( line_height );
+				++lx;
 			}
-		}
-
-		const double map_icon_angle = ( double )( hero.bounce_height_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
-		const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
-		const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
-		const int map_line_y = ( direction_y + 1.0 ) * ( MAP_HEIGHT / 2 );
-		const int map_line_x = ( direction_x + 1.0 ) * ( MAP_WIDTH / 2 );
-		for ( int x = 0; x < RAY_MAX; ++x )
-		{
-			const int mx = ( mapxs[ x ] * 16 - camera.x() ) / 4;
-			const int my = ( mapys[ x ] * 16 - camera.y() ) / 4;
-			Render::renderLine( mx, my, map_icon_x + 2, map_icon_y + 2, 4 );
-		}
-		Render::renderObject
-		(
-			"tilesets/dungeon3.png",
-			{ 160, 0, 4, 4 },
+			// Test for right clipping
+			while ( lx < line_height )
 			{
-				map_icon_x,
-				map_icon_y,
-				4,
-				4
-			},
-			SDL_FLIP_NONE,
-			map_icon_angle
-		);
+				const int screen_x = draw_start_x + lx;
+				if ( screen_x > 0 && screen_x < RAY_MAX && line_height_d < wall_distances_[ screen_x ] )
+				{
+					right_clip = ( double )( line_height - lx ) / ( double )( line_height );
+					break;
+				}
+				++lx;
+			}
 
-	Render::releaseRenderTarget();
+			const int clipped_source_width_from_left = ( int )( 16.0 * source_left );
+			const int clipped_source_x = 64 + ( 16 - clipped_source_width_from_left );
+			const int clipped_source_width = clipped_source_width_from_left - ( int )( right_clip * 16.0 );
+			const int clipped_width_from_left = ( int )( line_height * source_left );
+			const int clipped_x = draw_start_x + ( int )( line_height ) - clipped_width_from_left;
+			const int clipped_width = clipped_width_from_left - ( int )( line_height * right_clip );
+
+			items_.push_back({ { clipped_x, draw_start_y, clipped_width, line_height }, { clipped_source_x, 0, clipped_source_width, 16 }, distance, 1 });
+		}
+		std::sort( items_.begin(), items_.end(), sortItems );
+
+
+
+	//
+	//  MINIMAP
+	//
+	/////////////////////////////////////////////////////////
+
+		Render::setRenderTarget( map_ );
+			Render::renderRect( { 0, 0, MAP_WIDTH, MAP_HEIGHT }, 1 );
+
+			const std::vector<Block>& block_obj_list = blocks.getBlocksList();
+			for ( const Block& b : block_obj_list )
+			{
+				if ( b.typeID() == 9 || b.typeID() == 0 )
+				{
+					Render::renderRect
+					(
+						{
+							camera.relativeX( Unit::SubPixelsToPixels( b.hit_box_ ) ) / 4,
+							camera.relativeY( Unit::SubPixelsToPixels( b.hit_box_ ) ) / 4,
+							4,
+							4
+						},
+						( b.typeID() == 9 ) ? 5 : 2
+					);
+				}
+			}
+
+			const double map_icon_angle = ( double )( hero.bounce_height_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
+			const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
+			const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
+			const int map_line_y = ( direction_y + 1.0 ) * ( MAP_HEIGHT / 2 );
+			const int map_line_x = ( direction_x + 1.0 ) * ( MAP_WIDTH / 2 );
+			for ( int x = 0; x < RAY_MAX; ++x )
+			{
+				const int mx = ( mapxs[ x ] * 16 - camera.x() ) / 4;
+				const int my = ( mapys[ x ] * 16 - camera.y() ) / 4;
+				Render::renderLine( mx, my, map_icon_x + 2, map_icon_y + 2, 4 );
+			}
+			Render::renderObject
+			(
+				"tilesets/dungeon3.png",
+				{ 160, 0, 4, 4 },
+				{
+					map_icon_x,
+					map_icon_y,
+					4,
+					4
+				},
+				SDL_FLIP_NONE,
+				map_icon_angle
+			);
+
+		Render::releaseRenderTarget();
 };
 
 bool MapLayerDoom::sortItems( const Item& lhs, const Item& rhs )
