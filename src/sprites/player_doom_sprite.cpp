@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include <cmath>
+#include "health.hpp"
 #include "input.hpp"
 #include "player_doom_sprite.hpp"
 
@@ -19,6 +20,7 @@ PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 		{ SpriteType::HERO },
 		200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, true, true, 0
 	),
+	screen_tint_ ( { 255, 0, 0, 0 } ),
 	posx_ ( 0 ),
 	posy_ ( 0 ),
 	ddirx_ ( -1 ),
@@ -81,6 +83,8 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	prevdiry_ = ddiry_;
 	prevposx_ = hit_box_.x;
 	prevposy_ = hit_box_.y;
+
+	updateHurtAnimation( health );
 	camera.adjustCart( *this, lvmap );
 };
 
@@ -108,7 +112,7 @@ void PlayerDoomSprite::customInteract( Collision& my_collision, Collision& their
 
 void PlayerDoomSprite::render( Camera& camera, bool priority )
 {
-	//Render::renderRectDebug( Unit::SubPixelsToPixels( hit_box_ ), { 255, 0, 0, 255 } );
+	Render::tintScreen( screen_tint_ );
 };
 
 double PlayerDoomSprite::getAccelerationAdjustedByAngle( double angle )
@@ -124,4 +128,33 @@ void PlayerDoomSprite::moveSideways( double multiplier )
 	const int x_change = multiplier * getAccelerationAdjustedByAngle( right_angle_x );
 	acceleration_y_ += y_change;
 	acceleration_x_ += x_change;
+}
+void PlayerDoomSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+{
+	fullStopX();
+	fullStopY();
+	block_interact_ = false;
+	sprite_interact_ = false;
+	screen_tint_.a += 2;
+	if ( screen_tint_.a >= 254 )
+	{
+		death_finished_ = true;
+	}
+};
+
+void PlayerDoomSprite::updateHurtAnimation( const Health& health )
+{
+	if ( health.getInvincibilityCounter() > 0 )
+	{
+		if ( health.getInvincibilityCounter() > 24 )
+		{
+			// After midpoint o' timer, alpha goes back downward ( less red ) as counter rises.
+			screen_tint_.a = ( Uint8 )( 255.0 - ( ( 255.0 / 24.0 ) * ( double )( health.getInvincibilityCounter() ) ) );
+		}
+		else
+		{
+			// Else, before midpoint, alpha goes up ( mo' red ) as counter rises.
+			screen_tint_.a = ( Uint8 )( ( 255.0 / 24.0 ) * ( double )( health.getInvincibilityCounter() ) );
+		}
+	}
 }

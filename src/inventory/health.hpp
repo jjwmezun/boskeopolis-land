@@ -22,6 +22,7 @@ class Health
 		bool overheated() const;
 		double oxygenPercent() const;
 		bool hasFullHealth() const;
+		int getInvincibilityCounter() const;
 
 		static int maxHP();
 

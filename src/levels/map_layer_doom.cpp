@@ -12,6 +12,13 @@
 
 #include <iostream>
 
+struct TempDoomItem
+{
+	double x;
+	double y;
+	int type;
+};
+
 static constexpr int TEXTURE_WIDTH = 164;
 static constexpr int FLOOR_TEXTURE_X_OFFSET = 32;
 static constexpr int CEILING_TEXTURE_X_OFFSET = 48;
@@ -20,6 +27,11 @@ static constexpr int MAP_HEIGHT = ( Unit::WINDOW_HEIGHT_PIXELS - 32 ) / 4;
 static constexpr int MAP_PADDING = 8;
 static constexpr int MAP_X = Unit::WINDOW_WIDTH_PIXELS - MAP_WIDTH - MAP_PADDING;
 static constexpr int MAP_Y = Unit::WINDOW_HEIGHT_PIXELS - MAP_HEIGHT - MAP_PADDING - 32;
+
+static constexpr double subPixelsToBlocksDouble( int sp )
+{
+	return ( double )( sp ) / ( double )( Unit::SUBPIXELS_PER_BLOCK );
+};
 
 static constexpr double calcSideDist( bool negative, double player_pos, double map_pos, double delta )
 {
@@ -66,9 +78,11 @@ static constexpr int calcFloorTexture( double floor )
 
 MapLayerDoom::MapLayerDoom()
 :
+	animation_timer_ (),
 	floor_and_ceiling_ ( Render::createRenderBox( RAY_MAX, SCREEN_HEIGHT ) ),
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	items_ (),
+	item_frames_ ( { 0, 6 * 16, 7 * 16, 8 * 16 } ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
 	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
 	map_dest_ ( MAP_X, MAP_Y, MAP_WIDTH, MAP_HEIGHT ),
@@ -144,7 +158,15 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	//
 	//////////////////////////////////////////////////////////
 
-
+		if ( animation_timer_.hit() )
+		{
+			item_frames_[ 0 ] += 16;
+			if ( item_frames_[ 0 ] >= 6 * 16 )
+			{
+				item_frames_[ 0 ] = 0;
+			}
+		}
+		animation_timer_.update();
 
 
 	//
@@ -156,12 +178,12 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		// If hero hasn't moved, no need to update walls or items.
 		if ( !hero.jump_lock_ )
 		{
-			return;
+			//return;
 		}
 
 		items_.clear();
-		const double hero_x = ( double )( hero.centerXSubPixels() ) / ( double )( Unit::SUBPIXELS_PER_BLOCK );
-		const double hero_y = ( double )( hero.centerYSubPixels() ) / ( double )( Unit::SUBPIXELS_PER_BLOCK );
+		const double hero_x = subPixelsToBlocksDouble( hero.centerXSubPixels() );
+		const double hero_y = subPixelsToBlocksDouble( hero.centerYSubPixels() );
 		const double direction_x = ( double )( hero.direction_x_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 		const double direction_y = ( double )( hero.direction_y_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 		const double plane_x = ( double )( hero.jump_top_speed_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
@@ -169,7 +191,9 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 
 		auto block_list = lvmap.blocks_;
 		bool items_caught[ block_list.size() ] = { false };
-		std::vector<int> items = {};
+		const auto& sprites_list = sprites.getSpritesList();
+		bool sprites_caught[ sprites_list.size() ] = { false };
+		std::vector<TempDoomItem> items = {};
 		int mapxs[ RAY_MAX ];
 		int mapys[ RAY_MAX ];
 
@@ -209,6 +233,16 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					side = 1;
 				}
 
+				for ( int i = 0; i < sprites_list.size(); ++i )
+				{
+					const auto& sprite = sprites_list[ i ];
+					const sdl2::SDLRect box = { Unit::BlocksToSubPixels( map_x ), Unit::BlocksToSubPixels( map_y ), Unit::BlocksToSubPixels( 1 ), Unit::BlocksToSubPixels( 1 ) };
+					if ( sprite->inBox( box ) )
+					{
+						sprites_caught[ i ] = true;
+					}
+				}
+
 				//Check if ray has hit a wall
 				const int block_index = lvmap.indexFromXAndY( map_x, map_y );
 				const int block = lvmap.block( block_index );
@@ -218,9 +252,20 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					mapys[ ray_x ] = map_y;
 					break;
 				}
-				else if ( block == 1 && !items_caught[ block_index ] )
+				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 ) )
 				{
-					items.push_back( block_index );
+					int type = 0;
+					switch ( block )
+					{
+						case ( 6 ):
+						{
+							type = 1;
+						}
+						break;
+					}
+					const double x = ( double )( lvmap.mapX( block_index ) ) + .5;
+					const double y = ( double )( lvmap.mapY( block_index ) ) + .5;
+					items.push_back( { x, y, type } );
 					items_caught[ block_index ] = true;
 				}
 			}
@@ -286,16 +331,27 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	SDL_UpdateTexture( floor_and_ceiling_, nullptr, &floor_and_ceiling_pixels_, RAY_MAX * NUMBER_OF_COLOR_CHANNELS * sizeof( Uint8 ) );
 
 
+
 	//
 	//  ITEMS
 	//
 	/////////////////////////////////////////////////////////
 
-		items_.clear();
-		for ( const int item : items )
+		for ( int i = 0; i < sprites_list.size(); ++i )
 		{
-			const double x = ( double )( lvmap.mapX( item ) ) + .5;
-			const double y = ( double )( lvmap.mapY( item ) ) + .5;
+			if ( sprites_caught[ i ] )
+			{
+				const auto& sprite = sprites_list[ i ];
+				items.push_back( { subPixelsToBlocksDouble( sprite->hit_box_.x ) + 0.5, subPixelsToBlocksDouble( sprite->hit_box_.y ) + 0.5, 2 } );
+			}
+		}
+
+		items_.clear();
+		for ( int i = 0; i < items.size(); ++i )
+		{
+			const TempDoomItem& item = items[ i ];
+			const double x = item.x;
+			const double y = item.y;
 			const double distance_x = abs( x - hero_x );
 			const double distance_y = abs( y - hero_y );
 			const double distance = sqrt( distance_x * distance_x + distance_y * distance_y );
@@ -346,13 +402,13 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			}
 
 			const int clipped_source_width_from_left = ( int )( 16.0 * source_left );
-			const int clipped_source_x = 64 + ( 16 - clipped_source_width_from_left );
+			const int clipped_source_x = item_frames_[ item.type ] + ( 16 - clipped_source_width_from_left );
 			const int clipped_source_width = clipped_source_width_from_left - ( int )( right_clip * 16.0 );
 			const int clipped_width_from_left = ( int )( line_height * source_left );
 			const int clipped_x = draw_start_x + ( int )( line_height ) - clipped_width_from_left;
 			const int clipped_width = clipped_width_from_left - ( int )( line_height * right_clip );
 
-			items_.push_back({ { clipped_x, draw_start_y, clipped_width, line_height }, { clipped_source_x, 0, clipped_source_width, 16 }, distance, 1 });
+			items_.push_back({ { clipped_x, draw_start_y, clipped_width, line_height }, { clipped_source_x, 16, clipped_source_width, 16 }, distance, 1 });
 		}
 		std::sort( items_.begin(), items_.end(), sortItems );
 
@@ -387,6 +443,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const double map_icon_angle = ( double )( hero.bounce_height_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 			const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
 			const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
+			/*
 			const int map_line_y = ( direction_y + 1.0 ) * ( MAP_HEIGHT / 2 );
 			const int map_line_x = ( direction_x + 1.0 ) * ( MAP_WIDTH / 2 );
 			for ( int x = 0; x < RAY_MAX; ++x )
@@ -395,6 +452,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				const int my = ( mapys[ x ] * 16 - camera.y() ) / 4;
 				Render::renderLine( mx, my, map_icon_x + 2, map_icon_y + 2, 4 );
 			}
+			*/
 			Render::renderObject
 			(
 				"tilesets/dungeon3.png",
@@ -408,6 +466,22 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				SDL_FLIP_NONE,
 				map_icon_angle
 			);
+
+			for ( const auto& sprite : sprites_list )
+			{
+				const int enemy_icon_x = camera.relativeX( Unit::SubPixelsToPixels( sprite->hit_box_ ) ) / 4;
+				const int enemy_icon_y = camera.relativeY( Unit::SubPixelsToPixels( sprite->hit_box_ ) ) / 4;
+				Render::renderRect
+				(
+					{
+						enemy_icon_x,
+						enemy_icon_y,
+						4,
+						4
+					},
+					3
+				);
+			}
 
 		Render::releaseRenderTarget();
 };

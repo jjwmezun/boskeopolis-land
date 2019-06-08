@@ -14,8 +14,10 @@ class PlayerDoomSprite : public Sprite
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 		void render( Camera& camera, bool priority ) override;
+		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
 	private:
+		SDL_Color screen_tint_;
 		double posx_;
 		double posy_;
 		double ddirx_;
@@ -31,4 +33,5 @@ class PlayerDoomSprite : public Sprite
 		void rotate( double rotation_speed );
 		double getAccelerationAdjustedByAngle( double angle );
 		void moveSideways( double multiplier );
+		void updateHurtAnimation( const Health& health );
 };

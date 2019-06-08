@@ -48,6 +48,11 @@ bool Health::flickerOff() const
 	return invincibility_timer_.counter() % 4 == 1;
 };
 
+int Health::getInvincibilityCounter() const
+{
+	return invincibility_timer_.counter();
+};
+
 int Health::hp() const
 {
 	return hp_;

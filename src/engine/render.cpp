@@ -606,4 +606,11 @@ namespace Render
 		checkTexture( sheet );
 		return surfaces_.at( sheet );
 	};
+
+	void tintScreen( const SDL_Color& color )
+	{
+		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_ADD );
+		colorCanvasForceColor( color.r, color.g, color.b, color.a );		
+		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
+	};
 };

@@ -3,6 +3,7 @@
 #include <array>
 #include "map_layer.hpp"
 #include "mezun_sdl2.hpp"
+#include "timer_repeat_t.hpp"
 #include "unit.hpp"
 #include <vector>
 
@@ -25,6 +26,7 @@ class MapLayerDoom : public MapLayer
 		static constexpr double RAY_MAX_D = ( double )( RAY_MAX );
 		static constexpr int SCREEN_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 32;
 		static constexpr double SCREEN_HEIGHT_D = ( double )( SCREEN_HEIGHT );
+		static constexpr int NUMBER_OF_ITEM_TYPES = 4;
 
 		struct TextureSlice
 		{
@@ -42,9 +44,11 @@ class MapLayerDoom : public MapLayer
 
 		static bool sortItems( const Item& lhs, const Item& rhs );
 
+		TimerRepeatT<> animation_timer_;
 		SDL_Texture* floor_and_ceiling_;
 		SDL_Texture* map_;
 		std::vector<Item> items_;
+		int item_frames_[ NUMBER_OF_ITEM_TYPES ];
 		sdl2::SDLRect texture_source_;
 		const sdl2::SDLRect render_screen_;
 		const sdl2::SDLRect map_dest_;

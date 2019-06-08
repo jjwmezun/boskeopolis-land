@@ -64,6 +64,7 @@ namespace Render
 	void colorCanvasMultiply( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha );
 	void clearScreen();
 	void clearScreenTransparency();
+	void tintScreen( const SDL_Color& color );
 	void presentScreen();
 
 	void newPalette( Palette palette );
