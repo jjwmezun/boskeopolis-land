@@ -29,9 +29,10 @@ class PlayerDoomSprite : public Sprite
 		double angle_;
 		int prevposx_;
 		int prevposy_;
+		int shoot_timer_;
 
 		void rotate( double rotation_speed );
 		double getAccelerationAdjustedByAngle( double angle );
-		void moveSideways( double multiplier );
+		void moveStraight( double multiplier, double angle );
 		void updateHurtAnimation( const Health& health );
 };

@@ -1,8 +1,10 @@
 #include "camera.hpp"
 #include <cmath>
+#include "doom_bullet_sprite.hpp"
 #include "health.hpp"
 #include "input.hpp"
 #include "player_doom_sprite.hpp"
+#include "sprite_system.hpp"
 
 static constexpr double DEG_ROTATION_SPEED = mezun::DOUBLE_PI * 2;
 static constexpr double ROTATION_SPEED = DEG_ROTATION_SPEED / 360.0; // 1° in radians.
@@ -31,7 +33,8 @@ PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 	prevposy_ ( 0 ),
 	prevdirx_ ( 0 ),
 	prevdiry_ ( 0 ),
-	angle_ ( 0 )
+	angle_ ( 0 ),
+	shoot_timer_ ( 0 )
 {
 	direction_x_ = ( Direction::Horizontal )( ddirx_ * CONVERSION_PRECISION );
 	direction_y_ = ( Direction::Vertical )( ddiry_ * CONVERSION_PRECISION );
@@ -45,6 +48,10 @@ PlayerDoomSprite::~PlayerDoomSprite() {};
 
 void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
+	const bool is_running = Input::held( Input::Action::JUMP );
+	start_speed_ = ( is_running ) ? 400 : 200;
+	top_speed_ = ( is_running ) ? 2000 : 1000;
+
 	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
 		acceleration_y_ = getAccelerationAdjustedByAngle( ddiry_ );
@@ -62,11 +69,20 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	if ( Input::held( Input::Action::CAMERA_RIGHT ) )
 	{
-		moveSideways( 1.0 );
+		moveStraight( 1.0, N90DEGREES );
 	}
 	else if ( Input::held( Input::Action::CAMERA_LEFT ) )
 	{
-		moveSideways( -1.0 );
+		moveStraight( -1.0, N90DEGREES );
+	}
+
+	if ( Input::held( Input::Action::CAMERA_UP ) )
+	{
+		moveStraight( -1.0, N90DEGREES * 2 );
+	}
+	else if ( Input::held( Input::Action::CAMERA_DOWN ) )
+	{
+		moveStraight( 1.0, N90DEGREES * 2 );
 	}
 
 	if ( Input::held( Input::Action::MOVE_LEFT ) )
@@ -76,6 +92,19 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	else if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
 		rotate( ROTATION_SPEED );
+	}
+
+	if ( shoot_timer_ == 0 )
+	{
+		if ( Input::held( Input::Action::RUN ) )
+		{
+			sprites.spawn( std::unique_ptr<Sprite> ( new DoomBulletSprite( xPixels(), yPixels(), ddirx_, ddiry_ ) ) );
+			shoot_timer_ = 32;
+		}
+	}
+	else
+	{
+		--shoot_timer_;
 	}
 
 	jump_lock_ = ddirx_ != prevdirx_ || ddiry_ != prevdiry_ || hit_box_.x != prevposx_ || hit_box_.y != prevposy_;
@@ -120,15 +149,16 @@ double PlayerDoomSprite::getAccelerationAdjustedByAngle( double angle )
 	return ( int )( ( double )( start_speed_ ) * angle );
 };
 
-void PlayerDoomSprite::moveSideways( double multiplier )
+void PlayerDoomSprite::moveStraight( double multiplier, double angle )
 {
-	const double right_angle_x = ddirx_ * cos( N90DEGREES ) - ddiry_ * sin( N90DEGREES );
-	const double right_angle_y = ddirx_ * sin( N90DEGREES ) + ddiry_ * cos( N90DEGREES );
+	const double right_angle_x = ddirx_ * cos( angle ) - ddiry_ * sin( angle );
+	const double right_angle_y = ddirx_ * sin( angle ) + ddiry_ * cos( angle );
 	const int y_change = multiplier * getAccelerationAdjustedByAngle( right_angle_y );
 	const int x_change = multiplier * getAccelerationAdjustedByAngle( right_angle_x );
 	acceleration_y_ += y_change;
 	acceleration_x_ += x_change;
 }
+
 void PlayerDoomSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
 	fullStopX();

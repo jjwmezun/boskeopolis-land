@@ -19,7 +19,7 @@ struct TempDoomItem
 	int type;
 };
 
-static constexpr int TEXTURE_WIDTH = 164;
+static constexpr int TEXTURE_WIDTH = 336;
 static constexpr int FLOOR_TEXTURE_X_OFFSET = 32;
 static constexpr int CEILING_TEXTURE_X_OFFSET = 48;
 static constexpr int MAP_WIDTH = Unit::WINDOW_WIDTH_PIXELS / 4;
@@ -82,7 +82,7 @@ MapLayerDoom::MapLayerDoom()
 	floor_and_ceiling_ ( Render::createRenderBox( RAY_MAX, SCREEN_HEIGHT ) ),
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	items_ (),
-	item_frames_ ( { 0, 6 * 16, 7 * 16, 8 * 16 } ),
+	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272 } ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
 	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
 	map_dest_ ( MAP_X, MAP_Y, MAP_WIDTH, MAP_HEIGHT ),
@@ -160,10 +160,21 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 
 		if ( animation_timer_.hit() )
 		{
+			item_frames_[ 3 ] = ( item_frames_[ 3 ] == 144 ) ? 160 : 144;
+		}
+		if ( animation_timer_.counter() % 8 == 0 )
+		{
 			item_frames_[ 0 ] += 16;
+			item_frames_[ 1 ] += 16;
+			item_frames_[ 4 ] += 16;
 			if ( item_frames_[ 0 ] >= 6 * 16 )
 			{
 				item_frames_[ 0 ] = 0;
+				item_frames_[ 4 ] = 176;
+			}
+			if ( item_frames_[ 1 ] >= 288 + 48 )
+			{
+				item_frames_[ 1 ] = 288;
 			}
 		}
 		animation_timer_.update();
@@ -252,11 +263,21 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					mapys[ ray_x ] = map_y;
 					break;
 				}
-				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 ) )
+				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 || block == 5 || block == 2 ) )
 				{
 					int type = 0;
 					switch ( block )
 					{
+						case ( 2 ):
+						{
+							type = 4;
+						}
+						break;
+						case ( 5 ):
+						{
+							type = 3;
+						}
+						break;
 						case ( 6 ):
 						{
 							type = 1;
@@ -342,7 +363,17 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			if ( sprites_caught[ i ] )
 			{
 				const auto& sprite = sprites_list[ i ];
-				items.push_back( { subPixelsToBlocksDouble( sprite->hit_box_.x ) + 0.5, subPixelsToBlocksDouble( sprite->hit_box_.y ) + 0.5, 2 } );
+				if ( sprite->hasType( Sprite::SpriteType::ENEMY ) )
+				{
+					if ( !sprite->jump_lock_ )
+					{
+						items.push_back( { subPixelsToBlocksDouble( sprite->hit_box_.x ) + 0.5, subPixelsToBlocksDouble( sprite->hit_box_.y ) + 0.5, 2 } );
+					}
+				}
+				else
+				{
+					items.push_back( { subPixelsToBlocksDouble( sprite->hit_box_.x ) + 0.5, subPixelsToBlocksDouble( sprite->hit_box_.y ) + 0.5, 5 } );
+				}
 			}
 		}
 
@@ -425,7 +456,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const std::vector<Block>& block_obj_list = blocks.getBlocksList();
 			for ( const Block& b : block_obj_list )
 			{
-				if ( b.typeID() == 9 || b.typeID() == 0 )
+				if ( b.typeID() == 9 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 )
 				{
 					Render::renderRect
 					(

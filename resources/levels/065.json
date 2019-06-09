@@ -1,5 +1,5 @@
 {
-	"name": "Doom",
+	"name": "Gravity, Hypocrisy, & the Perils o' Being in 3D",
 
 	"maps":
 	[
@@ -12,6 +12,8 @@
 		}
 	],
 
-	"entrance_x": 11,
-	"entrance_y": 6
+	"entrance_x": 21,
+	"entrance_y": 34,
+	"gem_challenge": 23300,
+	"time_challenge": 20
 }

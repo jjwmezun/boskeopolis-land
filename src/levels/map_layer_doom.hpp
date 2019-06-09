@@ -26,7 +26,7 @@ class MapLayerDoom : public MapLayer
 		static constexpr double RAY_MAX_D = ( double )( RAY_MAX );
 		static constexpr int SCREEN_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 32;
 		static constexpr double SCREEN_HEIGHT_D = ( double )( SCREEN_HEIGHT );
-		static constexpr int NUMBER_OF_ITEM_TYPES = 4;
+		static constexpr int NUMBER_OF_ITEM_TYPES = 6;
 
 		struct TextureSlice
 		{
@@ -44,7 +44,7 @@ class MapLayerDoom : public MapLayer
 
 		static bool sortItems( const Item& lhs, const Item& rhs );
 
-		TimerRepeatT<> animation_timer_;
+		TimerRepeatT<32> animation_timer_;
 		SDL_Texture* floor_and_ceiling_;
 		SDL_Texture* map_;
 		std::vector<Item> items_;
