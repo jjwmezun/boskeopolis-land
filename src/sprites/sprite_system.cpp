@@ -60,6 +60,7 @@
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
 #include "icicle_sprite.hpp"
+#include "iron_wall_sprite.hpp"
 #include <iostream>
 #include "level.hpp"
 #include "lava_platform_sprite.hpp"
@@ -639,6 +640,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 159 ):
 			return std::unique_ptr<Sprite> ( new DoomDoorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 160 ):
+			return std::unique_ptr<Sprite> ( new IronWallSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

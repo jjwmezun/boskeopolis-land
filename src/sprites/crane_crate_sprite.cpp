@@ -1,13 +1,12 @@
+#include "camera.hpp"
 #include "crane_crate_sprite.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
 
-#include <iostream>
-
 CraneCrateSprite::CraneCrateSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 160, 48 ), x - 50, y - 160, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
-	circle_ ( original_hit_box_, original_hit_box_.x, original_hit_box_.y, 175000, 0.005, 1.25 ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/hook.png" ), x - 50, y - 160, 16, 16, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	circle_ ( original_hit_box_, original_hit_box_.x, original_hit_box_.y, 200000, 0.01, 1.25 ),
 	prev_x_ ( original_hit_box_.x ),
 	prev_y_ ( original_hit_box_.y )
 {};
@@ -37,14 +36,13 @@ void CraneCrateSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 
 	hit_box_ = circle_.getPosition();
-	std::cout<<circle_.getAngle()<<std::endl;;
-	std::cout<<( int )( direction_x_ )<<std::endl;;
 };
 
 void CraneCrateSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
+		/*
 		if ( their_collision.collideBottom() )
 		{
 			them.collideStopYBottom( their_collision.overlapYBottom() );
@@ -54,6 +52,18 @@ void CraneCrateSprite::customInteract( Collision& my_collision, Collision& their
 		else
 		{
 			them.collideStopAny( their_collision );
-		}
+		}*/
+	}
+};
+
+
+void CraneCrateSprite::render( Camera& camera, bool priority )
+{
+	if ( !priority )
+	{
+		sdl2::SDLRect dest = camera.relativeRect( { xPixels(), yPixels() - 192, 16, 192 } );
+		sdl2::SDLRect src = { 0, 16, 16, 192 };
+		Render::renderObject( "sprites/hook.png", src, dest );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	}
 };

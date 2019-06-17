@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "camera.hpp"
 #include <cmath>
 #include "doom_bullet_sprite.hpp"
@@ -48,7 +49,7 @@ PlayerDoomSprite::~PlayerDoomSprite() {};
 
 void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	const bool is_running = Input::held( Input::Action::JUMP );
+	const bool is_running = Input::held( Input::Action::RUN );
 	start_speed_ = ( is_running ) ? 400 : 200;
 	top_speed_ = ( is_running ) ? 2000 : 1000;
 
@@ -96,8 +97,9 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	if ( shoot_timer_ == 0 )
 	{
-		if ( Input::held( Input::Action::RUN ) )
+		if ( Input::held( Input::Action::JUMP ) )
 		{
+			Audio::playSound( Audio::SoundType::JUMP );
 			sprites.spawn( std::unique_ptr<Sprite> ( new DoomBulletSprite( xPixels(), yPixels(), ddirx_, ddiry_ ) ) );
 			shoot_timer_ = 32;
 		}

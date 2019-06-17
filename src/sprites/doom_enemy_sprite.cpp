@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "doom_enemy_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
@@ -47,6 +48,11 @@ void DoomEnemySprite::customInteract( Collision& my_collision, Collision& their_
 
 void DoomEnemySprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {
+	if ( animation_ == 0 )
+	{
+		Audio::playSound( Audio::SoundType::HURT );
+	}
+
 	if ( animation_ >= 32 )
 	{
 		death_finished_ = true;

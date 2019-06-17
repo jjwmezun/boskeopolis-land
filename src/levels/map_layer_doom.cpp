@@ -207,6 +207,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		std::vector<TempDoomItem> items = {};
 		int mapxs[ RAY_MAX ];
 		int mapys[ RAY_MAX ];
+		int block_types[ RAY_MAX ];
 
 		// RAY LOOP START
 		for ( int ray_x = 0; ray_x < RAY_MAX; ++ray_x )
@@ -257,10 +258,11 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				//Check if ray has hit a wall
 				const int block_index = lvmap.indexFromXAndY( map_x, map_y );
 				const int block = lvmap.block( block_index );
-				if ( block == 10 )
+				if ( block == 10 || block == 19 || block == 20 )
 				{
 					mapxs[ ray_x ] = map_x;
 					mapys[ ray_x ] = map_y;
+					block_types[ ray_x ] = block;
 					break;
 				}
 				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 || block == 5 || block == 2 ) )
@@ -307,8 +309,8 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const int texture_x = ( ( ( side == 0 && ray_dir_x > 0 ) || ( side == 1 && ray_dir_y < 0 ) )
 				? 16 - calcBaseTextureX( wall_x ) - 1
 				: calcBaseTextureX( wall_x ) ) % 16;
-
-			wall_items_[ ray_x ] = { { ray_x, draw_start, 1, line_height }, texture_x + ( side * 16 ) };
+			const int texture_index = ( block_types[ ray_x ] == 10 ) ? 0 : ( block_types[ ray_x ] == 19 ) ? 8 : 11;
+			wall_items_[ ray_x ] = { { ray_x, draw_start, 1, line_height }, texture_x + ( ( texture_index + side ) * 16 ) };
 
 
 		//
@@ -456,7 +458,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const std::vector<Block>& block_obj_list = blocks.getBlocksList();
 			for ( const Block& b : block_obj_list )
 			{
-				if ( b.typeID() == 9 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 )
+				if ( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 )
 				{
 					Render::renderRect
 					(
@@ -466,7 +468,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 							4,
 							4
 						},
-						( b.typeID() == 9 ) ? 5 : 2
+						( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 ) ? 5 : 2
 					);
 				}
 			}

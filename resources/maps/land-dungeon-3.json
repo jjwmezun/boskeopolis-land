@@ -59,6 +59,11 @@
          "value":"TOP_DOWN"
         }, 
         {
+         "name":"music",
+         "type":"string",
+         "value":"palace"
+        }, 
+        {
          "name":"palette",
          "type":"string",
          "value":"Dungeon Green"

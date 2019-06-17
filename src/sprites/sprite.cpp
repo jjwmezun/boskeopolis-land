@@ -226,26 +226,21 @@ void Sprite::positionX()
 {
 	vx_ += acceleration_x_;
 
-	if ( vx_ > top_speed_ )
-	{/*
-		if ( vx_ > top_speed_ * 2 )
-		{
-			vx_ = top_speed_ * 2;
-		}
 
-		vx_ -= acceleration_x_;
-		vx_ /= traction_;*/
+	if ( on_slope_ == Direction::Horizontal::RIGHT && vx_ > top_speed_ * 2 )
+	{
+		vx_ = top_speed_ * 2;
+	}
+	else if ( vx_ > top_speed_ )
+	{
 		vx_ = top_speed_;
 	}
-	if ( vx_ < -top_speed_ )
-	{/*
-		if ( vx_ < -( top_speed_ * 2 ) )
-		{
-			vx_ = -( top_speed_ * 2 );
-		}
-
-		vx_ += acceleration_x_;
-		vx_ /= traction_;*/
+	else if ( on_slope_ == Direction::Horizontal::LEFT && vx_ < -top_speed_ * 2 )
+	{
+		vx_ = -top_speed_ * 2;
+	}
+	else if ( vx_ < -top_speed_ )
+	{
 		vx_ = -top_speed_;
 	}
 
