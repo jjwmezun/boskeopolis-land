@@ -6,7 +6,7 @@
 
 DoomEnemySprite::DoomEnemySprite( int x, int y )
 :
-	Sprite( nullptr, x, y, 16, 16, { SpriteType::ENEMY }, 200, 600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( nullptr, x, y, 16, 16, { SpriteType::ENEMY }, 200, 600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	animation_ ( 0 )
 {
 	jump_lock_ = false;

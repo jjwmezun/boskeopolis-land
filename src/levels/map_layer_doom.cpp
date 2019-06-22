@@ -502,6 +502,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 
 			for ( const auto& sprite : sprites_list )
 			{
+				const int size = ( sprite->hasType( Sprite::SpriteType::ENEMY ) ? 4 : 2 );
 				const int enemy_icon_x = camera.relativeX( Unit::SubPixelsToPixels( sprite->hit_box_ ) ) / 4;
 				const int enemy_icon_y = camera.relativeY( Unit::SubPixelsToPixels( sprite->hit_box_ ) ) / 4;
 				Render::renderRect
@@ -509,8 +510,8 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					{
 						enemy_icon_x,
 						enemy_icon_y,
-						4,
-						4
+						size,
+						size
 					},
 					3
 				);

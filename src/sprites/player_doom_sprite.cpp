@@ -30,11 +30,11 @@ PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 	ddiry_ ( 0 ),
 	planex_ ( 0 ),
 	planey_ ( 0.66 ),
-	prevposx_ ( 0 ),
-	prevposy_ ( 0 ),
 	prevdirx_ ( 0 ),
 	prevdiry_ ( 0 ),
 	angle_ ( 0 ),
+	prevposx_ ( 0 ),
+	prevposy_ ( 0 ),
 	shoot_timer_ ( 0 )
 {
 	direction_x_ = ( Direction::Horizontal )( ddirx_ * CONVERSION_PRECISION );
@@ -50,22 +50,18 @@ PlayerDoomSprite::~PlayerDoomSprite() {};
 void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	const bool is_running = Input::held( Input::Action::RUN );
-	start_speed_ = ( is_running ) ? 400 : 200;
+	start_speed_ = ( is_running ) ? 2000 : 1000;
 	top_speed_ = ( is_running ) ? 2000 : 1000;
 
 	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
-		acceleration_y_ = getAccelerationAdjustedByAngle( ddiry_ );
-		acceleration_x_ = getAccelerationAdjustedByAngle( ddirx_ );
+		vx_ = getAccelerationAdjustedByAngle( ddirx_ );
+		vy_ = getAccelerationAdjustedByAngle( ddiry_ );
 	}
 	else if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
-		acceleration_y_ = -getAccelerationAdjustedByAngle( ddiry_ );
-		acceleration_x_ = -getAccelerationAdjustedByAngle( ddirx_ );
-	}
-	else
-	{
-		acceleration_y_ = acceleration_x_ = 0;
+		vx_ = -getAccelerationAdjustedByAngle( ddirx_ );
+		vy_ = -getAccelerationAdjustedByAngle( ddiry_ );
 	}
 
 	if ( Input::held( Input::Action::CAMERA_RIGHT ) )
@@ -157,8 +153,8 @@ void PlayerDoomSprite::moveStraight( double multiplier, double angle )
 	const double right_angle_y = ddirx_ * sin( angle ) + ddiry_ * cos( angle );
 	const int y_change = multiplier * getAccelerationAdjustedByAngle( right_angle_y );
 	const int x_change = multiplier * getAccelerationAdjustedByAngle( right_angle_x );
-	acceleration_y_ += y_change;
-	acceleration_x_ += x_change;
+	vx_ += x_change;
+	vy_ += y_change;
 }
 
 void PlayerDoomSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )

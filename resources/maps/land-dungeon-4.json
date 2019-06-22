@@ -29,7 +29,7 @@
         {
          "name":"blocks_work_offscreen",
          "type":"bool",
-         "value":false
+         "value":true
         }, 
         {
          "name":"hero_type",
