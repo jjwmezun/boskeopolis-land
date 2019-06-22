@@ -10,15 +10,6 @@
 #include "sprite_system.hpp"
 #include "sprite.hpp"
 
-#include <iostream>
-
-struct TempDoomItem
-{
-	double x;
-	double y;
-	int type;
-};
-
 static constexpr int TEXTURE_WIDTH = 336;
 static constexpr int FLOOR_TEXTURE_X_OFFSET = 32;
 static constexpr int CEILING_TEXTURE_X_OFFSET = 48;
@@ -81,6 +72,7 @@ MapLayerDoom::MapLayerDoom()
 	animation_timer_ (),
 	floor_and_ceiling_ ( Render::createRenderBox( RAY_MAX, SCREEN_HEIGHT ) ),
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
+	item_info_ (),
 	items_ (),
 	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272 } ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
@@ -130,54 +122,11 @@ void MapLayerDoom::render( const Camera& camera )
 void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
 	// 43 is not a valid color in our palette.
-	if ( floor_graphics_[ 0 ][ 0 ] == 43 )
+	if ( testFloorAndCeilingNotSetup() )
 	{
-		const Palette& palette = Main::getPalette();
-		SDL_Surface* texture_data = Render::getSurface( "tilesets/dungeon3.png" );
-		const Uint8* texture_pixels = ( Uint8* )( texture_data->pixels );
-
-		for ( int y = 0; y < Unit::PIXELS_PER_BLOCK; ++y )
-		{
-			for ( int x = 0; x < Unit::PIXELS_PER_BLOCK; ++x )
-			{
-				const int texture_index = y * TEXTURE_WIDTH + x;
-				const int floor_color_index = ( int )( texture_pixels[ texture_index + FLOOR_TEXTURE_X_OFFSET ] );
-				const SDL_Color& floor_color = palette.color( floor_color_index );
-				memcpy( ( void* )( &floor_graphics_[ y ][ x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &floor_color ), PIXEL_SIZE );
-				const int ceiling_color_index = ( int )( texture_pixels[ texture_index + CEILING_TEXTURE_X_OFFSET ] );
-				const SDL_Color& ceiling_color = palette.color( ceiling_color_index );
-				memcpy( ( void* )( &ceiling_graphics_[ y ][ x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &ceiling_color ), PIXEL_SIZE );
-			}
-		}
+		setupFloorAndCeiling();
 	}
-
-
-
-	//
-	//  Update animation
-	//
-	//////////////////////////////////////////////////////////
-
-		if ( animation_timer_.hit() )
-		{
-			item_frames_[ 3 ] = ( item_frames_[ 3 ] == 144 ) ? 160 : 144;
-		}
-		if ( animation_timer_.counter() % 8 == 0 )
-		{
-			item_frames_[ 0 ] += 16;
-			item_frames_[ 1 ] += 16;
-			item_frames_[ 4 ] += 16;
-			if ( item_frames_[ 0 ] >= 6 * 16 )
-			{
-				item_frames_[ 0 ] = 0;
-				item_frames_[ 4 ] = 176;
-			}
-			if ( item_frames_[ 1 ] >= 288 + 48 )
-			{
-				item_frames_[ 1 ] = 288;
-			}
-		}
-		animation_timer_.update();
+	updateAnimation();
 
 
 	//
@@ -187,10 +136,6 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 
 		const Sprite& hero = sprites.hero();
 		// If hero hasn't moved, no need to update walls or items.
-		if ( !hero.jump_lock_ )
-		{
-			//return;
-		}
 
 		items_.clear();
 		const double hero_x = subPixelsToBlocksDouble( hero.centerXSubPixels() );
@@ -200,16 +145,17 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		const double plane_x = ( double )( hero.jump_top_speed_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 		const double plane_y = ( double )( hero.jump_top_speed_normal_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 
-		auto block_list = lvmap.blocks_;
-		bool items_caught[ block_list.size() ] = { false };
 		const auto& sprites_list = sprites.getSpritesList();
-		bool sprites_caught[ sprites_list.size() ] = { false };
-		std::vector<TempDoomItem> items = {};
-		int mapxs[ RAY_MAX ];
-		int mapys[ RAY_MAX ];
-		int block_types[ RAY_MAX ];
 
 		// RAY LOOP START
+
+		bool items_caught[ lvmap.blocks_.size() ] = { false };
+		int block_types[ RAY_MAX ];
+		item_info_.clear();
+
+		// Start by assuming all sprites not caught.
+		bool sprites_caught[ sprites_list.size() ] = { false };
+
 		for ( int ray_x = 0; ray_x < RAY_MAX; ++ray_x )
 		{
 			// Make camera x go from 1.0 to -1.0.
@@ -245,7 +191,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					side = 1;
 				}
 
-				for ( int i = 0; i < sprites_list.size(); ++i )
+				for ( int i = 0; i < ( int )( sprites_list.size() ); ++i )
 				{
 					const auto& sprite = sprites_list[ i ];
 					const sdl2::SDLRect box = { Unit::BlocksToSubPixels( map_x ), Unit::BlocksToSubPixels( map_y ), Unit::BlocksToSubPixels( 1 ), Unit::BlocksToSubPixels( 1 ) };
@@ -260,8 +206,6 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				const int block = lvmap.block( block_index );
 				if ( block == 10 || block == 19 || block == 20 )
 				{
-					mapxs[ ray_x ] = map_x;
-					mapys[ ray_x ] = map_y;
 					block_types[ ray_x ] = block;
 					break;
 				}
@@ -288,66 +232,69 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					}
 					const double x = ( double )( lvmap.mapX( block_index ) ) + .5;
 					const double y = ( double )( lvmap.mapY( block_index ) ) + .5;
-					items.push_back( { x, y, type } );
+					item_info_.push_back( { x, y, type } );
 					items_caught[ block_index ] = true;
 				}
 			}
 
-			const double perp_wall_dist = ( side == 0 )
-				? calcPerpWallDist( map_x, hero_x, step_x, ray_dir_x )
-				: calcPerpWallDist( map_y, hero_y, step_y, ray_dir_y );
-
-			const double line_height_d = SCREEN_HEIGHT_D / perp_wall_dist;
-			const int line_height = ( int )( line_height_d );
-			wall_distances_[ ray_x ] = line_height_d; // We'll need this for items later.
-			const int draw_start = ( int )( SCREEN_HEIGHT_D / 2.0 ) - ( int )( ( double )( line_height ) / 2.0 );
-
-			double wall_x = ( side == 0 )
-				? hero_y + perp_wall_dist * ray_dir_y
-				: hero_x + perp_wall_dist * ray_dir_x;
-			wall_x = wall_x - floor( wall_x );
-			const int texture_x = ( ( ( side == 0 && ray_dir_x > 0 ) || ( side == 1 && ray_dir_y < 0 ) )
-				? 16 - calcBaseTextureX( wall_x ) - 1
-				: calcBaseTextureX( wall_x ) ) % 16;
-			const int texture_index = ( block_types[ ray_x ] == 10 ) ? 0 : ( block_types[ ray_x ] == 19 ) ? 8 : 11;
-			wall_items_[ ray_x ] = { { ray_x, draw_start, 1, line_height }, texture_x + ( ( texture_index + side ) * 16 ) };
-
-
-		//
-		//  Floor Plans
-		//
-		/////////////////////////////////////////////////////////
-
-			const Direction::Simple wall_dir =
-				  ( side == 0 && ray_dir_x > 0 ) ? Direction::Simple::RIGHT
-				: ( side == 0 && ray_dir_x < 0 ) ? Direction::Simple::LEFT
-				: ( side == 1 && ray_dir_y > 0 ) ? Direction::Simple::DOWN
-				                                 : Direction::Simple::UP;
-
-			const double floor_x_wall =
-				  ( wall_dir == Direction::Simple::RIGHT ) ? ( double )( map_x )
-				: ( wall_dir == Direction::Simple::LEFT )  ? ( double )( map_x ) + 1.0
-				                                           : ( double )( map_x ) + wall_x;
-
-	   		const double floor_y_wall =
-	   			  ( wall_dir == Direction::Simple::DOWN ) ? ( double )( map_y )
-	   			: ( wall_dir == Direction::Simple::UP )   ? ( double )( map_y ) + 1.0
-	   			                                          : ( double )( map_y ) + wall_x;
-
-			// Start floor just under wall.
-			const int floor_start = draw_start + ( int )( ( double )( line_height ) / 2.0 );
-			for ( int y = floor_start; y < SCREEN_HEIGHT; ++y )
+			if ( hero.jump_lock_ ) // Don’t need to run loop ’less the player has moved.
 			{
-				const double current_distance = SCREEN_HEIGHT_D / ( ( 2.0 * ( double )( y ) ) - SCREEN_HEIGHT_D );
-				const double weight = current_distance / perp_wall_dist;
-				const double current_floor_x = weight * floor_x_wall + ( 1.0 - weight ) * hero_x;
-				const double current_floor_y = weight * floor_y_wall + ( 1.0 - weight ) * hero_y;
-				const int floor_texture_x = calcFloorTexture( current_floor_x );
-				const int floor_texture_y = calcFloorTexture( current_floor_y );
-				memcpy( ( void* )( &floor_and_ceiling_pixels_[ y ][ ray_x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &floor_graphics_[ floor_texture_y ][ floor_texture_x * NUMBER_OF_COLOR_CHANNELS ] ), PIXEL_SIZE );
-				memcpy( ( void* )( &floor_and_ceiling_pixels_[ SCREEN_HEIGHT - y - 1 ][ ray_x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &ceiling_graphics_[ floor_texture_y ][ floor_texture_x * NUMBER_OF_COLOR_CHANNELS ] ), PIXEL_SIZE );
-			}
+				const double perp_wall_dist = ( side == 0 )
+					? calcPerpWallDist( map_x, hero_x, step_x, ray_dir_x )
+					: calcPerpWallDist( map_y, hero_y, step_y, ray_dir_y );
 
+				const double line_height_d = SCREEN_HEIGHT_D / perp_wall_dist;
+				const int line_height = ( int )( line_height_d );
+				wall_distances_[ ray_x ] = line_height_d; // We'll need this for items later.
+				const int draw_start = ( int )( SCREEN_HEIGHT_D / 2.0 ) - ( int )( ( double )( line_height ) / 2.0 );
+
+				double wall_x = ( side == 0 )
+					? hero_y + perp_wall_dist * ray_dir_y
+					: hero_x + perp_wall_dist * ray_dir_x;
+				wall_x = wall_x - floor( wall_x );
+				const int texture_x = ( ( ( side == 0 && ray_dir_x > 0 ) || ( side == 1 && ray_dir_y < 0 ) )
+					? 16 - calcBaseTextureX( wall_x ) - 1
+					: calcBaseTextureX( wall_x ) ) % 16;
+				const int texture_index = ( block_types[ ray_x ] == 10 ) ? 0 : ( block_types[ ray_x ] == 19 ) ? 8 : 11;
+				wall_items_[ ray_x ] = { { ray_x, draw_start, 1, line_height }, texture_x + ( ( texture_index + side ) * 16 ) };
+
+
+			//
+			//  Floor Plans
+			//
+			/////////////////////////////////////////////////////////
+
+				const Direction::Simple wall_dir =
+					  ( side == 0 && ray_dir_x > 0 ) ? Direction::Simple::RIGHT
+					: ( side == 0 && ray_dir_x < 0 ) ? Direction::Simple::LEFT
+					: ( side == 1 && ray_dir_y > 0 ) ? Direction::Simple::DOWN
+					                                 : Direction::Simple::UP;
+
+				const double floor_x_wall =
+					  ( wall_dir == Direction::Simple::RIGHT ) ? ( double )( map_x )
+					: ( wall_dir == Direction::Simple::LEFT )  ? ( double )( map_x ) + 1.0
+					                                           : ( double )( map_x ) + wall_x;
+
+		   		const double floor_y_wall =
+		   			  ( wall_dir == Direction::Simple::DOWN ) ? ( double )( map_y )
+		   			: ( wall_dir == Direction::Simple::UP )   ? ( double )( map_y ) + 1.0
+		   			                                          : ( double )( map_y ) + wall_x;
+
+				// Start floor just under wall.
+				const int floor_start = draw_start + ( int )( ( double )( line_height ) / 2.0 );
+				for ( int y = floor_start; y < SCREEN_HEIGHT; ++y )
+				{
+					const double current_distance = SCREEN_HEIGHT_D / ( ( 2.0 * ( double )( y ) ) - SCREEN_HEIGHT_D );
+					const double weight = current_distance / perp_wall_dist;
+					const double current_floor_x = weight * floor_x_wall + ( 1.0 - weight ) * hero_x;
+					const double current_floor_y = weight * floor_y_wall + ( 1.0 - weight ) * hero_y;
+					const int floor_texture_x = calcFloorTexture( current_floor_x );
+					const int floor_texture_y = calcFloorTexture( current_floor_y );
+					memcpy( ( void* )( &floor_and_ceiling_pixels_[ y ][ ray_x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &floor_graphics_[ floor_texture_y ][ floor_texture_x * NUMBER_OF_COLOR_CHANNELS ] ), PIXEL_SIZE );
+					memcpy( ( void* )( &floor_and_ceiling_pixels_[ SCREEN_HEIGHT - y - 1 ][ ray_x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &ceiling_graphics_[ floor_texture_y ][ floor_texture_x * NUMBER_OF_COLOR_CHANNELS ] ), PIXEL_SIZE );
+				}
+
+		}
 	}
 	// RAY LOOP END
 
@@ -360,7 +307,8 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	//
 	/////////////////////////////////////////////////////////
 
-		for ( int i = 0; i < sprites_list.size(); ++i )
+		std::vector<ItemInfo> items = item_info_;
+		for ( int i = 0; i < ( int )( sprites_list.size() ); ++i )
 		{
 			if ( sprites_caught[ i ] )
 			{
@@ -380,9 +328,9 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		}
 
 		items_.clear();
-		for ( int i = 0; i < items.size(); ++i )
+		for ( int i = 0; i < ( int )( items.size() ); ++i )
 		{
-			const TempDoomItem& item = items[ i ];
+			const ItemInfo& item = items[ i ];
 			const double x = item.x;
 			const double y = item.y;
 			const double distance_x = abs( x - hero_x );
@@ -407,7 +355,6 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const int draw_start_x = item_screen_x - ( int )( ( double )( line_height ) / 2.0 );
 
 			double source_left = 1.0;
-			double source_right = 0;
 			double right_clip = 0;
 
 			int lx = 0;
@@ -476,16 +423,6 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 			const double map_icon_angle = ( double )( hero.bounce_height_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
 			const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
 			const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
-			/*
-			const int map_line_y = ( direction_y + 1.0 ) * ( MAP_HEIGHT / 2 );
-			const int map_line_x = ( direction_x + 1.0 ) * ( MAP_WIDTH / 2 );
-			for ( int x = 0; x < RAY_MAX; ++x )
-			{
-				const int mx = ( mapxs[ x ] * 16 - camera.x() ) / 4;
-				const int my = ( mapys[ x ] * 16 - camera.y() ) / 4;
-				Render::renderLine( mx, my, map_icon_x + 2, map_icon_y + 2, 4 );
-			}
-			*/
 			Render::renderObject
 			(
 				"tilesets/dungeon3.png",
@@ -516,7 +453,6 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					3
 				);
 			}
-
 		Render::releaseRenderTarget();
 };
 
@@ -524,3 +460,53 @@ bool MapLayerDoom::sortItems( const Item& lhs, const Item& rhs )
 {
 	return lhs.distance > rhs.distance;
 };
+
+inline bool MapLayerDoom::testFloorAndCeilingNotSetup() const
+{
+	return floor_graphics_[ 0 ][ 0 ] == 43;
+}
+
+inline void MapLayerDoom::setupFloorAndCeiling()
+{
+	const Palette& palette = Main::getPalette();
+	SDL_Surface* texture_data = Render::getSurface( "tilesets/dungeon3.png" );
+	const Uint8* texture_pixels = ( Uint8* )( texture_data->pixels );
+
+	for ( int y = 0; y < Unit::PIXELS_PER_BLOCK; ++y )
+	{
+		for ( int x = 0; x < Unit::PIXELS_PER_BLOCK; ++x )
+		{
+			const int texture_index = y * TEXTURE_WIDTH + x;
+			const int floor_color_index = ( int )( texture_pixels[ texture_index + FLOOR_TEXTURE_X_OFFSET ] );
+			const SDL_Color& floor_color = palette.color( floor_color_index );
+			memcpy( ( void* )( &floor_graphics_[ y ][ x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &floor_color ), PIXEL_SIZE );
+			const int ceiling_color_index = ( int )( texture_pixels[ texture_index + CEILING_TEXTURE_X_OFFSET ] );
+			const SDL_Color& ceiling_color = palette.color( ceiling_color_index );
+			memcpy( ( void* )( &ceiling_graphics_[ y ][ x * NUMBER_OF_COLOR_CHANNELS ] ), ( void* )( &ceiling_color ), PIXEL_SIZE );
+		}
+	}
+}
+
+void MapLayerDoom::updateAnimation()
+{
+	if ( animation_timer_.hit() )
+	{
+		item_frames_[ 3 ] = ( item_frames_[ 3 ] == 144 ) ? 160 : 144;
+	}
+	if ( animation_timer_.counter() % 8 == 0 )
+	{
+		item_frames_[ 0 ] += 16;
+		item_frames_[ 1 ] += 16;
+		item_frames_[ 4 ] += 16;
+		if ( item_frames_[ 0 ] >= 6 * 16 )
+		{
+			item_frames_[ 0 ] = 0;
+			item_frames_[ 4 ] = 176;
+		}
+		if ( item_frames_[ 1 ] >= 288 + 48 )
+		{
+			item_frames_[ 1 ] = 288;
+		}
+	}
+	animation_timer_.update();
+}

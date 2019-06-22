@@ -42,11 +42,18 @@ class MapLayerDoom : public MapLayer
 			int type;
 		};
 
-		static bool sortItems( const Item& lhs, const Item& rhs );
+		struct ItemInfo
+		{
+			double x;
+			double y;
+			int type;
+		};
 
 		TimerRepeatT<32> animation_timer_;
 		SDL_Texture* floor_and_ceiling_;
 		SDL_Texture* map_;
+		std::vector<bool> sprites_caught_;
+		std::vector<ItemInfo> item_info_;
 		std::vector<Item> items_;
 		int item_frames_[ NUMBER_OF_ITEM_TYPES ];
 		sdl2::SDLRect texture_source_;
@@ -57,4 +64,9 @@ class MapLayerDoom : public MapLayer
 		Uint8 floor_and_ceiling_pixels_[ SCREEN_HEIGHT ][ RAY_MAX * NUMBER_OF_COLOR_CHANNELS ];
 		Uint8 floor_graphics_[ Unit::PIXELS_PER_BLOCK ][ Unit::PIXELS_PER_BLOCK * NUMBER_OF_COLOR_CHANNELS ];
 		Uint8 ceiling_graphics_[ Unit::PIXELS_PER_BLOCK ][ Unit::PIXELS_PER_BLOCK * NUMBER_OF_COLOR_CHANNELS ];
+
+		inline bool testFloorAndCeilingNotSetup() const;
+		inline void setupFloorAndCeiling();
+		void updateAnimation();
+		static bool sortItems( const Item& lhs, const Item& rhs );
 };
