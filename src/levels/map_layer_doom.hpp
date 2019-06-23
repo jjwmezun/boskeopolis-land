@@ -3,6 +3,7 @@
 #include <array>
 #include "map_layer.hpp"
 #include "mezun_sdl2.hpp"
+#include "player_doom_sprite.hpp"
 #include "timer_repeat_t.hpp"
 #include "unit.hpp"
 #include <vector>
@@ -49,16 +50,22 @@ class MapLayerDoom : public MapLayer
 			int type;
 		};
 
+		bool hero_shooting_;
 		TimerRepeatT<32> animation_timer_;
+		const PlayerDoomSprite* hero_;
 		SDL_Texture* floor_and_ceiling_;
 		SDL_Texture* map_;
-		std::vector<bool> sprites_caught_;
 		std::vector<ItemInfo> item_info_;
 		std::vector<Item> items_;
 		int item_frames_[ NUMBER_OF_ITEM_TYPES ];
 		sdl2::SDLRect texture_source_;
 		const sdl2::SDLRect render_screen_;
+		const sdl2::SDLRect map_src_;
 		const sdl2::SDLRect map_dest_;
+		sdl2::SDLRect hand_src_;
+		const sdl2::SDLRect hand_dest_;
+		const sdl2::SDLRect map_bars_[ 4 ];
+		const int hand_frames_[ 25 ];
 		double wall_distances_[ RAY_MAX ];
 		TextureSlice wall_items_[ RAY_MAX ];
 		Uint8 floor_and_ceiling_pixels_[ SCREEN_HEIGHT ][ RAY_MAX * NUMBER_OF_COLOR_CHANNELS ];

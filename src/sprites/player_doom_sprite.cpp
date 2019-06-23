@@ -35,15 +35,9 @@ PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 	angle_ ( 0 ),
 	prevposx_ ( 0 ),
 	prevposy_ ( 0 ),
-	shoot_timer_ ( 0 )
-{
-	direction_x_ = ( Direction::Horizontal )( ddirx_ * CONVERSION_PRECISION );
-	direction_y_ = ( Direction::Vertical )( ddiry_ * CONVERSION_PRECISION );
-	jump_top_speed_ = ( int )( planex_ * CONVERSION_PRECISION );
-	jump_top_speed_normal_ = ( int )( planey_ * CONVERSION_PRECISION );
-	jump_lock_ = true;
-	bounce_height_ = ( int )( angle_ * CONVERSION_PRECISION );
-};
+	shoot_timer_ ( 0 ),
+	has_moved_ ( true )
+{};
 
 PlayerDoomSprite::~PlayerDoomSprite() {};
 
@@ -95,17 +89,24 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	{
 		if ( Input::held( Input::Action::JUMP ) )
 		{
-			Audio::playSound( Audio::SoundType::JUMP );
-			sprites.spawn( std::unique_ptr<Sprite> ( new DoomBulletSprite( xPixels(), yPixels(), ddirx_, ddiry_ ) ) );
 			shoot_timer_ = 32;
 		}
 	}
 	else
 	{
 		--shoot_timer_;
+		if ( shoot_timer_ == 16 )
+		{
+			Audio::playSound( Audio::SoundType::JUMP );
+			const int movement_x = ( int )( 32000.0 * ddirx_ );
+			const int movement_y = ( int )( 32000.0 * ddiry_ );
+			const int x = Unit::SubPixelsToPixels( hit_box_.x + movement_x );
+			const int y = Unit::SubPixelsToPixels( hit_box_.y + movement_y );
+			sprites.spawn( std::unique_ptr<Sprite> ( new DoomBulletSprite( x, y, ddirx_, ddiry_ ) ) );
+		}
 	}
 
-	jump_lock_ = ddirx_ != prevdirx_ || ddiry_ != prevdiry_ || hit_box_.x != prevposx_ || hit_box_.y != prevposy_;
+	has_moved_ = ddirx_ != prevdirx_ || ddiry_ != prevdiry_ || hit_box_.x != prevposx_ || hit_box_.y != prevposy_;
 	prevdirx_ = ddirx_;
 	prevdiry_ = ddiry_;
 	prevposx_ = hit_box_.x;
@@ -124,14 +125,6 @@ void PlayerDoomSprite::rotate( double rotation_speed )
 	planex_ = planex_ * cos( rotation_speed ) - planey_ * sin( rotation_speed );
 	planey_ = old_planex * sin( rotation_speed ) + planey_ * cos( rotation_speed );
 	angle_ += rotation_speed * 60.0;
-
-	// MapLayerDoom can only recognize this is a generic sprite, thanks to polymorphism.
-	// These are generic sprite values, so it can reach these.
-	direction_x_ = ( Direction::Horizontal )( ddirx_ * CONVERSION_PRECISION );
-	direction_y_ = ( Direction::Vertical )( ddiry_ * CONVERSION_PRECISION );
-	jump_top_speed_ = ( int )( planex_ * CONVERSION_PRECISION );
-	jump_top_speed_normal_ = ( int )( planey_ * CONVERSION_PRECISION );
-	bounce_height_ = ( int )( angle_ * CONVERSION_PRECISION );
 }
 
 void PlayerDoomSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

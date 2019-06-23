@@ -16,7 +16,6 @@ class PlayerDoomSprite : public Sprite
 		void render( Camera& camera, bool priority ) override;
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
-	private:
 		SDL_Color screen_tint_;
 		double posx_;
 		double posy_;
@@ -30,7 +29,9 @@ class PlayerDoomSprite : public Sprite
 		int prevposx_;
 		int prevposy_;
 		int shoot_timer_;
+		bool has_moved_;
 
+	private:
 		void rotate( double rotation_speed );
 		double getAccelerationAdjustedByAngle( double angle );
 		void moveStraight( double multiplier, double angle );

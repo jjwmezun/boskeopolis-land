@@ -69,7 +69,9 @@ static constexpr int calcFloorTexture( double floor )
 
 MapLayerDoom::MapLayerDoom()
 :
+	hero_shooting_ ( false ),
 	animation_timer_ (),
+	hero_ ( nullptr ),
 	floor_and_ceiling_ ( Render::createRenderBox( RAY_MAX, SCREEN_HEIGHT ) ),
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	item_info_ (),
@@ -77,7 +79,18 @@ MapLayerDoom::MapLayerDoom()
 	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272 } ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
 	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
+	map_src_ ( 0, 0, MAP_WIDTH, MAP_HEIGHT ),
 	map_dest_ ( MAP_X, MAP_Y, MAP_WIDTH, MAP_HEIGHT ),
+	hand_src_ ( 0, 0, 55, 24 ),
+	hand_dest_ ( ( Unit::WINDOW_WIDTH_PIXELS / 2 - ( 24 * 4 ) ), Unit::WINDOW_HEIGHT_PIXELS - 32 - ( 24 * 4 ), 55 * 4, 24 * 4 ),
+	map_bars_
+	({
+		{ 0, MAP_HEIGHT - 2, MAP_WIDTH, 2 },
+		{ MAP_WIDTH - 2, 0, 2, MAP_HEIGHT },
+		{ 0, 0, MAP_WIDTH, 2 },
+		{ 0, 0, 2, MAP_HEIGHT }
+	}),
+	hand_frames_ ({ 0, 24, 48, 72, 96, 120, 120, 144, 144, 168, 168, 168, 168, 192, 192, 192, 192, 168, 168, 144, 120, 96, 72, 48, 24 }),
 	wall_distances_ (),
 	wall_items_ (),
 	floor_and_ceiling_pixels_ { 255 },
@@ -96,16 +109,6 @@ MapLayerDoom::~MapLayerDoom()
 void MapLayerDoom::render( const Camera& camera )
 {
 	Render::renderRenderBox( floor_and_ceiling_, render_screen_ );
-	for ( const auto& slice : wall_items_ )
-	{
-		texture_source_.x = slice.texture_index;
-		Render::renderObject
-		(
-			"tilesets/dungeon3.png",
-			texture_source_,
-			slice.position
-		);
-	}
 
 	for ( const auto& item : items_ )
 	{
@@ -116,7 +119,14 @@ void MapLayerDoom::render( const Camera& camera )
 			item.position
 		);
 	}
-	Render::renderRenderBox( map_, { 0, 0, MAP_WIDTH, MAP_HEIGHT }, map_dest_ );
+
+	Render::renderObject
+	(
+		"sprites/autumn-3d-hand.png",
+		hand_src_,
+		hand_dest_
+	);
+	Render::renderRenderBox( map_, map_src_, map_dest_ );
 };
 
 void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
@@ -128,22 +138,25 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	}
 	updateAnimation();
 
+	if ( hero_ == nullptr )
+	{
+		hero_ = dynamic_cast<const PlayerDoomSprite*> ( &sprites.hero() );
+	}
 
 	//
 	//  WALLS
 	//
 	//////////////////////////////////////////////////////////
 
-		const Sprite& hero = sprites.hero();
-		// If hero hasn't moved, no need to update walls or items.
+		hand_src_.y = hand_frames_[ ( hero_->shoot_timer_ > 32 - 25 ) ? 32 - hero_->shoot_timer_ : 0 ];
 
 		items_.clear();
-		const double hero_x = subPixelsToBlocksDouble( hero.centerXSubPixels() );
-		const double hero_y = subPixelsToBlocksDouble( hero.centerYSubPixels() );
-		const double direction_x = ( double )( hero.direction_x_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
-		const double direction_y = ( double )( hero.direction_y_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
-		const double plane_x = ( double )( hero.jump_top_speed_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
-		const double plane_y = ( double )( hero.jump_top_speed_normal_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
+		const double hero_x = subPixelsToBlocksDouble( hero_->centerXSubPixels() );
+		const double hero_y = subPixelsToBlocksDouble( hero_->centerYSubPixels() );
+		const double direction_x = hero_->ddirx_;
+		const double direction_y = hero_->ddiry_;
+		const double plane_x = hero_->planex_;
+		const double plane_y = hero_->planey_;
 
 		const auto& sprites_list = sprites.getSpritesList();
 
@@ -230,14 +243,14 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 						}
 						break;
 					}
-					const double x = ( double )( lvmap.mapX( block_index ) ) + .5;
-					const double y = ( double )( lvmap.mapY( block_index ) ) + .5;
+					const double x = ( double )( lvmap.mapX( block_index ) ) + 0.5;
+					const double y = ( double )( lvmap.mapY( block_index ) ) + 0.5;
 					item_info_.push_back( { x, y, type } );
 					items_caught[ block_index ] = true;
 				}
 			}
 
-			if ( hero.jump_lock_ ) // Don’t need to run loop ’less the player has moved.
+			if ( hero_->has_moved_ ) // Don’t need to run loop ’less the player has moved.
 			{
 				const double perp_wall_dist = ( side == 0 )
 					? calcPerpWallDist( map_x, hero_x, step_x, ray_dir_x )
@@ -298,7 +311,22 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 	}
 	// RAY LOOP END
 
-	SDL_UpdateTexture( floor_and_ceiling_, nullptr, &floor_and_ceiling_pixels_, RAY_MAX * NUMBER_OF_COLOR_CHANNELS * sizeof( Uint8 ) );
+	if ( hero_->has_moved_ )
+	{
+		SDL_UpdateTexture( floor_and_ceiling_, nullptr, &floor_and_ceiling_pixels_, RAY_MAX * NUMBER_OF_COLOR_CHANNELS * sizeof( Uint8 ) );
+		Render::setRenderTarget( floor_and_ceiling_ );
+		for ( const auto& slice : wall_items_ )
+		{
+			texture_source_.x = slice.texture_index;
+			Render::renderObject
+			(
+				"tilesets/dungeon3.png",
+				texture_source_,
+				slice.position
+			);
+		}
+		Render::releaseRenderTarget();
+	}
 
 
 
@@ -420,9 +448,9 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 				}
 			}
 
-			const double map_icon_angle = ( double )( hero.bounce_height_ ) / ( double )PlayerDoomSprite::CONVERSION_PRECISION;
-			const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
-			const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero.hit_box_ ) ) / 4;
+			const double map_icon_angle = hero_->angle_;
+			const int map_icon_x = camera.relativeX( Unit::SubPixelsToPixels( hero_->hit_box_ ) ) / 4;
+			const int map_icon_y = camera.relativeY( Unit::SubPixelsToPixels( hero_->hit_box_ ) ) / 4;
 			Render::renderObject
 			(
 				"tilesets/dungeon3.png",
@@ -453,6 +481,10 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 					3
 				);
 			}
+			Render::renderRect( map_bars_[ 0 ], 5 );
+			Render::renderRect( map_bars_[ 1 ], 5 );
+			Render::renderRect( map_bars_[ 2 ], 5 );
+			Render::renderRect( map_bars_[ 3 ], 5 );
 		Render::releaseRenderTarget();
 };
 

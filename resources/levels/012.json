@@ -1,81 +1,19 @@
 {
-	"name": "Donut Dungeon",
+	"name": "Gravity, Hypocrisy, & the Perils o' Being in 3D",
 
 	"maps":
 	[
 		{
-			"slug": "dungeon-3",
-			"foregrounds":
+			"slug": "dungeon-4",
+			"backgrounds":
 			[
-				{
-					"type": "image",
-					"img": "dungeon-walls.png",
-					"width": 400,
-					"height": 192,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 1,
-					"entrance_x": 4,
-					"entrance_y": 63,
-					"location": [ 3, 5, 62, 64 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 87,
-					"entrance_y": 19,
-					"location": [ 85, 89, 19, 21 ],
-					"camera_x": 1200,
-					"camera_y": 0
-				}
-			]
-		},
-		{
-			"slug": "dungeon-3-2",
-			"foregrounds":
-			[
-				{
-					"type": "image",
-					"img": "dungeon-walls.png",
-					"width": 400,
-					"height": 192,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 0,
-					"entrance_x": 4,
-					"entrance_y": 63,
-					"location": [ 3, 5, 62, 64 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 87,
-					"entrance_y": 19,
-					"location": [ 85, 89, 19, 21 ],
-					"camera_x": 1200,
-					"camera_y": 0
-				}
+				{ "type": "doom" }
 			]
 		}
 	],
 
-	"entrance_x2": 62,
-	"entrance_y2": 81,
-		"entrance_x": 79,
-		"entrance_y": 17,
-
-	"gem_challenge": 0,
-	"time_challenge": 0,
-	"camera_x2": 50,
-	"camera_y2": 72,
-	"camera_x": 75,
-	"camera_y": 12
+	"entrance_x": 21,
+	"entrance_y": 34,
+	"gem_challenge": 23300,
+	"time_challenge": 25
 }

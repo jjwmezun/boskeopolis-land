@@ -1,19 +1,60 @@
 {
-	"name": "Stop & Go Space Station",
+	"name": "Golden Gear Solid",
+
 	"maps":
 	[
 		{
-			"slug": "space-3"
+			"slug": "sneak-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "moon.png",
+					"width": 32,
+					"height": 32,
+					"x_offset": 240,
+					"y_offset": 368,
+					"x_scroll": 0,
+					"y_scroll": 0,
+					"frames": 1,
+					"x_repeat": false,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "rain.png",
+					"width": 8,
+					"height": 8,
+					"x_offset": 0,
+					"y_offset": 0,
+					"x_scroll": 0,
+					"y_scroll": 0,
+					"frames": 16,
+					"x_repeat": true,
+					"y_repeat": true,
+					"x_speed": 0,
+					"y_speed": 0,
+					"animation_speed": 4
+				},
+				{
+					"type": "image",
+					"img": "darkroom.png",
+					"width": 128,
+					"height": 160,
+					"x_offset": 0,
+					"y_offset": -72,
+					"x_scroll": 0.5,
+					"y_scroll": 0.8
+				}
+			]
 		}
 	],
 
-	"goal":
-	{
-		"type": "stop_on_off"
-	},
+	"entrance_x": 1,
+	"entrance_y": 26,
 
-	"entrance_x": 12,
-	"entrance_y": 48,
-	"gem_challenge": 10000,
-	"time_challenge": 40
+	"message": "Guards can see 'bout 8 blocks 'head, 1\nblock 'bove if you're on the ground, &\na li'l higher if you're in the air.\n\nBut they can't see you if part o' you\nis covered by a solid block.",
+
+	"gem_challenge": 9000,
+	"time_challenge": 50
 }
