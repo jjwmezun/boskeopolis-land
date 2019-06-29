@@ -1,0 +1,13 @@
+{
+	"name": "Raft",
+
+	"maps":
+	[
+		{
+			"slug": "swamp-3"
+		}
+	],
+
+	"entrance_x": 4,
+	"entrance_y": 31
+}

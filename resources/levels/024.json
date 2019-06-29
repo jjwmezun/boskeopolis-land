@@ -30,7 +30,7 @@
 					"entrance_y": 19,
 					"location": [ 85, 89, 19, 21 ],
 					"camera_x": 1200,
-					"camera_y": 0
+					"camera_y": 192
 				}
 			]
 		},
@@ -62,6 +62,14 @@
 					"location": [ 85, 89, 19, 21 ],
 					"camera_x": 1200,
 					"camera_y": 0
+				},
+				{
+					"map": 0,
+					"entrance_x": 112,
+					"entrance_y": 44,
+					"location": [ 110, 114, 43, 45 ],
+					"camera_x": 1600,
+					"camera_y": 576
 				}
 			]
 		}

@@ -4,6 +4,8 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
+#include <iostream>
+
 // Note: top_speed_ used as hole trigger 'cause polymorphism is too limited for using sane variable names.
 
 TopDownMoveableBlockSprite::TopDownMoveableBlockSprite( int x, int y )
@@ -25,7 +27,7 @@ void TopDownMoveableBlockSprite::customInteract( Collision& my_collision, Collis
 			( them.hit_box_.y < bottomSubPixels() - 4000 && them.bottomSubPixels() > hit_box_.y + 4000 )
 			&&
 				(
-					( going_right && !blocksInTheWay( blocks, getRightBoundarySpace() ) && !spritesOnOtherSide( sprites, getRightBoundarySpace() ) )
+					( going_right && !blocksInTheWay( blocks, getRightBoundarySpace() ) && !spritesOnOtherSide( sprites, getRightBoundarySpace() )  )
 					|| ( !going_right && !blocksInTheWay( blocks, getLeftBoundarySpace() ) && !spritesOnOtherSide( sprites, getLeftBoundarySpace() ) )
 				);
 

@@ -50,7 +50,8 @@ class Sprite : public Object
 			CRAB,
 			CAMERA_MOVE,
 			MOVEABLE_BLOCK,
-			FALLING_BOUGH
+			FALLING_BOUGH,
+			RAFT
 		};
 
 		enum class CameraMovement

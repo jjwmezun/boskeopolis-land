@@ -98,6 +98,7 @@
 #include "pufferbee_square_sprite.hpp"
 #include "quadrapus_sprite.hpp"
 #include "racer_sprite.hpp"
+#include "raft_sprite.hpp"
 #include "random_treasure_chest_sprite.hpp"
 #include "rising_package_sprite.hpp"
 #include "rising_ice_cube_sprite.hpp"
@@ -128,6 +129,7 @@
 #include "sprite_component_up_and_down.hpp"
 #include "sprite_system.hpp"
 #include "stronger_cowpoker_sprite.hpp"
+#include "swamp_monster_sprite.hpp"
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
 #include "top_down_player_sprite.hpp"
@@ -643,6 +645,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 160 ):
 			return std::unique_ptr<Sprite> ( new IronWallSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 161 ):
+			return std::unique_ptr<Sprite> ( new RaftSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 162 ):
+			return std::unique_ptr<Sprite> ( new SwampMonsterSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

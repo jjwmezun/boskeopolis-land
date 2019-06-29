@@ -6,6 +6,8 @@
 #include "sprite.hpp"
 #include <utility>
 
+#include <iostream>
+
 static constexpr int CAMERA_PADDING = 8;
 static bool testBlockInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type, const Block& b )
 {
@@ -182,7 +184,7 @@ bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Typ
 	{
 		for ( const auto& block : blocks_ )
 		{
-			if ( testBlockInTheWay( rect, type, block ) )
+			if ( block.typeID() != -1 && testBlockInTheWay( rect, type, block ) )
 			{
 				return true;
 			}
@@ -203,7 +205,7 @@ bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Typ
 				if ( n < blocks_.size() )
 				{
 					const Block& block = blocks_[ n ];
-					if ( testBlockInTheWay( rect, type, block ) )
+					if ( block.typeID() != -1 && testBlockInTheWay( rect, type, block ) )
 					{
 						return true;
 					}
