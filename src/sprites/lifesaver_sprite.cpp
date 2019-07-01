@@ -3,9 +3,9 @@
 #include "sprite_graphics.hpp"
 #include <iostream>
 
-LifesaverSprite::LifesaverSprite( int x, int y, Direction::Horizontal direction, bool start_moving )
+LifesaverSprite::LifesaverSprite( int x, int y, bool crate )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/lifesaver.png" ), x, y, 48, 16, {}, 50, 2000, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, true, true, true )
+	Sprite( ( crate ) ? std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 192, 48 ) : std::make_unique<SpriteGraphics> ( "sprites/lifesaver.png" ), x, y, ( crate ) ? 32 : 48, ( crate ) ? 32 : 16, {}, 50, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, true, true, true )
 {};
 
 LifesaverSprite::~LifesaverSprite() {};

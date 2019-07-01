@@ -3,9 +3,9 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
-SnowmanSprite::SnowmanSprite( int x, int y )
+SnowmanSprite::SnowmanSprite( int x, int y, bool squid )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowman.png", 8, 0, false, false, 0, false, -1, -2, 2, 4 ), x, y, 15, 22, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 1000, jumpHeight(), jumpHeight(), Direction::Horizontal::LEFT ),
+	Sprite( ( squid ) ? std::make_unique<SpriteGraphics> ( "sprites/box.png", 0, 0, false, false, 0, false, -1, -1, 1, 1 ) : std::make_unique<SpriteGraphics> ( "sprites/snowman.png", 8, 0, false, false, 0, false, -1, -2, 2, 4 ), x, y, ( squid ) ? 14 : 15, ( squid ) ? 14 : 22, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 1000, jumpHeight(), jumpHeight(), Direction::Horizontal::LEFT ),
 	move_type_ ( moveType() ),
 	move_time_ ( moveTime() ),
 	move_counter_ ( 0 ),
@@ -27,12 +27,12 @@ void SnowmanSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 		case ( Direction::Horizontal::RIGHT ):
 			graphics_->flip_x_ = true;
 		break;
-			
+
 		default:
 			graphics_->flip_x_ = false;
 		break;
 	}
-	
+
 	handleMovement();
 	handleJumping();
 	handleThrowing( sprites );
@@ -99,17 +99,17 @@ void SnowmanSprite::handleMovement()
 	{
 		case ( 3 ):
 			hit_box_.x -= 1000;
-		break;	
+		break;
 
 		case ( 2 ):
 			hit_box_.x += 1000;
 		break;
-			
+
 		default:
 			fullStopX();
 		break;
 	}
-	
+
 	++move_counter_;
 };
 

@@ -652,6 +652,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 162 ):
 			return std::unique_ptr<Sprite> ( new SwampMonsterSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 163 ):
+			return std::unique_ptr<Sprite> ( new LifesaverSprite( x, y, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 164 ):
+			return std::unique_ptr<Sprite> ( new SnowmanSprite( x, y, true ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;

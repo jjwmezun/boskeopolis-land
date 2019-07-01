@@ -5,7 +5,7 @@
 
 CraneCrateSprite::CraneCrateSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/hook.png" ), x - 50, y - 160, 16, 16, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 160, 48 ), x - 50, y - 160, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	circle_ ( original_hit_box_, original_hit_box_.x, original_hit_box_.y, 200000, 0.01, 1.25 ),
 	prev_x_ ( original_hit_box_.x ),
 	prev_y_ ( original_hit_box_.y )
@@ -42,7 +42,6 @@ void CraneCrateSprite::customInteract( Collision& my_collision, Collision& their
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		/*
 		if ( their_collision.collideBottom() )
 		{
 			them.collideStopYBottom( their_collision.overlapYBottom() );
@@ -52,7 +51,7 @@ void CraneCrateSprite::customInteract( Collision& my_collision, Collision& their
 		else
 		{
 			them.collideStopAny( their_collision );
-		}*/
+		}
 	}
 };
 
