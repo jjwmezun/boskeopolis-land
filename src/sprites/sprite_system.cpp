@@ -18,6 +18,7 @@
 #include "cannon_sprite.hpp"
 #include "capn_clearbeard_sprite.hpp"
 #include "carrot_sprite.hpp"
+#include "chamsby_sprite.hpp"
 #include "change_layer_sprite.hpp"
 #include "choque_sprite.hpp"
 #include "circle_block_sprite.hpp"
@@ -658,13 +659,16 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 164 ):
 			return std::unique_ptr<Sprite> ( new SnowmanSprite( x, y, true ) );
 		break;
+		case ( SPRITE_INDEX_START + 165 ):
+			return std::unique_ptr<Sprite> ( new ChamsbySprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
 	}
 };
 
-void SpriteSystem::spawn( std::unique_ptr<Sprite> sprite )
+void SpriteSystem::spawn( std::unique_ptr<Sprite>&& sprite )
 {
 	sprites_.emplace_back( sprite.release() );
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "timer_random.hpp"
 
 class CowpokerSprite : public Sprite
 {
@@ -10,7 +11,7 @@ class CowpokerSprite : public Sprite
 		~CowpokerSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
-	
+
 	private:
 		enum class CowpokerType
 		{
@@ -20,13 +21,11 @@ class CowpokerSprite : public Sprite
 		};
 
 		CowpokerSprite( int x, int y, int w, int h, CowpokerType type, std::unique_ptr<SpriteGraphics>&& gfx, int map_id );
-		CowpokerType type_;
+		void handleGraphics();
+		void handleThrowing( SpriteSystem& sprites );
 
-		int throw_time_;
-		int throw_counter_;
+		CowpokerType type_;
 		bool is_shooting_;
 		int is_shooting_counter_;
-
-		int throwTime() const;
-		void handleThrowing( SpriteSystem& sprites );
+		TimerRandom<80, 10> throw_timer_;
 };

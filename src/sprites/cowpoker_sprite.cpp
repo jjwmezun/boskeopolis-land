@@ -1,4 +1,5 @@
 #include "mezun_math.hpp"
+#include "bullet_sprite.hpp"
 #include "cowpoker_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -17,36 +18,33 @@ CowpokerSprite::CowpokerSprite( int x, int y, int w, int h, CowpokerType type, s
 :
 	Sprite( std::move( gfx ), x, y, w, h, { SpriteType::ENEMY, SpriteType::BOPPABLE, SpriteType::DEATH_COUNT }, 500, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, .2, map_id ),
 	type_ ( type ),
-	throw_time_ ( 0 ),
-	throw_counter_ ( 0 ),
 	is_shooting_ ( false ),
-	is_shooting_counter_ ( 0 )
+	is_shooting_counter_ ( 0 ),
+	throw_timer_ ()
 {};
 
 CowpokerSprite::~CowpokerSprite() {};
 
 void CowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	switch ( direction_x_ )
-	{
-		case ( Direction::Horizontal::RIGHT ):
-			graphics_->flip_x_ = true;
-		break;
+	handleGraphics();
+	handleThrowing( sprites );
+};
 
-		default:
-			graphics_->flip_x_ = false;
-		break;
-	}
-
-	if ( is_shooting_ )
+void CowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+{
+	if ( them.hasType( SpriteType::HERO ) )
 	{
-		graphics_->current_frame_x_ = 17;
+		direction_x_ = ( them.xSubPixels() > rightSubPixels() )
+			? Direction::Horizontal::RIGHT
+			: Direction::Horizontal::LEFT;
 	}
-	else
-	{
-		graphics_->current_frame_x_ = 0;
-	}
+};
 
+void CowpokerSprite::handleGraphics()
+{
+	flipGraphicsOnRight();
+	graphics_->current_frame_x_ = ( is_shooting_ ) ? 17 : 0;
 	if ( is_shooting_ )
 	{
 		if ( is_shooting_counter_ >= 8 )
@@ -59,44 +57,18 @@ void CowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 			++is_shooting_counter_;
 		}
 	}
-
-	handleThrowing( sprites );
-};
-
-void CowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
-{
-	if ( them.hasType( SpriteType::HERO ) )
-	{
-		if ( them.xSubPixels() > rightSubPixels() )
-		{
-			direction_x_ = Direction::Horizontal::RIGHT;
-		}
-		else
-		{
-			direction_x_ = Direction::Horizontal::LEFT;
-		}
-	}
-};
-
-int CowpokerSprite::throwTime() const
-{
-	return mezun::randInt( 80, 10 );
-};
+}
 
 void CowpokerSprite::handleThrowing( SpriteSystem& sprites )
 {
-	if ( throw_counter_ >= throw_time_ )
+	if ( throw_timer_.update() )
 	{
 		int bullet_y = yPixels();
 		if ( type_ == CowpokerType::SHORT )
 		{
 			bullet_y += 3;
 		}
-
-		throw_counter_ = 0;
-		throw_time_ = throwTime();
-		sprites.spawnEnemyBullet( centerXPixels(), bullet_y, Direction::horizontalToSimple( direction_x_ ) );
+		sprites.spawn( std::make_unique<BulletSprite> ( centerXPixels(), bullet_y, Direction::horizontalToSimple( direction_x_ ), false ) );
 		is_shooting_ = true;
 	}
-	++throw_counter_;
 };
