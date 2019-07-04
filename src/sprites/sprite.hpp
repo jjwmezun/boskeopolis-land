@@ -157,6 +157,7 @@ class Sprite : public Object
 		void bounceRight( int overlap );
 		void bounceDownward( int overlap );
 
+		const Collision testCollision( const sdl2::SDLRect& hitbox ) const;
 		const Collision testCollision( const Object& them ) const;
 		void collideStopAny( const Collision& collision );
 		void collideStopXLeft( int overlap );

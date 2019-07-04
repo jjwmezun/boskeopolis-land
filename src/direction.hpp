@@ -165,16 +165,54 @@ namespace Direction
 		{
 			case ( Simple::LEFT ):
 			case ( Simple::RIGHT ):
+			{
 				return Type::HORIZONTAL;
+			}
 			break;
 
 			case ( Simple::UP ):
 			case ( Simple::DOWN ):
+			{
 				return Type::VERTICAL;
+			}
 			break;
 
 			default:
+			{
 				return Type::__NULL;
+			}
+			break;
+		}
+	};
+
+	constexpr Simple rotateSimpleClockwise( Simple d )
+	{
+		switch ( d )
+		{
+			case ( Simple::UP ):
+			{
+				return Simple::RIGHT;
+			}
+			break;
+			case ( Simple::RIGHT ):
+			{
+				return Simple::DOWN;
+			}
+			break;
+			case ( Simple::DOWN ):
+			{
+				return Simple::LEFT;
+			}
+			break;
+			case ( Simple::LEFT ):
+			{
+				return Simple::UP;
+			}
+			break;
+			default:
+			{
+				return Simple::__NULL;
+			}
 			break;
 		}
 	};

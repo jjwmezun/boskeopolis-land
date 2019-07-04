@@ -80,6 +80,7 @@
 #include "olive_sprite.hpp"
 #include "pelican_sprite.hpp"
 #include "penguin_sprite.hpp"
+#include "pike_sprite.hpp"
 #include "pipe_eel_sprite.hpp"
 #include "platform_sprite.hpp"
 #include "player_car_sprite.hpp"
@@ -661,6 +662,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 165 ):
 			return std::unique_ptr<Sprite> ( new ChamsbySprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 166 ):
+			return std::unique_ptr<Sprite> ( new PikeSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

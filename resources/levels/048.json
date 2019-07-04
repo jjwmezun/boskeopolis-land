@@ -4,12 +4,51 @@
 	"maps":
 	[
 		{
-			"slug": "dungeon-2-2"
+			"slug": "dungeon-1-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "shady_firs.png",
+					"width": 461,
+					"height": 300,
+					"y_offset": -64,
+					"x_scroll": 0.1,
+					"y_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "thin_boughs.png",
+					"width": 256,
+					"height": 256,
+					"x_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "thick_boughs.png",
+					"width": 640,
+					"height": 256,
+					"x_scroll": 0.5
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 0,
+					"entrance_y": 59,
+					"location": [ 19, 25, 0, 12 ],
+					"camera_x": 32
+				}
+			]
+		},
+		{
+			"slug": "dungeon-1"
 		}
 	],
 
-	"entrance_x": 29,
-	"entrance_y": 6,
+	"entrance_x": 1,
+	"entrance_y": 8,
 
 	"gem_challenge": 11000,
 	"time_challenge": 18

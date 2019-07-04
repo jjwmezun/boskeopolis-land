@@ -627,12 +627,18 @@ void Sprite::bounceDownward( int overlap )
 	}
 };
 
-const Collision Sprite::testCollision( const Object& them ) const
+const Collision Sprite::testCollision( const sdl2::SDLRect& hitbox ) const
 {
 	if ( movement_ != nullptr )
 	{
-		return movement_->testCollision( *this, them.hit_box_ );
+		return movement_->testCollision( *this, hitbox );
 	}
+	return { 0, 0, 0, 0 };
+};
+
+const Collision Sprite::testCollision( const Object& them ) const
+{
+	return testCollision( them.hit_box_ );
 };
 
 SpriteMovement::Type Sprite::movementType() const
