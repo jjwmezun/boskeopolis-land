@@ -47,7 +47,6 @@ class SpriteSystem
 		void reset( const Level& level, EventSystem& events );
 		void spawn( std::unique_ptr<Sprite>&& sprite );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
-		void spawnSnowball( int x, int y, Direction::Horizontal direction );
 		void spawnWaterdrop( int x, int y );
 		void spawnEnemyBullet( int x, int y, Direction::Simple direction );
 		void spawnHeroBullet( int x, int y, Direction::Simple direction );

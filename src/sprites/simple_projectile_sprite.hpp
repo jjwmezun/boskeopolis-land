@@ -1,16 +1,13 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "sprite_graphics.hpp"
 
-class SnowballSprite : public Sprite
+class SimpleProjectileSprite : public Sprite
 {
 	public:
-		SnowballSprite( int x, int y, Direction::Horizontal dir );
-		~SnowballSprite();
+		SimpleProjectileSprite( int x, int y, int w, int h, Direction::Horizontal dir, std::unique_ptr<SpriteGraphics>&& gfx );
+		~SimpleProjectileSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
-		
-	private:
-		const int fall_speed_;
-		int counter_;
 };

@@ -76,6 +76,7 @@
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
 #include "move_water_sprite.hpp"
+#include "octopig_sprite.hpp"
 #include "olive_spawner_sprite.hpp"
 #include "olive_sprite.hpp"
 #include "pelican_sprite.hpp"
@@ -116,7 +117,6 @@
 #include "shooter_player_sprite.hpp"
 #include "shroud_sprite.hpp"
 #include "sillyfish_sprite.hpp"
-#include "snowball_sprite.hpp"
 #include "snowboulder_sprite.hpp"
 #include "snowman_sprite.hpp"
 #include "spawn_anchor_missile_sprite.hpp"
@@ -289,7 +289,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new CloudMonsterSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 41 ):
-			return std::unique_ptr<Sprite> ( new SnowmanSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( generateSnowmanSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 42 ):
 			return std::unique_ptr<Sprite> ( new SnowboulderSprite( x, y ) );
@@ -658,7 +658,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new LifesaverSprite( x, y, true ) );
 		break;
 		case ( SPRITE_INDEX_START + 164 ):
-			return std::unique_ptr<Sprite> ( new SnowmanSprite( x, y, true ) );
+			return std::unique_ptr<Sprite> ( generateOctopigSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 165 ):
 			return std::unique_ptr<Sprite> ( new ChamsbySprite( x, y ) );
@@ -680,11 +680,6 @@ void SpriteSystem::spawn( std::unique_ptr<Sprite>&& sprite )
 void SpriteSystem::spawnCactooieSpine( int x, int y, Direction::Horizontal direction )
 {
 	sprites_.emplace_back( new CactooieSpineSprite( x, y, direction ) );
-};
-
-void SpriteSystem::spawnSnowball( int x, int y, Direction::Horizontal direction )
-{
-	sprites_.emplace_back( new SnowballSprite( x, y, direction ) );
 };
 
 void SpriteSystem::spawnWaterdrop( int x, int y )
