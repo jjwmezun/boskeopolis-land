@@ -15,7 +15,7 @@ class ChamsbySprite : public Sprite
 		int health_;
 		int invincibility_;
 		TimerRandom<100, 10> walk_timer_;
-		TimerRandom<20, 40> shoot_timer_;
+		TimerRandom<10, 30> shoot_timer_;
 		int sdfkjslf;
 		int sfkjsadlf;
 		int asflkjhsal;

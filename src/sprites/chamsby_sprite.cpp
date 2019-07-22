@@ -3,12 +3,13 @@
 #include "chamsby_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
 ChamsbySprite::ChamsbySprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 16, 20, {}, 200, 2000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 16, 20, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
 	health_ ( 3 ),
 	invincibility_ ( 0 ),
 	walk_timer_ (),
@@ -26,6 +27,9 @@ void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	}
 	else if ( walk_timer_.update() )
 	{
+		const bool is_high_jump = mezun::randBool();
+		jump_start_speed_ = ( is_high_jump ) ? 1000 : 500;
+		jump_top_speed_ = ( is_high_jump ) ? 6000 : 4000;
 		jump();
 	}
 
