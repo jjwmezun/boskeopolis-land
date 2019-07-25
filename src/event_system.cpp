@@ -56,6 +56,8 @@ EventSystem::EventSystem( bool start_on )
 	can_climb_down_ ( false ),
 	is_sliding_ ( false ),
 	is_sliding_prev_ ( false ),
+	pause_hero_ ( false ),
+	hide_ticker_ ( false ),
 	misc_ ()
 {
 	resetMisc();
@@ -88,6 +90,8 @@ void EventSystem::reset()
 	can_climb_down_ = false;
 	is_sliding_ = false;
 	is_sliding_prev_ = false;
+	pause_hero_ = false;
+	hide_ticker_ = false;
 	resetPalette();
 	resetMisc();
 };

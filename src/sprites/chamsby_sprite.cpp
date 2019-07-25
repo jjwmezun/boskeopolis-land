@@ -2,6 +2,7 @@
 #include "bullet_sprite.hpp"
 #include "chamsby_sprite.hpp"
 #include "collision.hpp"
+#include "event_system.hpp"
 #include "health.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
@@ -13,37 +14,45 @@ ChamsbySprite::ChamsbySprite( int x, int y )
 	health_ ( 3 ),
 	invincibility_ ( 0 ),
 	walk_timer_ (),
-	shoot_timer_ ()
+	shoot_timer_ (),
+	start_timer_ ( 0 ),
+	name ( "Lance Chamsby", 8, Unit::WINDOW_HEIGHT_PIXELS - 32 )
 {};
 
 ChamsbySprite::~ChamsbySprite() {};
 
 void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	moveInDirectionX();
-	if ( !on_ground_ || is_jumping_ )
+	events.hide_ticker_ = true;
+	events.pause_hero_ = ( start_timer_ < 60 && start_timer_ > 4 );
+	if ( start_timer_ > 60 )
 	{
-		jump();
-	}
-	else if ( walk_timer_.update() )
-	{
-		const bool is_high_jump = mezun::randBool();
-		jump_start_speed_ = ( is_high_jump ) ? 1000 : 500;
-		jump_top_speed_ = ( is_high_jump ) ? 6000 : 4000;
-		jump();
-	}
+		moveInDirectionX();
+		if ( !on_ground_ || is_jumping_ )
+		{
+			jump();
+		}
+		else if ( walk_timer_.update() )
+		{
+			const bool is_high_jump = mezun::randBool();
+			jump_start_speed_ = ( is_high_jump ) ? 1000 : 500;
+			jump_top_speed_ = ( is_high_jump ) ? 6000 : 4000;
+			jump();
+		}
 
-	graphics_->visible_ = ( invincibility_ % 4 != 1 );
+		graphics_->visible_ = ( invincibility_ % 4 != 1 );
 
-	if ( invincibility_ > 0 )
-	{
-		--invincibility_;
+		if ( invincibility_ > 0 )
+		{
+			--invincibility_;
+		}
 	}
+	++start_timer_;
 };
 
 void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::HERO ) )
+	if ( !events.pause_hero_ && them.hasType( SpriteType::HERO ) )
 	{
 		if ( them.rightSubPixels() < hit_box_.x )
 		{
@@ -77,4 +86,10 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 			}
 		}
 	}
+};
+
+void ChamsbySprite::render( Camera& camera, bool priority )
+{
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	name.render();
 };

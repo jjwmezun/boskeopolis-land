@@ -57,7 +57,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 		{
 			++flashing_time_shade_;
 			flashing_timer_ = 0;
-			
+
 			if ( flashing_time_shade_ >= FLASHING_TIMER_SHADES_NUM )
 			{
 				flashing_time_shade_ = 0;
@@ -131,7 +131,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
 			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
 		}
-	
+
 		// Kill Count
 		if ( kill_counter_ > -1 )
 		{
@@ -144,8 +144,11 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	oxygen_meter_.render();
 
 	// TICKER
-	ticker_.render();
-	
+	if ( !events.hide_ticker_ )
+	{
+		ticker_.render();
+	}
+
 	// BOPS
 	if ( Inventory::bopsMultiplier() )
 	{

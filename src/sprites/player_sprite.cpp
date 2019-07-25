@@ -66,8 +66,11 @@ PlayerSprite::~PlayerSprite() {};
 
 void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	heroActions( camera, lvmap, events, sprites, blocks, health );
-	player_gfx_.update( *this, graphics_.get(), &events );
+	if ( !events.pause_hero_ )
+	{
+		heroActions( camera, lvmap, events, sprites, blocks, health );
+		player_gfx_.update( *this, graphics_.get(), &events );
+	}
 };
 
 // Actions only performed by hero version.

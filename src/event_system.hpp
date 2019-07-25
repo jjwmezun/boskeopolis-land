@@ -75,6 +75,8 @@ class EventSystem
 	bool can_climb_down_;
 	bool is_sliding_;
 	bool is_sliding_prev_;
+	bool pause_hero_;
+	bool hide_ticker_;
 	int change_map_;
 	int in_front_of_door_;
 	int move_water_;
