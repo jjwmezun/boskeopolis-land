@@ -1,12 +1,14 @@
 #pragma once
 
 #include "palette.hpp"
+#include <SDL2/SDL.h>
 
 class BlockSystem;
 class Camera;
 class Level;
 class Sprite;
 class SpriteSystem;
+class TextObj;
 
 class EventSystem
 {
@@ -32,7 +34,8 @@ class EventSystem
 		__NULL,
 		RAND_TREASURE,
 		SEWER_GFX,
-		FLAG
+		FLAG,
+		BOSS_UI
 	};
 
 	struct SewerGFX
@@ -42,12 +45,28 @@ class EventSystem
 		bool fade_in_;
 	};
 
+	struct BossUI
+	{
+		BossUI();
+		~BossUI();
+		BossUI( const BossUI& ) = delete;
+		BossUI& operator=( const BossUI& ) = delete;
+		BossUI( BossUI&& ) = delete;
+		BossUI& operator=( BossUI&& ) = delete;
+		void render() const;
+
+		sdl2::SDLRect dest_;
+		sdl2::SDLRect src_;
+		SDL_Texture* texture_;
+	};
+
 	union MiscData
 	{
 		MiscData();
 		RandTreasure rand_treasure_;
 		SewerGFX* sewer_gfx_;
 		MiscFlagType flag_;
+		BossUI* boss_ui_;
 	};
 
 	struct EMisc
@@ -76,7 +95,6 @@ class EventSystem
 	bool is_sliding_;
 	bool is_sliding_prev_;
 	bool pause_hero_;
-	bool hide_ticker_;
 	int change_map_;
 	int in_front_of_door_;
 	int move_water_;
@@ -136,6 +154,11 @@ class EventSystem
 	bool ensureSewerPointerIsSet( int x, int y );
 	void setSewerPosition( int x, int y );
 	bool onUpperLayer() const;
+
+	bool showBossUI() const;
+	void renderBossUI() const;
+	void createBossUI();
+	void changeBossUI( const TextObj& text, int health );
 
 	private:
 		EMisc misc_;

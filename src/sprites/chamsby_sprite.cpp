@@ -8,24 +8,29 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
+static constexpr int HEALTH_PER_HIT = 4;
+static constexpr int NUMBER_OF_HITS = 3;
+static constexpr int MAX_HP = NUMBER_OF_HITS * HEALTH_PER_HIT;
+
 ChamsbySprite::ChamsbySprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 16, 20, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
-	health_ ( 3 ),
+	health_ ( 0 ),
 	invincibility_ ( 0 ),
 	walk_timer_ (),
 	shoot_timer_ (),
-	start_timer_ ( 0 ),
-	name ( "Lance Chamsby", 8, Unit::WINDOW_HEIGHT_PIXELS - 32 )
+	go_ ( false ),
+	name ( "Lance Chamsby", 0, 0, Text::FontColor::DARK_GRAY ),
+	health_timer_ ( 0 )
 {};
 
 ChamsbySprite::~ChamsbySprite() {};
 
 void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	events.hide_ticker_ = true;
-	events.pause_hero_ = ( start_timer_ < 60 && start_timer_ > 4 );
-	if ( start_timer_ > 60 )
+	events.createBossUI();
+	events.pause_hero_ = !go_;
+	if ( go_ )
 	{
 		moveInDirectionX();
 		if ( !on_ground_ || is_jumping_ )
@@ -47,49 +52,68 @@ void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 			--invincibility_;
 		}
 	}
-	++start_timer_;
+	else
+	{
+		if ( health_timer_ >= 4 )
+		{
+			Audio::playSound( Audio::SoundType::SELECT );
+			++health_;
+			if ( health_ == MAX_HP )
+			{
+				go_ = true;
+				Audio::changeSong( "boss" );
+			}
+			health_timer_ = 0;
+		}
+		else
+		{
+			++health_timer_;
+		}
+		events.changeBossUI( name, health_ );
+	}
 };
 
 void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( !events.pause_hero_ && them.hasType( SpriteType::HERO ) )
+	if (them.hasType( SpriteType::HERO ) )
 	{
-		if ( them.rightSubPixels() < hit_box_.x )
+		if ( events.pause_hero_ )
 		{
-			direction_x_ = Direction::Horizontal::LEFT;
 		}
-		else if ( them.hit_box_.x > rightSubPixels() )
+		else
 		{
-			direction_x_ = Direction::Horizontal::RIGHT;
-		}
-		if ( shoot_timer_.update() && them.hit_box_.y < bottomSubPixels() && them.bottomSubPixels() > hit_box_.y )
-		{
-			sprites.spawn( std::make_unique<BulletSprite> ( centerXPixels(), centerYPixels(), Direction::horizontalToSimple( direction_x_ ), false ) );
-		}
-
-		if ( invincibility_ == 0 )
-		{
-			if ( them.collideBottomOnly( their_collision, *this ) )
+			if ( them.rightSubPixels() < hit_box_.x )
 			{
-				them.bounce();
-				Audio::playSound( Audio::SoundType::BOP );
-				--health_;
-				invincibility_ = 48;
-				if ( health_ == 0 )
-				{
-					kill();
-				}
+				direction_x_ = Direction::Horizontal::LEFT;
 			}
-			else if ( their_collision.collideAny() )
+			else if ( them.hit_box_.x > rightSubPixels() )
 			{
-				health.hurt();
+				direction_x_ = Direction::Horizontal::RIGHT;
+			}
+			if ( shoot_timer_.update() && them.hit_box_.y < bottomSubPixels() && them.bottomSubPixels() > hit_box_.y )
+			{
+				sprites.spawn( std::make_unique<BulletSprite> ( centerXPixels(), centerYPixels(), Direction::horizontalToSimple( direction_x_ ), false ) );
+			}
+
+			if ( invincibility_ == 0 )
+			{
+				if ( them.collideBottomOnly( their_collision, *this ) )
+				{
+					them.bounce();
+					Audio::playSound( Audio::SoundType::BOP );
+					health_ -= HEALTH_PER_HIT;
+					events.changeBossUI( name, health_ );
+					invincibility_ = 48;
+					if ( health_ <= 0 )
+					{
+						kill();
+					}
+				}
+				else if ( their_collision.collideAny() )
+				{
+					health.hurt();
+				}
 			}
 		}
 	}
-};
-
-void ChamsbySprite::render( Camera& camera, bool priority )
-{
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	name.render();
 };

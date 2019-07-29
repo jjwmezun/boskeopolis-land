@@ -9,5 +9,9 @@
 	],
 
 	"entrance_x": 4,
-	"entrance_y": 8
+	"entrance_y": 8,
+	"goal":
+	{
+		"message": "¡Defeat Lance Chamsby!"
+	}
 }

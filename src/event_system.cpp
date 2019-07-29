@@ -8,6 +8,7 @@
 #include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
+#include "text.hpp"
 
 static constexpr int WATER_NULL = -1;
 static constexpr int SEWER_START_W = 64;
@@ -19,6 +20,23 @@ EventSystem::SewerGFX::SewerGFX( int x, int y )
 	dest_ ( x, y, SEWER_START_W, SEWER_START_H ),
 	fade_in_ ( false )
 {};
+
+EventSystem::BossUI::BossUI()
+:
+	dest_ ( 8, Unit::WINDOW_HEIGHT_PIXELS - 16, Unit::WINDOW_WIDTH_PIXELS - 16, 8 ),
+	src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS - 16, 8 ),
+	texture_ ( Render::createRenderBox( dest_.w, dest_.h ) )
+{};
+
+EventSystem::BossUI::~BossUI()
+{
+	SDL_DestroyTexture( texture_ );
+}
+
+void EventSystem::BossUI::render() const
+{
+	Render::renderRenderBox( texture_, src_, dest_ );
+}
 
 EventSystem::MiscData::MiscData()
 :
@@ -57,7 +75,6 @@ EventSystem::EventSystem( bool start_on )
 	is_sliding_ ( false ),
 	is_sliding_prev_ ( false ),
 	pause_hero_ ( false ),
-	hide_ticker_ ( false ),
 	misc_ ()
 {
 	resetMisc();
@@ -91,7 +108,6 @@ void EventSystem::reset()
 	is_sliding_ = false;
 	is_sliding_prev_ = false;
 	pause_hero_ = false;
-	hide_ticker_ = false;
 	resetPalette();
 	resetMisc();
 };
@@ -102,7 +118,11 @@ void EventSystem::resetMisc()
 	{
 		delete misc_.data_.sewer_gfx_;
 	}
-	memset( &misc_, 0, sizeof( EMisc ) );
+	else if ( misc_.type_ == MiscType::BOSS_UI && misc_.data_.boss_ui_ != nullptr )
+	{
+		delete misc_.data_.boss_ui_;
+	}
+	memset( &misc_, 0, sizeof( EMisc ) ); // Just 0-out data.
 };
 
 void EventSystem::win()
@@ -493,4 +513,38 @@ void EventSystem::setSewerPosition( int x, int y )
 bool EventSystem::onUpperLayer() const
 {
 	return misc_.data_.flag_ == MiscFlagType::UPPER_LAYER;
+};
+
+bool EventSystem::showBossUI() const
+{
+	return misc_.type_ == MiscType::BOSS_UI;
+};
+
+void EventSystem::renderBossUI() const
+{
+	misc_.data_.boss_ui_->render();
+};
+
+void EventSystem::createBossUI()
+{
+	if ( misc_.type_ != MiscType::BOSS_UI )
+	{
+		misc_.type_ = MiscType::BOSS_UI;
+		misc_.data_.boss_ui_ = new BossUI();
+	}
+};
+
+void EventSystem::changeBossUI( const TextObj& name, int health )
+{
+	Render::setRenderTarget( misc_.data_.boss_ui_->texture_ );
+		Render::renderRect( misc_.data_.boss_ui_->src_, 1 );
+		name.render();
+		int left = ( name.words_.size() + 1 ) * 8;
+		while ( health > 0 )
+		{
+			Render::renderRect( { left + 1, 1, 2, 6 }, 5 );
+			left += 4;
+			--health;
+		}
+	Render::releaseRenderTarget();
 };

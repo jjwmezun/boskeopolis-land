@@ -144,7 +144,11 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	oxygen_meter_.render();
 
 	// TICKER
-	if ( !events.hide_ticker_ )
+	if ( events.showBossUI() )
+	{
+		events.renderBossUI();
+	}
+	else
 	{
 		ticker_.render();
 	}
