@@ -13,14 +13,22 @@ class ChamsbySprite : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
 
 	private:
+		enum class ChamsbyState
+		{
+			INTRO,
+			ATTACK,
+			HIT,
+			DEFEATED,
+			RUNNING
+		};
+
 		int health_;
 		int invincibility_;
 		TimerRandom<100, 10> walk_timer_;
 		TimerRandom<10, 30> shoot_timer_;
-		bool go_;
 		TextObj name;
 		int health_timer_;
-		int asflkjhsal;
+		ChamsbyState state_;
 		int saflkjsadlkfj;
 		int kjfjklkj;
 		int sdfakljaslfkdj;

@@ -449,17 +449,14 @@ void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, const Eve
 	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocksJustAbove( blocks ) ) )
 	{
 		jump();
-
 		if ( jump_start_ && !jump_end_ )
 		{
 			on_ladder_ = false;
-
 			if ( events.is_sliding_ )
 			{
 				slide_jump_ = true;
 				vx_ *= 5;
 			}
-
 			if ( hasMovementType( SpriteMovement::Type::GROUNDED ) && ( on_ground_prev_ || onGroundPadding() ) )
 			{
 				Audio::playSound( Audio::SoundType::JUMP );
