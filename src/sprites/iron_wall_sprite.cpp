@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "iron_wall_sprite.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
@@ -5,7 +6,7 @@
 
 IronWallSprite::IronWallSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 64, 300, {}, 250, 250, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/iron-wall.png" ), x, y, 64, 300, {}, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
 {};
 
 IronWallSprite::~IronWallSprite() {};
@@ -15,6 +16,11 @@ void IronWallSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 	if ( events.switch_ )
 	{
 		moveDown();
+		Audio::playSound( Audio::SoundType::CANCEL );
+		if ( fellInBottomlessPit( lvmap ) )
+		{
+			kill();
+		}
 	}
 };
 

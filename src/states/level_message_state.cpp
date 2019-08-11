@@ -36,7 +36,7 @@ LevelMessageState::LevelMessageState( const Palette& palette, std::string messag
 	),
 	message_
 	(
-		message,
+		Text::autoformat( message, LINE_LIMIT ),
 		TEXT_X,
 		TEXT_Y,
 		Text::FontColor::WHITE,

@@ -51,7 +51,9 @@ class Sprite : public Object
 			CAMERA_MOVE,
 			MOVEABLE_BLOCK,
 			FALLING_BOUGH,
-			RAFT
+			RAFT,
+			WATER_SPOUT,
+			BARREL
 		};
 
 		enum class CameraMovement

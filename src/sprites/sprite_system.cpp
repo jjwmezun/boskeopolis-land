@@ -52,6 +52,7 @@
 #include "gorilla_sprite.hpp"
 #include "guard_sprite.hpp"
 #include "handgun_sprite.hpp"
+#include "harpoon_sprite.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
@@ -143,7 +144,9 @@
 #include "volcano_monster_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
+#include "water_spout_sprite.hpp"
 #include "weight_platform_sprite.hpp"
+#include "window_monster_sprite.hpp"
 
 SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
 :
@@ -665,6 +668,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 166 ):
 			return std::unique_ptr<Sprite> ( new PikeSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 167 ):
+			return std::unique_ptr<Sprite> ( new WindowMonsterSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 168 ):
+			return std::unique_ptr<Sprite> ( new HarpoonSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 169 ):
+			return std::unique_ptr<Sprite> ( new WaterSpoutSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

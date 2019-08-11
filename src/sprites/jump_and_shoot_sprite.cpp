@@ -22,8 +22,10 @@ JumpAndShootSprite::~JumpAndShootSprite() {};
 void JumpAndShootSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	flipGraphicsOnRight();
-	handleMovement( blocks );
-	handleJumping();
+	if ( !handleJumping() )
+	{
+		handleMovement( blocks );
+	}
 	handleThrowing( sprites );
 };
 
@@ -37,18 +39,21 @@ void JumpAndShootSprite::customInteract( Collision& my_collision, Collision& the
 	}
 };
 
-void JumpAndShootSprite::handleJumping()
+bool JumpAndShootSprite::handleJumping()
 {
 	if ( onGround() && jump_timer_.update() )
 	{
 		jump();
 		jump_start_speed_ = jumpAcceleration();
 		jump_top_speed_ = jumpHeight();
+		return true;
 	}
 	else if ( !onGround() )
 	{
 		jump();
+		return true;
 	}
+	return false;
 };
 
 void JumpAndShootSprite::handleMovement( const BlockSystem& blocks )
@@ -68,7 +73,11 @@ void JumpAndShootSprite::handleMovement( const BlockSystem& blocks )
 
 		case ( Direction::Horizontal::LEFT ):
 		{
-			if ( blocks.blocksInTheWay( { hit_box_.x - 16000, bottomSubPixels(), 16000, 16000 }, BlockComponent::Type::SOLID ) )
+			if
+			(
+				blocks.blocksInTheWay( { hit_box_.x - 16000, bottomSubPixels(), 16000, 16000 }, BlockComponent::Type::SOLID ) &&
+				!blocks.blocksInTheWay( { hit_box_.x - 1000, hit_box_.y, 1000, hit_box_.h }, BlockComponent::Type::SOLID )
+			)
 			{
 				hit_box_.x -= 1000;
 			}
@@ -77,7 +86,11 @@ void JumpAndShootSprite::handleMovement( const BlockSystem& blocks )
 
 		case ( Direction::Horizontal::RIGHT ):
 		{
-			if ( blocks.blocksInTheWay( { rightSubPixels(), bottomSubPixels(), 16000, 16000 }, BlockComponent::Type::SOLID ) )
+			if
+			(
+				blocks.blocksInTheWay( { rightSubPixels(), bottomSubPixels(), 16000, 16000 }, BlockComponent::Type::SOLID ) &&
+				!blocks.blocksInTheWay( { rightSubPixels(), hit_box_.y, 1000, hit_box_.h }, BlockComponent::Type::SOLID )
+			)
 			{
 				hit_box_.x += 1000;
 			}

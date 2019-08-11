@@ -15,7 +15,7 @@ class JumpAndShootSprite : public Sprite
 
 	private:
 		void handleMovement( const BlockSystem& blocks );
-		void handleJumping();
+		bool handleJumping();
 		void handleThrowing( SpriteSystem& sprites );
 
 		TimerRandom<32, 8> move_timer_;

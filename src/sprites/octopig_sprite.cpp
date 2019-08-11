@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "jump_and_shoot_sprite.hpp"
 #include "octopig_sprite.hpp"
 #include "simple_projectile_sprite.hpp"
@@ -24,6 +25,7 @@ std::unique_ptr<Sprite> generateOctopigSprite( int x, int y )
 						std::make_unique<SpriteGraphics> ( "sprites/octopig.png", 16, 0, false, false, 0, false, -1, -1, 2, 2 )
 					)
 				);
+				Audio::playSound( Audio::SoundType::BOP );
 			}
 		)
 	);
