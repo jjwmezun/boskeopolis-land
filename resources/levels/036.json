@@ -3,7 +3,15 @@
 	"maps":
 	[
 		{
-			"slug": "space-3"
+			"slug": "space-3",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"width": 224,
+					"height": 8
+				}
+			]
 		}
 	],
 
@@ -12,8 +20,8 @@
 		"type": "stop_on_off"
 	},
 
-	"entrance_x": 12,
-	"entrance_y": 48,
+	"entrance_x": 4,
+	"entrance_y": 35,
 	"gem_challenge": 10000,
 	"time_challenge": 40
 }
