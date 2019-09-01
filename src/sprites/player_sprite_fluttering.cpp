@@ -24,7 +24,7 @@ void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSyst
 		break;
 	}
 	invincibilityFlicker( health );
-	
+
 	if ( Input::held( Input::Action::RUN ) )
 	{
 		run();
