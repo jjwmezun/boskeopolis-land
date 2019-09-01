@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "event_system.hpp"
 #include "level_state.hpp"
 #include "sprite.hpp"
@@ -23,6 +24,7 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 	{
 		case ( 0 ):
 			events.switch_ = true;
+			Audio::resumeSong();
 			state.newPalette( "Go Green" );
 		break;
 
@@ -51,6 +53,7 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 6 ) ):
+			Audio::pauseSong();
 			state.newPalette( "Stop Red" );
 		break;
 	}

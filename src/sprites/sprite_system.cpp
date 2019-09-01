@@ -120,6 +120,7 @@
 #include "sillyfish_sprite.hpp"
 #include "snowboulder_sprite.hpp"
 #include "snowman_sprite.hpp"
+#include "space_lizard_sprite.hpp"
 #include "spawn_anchor_missile_sprite.hpp"
 #include "spawn_icicle_sprite.hpp"
 #include "spider_sprite.hpp"
@@ -677,6 +678,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 169 ):
 			return std::unique_ptr<Sprite> ( new WaterSpoutSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 170 ):
+			return std::unique_ptr<Sprite> ( new SpaceLizardSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

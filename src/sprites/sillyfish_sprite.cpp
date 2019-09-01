@@ -15,6 +15,7 @@ void SillyfishSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	turnOnEdge( blocks );
 	turnOnCollide();
 	moveInDirectionX();
+	updateGraphics();
 };
 
 void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
