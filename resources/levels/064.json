@@ -4,10 +4,40 @@
 	"maps":
 	[
 		{
-			"slug": "sky-5"
+			"slug": "sky-6",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"width": 88,
+					"height": 80
+				},
+				{
+					"type": "image",
+					"img": "dim_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": 40,
+					"y_speed": 40,
+					"alpha": 16
+				},
+				{
+					"type": "image",
+					"img": "bright_clouds.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25,
+					"x_speed": -80,
+					"y_speed": -80,
+					"alpha": 16
+				}
+			]
 		}
 	],
 
-	"entrance_x": 56,
-	"entrance_y": 49
+	"entrance_x": 81,
+	"entrance_y": -2
 }

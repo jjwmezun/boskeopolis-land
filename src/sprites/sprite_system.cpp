@@ -90,6 +90,7 @@
 #include "player_doom_sprite.hpp"
 #include "player_graphics.hpp"
 #include "player_open_chest_sprite.hpp"
+#include "player_plane_sprite.hpp"
 #include "player_spaceship_sprite.hpp"
 #include "player_sprite_fluttering.hpp"
 #include "pi_block_sprite.hpp"
@@ -826,6 +827,9 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		case ( HeroType::DOOM ):
 			hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
 		break;
+		case ( HeroType::PLANE ):
+			hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
+		break;
 	}
 
 	clearSprites();
@@ -1019,6 +1023,10 @@ SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 	else if ( property.compare( "DOOM" ) == 0 )
 	{
 		return HeroType::DOOM;
+	}
+	else if ( property.compare( "PLANE" ) == 0 )
+	{
+		return HeroType::PLANE;
 	}
 
 	return HeroType::NORMAL;

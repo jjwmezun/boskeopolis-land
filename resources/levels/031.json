@@ -4,47 +4,17 @@
 	"maps":
 	[
 		{
-			"slug": "sneak-1",
+			"slug": "space-5",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "moon.png",
-					"width": 32,
-					"height": 32,
-					"x_offset": 240,
-					"y_offset": 368,
-					"x_scroll": 0,
-					"y_scroll": 0,
-					"frames": 1,
-					"x_repeat": false,
-					"y_repeat": false
-				},
-				{
-					"type": "image",
 					"img": "rain.png",
-					"width": 8,
-					"height": 8,
-					"x_offset": 0,
-					"y_offset": 0,
-					"x_scroll": 0,
-					"y_scroll": 0,
+					"width": 480,
+					"height": 320,
 					"frames": 16,
-					"x_repeat": true,
-					"y_repeat": true,
-					"x_speed": 0,
-					"y_speed": 0,
-					"animation_speed": 4
-				},
-				{
-					"type": "image",
-					"img": "darkroom.png",
-					"width": 128,
-					"height": 160,
-					"x_offset": 0,
-					"y_offset": -72,
-					"x_scroll": 0.5,
-					"y_scroll": 0.8
+					"animation_speed": 4,
+					"alpha": 128
 				}
 			]
 		}
