@@ -13,11 +13,4 @@ class PlayerPlaneSprite : public Sprite
 	private:
 		double angle_;
 		double speed_;
-		double sfsafsdfsf;
-		double afklj;
-		double aflskj;
-		double askdflj;
-		double kajnsfd;
-		double afslkj;
-		double asfdlk;
 };

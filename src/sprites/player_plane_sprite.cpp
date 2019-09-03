@@ -12,7 +12,7 @@
 
 PlayerPlaneSprite::PlayerPlaneSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png" ), x, y, 16, 16, { SpriteType::HERO }, ACCELERATION, MAX_SPEED, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, 10.0 ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0, false, -2, -2, 4, 4 ), x, y, 12, 12, { SpriteType::HERO }, ACCELERATION, MAX_SPEED, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, 10.0 ),
 	angle_ ( 180.0 ),
 	speed_ ( 0.0 )
 {};
@@ -21,11 +21,11 @@ PlayerPlaneSprite::~PlayerPlaneSprite() {};
 
 void PlayerPlaneSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( Input::held( Input::Action::MOVE_RIGHT ) )
+	if ( Input::held( Input::Action::MOVE_RIGHT ) || Input::held( Input::Action::RUN ) || Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		angle_ -= TURN_SPEED;
 	}
-	else if ( Input::held( Input::Action::MOVE_LEFT ) )
+	else if ( Input::held( Input::Action::MOVE_LEFT ) || Input::held( Input::Action::JUMP ) || Input::held( Input::Action::MOVE_UP ) )
 	{
 		angle_ += TURN_SPEED;
 	}
@@ -52,4 +52,8 @@ void PlayerPlaneSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 
 void PlayerPlaneSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
+	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
+	{
+		health.hurt();
+	}
 };
