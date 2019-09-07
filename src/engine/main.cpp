@@ -10,6 +10,7 @@
 #include "mezun_math.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
+#include "message_state.hpp"
 #include "title_state.hpp"
 #include <vector>
 #include <iostream>
@@ -136,7 +137,6 @@ namespace Main
 
 		while ( !testTotalQuit() )
 		{
-			const int frame_start_time = SDL_GetTicks();
 			while ( SDL_PollEvent( &event ) != 0 )
 			{
 				switch ( event.type )
@@ -227,9 +227,6 @@ namespace Main
 
 				Input::update();
 				render();
-				const int frame_end_time = SDL_GetTicks();
-				const int frame_speed = frame_end_time - frame_start_time;
-				//std::cout<<"Frame Speed: "<<frame_speed<<std::endl;
 			}
 		}
 	};
@@ -331,14 +328,6 @@ namespace Main
 				push_states_.pop_front();
 				pushStateSafe();
 			}
-
-			// Fixes graphical bug wherein start o' level state shows before message appears due to delay
-			// 'tween creating message state in init just before now & the next time this loop checks for
-			// state change calls.
-			if ( state_change_type_ == StateChangeType::PUSH )
-			{
-				//pushStateSafe();
-			}
 		}
 	};
 
@@ -374,7 +363,25 @@ namespace Main
 		//Ensure state list is clear:
 		states_.clear();
 
-		pushState( std::unique_ptr<GameState> ( new TitleState() ) );
+		states_.push_back( std::unique_ptr<GameState>
+			(
+				new MessageState
+				(
+					"Learn Mo' 'bout this project's development @\nhttps://www.boskeopolis-land.com",
+					MessageState::Type::CHANGE,
+					{ "Grayscale", 1 },
+					std::unique_ptr<GameState> ( new TitleState() ),
+					Text::FontColor::BLACK,
+					Text::FontColor::__NULL,
+					"gem",
+					false
+				)
+			)
+		);
+		states_.back()->changePalette();
+		states_.back()->init();
+		transition_state_ = TransitionState::FADE_IN;
+		transition_level_ = TRANSITION_LIMIT;
 	};
 
 	bool nextFrame( int interval, int duration )

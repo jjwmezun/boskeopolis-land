@@ -33,7 +33,6 @@ TitleState::TitleState()
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
 	can_load_ ( false )
 {
-	Audio::changeSong( "title" );
 };
 
 TitleState::~TitleState() {};
@@ -107,6 +106,7 @@ void TitleState::init()
 	}
 	ifs.close();
 	Inventory::reset();
+	Audio::changeSong( "title" );
 };
 
 void TitleState::backFromPop()

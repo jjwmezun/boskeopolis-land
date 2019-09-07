@@ -63,7 +63,7 @@ namespace Audio
 			Mix_AllocateChannels( MAX_CHANNELS );
 			Mix_VolumeMusic( MIX_MAX_VOLUME / 2 );
 			Mix_Volume( -1, MIX_MAX_VOLUME );
-			sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
+			sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.mp3" );
 			sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );
 			sounds_[ ( int )( SoundType::HEAL ) ] = loadSound( "heal.wav" );
 			sounds_[ ( int )( SoundType::JUMP ) ] = loadSound( "jump.wav" );
