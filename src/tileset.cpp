@@ -35,6 +35,7 @@
 #include "block_component_very_steep.hpp"
 #include "block_component_sludge_water.hpp"
 #include "block_component_solid.hpp"
+#include "block_component_spark_wall.hpp"
 #include "block_component_sticky.hpp"
 #include "block_component_swimmable.hpp"
 #include "block_component_switch_off.hpp"
@@ -587,6 +588,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "hole" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentHole> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "spark_wall" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSparkWall> () );
 					}
 				}
 

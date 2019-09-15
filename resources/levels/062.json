@@ -3,12 +3,20 @@
 	"maps":
 	[
 		{
-			"slug": "space-4"
+			"slug": "space-6",
+			"backgrounds":
+			[
+				{
+					"type": "constellation",
+					"width": 166,
+					"height": 72
+				}
+			]
 		}
 	],
 
-	"entrance_x": 23,
-	"entrance_y": 7,
+	"entrance_x": 2,
+	"entrance_y": 18,
 	"gem_challenge": 0,
 	"time_challenge": 0
 }

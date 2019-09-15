@@ -53,7 +53,8 @@ class Sprite : public Object
 			FALLING_BOUGH,
 			RAFT,
 			WATER_SPOUT,
-			BARREL
+			BARREL,
+			SPARK
 		};
 
 		enum class CameraMovement

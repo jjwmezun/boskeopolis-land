@@ -57,7 +57,7 @@
         {
          "name":"music",
          "type":"string",
-         "value":"space"
+         "value":"forecast"
         }, 
         {
          "name":"show_on_off",
