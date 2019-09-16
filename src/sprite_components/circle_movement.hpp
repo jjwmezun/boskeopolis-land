@@ -48,10 +48,10 @@ class CircleMovement
             return angle_;
         };
 
-            sdl2::SDLRect position_;
-            const double speed_;
-            double angle_;
-            const int start_x_;
-            const int start_y_;
-            const int radius_;
+        sdl2::SDLRect position_;
+        const double speed_;
+        double angle_;
+        const int start_x_;
+        const int start_y_;
+        const int radius_;
 };

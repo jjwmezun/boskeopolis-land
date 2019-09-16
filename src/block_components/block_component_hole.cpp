@@ -6,7 +6,7 @@
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
 
-BlockComponentHole::BlockComponentHole() {};
+BlockComponentHole::BlockComponentHole() : BlockComponent( Type::HOLE ) {};
 BlockComponentHole::~BlockComponentHole() {};
 
 void BlockComponentHole::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const

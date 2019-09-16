@@ -55,105 +55,111 @@ void DungeonEnemySprite::customInteract( Collision& my_collision, Collision& the
 
 void DungeonEnemySprite::updateActions( SpriteSystem& sprites )
 {
-	switch ( state_ )
+	if ( stationary_ )
 	{
-		case ( State::WALK ):
-		{
-			if ( stationary_ )
-			{
-				state_ = State::CHANGE;
-				break;
-			}
-
-			moveInDirection();
-			if ( walk_timer_ >= walk_delay_ )
-			{
-				state_ = State::CHANGE;
-			}
-			else
-			{
-				if ( collide_top_ || collide_left_ || collide_right_ || collide_bottom_ )
-				{
-					fullStopX();
-					fullStopY();
-					if ( collide_top_ )
-					{
-						direction_ = Direction::Simple::UP;
-					}
-					else if ( collide_bottom_ )
-					{
-						direction_ = Direction::Simple::DOWN;
-					}
-					else if ( collide_left_ )
-					{
-						direction_ = Direction::Simple::RIGHT;
-					}
-					else if ( collide_right_ )
-					{
-						direction_ = Direction::Simple::LEFT;
-					}
-				}
-				++walk_timer_;
-			}
-		}
-		break;
-
-		case ( State::SHOOT ):
+		if ( walk_timer_ >= 20 )
 		{
 			shoot( sprites );
-			state_ = State::CHANGE;
+			walk_timer_ = 0;
 		}
-		break;
-
-		case ( State::CHANGE ):
+		else
 		{
-			fullStopX();
-			fullStopY();
-			switch ( next_state_ )
-			{
-				case ( State::WALK ):
-				{
-					if ( walk_timer_ >= walk_delay_ + 8 )
-					{
-						walk_delay_ = generateWalkDelay();
-						walk_timer_ = 0;
-						if ( !stationary_ )
-						{
-							direction_ = Direction::randomSimple( false );
-						}
-						next_state_ = State::CHANGE;
-						state_ = State::WALK;
-					}
-					else
-					{
-						++walk_timer_;
-					}
-				}
-				break;
-
-				case ( State::SHOOT ):
-				{
-					if ( walk_timer_ >= walk_delay_ + 32 )
-					{
-						walk_timer_ = walk_delay_ + 34;
-						next_state_ = State::WALK;
-						state_ = State::SHOOT;
-					}
-					else
-					{
-						++walk_timer_;
-					}
-				}
-				break;
-
-				case ( State::CHANGE ):
-				{
-					next_state_ = ( testShoot() ) ? State::SHOOT : State::WALK;
-				}
-				break;
-			}
+			++walk_timer_;
 		}
-		break;
+	}
+	else
+	{
+		switch ( state_ )
+		{
+			case ( State::WALK ):
+			{
+				moveInDirection();
+				if ( walk_timer_ >= walk_delay_ )
+				{
+					state_ = State::CHANGE;
+				}
+				else
+				{
+					if ( collide_top_ || collide_left_ || collide_right_ || collide_bottom_ )
+					{
+						fullStopX();
+						fullStopY();
+						if ( collide_top_ )
+						{
+							direction_ = Direction::Simple::UP;
+						}
+						else if ( collide_bottom_ )
+						{
+							direction_ = Direction::Simple::DOWN;
+						}
+						else if ( collide_left_ )
+						{
+							direction_ = Direction::Simple::RIGHT;
+						}
+						else if ( collide_right_ )
+						{
+							direction_ = Direction::Simple::LEFT;
+						}
+					}
+					++walk_timer_;
+				}
+			}
+			break;
+
+			case ( State::SHOOT ):
+			{
+				shoot( sprites );
+				state_ = State::CHANGE;
+			}
+			break;
+
+			case ( State::CHANGE ):
+			{
+				fullStopX();
+				fullStopY();
+				switch ( next_state_ )
+				{
+					case ( State::WALK ):
+					{
+						if ( walk_timer_ >= walk_delay_ + 8 )
+						{
+							walk_delay_ = generateWalkDelay();
+							walk_timer_ = 0;
+							direction_ = Direction::randomSimple( false );
+							next_state_ = State::CHANGE;
+							state_ = State::WALK;
+						}
+						else
+						{
+							++walk_timer_;
+						}
+					}
+					break;
+
+					case ( State::SHOOT ):
+					{
+						if ( walk_timer_ >= walk_delay_ + 32 )
+						{
+							walk_timer_ = walk_delay_ + 34;
+							next_state_ = State::WALK;
+							state_ = State::SHOOT;
+						}
+						else
+						{
+							++walk_timer_;
+						}
+					}
+					break;
+
+					case ( State::CHANGE ):
+					{
+						next_state_ = ( testShoot() ) ? State::SHOOT : State::WALK;
+					}
+					break;
+				}
+			}
+			break;
+		}
 	}
 }
 

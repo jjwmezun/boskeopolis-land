@@ -4,8 +4,6 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
-#include <iostream>
-
 // Note: top_speed_ used as hole trigger 'cause polymorphism is too limited for using sane variable names.
 
 TopDownMoveableBlockSprite::TopDownMoveableBlockSprite( int x, int y )
@@ -101,5 +99,5 @@ sdl2::SDLRect TopDownMoveableBlockSprite::getBottomBoundarySpace() const
 
 inline bool TopDownMoveableBlockSprite::blocksInTheWay( const BlockSystem& blocks, const sdl2::SDLRect boundary )
 {
-	return blocks.blocksInTheWay( boundary );
+	return blocks.blocksInTheWayExcept( boundary, BlockComponent::Type::HOLE );
 };

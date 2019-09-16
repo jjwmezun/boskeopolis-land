@@ -18,6 +18,15 @@ static bool testBlockInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type t
 		b.topSubPixels() < rect.bottom() &&
 		b.bottomSubPixels() > rect.y;
 };
+static bool testBlockInTheWayExcept( const sdl2::SDLRect& rect, BlockComponent::Type type, const Block& b )
+{
+	return
+		( !b.hasComponentType( type ) ) &&
+		b.rightSubPixels() > rect.x      &&
+		b.leftSubPixels() < rect.right() &&
+		b.topSubPixels() < rect.bottom() &&
+		b.bottomSubPixels() > rect.y;
+};
 
 BlockSystem::BlockSystem( const Map& lvmap )
 :
@@ -206,6 +215,44 @@ bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Typ
 				{
 					const Block& block = blocks_[ n ];
 					if ( block.typeID() != -1 && testBlockInTheWay( rect, type, block ) )
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+};
+
+bool BlockSystem::blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponent::Type type ) const
+{
+	if ( !blocks_work_offscreen_ )
+	{
+		for ( const auto& block : blocks_ )
+		{
+			if ( block.typeID() != -1 && testBlockInTheWayExcept( rect, type, block ) )
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		// Only test blocks near the rect.
+		const int first_x = floor( rect.x        / Unit::SUBPIXELS_PER_BLOCK ) - 3; // Block x a bit left o' rect.
+		const int first_y = floor( rect.y        / Unit::SUBPIXELS_PER_BLOCK ) - 3; // Block y a bit 'bove rect.
+		const int last_x  = ceil ( rect.right()  / Unit::SUBPIXELS_PER_BLOCK ) + 3; // Block x a bit right o' rect.
+		const int last_y  = ceil ( rect.bottom() / Unit::SUBPIXELS_PER_BLOCK ) + 3; // Block y a bit below rect.
+		for ( int y = first_y; y < last_y; ++y )
+		{
+			for ( int x = first_x; x < last_x; ++x )
+			{
+				const int n = y * map_width_ + x;
+				if ( n < blocks_.size() )
+				{
+					const Block& block = blocks_[ n ];
+					if ( block.typeID() != -1 && testBlockInTheWayExcept( rect, type, block ) )
 					{
 						return true;
 					}

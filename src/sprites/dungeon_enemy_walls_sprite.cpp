@@ -3,10 +3,26 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
-DungeonEnemyWallsSprite::DungeonEnemyWallsSprite( int x, int y )
+DungeonEnemyWallsSprite::DungeonEnemyWallsSprite( int x, int y, Direction::Simple direction )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/dungeon2.png", 96, 32 ), x, y, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
-{};
+{
+	direction_ = direction;
+	switch ( direction )
+	{
+		case ( Direction::Simple::LEFT ):
+		{
+		}
+		break;
+
+		case ( Direction::Simple::UP ):
+		{
+			graphics_->current_frame_x_ = 144;
+			hit_box_.w = 48000;
+		}
+		break;
+	}
+};
 
 DungeonEnemyWallsSprite::~DungeonEnemyWallsSprite() {};
 
@@ -14,9 +30,25 @@ void DungeonEnemyWallsSprite::customUpdate( Camera& camera, Map& lvmap, EventSys
 {
 	if ( !sprites.spritesOnScreen( camera, SpriteType::ENEMY ) )
 	{
-		if ( hit_box_.y > original_hit_box_.y - hit_box_.h )
+		switch ( direction_ )
 		{
-			hit_box_.y -= 250;
+			case ( Direction::Simple::LEFT ):
+			{
+				if ( hit_box_.y > original_hit_box_.y - hit_box_.h )
+				{
+					hit_box_.y -= 250;
+				}
+			}
+			break;
+
+			case ( Direction::Simple::UP ):
+			{
+				if ( hit_box_.x < original_hit_box_.x + hit_box_.w )
+				{
+					hit_box_.x += 250;
+				}
+			}
+			break;
 		}
 	}
 };

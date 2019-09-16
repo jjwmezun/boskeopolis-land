@@ -75,15 +75,10 @@
 		}
 	],
 
-	"entrance_x2": 62,
-	"entrance_y2": 81,
-		"entrance_x": 79,
-		"entrance_y": 17,
-
+	"entrance_x": 62,
+	"entrance_y": 81,
 	"gem_challenge": 0,
 	"time_challenge": 0,
-	"camera_x2": 50,
-	"camera_y2": 72,
-	"camera_x": 75,
-	"camera_y": 12
+	"camera_x": 50,
+	"camera_y": 72
 }

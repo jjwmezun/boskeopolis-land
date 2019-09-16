@@ -19,7 +19,8 @@ class BlockComponent
 		enum class Type
 		{
 			NOTYPE,
-			SOLID
+			SOLID,
+			HOLE
 		};
 
 		BlockComponent( Type type = Type::NOTYPE );
