@@ -5,7 +5,7 @@
 #include "sprite_system.hpp"
 #include "top_down_bullet_sprite.hpp"
 
-static constexpr int MAX_HP = 3;
+static constexpr int MAX_HP = 2;
 static constexpr int NORMAL_OXYGEN_LIMIT = 720;
 static constexpr int STRONGER_OXYGEN_LIMIT = 720 + 360;
 static constexpr int HEAT_LIMIT = 500;
