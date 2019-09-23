@@ -14,7 +14,12 @@ class DungeonHealerSprite : public Sprite
         void render( Camera& camera, bool priority ) override;
 
     private:
+        bool invincibilityFlickerOff() const;
+
+        SpriteGraphics laser_gfx_;
         SpriteGraphics heart_gfx_;
+        sdl2::SDLRect laser_box_;
         sdl2::SDLRect heart_box_;
         TextObj text_;
+        int timer_;
 };

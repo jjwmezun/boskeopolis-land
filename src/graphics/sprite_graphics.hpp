@@ -30,7 +30,7 @@ class SpriteGraphics
 			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 		);
 
-		const std::string texture_;
+		std::string texture_;
 		double rotation_;
 		int prev_frame_x_;
 		int prev_frame_y_;
