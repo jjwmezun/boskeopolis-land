@@ -8,8 +8,8 @@
 
 DungeonHealerSprite::DungeonHealerSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 16, 16 ), x + Unit::BlocksToPixels( 12 ), y + Unit::BlocksToPixels( 5 ), 18, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
-    laser_gfx_ ( "tilesets/nut-monk", 0, 32 ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 16, 16, false, false, 0.0, true ), x + Unit::BlocksToPixels( 12 ), y + Unit::BlocksToPixels( 5 ), 18, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+    laser_gfx_ ( "sprites/nut-monk.png", 0, 32 ),
     heart_gfx_ ( "tilesets/universal.png", 16, 0 ),
     laser_box_ ( Unit::PixelsToSubPixels({ x + Unit::BlocksToPixels( 12 ), y + Unit::BlocksToPixels( 5 ), 16, 96 }) ),
     heart_box_ ( Unit::PixelsToSubPixels( x ) + Unit::BlocksToSubPixels( 12 ), Unit::PixelsToSubPixels( y ) + Unit::BlocksToSubPixels( 6 ), Unit::BlocksToSubPixels( 1 ), Unit::BlocksToSubPixels( 1 ) ),
@@ -22,7 +22,7 @@ DungeonHealerSprite::~DungeonHealerSprite() {};
 void DungeonHealerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
     text_.update();
-    if ( timer_ >= 0 && timer_ <= 48 )
+    if ( timer_ >= 0 && timer_ < 48 )
     {
         ++timer_;
     }
@@ -44,6 +44,14 @@ void DungeonHealerSprite::customInteract( Collision& my_collision, Collision& th
             health.heal();
             heart_box_.x = heart_box_.y = Unit::BlocksToPixels( -1 );
         }
+        if ( timer_ >= 47 )
+        {
+            const auto laser_collision = them.testCollision( laser_box_ );
+            if ( laser_collision.collideAny() )
+            {
+                them.kill();
+            }
+        }
     }
     else if ( them.hasType( SpriteType::HEROS_BULLET ) )
     {
@@ -62,9 +70,19 @@ void DungeonHealerSprite::render( Camera& camera, bool priority )
     {
         text_.render();
     }
+    if ( timer_ >= 47 )
+    {
+        laser_gfx_.render( Unit::SubPixelsToPixels( laser_box_ ), &camera, priority );
+        Render::colorCanvas( 1 );
+    }
 };
 
 bool DungeonHealerSprite::invincibilityFlickerOff() const
 {
 	return timer_ >= 0 && timer_ % 4 == 1;
+};
+
+void DungeonHealerSprite::reset()
+{
+    text_.chars_to_render_ = 0;
 };
