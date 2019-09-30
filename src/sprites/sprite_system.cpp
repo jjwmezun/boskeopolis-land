@@ -52,6 +52,7 @@
 #include "gemmy_sprite.hpp"
 #include "ghost_sprite.hpp"
 #include "gorilla_sprite.hpp"
+#include "guard_spike_sprite.hpp"
 #include "guard_sprite.hpp"
 #include "handgun_sprite.hpp"
 #include "harpoon_sprite.hpp"
@@ -697,6 +698,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 174 ):
 			return std::unique_ptr<Sprite> ( new DungeonHealerSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 175 ):
+			return std::unique_ptr<Sprite> ( new GuardSpikeSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

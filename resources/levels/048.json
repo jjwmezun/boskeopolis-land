@@ -34,15 +34,15 @@
 			"warps":
 			[
 				{
-					"map": 2,
-					"entrance_x": 1,
-					"entrance_y": 8,
-					"location": [ 19, 25, 0, 12 ]
-				},
-				{
 					"map": 1,
 					"entrance_x": 0,
 					"entrance_y": 59,
+					"location": [ 19, 25, 0, 12 ]
+				},
+				{
+					"map": 2,
+					"entrance_x": 1,
+					"entrance_y": 8,
 					"location": [ 222, 25, 0, 12 ],
 					"camera_x": 32
 				}
