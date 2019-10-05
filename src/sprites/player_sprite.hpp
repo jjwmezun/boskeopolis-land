@@ -24,13 +24,13 @@ class PlayerSprite : public Sprite
 			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<SpriteGraphics> ( "sprites/autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,
-			int top_speed = 2000
+			int top_speed = 2000,
+			DuckData duck_data = { false, 9, 11, -6, 8 }
 		);
 		~PlayerSprite();
 
 		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
-		virtual void duck();
 		virtual void unduck( const BlockSystem& blocks );
 		virtual bool canJump() const override;
 
@@ -40,13 +40,13 @@ class PlayerSprite : public Sprite
 		bool isLookingUp() const;
 
 	protected:
-		PlayerGraphics player_gfx_;
-
-	private:
 		bool door_lock_;
 		bool is_looking_up_;
 		std::unique_ptr<InputComponent> input_;
+		const DuckData duck_data_;
+		PlayerGraphics player_gfx_;
 
+	private:
 		void forceUnduck();
 		void handleCameraMovement( Camera& camera );
 		void handleDoorBehavior( EventSystem& events );

@@ -16,7 +16,8 @@ ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
 		std::make_unique<SpriteGraphics> ( "sprites/cowgirl_autumn.png", 0, 0, false, false, 0, false, -8, -3, 12, 5 ),
 		SpriteType::HERO,
 		160,
-		2000
+		2000,
+		{ false, 9, 11, -8, 11 }
 	),
 	is_shooting_ ( false ),
 	is_shooting_up_ ( false ),
@@ -180,24 +181,6 @@ void ShooterPlayerSprite::updateGFX()
 	else
 	{
 		graphics_->current_frame_y_ = 0;
-	}
-};
-
-void ShooterPlayerSprite::duck()
-{
-	// Can continue ducking while in air, but only start duck on ground.
-	if ( isDucking() || onGround() )
-	{
-		// Hacky way to make player warp to the right position after height changes.
-		if ( !isDucking() )
-		{
-			hit_box_.y += Unit::PixelsToSubPixels( 9 );
-			graphics_->y_adjustment_ = -8;
-			graphics_->h_adjustment_ = 11;
-		}
-
-		is_ducking_ = true;
-		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 11 );
 	}
 };
 

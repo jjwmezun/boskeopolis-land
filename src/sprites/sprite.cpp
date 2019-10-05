@@ -979,3 +979,20 @@ bool Sprite::inBox( const sdl2::SDLRect& box ) const
 		&& hit_box_.y < box.bottom()
 		&& bottomSubPixels() > box.y;
 };
+
+void Sprite::duck( const DuckData& duck_data )
+{
+	// Can continue ducking while in air, but only start duck on ground.
+	if ( duck_data.can_duck_while_jumping || isDucking() || onGround() )
+	{
+		// Hacky way to make player warp to the right position after height changes.
+		if ( !isDucking() )
+		{
+			hit_box_.y += Unit::PixelsToSubPixels( duck_data.y_change );
+			graphics_->y_adjustment_ = duck_data.gfx_y_change;
+			graphics_->h_adjustment_ = duck_data.gfx_h_change;
+		}
+		is_ducking_ = true;
+		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( duck_data.h_change );
+	}
+};

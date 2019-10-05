@@ -15,9 +15,9 @@ class PlayerCartSprite : public Sprite
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
 	private:
-		void duck();
 		void unduck();
 		void updateGraphics();
 
-		bool reached_height_ = false;
+		bool reached_height_;
+		const DuckData duck_data_;
 };

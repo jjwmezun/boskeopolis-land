@@ -31,6 +31,14 @@ class SpriteSystem;
 class Sprite : public Object
 {
 	public:
+		struct DuckData
+		{
+			bool can_duck_while_jumping;
+			int y_change;
+			int h_change;
+			int gfx_y_change;
+			int gfx_h_change;
+		};
 		enum class SpriteType
 		{
 			NOTYPE,
@@ -123,11 +131,11 @@ class Sprite : public Object
 		virtual bool canJump() const;
 		bool isJumping() const;
 		bool isJumpingPrev() const;
-		bool isDucking() const; // Not needed
-		bool lookingUp() const; // Not needed
+		bool isDucking() const;
+		bool lookingUp() const;
 
 		bool isMoving() const;
-		bool isRunning() const; // Not needed
+		bool isRunning() const;
 		SpriteMovement::Type movementType() const;
 		bool hasMovementType( SpriteMovement::Type type ) const;
 
@@ -171,15 +179,16 @@ class Sprite : public Object
 
 		void slowFall();
 		void fastFall();
-		void stopDucking(); // Not needed
-		void touchLadder(); // Not needed
-		void grabLadder(); // Not needed
-		void releaseLadder(); // Not needed
-		void lookUp(); // Not needed
-		void stopLookingUp(); // Not needed
+		void duck( const DuckData& duck_data );
+		void stopDucking();
+		void touchLadder();
+		void grabLadder();
+		void releaseLadder();
+		void lookUp();
+		void stopLookingUp();
 
-		void run(); // Not needed
-		void stopRunning(); // Not needed
+		void run();
+		void stopRunning();
 
 		void kill();
 		void killNoAnimation();
@@ -250,7 +259,7 @@ class Sprite : public Object
 		static const StuckSpriteMovement stuck_movement_;
 
 		const bool despawn_when_dead_;
-		bool jump_lock_; // Not needed
+		bool jump_lock_;
 		bool on_ground_;
 		bool in_water_;
 		bool on_ground_prev_ = false;
@@ -260,9 +269,9 @@ class Sprite : public Object
 		bool jump_end_ = false;
 		bool is_bouncing_ = false;
 		bool is_bouncing_prev_ = false;
-		bool slide_jump_ = false; // Not needed
-		bool is_ducking_ = false; // Not needed
-		bool on_ladder_ = false; // Not needed
+		bool slide_jump_ = false;
+		bool is_ducking_ = false;
+		bool on_ladder_ = false;
 		bool collide_top_ = false;
 		bool collide_bottom_ = false;
 		bool collide_top_prev_ = false;
@@ -281,8 +290,8 @@ class Sprite : public Object
 		const int map_id_;
 		const int start_speed_walk_;
 		const int top_speed_walk_;
-		const int start_speed_run_; // Not needed
-		const int top_speed_run_; // Not needed
+		const int start_speed_run_;
+		const int top_speed_run_;
 		int vx_;
 		int vy_;
 		int x_prev_;
@@ -293,8 +302,8 @@ class Sprite : public Object
 		int top_speed_downward_;
 		int acceleration_x_;
 		int acceleration_y_;
-		int fall_start_speed_ = gravity_start_speed_; // Not needed
-		int fall_top_speed_ = gravity_top_speed_; // Not needed
+		int fall_start_speed_ = gravity_start_speed_;
+		int fall_top_speed_ = gravity_top_speed_;
 		int jump_start_speed_;
 		int jump_top_speed_normal_;
 		int jump_top_speed_;

@@ -26,7 +26,8 @@ PlayerSprite::PlayerSprite
 	std::unique_ptr<SpriteGraphics>&& gfx,
 	SpriteType type,
 	int start_speed,
-	int top_speed
+	int top_speed,
+	DuckData duck_data
 )
 :
 	Sprite
@@ -53,7 +54,8 @@ PlayerSprite::PlayerSprite
 		.2
 	),
 	input_ ( std::move( input ) ),
-	door_lock_ ( true )
+	door_lock_ ( true ),
+	duck_data_ ( duck_data )
 {
 	// Be absolutely sure input component is set.
 	if ( input_ == nullptr )
@@ -246,25 +248,6 @@ void PlayerSprite::handleWaterEnteringAndExiting( const Map& lvmap )
 	}
 };
 
-void PlayerSprite::duck()
-{
-	// Can continue ducking while in air, but only start duck on ground.
-	if ( isDucking() || onGround() )
-	{
-		// Hacky way to make player warp to the right position after height changes.
-		if ( !isDucking() )
-		{
-			hit_box_.y += Unit::PixelsToSubPixels( 9 );
-			graphics_->y_adjustment_ = -6;
-			graphics_->h_adjustment_ = 8;
-		}
-
-		is_ducking_ = true;
-
-		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 11 );
-	}
-};
-
 void PlayerSprite::resetBopsOnLanding() const
 {
 	if ( on_ground_ )
@@ -392,7 +375,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 				}
 				else
 				{
-					duck();
+					duck( duck_data_ );
 				}
 			}
 			break;

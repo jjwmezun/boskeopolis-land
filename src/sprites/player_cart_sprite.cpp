@@ -13,7 +13,9 @@ static constexpr int JUMP_LIMIT = Unit::BlocksToSubPixels( 32 );
 
 PlayerCartSprite::PlayerCartSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 ),
+	reached_height_ ( false ),
+	duck_data_ ( { true, 8, 8, 0, 0 } )
 {
 	run();
 };
@@ -124,7 +126,7 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
-		duck();
+		duck( duck_data_ );
 	}
 
 	if ( Input::released( Input::Action::MOVE_DOWN ) )
@@ -173,21 +175,6 @@ void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their
 			health.hurt();
 		}
 	}
-};
-
-void PlayerCartSprite::duck()
-{
-	// Hacky way to make player warp to the right position after height changes.
-	if ( !isDucking() )
-	{
-		hit_box_.y += Unit::PixelsToSubPixels( 8 );
-		//graphics_->y_adjustment_ = -5;
-		//graphics_->h_adjustment_ = -16;
-	}
-
-	is_ducking_ = true;
-
-	hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 8 );
 };
 
 void PlayerCartSprite::unduck()
