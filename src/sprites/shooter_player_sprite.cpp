@@ -17,7 +17,8 @@ ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
 		SpriteType::HERO,
 		160,
 		2000,
-		{ false, 9, 11, -8, 11 }
+		{ false, 9, 11, -8, 11 },
+		{ 10, 0, -3, 5 }
 	),
 	is_shooting_ ( false ),
 	is_shooting_up_ ( false ),
@@ -182,20 +183,6 @@ void ShooterPlayerSprite::updateGFX()
 	{
 		graphics_->current_frame_y_ = 0;
 	}
-};
-
-void ShooterPlayerSprite::unduck( const BlockSystem& blocks )
-{
-	// Hacky way to keep player from falling through ground after gaining height from unducking.
-	if ( isDucking() )
-	{
-		hit_box_.y -= Unit::PixelsToSubPixels( 10 );
-		graphics_->y_adjustment_ = -3;
-		graphics_->h_adjustment_ = 5;
-	}
-
-	is_ducking_ = false;
-	hit_box_.h = original_hit_box_.h;
 };
 
 void ShooterPlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )

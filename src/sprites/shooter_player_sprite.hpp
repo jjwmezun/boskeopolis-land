@@ -10,7 +10,6 @@ class ShooterPlayerSprite : public PlayerSprite
 		ShooterPlayerSprite( int x, int y );
 		~ShooterPlayerSprite();
 		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
-		void unduck( const BlockSystem& blocks ) override;
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
 	private:

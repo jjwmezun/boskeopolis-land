@@ -996,3 +996,17 @@ void Sprite::duck( const DuckData& duck_data )
 		hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( duck_data.h_change );
 	}
 };
+
+void Sprite::unduck( const UnDuckData& unduck_data )
+{
+	// Hacky way to keep player from falling through ground after gaining height from unducking.
+	if ( isDucking() )
+	{
+		hit_box_.y -= Unit::PixelsToSubPixels( unduck_data.y_change );
+		graphics_->y_adjustment_ = unduck_data.gfx_y_change;
+		graphics_->h_adjustment_ = unduck_data.gfx_h_change;
+	}
+
+	is_ducking_ = false;
+	hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( unduck_data.h_change );
+};

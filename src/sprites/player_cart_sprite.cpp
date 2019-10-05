@@ -15,7 +15,8 @@ PlayerCartSprite::PlayerCartSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 ),
 	reached_height_ ( false ),
-	duck_data_ ( { true, 8, 8, 0, 0 } )
+	duck_data_ ( { true, 8, 8, -2, 4 } ),
+	unduck_data_ ( { 8, 0, -2, 4 } )
 {
 	run();
 };
@@ -129,7 +130,7 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 	else if ( Input::released( Input::Action::MOVE_DOWN ) )
 	{
-		unduck();
+		unduck( unduck_data_ );
 	}
 
 	if ( fellInBottomlessPit( lvmap ) )
@@ -169,21 +170,6 @@ void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their
 		}
 	}
 };
-
-void PlayerCartSprite::unduck()
-{
-	// Hacky way to keep player from falling through ground after gaining height from unducking.
-	if ( isDucking() )
-	{
-		hit_box_.y -= Unit::PixelsToSubPixels( 8 );
-		//graphics_->y_adjustment_ = -1;
-		//graphics_->h_adjustment_ = 2;
-	}
-
-	is_ducking_ = false;
-	hit_box_.h = original_hit_box_.h;
-};
-
 
 void PlayerCartSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
 {

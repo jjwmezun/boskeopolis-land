@@ -27,7 +27,8 @@ PlayerSprite::PlayerSprite
 	SpriteType type,
 	int start_speed,
 	int top_speed,
-	DuckData duck_data
+	DuckData duck_data,
+	UnDuckData unduck_data
 )
 :
 	Sprite
@@ -55,7 +56,8 @@ PlayerSprite::PlayerSprite
 	),
 	input_ ( std::move( input ) ),
 	door_lock_ ( true ),
-	duck_data_ ( duck_data )
+	duck_data_ ( duck_data ),
+	unduck_data_ ( unduck_data )
 {
 	// Be absolutely sure input component is set.
 	if ( input_ == nullptr )
@@ -328,7 +330,7 @@ void PlayerSprite::dontDuckWhileSwimming( const BlockSystem& blocks )
 {
 	if ( is_ducking_ && !on_ground_ && hasMovementType( SpriteMovement::Type::SWIMMING ) )
 	{
-		unduck( blocks );
+		tryUnduck( blocks );
 	}
 }
 
@@ -369,7 +371,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 				{
 					if ( isDucking() )
 					{
-						unduck( blocks );
+						tryUnduck( blocks );
 					}
 					on_ladder_ = true;
 				}
@@ -383,7 +385,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 			{
 				if ( isDucking() )
 				{
-					unduck( blocks );
+					tryUnduck( blocks );
 				}
 				slideLeft( events );
 			}
@@ -392,7 +394,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 			{
 				if ( isDucking() )
 				{
-					unduck( blocks );
+					tryUnduck( blocks );
 				}
 				slideRight( events );
 			}
@@ -401,7 +403,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 	}
 	else
 	{
-		unduck( blocks );
+		tryUnduck( blocks );
 	}
 
 	if ( !events.is_sliding_ )
@@ -472,25 +474,11 @@ void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, const Eve
 	}
 };
 
-void PlayerSprite::forceUnduck()
-{
-	// Hacky way to keep player from falling through ground after gaining height from unducking.
-	if ( isDucking() )
-	{
-		hit_box_.y -= Unit::PixelsToSubPixels( 10 );
-		graphics_->y_adjustment_ = -2;
-		graphics_->h_adjustment_ = 3;
-	}
-
-	is_ducking_ = false;
-	hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( 1 );
-};
-
-void PlayerSprite::unduck( const BlockSystem& blocks )
+void PlayerSprite::tryUnduck( const BlockSystem& blocks )
 {
 	if ( !blocksJustAbove( blocks ) )
 	{
-		forceUnduck();
+		unduck( unduck_data_ );
 	}
 };
 
@@ -498,7 +486,7 @@ void PlayerSprite::deathAction( const Camera& camera, EventSystem& events, const
 {
 	graphics_->current_frame_x_ = 16;
 	graphics_->current_frame_y_ = 26;
-	forceUnduck();
+	unduck( unduck_data_ );
 	graphics_->priority_ = true;
 	defaultDeathAction( camera );
 	events.playDeathSoundIfNotAlreadyPlaying();

@@ -25,13 +25,14 @@ class PlayerSprite : public Sprite
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,
 			int top_speed = 2000,
-			DuckData duck_data = { false, 9, 11, -6, 8 }
+			DuckData duck_data = { false, 9, 11, -6, 8 },
+			UnDuckData unduck_data = { 10, 1, -2, 3 }
 		);
 		~PlayerSprite();
 
 		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
-		virtual void unduck( const BlockSystem& blocks );
+		virtual void tryUnduck( const BlockSystem& blocks );
 		virtual bool canJump() const override;
 
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
@@ -44,10 +45,10 @@ class PlayerSprite : public Sprite
 		bool is_looking_up_;
 		std::unique_ptr<InputComponent> input_;
 		const DuckData duck_data_;
+		const UnDuckData unduck_data_;
 		PlayerGraphics player_gfx_;
 
 	private:
-		void forceUnduck();
 		void handleCameraMovement( Camera& camera );
 		void handleDoorBehavior( EventSystem& events );
 		void handleChasmBehavior( const Map& lvmap, EventSystem& events );

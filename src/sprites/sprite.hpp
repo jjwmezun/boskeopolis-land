@@ -39,6 +39,13 @@ class Sprite : public Object
 			int gfx_y_change;
 			int gfx_h_change;
 		};
+		struct UnDuckData
+		{
+			int y_change;
+			int h_change;
+			int gfx_y_change;
+			int gfx_h_change;
+		};
 		enum class SpriteType
 		{
 			NOTYPE,
@@ -180,6 +187,7 @@ class Sprite : public Object
 		void slowFall();
 		void fastFall();
 		void duck( const DuckData& duck_data );
+		void unduck( const UnDuckData& unduck_data );
 		void stopDucking();
 		void touchLadder();
 		void grabLadder();
