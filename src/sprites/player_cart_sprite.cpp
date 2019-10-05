@@ -99,8 +99,11 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 	if ( Input::held( Input::Action::JUMP ) )
 	{
-		jump();
-		jump_lock_ = true;
+		if ( !isDucking() )
+		{
+			jump();
+			jump_lock_ = true;
+		}
 
 		if ( is_bouncing_ )
 		{
@@ -117,29 +120,19 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		{
 			is_bouncing_ = false;
 		}
-
-		if ( !isDucking() )
-		{
-			jump_lock_ = false;
-		}
+		jump_lock_ = false;
 	}
 
 	if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
 		duck( duck_data_ );
 	}
-
-	if ( Input::released( Input::Action::MOVE_DOWN ) )
+	else if ( Input::released( Input::Action::MOVE_DOWN ) )
 	{
 		unduck();
 	}
 
-	if ( isDucking() )
-	{
-		jump_lock_ = true;
-	}
-
-	if (  fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( lvmap ) )
 	{
 		kill();
 	}
@@ -188,7 +181,6 @@ void PlayerCartSprite::unduck()
 	}
 
 	is_ducking_ = false;
-	jump_lock_ = false;
 	hit_box_.h = original_hit_box_.h;
 };
 
