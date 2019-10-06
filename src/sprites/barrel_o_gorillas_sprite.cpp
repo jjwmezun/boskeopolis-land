@@ -13,8 +13,8 @@ static int getRandomTimeLimit()
 BarrelOGorillasSprite::BarrelOGorillasSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/barrel-o-gorillas.png", 0, 0, false, false, 0, true, 0, -24, 0, 24 ), x, y + 24, 32, 8, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
-	top_hit_box_ ( Unit::PixelsToSubPixels({ x, y, 32, 8 }) ),
-	right_hit_box_ ( Unit::PixelsToSubPixels({ x + 24, y, 8, 32 }) ),
+	top_hit_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x, y, 32, 8 }) ),
+	right_hit_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 24, y, 8, 32 }) ),
 	spawn_timer_ ( 0 ),
 	spawn_limit_ ( getRandomTimeLimit() )
 {};

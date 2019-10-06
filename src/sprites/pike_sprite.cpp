@@ -23,7 +23,7 @@ PikeSprite::PikeSprite( int x, int y )
 	grow_speed_ ( 0 ),
 	state_ ( PikeState::WAIT ),
 	wait_timer_ ( 0 ),
-	horizontal_pike_ ( Unit::PixelsToSubPixels({ x + 16, y + 3, 0, 10 }) )
+	horizontal_pike_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 16, y + 3, 0, 10 }) )
 {
 	direction_ = Direction::Simple::UP;
 };

@@ -69,7 +69,8 @@ class Sprite : public Object
 			RAFT,
 			WATER_SPOUT,
 			BARREL,
-			SPARK
+			SPARK,
+			MANSION_GHOST
 		};
 
 		enum class CameraMovement

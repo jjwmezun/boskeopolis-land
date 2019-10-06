@@ -29,8 +29,8 @@ WeightPlatformSprite::WeightPlatformSprite( int x, int y, Direction::Horizontal 
 	break_timer_ ( 0 ),
 	broken_higher_bar_ ( nullptr ),
 	wheel_rotation_ ( 0.0 ),
-	left_ ( Unit::PixelsToSubPixels( { x, ( direction == Direction::Horizontal::LEFT ) ? ( y - Unit::BlocksToPixels( 2 ) ) : ( y + Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) ),
-	right_ ( Unit::PixelsToSubPixels( { x + WEIGHT_WIDTH + WEIGHT_SPACE_APART, ( direction == Direction::Horizontal::LEFT ) ? ( y + Unit::BlocksToPixels( 2 ) ) : ( y - Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) )
+	left_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x, ( direction == Direction::Horizontal::LEFT ) ? ( y - Unit::BlocksToPixels( 2 ) ) : ( y + Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) ),
+	right_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x + WEIGHT_WIDTH + WEIGHT_SPACE_APART, ( direction == Direction::Horizontal::LEFT ) ? ( y + Unit::BlocksToPixels( 2 ) ) : ( y - Unit::BlocksToPixels( 2 ) ), WEIGHT_WIDTH, WEIGHT_HEIGHT } ) )
 {};
 
 WeightPlatformSprite::~WeightPlatformSprite() {};

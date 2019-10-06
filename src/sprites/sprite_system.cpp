@@ -48,6 +48,7 @@
 #include "falling_gem_sprite.hpp"
 #include "firebar_sprite.hpp"
 #include "fishstick_sprite.hpp"
+#include "flashlight_player_sprite.hpp"
 #include "full_heal_block_sprite.hpp"
 #include "gemmy_sprite.hpp"
 #include "ghost_sprite.hpp"
@@ -73,6 +74,7 @@
 #include "lightning_sprite.hpp"
 #include "lil_pipe_monster_sprite.hpp"
 #include "locked_door_sprite.hpp"
+#include "mansion_ghost_sprite.hpp"
 #include "map.hpp"
 #include "maze_player_sprite.hpp"
 #include "maze_chaser_sprite.hpp"
@@ -702,6 +704,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 175 ):
 			return std::unique_ptr<Sprite> ( new GuardSpikeSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 176 ):
+			return std::unique_ptr<Sprite> ( new MansionGhostSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -848,6 +853,9 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		break;
 		case ( HeroType::PLANE ):
 			hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
+		break;
+		case ( HeroType::FLASHLIGHT ):
+			hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );
 		break;
 	}
 
@@ -1046,6 +1054,10 @@ SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 	else if ( property.compare( "PLANE" ) == 0 )
 	{
 		return HeroType::PLANE;
+	}
+	else if ( property.compare( "FLASHLIGHT" ) == 0 )
+	{
+		return HeroType::FLASHLIGHT;
 	}
 
 	return HeroType::NORMAL;

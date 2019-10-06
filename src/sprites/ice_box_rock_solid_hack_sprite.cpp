@@ -9,13 +9,13 @@ IceBoxRockSolidHackSprite::IceBoxRockSolidHackSprite( int x, int y )
 	Sprite( nullptr, x, y, 12 * 16, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	extra_solids_
 	({
-		Unit::PixelsToSubPixels( { x + 240, y + 32,  64, 64 } ),
-		Unit::PixelsToSubPixels( { x + 80,  y + 96, 320,  32 } ),
-		Unit::PixelsToSubPixels( { x, y + 32, 32, 160 } ),
-		Unit::PixelsToSubPixels( { x, y + 192, 240, 16 } ),
-		Unit::PixelsToSubPixels( { x + 272, y + 192, 224, 16 } ),
-		Unit::PixelsToSubPixels( { x + 448, y + 128, 32, 64 } ),
-		Unit::PixelsToSubPixels( { x + 352, y, 128, 32 } )
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x + 240, y + 32,  64, 64 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x + 80,  y + 96, 320,  32 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x, y + 32, 32, 160 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x, y + 192, 240, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x + 272, y + 192, 224, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x + 448, y + 128, 32, 64 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect { x + 352, y, 128, 32 } )
 	})
 {};
 

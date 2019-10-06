@@ -16,14 +16,14 @@ DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0, true ), x, y, 16, 16, { SpriteType::ENEMY }, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	spikes_
 	({
-		Unit::PixelsToSubPixels({ x - 16, y - 16, 16, 16 }),
-		Unit::PixelsToSubPixels({ x, y - 16, 16, 16 }),
-		Unit::PixelsToSubPixels({ x + 16, y - 16, 16, 16 }),
-		Unit::PixelsToSubPixels({ x + 16, y, 16, 16 }),
-		Unit::PixelsToSubPixels({ x + 16, y + 16, 16, 16 }),
-		Unit::PixelsToSubPixels({ x, y + 16, 16, 16 }),
-		Unit::PixelsToSubPixels({ x - 16, y + 16, 16, 16 }),
-		Unit::PixelsToSubPixels({ x - 16, y, 16, 16 })
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y - 16, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x, y - 16, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 16, y - 16, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 16, y, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 16, y + 16, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x, y + 16, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y + 16, 16, 16 } ),
+		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y, 16, 16 } )
 	}),
 	spike_angles_
 	({

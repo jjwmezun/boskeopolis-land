@@ -1,6 +1,8 @@
 #pragma once
 
+#include "line.hpp"
 #include "mezun_sdl2.hpp"
+#include "point.hpp"
 #include <cmath>
 #include <SDL2/SDL.h>
 
@@ -127,6 +129,42 @@ namespace Unit
 			SubPixelsToPixels( r.y ),
 			SubPixelsToPixels( r.w ),
 			SubPixelsToPixels( r.h )
+		};
+	};
+
+	inline constexpr Point PixelsToSubPixels( Point p )
+	{
+		return
+		{
+			PixelsToSubPixels( p.x ),
+			PixelsToSubPixels( p.y )
+		};
+	};
+
+	inline constexpr Point SubPixelsToPixels( Point p )
+	{
+		return
+		{
+			SubPixelsToPixels( p.x ),
+			SubPixelsToPixels( p.y )
+		};
+	};
+
+	inline constexpr Line PixelsToSubPixels( Line l )
+	{
+		return
+		{
+			PixelsToSubPixels( l.p1 ),
+			PixelsToSubPixels( l.p2 )
+		};
+	};
+
+	inline constexpr Line SubPixelsToPixels( Line l )
+	{
+		return
+		{
+			SubPixelsToPixels( l.p1 ),
+			SubPixelsToPixels( l.p2 )
 		};
 	};
 };

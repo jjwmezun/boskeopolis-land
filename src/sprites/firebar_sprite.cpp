@@ -10,7 +10,7 @@ static constexpr int HIT_BOX_PADDING = 2000;
 template<int n>
 static constexpr CircleMovement generateCircle( int x, int y )
 {
-	const sdl2::SDLRect r = Unit::PixelsToSubPixels({ x - 8, y - 8, 16, 16 });
+	const sdl2::SDLRect r = Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 8, y - 8, 16, 16 } );
 	return CircleMovement
 	(
 		r,

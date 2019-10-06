@@ -10,6 +10,7 @@ namespace mezun
 {
     constexpr double PI = 3.14159;
     constexpr double DOUBLE_PI = PI * 2;
+    constexpr double HALF_PI = PI / 2;
 
     constexpr double convertDegreesToRadians( double degrees )
     {

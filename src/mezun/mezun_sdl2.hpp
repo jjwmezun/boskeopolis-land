@@ -92,6 +92,11 @@ namespace sdl2
             {
                 return y + h;
             };
+
+            constexpr bool testSimpleCollision( const sdl2::SDLRect other ) const
+            {
+                return other.right() > x && other.x < right() && other.bottom() > y && other.y < bottom();
+            };
     };
 }
 
