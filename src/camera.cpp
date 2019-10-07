@@ -221,17 +221,17 @@ void Camera::contain( const Map& m )
 	}
 }
 
-bool Camera::onscreen( const sdl2::SDLRect& r, int padding ) const
+bool Camera::onscreen( sdl2::SDLRect r, int padding ) const
 {
 	return camera_.onscreen( r, padding );
 };
 
-bool Camera::onscreenPixels( const sdl2::SDLRect& r, int padding ) const
+bool Camera::onscreenPixels( sdl2::SDLRect r, int padding ) const
 {
 	return camera_.onscreenPixels( r, padding );
 };
 
-bool Camera::offscreen( const sdl2::SDLRect& r, int padding, Direction::Simple dir ) const
+bool Camera::offscreen( sdl2::SDLRect r, int padding, Direction::Simple dir ) const
 {
 	return camera_.offscreen( r, padding, dir );
 };

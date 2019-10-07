@@ -1,12 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <SDL2/SDL.h>
 
-struct Point
-{
-    int x;
-    int y;
-};
+typedef SDL_Point Point;
 
 inline std::ostream &operator<<( std::ostream &os, Point p )
 {

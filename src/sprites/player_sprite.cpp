@@ -111,6 +111,11 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 
 void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
+	playerInteract( my_collision, them, health, events );
+};
+
+void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events )
+{
 	if ( them.hasType( SpriteType::ENEMY ) )
 	{
 		if ( them.hasType( SpriteType::BOPPABLE ) )

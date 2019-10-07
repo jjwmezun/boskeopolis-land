@@ -1,6 +1,7 @@
 #pragma once
 
 class Camera;
+class Line;
 class Palette;
 
 #include "mezun_sdl2.hpp"
@@ -16,6 +17,7 @@ namespace Render
 	void quit();
 
 	void renderRect( const sdl2::SDLRect& box, int color = 1, int alpha = 255 );
+	void renderLine( Line line, int color = 1 );
 	void renderLine( int x1, int y1, int x2, int y2, int color = 1 );
 	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color );
 	void renderRectCamera( sdl2::SDLRect box, const Camera& camera, int color, int alpha );
@@ -30,7 +32,8 @@ namespace Render
 		Uint8 alpha,
 		const Camera* camera,
 		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
-		SDL_Texture* alt_texture = nullptr
+		SDL_Texture* alt_texture = nullptr,
+		const Point* rotation_center = nullptr
 	);
 	void renderObject
 	(
@@ -42,7 +45,8 @@ namespace Render
 		Uint8 alpha = 255,
 		const Camera* = nullptr,
 		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
-		SDL_Texture* alt_texture = nullptr
+		SDL_Texture* alt_texture = nullptr,
+		const Point* rotation_center = nullptr
 	);
 	void renderObject
 	(
@@ -54,7 +58,8 @@ namespace Render
 		Uint8 alpha = 255,
 		const Camera* = nullptr,
 		SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
-		SDL_Texture* alt_texture = nullptr
+		SDL_Texture* alt_texture = nullptr,
+		const Point* rotation_center = nullptr
 	);
 
 	void stateChangeFade( int alpha );

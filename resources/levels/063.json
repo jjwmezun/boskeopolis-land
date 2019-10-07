@@ -7,8 +7,8 @@
 		}
 	],
 
-	"entrance_x": 3,
-	"entrance_y": 8,
+	"entrance_x": 48,
+	"entrance_y": 20,
 	"gem_challenge": 0,
 	"time_challenge": 0
 }

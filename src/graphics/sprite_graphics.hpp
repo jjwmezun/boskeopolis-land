@@ -27,10 +27,13 @@ class SpriteGraphics
 			int w_adjustment = 0,
 			int h_adjustment = 0,
 			Uint8 alpha = 255,
-			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
+			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
+			Point rotation_center = { -1, -1 },
+			bool default_rotation_point = false
 		);
 
 		std::string texture_;
+		Point rotation_center_;
 		double rotation_;
 		int prev_frame_x_;
 		int prev_frame_y_;
@@ -46,6 +49,7 @@ class SpriteGraphics
 		bool flip_y_;
 		bool priority_;
 		bool visible_;
+		bool default_rotation_point_;
 
 		virtual ~SpriteGraphics();
 		virtual void update();

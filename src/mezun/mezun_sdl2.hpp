@@ -53,49 +53,69 @@ namespace sdl2
 				return *this;
             };
 
-            constexpr int halfWidth() const
+            constexpr inline int halfWidth() const
             {
                 return floor( w / 2 );
             };
 
-            constexpr int halfHeight() const
+            constexpr inline int halfHeight() const
             {
                 return floor( h / 2 );
             };
 
-            constexpr int centerWidth() const
+            constexpr inline int centerWidth() const
             {
                 return x + halfWidth();
             };
 
-            constexpr int centerHeight() const
+            constexpr inline int centerHeight() const
             {
                 return y + halfHeight();
             };
 
-            constexpr int left() const
+            constexpr inline int left() const
             {
                 return x;
             };
 
-            constexpr int right() const
+            constexpr inline int right() const
             {
                 return x + w;
             };
 
-            constexpr int top() const
+            constexpr inline int top() const
             {
                 return y;
             };
 
-            constexpr int bottom() const
+            constexpr inline int bottom() const
             {
                 return y + h;
             };
 
-            constexpr bool testSimpleCollision( const sdl2::SDLRect other ) const
+            constexpr inline bool testSimpleCollision( const sdl2::SDLRect other ) const
             {
                 return other.right() > x && other.x < right() && other.bottom() > y && other.y < bottom();
+            };
+
+            constexpr inline bool isLeftOf( const sdl2::SDLRect other ) const
+            {
+                return right() < other.x;
+            };
+
+            constexpr inline bool isRightOf( const sdl2::SDLRect other ) const
+            {
+                return x > other.right();
+            };
+
+            constexpr inline bool isAbove( const sdl2::SDLRect other ) const
+            {
+                return bottom() < other.y;
+            };
+
+            constexpr inline bool isBelow( const sdl2::SDLRect other ) const
+            {
+                return y > other.bottom();
             };
     };
 }

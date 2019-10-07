@@ -41,6 +41,8 @@ class PlayerSprite : public Sprite
 		bool isLookingUp() const;
 
 	protected:
+		void playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events );
+
 		bool door_lock_;
 		bool is_looking_up_;
 		std::unique_ptr<InputComponent> input_;

@@ -12,9 +12,10 @@ class MansionGhostSprite : public Sprite
 
 	private:
 		int light_timer_;
-		double afkjndskfnas;
-		double fakjnsdklfjn;
-		double alfkndslkfn;
+		bool being_flashed_;
+		int vertical_acceleration_;
+		int vertical_speed_;
+		int wave_timer_;
 		double akfjndskfjnas;
 		double aflkmjdslfm;
 		double alkmflksdmf;

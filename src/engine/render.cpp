@@ -363,10 +363,11 @@ namespace Render
 		Uint8 alpha,
 		const Camera* camera,
 		SDL_BlendMode blend_mode,
-		SDL_Texture* alt_texture
+		SDL_Texture* alt_texture,
+		const Point* rotation_center
 	)
 	{
-		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera, blend_mode, alt_texture );
+		renderObject( sheet, source, dest, convertFlip( flip_x, flip_y ), rotation, alpha, camera, blend_mode, alt_texture, rotation_center );
 	};
 
 	void renderObject
@@ -379,11 +380,12 @@ namespace Render
 		Uint8 alpha,
 		const Camera* camera,
 		SDL_BlendMode blend_mode,
-		SDL_Texture* alt_texture
+		SDL_Texture* alt_texture,
+		const Point* rotation_center
 	)
 	{
 		checkTexture( sheet );
-		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode, alt_texture );
+		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode, alt_texture, rotation_center );
 	}
 
 	void renderObject
@@ -396,13 +398,14 @@ namespace Render
 		Uint8 alpha,
 		const Camera* camera,
 		SDL_BlendMode blend_mode,
-		SDL_Texture* alt_texture
+		SDL_Texture* alt_texture,
+		const Point* rotation_center
 	)
 	{
 		if ( alt_texture != nullptr )
 		{
 			SDL_SetRenderTarget( renderer_, alt_texture );
-			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, nullptr, flip ) != 0 )
+			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, rotation_center, flip ) != 0 )
 			{
 				printf( "Render failure: %s\n", SDL_GetError() );
 			}
@@ -422,8 +425,8 @@ namespace Render
 				SDL_SetRenderDrawBlendMode( renderer_, blend_mode );
 				SDL_SetTextureBlendMode( texture, blend_mode );
 			}
-
-			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, nullptr, flip ) != 0 )
+			
+			if ( SDL_RenderCopyEx( renderer_, texture, &source, &dest, rotation, rotation_center, flip ) != 0 )
 			{
 				printf( "Render failure: %s\n", SDL_GetError() );
 			}
@@ -483,6 +486,11 @@ namespace Render
 		setColor( color );
 		SDL_RenderDrawLine( renderer_, x1, y1, x2, y2 );
 	};
+
+	void renderLine( Line line, int color )
+	{
+		renderLine( line.p1.x, line.p1.y, line.p2.x, line.p2.y, color );
+	}
 
 	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color )
 	{

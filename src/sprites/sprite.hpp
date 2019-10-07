@@ -259,6 +259,7 @@ class Sprite : public Object
 		void containCameraX( const Camera& camera );
 		void containCameraY( const Camera& camera );
 		void flipGraphicsOnRight();
+		void moveToward( const Sprite& them );
 
 		static const SpriteMovement floating_;
 		static const GroundedSpriteMovement grounded_;

@@ -4,6 +4,7 @@ class Map;
 class Sprite;
 
 #include "direction.hpp"
+#include "line.hpp"
 #include "unit.hpp"
 #include <SDL2/SDL.h>
 #include "simple_camera.hpp"
@@ -40,72 +41,72 @@ class Camera
 			camera_ ( x, y, width, height, x_offset, y_offset )
 		{};
 
-		constexpr sdl2::SDLRect rect() const
+		constexpr inline sdl2::SDLRect rect() const
 		{
 			return { camera_.x_, camera_.y_, widthPixels(), heightPixels() };
 		};
 
-		constexpr int widthBlocks() const
+		constexpr inline int widthBlocks() const
 		{
 			return camera_.width_;
 		};
 
-		constexpr int heightBlocks() const
+		constexpr inline int heightBlocks() const
 		{
 			return camera_.height_;
 		};
 
-		constexpr int widthPixels() const
+		constexpr inline int widthPixels() const
 		{
 			return Unit::BlocksToPixels( camera_.width_ );
 		};
 
-		constexpr int heightPixels() const
+		constexpr inline int heightPixels() const
 		{
 			return Unit::BlocksToPixels( camera_.height_ );
 		};
 
-		constexpr int x() const
+		constexpr inline int x() const
 		{
 			return camera_.x_;
 		};
 
-		constexpr int y() const
+		constexpr inline int y() const
 		{
 			return camera_.y_;
 		};
 
-		constexpr int xOffset() const
+		constexpr inline int xOffset() const
 		{
 			return camera_.x_offset_;
 		};
 
-		constexpr int yOffset() const
+		constexpr inline int yOffset() const
 		{
 			return camera_.y_offset_;
 		};
 
-		constexpr int prevX() const
+		constexpr inline int prevX() const
 		{
 			return prev_x_;
 		};
 
-		constexpr int prevY() const
+		constexpr inline int prevY() const
 		{
 			return prev_y_;
 		};
 
-		constexpr int right() const
+		constexpr inline int right() const
 		{
 			return camera_.x_ + widthPixels();
 		};
 
-		constexpr int bottom() const
+		constexpr inline int bottom() const
 		{
 			return camera_.y_ + heightPixels();
 		};
 
-		constexpr int left() const
+		constexpr inline int left() const
 		{
 			return camera_.x_ + xOffset();
 		};
@@ -115,109 +116,119 @@ class Camera
 			return camera_.y_ + yOffset();
 		};
 
-		constexpr int boundaryTop() const
+		constexpr inline int boundaryTop() const
 		{
 			return camera_.y_ + ( heightPixels() * .25 );
 		};
 
-		constexpr int boundaryTopWeaker() const
+		constexpr inline int boundaryTopWeaker() const
 		{
 			return camera_.y_ + ( heightPixels() * .25 );
 		};
 
-		constexpr int boundaryCenterY() const
+		constexpr inline int boundaryCenterY() const
 		{
 			return camera_.y_ + ( heightPixels() * .5 );
 		};
 
-		constexpr int boundaryBottom() const
+		constexpr inline int boundaryBottom() const
 		{
 			return camera_.y_ + ( heightPixels() * .75 );
 		};
 
-		constexpr int boundaryLeft() const
+		constexpr inline int boundaryLeft() const
 		{
 			return camera_.x_ + ( widthPixels() * .35 );
 		};
 
-		constexpr int boundaryCenterX() const
+		constexpr inline int boundaryCenterX() const
 		{
 			return camera_.x_ + ( widthPixels() * .5 );
 		};
 
-		constexpr int boundaryRight() const
+		constexpr inline int boundaryRight() const
 		{
 			return camera_.x_ + ( widthPixels() * .65 );
 		};
 
-		constexpr bool offscreenTop( const sdl2::SDLRect& r, int padding = 0 ) const
+		constexpr inline bool offscreenTop( sdl2::SDLRect r, int padding = 0 ) const
 		{
 			return r.y + r.h < Unit::PixelsToSubPixels( y() - padding );
 		};
 
-		constexpr bool offscreenLeft( const sdl2::SDLRect& r, int padding = 0 ) const
+		constexpr inline bool offscreenLeft( sdl2::SDLRect r, int padding = 0 ) const
 		{
 			return r.x + r.w < Unit::PixelsToSubPixels( x() - padding );
 		};
 
-		constexpr bool offscreenBottom( const sdl2::SDLRect& r, int padding = 0 ) const
+		constexpr inline bool offscreenBottom( sdl2::SDLRect r, int padding = 0 ) const
 		{
 			return r.y > Unit::PixelsToSubPixels( bottom() + padding );
 		};
 
-		constexpr bool offscreenRight( const sdl2::SDLRect& r, int padding = 0 ) const
+		constexpr inline bool offscreenRight( sdl2::SDLRect r, int padding = 0 ) const
 		{
 			return r.x > Unit::PixelsToSubPixels( right() + padding );
 		};
 
-		constexpr bool offscreenPartwayTop( const sdl2::SDLRect& r ) const
+		constexpr inline bool offscreenPartwayTop( sdl2::SDLRect r ) const
 		{
 			return r.y < y();
 		};
 
-		constexpr bool offscreenPartwayRight( const sdl2::SDLRect& r ) const
+		constexpr inline bool offscreenPartwayRight( sdl2::SDLRect r ) const
 		{
 			return r.x + r.h > widthPixels();
 		};
 
-		constexpr bool offscreenPartwayBottom( const sdl2::SDLRect& r ) const
+		constexpr inline bool offscreenPartwayBottom( sdl2::SDLRect r ) const
 		{
 			return r.y + r.w > heightPixels();
 		};
 
-		constexpr bool offscreenPartwayLeft( const sdl2::SDLRect& r ) const
+		constexpr inline bool offscreenPartwayLeft( sdl2::SDLRect r ) const
 		{
 			return r.x < x();
 		};
 
-		constexpr int relativeX( const sdl2::SDLRect& r ) const
+		constexpr inline int relativeX( sdl2::SDLRect r ) const
 		{
 			return r.x - x() + xOffset();
 		};
 
-		constexpr int relativeY( const sdl2::SDLRect& r ) const
+		constexpr inline int relativeY( sdl2::SDLRect r ) const
 		{
 			return r.y - y() + yOffset();
 		};
 
-		constexpr int relativeX( int n ) const
+		constexpr inline int relativeX( int n ) const
 		{
 			return n - x() + xOffset();
 		};
 
-		constexpr int relativeY( int n ) const
+		constexpr inline int relativeY( int n ) const
 		{
 			return n - y() + yOffset();
 		};
 
-		constexpr sdl2::SDLRect relativeRect( const sdl2::SDLRect& r ) const
+		constexpr inline sdl2::SDLRect relativeRect( sdl2::SDLRect r ) const
 		{
 			return { relativeX( r ), relativeY( r ), r.w, r.h };
 		};
 
-		bool onscreen( const sdl2::SDLRect& r, int padding = 0 )  const;
-		bool onscreenPixels( const sdl2::SDLRect& r, int padding = 0 )  const;
-		bool offscreen( const sdl2::SDLRect& r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
+		constexpr inline Point relativePoint( Point p ) const
+		{
+			return { relativeX( p.x ), relativeY( p.y ) };
+		};
+
+		constexpr inline Line relativeLine( Line l ) const
+		{
+			return { relativePoint( l.p1 ), relativePoint( l.p2 ) };
+		};
+
+		bool onscreen( sdl2::SDLRect r, int padding = 0 )  const;
+		bool onscreenPixels( sdl2::SDLRect r, int padding = 0 )  const;
+		bool offscreen( sdl2::SDLRect r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
 
 		bool changed() const;
 		void update();

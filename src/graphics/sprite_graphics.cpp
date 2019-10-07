@@ -15,7 +15,9 @@ SpriteGraphics::SpriteGraphics
 	int w_adjustment,
 	int h_adjustment,
 	Uint8 alpha,
-	SDL_BlendMode blend_mode
+	SDL_BlendMode blend_mode,
+	Point rotation_center,
+	bool default_rotation_point
 )
 :
 	flip_x_ ( flip_x ),
@@ -33,7 +35,9 @@ SpriteGraphics::SpriteGraphics
 	texture_ ( texture ),
 	prev_frame_x_ ( 0 ),
 	prev_frame_y_ ( 0 ),
-	blend_mode_ ( blend_mode )
+	blend_mode_ ( blend_mode ),
+	rotation_center_ ( rotation_center ),
+	default_rotation_point_ ( default_rotation_point )
 {};
 
 SpriteGraphics::~SpriteGraphics() {};
@@ -79,7 +83,7 @@ void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_f
 			dest.h
 		};
 
-		Render::renderObject( texture_, source, dest, flip_x_, flip_y_, rotation_, alpha, camera, blend_mode_ );
+		Render::renderObject( texture_, source, dest, flip_x_, flip_y_, rotation_, alpha, camera, blend_mode_, nullptr, ( ( default_rotation_point_ ) ? &rotation_center_ : nullptr ) );
 	}
 };
 

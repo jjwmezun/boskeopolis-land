@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "event_system.hpp"
 #include "input.hpp"
+#include "input_component_flashlight_player.hpp"
 #include "flashlight_player_sprite.hpp"
 #include "line.hpp"
 #include "mezun_math.hpp"
@@ -9,8 +10,10 @@
 // @ https://martin-thoma.com/how-to-check-if-two-line-segments-intersect/
 // for most o’ this math.
 
-static constexpr int LIGHT_LENGTH = 32;
-static constexpr double FLASHLIGHT_SPEED = 0.01;
+static constexpr int LIGHT_LENGTH = 48;
+static constexpr double FLASHLIGHT_SPEED = 0.05;
+static constexpr double FLASHLIGHT_HALF_WIDTH = mezun::PI / 11;
+static constexpr double FLASHLIGHT_MOVEMENT_LIMIT = mezun::PI / 4;
 static constexpr double EPSILON = 0.000001;
 static constexpr double amountToChange( double angle )
 {
@@ -54,14 +57,12 @@ static constexpr bool testLineAndBoxCollision( const Line& line, const sdl2::SDL
 	if ( box.testSimpleCollision( line_box ) )
 	{
 		const auto box_lines = Line::getLinesFromBox( box );
-		int i = 0;
 		for ( const Line& box_line : box_lines )
 		{
 			if ( lineCrossesLine( line, box_line ) && lineCrossesLine( box_line, line ) )
 			{
 				return true;
 			}
-			++i;
 		}
 	}
 	return false;
@@ -69,8 +70,18 @@ static constexpr bool testLineAndBoxCollision( const Line& line, const sdl2::SDL
 
 FlashlightPlayerSprite::FlashlightPlayerSprite( int x, int y )
 :
-	PlayerSprite( x, y ),
-	angle_()
+	PlayerSprite
+	(
+		x,
+		y,
+		1000,
+		6000,
+		std::unique_ptr<InputComponentFlashlightPlayer> ( new InputComponentFlashlightPlayer() ),
+		std::make_unique<SpriteGraphics> ( "sprites/flashlight-autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 )
+	),
+	angle_(),
+	flashlight_gfx_ ( "sprites/flashlight-autumn.png", 0, 51, false, false, 0.0, false, 0, 0, 0, 0, 255, SDL_BLENDMODE_NONE, { 0, 13 }, true ),
+	flashlight_box_ ( x, y, 56, 26 )
 {};
 
 FlashlightPlayerSprite::~FlashlightPlayerSprite() {};
@@ -84,17 +95,17 @@ void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 		if ( Input::held( Input::Action::MOVE_UP ) )
 		{
 			angle_ -= FLASHLIGHT_SPEED;
-			if ( angle_ < -( mezun::PI / 4 ) )
+			if ( angle_ < -FLASHLIGHT_MOVEMENT_LIMIT )
 			{
-				angle_ = -( mezun::PI / 4 );
+				angle_ = -FLASHLIGHT_MOVEMENT_LIMIT;
 			}
 		}
 		else if ( Input::held( Input::Action::MOVE_DOWN ) )
 		{
 			angle_ += FLASHLIGHT_SPEED;
-			if ( angle_ > ( mezun::PI / 4 ) )
+			if ( angle_ > FLASHLIGHT_MOVEMENT_LIMIT )
 			{
-				angle_ = ( mezun::PI / 4 );
+				angle_ = FLASHLIGHT_MOVEMENT_LIMIT;
 			}
 		}
 	}
@@ -103,18 +114,43 @@ void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 void FlashlightPlayerSprite::render( Camera& camera, bool priority )
 {
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	Render::renderLine( camera.relativeX( centerXPixels() ), camera.relativeY( centerYPixels() ), camera.relativeX( x2( -mezun::PI / 16 ) ), camera.relativeY( y2( -mezun::PI / 16 ) ) );
-	Render::renderLine( camera.relativeX( centerXPixels() ), camera.relativeY( centerYPixels() ), camera.relativeX( x2( mezun::PI / 16 ) ), camera.relativeY( y2( mezun::PI / 16 ) ) );
+	flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
+	flashlight_box_.y = yPixels();
+	flashlight_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
+	flashlight_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
+	flashlight_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
+
+	// Render light beam
+	flashlight_gfx_.current_frame_x_ = 56;
+	flashlight_gfx_.alpha_ = 128;
+	//flashlight_gfx_.blend_mode_ = SDL_BLENDMODE_ADD;
+	flashlight_gfx_.render( flashlight_box_, &camera, priority );
+
+	// Render flashlight
+	flashlight_gfx_.current_frame_x_ = 0;
+	flashlight_gfx_.alpha_ = 255;
+	flashlight_gfx_.blend_mode_ = SDL_BLENDMODE_BLEND;
+	flashlight_gfx_.render( flashlight_box_, &camera, priority );
+	
+	/*
+	const auto lines = getLines();
+	for ( const auto& line : lines )
+	{
+		const auto relative_line = camera.relativeLine( Unit::SubPixelsToPixels( line ) );
+		Render::renderLine( relative_line, 6 );
+	}
+	*/
+	
 };
 
-int FlashlightPlayerSprite::x2( double offset ) const
+int FlashlightPlayerSprite::x2( int center_x, double offset ) const
 {
-	return centerXPixels() + ( LIGHT_LENGTH * std::cos( angle() + offset ) );
+	return Unit::SubPixelsToPixels( center_x ) + ( LIGHT_LENGTH * std::cos( angle() + offset ) );
 }
 
-int FlashlightPlayerSprite::y2( double offset ) const
+int FlashlightPlayerSprite::y2( int center_y, double offset ) const
 {
-	return centerYPixels() + ( LIGHT_LENGTH * std::sin( angle() + offset ) );
+	return Unit::SubPixelsToPixels( center_y ) + ( LIGHT_LENGTH * std::sin( angle() + offset ) );
 }
 
 double FlashlightPlayerSprite::angle() const
@@ -126,20 +162,30 @@ void FlashlightPlayerSprite::customInteract( Collision& my_collision, Collision&
 {
 	if ( them.hasType( SpriteType::MANSION_GHOST ) )
 	{
-		if ( collideWithFlashLight( them, their_collision ) )
-		{
-			them.collide_left_ = true;
-		}
+		them.collide_left_ = collideWithFlashLight( them, their_collision );
 	}
+	playerInteract( my_collision, them, health, events );
 }
 
 bool FlashlightPlayerSprite::collideWithFlashLight( const Sprite& them, const Collision& their_collision ) const
 {
-	const Point center_point = { centerXSubPixels(), centerYSubPixels() };
-	const Line lines[ 2 ] =
-	{
-		{ center_point, Unit::PixelsToSubPixels( Point{ x2( -mezun::PI / 16 ), y2( -mezun::PI / 16 ) }) },
-		{ center_point, Unit::PixelsToSubPixels( Point{ x2( mezun::PI / 16 ), y2( mezun::PI / 16 ) }) }
-	};
-	return testLineAndBoxCollision( lines[ 0 ], them.hit_box_ ) || testLineAndBoxCollision( lines[ 1 ], them.hit_box_ );
+	const auto lines = getLines();
+	return testLineAndBoxCollision( lines[ 0 ], them.hit_box_ )
+		|| testLineAndBoxCollision( lines[ 1 ], them.hit_box_ )
+		|| testLineAndBoxCollision( lines[ 2 ], them.hit_box_ );
 };
+
+std::array<Line, 3> FlashlightPlayerSprite::getLines() const
+{
+	const Point center_point =
+	{
+		( ( direction_x_ == Direction::Horizontal::LEFT ) ? centerXSubPixels() + Unit::PixelsToSubPixels( 5 ) : centerXSubPixels() - Unit::PixelsToSubPixels( 6 ) ),
+		centerYSubPixels() + Unit::PixelsToSubPixels( 4 )
+	};
+	return
+	{{
+		{ center_point, Unit::PixelsToSubPixels( Point{ x2( center_point.x, -FLASHLIGHT_HALF_WIDTH ), y2( center_point.y, -FLASHLIGHT_HALF_WIDTH ) }) },
+		{ center_point, Unit::PixelsToSubPixels( Point{ x2( center_point.x, FLASHLIGHT_HALF_WIDTH ), y2( center_point.y, FLASHLIGHT_HALF_WIDTH ) }) },
+		{ center_point, Unit::PixelsToSubPixels( Point{ x2( center_point.x ), y2( center_point.y ) }) }
+	}};
+}

@@ -1010,3 +1010,25 @@ void Sprite::unduck( const UnDuckData& unduck_data )
 	is_ducking_ = false;
 	hit_box_.h = original_hit_box_.h - Unit::PixelsToSubPixels( unduck_data.h_change );
 };
+
+void Sprite::moveToward( const Sprite& them )
+{
+	const auto& their_box = them.hit_box_;
+	const auto& my_box = hit_box_;
+	if ( their_box.isLeftOf( my_box ) )
+	{
+		moveLeft();
+	}
+	else if ( their_box.isRightOf( my_box ) )
+	{
+		moveRight();
+	}
+	if ( their_box.isAbove( my_box ) )
+	{
+		moveUp();
+	}
+	else if ( their_box.isBelow( my_box ) )
+	{
+		moveDown();
+	}
+};

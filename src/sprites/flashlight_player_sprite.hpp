@@ -1,6 +1,8 @@
 #pragma once
 
+#include <array>
 #include "player_sprite.hpp"
+#include "sprite_graphics.hpp"
 
 class FlashlightPlayerSprite : public PlayerSprite
 {
@@ -13,16 +15,13 @@ class FlashlightPlayerSprite : public PlayerSprite
 
 	private:
 		double angle_;
-		double afjdskfjsh;
-		double jnfkjnsdfkjnas;
-		double hrtnjktnerlkjnt;
-		double ckndasklcnsadkc;
-		double asjfnslafn;
-		double kadmnflksdmf;
+		SpriteGraphics flashlight_gfx_;
+		sdl2::SDLRect flashlight_box_;
 		double ekwmflwmfkfsm;
 
-		int x2( double offset ) const;
-		int y2( double offset ) const;
+		int x2( int center_x, double offset = 0.0 ) const;
+		int y2( int center_y, double offset = 0.0 ) const;
 		double angle() const;
 		bool collideWithFlashLight( const Sprite& them, const Collision& their_collision ) const;
+		std::array<Line, 3> getLines() const;
 };

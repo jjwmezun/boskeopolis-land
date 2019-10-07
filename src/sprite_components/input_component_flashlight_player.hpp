@@ -2,10 +2,10 @@
 
 #include "input_component.hpp"
 
-class InputComponentPlayer : public InputComponent
+class InputComponentFlashlightPlayer : public InputComponent
 {
 	public:
-		~InputComponentPlayer();
+		~InputComponentFlashlightPlayer();
 		void update() override;
 		bool action1() override;
 		bool action2() override;
