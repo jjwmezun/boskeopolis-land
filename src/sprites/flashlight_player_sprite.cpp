@@ -79,9 +79,10 @@ FlashlightPlayerSprite::FlashlightPlayerSprite( int x, int y )
 		std::unique_ptr<InputComponentFlashlightPlayer> ( new InputComponentFlashlightPlayer() ),
 		std::make_unique<SpriteGraphics> ( "sprites/flashlight-autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 )
 	),
-	angle_(),
 	flashlight_gfx_ ( "sprites/flashlight-autumn.png", 0, 51, false, false, 0.0, false, 0, 0, 0, 0, 255, SDL_BLENDMODE_NONE, { 0, 13 }, true ),
-	flashlight_box_ ( x, y, 56, 26 )
+	flash_beam_gfx_ ( "sprites/flashlight-beam.png", 0, 0, false, false, 0.0, false, 0, 0, 0, 0, 128, SDL_BLENDMODE_ADD, { 0, 13 }, true ),
+	flashlight_box_ ( x, y, 56, 26 ),
+	angle_( 0.0 )
 {};
 
 FlashlightPlayerSprite::~FlashlightPlayerSprite() {};
@@ -116,20 +117,11 @@ void FlashlightPlayerSprite::render( Camera& camera, bool priority )
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
 	flashlight_box_.y = yPixels();
-	flashlight_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
-	flashlight_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
-	flashlight_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
+	flashlight_gfx_.flip_x_ = flash_beam_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
+	flashlight_gfx_.rotation_ = flash_beam_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
+	flashlight_gfx_.rotation_center_.x = flash_beam_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
 
-	// Render light beam
-	flashlight_gfx_.current_frame_x_ = 56;
-	flashlight_gfx_.alpha_ = 128;
-	//flashlight_gfx_.blend_mode_ = SDL_BLENDMODE_ADD;
-	flashlight_gfx_.render( flashlight_box_, &camera, priority );
-
-	// Render flashlight
-	flashlight_gfx_.current_frame_x_ = 0;
-	flashlight_gfx_.alpha_ = 255;
-	flashlight_gfx_.blend_mode_ = SDL_BLENDMODE_BLEND;
+	flash_beam_gfx_.render( flashlight_box_, &camera, priority );
 	flashlight_gfx_.render( flashlight_box_, &camera, priority );
 	
 	/*

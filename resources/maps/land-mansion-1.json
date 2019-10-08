@@ -38,9 +38,19 @@
  "orientation":"orthogonal",
  "properties":[
         {
+         "name":"bg_color",
+         "type":"int",
+         "value":6
+        }, 
+        {
          "name":"hero_type",
          "type":"string",
          "value":"FLASHLIGHT"
+        }, 
+        {
+         "name":"palette",
+         "type":"string",
+         "value":"Mansion 3"
         }, 
         {
          "name":"tileset",

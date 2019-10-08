@@ -14,10 +14,10 @@ class FlashlightPlayerSprite : public PlayerSprite
 		void render( Camera& camera, bool priority = false ) override;
 
 	private:
-		double angle_;
 		SpriteGraphics flashlight_gfx_;
+		SpriteGraphics flash_beam_gfx_;
 		sdl2::SDLRect flashlight_box_;
-		double ekwmflwmfkfsm;
+		double angle_;
 
 		int x2( int center_x, double offset = 0.0 ) const;
 		int y2( int center_y, double offset = 0.0 ) const;
