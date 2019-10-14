@@ -901,7 +901,8 @@ int Level::allEnemiesToKill() const
 			(
 				( m.sprite( i ) == 450 || m.sprite( i ) == 451 ) ||
 				( m.sprite( i ) > 452 && m.sprite( i ) < 457 ) ||
-				( m.sprite( i ) > 519 && m.sprite( i ) < 533 )
+				( m.sprite( i ) > 519 && m.sprite( i ) < 533 ) ||
+				m.sprite( i ) == 577
 			)
 			{
 				++n;

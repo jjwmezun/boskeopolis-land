@@ -6,7 +6,7 @@ static constexpr int WAVE_TIMER_LIMIT = 32;
 
 MansionGhostSprite::MansionGhostSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ghost.png", 0, 0, false, false, 0.0, false, -4, -4, 8, 8, 160, SDL_BLENDMODE_ADD ), x, y, 8, 8, { SpriteType::ENEMY, SpriteType::MANSION_GHOST }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ghost.png", 0, 0, false, false, 0.0, false, -4, -4, 8, 8, 160, SDL_BLENDMODE_ADD ), x, y, 8, 8, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
 	light_timer_ ( 0 ),
 	being_flashed_ ( false ),
 	vertical_acceleration_ ( 0 ),

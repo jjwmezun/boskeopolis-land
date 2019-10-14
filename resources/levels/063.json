@@ -7,8 +7,14 @@
 		}
 	],
 
-	"entrance_x": 48,
-	"entrance_y": 20,
+	"entrance_x": 96,
+	"entrance_y": 54,
 	"gem_challenge": 0,
-	"time_challenge": 0
+	"time_challenge": 0,
+
+	"goal":
+	{
+		"type": "kill_all",
+		"message": "¡Make all the ghosts fade with your flashlight!"
+	}
 }

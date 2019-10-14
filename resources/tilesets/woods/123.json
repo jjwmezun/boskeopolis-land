@@ -1,0 +1,21 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 2,
+		"y": 8
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "bouncy"
+			},
+			"conditions":
+			[
+				{ "type": "collide_bottom" }
+			]
+		}
+	]
+}

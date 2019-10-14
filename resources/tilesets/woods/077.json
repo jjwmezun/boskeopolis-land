@@ -5,5 +5,14 @@
 		"x": 10,
 		"y": 0,
 		"priority": true
-	}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		}
+	]
 }

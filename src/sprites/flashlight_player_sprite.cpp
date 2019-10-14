@@ -1,7 +1,7 @@
 #include "camera.hpp"
 #include "event_system.hpp"
 #include "input.hpp"
-#include "input_component_flashlight_player.hpp"
+#include "input_component_player.hpp"
 #include "flashlight_player_sprite.hpp"
 #include "line.hpp"
 #include "mezun_math.hpp"
@@ -76,7 +76,7 @@ FlashlightPlayerSprite::FlashlightPlayerSprite( int x, int y )
 		y,
 		1000,
 		6000,
-		std::unique_ptr<InputComponentFlashlightPlayer> ( new InputComponentFlashlightPlayer() ),
+		std::unique_ptr<InputComponentPlayer> ( new InputComponentPlayer() ),
 		std::make_unique<SpriteGraphics> ( "sprites/flashlight-autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 )
 	),
 	flashlight_gfx_ ( "sprites/flashlight-autumn.png", 0, 51, false, false, 0.0, false, 0, 0, 0, 0, 255, SDL_BLENDMODE_NONE, { 0, 13 }, true ),
@@ -91,22 +91,48 @@ void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 {
 	if ( !events.pause_hero_ )
 	{
-		heroActions( camera, lvmap, events, sprites, blocks, health );
-		player_gfx_.update( *this, graphics_.get(), &events );
-		if ( Input::held( Input::Action::MOVE_UP ) )
+		resetBopsOnLanding();
+		handleRunning();
+		handleWalking();
+		if ( !input_->right() && !input_->left())
 		{
-			angle_ -= FLASHLIGHT_SPEED;
-			if ( angle_ < -FLASHLIGHT_MOVEMENT_LIMIT )
-			{
-				angle_ = -FLASHLIGHT_MOVEMENT_LIMIT;
-			}
+			stopX();
 		}
-		else if ( Input::held( Input::Action::MOVE_DOWN ) )
+		handleJumpingAndFalling( blocks, events );
+		events.on_conveyor_belt_ = false;
+		handleLadderBehavior( events );
+		adjustJumpSpeed();
+		dontDuckWhileSwimming( blocks );
+		input_->update();
+		handleLookingUp();
+		handleCameraMovement( camera );
+		handleWaterEnteringAndExiting( lvmap );
+		handleDoorBehavior( events );
+		handleChasmBehavior( lvmap, events );
+		handleDrowningBehavior( health );
+		invincibilityFlicker( health );
+		boundaries( camera, lvmap );
+		camera.adjust( *this, lvmap );
+		events.is_sliding_prev_ = events.is_sliding_;
+		events.is_sliding_ = false;
+		player_gfx_.update( *this, graphics_.get(), &events );
+		if ( !on_ladder_ )
 		{
-			angle_ += FLASHLIGHT_SPEED;
-			if ( angle_ > FLASHLIGHT_MOVEMENT_LIMIT )
+			if ( Input::held( Input::Action::MOVE_UP ) )
 			{
-				angle_ = FLASHLIGHT_MOVEMENT_LIMIT;
+				angle_ -= FLASHLIGHT_SPEED;
+				if ( angle_ < -FLASHLIGHT_MOVEMENT_LIMIT )
+				{
+					angle_ = -FLASHLIGHT_MOVEMENT_LIMIT;
+				}
+			}
+			else if ( Input::held( Input::Action::MOVE_DOWN ) )
+			{
+				angle_ += FLASHLIGHT_SPEED;
+				if ( angle_ > FLASHLIGHT_MOVEMENT_LIMIT )
+				{
+					angle_ = FLASHLIGHT_MOVEMENT_LIMIT;
+				}
 			}
 		}
 	}
@@ -115,14 +141,18 @@ void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 void FlashlightPlayerSprite::render( Camera& camera, bool priority )
 {
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
-	flashlight_box_.y = yPixels();
-	flashlight_gfx_.flip_x_ = flash_beam_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
-	flashlight_gfx_.rotation_ = flash_beam_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
-	flashlight_gfx_.rotation_center_.x = flash_beam_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
 
-	flash_beam_gfx_.render( flashlight_box_, &camera, priority );
-	flashlight_gfx_.render( flashlight_box_, &camera, priority );
+	if ( !on_ladder_ )
+	{
+		flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
+		flashlight_box_.y = yPixels();
+		flashlight_gfx_.flip_x_ = flash_beam_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
+		flashlight_gfx_.rotation_ = flash_beam_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
+		flashlight_gfx_.rotation_center_.x = flash_beam_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
+
+		flash_beam_gfx_.render( flashlight_box_, &camera, priority );
+		flashlight_gfx_.render( flashlight_box_, &camera, priority );
+	}
 	
 	/*
 	const auto lines = getLines();

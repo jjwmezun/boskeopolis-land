@@ -42,15 +42,6 @@ class PlayerSprite : public Sprite
 
 	protected:
 		void playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events );
-
-		bool door_lock_;
-		bool is_looking_up_;
-		std::unique_ptr<InputComponent> input_;
-		const DuckData duck_data_;
-		const UnDuckData unduck_data_;
-		PlayerGraphics player_gfx_;
-
-	private:
 		void handleCameraMovement( Camera& camera );
 		void handleDoorBehavior( EventSystem& events );
 		void handleChasmBehavior( const Map& lvmap, EventSystem& events );
@@ -68,4 +59,11 @@ class PlayerSprite : public Sprite
 		void handleLookingUp();
 		void slideLeft( EventSystem& events );
 		void slideRight( EventSystem& events );
+
+		bool door_lock_;
+		bool is_looking_up_;
+		std::unique_ptr<InputComponent> input_;
+		const DuckData duck_data_;
+		const UnDuckData unduck_data_;
+		PlayerGraphics player_gfx_;
 };
