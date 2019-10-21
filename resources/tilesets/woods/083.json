@@ -4,5 +4,14 @@
 		"type": "sprite",
 		"x": 11,
 		"y": 3
-	}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		}
+	]
 }
