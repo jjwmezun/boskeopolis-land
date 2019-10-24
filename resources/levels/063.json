@@ -3,7 +3,33 @@
 	"maps":
 	[
 		{
-			"slug": "mansion-1"
+			"slug": "mansion-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "shady_firs.png",
+					"width": 461,
+					"height": 300,
+					"y_offset": -64,
+					"x_scroll": 0.1,
+					"y_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "thin_boughs_dark.png",
+					"width": 256,
+					"height": 256,
+					"x_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "thick_boughs.png",
+					"width": 640,
+					"height": 256,
+					"x_scroll": 0.5
+				}
+			]
 		}
 	],
 
