@@ -13,10 +13,11 @@ AnimatedGraphics::AnimatedGraphics
 	int w_adjustment,
 	int h_adjustment,
 	int animation_speed,
-	Uint8 alpha
+	Uint8 alpha,
+	SDL_BlendMode blend_mode
 )
 :
-	SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment, alpha ),
+	SpriteGraphics( std::forward<std::string> ( texture ), 0, 0, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment, alpha, blend_mode ),
 	frames_ ( frames ),
 	current_frame_index_ ( 0, frames.size() - 1, 0, true ),
 	animation_timer_ ( animation_speed )

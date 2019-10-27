@@ -33,12 +33,12 @@
 		}
 	],
 
-	"entrance_x": 96,
-	"entrance_y": 54,
-	"gem_challenge": 0,
-	"time_challenge": 0,
+	"entrance_x": 97,
+	"entrance_y": 55,
+	"gem_challenge": 20000,
+	"time_challenge": 40,
 
-	"boal":
+	"goal":
 	{
 		"type": "kill_all",
 		"message": "¡Make all the ghosts fade with your flashlight!"

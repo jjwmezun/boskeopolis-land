@@ -23,7 +23,8 @@ class AnimatedGraphics : public SpriteGraphics
 			int w_adjustment = 0,
 			int h_adjustment = 0,
 			int animation_speed = Unit::DEFAULT_ANIMATION_SPEED,
-			Uint8 alpha = 255
+			Uint8 alpha = 255,
+			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 		);
 		~AnimatedGraphics();
 		void update() override;

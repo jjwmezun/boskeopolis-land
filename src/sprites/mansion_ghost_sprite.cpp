@@ -1,17 +1,32 @@
+#include <cassert>
 #include "mansion_ghost_sprite.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int LIGHT_LIMIT = 32;
 static constexpr int WAVE_TIMER_LIMIT = 32;
+static constexpr int NUMBER_OF_ANIMATION_FRAMES = 8;
+static constexpr int ANIMATION_FRAMES[ NUMBER_OF_ANIMATION_FRAMES ] =
+{
+	0,
+	31,
+	62,
+	93,
+	93,
+	62,
+	31,
+	0
+};
 
 MansionGhostSprite::MansionGhostSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ghost.png", 0, 0, false, false, 0.0, false, -4, -4, 8, 8, 160, SDL_BLENDMODE_ADD ), x, y, 8, 8, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-3.png", 0, 0, false, false, 0.0, false, -10, -6, 16, 7, 160, SDL_BLENDMODE_ADD ), x, y, 15, 18, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
 	light_timer_ ( 0 ),
 	being_flashed_ ( false ),
 	vertical_acceleration_ ( 0 ),
 	vertical_speed_ ( 0 ),
-	wave_timer_ ( 0 )
+	wave_timer_ ( 0 ),
+	animation_timer_ ( 0 ),
+	current_animation_frame_ ( 0 )
 {};
 
 MansionGhostSprite::~MansionGhostSprite() {};
@@ -35,11 +50,19 @@ void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 		{
 			light_timer_ = 0;
 		}
+		if ( direction_y_ == Direction::Vertical::DOWN )
+		{
+			vertical_acceleration_ = 50;
+		}
+		else
+		{
+			vertical_acceleration_ = -50;
+		}
 		if ( vertical_speed_ > 500 )
 		{
 			vertical_speed_ = 500;
 		}
-		else if ( vertical_speed_ > -500 )
+		else if ( vertical_speed_ < -500 )
 		{
 			vertical_speed_ = -500;
 		}
@@ -57,7 +80,28 @@ void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 		++wave_timer_;
 	}
 
-	graphics_->current_frame_x_ = ( being_flashed_ ) ? 16 : 0;
+	if ( being_flashed_ )
+	{
+		graphics_->current_frame_x_ = 155;
+	}
+	else
+	{
+		if ( animation_timer_ > 7 )
+		{
+			animation_timer_ = 0;
+			++current_animation_frame_;
+			if ( current_animation_frame_ >= NUMBER_OF_ANIMATION_FRAMES )
+			{
+				current_animation_frame_ = 0;
+			}
+		}
+		else
+		{
+			++animation_timer_;
+		}
+		assert( current_animation_frame_ < NUMBER_OF_ANIMATION_FRAMES );
+		graphics_->current_frame_x_ = ANIMATION_FRAMES[ current_animation_frame_ ];
+	}
 	flipGraphicsOnRight();
 };
 
@@ -68,15 +112,6 @@ void MansionGhostSprite::customInteract( Collision& my_collision, Collision& the
 		if ( !being_flashed_ )
 		{
 			moveToward( them );
-			if ( direction_y_ == Direction::Vertical::DOWN )
-			{
-				vertical_acceleration_ = 50;
-			}
-			else
-			{
-				vertical_acceleration_ = -50;
-			}
-			
 		}
 		else
 		{

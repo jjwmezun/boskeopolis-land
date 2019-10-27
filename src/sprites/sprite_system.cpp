@@ -51,6 +51,7 @@
 #include "flashlight_player_sprite.hpp"
 #include "full_heal_block_sprite.hpp"
 #include "gemmy_sprite.hpp"
+#include "ghost_coffin_sprite.hpp"
 #include "ghost_sprite.hpp"
 #include "gorilla_sprite.hpp"
 #include "guard_spike_sprite.hpp"
@@ -706,6 +707,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 176 ):
 			return std::unique_ptr<Sprite> ( new MansionGhostSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 177 ):
+			return std::unique_ptr<Sprite> ( new GhostCoffinSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
