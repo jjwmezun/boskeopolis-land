@@ -78,6 +78,11 @@
          "name":"tileset",
          "type":"string",
          "value":"woods"
+        }, 
+        {
+         "name":"ui_bg_color",
+         "type":"int",
+         "value":2
         }],
  "renderorder":"right-down",
  "tiledversion":"1.1.4",

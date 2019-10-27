@@ -8,12 +8,15 @@
 			[
 				{
 					"type": "image",
-					"img": "shady_firs.png",
-					"width": 461,
-					"height": 300,
-					"y_offset": -64,
-					"x_scroll": 0.1,
-					"y_scroll": 0.25
+					"img": "waxing-gibbous-moon-2.png",
+					"width": 32,
+					"height": 32,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 48,
+					"y_offset": 24
 				},
 				{
 					"type": "image",
