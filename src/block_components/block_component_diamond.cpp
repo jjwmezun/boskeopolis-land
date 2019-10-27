@@ -17,10 +17,11 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 	}
 	else
 	{
-		if ( collision.collideAny() && sprite.hasType( Sprite::SpriteType::HERO ) )
+		if ( sprite.hasType( Sprite::SpriteType::HERO ) && collision.collideAny() )
 		{
 			Inventory::getDiamond();
 			Audio::playSound( Audio::SoundType::DIAMOND );
+			removeDiamond( block, level.currentMap() );
 		}
 	}
 };
