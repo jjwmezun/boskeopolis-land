@@ -1,0 +1,6 @@
+* Change enemy icon on “Foul Fowl Farm” & “Mind Your Manors”
+* Revamp Level organization ( after all levels are done )
+  ** Label levels with themes ( “%CITYICON%–1”, for example )
+* Revamp text system
+  ** Separate as much text as possible into external text files.
+  ** Replace dumb ASCII char with UTF-8
