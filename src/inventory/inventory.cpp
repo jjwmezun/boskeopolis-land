@@ -36,6 +36,9 @@ namespace Inventory
 	void saveBinary();
 	void loadBinary();
 
+	bool testMultiples( int value );
+	void addFundsForMultiplier( int value );
+
 
 	// Private Variables
 	static constexpr bool DEFAULT_VICTORY        = false;
@@ -72,6 +75,7 @@ namespace Inventory
 	static Clock clock_ = Clock();
 
 	static int bops_ = 0;
+	static int ghost_kills_ = 0;
 
 
 	// Function Implementations
@@ -698,15 +702,13 @@ namespace Inventory
 		++bops_;
 		if ( bopsMultiplier() )
 		{
-			//  2    3    4    5     6      7      8
-			// 100, 200, 400, 800, 1,600, 3,200, 6,400
-			addFunds( ( int )( 100 * pow( 2, bops_ - 2 ) ) );
+			addFundsForMultiplier( bops_ );
 		}
 	};
 
 	bool bopsMultiplier()
 	{
-		return bops_ > 1 && bops_ <= MAX_BOPS;
+		return testMultiples( bops_ );
 	};
 
 	void clearBops()
@@ -718,4 +720,40 @@ namespace Inventory
 	{
 		return bops_;
 	};
+
+	void addGhostKill()
+	{
+		++ghost_kills_;
+		if ( multipleGhostKills() )
+		{
+			addFundsForMultiplier( ghost_kills_ );
+		}
+	};
+
+	void clearGhostKills()
+	{
+		ghost_kills_ = 0;
+	};
+
+	int howManyGhostKills()
+	{
+		return ghost_kills_;
+	};
+
+	bool multipleGhostKills()
+	{
+		return testMultiples( ghost_kills_ );
+	};
+
+	bool testMultiples( int value )
+	{
+		return value > 1 && value <= MAX_BOPS;
+	};
+
+	void addFundsForMultiplier( int value )
+	{
+		//  2    3    4    5     6      7      8
+		// 100, 200, 400, 800, 1,600, 3,200, 6,400
+		addFunds( ( int )( 100 * pow( 2, value - 2 ) ) );
+	}
 };

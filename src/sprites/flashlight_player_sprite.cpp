@@ -2,8 +2,11 @@
 #include "event_system.hpp"
 #include "input.hpp"
 #include "input_component_player.hpp"
+#include "inventory.hpp"
 #include "flashlight_player_sprite.hpp"
 #include "line.hpp"
+#include "main.hpp"
+#include "mansion_ghost_sprite.hpp"
 #include "mezun_math.hpp"
 
 // Many thanks to Martin Thoma
@@ -136,13 +139,19 @@ void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 			}
 		}
 	}
+
+	if ( MansionGhostSprite::last_ghost_death_frame_ != -1 && Main::stateFrame() - MansionGhostSprite::last_ghost_death_frame_ > 30 )
+	{
+		Inventory::clearGhostKills();
+		MansionGhostSprite::last_ghost_death_frame_ = -1;
+	}
 };
 
 void FlashlightPlayerSprite::render( Camera& camera, bool priority )
 {
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 
-	if ( !on_ladder_ )
+	if ( !on_ladder_ && !is_dead_ )
 	{
 		flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
 		flashlight_box_.y = yPixels();
@@ -153,16 +162,6 @@ void FlashlightPlayerSprite::render( Camera& camera, bool priority )
 		flash_beam_gfx_.render( flashlight_box_, &camera, priority );
 		flashlight_gfx_.render( flashlight_box_, &camera, priority );
 	}
-	
-	/*
-	const auto lines = getLines();
-	for ( const auto& line : lines )
-	{
-		const auto relative_line = camera.relativeLine( Unit::SubPixelsToPixels( line ) );
-		Render::renderLine( relative_line, 6 );
-	}
-	*/
-	
 };
 
 int FlashlightPlayerSprite::x2( int center_x, double offset ) const

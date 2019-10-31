@@ -1,4 +1,5 @@
-#include <cassert>
+#include "inventory.hpp"
+#include "main.hpp"
 #include "mansion_ghost_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -17,9 +18,11 @@ static constexpr int ANIMATION_FRAMES[ NUMBER_OF_ANIMATION_FRAMES ] =
 	0
 };
 
+int MansionGhostSprite::last_ghost_death_frame_ = -1;
+
 MansionGhostSprite::MansionGhostSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-3.png", 0, 0, false, false, 0.0, false, -10, -6, 16, 7, 160, SDL_BLENDMODE_ADD ), x, y, 15, 18, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-3.png", 0, 0, false, false, 0.0, true, -10, -6, 16, 7, 160, SDL_BLENDMODE_ADD ), x, y, 15, 18, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
 	light_timer_ ( 0 ),
 	being_flashed_ ( false ),
 	vertical_acceleration_ ( 0 ),
@@ -37,9 +40,11 @@ void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	if ( being_flashed_ )
 	{
 		++light_timer_;
-		if ( light_timer_ > LIGHT_LIMIT )
+		if ( !is_dead_ && light_timer_ > LIGHT_LIMIT )
 		{
 			kill();
+			Inventory::addGhostKill();
+			last_ghost_death_frame_ = Main::stateFrame();
 		}
 		vertical_acceleration_ /= 1.15;
 	}
@@ -99,7 +104,6 @@ void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 		{
 			++animation_timer_;
 		}
-		assert( current_animation_frame_ < NUMBER_OF_ANIMATION_FRAMES );
 		graphics_->current_frame_x_ = ANIMATION_FRAMES[ current_animation_frame_ ];
 	}
 	flipGraphicsOnRight();
@@ -119,5 +123,25 @@ void MansionGhostSprite::customInteract( Collision& my_collision, Collision& the
 			stopY();
 			vertical_acceleration_ = 0;
 		}
+	}
+};
+
+void MansionGhostSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+{
+	if ( graphics_->alpha_ == 0 )
+	{
+		death_finished_ = true;
+	}
+	else
+	{
+		if ( graphics_->alpha_ >= 4 )
+		{
+			graphics_->alpha_ -= 4;
+		}
+		else
+		{
+			graphics_->alpha_ = 0;
+		}
+		
 	}
 };

@@ -16,6 +16,18 @@
 		{
 			"component":
 			{
+				"type": "switch_sound"
+            },
+            "conditions":
+            [
+                { "type": "switch_off" },
+                { "type": "hero" },
+                { "type": "collide_any" }
+            ]
+		},
+		{
+			"component":
+			{
 				"type": "switch_on"
             },
             "conditions":

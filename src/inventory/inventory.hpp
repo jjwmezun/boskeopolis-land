@@ -58,4 +58,8 @@ namespace Inventory
 	void clearBops();
 	int howManyBops();
 	bool bopsMultiplier();
+	void addGhostKill();
+	void clearGhostKills();
+	int howManyGhostKills();
+	bool multipleGhostKills();
 };

@@ -75,6 +75,7 @@
 #include "lightning_sprite.hpp"
 #include "lil_pipe_monster_sprite.hpp"
 #include "locked_door_sprite.hpp"
+#include "mansion_door_sprite.hpp"
 #include "mansion_ghost_sprite.hpp"
 #include "map.hpp"
 #include "maze_player_sprite.hpp"
@@ -117,6 +118,7 @@
 #include "rolling_ball_sprite.hpp"
 #include "rope_sprite.hpp"
 #include "rotating_block_sprite.hpp"
+#include "rug_monster_sprite.hpp"
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
 #include "shmup_bullet_sprite.hpp"
@@ -710,6 +712,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 177 ):
 			return std::unique_ptr<Sprite> ( new GhostCoffinSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 178 ):
+			return std::unique_ptr<Sprite> ( new MansionDoorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 179 ):
+			return std::unique_ptr<Sprite> ( new RugMonsterSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -40,6 +40,7 @@
 #include "block_component_swimmable.hpp"
 #include "block_component_switch_off.hpp"
 #include "block_component_switch_on.hpp"
+#include "block_component_switch_sound.hpp"
 #include "block_component_warp.hpp"
 #include "block_condition_collide_any.hpp"
 #include "block_condition_collide_bottom.hpp"
@@ -533,6 +534,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "door" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentDoor> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "switch_sound" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSwitchSound> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "layer" ) )
 					{

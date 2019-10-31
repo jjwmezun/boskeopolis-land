@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "event_system.hpp"
 #include "ghost_coffin_sprite.hpp"
 #include "mansion_ghost_sprite.hpp"
@@ -16,6 +17,10 @@ void GhostCoffinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 {
     if ( !done_ && events.switch_ )
     {
+        if ( hit_box_.x == original_hit_box_.x )
+        {
+            Audio::playSound( Audio::SoundType::CHEST_LOCK );
+        }
         if ( hit_box_.x >= original_hit_box_.x + 16000 )
         {
             hit_box_.x = original_hit_box_.x + 16000;

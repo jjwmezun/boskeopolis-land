@@ -158,4 +158,8 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	{
 		Text::renderNumber( Inventory::howManyBops(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontColor::DARK_GRAY );
 	}
+	else if ( Inventory::multipleGhostKills() )
+	{
+		Text::renderNumber( Inventory::howManyGhostKills(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontColor::DARK_GRAY );
+	}
 };
