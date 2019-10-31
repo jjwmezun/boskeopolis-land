@@ -26,7 +26,8 @@ namespace Audio
 		SEWER_HOLE = 18,
 		UNLOCK = 19,
 		BUMP = 20,
-		SWITCH = 21
+		SWITCH = 21,
+		GHOST = 22
 	};
 
 	void init( bool noaudio );

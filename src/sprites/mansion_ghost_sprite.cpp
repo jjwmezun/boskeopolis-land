@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "inventory.hpp"
 #include "main.hpp"
 #include "mansion_ghost_sprite.hpp"
@@ -45,6 +46,7 @@ void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 			kill();
 			Inventory::addGhostKill();
 			last_ghost_death_frame_ = Main::stateFrame();
+			Audio::playSound( Audio::SoundType::GHOST );
 		}
 		vertical_acceleration_ /= 1.15;
 	}
