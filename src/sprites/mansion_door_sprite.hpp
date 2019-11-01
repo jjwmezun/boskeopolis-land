@@ -1,5 +1,6 @@
 #pragma once
 
+#include "animation_counter_no_repeat.hpp"
 #include "sprite.hpp"
 
 class MansionDoorSprite : public Sprite
@@ -11,13 +12,14 @@ class MansionDoorSprite : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
     
     private:
+        static constexpr int NUMBER_OF_FRAMES = 8;
+
         enum class MansionDoorState
         {
             CLOSED,
             OPENING,
             OPEN
         };
+        AnimationCounterNoRepeat<NUMBER_OF_FRAMES> animation_counter_;
         MansionDoorState state_;
-        int animation_timer_;
-        int current_animation_frame_;
 };

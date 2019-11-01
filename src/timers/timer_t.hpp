@@ -37,28 +37,9 @@ class TimerT
 
             if ( on() )
             {
-                if ( countsDown() )
-                {
-                    if ( counter_ <= limit_T )
-                    {
-                        hit = true;
-                    }
-                    else
-                    {
-                        hit = false;
-                    }
-                }
-                else
-                {
-                    if ( counter_ >= limit_T )
-                    {
-                        hit = true;
-                    }
-                    else
-                    {
-                        hit = false;
-                    }
-                }
+                hit = ( countsDown() )
+                    ? counter_ <= limit_T
+                    : counter_ >= limit_T;
             }
 
             event( hit );
