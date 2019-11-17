@@ -295,10 +295,12 @@ const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::
 	std::vector<const Block*> block_sublist = {};
 	const sdl2::SDLRect relative_box = camera.relativeRect( Unit::SubPixelsToPixels( rect ) );
 	// Only test with blocks round it.
-	const int first_x = floor( relative_box.x / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block x a bit left o' box
-	const int first_y = floor( relative_box.y / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block y a bit 'bove box.
-	const int last_x  = ceil ( relative_box.right() / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block x a bit right o' box.
-	const int last_y  = ceil ( relative_box.bottom() / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block y a bit below box.
+	const int first_x = Unit::PixelsToBlocks( relative_box.x ) + 6; // Block x a bit left o' box
+	const int first_y = Unit::PixelsToBlocks( relative_box.y ) + 7; // Block y a bit 'bove box.
+	const int last_x  = ( int )( ceil ( ( double )( relative_box.right() ) / ( double )( Unit::PIXELS_PER_BLOCK ) ) ) + 10; // Block x a bit right o' box.
+	const int last_y  = ( int )( ceil ( ( double )( relative_box.bottom() ) / ( double )( Unit::PIXELS_PER_BLOCK ) ) ) + 11; // Block y a bit below box.
+	std::cout<<first_x<<std::endl;
+
 	for ( int y = first_y; y < last_y; ++y )
 	{
 		for ( int x = first_x; x < last_x; ++x )

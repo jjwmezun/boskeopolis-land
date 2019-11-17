@@ -105,7 +105,6 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 		speed_ = speed;
 	}
 	speed_ /= 1.005;
-	std::cout<<speed_<<std::endl;
 	graphics_->rotation_ = angle_;
 
 	boundaries( camera, lvmap );
@@ -121,7 +120,7 @@ void PlayerCarSprite::render( Camera& camera, bool priority )
 	for ( const Block* block : block_list_ )
 	{
 		const sdl2::SDLRect relative_box = camera.relativeRect( Unit::SubPixelsToPixels( block->hit_box_ ) );
-		Render::renderRectDebug( relative_box, { 255, 0, 0, 255 } );
+		Render::renderRectDebug( relative_box, { 255, 0, 0, 128 } );
 	}
 
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
