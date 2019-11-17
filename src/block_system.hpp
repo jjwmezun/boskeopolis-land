@@ -27,6 +27,7 @@ class BlockSystem
 		bool blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponent::Type type ) const;
 		BlockType* getBlockType( int type );
 		const std::vector<Block>& getBlocksList() const;
+		const std::vector<const Block*> getSolidBlocksInField( const sdl2::SDLRect& rect, const Camera& camera, const Sprite& sprite, const EventSystem& events, const Health& health ) const;
 
 	private:
 		std::vector<Block> blocks_;

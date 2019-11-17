@@ -68,6 +68,15 @@ bool Block::hasComponentType( BlockComponent::Type type ) const
 	return false;
 };
 
+bool Block::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+{
+	if ( hasType() )
+	{
+		return type_->testForComponentTypeNow( type, collision, sprite, block, events, health );
+	}
+	return false;
+}
+
 bool Block::hasType() const
 {
 	return type_ != nullptr;

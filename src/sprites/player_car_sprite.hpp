@@ -15,7 +15,7 @@ class PlayerCarSprite : public Sprite
 		double angle_;
 		double speed_;
 		double acceleration_;
-		double previous_angle_[ 2 ];
-		int x_prev_prev_[ 2 ];
-		int y_prev_prev_[ 2 ];
+		std::vector<const Block*> block_list_;
+
+		bool testForCollisions( int x, int y, const Camera& camera, const BlockSystem& blocks, const EventSystem& events, const Health& health );
 };

@@ -4,6 +4,7 @@
 #include "input.hpp"
 #include "player_car_sprite.hpp"
 #include "sprite_graphics.hpp"
+#include "test_line_and_box_collision.hpp"
 
 #include <iostream>
 
@@ -19,9 +20,7 @@ PlayerCarSprite::PlayerCarSprite( int x, int y )
 	angle_ ( 0.0 ),
 	speed_ ( 0.0 ),
 	acceleration_ ( 0.0 ),
-	previous_angle_ ( { 0.0, 0.0 } ),
-	x_prev_prev_ ( { 0, 0 } ),
-	y_prev_prev_ ( { 0, 0 } )
+	block_list_ ( {} )
 {};
 
 PlayerCarSprite::~PlayerCarSprite() {};
@@ -41,54 +40,76 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 		acceleration_ = 0;
 	}
 
-	if ( speed_ >= START_SPEED || speed_ <= BACK_SPEED )
+	double speed = speed_ + acceleration_;
+	if ( Input::held( Input::Action::CANCEL ) )
+	{
+		speed /= 1.15;
+	}
+
+	double angle = angle_;
+	if ( speed >= START_SPEED || speed <= BACK_SPEED )
 	{
 		if ( Input::held( Input::Action::MOVE_LEFT ) )
 		{
-			angle_ -= TURN_SPEED;
+			angle -= TURN_SPEED;
 		}
 		else if ( Input::held( Input::Action::MOVE_RIGHT ) )
 		{
-			angle_ += TURN_SPEED;
+			angle += TURN_SPEED;
 		}
-		graphics_->rotation_ = angle_;
 	}
 
-	speed_ += acceleration_;
+	if ( speed > MAX_SPEED ) speed = MAX_SPEED;
+	if ( speed < MIN_SPEED ) speed = MIN_SPEED;
 
-	if ( speed_ > MAX_SPEED ) speed_ = MAX_SPEED;
-	if ( speed_ < MIN_SPEED ) speed_ = MIN_SPEED;
+	const double angle_radians = mezun::convertDegreesToRadians( angle - 90.0 );
+	int x = hit_box_.x + ( int )( speed * std::cos( angle_radians ) );
+	int y = hit_box_.y + ( int )( speed * std::sin( angle_radians ) );
 
-	const double radians = ( M_PI / 180.0 ) * ( angle_ - 90.0 );
-	hit_box_.x += ( int )( speed_ * std::cos( radians ) );
-	hit_box_.y += ( int )( speed_ * std::sin( radians ) );
+	bool collisions = testForCollisions( x, y, camera, blocks, events, health );
 
-	if ( collide_top_ || collide_bottom_ || collide_left_ || collide_right_ )
+	if ( collisions )
 	{
 		std::cout<<"HIT"<<std::endl;
-		hit_box_.x = x_prev_prev_[ 0 ] = x_prev_prev_[ 1 ];
-		hit_box_.y = y_prev_prev_[ 0 ] = y_prev_prev_[ 1 ];
-		angle_ = previous_angle_[ 0 ] = previous_angle_[ 1 ];
-		speed_ = -speed_ / 2;
+		if ( angle_ < angle )
+		{
+			angle_ -= ( 3 * TURN_SPEED );
+		}
+		else if ( angle_ > angle )
+		{
+			angle_ += ( 3 * TURN_SPEED );
+		}
+		speed = speed_ * ( -2.0 );
+
+		if ( speed > MAX_SPEED ) speed = MAX_SPEED;
+		if ( speed < MIN_SPEED ) speed = MIN_SPEED;
+
+		x = hit_box_.x + ( int )( speed * std::cos( angle_radians ) );
+		y = hit_box_.y + ( int )( speed * std::sin( angle_radians ) );
+		collisions = testForCollisions( x, y, camera, blocks, events, health );
+
+		if ( collisions )
+		{
+			speed_ = 0.0;
+		}
+		else
+		{
+			speed_ = speed;
+		}
 	}
 	else
 	{
-		x_prev_prev_[ 1 ] = x_prev_prev_[ 0 ];
-		y_prev_prev_[ 1 ] = y_prev_prev_[ 0 ];
-		previous_angle_[ 1 ] = previous_angle_[ 0 ];
-		x_prev_prev_[ 0 ] = hit_box_.x;
-		y_prev_prev_[ 0 ] = hit_box_.y;
-		previous_angle_[ 0 ] = angle_;
+		hit_box_.x = x;
+		hit_box_.y = y;
+		angle_ = angle;
+		speed_ = speed;
 	}
-
 	speed_ /= 1.005;
+	std::cout<<speed_<<std::endl;
+	graphics_->rotation_ = angle_;
 
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
-
-	std::cout<<"A2: "<<previous_angle_[ 1 ]<<std::endl;
-	std::cout<<"A1: "<<previous_angle_[ 0 ]<<std::endl;
-	std::cout<<"A0: "<<angle_<<std::endl;
 };
 
 void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
@@ -97,6 +118,12 @@ void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_
 
 void PlayerCarSprite::render( Camera& camera, bool priority )
 {
+	for ( const Block* block : block_list_ )
+	{
+		const sdl2::SDLRect relative_box = camera.relativeRect( Unit::SubPixelsToPixels( block->hit_box_ ) );
+		Render::renderRectDebug( relative_box, { 255, 0, 0, 255 } );
+	}
+
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	const auto lines = AngledSpriteMovement::getLinesFromBox( hit_box_, mezun::convertDegreesToRadians( angle_ ) );
 	for ( const Line& line : lines )
@@ -104,4 +131,23 @@ void PlayerCarSprite::render( Camera& camera, bool priority )
 		const Line relative_line = camera.relativeLine( Unit::SubPixelsToPixels( line ) );
 		Render::renderLineDebug( relative_line, { 0, 0, 255, 128 } );
 	}
+};
+
+bool PlayerCarSprite::testForCollisions( int x, int y, const Camera& camera, const BlockSystem& blocks, const EventSystem& events, const Health& health )
+{
+	const sdl2::SDLRect new_hit_box = { x, y, hit_box_.w, hit_box_.h, };
+	const auto block_list = blocks.getSolidBlocksInField( new_hit_box, camera, *this, events, health );
+	block_list_ = block_list;
+	const auto collision_lines = AngledSpriteMovement::getLinesFromBox( new_hit_box, mezun::convertDegreesToRadians( angle_ ) );
+	for ( const Block* block : block_list )
+	{
+		for ( const Line& line : collision_lines )
+		{
+			if ( mezun::testLineAndBoxCollision( line, block->hit_box_ ) )
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 };

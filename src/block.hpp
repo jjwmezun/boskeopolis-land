@@ -26,6 +26,7 @@ class Block : public Object
 		const BlockType* type() const;
 		bool isDestroyed() const;
 		bool hasComponentType( BlockComponent::Type type ) const;
+		bool testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const;
 		void init( Map& lvmap );
 
 	private:

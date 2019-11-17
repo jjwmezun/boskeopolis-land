@@ -1,5 +1,6 @@
 #include "block_system.hpp"
 #include "camera.hpp"
+#include "collision.hpp"
 #include "level.hpp"
 #include "render.hpp"
 #include "map.hpp"
@@ -9,6 +10,9 @@
 #include <iostream>
 
 static constexpr int CAMERA_PADDING = 8;
+static constexpr int GRID_WIDTH = Unit::WINDOW_WIDTH_BLOCKS + CAMERA_PADDING * 2;
+static constexpr int INTERACT_PADDING = 3 + CAMERA_PADDING;
+
 static bool testBlockInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type, const Block& b )
 {
 	return
@@ -90,17 +94,15 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 	if ( !blocks_work_offscreen_ )
 	{
 		// Only test sprite interaction with blocks round it.
-		static constexpr int grid_width = Unit::WINDOW_WIDTH_BLOCKS + CAMERA_PADDING * 2;
-		static constexpr int padding = 3 + CAMERA_PADDING;
-		const int first_x = floor( camera.relativeX( sprite.xPixels()      ) / Unit::PIXELS_PER_BLOCK ) - padding; // Block x a bit left o' sprite.
-		const int first_y = floor( camera.relativeY( sprite.yPixels()      ) / Unit::PIXELS_PER_BLOCK ) - padding; // Block y a bit 'bove sprite.
-		const int last_x  = ceil ( camera.relativeX( sprite.rightPixels()  ) / Unit::PIXELS_PER_BLOCK ) + padding; // Block x a bit right o' sprite.
-		const int last_y  = ceil ( camera.relativeY( sprite.bottomPixels() ) / Unit::PIXELS_PER_BLOCK ) + padding; // Block y a bit below sprite.
+		const int first_x = floor( camera.relativeX( sprite.xPixels()      ) / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block x a bit left o' sprite.
+		const int first_y = floor( camera.relativeY( sprite.yPixels()      ) / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block y a bit 'bove sprite.
+		const int last_x  = ceil ( camera.relativeX( sprite.rightPixels()  ) / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block x a bit right o' sprite.
+		const int last_y  = ceil ( camera.relativeY( sprite.bottomPixels() ) / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block y a bit below sprite.
 		for ( int y = first_y; y < last_y; ++y )
 		{
 			for ( int x = first_x; x < last_x; ++x )
 			{
-				const int n = y * grid_width + x;
+				const int n = y * GRID_WIDTH + x;
 				if ( n < blocks_.size() )
 				{
 					Block& block = blocks_[ n ];
@@ -286,4 +288,32 @@ Tileset& BlockSystem::getTileset()
 const std::vector<Block>& BlockSystem::getBlocksList() const
 {
 	return blocks_;
+}
+
+const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::SDLRect& rect, const Camera& camera, const Sprite& sprite, const EventSystem& events, const Health& health ) const
+{
+	std::vector<const Block*> block_sublist = {};
+	const sdl2::SDLRect relative_box = camera.relativeRect( Unit::SubPixelsToPixels( rect ) );
+	// Only test with blocks round it.
+	const int first_x = floor( relative_box.x / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block x a bit left o' box
+	const int first_y = floor( relative_box.y / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block y a bit 'bove box.
+	const int last_x  = ceil ( relative_box.right() / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block x a bit right o' box.
+	const int last_y  = ceil ( relative_box.bottom() / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block y a bit below box.
+	for ( int y = first_y; y < last_y; ++y )
+	{
+		for ( int x = first_x; x < last_x; ++x )
+		{
+			const int n = y * GRID_WIDTH + x;
+			if ( n < blocks_.size() )
+			{
+				const Block& block = blocks_[ n ];
+				Collision collision = { 1, 1, 1, 1 };
+				if ( block.testForComponentTypeNow( BlockComponent::Type::SOLID, collision, sprite, block, events, health ) )
+				{
+					block_sublist.push_back( &block );
+				}
+			}
+		}
+	}
+	return block_sublist;
 }

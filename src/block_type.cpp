@@ -29,24 +29,7 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 {
 	for ( int i = 0; i < components_.size(); ++i )
 	{
-		bool can_interact = true;
-
-		if ( i < conditions_.size() )
-		{
-			for ( int j = 0; j < conditions_[ i ].size(); ++j )
-			{
-				if ( conditions_.at( i ).at( j ) )
-				{
-					if ( !conditions_.at( i ).at( j )->condition( collision, sprite, block, events, health ) )
-					{
-						can_interact = false;
-						break;
-					}
-				}
-			}
-		}
-
-		if ( can_interact )
+		if ( testCanInteract( i, collision, sprite, block, events, health ) )
 		{
 			if ( components_.at( i ) )
 			{
@@ -92,6 +75,24 @@ bool BlockType::hasComponentType( BlockComponent::Type type ) const
 	return false;
 };
 
+bool BlockType::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+{
+	for ( int i = 0; i < components_.size(); ++i )
+	{
+		if ( testCanInteract( i, collision, sprite, block, events, health ) )
+		{
+			if ( components_.at( i ) )
+			{
+				if ( components_.at( i )->type() == type )
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 const SpriteGraphics* BlockType::graphics() const
 {
 	return graphics_.get();
@@ -103,4 +104,22 @@ void BlockType::init( Block& block, Map& lvmap ) const
 	{
 		component->init( block, lvmap );
 	}
+};
+
+bool BlockType::testCanInteract( int i, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+{
+	if ( i < conditions_.size() )
+	{
+		for ( int j = 0; j < conditions_[ i ].size(); ++j )
+		{
+			if ( conditions_.at( i ).at( j ) )
+			{
+				if ( !conditions_.at( i ).at( j )->condition( collision, sprite, block, events, health ) )
+				{
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 };

@@ -42,6 +42,7 @@ class BlockType
 		void init( Block& block, Map& lvmap ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;
+		bool testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const;
 		const SpriteGraphics* graphics() const;
 
 
@@ -49,4 +50,6 @@ class BlockType
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::vector<std::unique_ptr<BlockComponent>> components_;
 		std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
+
+		bool testCanInteract( int i, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const;
 };
