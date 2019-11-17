@@ -32,6 +32,16 @@
          "value":6
         }, 
         {
+         "name":"hero_type",
+         "type":"string",
+         "value":"SHOOTER"
+        }, 
+        {
+         "name":"moon_gravity",
+         "type":"bool",
+         "value":true
+        }, 
+        {
          "name":"palette",
          "type":"string",
          "value":"Neon"

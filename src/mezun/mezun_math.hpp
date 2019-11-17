@@ -14,7 +14,12 @@ namespace mezun
 
     constexpr double convertDegreesToRadians( double degrees )
     {
-        return ( PI / ( double )( 180.0 ) ) * degrees;
+        return ( PI / 180.0 ) * degrees;
+    };
+
+    constexpr double convertRadiansToDegrees( double radians )
+    {
+        return radians * ( 180.0 / PI );
     };
 
     inline void initRand()

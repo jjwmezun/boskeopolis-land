@@ -492,6 +492,12 @@ namespace Render
 		renderLine( line.p1.x, line.p1.y, line.p2.x, line.p2.y, color );
 	}
 
+	void renderLineDebug( Line line, SDL_Color color )
+	{
+		SDL_SetRenderDrawColor( renderer_, color.r, color.g, color.b, color.a );
+		SDL_RenderDrawLine( renderer_, line.p1.x, line.p1.y, line.p2.x, line.p2.y );
+	};
+
 	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color )
 	{
 		SDL_SetRenderDrawColor( renderer_, color.r, color.g, color.b, color.a );
@@ -502,6 +508,13 @@ namespace Render
 	{
 		cameraAdjust( box, &camera );
 		renderRect( box, color, alpha );
+	};
+
+	void renderPointDebug( const Point& point, SDL_Color color )
+	{
+		SDL_SetRenderDrawColor( renderer_, color.r, color.g, color.b, color.a );
+		const sdl2::SDLRect box = { point.x, point.y, 1, 1 };
+		SDL_RenderFillRect( renderer_, &box );
 	};
 
 	void newPalette( Palette palette )
