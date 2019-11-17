@@ -79,7 +79,7 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 		{
 			angle_ += ( 3 * TURN_SPEED );
 		}
-		speed = speed_ * ( -2.0 );
+		speed = speed_ * ( -1.0 );
 
 		if ( speed > MAX_SPEED ) speed = MAX_SPEED;
 		if ( speed < MIN_SPEED ) speed = MIN_SPEED;
