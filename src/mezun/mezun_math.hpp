@@ -55,20 +55,26 @@ namespace mezun
 		return value % 90 == 0;
 	};
 
-	static constexpr int xOfN( int n, int w )
+	constexpr int xOfN( int n, int w )
 	{
 		return n % w;
 	};
 
-	static constexpr int yOfN( int n, int w )
+	constexpr int yOfN( int n, int w )
 	{
 		return floor( n / w );
 	};
 
-	static constexpr int nOfXY( int x, int y, int w )
+	constexpr int nOfXY( int x, int y, int w )
 	{
 		return ( y * w ) + x;
 	};
 
 	bool nextFrame( int frame, int interval, int duration );
+
+    template<typename T>
+    inline T randInCArray( T* array, int count )
+    {
+        return array[ randInt( count - 1, 0 ) ];
+    }
 };

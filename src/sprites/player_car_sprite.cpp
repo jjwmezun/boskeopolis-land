@@ -70,7 +70,6 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 
 	if ( collisions )
 	{
-		std::cout<<"HIT"<<std::endl;
 		if ( angle_ < angle )
 		{
 			angle_ -= ( 3 * TURN_SPEED );

@@ -36,6 +36,7 @@ namespace Direction
 		LEFT   = 4
 	};
 	static constexpr int SIMPLE_SIZE = ( int )Simple::LEFT + 1;
+	static constexpr int NUMBER_OF_VALID_SIMPLE_SIZES = 4;
 	std::string simpleString( Simple dir );
 
 	enum class Rotation
@@ -183,6 +184,16 @@ namespace Direction
 			}
 			break;
 		}
+	};
+
+	constexpr bool SimpleIsHorizontal( Simple d )
+	{
+		return SimpleIsOfWhatType( d ) == Type::HORIZONTAL;
+	};
+
+	constexpr bool SimpleIsVertical( Simple d )
+	{
+		return SimpleIsOfWhatType( d ) == Type::VERTICAL;
 	};
 
 	constexpr Simple rotateSimpleClockwise( Simple d )

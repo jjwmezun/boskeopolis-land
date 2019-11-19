@@ -299,7 +299,6 @@ const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::
 	const int first_y = Unit::PixelsToBlocks( relative_box.y ) + 7; // Block y a bit 'bove box.
 	const int last_x  = ( int )( ceil ( ( double )( relative_box.right() ) / ( double )( Unit::PIXELS_PER_BLOCK ) ) ) + 10; // Block x a bit right o' box.
 	const int last_y  = ( int )( ceil ( ( double )( relative_box.bottom() ) / ( double )( Unit::PIXELS_PER_BLOCK ) ) ) + 11; // Block y a bit below box.
-	std::cout<<first_x<<std::endl;
 
 	for ( int y = first_y; y < last_y; ++y )
 	{
