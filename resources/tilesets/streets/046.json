@@ -1,22 +1,11 @@
 {
 	"graphics":
 	{
-		"type": "switch",
-		"off":
-		{
-			"type": "sprite",
-			"x": 2,
-			"y": 0,
-			"rotation": 270
-		},
-		"on":
-		{
-			"type": "sprite",
-			"x": 2,
-			"y": 0,
-			"rotation": 270,
-			"priority": true
-		}
+		"type": "sprite",
+		"x": 2,
+		"y": 0,
+		"rotation": 270,
+		"priority": true
 	},
 	"behavior":
 	[
@@ -27,8 +16,7 @@
 			},
 			"conditions":
 			[
-				{ "type": "switch_on" },
-				{ "type": "collide_any" }
+				{ "type": "layer", "layer": 1 }
 			]
 		}
 	]

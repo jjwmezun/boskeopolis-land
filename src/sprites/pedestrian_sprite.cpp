@@ -5,7 +5,7 @@
 #include "pedestrian_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES = 10;
+static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES = 12;
 static constexpr int MOVEABLE_BLOCK_TYPES[ NUMBER_OF_MOVEABLE_BLOCK_TYPES ] =
 {
 	100,
@@ -17,9 +17,25 @@ static constexpr int MOVEABLE_BLOCK_TYPES[ NUMBER_OF_MOVEABLE_BLOCK_TYPES ] =
 	93,
 	112,
 	77,
-	74
+	74,
+	80,
+	96
 };
-static bool testMoveableBlockType( int value );
+
+static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES_LOWER = 8;
+static constexpr int MOVEABLE_BLOCK_TYPES_LOWER[ NUMBER_OF_MOVEABLE_BLOCK_TYPES_LOWER ] =
+{
+	80,
+	96,
+	76,
+	92,
+	91,
+	113,
+	129,
+	114
+};
+
+static bool testMoveableBlockType( int value, int layer );
 
 PedestrianSprite::PedestrianSprite( int x, int y )
 :
@@ -27,6 +43,8 @@ PedestrianSprite::PedestrianSprite( int x, int y )
 	animation_ ()
 {
 	direction_ = Direction::Simple::RIGHT;
+	layer_ = 2;
+	graphics_->priority_ = true;
 };
 
 PedestrianSprite::~PedestrianSprite() {};
@@ -40,6 +58,17 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		const int current_block_y = Unit::SubPixelsToBlocks( hit_box_.y );
 		const int current_block_n = lvmap.indexFromXAndY( current_block_x, current_block_y );
 
+		const int current_block = lvmap.block( current_block_n );
+
+		if ( current_block == 65 + 15 || current_block == 65 + 50 )
+		{
+			layer_ = 1;
+		}
+		else if ( current_block == 65 + 31 || current_block == 65 + 66 )
+		{
+			layer_ = 2;
+		}
+
 		const int block_types[ 4 ] =
 		{
 			lvmap.block( current_block_n - lvmap.widthBlocks() ), // UP
@@ -47,6 +76,7 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 			lvmap.block( current_block_n + lvmap.widthBlocks() ), // DOWN
 			lvmap.block( current_block_n - 1 				   )  // LEFT
 		};
+		std::cout<<block_types[ 2 ]<<std::endl;
 
 		int usable_blocks[ 4 ] = { -1, -1, -1, -1 };
 		int usable_blocks_count = 0;
@@ -55,7 +85,7 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 		for ( int i = 0; i < 4; ++i )
 		{
-			if ( i != opposite_direction_index && testMoveableBlockType( block_types[ i ] ) )
+			if ( i != opposite_direction_index && testMoveableBlockType( block_types[ i ], layer_ ) )
 			{
 				usable_blocks[ usable_blocks_count ] = i;
 				++usable_blocks_count;
@@ -84,7 +114,7 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 void PedestrianSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( my_collision.collideAny() )
+	if ( them.layer_ == layer_ && my_collision.collideAny() )
 	{
 		events.fail();
 	}
@@ -97,13 +127,26 @@ bool PedestrianSprite::isAtTransitionPoint() const
 		: hit_box_.y % Unit::SUBPIXELS_PER_BLOCK == 5000;
 }
 
-static bool testMoveableBlockType( int value )
+static bool testMoveableBlockType( int value, int layer )
 {
-	for ( int i = 0; i < NUMBER_OF_MOVEABLE_BLOCK_TYPES; ++i )
+	if ( layer == 2 )
 	{
-		if ( MOVEABLE_BLOCK_TYPES[ i ] == value )
+		for ( int i = 0; i < NUMBER_OF_MOVEABLE_BLOCK_TYPES; ++i )
 		{
-			return true;
+			if ( MOVEABLE_BLOCK_TYPES[ i ] == value )
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		for ( int i = 0; i < NUMBER_OF_MOVEABLE_BLOCK_TYPES_LOWER; ++i )
+		{
+			if ( MOVEABLE_BLOCK_TYPES_LOWER[ i ] == value )
+			{
+				return true;
+			}
 		}
 	}
 	return false;
