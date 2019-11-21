@@ -88,7 +88,7 @@
 #include "olive_spawner_sprite.hpp"
 #include "olive_sprite.hpp"
 #include "pelican_sprite.hpp"
-#include "pedestrian_sprite.hpp"
+#include "pedestrian_generator_sprite.hpp"
 #include "penguin_sprite.hpp"
 #include "pike_sprite.hpp"
 #include "pipe_eel_sprite.hpp"
@@ -721,7 +721,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new RugMonsterSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 180 ):
-			return std::unique_ptr<Sprite> ( new PedestrianSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new PedestrianGeneratorSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

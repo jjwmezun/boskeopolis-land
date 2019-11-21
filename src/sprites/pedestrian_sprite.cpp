@@ -5,7 +5,7 @@
 #include "pedestrian_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES = 12;
+static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES = 14;
 static constexpr int MOVEABLE_BLOCK_TYPES[ NUMBER_OF_MOVEABLE_BLOCK_TYPES ] =
 {
 	100,
@@ -19,10 +19,12 @@ static constexpr int MOVEABLE_BLOCK_TYPES[ NUMBER_OF_MOVEABLE_BLOCK_TYPES ] =
 	77,
 	74,
 	80,
-	96
+	96,
+	116,
+	92
 };
 
-static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES_LOWER = 8;
+static constexpr int NUMBER_OF_MOVEABLE_BLOCK_TYPES_LOWER = 11;
 static constexpr int MOVEABLE_BLOCK_TYPES_LOWER[ NUMBER_OF_MOVEABLE_BLOCK_TYPES_LOWER ] =
 {
 	80,
@@ -32,14 +34,17 @@ static constexpr int MOVEABLE_BLOCK_TYPES_LOWER[ NUMBER_OF_MOVEABLE_BLOCK_TYPES_
 	91,
 	113,
 	129,
-	114
+	114,
+	116,
+	130,
+	132
 };
 
 static bool testMoveableBlockType( int value, int layer );
 
 PedestrianSprite::PedestrianSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pedestrian.png", 0, 0, false, false, 0.0, false, -1, -1, 2, 2 ), x + 6, y + 5, 2, 5, {}, 250, 250, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pedestrian.png", 0, 0, false, false, 0.0, false, -1, -1, 2, 2 ), x + 6, y + 5, 2, 5, {}, 250, 250, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false ),
 	animation_ ()
 {
 	direction_ = Direction::Simple::RIGHT;
@@ -63,10 +68,12 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		if ( current_block == 65 + 15 || current_block == 65 + 50 )
 		{
 			layer_ = 1;
+			graphics_->priority_ = false;
 		}
 		else if ( current_block == 65 + 31 || current_block == 65 + 66 )
 		{
 			layer_ = 2;
+			graphics_->priority_ = true;
 		}
 
 		const int block_types[ 4 ] =
@@ -76,7 +83,6 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 			lvmap.block( current_block_n + lvmap.widthBlocks() ), // DOWN
 			lvmap.block( current_block_n - 1 				   )  // LEFT
 		};
-		std::cout<<block_types[ 2 ]<<std::endl;
 
 		int usable_blocks[ 4 ] = { -1, -1, -1, -1 };
 		int usable_blocks_count = 0;
@@ -114,7 +120,7 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 
 void PedestrianSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.layer_ == layer_ && my_collision.collideAny() )
+	if ( them.layer_ == layer_ && them.hasType( SpriteType::HERO ) && my_collision.collideAny() )
 	{
 		events.fail();
 	}
