@@ -152,3 +152,9 @@ bool PlayerCarSprite::testForCollisions( int x, int y, const Camera& camera, con
 	}
 	return false;
 };
+
+void PlayerCarSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+{
+	graphics_->visible_ = false;
+	death_finished_ = true;
+};

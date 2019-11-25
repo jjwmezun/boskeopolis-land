@@ -19,6 +19,7 @@
 #include "block_component_hurt.hpp"
 #include "block_component_key.hpp"
 #include "block_component_kill.hpp"
+#include "block_component_kill_animated.hpp"
 #include "block_component_layer.hpp"
 #include "block_component_light_switch.hpp"
 #include "block_component_lock_box.hpp"
@@ -49,6 +50,7 @@
 #include "block_condition_collide_right.hpp"
 #include "block_condition_collide_specific.hpp"
 #include "block_condition_collide_top.hpp"
+#include "block_condition_collide_center.hpp"
 #include "block_condition_enemy.hpp"
 #include "block_condition_fade_cloud.hpp"
 #include "block_condition_fade_out.hpp"
@@ -492,6 +494,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentKill> () );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "kill_animated" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentKillAnimated> () );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "change_block" ) )
 					{
 						if
@@ -640,6 +646,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "collide_right" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionCollideRight> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "collide_center" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionCollideCenter> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "switch_on" ) )
 							{
