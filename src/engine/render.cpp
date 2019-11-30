@@ -8,6 +8,7 @@
 #include "mezun_helpers.hpp"
 #include "palette.hpp"
 #include <SDL2/SDL_image.h>
+#include "text_info.hpp"
 #include "timers/timer_repeat.hpp"
 
 #define magnified( n ) ( ( n ) * ( magnification_ ) )
@@ -99,7 +100,7 @@ namespace Render
 	{
 		window_ = SDL_CreateWindow
 		(
-			"Boskeopolis Land",
+			TextInfo::getGameTitle(),
 			0,
 			0,
 			magnified( Unit::WINDOW_WIDTH_PIXELS ),

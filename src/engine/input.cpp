@@ -9,6 +9,8 @@
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include <vector>
+#include "text_info.hpp"
+#include "wtext_obj.hpp"
 
 namespace Input
 {
@@ -94,6 +96,7 @@ namespace Input
 		static bool waiting_for_press_ = false;
 		static bool escape_held_ = false;
 		static int escape_timer_ = 0;
+		static WTextObj quitting_text;
 
 
 
@@ -143,6 +146,13 @@ namespace Input
 			loadJoysticks();
 			loadConfig();
 			reset();
+
+			quitting_text = WTextObj
+			(
+				TextInfo::getInputQuitting(),
+				8,
+				Unit::WINDOW_HEIGHT_PIXELS - 16
+			);
 		};
 
 		void close()
@@ -252,17 +262,7 @@ namespace Input
 		{
 			if ( escape_timer_ > 0 )
 			{
-				Text::renderText
-				(
-					"Quitting...",
-					8,
-					Unit::WINDOW_HEIGHT_PIXELS - 16,
-					nullptr,
-					Text::FontColor::WHITE,
-					Text::DEFAULT_LINE_LENGTH,
-					Text::FontAlign::LEFT,
-					Text::FontColor::BLACK
-				);
+				quitting_text.render();
 			}
 		};
 

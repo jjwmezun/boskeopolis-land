@@ -11,6 +11,7 @@
 #include "render.hpp"
 #include <SDL2/SDL.h>
 #include "message_state.hpp"
+#include "text_info.hpp"
 #include "title_state.hpp"
 #include <vector>
 #include <iostream>
@@ -33,7 +34,6 @@ namespace Main
 		static constexpr Uint32 SDL_INIT_FLAGS = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
 	#endif
 
-	static constexpr char TITLE[] = "Boskeopolis Land";
 	static constexpr int TRANSITION_SPEED = 16;
 	static constexpr int TRANSITION_LIMIT = 255;
 
@@ -107,11 +107,12 @@ namespace Main
 	void init( int argc, char** argv )
 	{
 		initSDL();
+		setResourcePath();
+		TextInfo::init();
 		const ConsoleArguments args( argc, argv );
 		NOSAVE = args.nosave();
 		NOHARM = args.noharm();
 		mezun::initRand();
-		setResourcePath();
 		Render::init( args.windowed(), args.magnification() );
 		Audio::init( args.noaudio() );
 		firstState();
@@ -367,7 +368,7 @@ namespace Main
 			(
 				new MessageState
 				(
-					"Learn Mo' 'bout this project's development @\nhttps://www.boskeopolis-land.com",
+					"₧ Learn Mo' 'bout this project's development @\nhttps://www.boskeopolis-land.com",
 					MessageState::Type::CHANGE,
 					{ "Grayscale", 1 },
 					std::unique_ptr<GameState> ( new TitleState() ),

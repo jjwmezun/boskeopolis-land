@@ -1,0 +1,74 @@
+{
+    "game_title": "Boskeopolis Land",
+    "intro_text": "Learn Mo’ ’bout this project’s development @\nhttps://www.boskeopolis-land.com",
+    "input":
+    {
+        "quitting": "¡Quitting…! ₧ 𓐰",
+        "actions":
+        {
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "menu": "Menu",
+            "jump": "Jump",
+			"run": "Run",
+			"up": "Up",
+			"right": "Right",
+			"down": "Down",
+			"left": "Left",
+			"camera_left": "Camera Left",
+			"camera_right": "Camera Right",
+			"camera_up": "Camera Up",
+			"camera_down": "Camera Down"
+        }
+    },
+    "title":
+    {
+        "attribution": "Created by J.J.W. Mezun, 2017-2019",
+        "options":
+        [
+            "New Game",
+            "Load Game",
+            "Options",
+            "Quit"
+        ]
+    },
+    "options":
+    {
+        "title": "Options",
+        "options":
+        [
+            "Screen Resolution",
+            "Controls"
+        ]
+    },
+    "pause":
+    {
+        "continue": "Continue",
+        "exit_leave_unbeaten": "Give Up",
+        "exit_leave_beaten": "Back to Level Select"
+    },
+    "overworld":
+    {
+		"continue": "Continue",
+		"level_list": "Level List",
+		"camera_view": "Camera View",
+		"options": "Options",
+		"quit": "Quit"
+    },
+    "goals":
+    {
+        "avoid_money": "¡Don't touch any money!",
+        "collect": "¡Collect %p ₧!",
+        "do_nothing": "¡Don't do anything @ all!",
+        "heat": "¡Don't touch the hot surface too long!",
+        "mcguffins": "¡Collect %m McGuffins!",
+        "past_right_edge": "¡Go past the end!",
+        "starving": "¡Don't let your money run out!",
+        "stop_on_off": "¡Don't move when the light's red!",
+        "survive_time": "¡Last %t seconds without dying!",
+        "timed": "¡Don't let time run out!",
+        "warp": "¡Get out o' here!",
+        "windy": "O, fun: a lazy wind gimmick."
+    },
+    "dungeon_healer_text": "Pay 5,000 & you can heal."
+}

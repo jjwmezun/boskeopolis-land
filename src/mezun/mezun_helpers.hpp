@@ -63,4 +63,5 @@ namespace mezun
 	};
 
 	bool isCStringOnlyNumeric( const char* c_string );
+	void copyCharToChar32( char32_t* destination, const char* source, int limit );
 };
