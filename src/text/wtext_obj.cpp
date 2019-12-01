@@ -164,7 +164,7 @@ WTextObj::WTextObj
     }
 };
 
-void WTextObj::render()
+void WTextObj::render() const
 {
     if ( shadow_ )
     {
@@ -180,4 +180,14 @@ void WTextObj::render()
             line.renderWithoutShadow();
         }
     }
+};
+
+TextureBox WTextObj::generateTexture() const
+{
+    TextureBox texture_box;
+    texture_box.init();
+    texture_box.startDrawing();
+    render();
+    texture_box.endDrawing();
+    return texture_box;
 };

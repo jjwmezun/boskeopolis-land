@@ -31,12 +31,15 @@ TitleState::TitleState()
 	cloud_bg_ ( "bg/city_clouds.png", 400, 112, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	logo_gfx_ ( "bosko_logo.png" ),
 	options_ ( { "New Game", "Load Game", "Options", "Quit" }, OPTION_WIDTH_MINIBLOCKS, OPTIONS_TOP_Y ),
-	created_by_ ( "Created by J.J.W. Mezun, 2017-2019", 0, CREATED_BY_Y, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
+	created_by_ (),
 	can_load_ ( false )
 {};
 
-TitleState::~TitleState() {};
+TitleState::~TitleState()
+{
+	created_by_.destroy();
+};
 
 void TitleState::stateUpdate()
 {
@@ -79,9 +82,8 @@ void TitleState::stateRender()
 	skyscrapers_bg_.render( Render::window_box_ );
 	cloud_bg_.render( Render::window_box_ );
 	options_.render();
-	//created_by_.render();
-	WTextObj created_by = { TextInfo::getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK };
-	created_by.render();
+	created_by_.render();
+
 };
 
 void TitleState::init()
@@ -109,6 +111,10 @@ void TitleState::init()
 	}
 	ifs.close();
 	Inventory::reset();
+
+	WTextObj created_by_text = { TextInfo::getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK };
+	created_by_ = created_by_text.generateTexture();
+
 	Audio::changeSong( "title" );
 };
 

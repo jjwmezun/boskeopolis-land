@@ -1,6 +1,7 @@
 #pragma once
 
 #include "char_frame.hpp"
+#include "texture_box.hpp"
 #include "unit.hpp"
 #include <vector>
 #include "wtext_line.hpp"
@@ -56,7 +57,8 @@ class WTextObj
 			VAlign valign = DEFAULT_VALIGN,
 			int height = DEFAULT_HEIGHT
 		);
-		void render();
+		void render() const;
+		TextureBox generateTexture() const;
 
 	private:
 		std::vector<WTextLine> lines_;

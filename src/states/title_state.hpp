@@ -5,6 +5,7 @@
 #include "option_system.hpp"
 #include "sprite_graphics.hpp"
 #include "text_obj.hpp"
+#include "texture_box.hpp"
 
 class TitleState : public GameState
 {
@@ -35,7 +36,7 @@ class TitleState : public GameState
 		MapLayerImage cloud_bg_;
 		SpriteGraphics logo_gfx_;
 		OptionSystem options_;
-		TextObj created_by_;
 		const sdl2::SDLRect logo_rect_;
+		TextureBox created_by_;
 		bool can_load_;
 };
