@@ -28,8 +28,6 @@ class InvalidTextInfo : public std::runtime_error
 namespace TextInfo
 {
     static constexpr int GAME_TITLE_LIMIT = 64;
-    static constexpr int TITLE_CREATED_BY_LIMIT = 512;
-    static constexpr int INPUT_QUITTING_LIMIT = 32;
 
     static char game_title[ GAME_TITLE_LIMIT ];
     static std::u32string title_created_by;
@@ -60,8 +58,7 @@ namespace TextInfo
             {
                 if ( item.IsObject() && item.HasMember( "key" ) && item[ "key" ].IsString() && item.HasMember( "values" ) )
                 {
-                    char32_t key;
-                    mezun::copyCharToChar32( &key, item[ "key" ].GetString(), 1 );
+                    char32_t key = mezun::copyCharToChar32( item[ "key" ].GetString() );
                     std::vector<CharFrame> values;
                     if
                     (
@@ -127,7 +124,7 @@ namespace TextInfo
             if ( input.HasMember( "quitting" ) && input[ "quitting" ].IsString() )
             {
                 const char* quitting = input[ "quitting" ].GetString();
-                input_quitting = mezun::charToChar32String( quitting, INPUT_QUITTING_LIMIT );
+                input_quitting = mezun::charToChar32String( quitting );
             }
         }
 
@@ -137,7 +134,7 @@ namespace TextInfo
             if ( input.HasMember( "attribution" ) && input[ "attribution" ].IsString() )
             {
                 const char* attribution = input[ "attribution" ].GetString();
-                title_created_by = mezun::charToChar32String( attribution, TITLE_CREATED_BY_LIMIT );
+                title_created_by = mezun::charToChar32String( attribution );
             }
         }
     };

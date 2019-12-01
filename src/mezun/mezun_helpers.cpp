@@ -52,24 +52,22 @@ namespace mezun
 		return true;
 	};
 
-	void copyCharToChar32( char32_t* destination, const char* source, int limit )
+	char32_t copyCharToChar32( const char* source )
 	{
-		int i = 0;
-		while ( source[ 0 ] != '\0' && i < limit )
-		{
-			int charsize = getCharacterSize( source[ 0 ] );
-			destination[ i ] = combineCharactersByCharsize( charsize, source );
-			source += charsize; // Go forward through the string by charsize.
-			++i;
-		}
-		destination[ i ] = '\0';
+		int charsize = getCharacterSize( source[ 0 ] );
+		return combineCharactersByCharsize( charsize, source );
 	};
 
-	std::u32string charToChar32String( const char* source, int limit )
+	std::u32string charToChar32String( const char* source )
 	{
-		char32_t destination[ limit ];
-		copyCharToChar32( destination, source, limit );
-		return std::u32string( destination );
+		std::u32string text;
+		while ( source[ 0 ] != '\0' )
+		{
+			int charsize = getCharacterSize( source[ 0 ] );
+			text += combineCharactersByCharsize( charsize, source );
+			source += charsize;
+		}
+		return text;
 	};
 
     static int getCharacterSize( char character )
