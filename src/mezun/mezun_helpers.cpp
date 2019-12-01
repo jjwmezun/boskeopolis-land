@@ -62,7 +62,15 @@ namespace mezun
 			source += charsize; // Go forward through the string by charsize.
 			++i;
 		}
-	}
+		destination[ i ] = '\0';
+	};
+
+	std::u32string charToChar32String( const char* source, int limit )
+	{
+		char32_t destination[ limit ];
+		copyCharToChar32( destination, source, limit );
+		return std::u32string( destination );
+	};
 
     static int getCharacterSize( char character )
     {

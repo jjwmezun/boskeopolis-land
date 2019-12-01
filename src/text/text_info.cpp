@@ -32,8 +32,8 @@ namespace TextInfo
     static constexpr int INPUT_QUITTING_LIMIT = 32;
 
     static char game_title[ GAME_TITLE_LIMIT ];
-    static char32_t title_created_by[ TITLE_CREATED_BY_LIMIT ] = { '\0' };
-    static char32_t input_quitting[ INPUT_QUITTING_LIMIT ] = { '\0' };
+    static std::u32string title_created_by;
+    static std::u32string input_quitting;
     static std::unordered_map<char32_t, std::vector<CharFrame>> charset;
 
     void init()
@@ -127,7 +127,7 @@ namespace TextInfo
             if ( input.HasMember( "quitting" ) && input[ "quitting" ].IsString() )
             {
                 const char* quitting = input[ "quitting" ].GetString();
-                mezun::copyCharToChar32( input_quitting, quitting, INPUT_QUITTING_LIMIT );
+                input_quitting = mezun::charToChar32String( quitting, INPUT_QUITTING_LIMIT );
             }
         }
 
@@ -137,8 +137,7 @@ namespace TextInfo
             if ( input.HasMember( "attribution" ) && input[ "attribution" ].IsString() )
             {
                 const char* attribution = input[ "attribution" ].GetString();
-                mezun::copyCharToChar32( title_created_by, attribution, TITLE_CREATED_BY_LIMIT );
-                std::cout<<title_created_by[ 0 ]<<std::endl;
+                title_created_by = mezun::charToChar32String( attribution, TITLE_CREATED_BY_LIMIT );
             }
         }
     };
@@ -148,12 +147,12 @@ namespace TextInfo
         return game_title;
     };
 
-    const char32_t* getTitleCreatedBy()
+    const std::u32string& getTitleCreatedBy()
     {
         return title_created_by;
     };
 
-    const char32_t* getInputQuitting()
+    const std::u32string& getInputQuitting()
     {
         return input_quitting;
     };

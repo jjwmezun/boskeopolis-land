@@ -45,7 +45,7 @@ class WTextObj
 		WTextObj();
 		WTextObj
 		(
-			const char32_t* text,
+			const std::u32string& text,
 			int x,
 			int y,
 			Color color = DEFAULT_COLOR,

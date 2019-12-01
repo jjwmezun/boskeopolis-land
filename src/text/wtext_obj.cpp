@@ -16,7 +16,7 @@ WTextObj::WTextObj()
 
 WTextObj::WTextObj
 (
-    const char32_t* text,
+    const std::u32string& text,
     int x,
     int y,
     Color color,
@@ -47,14 +47,13 @@ WTextObj::WTextObj
     const int shadow_offset = calculateColorOffset( shadow );
 
     std::vector<CharFrame> frames;
-    while ( text[ 0 ] != '\0' )
+    for ( const char32_t character : text )
     {
-        auto char_frame_list = TextInfo::getCharacterFrames( text[ 0 ] );
+        auto char_frame_list = TextInfo::getCharacterFrames( character );
         for ( auto frame : char_frame_list )
         {
             frames.emplace_back( frame );
         }
-        ++text;
     }
 
     int i = 0;
