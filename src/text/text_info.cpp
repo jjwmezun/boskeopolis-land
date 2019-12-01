@@ -6,6 +6,8 @@
 #include "rapidjson/document.h"
 #include <string>
 #include "text_info.hpp"
+#include "unit.hpp"
+#include <unordered_map>
 
 class MissingTextInfo : public std::runtime_error
 {
@@ -26,9 +28,13 @@ class InvalidTextInfo : public std::runtime_error
 namespace TextInfo
 {
     static constexpr int GAME_TITLE_LIMIT = 64;
+    static constexpr int TITLE_CREATED_BY_LIMIT = 512;
     static constexpr int INPUT_QUITTING_LIMIT = 32;
+
     static char game_title[ GAME_TITLE_LIMIT ];
+    static char32_t title_created_by[ TITLE_CREATED_BY_LIMIT ] = { '\0' };
     static char32_t input_quitting[ INPUT_QUITTING_LIMIT ] = { '\0' };
+    static std::unordered_map<char32_t, std::vector<CharFrame>> charset;
 
     void init()
     {
@@ -48,6 +54,68 @@ namespace TextInfo
         }
 
         auto data = document.GetObject();
+        if ( data.HasMember( "charset" ) && data[ "charset" ].IsArray() )
+        {
+            for ( const auto& item : data[ "charset" ].GetArray() )
+            {
+                if ( item.IsObject() && item.HasMember( "key" ) && item[ "key" ].IsString() && item.HasMember( "values" ) )
+                {
+                    char32_t key;
+                    mezun::copyCharToChar32( &key, item[ "key" ].GetString(), 1 );
+                    std::vector<CharFrame> values;
+                    if
+                    (
+                        item[ "values" ].IsObject() &&
+                        item[ "values" ].HasMember( "x" ) &&
+                        item[ "values" ][ "x" ].IsInt() &&
+                        item[ "values" ].HasMember( "y" ) &&
+                        item[ "values" ][ "y" ].IsInt()
+                    )
+                    {
+                        CharFrame::Type type = CharFrame::Type::NORMAL;
+                        if ( item[ "values" ].HasMember( "whitespace" ) && item[ "values" ][ "whitespace" ].IsBool() && item[ "values" ][ "whitespace" ].GetBool() )
+                        {
+                            type = CharFrame::Type::WHITESPACE;
+                        }
+                        else if ( item[ "values" ].HasMember( "newline" ) && item[ "values" ][ "newline" ].IsBool() && item[ "values" ][ "newline" ].GetBool() )
+                        {
+                            type = CharFrame::Type::NEWLINE;
+                        }
+                        values.push_back({ item[ "values" ][ "x" ].GetInt(), item[ "values" ][ "y" ].GetInt(), type });
+                        charset.insert( std::pair<char32_t, std::vector<CharFrame>> ( key, values ) );
+                    }
+                    else if ( item[ "values" ].IsArray() )
+                    {
+                        const auto& item_list = item[ "values" ].GetArray();
+                        for ( const auto& subitem : item_list )
+                        {
+                            if
+                            (
+                                subitem.IsObject() &&
+                                subitem.HasMember( "x" ) &&
+                                subitem[ "x" ].IsInt() &&
+                                subitem.HasMember( "y" ) &&
+                                subitem[ "y" ].IsInt()
+                            )
+                            {
+                                CharFrame::Type type = CharFrame::Type::NORMAL;
+                                if ( subitem.HasMember( "whitespace" ) && subitem[ "whitespace" ].IsBool() && subitem[ "whitespace" ].GetBool() )
+                                {
+                                    type = CharFrame::Type::WHITESPACE;
+                                }
+                                else if ( subitem.HasMember( "newline" ) && subitem[ "newline" ].IsBool() && subitem[ "newline" ].GetBool() )
+                                {
+                                    type = CharFrame::Type::NEWLINE;
+                                }
+                                values.push_back({ subitem[ "x" ].GetInt(), subitem[ "y" ].GetInt(), type });
+                            }
+                        }
+                        charset.insert( std::pair<char32_t, std::vector<CharFrame>> ( key, values ) );
+                    }
+                }
+            }
+        }
+
         if ( data.HasMember( "game_title" ) && data[ "game_title" ].IsString() )
         {
             strncpy( game_title, data[ "game_title" ].GetString(), GAME_TITLE_LIMIT );
@@ -62,6 +130,17 @@ namespace TextInfo
                 mezun::copyCharToChar32( input_quitting, quitting, INPUT_QUITTING_LIMIT );
             }
         }
+
+        if ( data.HasMember( "title" ) && data[ "title" ].IsObject() )
+        {
+            const auto input = data[ "title" ].GetObject();
+            if ( input.HasMember( "attribution" ) && input[ "attribution" ].IsString() )
+            {
+                const char* attribution = input[ "attribution" ].GetString();
+                mezun::copyCharToChar32( title_created_by, attribution, TITLE_CREATED_BY_LIMIT );
+                std::cout<<title_created_by[ 0 ]<<std::endl;
+            }
+        }
     };
 
     const char* getGameTitle()
@@ -69,8 +148,23 @@ namespace TextInfo
         return game_title;
     };
 
+    const char32_t* getTitleCreatedBy()
+    {
+        return title_created_by;
+    };
+
     const char32_t* getInputQuitting()
     {
         return input_quitting;
+    };
+
+    const std::vector<CharFrame> getCharacterFrames( char32_t character )
+    {
+        std::unordered_map<char32_t,std::vector<CharFrame>>::const_iterator found = charset.find( character );
+        if ( found == charset.end() )
+        {
+            return { CharFrame( 30, 3, CharFrame::Type::WHITESPACE ) };
+        }
+        return found->second;
     };
 }

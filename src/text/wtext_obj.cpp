@@ -1,68 +1,13 @@
-#include "render.hpp"
+#include "text_info.hpp"
 #include <unordered_map>
 #include "wtext_obj.hpp"
 
-static constexpr int CHAR_SIZE_PIXELS = 8;
+#include <cstdio>
 
-static CharFrame getFrameIndices( char32_t character )
+static int calculateColorOffset( WTextObj::Color color )
 {
-    switch ( character )
-    {
-        case( ' ' ):
-        {
-            return { 31, 3 };
-        }
-        break;
-
-        case( 'Q' ):
-        {
-            return { 26, 0 };
-        }
-        break;
-
-        case( 'i' ):
-        {
-            return { 18, 0 };
-        }
-        break;
-
-        case( '…' ):
-        {
-            return { 18, 0 };
-        }
-        break;
-
-        case( '¡' ):
-        {
-            return { 6, 1 };
-        }
-        break;
-
-        case( '₧' ):
-        {
-            return { 4, 2 };
-        }
-        break;
-
-        case( '𓐰' ):
-        {
-            return { 5, 2 };
-        }
-        break;
-
-        default:
-        {
-            return { 0, 0 };
-        }
-        break;
-    }
+    return ( color == WTextObj::Color::__NULL ) ? 0 : ( int )( color ) * 4 * CharFrame::SIZE_PIXELS;
 };
-
-static CharFrame getFrame( char32_t character )
-{
-    CharFrame frame = getFrameIndices( character );
-    return { frame.x * CHAR_SIZE_PIXELS, frame.y * CHAR_SIZE_PIXELS };
-}
 
 WTextObj::WTextObj()
 {
@@ -73,45 +18,166 @@ WTextObj::WTextObj
 (
     const char32_t* text,
     int x,
-    int y
+    int y,
+    Color color,
+    int width,
+    Align align,
+    Color shadow,
+    int x_padding,
+    int y_padding,
+    VAlign valign,
+    int height
 )
 :
-    x_ ( x ),
-    y_ ( y )
+    shadow_ ( shadow != Color::__NULL )
 {
+    // Apply x_padding to width ( pushes in from both sides, so x2 ).
+    width -= ( x_padding * 2 );
+    height -= ( y_padding * 2 );
+
+    // Setup initial x
+    const int start_y = y = y + y_padding;
+    const int start_x = x = x + x_padding;
+    const int line_end = start_x + width;
+
+    // Create 1st line.
+    lines_.push_back({ {}, {}, x, y });
+
+    const int color_offset = calculateColorOffset( color );
+    const int shadow_offset = calculateColorOffset( shadow );
+
+    std::vector<CharFrame> frames;
     while ( text[ 0 ] != '\0' )
     {
-        frames_.push_back( getFrame( text[ 0 ] ) );
+        auto char_frame_list = TextInfo::getCharacterFrames( text[ 0 ] );
+        for ( auto frame : char_frame_list )
+        {
+            frames.emplace_back( frame );
+        }
         ++text;
+    }
+
+    int i = 0;
+    while ( i < frames.size() )
+    {
+        int ib = i;
+        int xb = x;
+        bool look_ahead = true;
+
+        while ( look_ahead )
+        {
+            if ( frames[ ib ].isNewline() )
+            {
+                look_ahead = false;
+            }
+            else if ( frames[ ib ].isWhitespace() )
+            {
+                look_ahead = false;
+            }
+            else if ( xb > line_end )
+            {
+                x = start_x;
+                y += CharFrame::SIZE_PIXELS;
+                lines_.push_back({ {}, {}, x, y });
+                look_ahead = false;
+            }
+            else if ( ib >= frames.size() )
+            {
+                look_ahead = false;
+                break;
+            }
+
+            ++ib;
+            xb += CharFrame::SIZE_PIXELS;
+        }
+
+        while ( i < ib )
+        {
+            auto frame = frames[ i ];
+            if ( frame.isNewline() || x > line_end )
+            {
+                x = start_x;
+                y += CharFrame::SIZE_PIXELS;
+                lines_.push_back({ {}, {}, x, y });
+            }
+            else
+            {
+                frame.setColorOffset( color_offset );
+                lines_[ lines_.size() - 1 ].frames_.emplace_back( frame );
+                if ( shadow_ )
+                {
+                    auto shadow_frame = frames[ i ];
+                    shadow_frame.setColorOffset( shadow_offset );
+                    lines_[ lines_.size() - 1 ].shadow_frames_.emplace_back( shadow_frame );
+                }
+            }
+            ++i;
+            x += CharFrame::SIZE_PIXELS;
+        }
+    }
+
+    for ( auto& line : lines_ )
+    {
+        if ( !empty( line.frames_ ) && line.frames_[ line.frames_.size() - 1 ].isWhitespace() )
+        {
+            line.frames_.pop_back();
+        }
+        if ( !empty( line.shadow_frames_ ) && line.shadow_frames_[ line.shadow_frames_.size() - 1 ].isWhitespace() )
+        {
+            line.shadow_frames_.pop_back();
+        }
+    }
+
+    if ( align == Align::CENTER )
+    {
+        for ( auto& line : lines_ )
+        {
+            line.x_ = start_x + ( ( width - ( line.frames_.size() * CharFrame::SIZE_PIXELS ) ) / 2 );
+        }
+    }
+    else if ( align == Align::RIGHT )
+    {
+        for ( auto& line : lines_ )
+        {
+            line.x_ = line_end - ( line.frames_.size() * CharFrame::SIZE_PIXELS );
+        }
+    }
+
+    if ( valign == VAlign::CENTER )
+    {
+        int center_y = start_y + ( ( height - ( lines_.size() * CharFrame::SIZE_PIXELS )) / 2 );
+        for ( auto& line : lines_ )
+        {
+            line.y_ = center_y;
+            center_y += CharFrame::SIZE_PIXELS;
+        }
+    }
+    else if ( valign == VAlign::BOTTOM )
+    {
+        int bottom = start_y + height;
+        int bottom_y = bottom - ( lines_.size() * CharFrame::SIZE_PIXELS );
+        for ( auto& line : lines_ )
+        {
+            line.y_ = bottom_y;
+            bottom_y += CharFrame::SIZE_PIXELS;
+        }
     }
 };
 
 void WTextObj::render()
 {
-    int x = x_;
-    for ( const CharFrame& frame : frames_ )
+    if ( shadow_ )
     {
-        renderChar( frame, x, y_ );
-        x += CHAR_SIZE_PIXELS;
+        for ( const WTextLine& line : lines_ )
+        {
+            line.renderWithShadow();
+        }
+    }
+    else
+    {
+        for ( const WTextLine& line : lines_ )
+        {
+            line.renderWithoutShadow();
+        }
     }
 };
-
-void WTextObj::renderChar( const CharFrame character, int x, int y )
-{
-    Render::renderObject
-    (
-        "charset.png",
-        {
-            character.x,
-            character.y,
-            CHAR_SIZE_PIXELS,
-            CHAR_SIZE_PIXELS
-        },
-        {
-            x,
-            y,
-            CHAR_SIZE_PIXELS,
-            CHAR_SIZE_PIXELS
-        }
-    );
-}
