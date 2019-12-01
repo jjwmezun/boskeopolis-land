@@ -3,14 +3,15 @@
 #include <SDL2/SDL.h>
 #include "mezun_sdl2.hpp"
 
-struct TextureBox
+class TextureBox
 {
-    TextureBox();
-    void init();
-    void startDrawing();
-    void endDrawing();
-    void render() const;
-    void destroy();
+    public:
+        TextureBox();
+        void init();
+        void startDrawing();
+        void endDrawing();
+        void render() const;
+        void destroy();
 
     private:
         SDL_Texture* texture_;
