@@ -190,3 +190,22 @@ TextureBox WTextObj::generateTexture() const
     texture_box.endDrawing();
     return texture_box;
 };
+
+TextureBox WTextObj::generateTexture
+(
+    const std::u32string& text,
+    int x,
+    int y,
+    Color color,
+    int width,
+    Align align,
+    Color shadow,
+    int x_padding,
+    int y_padding,
+    VAlign valign,
+    int height
+)
+{
+    WTextObj o( text, x, y, color, width, align, shadow, x_padding, y_padding, valign, height );
+    return o.generateTexture();
+};

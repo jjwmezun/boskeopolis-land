@@ -19,6 +19,7 @@ class WTextObj
 			WHITE = 5,
 			__NULL = 6
 		};
+		static constexpr int NUMBER_OF_COLORS = ( int )( Color::__NULL );
 
 		enum class Align
 		{
@@ -59,6 +60,20 @@ class WTextObj
 		);
 		void render() const;
 		TextureBox generateTexture() const;
+		static TextureBox generateTexture
+		(
+			const std::u32string& text,
+			int x,
+			int y,
+			Color color = DEFAULT_COLOR,
+			int width = DEFAULT_WIDTH,
+			Align align = DEFAULT_ALIGN,
+			Color shadow = DEFAULT_SHADOW,
+			int x_padding = DEFAULT_PADDING,
+			int y_padding = DEFAULT_PADDING,
+			VAlign valign = DEFAULT_VALIGN,
+			int height = DEFAULT_HEIGHT
+		);
 
 	private:
 		std::vector<WTextLine> lines_;

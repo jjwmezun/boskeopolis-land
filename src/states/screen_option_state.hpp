@@ -4,7 +4,7 @@
 #include "options_bg.hpp"
 #include "option_selection.hpp"
 #include "option_system.hpp"
-#include "text_obj.hpp"
+#include "texture_box.hpp"
 
 class ScreenOptionState : public GameState
 {
@@ -19,7 +19,7 @@ class ScreenOptionState : public GameState
 
 	private:
 		OptionsBG bg_;
-		TextObj title_;
+		TextureBox title_;
 		OptionBox fullscreen_option_;
 		OptionBox window_option_;
 		OptionSelection selection_;

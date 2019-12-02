@@ -4,18 +4,39 @@
 static constexpr int SPACE_BETWEEN_OPTIONS_MINIBLOCKS = 1;
 static constexpr int SPACE_BETWEEN_OPTIONS_PIXELS = Unit::MiniBlocksToPixels( SPACE_BETWEEN_OPTIONS_MINIBLOCKS );
 
-OptionSystem::OptionSystem( std::vector<std::string> options, int option_width, int y )
+OptionSystem::OptionSystem( std::vector<std::u32string>& options, int option_width, int y )
 :
 	options_ (),
 	selection_ ( options.size() - 1 )
 {
-	for ( auto& name : options )
+	int max_width = 0;
+	for ( const std::u32string& name : options )
 	{
-		options_.emplace_back( name, y, option_width );
+		if ( name.size() > max_width )
+		{
+			max_width = name.size();
+		}
+	}
+	if ( max_width > Unit::MINIBLOCKS_PER_SCREEN - 4 )
+	{
+		max_width = Unit::MINIBLOCKS_PER_SCREEN - 4;
+	}
+
+	for ( const std::u32string& name : options )
+	{
+		options_.emplace_back( name, y, Unit::MiniBlocksToPixels( max_width + 2 ) );
 		y += OptionBox::BOX_HEIGHT + SPACE_BETWEEN_OPTIONS_PIXELS;
 	}
 };
 OptionSystem::~OptionSystem() {};
+
+void OptionSystem::init()
+{
+	for ( auto& option : options_ )
+	{
+		option.init();
+	}
+};
 
 int OptionSystem::selection() const { return selection_.selection(); };
 

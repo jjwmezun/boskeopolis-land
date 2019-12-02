@@ -1,8 +1,10 @@
 #include "audio.hpp"
 #include "input.hpp"
 #include "main.hpp"
+#include "mezun_helpers.hpp"
 #include "screen_option_state.hpp"
 #include "render.hpp"
+#include "text_info.hpp"
 #include <iostream>
 
 static constexpr int FULL_OR_WINDOW_OPTION_WIDTH = 12;
@@ -13,9 +15,9 @@ ScreenOptionState::ScreenOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
-	title_ ( "Screen Resolution", 0, 16, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
-	fullscreen_option_ ( "Fullscreen", START_Y, FULL_OR_WINDOW_OPTION_WIDTH, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
-	window_option_ ( "Windowed", START_Y, FULL_OR_WINDOW_OPTION_WIDTH, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
+	title_ ( WTextObj::generateTexture( TextInfo::getScreenOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK ) ),
+	fullscreen_option_ ( TextInfo::getScreenOptionFullscreen(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
+	window_option_ ( TextInfo::getScreenOptionWindow(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
 	selection_ ( Render::getMaxMagnification() ),
 	other_options_ (),
 	max_options_ ( Render::getMaxMagnification() + 1 )
@@ -25,15 +27,18 @@ ScreenOptionState::ScreenOptionState()
 	{
 		const int width = Unit::WINDOW_WIDTH_PIXELS * i;
 		const int height = Unit::WINDOW_HEIGHT_PIXELS * i;
-		const std::string text = std::to_string( width ) + "x" + std::to_string( height );
-		other_options_.emplace_back( text, y, FULL_OR_WINDOW_OPTION_WIDTH * 2 + 2 );
+		const std::u32string text = mezun::intToChar32String( width ) + U"x" + mezun::intToChar32String( height );
+		other_options_.emplace_back( text, y, ( FULL_OR_WINDOW_OPTION_WIDTH_PIXELS * 2 ) + Unit::PIXELS_PER_MINIBLOCK, -1 );
 		y += 32;
 	}
 	setNullifiedSizeOptions();
 	setNullifiedFullOrWindowOption();
 };
 
-ScreenOptionState::~ScreenOptionState() {};
+ScreenOptionState::~ScreenOptionState()
+{
+	title_.destroy();
+};
 
 void ScreenOptionState::stateUpdate()
 {
@@ -55,7 +60,15 @@ void ScreenOptionState::stateRender()
 	title_.render();
 };
 
-void ScreenOptionState::init() {};
+void ScreenOptionState::init()
+{
+	fullscreen_option_.init();
+	window_option_.init();
+	for ( auto& option : other_options_ )
+	{
+		option.init();
+	}
+};
 
 void ScreenOptionState::updateOptions()
 {
@@ -99,10 +112,9 @@ void ScreenOptionState::updateOptions()
 				}
 			}
 		}
-
-		fullscreen_option_.update();
-		window_option_.update();
 	}
+	fullscreen_option_.update();
+	window_option_.update();
 };
 
 void ScreenOptionState::updateInput()

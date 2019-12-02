@@ -8,12 +8,13 @@ class OptionBox
 {
 	public:
 		static constexpr int VERTICAL_PADDING_MINIBLOCKS = 1;
-		static constexpr int VERTICAL_PADDING_PIXELS = VERTICAL_PADDING_MINIBLOCKS * Text::CHAR_SIZE_PIXELS;
+		static constexpr int VERTICAL_PADDING_PIXELS = VERTICAL_PADDING_MINIBLOCKS * CharFrame::SIZE_PIXELS;
 		static constexpr int BOX_HEIGHT = VERTICAL_PADDING_PIXELS * 2 + 8;
 
-		OptionBox( const char32_t* text, int y, int width, int x = 0, WTextObj::Align align = WTextObj::Align::CENTER );
+		OptionBox( const std::u32string& text, int y, int width, int x = -1 );
 		~OptionBox();
 
+		void init();
 		void update();
 		void render() const;
 		void setToNormal();
@@ -32,15 +33,18 @@ class OptionBox
 			NULLIFIED
 		};
 
-		WTextObj text_;
+		TextureBox text_[ WTextObj::NUMBER_OF_COLORS ];
+		const std::u32string words_;
 		const sdl2::SDLRect box_;
 		const sdl2::SDLRect shadow_box_;
+		const int width_;
+		const int x_;
+		const int y_;
 		int box_color_;
 		OBState state_;
 		int timer_;
 
 		void renderShadow() const;
 		void renderBox() const;
-		WTextObj::Color getTextColor( int box_color ) const;
 		int currentTextPosition( int value ) const;
 };

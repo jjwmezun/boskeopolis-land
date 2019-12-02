@@ -21,6 +21,7 @@ static constexpr int CREATED_BY_HEIGHT = 8;
 static constexpr int OPTIONS_TOP_PADDING = 16;
 static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_TOP_PADDING;
 static constexpr int OPTION_WIDTH_MINIBLOCKS = 12;
+static constexpr int OPTION_WIDTH_MINIBLOCKS_PIXELS = Unit::MiniBlocksToPixels( OPTION_WIDTH_MINIBLOCKS );
 
 TitleState::TitleState()
 :
@@ -30,7 +31,7 @@ TitleState::TitleState()
 	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 248, 175, 0, Unit::WINDOW_HEIGHT_PIXELS - 175, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 112, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	logo_gfx_ ( "bosko_logo.png" ),
-	options_ ( { "New Game", "Load Game", "Options", "Quit" }, OPTION_WIDTH_MINIBLOCKS, OPTIONS_TOP_Y ),
+	options_ ( TextInfo::getTitleOptions(), OPTION_WIDTH_MINIBLOCKS_PIXELS, OPTIONS_TOP_Y ),
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
 	created_by_ (),
 	can_load_ ( false )
@@ -114,6 +115,7 @@ void TitleState::init()
 
 	WTextObj created_by_text = { TextInfo::getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK };
 	created_by_ = created_by_text.generateTexture();
+	options_.init();
 
 	Audio::changeSong( "title" );
 };

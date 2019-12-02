@@ -5,27 +5,53 @@
 static constexpr int SHADOW_LENGTH = 2;
 static constexpr int SHADOW_COLOR = 6;
 
-static int getBoxX( int x, int width, WTextObj::Align align )
+static int getBoxX( int x, int width )
 {
-	return ( align == WTextObj::Align::CENTER ) ? ( ( Unit::WINDOW_WIDTH_PIXELS - Unit::MiniBlocksToPixels( width ) ) / 2 ) : x;
+	return ( x == -1 ) ? ( ( Unit::WINDOW_WIDTH_PIXELS - width ) / 2 ) : x;
 };
 
-OptionBox::OptionBox( const char32_t* text, int y, int width, int x, WTextObj::Align align )
+OptionBox::OptionBox( const std::u32string& text, int y, int width, int x )
 :
-	text_
-	(
-		text, x, y, WTextObj::Color::DARK_MID_GRAY, width,
-		align, WTextObj::Color::__NULL, Unit::PIXELS_PER_MINIBLOCK,
-		Unit::PIXELS_PER_MINIBLOCK, WTextObj::VAlign::CENTER, Unit::PIXELS_PER_MINIBLOCK
-	),
-	box_ ( getBoxX( x, width ), y, Unit::MiniBlocksToPixels( width ), BOX_HEIGHT ),
-	shadow_box_ ( box_.x + SHADOW_LENGTH, box_.y + SHADOW_LENGTH, Unit::MiniBlocksToPixels( width ), BOX_HEIGHT ),
+	text_({}),
+	words_ ( text ),
+	box_ ( getBoxX( x, width ), y, width, BOX_HEIGHT ),
+	shadow_box_ ( box_.x + SHADOW_LENGTH, box_.y + SHADOW_LENGTH, width, BOX_HEIGHT ),
+	width_ ( width ),
+	x_ ( getBoxX( x, width ) ),
+	y_ ( y ),
 	box_color_ ( 5 ),
 	state_ ( OBState::NORMAL ),
 	timer_ ( 0 )
 {};
 
-OptionBox::~OptionBox() {};
+OptionBox::~OptionBox()
+{
+	for ( int i = 0; i < WTextObj::NUMBER_OF_COLORS; ++i )
+	{
+		text_[ i ].destroy();
+	}
+};
+
+void OptionBox::init()
+{
+	for ( int i = 0; i < WTextObj::NUMBER_OF_COLORS - 1; ++i )
+	{
+		text_[ i ] = WTextObj::generateTexture
+		(
+			words_, x_, y_, ( WTextObj::Color )( i ),
+			width_, WTextObj::Align::CENTER, WTextObj::Color::__NULL,
+			Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
+			WTextObj::VAlign::CENTER, BOX_HEIGHT
+		);
+	}
+	text_[ WTextObj::NUMBER_OF_COLORS - 1 ] = WTextObj::generateTexture
+	(
+		words_, x_ + 2, y_ + 2, ( WTextObj::Color )( 2 ),
+		width_, WTextObj::Align::CENTER, WTextObj::Color::__NULL,
+		Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
+		WTextObj::VAlign::CENTER, BOX_HEIGHT
+	);
+}
 
 void OptionBox::update()
 {
@@ -90,7 +116,7 @@ void OptionBox::render() const
 {
 	renderShadow();
 	renderBox();
-	text_.render();
+	text_[ box_color_ - 1 ].render();
 };
 
 void OptionBox::setToNormal()
@@ -139,11 +165,6 @@ void OptionBox::renderBox() const
 	{
 		Render::renderRect( box_, box_color_ );
 	}
-};
-
-WTextObj::Color OptionBox::getTextColor( int box_color ) const
-{
-	return ( state_ == OBState::NULLIFIED ) ? WTextObj::Color::DARK_MID_GRAY : ( WTextObj::Color )( box_color );
 };
 
 int OptionBox::currentTextPosition( int value ) const

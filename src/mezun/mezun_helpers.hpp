@@ -65,4 +65,5 @@ namespace mezun
 	bool isCStringOnlyNumeric( const char* c_string );
 	char32_t copyCharToChar32( const char* source );
 	std::u32string charToChar32String( const char* source );
+	std::u32string intToChar32String( int n );
 };

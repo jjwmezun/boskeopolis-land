@@ -3,7 +3,7 @@
 #include "game_state.hpp"
 #include "options_bg.hpp"
 #include "option_system.hpp"
-#include "text_obj.hpp"
+#include "texture_box.hpp"
 
 class OptionsState : public GameState
 {
@@ -23,7 +23,7 @@ class OptionsState : public GameState
 		};
 
 		OptionsBG bg_;
-		TextObj title_;
+		TextureBox title_;
 		OptionSystem options_;
 		void updateInput();
 };

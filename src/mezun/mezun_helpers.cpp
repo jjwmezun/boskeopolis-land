@@ -67,6 +67,7 @@ namespace mezun
 			text += combineCharactersByCharsize( charsize, source );
 			source += charsize;
 		}
+		text += ( char32_t )( '\0' );
 		return text;
 	};
 
@@ -119,4 +120,21 @@ namespace mezun
 			break;
 		}
 	}
+
+	std::u32string intToChar32String( int n )
+	{
+		std::u32string text;
+		std::vector<int> digits;
+		while ( n > 0 )
+		{
+			digits.push_back( n % 10 );
+			n /= 10;
+		}
+		std::reverse( digits.begin(), digits.end() );
+		for ( int d : digits )
+		{
+			text += ( char32_t )( 48 + d );
+		}
+		return text;
+	};
 }

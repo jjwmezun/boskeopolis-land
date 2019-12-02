@@ -32,7 +32,18 @@ namespace TextInfo
     static char game_title[ GAME_TITLE_LIMIT ];
     static std::u32string title_created_by;
     static std::u32string input_quitting;
+    static std::u32string screen_option_fullscreen;
+    static std::u32string screen_option_window;
+    static std::u32string options_title;
+    static std::u32string screen_options_title;
     static std::unordered_map<char32_t, std::vector<CharFrame>> charset;
+    std::vector<std::u32string> title_options;
+    std::vector<std::u32string> options_options;
+
+    void loadCharset( const auto& data );
+    void loadScreenOptions( const auto& data );
+    void loadTitleText( const auto& data );
+    void loadOptionsText( const auto& data );
 
     void init()
     {
@@ -52,6 +63,83 @@ namespace TextInfo
         }
 
         auto data = document.GetObject();
+        loadCharset( data );
+
+        if ( data.HasMember( "game_title" ) && data[ "game_title" ].IsString() )
+        {
+            strncpy( game_title, data[ "game_title" ].GetString(), GAME_TITLE_LIMIT );
+        }
+
+        if ( data.HasMember( "input" ) && data[ "input" ].IsObject() )
+        {
+            const auto input = data[ "input" ].GetObject();
+            if ( input.HasMember( "quitting" ) && input[ "quitting" ].IsString() )
+            {
+                const char* quitting = input[ "quitting" ].GetString();
+                input_quitting = mezun::charToChar32String( quitting );
+            }
+        }
+
+        loadTitleText( data );
+        loadOptionsText( data );
+        loadScreenOptions( data );
+    };
+
+    const char* getGameTitle()
+    {
+        return game_title;
+    };
+
+    const std::u32string& getTitleCreatedBy()
+    {
+        return title_created_by;
+    };
+
+    const std::u32string& getInputQuitting()
+    {
+        return input_quitting;
+    };
+
+    const std::vector<CharFrame> getCharacterFrames( char32_t character )
+    {
+        std::unordered_map<char32_t,std::vector<CharFrame>>::const_iterator found = charset.find( character );
+        if ( found == charset.end() )
+        {
+            return { CharFrame( 30, 3, CharFrame::Type::WHITESPACE ) };
+        }
+        return found->second;
+    };
+
+    const std::u32string& getScreenOptionFullscreen()
+    {
+        return screen_option_fullscreen;
+    };
+    const std::u32string& getScreenOptionWindow()
+    {
+        return screen_option_window;
+    };
+
+    std::vector<std::u32string>& getTitleOptions()
+    {
+        return title_options;
+    };
+
+    std::vector<std::u32string>& getOptionsOptions()
+    {
+        return options_options;
+    };
+
+    const std::u32string& getOptionsTitle()
+    {
+        return options_title;
+    };
+    const std::u32string& getScreenOptionsTitle()
+    {
+        return screen_options_title;
+    };
+
+    void loadCharset( const auto& data )
+    {
         if ( data.HasMember( "charset" ) && data[ "charset" ].IsArray() )
         {
             for ( const auto& item : data[ "charset" ].GetArray() )
@@ -112,55 +200,122 @@ namespace TextInfo
                 }
             }
         }
+    };
 
-        if ( data.HasMember( "game_title" ) && data[ "game_title" ].IsString() )
+    void loadScreenOptions( const auto& data )
+    {
+        if ( !data.HasMember( "screen_options" ) || !data[ "screen_options" ].IsObject() )
         {
-            strncpy( game_title, data[ "game_title" ].GetString(), GAME_TITLE_LIMIT );
+            throw InvalidTextInfo();
         }
 
-        if ( data.HasMember( "input" ) && data[ "input" ].IsObject() )
+        const auto& o = data[ "screen_options" ].GetObject();
+
+        if ( !o.HasMember( "title" ) || !o[ "title" ].IsString() )
         {
-            const auto input = data[ "input" ].GetObject();
-            if ( input.HasMember( "quitting" ) && input[ "quitting" ].IsString() )
-            {
-                const char* quitting = input[ "quitting" ].GetString();
-                input_quitting = mezun::charToChar32String( quitting );
-            }
+            throw InvalidTextInfo();
         }
 
+        screen_options_title = mezun::charToChar32String( o[ "title" ].GetString() );
+
+        if ( !o.HasMember( "options" ) || !o[ "options" ].IsObject() )
+        {
+            throw InvalidTextInfo();
+        }
+
+        const auto& options = o[ "options" ].GetObject();
+        if
+        (
+            !options.HasMember( "fullscreen" ) ||
+            !options[ "fullscreen" ].IsString() ||
+            !options.HasMember( "window" ) ||
+            !options[ "window" ].IsString()
+        )
+        {
+            throw InvalidTextInfo();
+        }
+
+        screen_option_fullscreen = mezun::charToChar32String( options[ "fullscreen" ].GetString() );
+        screen_option_window = mezun::charToChar32String( options[ "window" ].GetString() );
+    };
+
+    void loadTitleText( const auto& data )
+    {
         if ( data.HasMember( "title" ) && data[ "title" ].IsObject() )
         {
             const auto input = data[ "title" ].GetObject();
-            if ( input.HasMember( "attribution" ) && input[ "attribution" ].IsString() )
+            if
+            (
+                !input.HasMember( "attribution" ) ||
+                !input[ "attribution" ].IsString() ||
+                !input.HasMember( "options" ) ||
+                !input[ "options" ].IsObject()
+            )
             {
-                const char* attribution = input[ "attribution" ].GetString();
-                title_created_by = mezun::charToChar32String( attribution );
+                throw InvalidTextInfo();
             }
+
+            const char* attribution = input[ "attribution" ].GetString();
+            title_created_by = mezun::charToChar32String( attribution );
+
+            const auto& options = input[ "options" ].GetObject();
+
+            if
+            (
+                !options.HasMember( "new_game" ) ||
+                !options[ "new_game" ].IsString() ||
+                !options.HasMember( "load_game" ) ||
+                !options[ "load_game" ].IsString() ||
+                !options.HasMember( "options" ) ||
+                !options[ "options" ].IsString() ||
+                !options.HasMember( "quit" ) ||
+                !options[ "quit" ].IsString()
+            )
+            {
+                throw InvalidTextInfo();
+            }
+
+            title_options.emplace_back( mezun::charToChar32String( options[ "new_game" ].GetString() ) );
+            title_options.emplace_back( mezun::charToChar32String( options[ "load_game" ].GetString() ) );
+            title_options.emplace_back( mezun::charToChar32String( options[ "options" ].GetString() ) );
+            title_options.emplace_back( mezun::charToChar32String( options[ "quit" ].GetString() ) );
         }
     };
 
-    const char* getGameTitle()
+    void loadOptionsText( const auto& data )
     {
-        return game_title;
-    };
-
-    const std::u32string& getTitleCreatedBy()
-    {
-        return title_created_by;
-    };
-
-    const std::u32string& getInputQuitting()
-    {
-        return input_quitting;
-    };
-
-    const std::vector<CharFrame> getCharacterFrames( char32_t character )
-    {
-        std::unordered_map<char32_t,std::vector<CharFrame>>::const_iterator found = charset.find( character );
-        if ( found == charset.end() )
+        if ( !data.HasMember( "options" ) || !data[ "options" ].IsObject() )
         {
-            return { CharFrame( 30, 3, CharFrame::Type::WHITESPACE ) };
+            throw InvalidTextInfo();
         }
-        return found->second;
+
+        const auto input = data[ "options" ].GetObject();
+        if
+        (
+            !input.HasMember( "title" ) ||
+            !input[ "title" ].IsString() ||
+            !input.HasMember( "options" ) ||
+            !input[ "options" ].IsObject()
+        )
+        {
+            throw InvalidTextInfo();
+        }
+
+        options_title = mezun::charToChar32String( input[ "title" ].GetString() );
+
+        const auto& options = input[ "options" ].GetObject();
+        if
+        (
+            !options.HasMember( "screen_resolution" ) ||
+            !options[ "screen_resolution" ].IsString() ||
+            !options.HasMember( "controls" ) ||
+            !options[ "controls" ].IsString()
+        )
+        {
+            throw InvalidTextInfo();
+        }
+
+        options_options.emplace_back( mezun::charToChar32String( options[ "screen_resolution" ].GetString() ) );
+        options_options.emplace_back( mezun::charToChar32String( options[ "controls" ].GetString() ) );
     };
 }

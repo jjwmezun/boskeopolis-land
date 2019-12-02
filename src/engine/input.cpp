@@ -151,7 +151,11 @@ namespace Input
 			(
 				TextInfo::getInputQuitting(),
 				8,
-				Unit::WINDOW_HEIGHT_PIXELS - 16
+				Unit::WINDOW_HEIGHT_PIXELS - 16,
+				WTextObj::Color::WHITE,
+				WTextObj::DEFAULT_WIDTH,
+				WTextObj::Align::LEFT,
+				WTextObj::Color::BLACK
 			);
 		};
 
