@@ -1,11 +1,11 @@
 #include "audio.hpp"
 #include "input.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
-#include "screen_option_state.hpp"
 #include "render.hpp"
-#include "text_info.hpp"
-#include <iostream>
+#include "screen_option_state.hpp"
 
 static constexpr int FULL_OR_WINDOW_OPTION_WIDTH = 12;
 static constexpr int FULL_OR_WINDOW_OPTION_WIDTH_PIXELS = Unit::MiniBlocksToPixels( FULL_OR_WINDOW_OPTION_WIDTH );
@@ -15,9 +15,9 @@ ScreenOptionState::ScreenOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
-	title_ ( WTextObj::generateTexture( TextInfo::getScreenOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK ) ),
-	fullscreen_option_ ( TextInfo::getScreenOptionFullscreen(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
-	window_option_ ( TextInfo::getScreenOptionWindow(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
+	title_ ( WTextObj::generateTexture( Localization::getCurrentLanguage().getScreenOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK ) ),
+	fullscreen_option_ ( Localization::getCurrentLanguage().getScreenOptionFullscreen(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
+	window_option_ ( Localization::getCurrentLanguage().getScreenOptionWindow(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
 	selection_ ( Render::getMaxMagnification() ),
 	other_options_ (),
 	max_options_ ( Render::getMaxMagnification() + 1 )

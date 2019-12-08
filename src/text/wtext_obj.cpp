@@ -1,8 +1,7 @@
-#include "text_info.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include <unordered_map>
 #include "wtext_obj.hpp"
-
-#include <cstdio>
 
 static int calculateColorOffset( WTextObj::Color color )
 {
@@ -49,7 +48,7 @@ WTextObj::WTextObj
     std::vector<CharFrame> frames;
     for ( const char32_t character : text )
     {
-        auto char_frame_list = TextInfo::getCharacterFrames( character );
+        auto char_frame_list = Localization::getCurrentLanguage().getCharacterFrames( character );
         for ( auto frame : char_frame_list )
         {
             frames.emplace_back( frame );

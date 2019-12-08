@@ -4,7 +4,7 @@
 static constexpr int SPACE_BETWEEN_OPTIONS_MINIBLOCKS = 1;
 static constexpr int SPACE_BETWEEN_OPTIONS_PIXELS = Unit::MiniBlocksToPixels( SPACE_BETWEEN_OPTIONS_MINIBLOCKS );
 
-OptionSystem::OptionSystem( std::vector<std::u32string>& options, int option_width, int y )
+OptionSystem::OptionSystem( const std::vector<std::u32string>& options, int option_width, int y )
 :
 	options_ (),
 	selection_ ( options.size() - 1 )
@@ -28,7 +28,6 @@ OptionSystem::OptionSystem( std::vector<std::u32string>& options, int option_wid
 		y += OptionBox::BOX_HEIGHT + SPACE_BETWEEN_OPTIONS_PIXELS;
 	}
 };
-OptionSystem::~OptionSystem() {};
 
 void OptionSystem::init()
 {
@@ -68,4 +67,9 @@ void OptionSystem::updateOptions()
 		}
 		options_[ i ].update();
 	}
+};
+
+void OptionSystem::changeOptions( const std::vector<std::u32string>& options )
+{
+	options_.clear();
 };

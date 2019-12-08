@@ -34,12 +34,12 @@ class OptionBox
 		};
 
 		TextureBox text_[ WTextObj::NUMBER_OF_COLORS ];
-		const std::u32string words_;
-		const sdl2::SDLRect box_;
-		const sdl2::SDLRect shadow_box_;
-		const int width_;
-		const int x_;
-		const int y_;
+		std::u32string words_;
+		sdl2::SDLRect box_;
+		sdl2::SDLRect shadow_box_;
+		int width_;
+		int x_;
+		int y_;
 		int box_color_;
 		OBState state_;
 		int timer_;

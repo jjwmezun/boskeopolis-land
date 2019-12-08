@@ -52,4 +52,5 @@ namespace Input
 	void buttonHold( Uint8 button );
 	void axis( const SDL_JoyAxisEvent& axis_event );
 	bool exitButtonHeldLongEnough();
+	void changeQuittingText();
 };

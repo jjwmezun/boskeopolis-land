@@ -49,6 +49,9 @@
         "memory_resource": "cpp",
         "random": "cpp",
         "string": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "chrono": "cpp",
+        "filesystem": "cpp",
+        "ratio": "cpp"
     }
 }

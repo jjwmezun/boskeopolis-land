@@ -6,7 +6,6 @@ class OptionSelection
 {
 	public:
 		OptionSelection( int max, int not_allowed = -1 );
-		~OptionSelection();
 
 		void update();
 		void setNotAllowed( int not_allowed );
@@ -16,7 +15,7 @@ class OptionSelection
 
 
 	private:
-		const int max_;
+		int max_;
 		int selection_;
 		int previous_selection_;
 		int timer_;

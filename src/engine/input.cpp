@@ -3,13 +3,14 @@
 #include <fstream>
 #include "input.hpp"
 #include <iostream>
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_json.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include <vector>
-#include "text_info.hpp"
 #include "wtext_obj.hpp"
 
 namespace Input
@@ -105,23 +106,23 @@ namespace Input
 	//
 	//////////////////////////////////////////////////////////
 
-		void loadJoysticks();
-		void loadConfig();
-		void loadConfigFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& document_object );
-		void saveConfig();
-		std::string getConfigFilename();
-		void resetList( bool* list );
-		void updateEscape();
-		void registerKeyPress( Action action );
-		void registerKeyRelease( Action action );
-		void registerKeyHold( Action action );
-		void registerAxisPress( Uint8 axis, Sint16 value );
-		void registerSingleAxisPress( Sint16 value, Uint8 negative, Uint8 positive );
-		void registerAxisChange( Uint8 axis, Sint16 value );
-		bool movingCharacterFunction( bool ( *f )( Action a ) );
-		void setKeycodeChangeFinish( SDL_Keycode key );
-		void setButtonChangeFinish( Uint8 button );
-		void setPreferedButtonConfig();
+		static void loadJoysticks();
+		static void loadConfig();
+		static void loadConfigFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& document_object );
+		static void saveConfig();
+		static std::string getConfigFilename();
+		static void resetList( bool* list );
+		static void updateEscape();
+		static void registerKeyPress( Action action );
+		static void registerKeyRelease( Action action );
+		static void registerKeyHold( Action action );
+		static void registerAxisPress( Uint8 axis, Sint16 value );
+		static void registerSingleAxisPress( Sint16 value, Uint8 negative, Uint8 positive );
+		static void registerAxisChange( Uint8 axis, Sint16 value );
+		static bool movingCharacterFunction( bool ( *f )( Action a ) );
+		static void setKeycodeChangeFinish( SDL_Keycode key );
+		static void setButtonChangeFinish( Uint8 button );
+		static void setPreferedButtonConfig();
 
 
 	//
@@ -146,17 +147,7 @@ namespace Input
 			loadJoysticks();
 			loadConfig();
 			reset();
-
-			quitting_text = WTextObj
-			(
-				TextInfo::getInputQuitting(),
-				8,
-				Unit::WINDOW_HEIGHT_PIXELS - 16,
-				WTextObj::Color::WHITE,
-				WTextObj::DEFAULT_WIDTH,
-				WTextObj::Align::LEFT,
-				WTextObj::Color::BLACK
-			);
+			changeQuittingText();
 		};
 
 		void close()
@@ -649,5 +640,19 @@ namespace Input
 		bool exitButtonHeldLongEnough()
 		{
 			return escape_timer_ >= ESCAPE_TIMER_THRESHOLD;
+		}
+
+		void changeQuittingText()
+		{
+			quitting_text = WTextObj
+			(
+				Localization::getCurrentLanguage().getInputQuitting(),
+				8,
+				Unit::WINDOW_HEIGHT_PIXELS - 16,
+				WTextObj::Color::WHITE,
+				WTextObj::DEFAULT_WIDTH,
+				WTextObj::Align::LEFT,
+				WTextObj::Color::BLACK
+			);
 		}
 };

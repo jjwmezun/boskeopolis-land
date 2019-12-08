@@ -5,25 +5,17 @@
 #include "option_system.hpp"
 #include "texture_box.hpp"
 
-class OptionsState : public GameState
+class LanguageOptionState : public GameState
 {
 	public:
-		OptionsState();
-		~OptionsState();
+		LanguageOptionState();
+		~LanguageOptionState();
 
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
-		void backFromPop() override;
 
 	private:
-		enum class Option
-		{
-			RESOLUTION,
-			CONTROLS,
-			LANGUAGE
-		};
-
 		OptionsBG bg_;
 		TextureBox title_;
 		OptionSystem options_;

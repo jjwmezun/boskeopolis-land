@@ -5,16 +5,15 @@
 #include "console_arguments.hpp"
 #include <deque>
 #include "input.hpp"
+#include "localization.hpp"
 #include "main.hpp"
+#include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_math.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
-#include "message_state.hpp"
-#include "text_info.hpp"
 #include "title_state.hpp"
 #include <vector>
-#include <iostream>
 
 namespace Main
 {
@@ -108,7 +107,7 @@ namespace Main
 	{
 		initSDL();
 		setResourcePath();
-		TextInfo::init();
+		Localization::init();
 		const ConsoleArguments args( argc, argv );
 		NOSAVE = args.nosave();
 		NOHARM = args.noharm();

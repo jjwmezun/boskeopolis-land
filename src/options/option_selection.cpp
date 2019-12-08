@@ -9,7 +9,6 @@ OptionSelection::OptionSelection( int max, int not_allowed )
 	timer_ ( 0 ),
 	not_allowed_ ( not_allowed )
 {};
-OptionSelection::~OptionSelection() {};
 
 int OptionSelection::selection() const { return selection_; };
 int OptionSelection::previousSelection() const { return previous_selection_; };

@@ -4,11 +4,11 @@
 #include "main.hpp"
 #include "render.hpp"
 #include <iostream>
+#include "localization.hpp"
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
 #include "palette.hpp"
 #include <SDL2/SDL_image.h>
-#include "text_info.hpp"
 #include "timers/timer_repeat.hpp"
 
 #define magnified( n ) ( ( n ) * ( magnification_ ) )
@@ -100,7 +100,7 @@ namespace Render
 	{
 		window_ = SDL_CreateWindow
 		(
-			TextInfo::getGameTitle(),
+			Localization::getGameTitle(),
 			0,
 			0,
 			magnified( Unit::WINDOW_WIDTH_PIXELS ),
