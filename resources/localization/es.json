@@ -1,5 +1,6 @@
 {
     "language": "Español",
+    "order": 1,
     "charset":
     [
         { "key": "0", "values": { "x": 0, "y": 0 } },
@@ -139,6 +140,9 @@
         { "key": ">", "values": { "x": 30, "y": 2 } },
         { "key": "♪", "values": { "x": 0, "y": 3 } },
         { "key": "♫", "values": { "x": 1, "y": 3 } },
+        { "key": "ç", "values": { "x": 2, "y": 3 } },
+        { "key": "Ç", "values": { "x": 2, "y": 3 } },
+        { "key": "ß", "values": { "x": 3, "y": 3 } },
         { "key": "…", "values": [ { "x": 20, "y": 1 }, { "x": 20, "y": 1 }, { "x": 20, "y": 1 } ] },
         { "key": " ", "values": { "x": 31, "y": 3, "whitespace": true } },
         { "key": "\n", "values": { "x": 31, "y": 3, "newline": true } }
@@ -148,6 +152,7 @@
     "input":
     {
         "quitting": "Cerrando…",
+        "title": "Los Mandos",
         "actions":
         {
             "confirm": "Confirmar",

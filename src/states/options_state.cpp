@@ -8,15 +8,16 @@
 #include "options_state.hpp"
 #include "render.hpp"
 #include "screen_option_state.hpp"
+#include "title_state.hpp"
 
 static constexpr int NUMBER_OF_OPTIONS = 3;
 
-OptionsState::OptionsState()
+OptionsState::OptionsState( int start_selection )
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
-	title_ ( WTextObj::generateTexture( Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK ) ),
-	options_ ( Localization::getCurrentLanguage().getOptionsOptions(), 20, 64 )
+	title_ (),
+	options_ ( Localization::getCurrentLanguage().getOptionsOptions(), 64, start_selection )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -40,15 +41,9 @@ void OptionsState::stateRender()
 	title_.render();
 };
 
-void OptionsState::backFromPop()
-{/*
-	title_.destroy();
-	title_ = WTextObj::generateTexture( Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
-	options_.changeOptions( Localization::getCurrentLanguage().getOptionsOptions() );*/
-};
-
 void OptionsState::init()
 {
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
 	options_.init();
 };
 
@@ -57,7 +52,7 @@ void OptionsState::updateInput()
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::popState();
+		Main::changeState( std::make_unique<TitleState> ( 2 ) );
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
@@ -65,17 +60,17 @@ void OptionsState::updateInput()
 		{
 			case ( Option::RESOLUTION ):
 			{
-				Main::pushState( std::make_unique<ScreenOptionState> () );
+				Main::changeState( std::make_unique<ScreenOptionState> () );
 			}
 			break;
 			case ( Option::CONTROLS ):
 			{
-				Main::pushState( std::make_unique<ControlsOptionState> () );
+				Main::changeState( std::make_unique<ControlsOptionState> () );
 			}
 			break;
 			case ( Option::LANGUAGE ):
 			{
-				Main::pushState( std::make_unique<LanguageOptionState> () );
+				Main::changeState( std::make_unique<LanguageOptionState> () );
 			}
 			break;
 		}

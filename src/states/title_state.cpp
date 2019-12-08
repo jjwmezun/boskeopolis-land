@@ -24,7 +24,7 @@ static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_
 static constexpr int OPTION_WIDTH_MINIBLOCKS = 12;
 static constexpr int OPTION_WIDTH_MINIBLOCKS_PIXELS = Unit::MiniBlocksToPixels( OPTION_WIDTH_MINIBLOCKS );
 
-TitleState::TitleState()
+TitleState::TitleState( int start_selection )
 :
 	GameState( StateID::TITLE_STATE, { "Pale Purple", 2 } ),
 	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
@@ -32,7 +32,7 @@ TitleState::TitleState()
 	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 248, 175, 0, Unit::WINDOW_HEIGHT_PIXELS - 175, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 112, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	logo_gfx_ ( "bosko_logo.png" ),
-	options_ ( Localization::getCurrentLanguage().getTitleOptions(), OPTION_WIDTH_MINIBLOCKS_PIXELS, OPTIONS_TOP_Y ),
+	options_ ( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y, start_selection ),
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
 	created_by_ (),
 	can_load_ ( false )
@@ -51,20 +51,28 @@ void TitleState::stateUpdate()
 		switch( ( Option )( options_.selection() ) )
 		{
 			case ( Option::NEW ):
+			{
 				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+			}
 			break;
 
 			case ( Option::LOAD ):
+			{
 				Inventory::load();
 				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+			}
 			break;
 
 			case ( Option::OPTIONS ):
-				Main::pushState( std::make_unique<OptionsState> () );
+			{
+				Main::changeState( std::make_unique<OptionsState> () );
+			}
 			break;
 
 			case ( Option::QUIT ):
+			{
 				Main::quit();
+			}
 			break;
 		}
 		Audio::playSound( Audio::SoundType::CONFIRM );
@@ -85,7 +93,6 @@ void TitleState::stateRender()
 	cloud_bg_.render( Render::window_box_ );
 	options_.render();
 	created_by_.render();
-
 };
 
 void TitleState::init()
@@ -114,14 +121,8 @@ void TitleState::init()
 	ifs.close();
 	Inventory::reset();
 
-	WTextObj created_by_text = { Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK };
-	created_by_ = created_by_text.generateTexture();
+	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();
 
-	Audio::changeSong( "title" );
-};
-
-void TitleState::backFromPop()
-{
 	Audio::changeSong( "title" );
 };

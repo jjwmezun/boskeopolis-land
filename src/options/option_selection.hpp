@@ -5,7 +5,7 @@
 class OptionSelection
 {
 	public:
-		OptionSelection( int max, int not_allowed = -1 );
+		OptionSelection( int max, int not_allowed = -1, int current = 0 );
 
 		void update();
 		void setNotAllowed( int not_allowed );

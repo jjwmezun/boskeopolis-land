@@ -10,10 +10,9 @@ static int getBoxX( int x, int width )
 	return ( x == -1 ) ? ( ( Unit::WINDOW_WIDTH_PIXELS - width ) / 2 ) : x;
 };
 
-OptionBox::OptionBox( const std::u32string& text, int y, int width, int x )
+OptionBox::OptionBox( const std::u32string& words, int y, int width, int x )
 :
-	text_({}),
-	words_ ( text ),
+	words_ ( words ),
 	box_ ( getBoxX( x, width ), y, width, BOX_HEIGHT ),
 	shadow_box_ ( box_.x + SHADOW_LENGTH, box_.y + SHADOW_LENGTH, width, BOX_HEIGHT ),
 	width_ ( width ),
@@ -32,20 +31,35 @@ OptionBox::~OptionBox()
 	}
 };
 
+OptionBox::OptionBox( OptionBox&& o )
+:
+	words_ ( o.words_ ),
+	box_ ( o.box_ ),
+	shadow_box_ ( o.shadow_box_ ),
+	width_ ( o.width_ ),
+	x_ ( o.x_ ),
+	y_ ( o.y_ ),
+	box_color_ ( o.box_color_ ),
+	state_ ( o.state_ ),
+	timer_ ( o.timer_ )
+{};
+
 void OptionBox::init()
 {
 	for ( int i = 0; i < WTextObj::NUMBER_OF_COLORS - 1; ++i )
 	{
-		text_[ i ] = WTextObj::generateTexture
+		WTextObj::generateTexture
 		(
+			text_[ i ],
 			words_, x_, y_, ( WTextObj::Color )( i ),
 			width_, WTextObj::Align::CENTER, WTextObj::Color::__NULL,
 			Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
 			WTextObj::VAlign::CENTER, BOX_HEIGHT
 		);
 	}
-	text_[ WTextObj::NUMBER_OF_COLORS - 1 ] = WTextObj::generateTexture
+	WTextObj::generateTexture
 	(
+		text_[ WTextObj::NUMBER_OF_COLORS - 1 ],
 		words_, x_ + 2, y_ + 2, ( WTextObj::Color )( 2 ),
 		width_, WTextObj::Align::CENTER, WTextObj::Color::__NULL,
 		Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
@@ -170,4 +184,10 @@ void OptionBox::renderBox() const
 int OptionBox::currentTextPosition( int value ) const
 {
 	return ( state_ == OBState::NULLIFIED ) ? value + SHADOW_LENGTH : value;
+};
+
+void OptionBox::changeText( const std::u32string& words )
+{
+	words_ = words;
+	init();
 };

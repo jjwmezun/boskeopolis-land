@@ -4,6 +4,7 @@
 #include "localization_language.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
+#include "options_state.hpp"
 #include "render.hpp"
 #include "screen_option_state.hpp"
 
@@ -15,7 +16,7 @@ ScreenOptionState::ScreenOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
-	title_ ( WTextObj::generateTexture( Localization::getCurrentLanguage().getScreenOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK ) ),
+	title_ (),
 	fullscreen_option_ ( Localization::getCurrentLanguage().getScreenOptionFullscreen(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
 	window_option_ ( Localization::getCurrentLanguage().getScreenOptionWindow(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
 	selection_ ( Render::getMaxMagnification() ),
@@ -62,6 +63,7 @@ void ScreenOptionState::stateRender()
 
 void ScreenOptionState::init()
 {
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getScreenOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
 	fullscreen_option_.init();
 	window_option_.init();
 	for ( auto& option : other_options_ )
@@ -122,7 +124,7 @@ void ScreenOptionState::updateInput()
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::popState();
+		Main::changeState( std::make_unique<OptionsState> () );
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{

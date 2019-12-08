@@ -8,7 +8,7 @@
 class OptionSystem
 {
 	public:
-		OptionSystem( const std::vector<std::u32string>& options, int option_width, int y = 32 );
+		OptionSystem( const std::vector<std::u32string>& options, int y = 32, int start_selection = 0 );
 
 		void init();
 		void update();

@@ -3,6 +3,7 @@
 #include "controls_option_prompt_state.hpp"
 #include "input.hpp"
 #include "main.hpp"
+#include "options_state.hpp"
 #include "render.hpp"
 #include "screen_option_state.hpp"
 
@@ -106,7 +107,7 @@ void ControlsOptionState::updateInput()
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::popState();
+		Main::changeState( std::make_unique<OptionsState> ( 1 ) );
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{

@@ -1,5 +1,6 @@
 #include "localization.hpp"
 #include "localization_language.hpp"
+#include "render.hpp"
 #include <unordered_map>
 #include "wtext_obj.hpp"
 
@@ -180,18 +181,18 @@ void WTextObj::render() const
     }
 };
 
-TextureBox WTextObj::generateTexture() const
+void WTextObj::generateTexture( TextureBox& texture_box ) const
 {
-    TextureBox texture_box;
     texture_box.init();
     texture_box.startDrawing();
+    Render::clearScreenTransparency();
     render();
     texture_box.endDrawing();
-    return texture_box;
 };
 
-TextureBox WTextObj::generateTexture
+void WTextObj::generateTexture
 (
+    TextureBox& texture_box,
     const std::u32string& text,
     int x,
     int y,
@@ -206,5 +207,5 @@ TextureBox WTextObj::generateTexture
 )
 {
     WTextObj o( text, x, y, color, width, align, shadow, x_padding, y_padding, valign, height );
-    return o.generateTexture();
+    o.generateTexture( texture_box );
 };

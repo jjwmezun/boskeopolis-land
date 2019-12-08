@@ -7,6 +7,11 @@ class TextureBox
 {
     public:
         TextureBox();
+        ~TextureBox();
+        TextureBox( TextureBox&& t ) = delete;
+        TextureBox& operator=( TextureBox&& t );
+        TextureBox( const TextureBox& ) = delete;
+        TextureBox& operator=( const TextureBox& ) = delete;
         void init();
         void startDrawing();
         void endDrawing();
@@ -16,4 +21,5 @@ class TextureBox
     private:
         SDL_Texture* texture_;
         sdl2::SDLRect dest_;
+        bool token_;
 };

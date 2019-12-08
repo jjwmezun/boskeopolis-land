@@ -85,6 +85,7 @@ namespace Render
 	void renderRenderBox( SDL_Texture* texture );
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src );
 	void renderRenderBox( SDL_Texture* texture, sdl2::SDLRect src, sdl2::SDLRect dest );
+	void clearRenderBox( SDL_Texture* texture );
 	const sdl2::SDLRect& getScreen();
 	SDL_Surface* getSurface( std::string sheet );
 

@@ -1,6 +1,6 @@
 {
-    "language": "English",
-    "order": 1,
+    "language": "Deutsch",
+    "order": 3,
     "charset":
     [
         { "key": "0", "values": { "x": 0, "y": 0 } },
@@ -151,68 +151,68 @@
     "intro_text": "Learn Mo’ ’bout this project’s development @\nhttps://www.boskeopolis-land.com",
     "input":
     {
-        "quitting": "Quitting…",
-        "title": "Controls",
+        "quitting": "Verlassen…",
+        "title": "Kontrollen",
         "actions":
         {
-            "confirm": "Confirm",
-            "cancel": "Cancel",
-            "menu": "Menu",
-            "jump": "Jump",
-			"run": "Run",
-			"up": "Up",
-			"right": "Right",
-			"down": "Down",
-			"left": "Left",
-			"camera_left": "Camera Left",
-			"camera_right": "Camera Right",
-			"camera_up": "Camera Up",
-			"camera_down": "Camera Down"
+            "confirm": "Bestätigen",
+            "cancel": "Stornieren",
+            "menu": "Das Menü",
+            "jump": "Springen",
+			"run": "Lauf",
+			"up": "Auf",
+			"right": "Recht",
+			"down": "Nieder",
+			"left": "Links",
+			"camera_left": "Kamera Links",
+			"camera_right": "Kamera Recht",
+			"camera_up": "Kamera Auf",
+			"camera_down": "Kamera Nieder"
         }
     },
     "title":
     {
-        "attribution": "Created by J.J.W. Mezun — 2016-2019",
+        "attribution": "Erstellt von J.J.W. Mezun — 2016-2019",
         "options":
         {
-            "new_game": "New Game",
-            "load_game": "Load Game",
-            "options": "Options",
-            "quit": "Quit"
+            "new_game": "Neues Spiel",
+            "load_game": "Spiel laden",
+            "options": "Optionen",
+            "quit": "Verlassen"
         }
     },
     "options":
     {
-        "title": "Options",
+        "title": "Optionen",
         "options":
         {
-            "screen_resolution": "Screen Resolution",
-            "controls": "Controls",
-            "language": "Language"
+            "screen_resolution": "Bildauflösung",
+            "controls": "Kontrollen",
+            "language": "Sprache"
         }
     },
     "screen_options":
     {
-        "title": "Screen Options",
+        "title": "Bildauflösung",
         "options":
         {
-            "fullscreen": "Fullscreen",
-            "window": "Window"
+            "fullscreen": "Bildschirm",
+            "window": "Fenster"
         }
     },
     "pause":
     {
-        "continue": "Continue",
-        "exit_leave_unbeaten": "Give Up",
-        "exit_leave_beaten": "Back to Level Select"
+        "continue": "Weitermachen",
+        "exit_leave_unbeaten": "Aufgeben",
+        "exit_leave_beaten": "Zurück zur Karte"
     },
     "overworld":
     {
-		"continue": "Continue",
-		"level_list": "Level List",
-		"camera_view": "Camera View",
-		"options": "Options",
-		"quit": "Quit"
+		"continue": "Weitermachen",
+		"level_list": "Ebenenauswahl",
+		"camera_view": "Kameraansicht",
+		"options": "Optionen",
+		"quit": "Verlassen"
     },
     "goals":
     {

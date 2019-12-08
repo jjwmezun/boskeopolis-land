@@ -12,14 +12,12 @@ class TitleState : public GameState
 	public:
 		static constexpr int OPTIONS_SIZE = 4;
 
-		TitleState();
+		TitleState( int start_selection = 0 );
 		~TitleState();
 
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
-		void backFromPop() override;
-
 
 	private:
 		enum class Option

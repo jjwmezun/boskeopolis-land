@@ -4,6 +4,7 @@
 #include "language_option_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
+#include "options_state.hpp"
 #include "main.hpp"
 #include "render.hpp"
 #include "screen_option_state.hpp"
@@ -14,8 +15,8 @@ LanguageOptionState::LanguageOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
-	title_ ( WTextObj::generateTexture( Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK ) ),
-	options_ ( Localization::getLanguageNames(), 20, 64 )
+	title_ (),
+	options_ ( Localization::getLanguageNames(), 64 )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -41,6 +42,7 @@ void LanguageOptionState::stateRender()
 
 void LanguageOptionState::init()
 {
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
 	options_.init();
 };
 
@@ -49,7 +51,7 @@ void LanguageOptionState::updateInput()
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::popState();
+		Main::changeState( std::make_unique<OptionsState> ( 2 ) );
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{

@@ -1,10 +1,10 @@
 #include "audio.hpp"
 #include "option_selection.hpp"
 
-OptionSelection::OptionSelection( int max, int not_allowed )
+OptionSelection::OptionSelection( int max, int not_allowed, int current )
 :
 	max_ ( max ),
-	selection_ ( 0 ),
+	selection_ ( current ),
 	previous_selection_ ( -1 ),
 	timer_ ( 0 ),
 	not_allowed_ ( not_allowed )

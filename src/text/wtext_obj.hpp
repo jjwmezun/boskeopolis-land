@@ -59,9 +59,10 @@ class WTextObj
 			int height = DEFAULT_HEIGHT
 		);
 		void render() const;
-		TextureBox generateTexture() const;
-		static TextureBox generateTexture
+		void generateTexture( TextureBox& texture_box ) const;
+		static void generateTexture
 		(
+    		TextureBox& texture_box,
 			const std::u32string& text,
 			int x,
 			int y,

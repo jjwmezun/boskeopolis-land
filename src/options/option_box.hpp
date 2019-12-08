@@ -2,6 +2,7 @@
 
 #include "mezun_sdl2.hpp"
 #include <string>
+#include "texture_box.hpp"
 #include "wtext_obj.hpp"
 
 class OptionBox
@@ -11,8 +12,12 @@ class OptionBox
 		static constexpr int VERTICAL_PADDING_PIXELS = VERTICAL_PADDING_MINIBLOCKS * CharFrame::SIZE_PIXELS;
 		static constexpr int BOX_HEIGHT = VERTICAL_PADDING_PIXELS * 2 + 8;
 
-		OptionBox( const std::u32string& text, int y, int width, int x = -1 );
+		OptionBox( const std::u32string& words, int y, int width, int x = -1 );
 		~OptionBox();
+		OptionBox( OptionBox&& o );
+		OptionBox( const OptionBox& ) = delete;
+		OptionBox& operator=( const OptionBox& ) = delete;
+		OptionBox& operator=( OptionBox&& ) = delete;
 
 		void init();
 		void update();
@@ -22,7 +27,7 @@ class OptionBox
 		void setToPrevious();
 		void setToNullified();
 		bool isNullified() const;
-
+		void changeText( const std::u32string& words );
 
 	private:
 		enum class OBState

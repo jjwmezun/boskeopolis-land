@@ -327,6 +327,13 @@ namespace Render
 		SDL_SetRenderTarget( renderer_, target_ );
 	};
 
+	void clearRenderBox( SDL_Texture* texture )
+	{
+		setRenderTarget( texture );
+		clearScreenTransparency();
+		releaseRenderTarget();
+	};
+
 	void clearScreenTransparency()
 	{
 		SDL_SetRenderDrawColor( renderer_, 0, 0, 0, 0 );

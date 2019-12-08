@@ -8,13 +8,12 @@
 class OptionsState : public GameState
 {
 	public:
-		OptionsState();
+		OptionsState( int start_selection = 0 );
 		~OptionsState();
 
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
-		void backFromPop() override;
 
 	private:
 		enum class Option

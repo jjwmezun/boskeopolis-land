@@ -1,13 +1,11 @@
+#include <cassert>
 #include "option_system.hpp"
 #include "render.hpp"
 
 static constexpr int SPACE_BETWEEN_OPTIONS_MINIBLOCKS = 1;
 static constexpr int SPACE_BETWEEN_OPTIONS_PIXELS = Unit::MiniBlocksToPixels( SPACE_BETWEEN_OPTIONS_MINIBLOCKS );
 
-OptionSystem::OptionSystem( const std::vector<std::u32string>& options, int option_width, int y )
-:
-	options_ (),
-	selection_ ( options.size() - 1 )
+static int calculateBoxWidth( const std::vector<std::u32string>& options )
 {
 	int max_width = 0;
 	for ( const std::u32string& name : options )
@@ -21,10 +19,17 @@ OptionSystem::OptionSystem( const std::vector<std::u32string>& options, int opti
 	{
 		max_width = Unit::MINIBLOCKS_PER_SCREEN - 4;
 	}
+	return Unit::MiniBlocksToPixels( max_width + 2 );
+}
 
+OptionSystem::OptionSystem( const std::vector<std::u32string>& options, int y, int start_selection )
+:
+	options_ (),
+	selection_ ( options.size() - 1, -1, start_selection )
+{
 	for ( const std::u32string& name : options )
 	{
-		options_.emplace_back( name, y, Unit::MiniBlocksToPixels( max_width + 2 ) );
+		options_.emplace_back( name, y, calculateBoxWidth( options ) );
 		y += OptionBox::BOX_HEIGHT + SPACE_BETWEEN_OPTIONS_PIXELS;
 	}
 };
@@ -67,9 +72,4 @@ void OptionSystem::updateOptions()
 		}
 		options_[ i ].update();
 	}
-};
-
-void OptionSystem::changeOptions( const std::vector<std::u32string>& options )
-{
-	options_.clear();
 };
