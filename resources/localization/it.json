@@ -1,6 +1,6 @@
 {
-    "language": "Español",
-    "order": 2,
+    "language": "Italiano",
+    "order": 5,
     "charset":
     [
         { "key": "0", "values": { "x": 0, "y": 0 } },
@@ -143,82 +143,92 @@
         { "key": "ç", "values": { "x": 2, "y": 3 } },
         { "key": "Ç", "values": { "x": 2, "y": 3 } },
         { "key": "ß", "values": { "x": 3, "y": 3 } },
+        { "key": "â", "values": { "x": 4, "y": 3 } },
+        { "key": "Â", "values": { "x": 4, "y": 3 } },
+        { "key": "ê", "values": { "x": 5, "y": 3 } },
+        { "key": "Ê", "values": { "x": 5, "y": 3 } },
+        { "key": "î", "values": { "x": 6, "y": 3 } },
+        { "key": "Î", "values": { "x": 6, "y": 3 } },
+        { "key": "ô", "values": { "x": 7, "y": 3 } },
+        { "key": "Ô", "values": { "x": 7, "y": 3 } },
+        { "key": "û", "values": { "x": 8, "y": 3 } },
+        { "key": "Û", "values": { "x": 8, "y": 3 } },
         { "key": "…", "values": [ { "x": 20, "y": 1 }, { "x": 20, "y": 1 }, { "x": 20, "y": 1 } ] },
         { "key": " ", "values": { "x": 31, "y": 3, "whitespace": true } },
         { "key": "\n", "values": { "x": 31, "y": 3, "newline": true } }
     ],
-    "game_title": "Bosqueopolis Land",
-    "intro_text": "Aprende más del desarrollo de este projecto @\nhttps://www.boskeopolis-land.com",
+    "game_title": "Boskeopolis Land",
+    "intro_text": "Scopri di più sullo sviluppo di questo progetto @\nhttps://www.boskeopolis-land.com",
     "input":
     {
-        "quitting": "Cerrando…",
-        "title": "Los Mandos",
+        "quitting": "Cessare…",
+        "title": "Controlli",
         "actions":
         {
-            "confirm": "Confirmar",
-            "cancel": "Cancelar",
-            "menu": "Menú",
-            "jump": "Saltar",
-			"run": "Correr",
-			"up": "Arriba",
-			"right": "Derecho",
-			"down": "Abajo",
-			"left": "Izquierda",
-			"camera_left": "Cámera Izquierda",
-			"camera_right": "Cámera Derecho",
-			"camera_up": "Cámera Arriba",
-			"camera_down": "Cámera Abajo"
+            "confirm": "Confermare",
+            "cancel": "Annullare",
+            "menu": "Menu",
+            "jump": "Saltare",
+			"run": "Correre",
+			"up": "Su",
+			"right": "Destra",
+			"down": "Giù",
+			"left": "Sinistra",
+			"camera_left": "Fotocamera sinistra",
+			"camera_right": "Fotocamera destra",
+			"camera_up": "Fotocamera verso l'alto",
+			"camera_down": "Fotocamera verso il basso"
         }
     },
     "title":
     {
-        "attribution": "Creado por J.J.W. Mezun — 2016-2019",
+        "attribution": "Creato da J.J.W. Mezun — 2016-2019",
         "options":
         {
-            "new_game": "Nuevo Juego",
-            "load_game": "Recoga Juego",
-            "options": "Las Opciones",
-            "quit": "Cerra"
+            "new_game": "Nuovo gioco",
+            "load_game": "Riprendi il gioco",
+            "options": "Opzioni",
+            "quit": "Cessare"
         }
     },
     "options":
     {
-        "title": "Las Opciones",
+        "title": "Opzioni",
         "options":
         {
-            "screen_resolution": "La Resolución de Pantalla",
-            "controls": "Los Mandos",
-            "language": "El Idioma"
+            "screen_resolution": "Opzioni schermo",
+            "controls": "Controlli",
+            "language": "Linguaggio"
         }
     },
     "screen_options":
     {
-        "title": "Las Opciones de Pantalla",
+        "title": "Opzioni schermo",
         "options":
         {
-            "fullscreen": "Pantalla Completa",
-            "window": "Ventana"
+            "fullscreen": "A schermo intero",
+            "window": "Finestra"
         }
     },
     "pause":
     {
         "continue": "Continua",
-        "exit_leave_unbeaten": "Entregáse",
-        "exit_leave_beaten": "Volve al mapa"
+        "exit_leave_unbeaten": "Arrendersi",
+        "exit_leave_beaten": "Ritorna alla mappa"
     },
     "overworld":
     {
 		"continue": "Continua",
-		"level_list": "La lista de niveles",
-		"camera_view": "La Vista de Cámera",
-		"options": "Las Opciones",
-		"quit": "Cerra Juego"
+		"level_list": "Elenco dei livelli",
+		"camera_view": "Vista della telecamera",
+		"options": "Opzioni",
+		"quit": "Smettere"
     },
     "goals":
     {
-        "avoid_money": "¡No toca ninguno dinero!",
-        "collect": "¡Collecciona %p ₧!",
-        "do_nothing": "¡No haga nada de nada!",
+        "avoid_money": "¡Don't touch any money!",
+        "collect": "¡Collect %p ₧!",
+        "do_nothing": "¡Don't do anything @ all!",
         "heat": "¡Don't touch the hot surface too long!",
         "mcguffins": "¡Collect %m McGuffins!",
         "past_right_edge": "¡Go past the end!",

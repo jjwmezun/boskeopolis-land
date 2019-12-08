@@ -20,9 +20,11 @@ class LocalizationLanguage
         const std::vector<CharFrame> getCharacterFrames( char32_t character ) const;
         const std::vector<std::u32string>& getTitleOptions() const;
         const std::vector<std::u32string>& getOptionsOptions() const;
+        const int getOrder() const;
 
     private:
         void loadCharset( const auto& data, const std::string& path );
+        void loadOrder( const auto& data, const std::string& path );
         void loadLanguageName( const auto& data, const std::string& path );
         void loadInputText( const auto& data, const std::string& path );
         void loadScreenOptions( const auto& data, const std::string& path );
@@ -40,4 +42,5 @@ class LocalizationLanguage
         std::unordered_map<char32_t, std::vector<CharFrame>> charset_;
         std::vector<std::u32string> title_options_;
         std::vector<std::u32string> options_options_;
+        int order_;
 };

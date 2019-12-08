@@ -23,11 +23,17 @@ LocalizationLanguage::LocalizationLanguage( const std::string& path )
 
     const auto data = document.GetObject();
     loadCharset( data, path );
+    loadOrder( data, path );
     loadLanguageName( data, path );
     loadInputText( data, path );
     loadTitleText( data, path );
     loadOptionsText( data, path );
     loadScreenOptions( data, path );
+};
+
+const int LocalizationLanguage::getOrder() const
+{
+    return order_;
 };
 
 const std::u32string& LocalizationLanguage::getLanguageName() const
@@ -154,6 +160,15 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
             }
         }
     }
+};
+
+void LocalizationLanguage::loadOrder( const auto& data, const std::string& path )
+{
+    if ( !data.HasMember( "order" ) || !data[ "order" ].IsInt() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    order_ = data[ "order" ].GetInt();
 };
 
 void LocalizationLanguage::loadLanguageName( const auto& data, const std::string& path )

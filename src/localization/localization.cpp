@@ -23,12 +23,26 @@ namespace Localization
             try
             {
                 languages.push_back( LocalizationLanguage( file.path() ) );
-                language_names.push_back( languages[ languages.size() - 1 ].getLanguageName() );
             }
             catch ( const InvalidLocalizationLanguageException& e )
             {
                 std::cerr << e.what() << std::endl;
             }       
+        }
+
+        std::sort
+        (
+            std::begin( languages ),
+            std::end( languages ),
+            []( const LocalizationLanguage& lhs, const LocalizationLanguage& rhs )
+            {
+                return lhs.getOrder() < rhs.getOrder();
+            }
+        );
+
+        for ( const auto& language : languages )
+        {
+            language_names.push_back( language.getLanguageName() );
         }
         assert( languages.size() == language_names.size() );
     };
