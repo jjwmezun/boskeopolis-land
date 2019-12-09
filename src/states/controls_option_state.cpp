@@ -79,6 +79,17 @@ void ControlsOptionState::init()
 		16
 	);
 
+	//
+	//  Create texture for all text in normal text.
+	//
+	//  & list o’ textures for each line with highlight.
+	//
+	//  When rendering, we will draw all the normal text
+	//  & the selected line's highlighted texture o’er
+	//  the text o’ that line.
+	//
+	///////////////////////////////////////////////////////
+
 	text_.init();
 
 	const std::u32string* action_names = Localization::getCurrentLanguage().getControlsActionNames();
@@ -171,7 +182,7 @@ void ControlsOptionState::init()
 
 void ControlsOptionState::backFromPop()
 {
-	// RESET NAMES
+	// todo: RESET NAMES
 };
 
 void ControlsOptionState::updateSelection()
