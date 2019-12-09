@@ -33,8 +33,8 @@ namespace Input
 	bool movingCharacterNoHold();
 	std::string getActionName( Action action );
 	int calculateMaxActionNameLength();
-	std::string getKeyName( Action action );
-	std::string getButtonName( Action action );
+	const std::u32string* generateKeyNames();
+	const std::u32string* generateButtonNames();
 
 	void init();
 	void close();
@@ -53,4 +53,21 @@ namespace Input
 	void axis( const SDL_JoyAxisEvent& axis_event );
 	bool exitButtonHeldLongEnough();
 	void changeQuittingText();
+
+	constexpr char TAGS[ NUM_O_ACTIONS ][ 13 ]
+	{
+		"confirm",
+		"cancel",
+		"menu",
+		"jump",
+		"run",
+		"up",
+		"right",
+		"down",
+		"left",
+		"camera_left",
+		"camera_right",
+		"camera_up",
+		"camera_down"
+	};
 };

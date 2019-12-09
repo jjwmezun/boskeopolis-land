@@ -34,24 +34,11 @@ namespace Input
 		static constexpr Sint16 AXIS_POSITIVE = 32767;
 		static constexpr Sint16 AXIS_NEGATIVE = -32768;
 
-		static const std::string action_names_[ NUM_O_ACTIONS ] =
-		{
-			"Confirm",
-			"Cancel",
-			"Menu",
-			"Jump",
-			"Run",
-			"Up",
-			"Right",
-			"Down",
-			"Left",
-			"Camera Left",
-			"Camera Right",
-			"Camera Up",
-			"Camera Down"
-		};
+		static std::u32string key_names_[ NUM_O_ACTIONS ] = { U"" };
+		static std::u32string button_names_[ NUM_O_ACTIONS ] = { U"" };
 
 		// Private Variables
+
 		static SDL_Keycode key_map_ [ NUM_O_ACTIONS ] =
 		{
 			/* CONFIRM      */ SDLK_z      ,
@@ -123,6 +110,7 @@ namespace Input
 		static void setKeycodeChangeFinish( SDL_Keycode key );
 		static void setButtonChangeFinish( Uint8 button );
 		static void setPreferedButtonConfig();
+		static std::string getButtonName( Uint8 button );
 
 
 	//
@@ -182,7 +170,7 @@ namespace Input
 				auto keys = document_object[ type ].GetObject();
 				for ( int i = 0; i < NUM_O_ACTIONS; ++i )
 				{
-					const char* input_name = action_names_[ i ].c_str();
+					const char* input_name = TAGS[ i ];
 					if ( keys.HasMember( input_name ) && keys[ input_name ].IsInt() )
 					{
 						key_map[ i ] = ( T )( keys[ input_name ].GetInt() );
@@ -217,7 +205,7 @@ namespace Input
 			text += mezun::addLine( "{", 1 );
 			for ( int i = 0; i < NUM_O_ACTIONS; ++i )
 			{
-				const std::string& input_name = action_names_[ i ];
+				const std::string& input_name = TAGS[ i ];
 				const std::string input_value = std::to_string( ( int )( key_map[ i ] ) );
 				const std::string end = ( i == NUM_O_ACTIONS - 1 ) ? "" : ",";
 				text += mezun::addLine( "\"" + input_name + "\": " + input_value + end, 2 );
@@ -371,34 +359,28 @@ namespace Input
 			);
 		};
 
-		std::string getActionName( Action action )
+		const std::u32string* generateKeyNames()
 		{
-			return action_names_[ ( int )( action ) ];
-		};
-
-		int calculateMaxActionNameLength()
-		{
-			int length = 0;
 			for ( int i = 0; i < NUM_O_ACTIONS; ++i )
 			{
-				if ( length < action_names_[ i ].size() )
-				{
-					length = action_names_[ i ].size();
-				}
+				SDL_Keycode key = key_map_[ i ];
+				key_names_[ i ] = mezun::charToChar32String( SDL_GetKeyName( key ) );
 			}
-			return length;
+			return key_names_;
 		};
 
-		std::string getKeyName( Action action )
+		const std::u32string* generateButtonNames()
 		{
-			SDL_Keycode k = key_map_[ ( int )( action ) ];
-			return SDL_GetKeyName( k );
+			for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+			{
+				Uint8 button = controller_button_map_[ i ];
+				button_names_[ i ] = mezun::charToChar32String( getButtonName( button ).c_str() );
+			}
+			return button_names_;
 		};
 
-		std::string getButtonName( Action action )
+		std::string getButtonName( Uint8 button )
 		{
-			Uint8 button = controller_button_map_[ ( int )( action ) ];
-
 			switch ( button )
 			{
 				case ( AXIS_X_NEGATIVE_BUTTON ):

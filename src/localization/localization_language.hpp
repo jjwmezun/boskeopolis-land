@@ -1,6 +1,7 @@
 #pragma once
 
 #include "char_frame.hpp"
+#include "input.hpp"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -21,6 +22,8 @@ class LocalizationLanguage
         const std::vector<std::u32string>& getTitleOptions() const;
         const std::vector<std::u32string>& getOptionsOptions() const;
         const int getOrder() const;
+        const std::u32string& getControlsOptionsTitle() const;
+        const std::u32string* getControlsActionNames() const;
 
     private:
         void loadCharset( const auto& data, const std::string& path );
@@ -39,6 +42,8 @@ class LocalizationLanguage
         std::u32string options_title_;
         std::u32string screen_options_title_;
         std::u32string language_options_title_;
+        std::u32string controls_options_title_;
+        std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
         std::unordered_map<char32_t, std::vector<CharFrame>> charset_;
         std::vector<std::u32string> title_options_;
         std::vector<std::u32string> options_options_;

@@ -36,6 +36,16 @@ const int LocalizationLanguage::getOrder() const
     return order_;
 };
 
+const std::u32string& LocalizationLanguage::getControlsOptionsTitle() const
+{
+    return controls_options_title_;
+};
+
+const std::u32string* LocalizationLanguage::getControlsActionNames() const
+{
+    return controls_actions_names_;
+};
+
 const std::u32string& LocalizationLanguage::getLanguageName() const
 {
     return language_;
@@ -186,14 +196,33 @@ void LocalizationLanguage::loadInputText( const auto& data, const std::string& p
     {
         throw InvalidLocalizationLanguageException( path );
     }
-
     const auto input = data[ "input" ].GetObject();
-    if ( !input.HasMember( "quitting" ) || !input[ "quitting" ].IsString() )
+
+    if
+    (
+        !input.HasMember( "quitting" ) ||
+        !input[ "quitting" ].IsString() ||
+        !input.HasMember( "title" ) ||
+        !input[ "title" ].IsString() ||
+        !input.HasMember( "actions" ) ||
+        !input[ "actions" ].IsObject()
+    )
     {
         throw InvalidLocalizationLanguageException( path );
     }
 
+    controls_options_title_ = mezun::charToChar32String( input[ "title" ].GetString() );
     input_quitting_ = mezun::charToChar32String( input[ "quitting" ].GetString() );
+
+    const auto actions = input[ "actions" ].GetObject();
+    for ( int i = 0; i < Input::NUM_O_ACTIONS; ++i )
+    {
+        if ( !actions.HasMember( Input::TAGS[ i ] ) || !actions[ Input::TAGS[ i ] ].IsString() )
+        {
+            throw InvalidLocalizationLanguageException( path );
+        }
+        controls_actions_names_[ i ] = mezun::charToChar32String( actions[ Input::TAGS[ i ] ].GetString() );
+    }
 };
 
 void LocalizationLanguage::loadScreenOptions( const auto& data, const std::string& path )

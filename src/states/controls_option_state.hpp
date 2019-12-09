@@ -1,10 +1,10 @@
 #pragma once
 
 #include "game_state.hpp"
+#include "input.hpp"
 #include "options_bg.hpp"
 #include "option_selection.hpp"
-#include "text_obj_basic.hpp"
-#include <vector>
+#include "texture_box.hpp"
 
 class ControlsOptionState : public GameState
 {
@@ -15,20 +15,16 @@ class ControlsOptionState : public GameState
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
-
+		void backFromPop() override;
 
 	private:
 		OptionsBG bg_;
-		TextObjBasic title_;
-		std::vector<TextObjBasic> option_names_;
-		std::vector<TextObjBasic> key_names_;
-		std::vector<TextObjBasic> button_names_;
+		TextureBox title_;
+		TextureBox text_;
+		TextureBox highlights_[ Input::NUM_O_ACTIONS ];
 		OptionSelection selection_;
-		bool reset_option_names_;
 
 		void updateSelection();
 		void updateInput();
 		void renderOptions() const;
-		void testResetOptionNames();
-		void resetOptionNames();
 };
