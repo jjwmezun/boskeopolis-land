@@ -56,3 +56,11 @@ void WTextLine::renderChar( const CharFrame character, int x, int y ) const
         }
     );
 }
+
+void WTextLine::changeColorOffset( int offset )
+{
+    for ( auto& frame : frames_ )
+    {
+        frame.changeColorOffset( offset );
+    }
+};

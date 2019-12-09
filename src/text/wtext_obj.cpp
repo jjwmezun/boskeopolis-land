@@ -181,6 +181,15 @@ void WTextObj::render() const
     }
 };
 
+void WTextObj::changeColor( Color color )
+{
+    int offset = calculateColorOffset( color );
+    for ( auto& line : lines_ )
+    {
+        line.changeColorOffset( offset );
+    }
+};
+
 void WTextObj::generateTexture( TextureBox& texture_box ) const
 {
     texture_box.init();

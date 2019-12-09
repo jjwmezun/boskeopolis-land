@@ -90,16 +90,16 @@ void ControlsOptionState::init()
 	//
 	///////////////////////////////////////////////////////
 
-	text_.init();
-
 	const std::u32string* action_names = Localization::getCurrentLanguage().getControlsActionNames();
 	const std::u32string* key_names = Input::generateKeyNames();
 	const std::u32string* button_names = Input::generateButtonNames();
 	const int KEY_NAME_X = calculateKeyNameX( action_names );
-	int y = OPTION_NAME_START_Y;
 
+	text_.init();
+	int y = OPTION_NAME_START_Y;
 	for ( int i = 0; i < Input::NUM_O_ACTIONS; i++ )
 	{
+		// Draw line to normal text.
 		text_.startDrawing();
 		WTextObj action_name_obj
 		{
@@ -137,43 +137,15 @@ void ControlsOptionState::init()
 		};
 		button_name_obj.render();
 
+		// Generate highlight texture.
 		highlights_[ i ].init();
 		highlights_[ i ].startDrawing();
-		WTextObj action_name_obj_h
-		{
-			action_names[ i ],
-			OPTION_NAME_X,
-			y,
-			WTextObj::Color::LIGHT_GRAY,
-			Unit::WINDOW_WIDTH_PIXELS,
-			WTextObj::Align::LEFT,
-			WTextObj::Color::BLACK
-		};
-		action_name_obj_h.render();
-
-		WTextObj key_name_obj_h
-		{
-			key_names[ i ],
-			KEY_NAME_X,
-			y,
-			WTextObj::Color::LIGHT_GRAY,
-			Unit::WINDOW_WIDTH_PIXELS,
-			WTextObj::Align::LEFT,
-			WTextObj::Color::BLACK
-		};
-		key_name_obj_h.render();
-
-		WTextObj button_name_obj_h
-		{
-			button_names[ i ],
-			Unit::WINDOW_WIDTH_PIXELS - 72,
-			y,
-			WTextObj::Color::LIGHT_GRAY,
-			Unit::WINDOW_WIDTH_PIXELS,
-			WTextObj::Align::LEFT,
-			WTextObj::Color::BLACK
-		};
-		button_name_obj_h.render();
+		action_name_obj.changeColor( WTextObj::Color::LIGHT_GRAY );
+		action_name_obj.render();
+		key_name_obj.changeColor( WTextObj::Color::LIGHT_GRAY );
+		key_name_obj.render();
+		button_name_obj.changeColor( WTextObj::Color::LIGHT_GRAY );
+		button_name_obj.render();
 
 		y += CharFrame::SIZE_PIXELS;
 	}

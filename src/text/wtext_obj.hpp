@@ -59,6 +59,7 @@ class WTextObj
 			int height = DEFAULT_HEIGHT
 		);
 		void render() const;
+		void changeColor( Color color );
 		void generateTexture( TextureBox& texture_box ) const;
 		static void generateTexture
 		(
