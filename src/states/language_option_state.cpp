@@ -16,7 +16,7 @@ LanguageOptionState::LanguageOptionState()
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
 	title_ (),
-	options_ ( Localization::getLanguageNames(), 64 )
+	options_ ( Localization::getLanguageNames(), 56 )
 {
 	Audio::changeSong( "level-select" );
 };

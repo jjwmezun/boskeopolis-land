@@ -19,5 +19,7 @@ class LanguageOptionState : public GameState
 		OptionsBG bg_;
 		TextureBox title_;
 		OptionSystem options_;
+
 		void updateInput();
+		void setButtonsPressState();
 };
