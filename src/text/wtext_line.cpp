@@ -1,4 +1,6 @@
 #include <cassert>
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "render.hpp"
 #include "wtext_line.hpp"
 
@@ -41,7 +43,7 @@ void WTextLine::renderChar( const CharFrame character, int x, int y ) const
 {
     Render::renderObject
     (
-        "charset.png",
+        Localization::getCurrentLanguage().getCharsetImageSrc(),
         {
             character.x(),
             character.y(),

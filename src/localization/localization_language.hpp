@@ -24,6 +24,8 @@ class LocalizationLanguage
         const int getOrder() const;
         const std::u32string& getControlsOptionsTitle() const;
         const std::u32string* getControlsActionNames() const;
+        const std::string& getCharsetImageSrc() const;
+        const int getCharsetHeight() const;
 
     private:
         void loadCharset( const auto& data, const std::string& path );
@@ -48,4 +50,6 @@ class LocalizationLanguage
         std::vector<std::u32string> title_options_;
         std::vector<std::u32string> options_options_;
         int order_;
+        std::string charset_image_src_;
+        int charset_height_;
 };

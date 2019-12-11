@@ -27,11 +27,7 @@ class CharFrame
             y_ += color_offset;
         };
 
-        constexpr int changeColorOffset( int color_offset )
-        {
-            int fundamental_y = y_ % ( SIZE_PIXELS * 4 );
-            y_ = fundamental_y += color_offset;
-        };
+        int changeColorOffset( int color_offset );
 
         constexpr bool isWhitespace() const
         {

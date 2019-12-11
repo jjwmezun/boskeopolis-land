@@ -106,14 +106,42 @@ const std::u32string& LocalizationLanguage::getLanguageOptionsTitle() const
     return language_options_title_;
 };
 
+
+const std::string& LocalizationLanguage::getCharsetImageSrc() const
+{
+    return charset_image_src_;
+};
+
+const int LocalizationLanguage::getCharsetHeight() const
+{
+    return charset_height_;
+};
+
 void LocalizationLanguage::loadCharset( const auto& data, const std::string& path )
 {
-    if ( !data.HasMember( "charset" ) || !data[ "charset" ].IsArray() )
+    if ( !data.HasMember( "charset" ) || !data[ "charset" ].IsObject() )
     {
         throw InvalidLocalizationLanguageException( path );
     }
 
-    for ( const auto& item : data[ "charset" ].GetArray() )
+    const auto& charset = data[ "charset" ].GetObject();
+    if
+    (
+        !charset.HasMember( "characters" ) ||
+        !charset[ "characters" ].IsArray() ||
+        !charset.HasMember( "height" )     ||
+        !charset[ "height" ].IsInt()       ||
+        !charset.HasMember( "image" )      ||
+        !charset[ "image" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    charset_height_ = charset[ "height" ].GetInt();
+    charset_image_src_ = std::string( "charset/" ) + std::string( charset[ "image" ].GetString() );
+
+    for ( const auto& item : charset[ "characters" ].GetArray() )
     {
         if ( item.IsObject() && item.HasMember( "key" ) && item[ "key" ].IsString() && item.HasMember( "values" ) )
         {

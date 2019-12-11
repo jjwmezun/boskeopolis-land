@@ -1,6 +1,6 @@
 {
-    "language": "Español",
-    "order": 2,
+    "language": "ニホンゴ",
+    "order": 6,
     "charset":
     {
         "image": "latin.png",
@@ -153,78 +153,78 @@
             { "key": "\n", "values": { "x": 31, "y": 3, "newline": true } }
         ]
     },
-    "game_title": "Bosqueopolis Land",
-    "intro_text": "Aprende más del desarrollo de este projecto @\nhttps://www.boskeopolis-land.com",
+    "game_title": "Boskeopolis Land",
+    "intro_text": "Learn Mo’ ’bout this project’s development @\nhttps://www.boskeopolis-land.com",
     "input":
     {
-        "quitting": "Cerrando…",
-        "title": "Los Mandos",
+        "quitting": "Quitting…",
+        "title": "Controls",
         "actions":
         {
-            "confirm": "Confirmar",
-            "cancel": "Cancelar",
-            "menu": "Menú",
-            "jump": "Saltar",
-			"run": "Correr",
-			"up": "Arriba",
-			"right": "Derecho",
-			"down": "Abajo",
-			"left": "Izquierda",
-			"camera_left": "Cámera Izquierda",
-			"camera_right": "Cámera Derecho",
-			"camera_up": "Cámera Arriba",
-			"camera_down": "Cámera Abajo"
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "menu": "Menu",
+            "jump": "Jump",
+			"run": "Run",
+			"up": "Up",
+			"right": "Right",
+			"down": "Down",
+			"left": "Left",
+			"camera_left": "Camera Left",
+			"camera_right": "Camera Right",
+			"camera_up": "Camera Up",
+			"camera_down": "Camera Down"
         }
     },
     "title":
     {
-        "attribution": "Creado por J.J.W. Mezun — 2016-2019",
+        "attribution": "Created by J.J.W. Mezun — 2016-2019",
         "options":
         {
-            "new_game": "Nuevo Juego",
-            "load_game": "Recoga Juego",
-            "options": "Las Opciones",
-            "quit": "Cerra"
+            "new_game": "New Game",
+            "load_game": "Load Game",
+            "options": "Options",
+            "quit": "Quit"
         }
     },
     "options":
     {
-        "title": "Las Opciones",
+        "title": "Options",
         "options":
         {
-            "screen_resolution": "La Resolución de Pantalla",
-            "controls": "Los Mandos",
-            "language": "El Idioma"
+            "screen_resolution": "Screen Resolution",
+            "controls": "Controls",
+            "language": "Language"
         }
     },
     "screen_options":
     {
-        "title": "Las Opciones de Pantalla",
+        "title": "Screen Options",
         "options":
         {
-            "fullscreen": "Pantalla Completa",
-            "window": "Ventana"
+            "fullscreen": "Fullscreen",
+            "window": "Window"
         }
     },
     "pause":
     {
-        "continue": "Continua",
-        "exit_leave_unbeaten": "Entregáse",
-        "exit_leave_beaten": "Volve al mapa"
+        "continue": "Continue",
+        "exit_leave_unbeaten": "Give Up",
+        "exit_leave_beaten": "Back to Level Select"
     },
     "overworld":
     {
-		"continue": "Continua",
-		"level_list": "La lista de niveles",
-		"camera_view": "La Vista de Cámera",
-		"options": "Las Opciones",
-		"quit": "Cerra Juego"
+		"continue": "Continue",
+		"level_list": "Level List",
+		"camera_view": "Camera View",
+		"options": "Options",
+		"quit": "Quit"
     },
     "goals":
     {
-        "avoid_money": "¡No toca ninguno dinero!",
-        "collect": "¡Collecciona %p ₧!",
-        "do_nothing": "¡No haga nada de nada!",
+        "avoid_money": "¡Don't touch any money!",
+        "collect": "¡Collect %p ₧!",
+        "do_nothing": "¡Don't do anything @ all!",
         "heat": "¡Don't touch the hot surface too long!",
         "mcguffins": "¡Collect %m McGuffins!",
         "past_right_edge": "¡Go past the end!",

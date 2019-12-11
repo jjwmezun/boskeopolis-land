@@ -6,7 +6,7 @@
 
 static int calculateColorOffset( WTextObj::Color color )
 {
-    return ( color == WTextObj::Color::__NULL ) ? 0 : ( int )( color ) * 4 * CharFrame::SIZE_PIXELS;
+    return ( color == WTextObj::Color::__NULL ) ? 0 : ( int )( color ) * Localization::getCurrentLanguage().getCharsetHeight() * CharFrame::SIZE_PIXELS;
 };
 
 WTextObj::WTextObj()
