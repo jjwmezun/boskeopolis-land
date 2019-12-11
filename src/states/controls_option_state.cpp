@@ -154,7 +154,7 @@ void ControlsOptionState::init()
 
 void ControlsOptionState::backFromPop()
 {
-	// todo: RESET NAMES
+	init();
 };
 
 void ControlsOptionState::updateSelection()
