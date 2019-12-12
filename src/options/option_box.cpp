@@ -191,3 +191,20 @@ void OptionBox::changeText( const std::u32string& words )
 	words_ = words;
 	init();
 };
+
+int OptionBox::calculateMaxBoxWidthWithPadding( const std::vector<std::u32string>& options )
+{
+	int max_width = 0;
+	for ( const std::u32string& name : options )
+	{
+		if ( name.size() > max_width )
+		{
+			max_width = name.size();
+		}
+	}
+	if ( max_width > Unit::MINIBLOCKS_PER_SCREEN - 4 )
+	{
+		max_width = Unit::MINIBLOCKS_PER_SCREEN - 4;
+	}
+	return ( max_width + 2 ) * CharFrame::SIZE_PIXELS;
+}

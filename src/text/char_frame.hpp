@@ -22,7 +22,7 @@ class CharFrame
         constexpr int x() const { return x_; };
         constexpr int y() const { return y_; };
 
-        constexpr int setColorOffset( int color_offset )
+        constexpr void setColorOffset( int color_offset )
         {
             y_ += color_offset;
         };

@@ -2,7 +2,7 @@
 
 #include "game_state.hpp"
 #include "options_bg.hpp"
-#include "option_selection.hpp"
+#include "option_selection_vertical.hpp"
 #include "option_system.hpp"
 #include "texture_box.hpp"
 
@@ -22,7 +22,7 @@ class ScreenOptionState : public GameState
 		TextureBox title_;
 		OptionBox fullscreen_option_;
 		OptionBox window_option_;
-		OptionSelection selection_;
+		OptionSelectionVertical selection_;
 		std::vector<OptionBox> other_options_;
 		int max_options_;
 

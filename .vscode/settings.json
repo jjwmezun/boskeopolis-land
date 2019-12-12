@@ -52,6 +52,7 @@
         "codecvt": "cpp",
         "chrono": "cpp",
         "filesystem": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "bit": "cpp"
     }
 }

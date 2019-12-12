@@ -9,14 +9,12 @@
 #include "render.hpp"
 #include "screen_option_state.hpp"
 
-static constexpr int NUMBER_OF_OPTIONS = 3;
-
 LanguageOptionState::LanguageOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
 	title_ (),
-	options_ ( Localization::getLanguageNames(), 56 )
+	options_ ( OptionSystem::generateGridOptionSystem( Localization::getLanguageNames() ) )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -44,6 +42,7 @@ void LanguageOptionState::init()
 {
 	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
 	options_.init();
+	options_.setPressedDown( Localization::getCurrentLanguageIndex() );
 };
 
 void LanguageOptionState::updateInput()
@@ -56,6 +55,7 @@ void LanguageOptionState::updateInput()
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
 		Localization::setLanguage( options_.selection() );
+		options_.setSelectedPressedDown();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 };

@@ -5,23 +5,22 @@
 class OptionSelection
 {
 	public:
-		OptionSelection( int max, int not_allowed = -1, int current = 0 );
-
+		OptionSelection( int current = 0, int not_allowed = -1 );
+		virtual ~OptionSelection();
 		void update();
-		void setNotAllowed( int not_allowed );
 		int selection() const;
 		int previousSelection() const;
 		void setSelect( int value );
+		void setNotAllowed( int not_allowed );
 
-
-	private:
-		int max_;
+	protected:
 		int selection_;
 		int previous_selection_;
 		int timer_;
 		int not_allowed_;
 
-		void selectUp();
-		void selectDown();
 		bool testInput( Input::Action input ) const;
+		void playSound() const;
+		virtual bool customUpdate() = 0;
+		virtual void shoveForward() = 0;
 };

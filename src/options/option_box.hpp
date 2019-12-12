@@ -10,7 +10,7 @@ class OptionBox
 	public:
 		static constexpr int VERTICAL_PADDING_MINIBLOCKS = 1;
 		static constexpr int VERTICAL_PADDING_PIXELS = VERTICAL_PADDING_MINIBLOCKS * CharFrame::SIZE_PIXELS;
-		static constexpr int BOX_HEIGHT = VERTICAL_PADDING_PIXELS * 2 + 8;
+		static constexpr int BOX_HEIGHT = VERTICAL_PADDING_PIXELS * 2 + CharFrame::SIZE_PIXELS;
 
 		OptionBox( const std::u32string& words, int y, int width, int x = -1 );
 		~OptionBox();
@@ -28,6 +28,8 @@ class OptionBox
 		void setToNullified();
 		bool isNullified() const;
 		void changeText( const std::u32string& words );
+
+		static int calculateMaxBoxWidthWithPadding( const std::vector<std::u32string>& options );
 
 	private:
 		enum class OBState

@@ -17,7 +17,7 @@ OptionsState::OptionsState( int start_selection )
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	bg_ (),
 	title_ (),
-	options_ ( Localization::getCurrentLanguage().getOptionsOptions(), 64, start_selection )
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getOptionsOptions(), 64, start_selection ) )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -74,6 +74,7 @@ void OptionsState::updateInput()
 			}
 			break;
 		}
+		options_.setSelectedPressedDown();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 };

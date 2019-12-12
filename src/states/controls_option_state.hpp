@@ -3,7 +3,7 @@
 #include "game_state.hpp"
 #include "input.hpp"
 #include "options_bg.hpp"
-#include "option_selection.hpp"
+#include "option_selection_vertical.hpp"
 #include "texture_box.hpp"
 
 class ControlsOptionState : public GameState
@@ -22,7 +22,7 @@ class ControlsOptionState : public GameState
 		TextureBox title_;
 		TextureBox text_;
 		TextureBox highlights_[ Input::NUM_O_ACTIONS ];
-		OptionSelection selection_;
+		OptionSelectionVertical selection_;
 
 		void updateSelection();
 		void updateInput();

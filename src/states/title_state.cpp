@@ -32,7 +32,7 @@ TitleState::TitleState( int start_selection )
 	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 248, 175, 0, Unit::WINDOW_HEIGHT_PIXELS - 175, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 112, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	logo_gfx_ ( "bosko_logo.png" ),
-	options_ ( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y, start_selection ),
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y, start_selection ) ),
 	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
 	created_by_ (),
 	can_load_ ( false )
@@ -75,6 +75,7 @@ void TitleState::stateUpdate()
 			}
 			break;
 		}
+		options_.setSelectedPressedDown();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 

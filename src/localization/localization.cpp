@@ -67,4 +67,9 @@ namespace Localization
         current_language = language_index;
         Input::changeQuittingText();
     };
+
+    int getCurrentLanguageIndex()
+    {
+        return current_language;
+    };
 }
