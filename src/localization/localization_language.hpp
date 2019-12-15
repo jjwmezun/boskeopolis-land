@@ -1,6 +1,7 @@
 #pragma once
 
 #include "char_frame.hpp"
+#include <filesystem>
 #include "input.hpp"
 #include <string>
 #include <vector>
@@ -9,7 +10,7 @@
 class LocalizationLanguage
 {
     public:
-        LocalizationLanguage( const std::string& path );
+        LocalizationLanguage( const std::filesystem::directory_entry& file );
         const std::u32string& getLanguageName() const;
         const std::u32string& getTitleCreatedBy() const;
         const std::u32string& getScreenOptionFullscreen() const;
@@ -21,11 +22,12 @@ class LocalizationLanguage
         const std::vector<CharFrame> getCharacterFrames( char32_t character ) const;
         const std::vector<std::u32string>& getTitleOptions() const;
         const std::vector<std::u32string>& getOptionsOptions() const;
-        const int getOrder() const;
+        int getOrder() const;
         const std::u32string& getControlsOptionsTitle() const;
         const std::u32string* getControlsActionNames() const;
         const std::string& getCharsetImageSrc() const;
-        const int getCharsetHeight() const;
+        int getCharsetHeight() const;
+        const std::string& getPathName() const;
 
     private:
         void loadCharset( const auto& data, const std::string& path );
@@ -53,4 +55,5 @@ class LocalizationLanguage
         std::string charset_image_src_;
         int charset_height_;
         std::vector<CharFrame> default_character_;
+        std::string path_name_;
 };

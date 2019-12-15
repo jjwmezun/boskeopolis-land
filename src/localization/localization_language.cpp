@@ -5,12 +5,15 @@
 #include "rapidjson/istreamwrapper.h"
 #include "rapidjson/document.h"
 
-LocalizationLanguage::LocalizationLanguage( const std::string& path )
+LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_entry& file )
+:
+    path_name_ ( file.path().stem() )
 {
+    const std::string path = file.path();
+
     std::ifstream ifs( path );
     if( !ifs.is_open() )
     {
-        std::cout<<path<<std::endl;
         throw std::runtime_error( "Unexpected IO error for loading localization: somehow file we found in localization directory failed to be opened." );
     }
     rapidjson::IStreamWrapper ifs_wrap( ifs );
@@ -32,7 +35,7 @@ LocalizationLanguage::LocalizationLanguage( const std::string& path )
     loadScreenOptions( data, path );
 };
 
-const int LocalizationLanguage::getOrder() const
+int LocalizationLanguage::getOrder() const
 {
     return order_;
 };
@@ -113,7 +116,7 @@ const std::string& LocalizationLanguage::getCharsetImageSrc() const
     return charset_image_src_;
 };
 
-const int LocalizationLanguage::getCharsetHeight() const
+int LocalizationLanguage::getCharsetHeight() const
 {
     return charset_height_;
 };
@@ -386,4 +389,9 @@ void LocalizationLanguage::loadOptionsText( const auto& data, const std::string&
     options_options_.emplace_back( mezun::charToChar32String( options[ "controls" ].GetString() ) );
     options_options_.emplace_back( mezun::charToChar32String( options[ "language" ].GetString() ) );
     language_options_title_ = mezun::charToChar32String( options[ "language" ].GetString() );
+};
+
+const std::string& LocalizationLanguage::getPathName() const
+{
+    return path_name_;
 };

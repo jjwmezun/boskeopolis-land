@@ -24,4 +24,5 @@ class LanguageOptionState : public GameState
 		void setButtonsPressState();
 		void initTitle();
 		void resetTitle();
+		void saveLanguageSettings() const;
 };

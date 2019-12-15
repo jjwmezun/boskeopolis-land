@@ -32,7 +32,6 @@ namespace mezun
 			}
 			else
 			{
-				std::cout<<"JSON Object Load Error: "<<file_path<<std::endl;
 				if ( json_load_error_message != nullptr )
 				{
 					std::cout<<json_load_error_message<<std::endl;
@@ -47,7 +46,6 @@ namespace mezun
 		}
 		else
 		{
-			std::cout<<"JSON File Load Error: "<<file_path<<std::endl;
 			if ( file_load_error_message != nullptr )
 			{
 				std::cout<<file_load_error_message<<std::endl;

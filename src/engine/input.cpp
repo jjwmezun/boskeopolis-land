@@ -1,15 +1,19 @@
 #include "audio.hpp"
 #include <cassert>
+#include "config.hpp"
 #include <fstream>
 #include "input.hpp"
 #include <iostream>
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
+#include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_json.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/stringbuffer.h"
 #include <vector>
 #include "wtext_obj.hpp"
 
@@ -194,39 +198,60 @@ namespace Input
 
 		void loadConfigFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& document_object )
 		{
-			loadConfigType( document_object, "keys", key_map_ );
-			loadConfigType( document_object, "buttons", controller_button_map_ );
-		};
-
-		template <typename T>
-		std::string saveConfigType( const std::string& type, T* key_map, bool last = false )
-		{
-			std::string text = mezun::addLine( "\"" + type + "\":", 1 );
-			text += mezun::addLine( "{", 1 );
-			for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+			if ( document_object.HasMember( "controls" ) && document_object[ "controls" ].IsObject() )
 			{
-				const std::string& input_name = TAGS[ i ];
-				const std::string input_value = std::to_string( ( int )( key_map[ i ] ) );
-				const std::string end = ( i == NUM_O_ACTIONS - 1 ) ? "" : ",";
-				text += mezun::addLine( "\"" + input_name + "\": " + input_value + end, 2 );
+				const auto& controls = document_object[ "controls" ].GetObject();
+				loadConfigType( controls, "keys", key_map_ );
+				loadConfigType( controls, "buttons", controller_button_map_ );
 			}
-			text += ( last ) ? mezun::addLine( "}", 1 ) : mezun::addLine( "},", 1 );
-			return text;
+			else
+			{
+				saveConfig();
+				Main::pushState( std::unique_ptr<MessageState> ( MessageState::errorMessage( "Input configuration file has been corruped.\nConfig file has been replaced with default." ) ) );
+			}
 		};
 
 		void saveConfig()
 		{
-			std::ofstream ofs( getConfigFilename() );
+			rapidjson::Document document = Config::readData();
 
-			std::string text = "";
+			rapidjson::Value keys;
+			keys.SetObject();
+			rapidjson::Value buttons;
+			buttons.SetObject();
+			for ( int i = 0; i < NUM_O_ACTIONS; ++i )
+			{
+				rapidjson::Value key_name;
+				std::string key_name_string = TAGS[ i ];
+				key_name.SetString( key_name_string.data(), key_name_string.size(), document.GetAllocator() );
+				rapidjson::Value key;
+				key.SetInt( ( int )( key_map_[ i ] ) );
+				keys.AddMember( key_name, key, document.GetAllocator() );
 
-			text += mezun::addLine( "{", 0 );
-			text += saveConfigType( "keys", key_map_ );
-			text += saveConfigType( "buttons", controller_button_map_, true );
-			text += mezun::addLine( "}", 0 );
+				rapidjson::Value button_name;
+				std::string button_name_string = TAGS[ i ];
+				button_name.SetString( button_name_string.data(), button_name_string.size(), document.GetAllocator() );
+				rapidjson::Value button;
+				button.SetInt( ( int )( controller_button_map_[ i ] ) );
+				buttons.AddMember( button_name, button, document.GetAllocator() );
+			}
 
-			ofs << text;
-			ofs.close();
+			if ( document.HasMember( "controls" ) )
+			{
+				document[ "controls" ].SetObject();
+				document[ "controls" ].AddMember( "keys", keys, document.GetAllocator() );
+				document[ "controls" ].AddMember( "buttons", buttons, document.GetAllocator() );
+			}
+			else
+			{
+				rapidjson::Value controls;
+				controls.SetObject();
+				controls.AddMember( "keys", keys, document.GetAllocator() );
+				controls.AddMember( "buttons", buttons, document.GetAllocator() );
+				document.AddMember( "controls", controls, document.GetAllocator() );
+			}
+
+			Config::saveData( document );
 		}
 
 		std::string getConfigFilename()

@@ -137,4 +137,14 @@ namespace mezun
 		}
 		return text;
 	};
+
+	std::string string32ToString8( const std::u32string source )
+	{
+		std::string output = "";
+		for ( char32_t character : source )
+		{
+			output += ( char )( character );
+		}
+		return output;
+	};
 }

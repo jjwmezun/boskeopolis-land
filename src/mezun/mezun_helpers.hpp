@@ -66,4 +66,5 @@ namespace mezun
 	char32_t copyCharToChar32( const char* source );
 	std::u32string charToChar32String( const char* source );
 	std::u32string intToChar32String( int n );
+	std::string string32ToString8( const std::u32string source );
 };
