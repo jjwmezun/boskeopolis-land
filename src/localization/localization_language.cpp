@@ -10,6 +10,7 @@ LocalizationLanguage::LocalizationLanguage( const std::string& path )
     std::ifstream ifs( path );
     if( !ifs.is_open() )
     {
+        std::cout<<path<<std::endl;
         throw std::runtime_error( "Unexpected IO error for loading localization: somehow file we found in localization directory failed to be opened." );
     }
     rapidjson::IStreamWrapper ifs_wrap( ifs );
@@ -66,7 +67,7 @@ const std::vector<CharFrame> LocalizationLanguage::getCharacterFrames( char32_t 
     std::unordered_map<char32_t,std::vector<CharFrame>>::const_iterator found = charset_.find( character );
     if ( found == charset_.end() )
     {
-        return { CharFrame( 30, 3, CharFrame::Type::WHITESPACE ) };
+        return default_character_;
     }
     return found->second;
 };
@@ -132,7 +133,9 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
         !charset.HasMember( "height" )     ||
         !charset[ "height" ].IsInt()       ||
         !charset.HasMember( "image" )      ||
-        !charset[ "image" ].IsString()
+        !charset[ "image" ].IsString()     ||
+        !charset.HasMember( "default_character" ) ||
+        !charset[ "default_character" ].IsObject()
     )
     {
         throw InvalidLocalizationLanguageException( path );
@@ -140,6 +143,19 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
 
     charset_height_ = charset[ "height" ].GetInt();
     charset_image_src_ = std::string( "charset/" ) + std::string( charset[ "image" ].GetString() );
+
+    const auto& default_character_obj = charset[ "default_character" ].GetObject();
+    if
+    (
+        !default_character_obj.HasMember( "x" ) ||
+        !default_character_obj[ "x" ].IsInt()   ||
+        !default_character_obj.HasMember( "y" ) ||
+        !default_character_obj[ "y" ].IsInt()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    default_character_.push_back( CharFrame( default_character_obj[ "x" ].GetInt(), default_character_obj[ "y" ].GetInt(), CharFrame::Type::WHITESPACE ) );
 
     for ( const auto& item : charset[ "characters" ].GetArray() )
     {

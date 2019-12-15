@@ -22,4 +22,6 @@ class LanguageOptionState : public GameState
 
 		void updateInput();
 		void setButtonsPressState();
+		void initTitle();
+		void resetTitle();
 };

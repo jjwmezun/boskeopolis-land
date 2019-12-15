@@ -52,4 +52,5 @@ class LocalizationLanguage
         int order_;
         std::string charset_image_src_;
         int charset_height_;
+        std::vector<CharFrame> default_character_;
 };

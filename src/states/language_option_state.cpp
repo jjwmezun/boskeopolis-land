@@ -40,8 +40,8 @@ void LanguageOptionState::stateRender()
 
 void LanguageOptionState::init()
 {
-	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
-	options_.init();
+	initTitle();
+	options_.initForLanguageSelect();
 	options_.setPressedDown( Localization::getCurrentLanguageIndex() );
 };
 
@@ -56,6 +56,18 @@ void LanguageOptionState::updateInput()
 	{
 		Localization::setLanguage( options_.selection() );
 		options_.setSelectedPressedDown();
+		resetTitle();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 };
+
+void LanguageOptionState::initTitle()
+{
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
+};
+
+void LanguageOptionState::resetTitle()
+{
+	title_.destroy();
+	initTitle();
+}

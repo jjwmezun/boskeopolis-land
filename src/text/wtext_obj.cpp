@@ -49,6 +49,11 @@ WTextObj::WTextObj
     std::vector<CharFrame> frames;
     for ( const char32_t character : text )
     {
+        if ( character == '\0' )
+        {
+            break;
+        }
+
         auto char_frame_list = Localization::getCurrentLanguage().getCharacterFrames( character );
         for ( auto frame : char_frame_list )
         {

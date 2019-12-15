@@ -13,6 +13,7 @@ class OptionSystem
 		static OptionSystem generateGridOptionSystem( const std::vector<std::u32string>& option_strings );
 
 		void init();
+		void initForLanguageSelect();
 		void update();
 		void render() const;
 		int selection() const;

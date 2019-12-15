@@ -6,6 +6,7 @@
         "image": "latin.png",
         "width": 16,
         "height": 4,
+        "default_character": { "x": 30, "y": 3 },
         "characters":
         [
             { "key": "0", "values": { "x": 0, "y": 0 } },

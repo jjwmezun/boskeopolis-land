@@ -1,3 +1,4 @@
+#include "localization.hpp"
 #include "option_selection_grid.hpp"
 #include "option_selection_vertical.hpp"
 #include "option_system.hpp"
@@ -66,6 +67,17 @@ void OptionSystem::init()
 	{
 		option.init();
 	}
+};
+
+void OptionSystem::initForLanguageSelect()
+{	
+	const int remember_language = Localization::getCurrentLanguageIndex();
+	for ( int i = 0; i < options_.size(); ++i )
+	{
+		Localization::setLanguage( i );
+		options_[ i ].init();
+	}
+	Localization::setLanguage( remember_language );
 };
 
 int OptionSystem::selection() const { return selection_->selection(); };
