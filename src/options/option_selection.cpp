@@ -16,7 +16,7 @@ int OptionSelection::previousSelection() const { return previous_selection_; };
 
 void OptionSelection::update()
 {
-	if ( !customUpdate() )
+	if ( customUpdate() )
 	{
 		playSound();
 		timer_ = 16;

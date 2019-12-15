@@ -4,3 +4,4 @@ mkdir/
 obj/
 resources/music/
 .~lock.lvs.ods#
+resources/saves/save.bin
