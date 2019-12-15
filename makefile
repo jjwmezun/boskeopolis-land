@@ -1,7 +1,7 @@
-COMPILER = g++-9
-LINKER = g++-9
+COMPILER = g++
+LINKER = g++
 EXT = cpp
-CFLAGS = -g3 -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wfloat-equal -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Weffc++ -Wzero-as-null-pointer-constant -Wmain -Wfatal-errors -Wextra -Wall -std=c++17 -Wno-switch -Wno-unused-parameter -Wno-reorder -Wno-float-equal
+CFLAGS = -g3 -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wfloat-equal -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Weffc++ -Wzero-as-null-pointer-constant -Wmain -Wfatal-errors -Wextra -Wall -std=c++2a -Wno-switch -Wno-unused-parameter -Wno-reorder -Wno-float-equal
 
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer
 ABS_INC = -Isrc/
