@@ -269,32 +269,41 @@
             { "key": "", "values": { "x": 2, "y": 7 } },
             { "key": "♪", "values": { "x": 2, "y": 7 } },
             { "key": "♫", "values": { "x": 3, "y": 7 } },
-            { "key": "…", "values": [ { "x": 11, "y": 6 }, { "x": 11, "y": 6 }, { "x": 11, "y": 6 } ] },
+            { "key": "右", "values": { "x": 4, "y": 7 } },
+            { "key": "左", "values": { "x": 5, "y": 7 } },
+            { "key": "上", "values": { "x": 6, "y": 7 } },
+            { "key": "下", "values": { "x": 7, "y": 7 } },
+            { "key": "ゃ", "values": { "x": 8, "y": 7 } },
+            { "key": "ゅ", "values": { "x": 9, "y": 7 } },
+            { "key": "ょ", "values": { "x": 10, "y": 7 } },
+            { "key": "。", "values": { "x": 13, "y": 6 } },
+            { "key": "、", "values": { "x": 12, "y": 6 } },
+            { "key": "…", "values": [ { "x": 13, "y": 6 }, { "x": 13, "y": 6 }, { "x": 13, "y": 6 } ] },
             { "key": " ", "values": { "x": 31, "y": 7, "whitespace": true } },
             { "key": "\n", "values": { "x": 31, "y": 7, "newline": true } }
         ]
     },
     "game_title": "Boskeopolis Land",
-    "intro_text": "Learn Mo’ ’bout this project’s development @\nhttps://www.boskeopolis-land.com",
+    "intro_text": "このゲームのかいはつのしょうさいについては、\nhttps://www.boskeopolis-land.comをごらんください。",
     "input":
     {
         "quitting": "しゅうりょうしています…",
-        "title": "Controls",
+        "title": "コントロール",
         "actions":
         {
-            "confirm": "Confirm",
-            "cancel": "Cancel",
-            "menu": "Menu",
-            "jump": "Jump",
-			"run": "Run",
-			"up": "Up",
-			"right": "Right",
-			"down": "Down",
-			"left": "Left",
-			"camera_left": "Camera Left",
-			"camera_right": "Camera Right",
-			"camera_up": "Camera Up",
-			"camera_down": "Camera Down"
+            "confirm": "かくにんする",
+            "cancel": "もどる",
+            "menu": "メニュー",
+            "jump": "ジャンプ",
+			"run": "しっそう",
+			"up": "上",
+			"right": "右",
+			"down": "下",
+			"left": "左",
+			"camera_left": "カメラ左",
+			"camera_right": "カメラ右",
+			"camera_up": "カメラ上",
+			"camera_down": "カメラ下"
         }
     },
     "title":
@@ -304,42 +313,42 @@
         {
             "new_game": "あたらしいゲーム",
             "load_game": "ゲームおぞくける",
-            "options": "オプション",
+            "options": "せつていをかえる",
             "quit": "ゲームおしゅうりょうします"
         }
     },
     "options":
     {
-        "title": "オプション",
+        "title": "せつていをかえる",
         "options":
         {
-            "screen_resolution": "Screen Resolution",
-            "controls": "Controls",
-            "language": "Language"
+            "screen_resolution": "がめんオプション",
+            "controls": "コントロール",
+            "language": "げんご"
         }
     },
     "screen_options":
     {
-        "title": "Screen Options",
+        "title": "がめんオプション",
         "options":
         {
-            "fullscreen": "Fullscreen",
-            "window": "Window"
+            "fullscreen": "ぜんがめんひょうじ",
+            "window": "ウィンドウ"
         }
     },
     "pause":
     {
-        "continue": "Continue",
-        "exit_leave_unbeaten": "Give Up",
-        "exit_leave_beaten": "Back to Level Select"
+        "continue": "じぞくする",
+        "exit_leave_unbeaten": "あきらめる",
+        "exit_leave_beaten": "ちずにもどる"
     },
     "overworld":
     {
-		"continue": "Continue",
-		"level_list": "Level List",
-		"camera_view": "Camera View",
-		"options": "Options",
-		"quit": "Quit"
+		"continue": "じぞくする",
+		"level_list": "レベルリスト",
+		"camera_view": "カメラ",
+		"options": "オプション",
+		"quit": "ゲームをやめる"
     },
     "goals":
     {

@@ -149,77 +149,91 @@
             { "key": "ç", "values": { "x": 2, "y": 3 } },
             { "key": "Ç", "values": { "x": 2, "y": 3 } },
             { "key": "ß", "values": { "x": 3, "y": 3 } },
+            { "key": "â", "values": { "x": 4, "y": 3 } },
+            { "key": "ê", "values": { "x": 5, "y": 3 } },
+            { "key": "î", "values": { "x": 6, "y": 3 } },
+            { "key": "ô", "values": { "x": 7, "y": 3 } },
+            { "key": "û", "values": { "x": 8, "y": 3 } },
+            { "key": "å", "values": { "x": 9, "y": 3 } },
+            { "key": "ů", "values": { "x": 10, "y": 3 } },
+            { "key": "Â", "values": { "x": 4, "y": 3 } },
+            { "key": "Ê", "values": { "x": 5, "y": 3 } },
+            { "key": "Î", "values": { "x": 6, "y": 3 } },
+            { "key": "Ô", "values": { "x": 7, "y": 3 } },
+            { "key": "Û", "values": { "x": 8, "y": 3 } },
+            { "key": "Å", "values": { "x": 9, "y": 3 } },
+            { "key": "Ů", "values": { "x": 10, "y": 3 } },
             { "key": "…", "values": [ { "x": 20, "y": 1 }, { "x": 20, "y": 1 }, { "x": 20, "y": 1 } ] },
             { "key": " ", "values": { "x": 31, "y": 3, "whitespace": true } },
             { "key": "\n", "values": { "x": 31, "y": 3, "newline": true } }
         ]
     },
     "game_title": "Boskeopolis Land",
-    "intro_text": "Learn Mo’ ’bout this project’s development @\nhttps://www.boskeopolis-land.com",
+    "intro_text": "Läs mer om spelets utveckling på\nhttps://www.boskeopolis-land.com",
     "input":
     {
-        "quitting": "Verlassen…",
-        "title": "Kontrollen",
+        "quitting": "Slutar…",
+        "title": "Kontroller",
         "actions":
         {
-            "confirm": "Bestätigen",
-            "cancel": "Stornieren",
-            "menu": "Das Menü",
-            "jump": "Springen",
-			"run": "Lauf",
-			"up": "Auf",
-			"right": "Recht",
-			"down": "Nieder",
-			"left": "Links",
-			"camera_left": "Kamera Links",
-			"camera_right": "Kamera Recht",
-			"camera_up": "Kamera Auf",
-			"camera_down": "Kamera Nieder"
+            "confirm": "Bekräfta",
+            "cancel": "Avbryt",
+            "menu": "Meny",
+            "jump": "Hoppa",
+			"run": "Rusa",
+			"up": "Upp",
+			"right": "Höger",
+			"down": "Ner",
+			"left": "Vänster",
+			"camera_left": "Kameran Vänster",
+			"camera_right": "Kameran Höger",
+			"camera_up": "Kameran Upp",
+			"camera_down": "Kamera Ner"
         }
     },
     "title":
     {
-        "attribution": "Erstellt von J.J.W. Mezun — 2016-2019",
+        "attribution": "Skapad av J.J.W. Mezun — 2016-2019",
         "options":
         {
-            "new_game": "Neues Spiel",
-            "load_game": "Spiel laden",
-            "options": "Optionen",
-            "quit": "Verlassen"
+            "new_game": "Nytt Spel",
+            "load_game": "Återupptag spelet",
+            "options": "Alternativ",
+            "quit": "Slutar"
         }
     },
     "options":
     {
-        "title": "Optionen",
+        "title": "Alternativ",
         "options":
         {
-            "screen_resolution": "Bildauflösung",
-            "controls": "Kontrollen",
-            "language": "Sprache"
+            "screen_resolution": "Skärmalternativ",
+            "controls": "Kontroller",
+            "language": "Språk"
         }
     },
     "screen_options":
     {
-        "title": "Bildauflösung",
+        "title": "Skärmalternativ",
         "options":
         {
-            "fullscreen": "Bildschirm",
-            "window": "Fenster"
+            "fullscreen": "Fullskärm",
+            "window": "Fönster"
         }
     },
     "pause":
     {
-        "continue": "Weitermachen",
-        "exit_leave_unbeaten": "Aufgeben",
-        "exit_leave_beaten": "Zurück zur Karte"
+        "continue": "Fortsätta",
+        "exit_leave_unbeaten": "Ge upp",
+        "exit_leave_beaten": "Återgå till kartan"
     },
     "overworld":
     {
-		"continue": "Weitermachen",
-		"level_list": "Ebenenauswahl",
-		"camera_view": "Kameraansicht",
-		"options": "Optionen",
-		"quit": "Verlassen"
+		"continue": "Fortsätta",
+		"level_list": "Nivå lista",
+		"camera_view": "Kameravy",
+		"options": "Alternativ",
+		"quit": "Slutar"
     },
     "goals":
     {
