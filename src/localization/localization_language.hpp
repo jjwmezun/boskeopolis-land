@@ -12,6 +12,7 @@ class LocalizationLanguage
     public:
         LocalizationLanguage( const std::filesystem::directory_entry& file );
         const std::u32string& getLanguageName() const;
+        const std::u32string& getIntroText() const;
         const std::u32string& getTitleCreatedBy() const;
         const std::u32string& getScreenOptionFullscreen() const;
         const std::u32string& getScreenOptionWindow() const;
@@ -32,6 +33,7 @@ class LocalizationLanguage
     private:
         void loadCharset( const auto& data, const std::string& path );
         void loadOrder( const auto& data, const std::string& path );
+        void loadIntroMessage( const auto& data, const std::string& path );
         void loadLanguageName( const auto& data, const std::string& path );
         void loadInputText( const auto& data, const std::string& path );
         void loadScreenOptions( const auto& data, const std::string& path );
@@ -39,6 +41,7 @@ class LocalizationLanguage
         void loadOptionsText( const auto& data, const std::string& path );
 
         std::u32string language_;
+        std::u32string intro_text_;
         std::u32string title_created_by_;
         std::u32string input_quitting_;
         std::u32string screen_option_fullscreen_;

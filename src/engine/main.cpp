@@ -6,14 +6,15 @@
 #include <deque>
 #include "input.hpp"
 #include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
-#include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_math.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
 #include "title_state.hpp"
 #include <vector>
+#include "wmessage_state.hpp"
 
 namespace Main
 {
@@ -365,16 +366,12 @@ namespace Main
 
 		states_.push_back( std::unique_ptr<GameState>
 			(
-				new MessageState
+				new WMessageState
 				(
-					"₧ Learn Mo' 'bout this project's development @\nhttps://www.boskeopolis-land.com",
-					MessageState::Type::CHANGE,
+					{ Localization::getCurrentLanguage().getIntroText() },
+					WMessageState::Type::CHANGE,
 					{ "Grayscale", 1 },
-					std::unique_ptr<GameState> ( new TitleState() ),
-					Text::FontColor::BLACK,
-					Text::FontColor::__NULL,
-					"gem",
-					false
+					std::unique_ptr<GameState> ( new TitleState() )
 				)
 			)
 		);

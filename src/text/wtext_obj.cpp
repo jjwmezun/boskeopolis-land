@@ -9,10 +9,7 @@ static int calculateColorOffset( WTextObj::Color color )
     return ( color == WTextObj::Color::__NULL ) ? 0 : ( int )( color ) * Localization::getCurrentLanguage().getCharsetHeight() * CharFrame::SIZE_PIXELS;
 };
 
-WTextObj::WTextObj()
-{
-
-};
+WTextObj::WTextObj() {};
 
 WTextObj::WTextObj
 (
@@ -167,6 +164,13 @@ WTextObj::WTextObj
         }
     }
 };
+
+WTextObj::MessageData::MessageData( const std::u32string& _text, Color _color, Color _shadow )
+:
+    text ( _text ),
+    color ( _color ),
+    shadow ( _shadow )
+{};
 
 void WTextObj::render() const
 {

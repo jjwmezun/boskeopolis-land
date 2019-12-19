@@ -43,6 +43,14 @@ class WTextObj
 		static constexpr VAlign DEFAULT_VALIGN = VAlign::TOP;
 		static constexpr int DEFAULT_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS;
 
+		struct MessageData
+		{
+			MessageData( const std::u32string& _text, Color _color = DEFAULT_COLOR, Color _shadow = DEFAULT_SHADOW );
+			const std::u32string& text;
+			Color color;
+			Color shadow;
+		};
+
 		WTextObj();
 		WTextObj
 		(

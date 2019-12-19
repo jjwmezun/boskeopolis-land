@@ -28,6 +28,7 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     const auto data = document.GetObject();
     loadCharset( data, path );
     loadOrder( data, path );
+    loadIntroMessage( data, path );
     loadLanguageName( data, path );
     loadInputText( data, path );
     loadTitleText( data, path );
@@ -53,6 +54,11 @@ const std::u32string* LocalizationLanguage::getControlsActionNames() const
 const std::u32string& LocalizationLanguage::getLanguageName() const
 {
     return language_;
+};
+
+const std::u32string& LocalizationLanguage::getIntroText() const
+{
+    return intro_text_;
 };
 
 const std::u32string& LocalizationLanguage::getTitleCreatedBy() const
@@ -226,6 +232,15 @@ void LocalizationLanguage::loadOrder( const auto& data, const std::string& path 
         throw InvalidLocalizationLanguageException( path );
     }
     order_ = data[ "order" ].GetInt();
+};
+
+void LocalizationLanguage::loadIntroMessage( const auto& data, const std::string& path )
+{
+    if ( !data.HasMember( "intro_text" ) || !data[ "intro_text" ].IsString() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    intro_text_ = mezun::charToChar32String( data[ "intro_text" ].GetString() );
 };
 
 void LocalizationLanguage::loadLanguageName( const auto& data, const std::string& path )
