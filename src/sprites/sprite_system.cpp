@@ -8,6 +8,7 @@
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
 #include "bouncing_spike_fruit_sprite.hpp"
+#include "bridge_monster_sprite.hpp"
 #include "bubble_sprite.hpp"
 #include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
@@ -722,6 +723,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 180 ):
 			return std::unique_ptr<Sprite> ( new PedestrianGeneratorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 181 ):
+			return std::unique_ptr<Sprite> ( new BridgeMonsterSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
