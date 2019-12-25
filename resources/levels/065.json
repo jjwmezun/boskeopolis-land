@@ -1,13 +1,13 @@
 {
-	"name": "Raft",
+	"name": "Bayou Jupiter",
 
 	"maps":
 	[
 		{
-			"slug": "swamp-3"
+			"slug": "swamp-4"
 		}
 	],
 
-	"entrance_x": 4,
-	"entrance_y": 31
+	"entrance_x": 79,
+	"entrance_y": 22
 }

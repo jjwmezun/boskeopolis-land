@@ -6,7 +6,7 @@ static constexpr int FALL_TIMER_LIMIT = 16;
 
 PiBlockSprite::PiBlockSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/swamp.png" ), x, y, 16, 16, {}, 200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pi-block.png" ), x, y, 16, 16, {}, 200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	fall_timer_ ( 0 ),
 	hero_still_on_block_ ( false )
 {};

@@ -38,6 +38,7 @@ namespace Direction
 	static constexpr int SIMPLE_SIZE = ( int )Simple::LEFT + 1;
 	static constexpr int NUMBER_OF_VALID_SIMPLE_SIZES = 4;
 	std::string simpleString( Simple dir );
+	std::string horizontalString( Horizontal dir );
 
 	enum class Rotation
 	{

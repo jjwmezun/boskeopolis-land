@@ -24,7 +24,7 @@ void BridgeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
         {
             jump_lock_ = false;
             jump_start_speed_ = mezun::randInt( 2000, 500 );
-            jump_top_speed_ = mezun::randInt( 8000, 3000 );
+            jump_top_speed_ = mezun::randInt( 8000, 5000 );
         }
     }
     else
@@ -33,7 +33,9 @@ void BridgeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
         if ( jump_end_ )
         {
             jump_lock_ = true;
-            shoot_ = true;
+            const double dx = ( double )( Unit::BlocksToSubPixels( -2 ) );
+            const double dy = ( double )( Unit::BlocksToSubPixels( 1 ) );
+            sprites.spawn( std::make_unique<BridgeMonsterProjectileSprite> ( centerXPixels(), centerYPixels(), dy, dx ) );
         }       
     }
     if ( walk_timer_.update() )
@@ -45,11 +47,4 @@ void BridgeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 
 void BridgeMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-    if ( shoot_ && them.hasType( SpriteType::HERO ) )
-    {
-        const double dx = ( double )( them.centerXSubPixels() - centerXSubPixels() );
-        const double dy = ( double )( them.centerYSubPixels() - centerYSubPixels() );
-        sprites.spawn( std::make_unique<BridgeMonsterProjectileSprite> ( centerXPixels(), centerYPixels(), dy, dx ) );
-        shoot_ = false;
-    }
 };

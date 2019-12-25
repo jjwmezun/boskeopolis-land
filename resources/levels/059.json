@@ -1,15 +1,15 @@
 {
-	"name": "Current Demo",
+	"name": "I Can Go with the Flow",
 
 	"maps":
 	[
 		{
-			"slug": "beach-2"
+			"slug": "swamp-1"
 		}
 	],
 
 	"entrance_x": 7,
-	"entrance_y": 2,
+	"entrance_y": 33,
 
 	"gem_challenge": 0,
 	"time_challenge": 0

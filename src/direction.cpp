@@ -29,4 +29,14 @@ namespace Direction
 			case( Rotation::UP_LEFT ):    return "UP-LEFT";
 		}
 	};
+
+	std::string horizontalString( Horizontal dir )
+	{
+		switch ( dir )
+		{
+			case ( Horizontal::__NULL ): return "NULL";
+			case ( Horizontal::LEFT ):   return "LEFT";
+			case ( Horizontal::RIGHT ):  return "RIGHT";
+		}
+	};
 };

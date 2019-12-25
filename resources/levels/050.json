@@ -1,5 +1,5 @@
 {
-	"name": "Bridge",
+	"name": "Broccoli Bridge",
 	"maps":
 	[
 		{
@@ -7,8 +7,8 @@
 		}
 	],
 
-	"entrance_x": 3,
-	"entrance_y": 6,
+	"entrance_x": 1,
+	"entrance_y": 25,
 	"gem_challenge": 0,
 	"time_challenge": 0
 }

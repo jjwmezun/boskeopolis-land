@@ -20,7 +20,7 @@
 		{
 			"component":
 			{
-				"type": "current_left"
+				"type": "current_down"
 			},
 			"conditions":
 			[

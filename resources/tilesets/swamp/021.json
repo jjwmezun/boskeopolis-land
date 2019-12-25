@@ -16,17 +16,6 @@
 			[
 				{ "type": "collide_any" }
 			]
-		},
-		{
-			"component":
-			{
-				"type": "current_left"
-			},
-			"conditions":
-			[
-				{ "type": "hero" },
-				{ "type": "collide_any" }
-			]
 		}
 	]
 }

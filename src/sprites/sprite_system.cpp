@@ -50,6 +50,7 @@
 #include "firebar_sprite.hpp"
 #include "fishstick_sprite.hpp"
 #include "flashlight_player_sprite.hpp"
+#include "frog_sprite.hpp"
 #include "full_heal_block_sprite.hpp"
 #include "gemmy_sprite.hpp"
 #include "ghost_coffin_sprite.hpp"
@@ -146,6 +147,7 @@
 #include "sprite_system.hpp"
 #include "stronger_cowpoker_sprite.hpp"
 #include "swamp_monster_sprite.hpp"
+#include "swamp_pole_sprite.hpp"
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
 #include "top_down_player_sprite.hpp"
@@ -726,6 +728,30 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 181 ):
 			return std::unique_ptr<Sprite> ( new BridgeMonsterSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 182 ):
+			return std::unique_ptr<Sprite> ( new FrogSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 183 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 1 ) );
+		break;
+		case ( SPRITE_INDEX_START + 184 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 2 ) );
+		break;
+		case ( SPRITE_INDEX_START + 185 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 3 ) );
+		break;
+		case ( SPRITE_INDEX_START + 186 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 4 ) );
+		break;
+		case ( SPRITE_INDEX_START + 187 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 5 ) );
+		break;
+		case ( SPRITE_INDEX_START + 188 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 6 ) );
+		break;
+		case ( SPRITE_INDEX_START + 189 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 7 ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
