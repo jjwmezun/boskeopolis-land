@@ -4,7 +4,18 @@
 	"maps":
 	[
 		{
-			"slug": "swamp-1"
+			"slug": "swamp-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "swamp-bg.png",
+					"width": 400,
+					"height": 224,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0
+				}
+			]
 		}
 	],
 

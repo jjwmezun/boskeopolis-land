@@ -2,9 +2,8 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 2,
-		"y": 0,
-		"priority": true
+		"x": 4,
+		"y": 2
 	},
 	"behavior":
 	[
