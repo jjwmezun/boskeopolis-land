@@ -1,22 +1,14 @@
 {
-	"name": "Star Lake",
+	"name": "Welcome to the Brick Parade",
 	"maps":
 	[
 		{
-			"slug": "space-6",
-			"backgrounds":
-			[
-				{
-					"type": "constellation",
-					"width": 166,
-					"height": 72
-				}
-			]
+			"slug": "house-1"
 		}
 	],
 
-	"entrance_x": 2,
-	"entrance_y": 18,
+	"entrance_x": 13,
+	"entrance_y": 26,
 	"gem_challenge": 0,
 	"time_challenge": 0
 }
