@@ -85,6 +85,7 @@
 #include "message_block_sprite.hpp"
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
+#include "moveable_block_sprite.hpp"
 #include "move_water_sprite.hpp"
 #include "octopig_sprite.hpp"
 #include "olive_spawner_sprite.hpp"
@@ -752,6 +753,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 189 ):
 			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 7 ) );
+		break;
+		case ( SPRITE_INDEX_START + 190 ):
+			return std::unique_ptr<Sprite> ( new MoveableBlockSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
