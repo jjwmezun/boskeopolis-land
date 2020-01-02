@@ -1,0 +1,14 @@
+{
+	"name": "Attic Addict",
+	"maps":
+	[
+		{
+            "slug": "attic-1"
+        }
+	],
+
+	"entrance_x": 11,
+	"entrance_y": 36,
+	"gem_challenge": 0,
+	"time_challenge": 0
+}
