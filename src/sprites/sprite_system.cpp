@@ -158,6 +158,7 @@
 #include "underground_subway_sprite.hpp"
 #include "urban_bird_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
+#include "wall_crawler_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 #include "water_spout_sprite.hpp"
@@ -756,6 +757,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 190 ):
 			return std::unique_ptr<Sprite> ( new MoveableBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 191 ):
+			return std::unique_ptr<Sprite> ( new WallCrawlerSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
