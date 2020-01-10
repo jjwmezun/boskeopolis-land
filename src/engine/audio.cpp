@@ -108,6 +108,7 @@ namespace Audio
 				else
 				{
 					Mix_PlayMusic( music_, ( loop ) ? -1 : 1 );
+					Mix_ResumeMusic();
 					current_song_ = song_name;
 				}
 			}
