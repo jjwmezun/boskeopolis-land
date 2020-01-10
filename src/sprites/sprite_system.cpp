@@ -69,6 +69,7 @@
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
 #include "icicle_sprite.hpp"
+#include "input_component_sequence.hpp"
 #include "iron_wall_sprite.hpp"
 #include <iostream>
 #include "level.hpp"
@@ -856,6 +857,16 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 void SpriteSystem::reset( const Level& level, EventSystem& events )
 {
+	resetInternal( level, events, false );
+};
+
+void SpriteSystem::resetTrainer( const Level& level, EventSystem& events )
+{
+	resetInternal( level, events, true );
+};
+
+void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool trainer )
+{
 	Sprite::resistance_x_ = level.currentMap().wind_strength_;
 
 	if ( level.currentMap().moon_gravity_ )
@@ -876,41 +887,54 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		Sprite::traction_ = Sprite::TRACTION_NORMAL;
 	}
 
-	switch( level.currentMap().hero_type_ )
+	if ( hero_ == nullptr )
 	{
-		case ( HeroType::NORMAL ):
-			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() + 10 ) );
-		break;
-		case ( HeroType::SHOOTER ):
-			hero_.reset( new ShooterPlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::OVERWORLD ):
-			hero_.reset( new MazePlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::CART ):
-			hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::FLUTTERING ):
-			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::SPACESHIP ):
-			hero_.reset( new PlayerSpaceshipSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::CAR ):
-			hero_.reset( new PlayerCarSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::TOP_DOWN ):
-			hero_.reset( new TopDownPlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::DOOM ):
-			hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::PLANE ):
-			hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::FLASHLIGHT ):
-			hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
+		switch( level.currentMap().hero_type_ )
+		{
+			case ( HeroType::NORMAL ):
+				hero_.reset
+				(
+					new PlayerSprite
+					(
+						level.entranceX(),
+						level.entranceY() + 10,
+						PlayerSprite::DEFAULT_JUMP_START_SPEED,
+						PlayerSprite::DEFAULT_JUMP_TOP_SPEED,
+						( trainer ) ? std::unique_ptr<InputComponent> ( new InputComponentSequence( "trainer", true ) ) : std::unique_ptr<InputComponent> ( new InputComponentPlayer() )
+					)
+				);
+			break;
+			case ( HeroType::SHOOTER ):
+				hero_.reset( new ShooterPlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::OVERWORLD ):
+				hero_.reset( new MazePlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::CART ):
+				hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::FLUTTERING ):
+				hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::SPACESHIP ):
+				hero_.reset( new PlayerSpaceshipSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::CAR ):
+				hero_.reset( new PlayerCarSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::TOP_DOWN ):
+				hero_.reset( new TopDownPlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::DOOM ):
+				hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::PLANE ):
+				hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::FLASHLIGHT ):
+				hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+		}
 	}
 
 	clearSprites();

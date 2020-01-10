@@ -12,6 +12,7 @@ namespace Audio
 	Mix_Music* music_ = nullptr;
 	Mix_Chunk* sounds_[ NUM_O_SOUNDS ];
 	bool enable_ = true;
+	bool trainer_mode_ = false;
 
 	enum class ChannelType
 	{
@@ -92,7 +93,7 @@ namespace Audio
 
 	void changeSong( const std::string& song_name, bool loop, int quietness )
 	{
-		if ( song_name != current_song_ )
+		if ( !trainer_mode_ && song_name != current_song_ )
 		{
 			closeSong();
 
@@ -177,7 +178,7 @@ namespace Audio
 
 	void playSound( SoundType sound )
 	{
-		if ( enable_ )
+		if ( enable_ && !trainer_mode_ )
 		{
 			const int channel = ( int )( sound_channels_[ ( int )( sound ) ] );
 			if ( channel == 0 )
@@ -196,5 +197,15 @@ namespace Audio
 	void fadeMusic( int milliseconds )
 	{
 		Mix_FadeOutMusic( milliseconds );
+	};
+
+	void setTrainerModeOn()
+	{
+		trainer_mode_ = true;
+	};
+
+	void setTrainerModeOff()
+	{
+		trainer_mode_ = false;
 	};
 };

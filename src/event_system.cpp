@@ -200,6 +200,16 @@ void EventSystem::flipSwitch()
 	switch_changed_ = true;
 };
 
+void EventSystem::updateTrainer( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+{
+	switch_changed_ = false;
+	if ( waterShouldStop() )
+	{
+		move_water_ = WATER_NULL;
+	}
+	testWarp( level, sprites, camera, blocks );
+};
+
 void EventSystem::update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
 {
 	switch_changed_ = false;

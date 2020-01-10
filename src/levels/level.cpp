@@ -134,6 +134,8 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		entrance_y_ = warp->entranceY();
 
 		sprites.reset( *this, events );
+		sprites.hero().hit_box_.x = Unit::PixelsToSubPixels( warp->entranceX() );
+		sprites.hero().hit_box_.y = Unit::PixelsToSubPixels( warp->entranceY() );
 
 		int camera_x = camera.x();
 		int camera_y = camera.y();

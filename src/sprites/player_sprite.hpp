@@ -5,6 +5,7 @@ class EventSystem;
 class Sprite;
 
 #include "input_component_player.hpp"
+#include "input_component_player_record.hpp"
 #include "player_graphics.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -12,6 +13,9 @@ class Sprite;
 class PlayerSprite : public Sprite
 {
 	public:
+		static constexpr int DEFAULT_JUMP_START_SPEED = 1000;
+		static constexpr int DEFAULT_JUMP_TOP_SPEED = 6000;
+
 		PlayerSprite
 		(
 			int x,
@@ -19,8 +23,7 @@ class PlayerSprite : public Sprite
 			int jump_start_speed = 1000,
 			int jump_top_speed = 6000,
 			std::unique_ptr<InputComponent> input
-				= std::unique_ptr<InputComponentPlayer>
-				(),
+				= nullptr,
 			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<SpriteGraphics> ( "sprites/autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,

@@ -40,4 +40,6 @@ namespace Audio
 	void closeSong();
 	void playSound( SoundType sound );
 	void fadeMusic( int milliseconds );
+	void setTrainerModeOn();
+	void setTrainerModeOff();
 };
