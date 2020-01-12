@@ -1,7 +1,7 @@
 #include <cstdio>
 #include "input.hpp"
 #include "input_component_sequence.hpp"
-#include "level_title_state.hpp"
+#include "title_state.hpp"
 #include "main.hpp"
 
 InputComponentSequence::InputComponentSequence( std::string local_file, bool trainer )
@@ -43,7 +43,7 @@ void InputComponentSequence::update()
 	++current_frame_;
 	if ( trainer_ && current_frame_ >= number_of_frames_ )
 	{
-		Main::changeState( std::make_unique<LevelTitleState> () );
+		Main::changeState( std::make_unique<TitleState> () );
 	}
 };
 

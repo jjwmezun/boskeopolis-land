@@ -5,7 +5,7 @@
 #include "console_arguments.hpp"
 #include <deque>
 #include "input.hpp"
-#include "level_title_state.hpp"
+#include "title_state.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_math.hpp"
@@ -370,7 +370,7 @@ namespace Main
 					"Learn Mo' 'bout this project's development @\nhttps://www.boskeopolis-land.com",
 					MessageState::Type::CHANGE,
 					{ "Grayscale", 1 },
-					std::unique_ptr<GameState> ( new LevelTitleState() ),
+					std::unique_ptr<GameState> ( new TitleState() ),
 					Text::FontColor::BLACK,
 					Text::FontColor::__NULL,
 					"gem",
