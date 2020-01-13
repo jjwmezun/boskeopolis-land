@@ -6,7 +6,7 @@ static constexpr int FALL_TIMER_LIMIT = 16;
 
 PiBlockSprite::PiBlockSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/swamp.png" ), x, y, 16, 16, {}, 200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pi-block.png" ), x, y, 16, 16, {}, 200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	fall_timer_ ( 0 ),
 	hero_still_on_block_ ( false )
 {};
@@ -44,10 +44,13 @@ void PiBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 
 void PiBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.hasType( SpriteType::HERO ) && them.collideBottomOnly( their_collision, *this ) )
+	if ( them.collideBottomOnly( their_collision, *this ) )
 	{
 		them.collideStopYBottom( their_collision.overlapYBottom() );
-		hero_still_on_block_ = true;
+		if ( them.hasType( SpriteType::HERO ) )
+		{
+			hero_still_on_block_ = true;
+		}
 	}
 };
 

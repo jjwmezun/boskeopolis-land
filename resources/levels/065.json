@@ -1,13 +1,24 @@
 {
-	"name": "Raft",
+	"name": "Bayou Jupiter",
 
 	"maps":
 	[
 		{
-			"slug": "swamp-3"
+			"slug": "swamp-4",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "swamp-bg.png",
+					"width": 400,
+					"height": 224,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0
+				}
+			]
 		}
 	],
 
-	"entrance_x": 4,
-	"entrance_y": 31
+	"entrance_x": 8,
+	"entrance_y": 22
 }

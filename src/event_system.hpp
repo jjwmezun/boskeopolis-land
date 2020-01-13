@@ -112,6 +112,7 @@ class EventSystem
 	EventSystem( bool start_on = false );
 	~EventSystem();
 	void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
+	void updateTrainer( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 	void reset();
 	Palette getPalette();
 	bool testLightSwitch();

@@ -47,6 +47,7 @@ class SpriteSystem
 		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health );
 		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events );
 		void reset( const Level& level, EventSystem& events );
+		void resetTrainer( const Level& level, EventSystem& events );
 		void spawn( std::unique_ptr<Sprite>&& sprite );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
 		void spawnWaterdrop( int x, int y );
@@ -77,4 +78,5 @@ class SpriteSystem
 		void destroySprite( int n, Map& lvmap );
 		void spritesFromMap( const Map& lvmap, EventSystem& events );
 		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, const Map& lvmap, EventSystem& events );
+		void resetInternal( const Level& level, EventSystem& events, bool trainer );
 };

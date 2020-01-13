@@ -1,0 +1,63 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 8,  "y": 0 },
+			{ "x": 9,  "y": 0 },
+			{ "x": 10, "y": 0 },
+			{ "x": 11, "y": 0 },
+			{ "x": 12, "y": 0 },
+			{ "x": 13, "y": 0 }
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "swim"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "money",
+				"amount": 100
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "change_block",
+				"value": 69
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "current_up"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

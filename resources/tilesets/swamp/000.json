@@ -11,24 +11,8 @@
 		{
 			"component":
 			{
-				"type": "sink"
-			},
-			"conditions":
-			[
-				{ "type": "hero" },
-				{ "type": "collide_any" }
-			]
-		},
-		{
-			"component":
-			{
 				"type": "solid"
-			},
-			"conditions":
-			[
-				{ "type": "not_hero" },
-				{ "type": "collide_bottom" }
-			]
+			}
 		}
 	]
 }

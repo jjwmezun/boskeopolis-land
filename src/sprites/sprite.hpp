@@ -70,7 +70,8 @@ class Sprite : public Object
 			WATER_SPOUT,
 			BARREL,
 			SPARK,
-			MANSION_GHOST
+			MANSION_GHOST,
+			SWAMP_POLE
 		};
 
 		enum class CameraMovement
@@ -80,6 +81,11 @@ class Sprite : public Object
 			PERMANENT,
 			PAUSE_OFFSCREEN,
 			DESPAWN_OFFSCREEN
+		};
+
+		union Misc
+		{
+			int id;
 		};
 
 		Sprite
@@ -261,6 +267,9 @@ class Sprite : public Object
 		void flipGraphicsOnRight();
 		void moveToward( const Sprite& them );
 
+		bool isLeftOf( const Object& them ) const;
+		bool isRightOf( const Object& them ) const;
+
 		static const SpriteMovement floating_;
 		static const GroundedSpriteMovement grounded_;
 		static const FlutteringSpriteMovement fluttering_;
@@ -319,6 +328,7 @@ class Sprite : public Object
 		int jump_top_speed_;
 		int bounce_height_;
 		int layer_;
+		Misc misc_;
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;
 		Direction::Simple direction_;

@@ -8,6 +8,7 @@
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
 #include "bouncing_spike_fruit_sprite.hpp"
+#include "bridge_monster_sprite.hpp"
 #include "bubble_sprite.hpp"
 #include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
@@ -49,6 +50,7 @@
 #include "firebar_sprite.hpp"
 #include "fishstick_sprite.hpp"
 #include "flashlight_player_sprite.hpp"
+#include "frog_sprite.hpp"
 #include "full_heal_block_sprite.hpp"
 #include "gemmy_sprite.hpp"
 #include "ghost_coffin_sprite.hpp"
@@ -67,6 +69,7 @@
 #include "iceblock_sprite.hpp"
 #include "icecube_sprite.hpp"
 #include "icicle_sprite.hpp"
+#include "input_component_sequence.hpp"
 #include "iron_wall_sprite.hpp"
 #include <iostream>
 #include "level.hpp"
@@ -83,6 +86,7 @@
 #include "message_block_sprite.hpp"
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
+#include "moveable_block_sprite.hpp"
 #include "move_water_sprite.hpp"
 #include "octopig_sprite.hpp"
 #include "olive_spawner_sprite.hpp"
@@ -145,6 +149,7 @@
 #include "sprite_system.hpp"
 #include "stronger_cowpoker_sprite.hpp"
 #include "swamp_monster_sprite.hpp"
+#include "swamp_pole_sprite.hpp"
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
 #include "top_down_player_sprite.hpp"
@@ -154,6 +159,7 @@
 #include "underground_subway_sprite.hpp"
 #include "urban_bird_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
+#include "wall_crawler_sprite.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 #include "water_spout_sprite.hpp"
@@ -723,6 +729,39 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 180 ):
 			return std::unique_ptr<Sprite> ( new PedestrianGeneratorSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 181 ):
+			return std::unique_ptr<Sprite> ( new BridgeMonsterSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 182 ):
+			return std::unique_ptr<Sprite> ( new FrogSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 183 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 1 ) );
+		break;
+		case ( SPRITE_INDEX_START + 184 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 2 ) );
+		break;
+		case ( SPRITE_INDEX_START + 185 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 3 ) );
+		break;
+		case ( SPRITE_INDEX_START + 186 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 4 ) );
+		break;
+		case ( SPRITE_INDEX_START + 187 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 5 ) );
+		break;
+		case ( SPRITE_INDEX_START + 188 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 6 ) );
+		break;
+		case ( SPRITE_INDEX_START + 189 ):
+			return std::unique_ptr<Sprite> ( new SwampPoleSprite( x, y, 7 ) );
+		break;
+		case ( SPRITE_INDEX_START + 190 ):
+			return std::unique_ptr<Sprite> ( new MoveableBlockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 191 ):
+			return std::unique_ptr<Sprite> ( new WallCrawlerSprite( x, y ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -818,6 +857,16 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 void SpriteSystem::reset( const Level& level, EventSystem& events )
 {
+	resetInternal( level, events, false );
+};
+
+void SpriteSystem::resetTrainer( const Level& level, EventSystem& events )
+{
+	resetInternal( level, events, true );
+};
+
+void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool trainer )
+{
 	Sprite::resistance_x_ = level.currentMap().wind_strength_;
 
 	if ( level.currentMap().moon_gravity_ )
@@ -838,41 +887,54 @@ void SpriteSystem::reset( const Level& level, EventSystem& events )
 		Sprite::traction_ = Sprite::TRACTION_NORMAL;
 	}
 
-	switch( level.currentMap().hero_type_ )
+	if ( hero_ == nullptr )
 	{
-		case ( HeroType::NORMAL ):
-			hero_.reset( new PlayerSprite( level.entranceX(), level.entranceY() + 10 ) );
-		break;
-		case ( HeroType::SHOOTER ):
-			hero_.reset( new ShooterPlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::OVERWORLD ):
-			hero_.reset( new MazePlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::CART ):
-			hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::FLUTTERING ):
-			hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::SPACESHIP ):
-			hero_.reset( new PlayerSpaceshipSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::CAR ):
-			hero_.reset( new PlayerCarSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::TOP_DOWN ):
-			hero_.reset( new TopDownPlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::DOOM ):
-			hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::PLANE ):
-			hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
-		break;
-		case ( HeroType::FLASHLIGHT ):
-			hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );
-		break;
+		switch( level.currentMap().hero_type_ )
+		{
+			case ( HeroType::NORMAL ):
+				hero_.reset
+				(
+					new PlayerSprite
+					(
+						level.entranceX(),
+						level.entranceY() + 10,
+						PlayerSprite::DEFAULT_JUMP_START_SPEED,
+						PlayerSprite::DEFAULT_JUMP_TOP_SPEED,
+						( trainer ) ? std::unique_ptr<InputComponent> ( new InputComponentSequence( "trainer" + std::to_string( level.id() ), true ) ) : std::unique_ptr<InputComponent> ( new InputComponentPlayerRecord() )
+					)
+				);
+			break;
+			case ( HeroType::SHOOTER ):
+				hero_.reset( new ShooterPlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::OVERWORLD ):
+				hero_.reset( new MazePlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::CART ):
+				hero_.reset( new PlayerCartSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::FLUTTERING ):
+				hero_.reset( new PlayerSpriteFluttering( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::SPACESHIP ):
+				hero_.reset( new PlayerSpaceshipSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::CAR ):
+				hero_.reset( new PlayerCarSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::TOP_DOWN ):
+				hero_.reset( new TopDownPlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::DOOM ):
+				hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::PLANE ):
+				hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
+			break;
+			case ( HeroType::FLASHLIGHT ):
+				hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );
+			break;
+		}
 	}
 
 	clearSprites();

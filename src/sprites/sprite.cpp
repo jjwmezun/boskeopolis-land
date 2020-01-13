@@ -894,16 +894,16 @@ void Sprite::moveInDirectionX()
 {
 	switch ( direction_x_ )
 	{
+		case ( Direction::Horizontal::__NULL ):
+			stopX();
+		break;
+
 		case ( Direction::Horizontal::LEFT ):
 			moveLeft();
 		break;
 
 		case ( Direction::Horizontal::RIGHT ):
 			moveRight();
-		break;
-
-		case ( Direction::Horizontal::__NULL ):
-			stopX();
 		break;
 	}
 };
@@ -1031,4 +1031,14 @@ void Sprite::moveToward( const Sprite& them )
 	{
 		moveDown();
 	}
+};
+
+bool Sprite::isLeftOf( const Object& them ) const
+{
+	return rightSubPixels() < them.hit_box_.x;
+};
+
+bool Sprite::isRightOf( const Object& them ) const
+{
+	return hit_box_.x > them.rightSubPixels();
 };

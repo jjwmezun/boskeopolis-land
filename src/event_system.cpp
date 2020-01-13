@@ -113,7 +113,7 @@ void EventSystem::reset()
 };
 
 void EventSystem::resetMisc()
-{
+{/*
 	if ( misc_.type_ == MiscType::SEWER_GFX && misc_.data_.sewer_gfx_ != nullptr )
 	{
 		delete misc_.data_.sewer_gfx_;
@@ -122,7 +122,7 @@ void EventSystem::resetMisc()
 	{
 		delete misc_.data_.boss_ui_;
 	}
-	memset( &misc_, 0, sizeof( EMisc ) ); // Just 0-out data.
+	memset( &misc_, 0, sizeof( EMisc ) ); // Just 0-out data.*/
 };
 
 void EventSystem::win()
@@ -198,6 +198,16 @@ void EventSystem::flipSwitch()
 {
 	switch_ = !switch_;
 	switch_changed_ = true;
+};
+
+void EventSystem::updateTrainer( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+{
+	switch_changed_ = false;
+	if ( waterShouldStop() )
+	{
+		move_water_ = WATER_NULL;
+	}
+	testWarp( level, sprites, camera, blocks );
 };
 
 void EventSystem::update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )

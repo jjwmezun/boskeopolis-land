@@ -9,7 +9,9 @@
 class InputComponentSequence : public InputComponent
 {
 	public:
-		InputComponentSequence( std::vector<std::array<bool, Input::NUM_O_ACTIONS>>&& sequence );
+        static constexpr int MAX_INPUTS = 60 * 60 * 60 * 10;
+
+		InputComponentSequence( std::string local_file, bool trainer = false );
 		~InputComponentSequence();
 		void update();
 		bool action1();
@@ -24,7 +26,13 @@ class InputComponentSequence : public InputComponent
 		bool cLeft();
 		bool cRight();
 
+		static std::string getFilePath( const std::string& local );
+
 	private:
-		const std::vector< std::array<bool, Input::NUM_O_ACTIONS> > sequence_of_inputs_;
-		Counter frame_;
+		bool testFrame( Input::Action action ) const;
+
+		bool sequence_of_inputs_[ MAX_INPUTS ][ Input::NUM_O_ACTIONS ];
+		int number_of_frames_;
+		int current_frame_;
+		bool trainer_;
 };

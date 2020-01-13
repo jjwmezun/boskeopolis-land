@@ -1,0 +1,25 @@
+{
+	"name": "Attic Addict",
+	"maps":
+	[
+		{
+            "slug": "attic-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "attic-brick-wall-2.png",
+					"width": 400,
+					"height": 226,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+                }
+            ]
+        }
+	],
+
+	"entrance_x": 28,
+	"entrance_y": 69,
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

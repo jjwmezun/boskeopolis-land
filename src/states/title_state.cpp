@@ -1,84 +1,162 @@
 #include "audio.hpp"
-#include <fstream>
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
+#include <fstream>
 #include "main.hpp"
+#include "title_state.hpp"
 #include "message_state.hpp"
 #include "mezun_exceptions.hpp"
 #include "options_state.hpp"
 #include "overworld_state.hpp"
+#include "overworld_state.hpp"
+#include "pause_state.hpp"
+#include "level_select_state.hpp"
 #include "render.hpp"
 #include "title_state.hpp"
 #include "wtext_obj.hpp"
+#include "time_start_state.hpp"
 
-static constexpr int LOGO_WIDTH = 367;
-static constexpr int LOGO_HEIGHT = 38;
-static constexpr int LOGO_Y = 16;
+static constexpr int LOGO_WIDTH = 352;
+static constexpr int LOGO_HEIGHT = 36;
+static constexpr int LOGO_Y = 8;
 static constexpr int CREATED_BY_Y = LOGO_HEIGHT + LOGO_Y + 8;
 static constexpr int CREATED_BY_HEIGHT = 8;
 static constexpr int OPTIONS_TOP_PADDING = 16;
-static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_TOP_PADDING;
+static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_TOP_PADDING + 20;
 static constexpr int OPTION_WIDTH_MINIBLOCKS = 12;
 static constexpr int OPTION_WIDTH_MINIBLOCKS_PIXELS = Unit::MiniBlocksToPixels( OPTION_WIDTH_MINIBLOCKS );
+enum class Option
+{
+	NEW,
+	LOAD,
+	OPTIONS,
+	QUIT
+};
+static constexpr int OPTIONS_SIZE = 4;
+
+static constexpr int NUMBER_OF_TRAINER_LEVELS = 4;
+static constexpr int TRAINER_LEVELS[ NUMBER_OF_TRAINER_LEVELS ] = { 1, 2, 23, 37 };
+
+static int getRandomTrainerLevel()
+{
+    return TRAINER_LEVELS[ mezun::randInt( NUMBER_OF_TRAINER_LEVELS - 1, 0 ) ];
+};
 
 TitleState::TitleState( int start_selection )
 :
-	GameState( StateID::TITLE_STATE, { "Pale Purple", 2 } ),
-	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
-	skyline_bg_ ( "bg/skyline.png", 264, 224, 0, 48, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
-	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 248, 175, 0, Unit::WINDOW_HEIGHT_PIXELS - 175, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
-	cloud_bg_ ( "bg/city_clouds.png", 400, 112, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
-	logo_gfx_ ( "bosko_logo.png" ),
-	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y, start_selection ) ),
-	logo_rect_ ( ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, 16, LOGO_WIDTH, LOGO_HEIGHT ),
+	GameState ( StateID::TITLE_STATE ),
+	level_ ( Level::getLevel( getRandomTrainerLevel() ) ),
+	events_ ( level_.startOn() ),
+	camera_ ( { level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4 } ),
+	sprites_ ( level_.entranceX(), level_.entranceY() ),
+	blocks_ ( level_.currentMap() ),
+	health_ (),
 	created_by_ (),
-	can_load_ ( false )
+	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 496, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
+	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
+	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
+	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y, start_selection ) ),
+    screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ) ),
+    screen_src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
+    screen_dest_ ( 0, 64, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
+    curtain_ ( "bg/stageplay.png", { 0, 0, 400, 224 }, { 0, 68, 400, 224 } ),
+	logo_ ( "bosko_logo.png", { 0, 0, LOGO_WIDTH, LOGO_HEIGHT }, { ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT } ),
+	can_load_ ( false ),
+    paused_ ( false )
 {};
 
 TitleState::~TitleState()
 {
-	created_by_.destroy();
+    SDL_DestroyTexture( screen_texture_ );
+    created_by_.destroy();
 };
 
 void TitleState::stateUpdate()
 {
-	options_.update();
-	if ( Input::pressed( Input::Action::CONFIRM ) )
-	{
-		switch( ( Option )( options_.selection() ) )
-		{
-			case ( Option::NEW ):
-			{
-				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
-			}
-			break;
+    if ( paused_ )
+    {
+        options_.update();
+        if ( Input::pressed( Input::Action::CONFIRM ) )
+        {
+            switch( ( Option )( options_.selection() ) )
+            {
+                case ( Option::NEW ):
+                {
+                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+                }
+                break;
 
-			case ( Option::LOAD ):
-			{
-				Inventory::load();
-				Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
-			}
-			break;
+                case ( Option::LOAD ):
+                {
+                    Inventory::load();
+                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+                }
+                break;
 
-			case ( Option::OPTIONS ):
-			{
-				Main::changeState( std::make_unique<OptionsState> () );
-			}
-			break;
+                case ( Option::OPTIONS ):
+                {
+                    Main::pushState( std::make_unique<OptionsState> () );
+                }
+                break;
 
-			case ( Option::QUIT ):
-			{
-				Main::quit();
-			}
-			break;
-		}
-		options_.setSelectedPressedDown();
-		Audio::playSound( Audio::SoundType::CONFIRM );
-	}
+                case ( Option::QUIT ):
+                {
+                    Main::quit();
+                }
+                break;
+            }
+            Audio::playSound( Audio::SoundType::CONFIRM );
+        }
+    }
+    else
+    {
+        blocks_.blocksFromMap( level_.currentMap(), camera_ );
+        blocks_.update( events_ );
 
+        if ( camera_.testPause() )
+        {
+            camera_.scroll( level_.currentMap() );
+        }
+        else
+        {
+            level_.currentMap().update( events_, sprites_, blocks_, camera_ );
+            camera_.update();
+            sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+            sprites_.interact( blocks_, level_, events_, camera_, health_ );
+            sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+            sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
+            health_.update();
+            events_.updateTrainer( level_, sprites_, camera_, blocks_ );
+
+            if ( events_.paletteChanged() )
+            {
+                newPalette( events_.getPalette() );
+            }
+
+            if ( events_.timerStart() )
+            {
+                events_.unsetFlag();
+                Main::pushState
+                (
+                    std::unique_ptr<GameState>
+                    (
+                        new TimeStartState( palette() )
+                    )
+                );
+            }
+        }
+
+        if ( Input::held( Input::Action::CONFIRM ) )
+        {
+            paused_ = true;
+            Audio::setTrainerModeOff();
+            Audio::playSound( Audio::SoundType::CONFIRM );
+        }
+    }
 	cloud_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
 	skyline_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
 	skyscrapers_bg_.move( Unit::WINDOW_WIDTH_PIXELS, Render::window_box_ );
@@ -86,13 +164,48 @@ void TitleState::stateUpdate()
 
 void TitleState::stateRender()
 {
-	Render::colorCanvas( 2 );
-	logo_gfx_.render( logo_rect_, nullptr );
-	light_gradient_bg_.render( Render::window_box_ );
-	skyline_bg_.render( Render::window_box_ );
-	skyscrapers_bg_.render( Render::window_box_ );
-	cloud_bg_.render( Render::window_box_ );
-	options_.render();
+    if ( !paused_ )
+    {
+        generateLevelTexture();
+    }
+    renderLevel();
+    curtain_.render();
+    renderHeader();
+
+    if ( paused_ )
+    {
+	    options_.render();
+    }
+};
+
+void TitleState::renderLevel()
+{
+    Render::colorCanvas( palette().bgN() );
+    Render::renderObject( screen_texture_, screen_src_, screen_dest_ );
+};
+
+void TitleState::generateLevelTexture()
+{
+    Render::setRenderTarget( screen_texture_ );
+    Render::clearScreenTransparency();
+    Render::colorCanvas( palette().bgN() );
+    level_.currentMap().renderBG( camera_ );
+    blocks_.render( level_.currentMap(), camera_, false );
+    sprites_.render( camera_, false );
+    blocks_.render( level_.currentMap(), camera_, true );
+    sprites_.render( camera_, true );
+    level_.currentMap().renderFG( camera_ );
+    Render::releaseRenderTarget();
+};
+
+void TitleState::renderHeader()
+{
+    Render::renderRect( { 0, 72, Unit::WINDOW_WIDTH_PIXELS, 2 }, 6, 128 );
+    Render::renderRect( { 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 }, 2 );
+	cloud_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
+	logo_.render();
+	skyline_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
+	//skyscrapers_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
 	created_by_.render();
 };
 
@@ -122,8 +235,11 @@ void TitleState::init()
 	ifs.close();
 	Inventory::reset();
 
+	newPalette( level_.currentMap().palette_ );
 	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();
-
+	sprites_.resetTrainer( level_, events_ );
+	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 	Audio::changeSong( "title" );
+    Audio::setTrainerModeOn();
 };

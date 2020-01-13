@@ -5,6 +5,7 @@
 #include "map_layer_doom.hpp"
 #include "map_layer_image.hpp"
 #include "map_layer_image_switch.hpp"
+#include "map_layer_lightning.hpp"
 #include "map_layer_neon.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
@@ -134,6 +135,8 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		entrance_y_ = warp->entranceY();
 
 		sprites.reset( *this, events );
+		sprites.hero().hit_box_.x = Unit::PixelsToSubPixels( warp->entranceX() );
+		sprites.hero().hit_box_.y = Unit::PixelsToSubPixels( warp->entranceY() );
 
 		int camera_x = camera.x();
 		int camera_y = camera.y();
@@ -487,6 +490,10 @@ Level Level::getLevel( int id )
 									{
 										blend_mode = SDL_BLENDMODE_ADD;
 									}
+									else if ( bg.HasMember( "darken" ) && bg[ "darken" ].IsBool() && bg[ "darken" ].GetBool() == true )
+									{
+										blend_mode = SDL_BLENDMODE_MOD;
+									}
 
 									if ( bg.HasMember( "switch" ) && bg[ "switch" ].IsBool() && bg[ "switch" ].GetBool() == true )
 									{
@@ -594,6 +601,13 @@ Level Level::getLevel( int id )
 									group.emplace_back
 									(
 										std::make_unique<MapLayerNeon> ()
+									);
+								}
+								else if ( mezun::areStringsEqual( bgtype, "lightning" ) )
+								{
+									group.emplace_back
+									(
+										std::make_unique<MapLayerLightning> ()
 									);
 								}
 								else if ( mezun::areStringsEqual( bgtype, "doom" ) )
