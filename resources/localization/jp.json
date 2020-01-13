@@ -308,7 +308,7 @@
     },
     "title":
     {
-        "attribution": "JJWメズンがさくせい — 2016-2019\nProgrammed by Nasrin",
+        "attribution": "JJWメズンがさくせい — 2016-%Y\nProgrammed by Nasrin",
         "options":
         {
             "new_game": "あたらしいゲーム",

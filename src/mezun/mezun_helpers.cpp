@@ -1,6 +1,7 @@
 #include <bitset>
 #include <cctype>
 #include "mezun_helpers.hpp"
+#include <regex>
 #include <stdexcept>
 #include <string>
 
@@ -146,5 +147,10 @@ namespace mezun
 			output += ( char )( character );
 		}
 		return output;
+	};
+
+	std::string stringReplace( const std::string& in, std::string from, std::string to )
+	{
+		return std::regex_replace( in, std::regex( from ), to );
 	};
 }

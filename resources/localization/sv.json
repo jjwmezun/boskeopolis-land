@@ -193,7 +193,7 @@
     },
     "title":
     {
-        "attribution": "Skapad av J.J.W. Mezun — 2016-2019\nProgrammerad av Nasrin",
+        "attribution": "Skapad av J.J.W. Mezun — 2016-%Y\nProgrammerad av Nasrin",
         "options":
         {
             "new_game": "Nytt Spel",

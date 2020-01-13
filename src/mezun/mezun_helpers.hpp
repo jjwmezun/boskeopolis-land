@@ -67,4 +67,5 @@ namespace mezun
 	std::u32string charToChar32String( const char* source );
 	std::u32string intToChar32String( int n );
 	std::string string32ToString8( const std::u32string source );
+	std::string stringReplace( const std::string& in, std::string from, std::string to );
 };

@@ -179,7 +179,7 @@
     },
     "title":
     {
-        "attribution": "Créé par J.J.W. Mezun — 2016-2019\nProgrammé par Nasrin",
+        "attribution": "Créé par J.J.W. Mezun — 2016-%Y\nProgrammé par Nasrin",
         "options":
         {
             "new_game": "Nouveau jeu",

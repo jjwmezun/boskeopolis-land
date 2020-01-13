@@ -2,6 +2,7 @@
 #include "invalid_localization_language_exception.hpp"
 #include "localization_language.hpp"
 #include "mezun_helpers.hpp"
+#include "mezun_time.hpp"
 #include "rapidjson/istreamwrapper.h"
 #include "rapidjson/document.h"
 
@@ -342,7 +343,9 @@ void LocalizationLanguage::loadTitleText( const auto& data, const std::string& p
     {
         throw InvalidLocalizationLanguageException( path );
     }
-    title_created_by_ = mezun::charToChar32String( input[ "attribution" ].GetString() );
+    std::string title_created_by_str = std::string( input[ "attribution" ].GetString() );
+    title_created_by_str = mezun::stringReplace( title_created_by_str, "%Y", mezun::getCurrentYear() );
+    title_created_by_ = mezun::charToChar32String( title_created_by_str.c_str() );
 
     const auto& options = input[ "options" ].GetObject();
     if
