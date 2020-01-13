@@ -8,6 +8,19 @@
 			"backgrounds":
 			[
 				{
+					"type": "image",
+					"img": "gradient.png",
+					"width": 8,
+					"height": 160,
+					"x_scroll": 0,
+					"y_scroll": 0.0,
+					"y_offset": 32,
+					"y_repeat": false
+				},
+				{
+					"type": "lightning"
+				},
+				{
 					"type": "constellation",
 					"width": 320,
 					"height": 16
@@ -18,7 +31,9 @@
 					"width": 264,
 					"height": 224,
 					"x_scroll": 0.25,
-					"y_scroll": 0.0
+					"y_scroll": 0.0,
+					"y_offset": 32,
+					"y_repeat": false
 				}
 			],
 			"foregrounds":
@@ -29,7 +44,8 @@
 					"width": 480,
 					"height": 320,
 					"frames": 16,
-					"animation_speed": 4
+					"animation_speed": 4,
+					"alpha": 128
 				}
 			]
 		}
@@ -40,7 +56,7 @@
 		"message": "¡Get to the Keycane before \"Dagny\"!"
 	},
 	
-	"entrance_x": 23,
+	"entrance_x": 4,
 	"entrance_y": 8,
 	"camera_x": 17,
 	

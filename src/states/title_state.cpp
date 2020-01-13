@@ -17,7 +17,7 @@
 static constexpr int LOGO_WIDTH = 352;
 static constexpr int LOGO_HEIGHT = 36;
 static constexpr int LOGO_Y = 8;
-static constexpr int CREATED_BY_Y = LOGO_HEIGHT + LOGO_Y + 4;
+static constexpr int CREATED_BY_Y = LOGO_HEIGHT + LOGO_Y + 8;
 static constexpr int CREATED_BY_HEIGHT = 8;
 static constexpr int OPTIONS_TOP_PADDING = 16;
 static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_TOP_PADDING + 20;
@@ -42,7 +42,7 @@ static int getRandomTrainerLevel()
 TitleState::TitleState()
 :
 	GameState ( StateID::TITLE_STATE ),
-	level_ ( Level::getLevel( getRandomTrainerLevel() ) ),
+	level_ ( Level::getLevel( 1 ) ),
 	events_ ( level_.startOn() ),
 	camera_ ( { level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4 } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
@@ -51,7 +51,7 @@ TitleState::TitleState()
 	created_by_ ( "Created by J.J.W. Mezun, 2016-2020\nProgrammed by Nasrin", 0, CREATED_BY_Y, Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK ),
 	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 496, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
 	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
-	skyline_bg_ ( "bg/skyline.png", 448, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
+	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	options_ ( { "New Game", "Load Game", "Options", "Quit" }, OPTION_WIDTH_MINIBLOCKS, OPTIONS_TOP_Y ),
     screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ) ),
@@ -196,9 +196,9 @@ void TitleState::renderHeader()
     Render::renderRect( { 0, 72, Unit::WINDOW_WIDTH_PIXELS, 2 }, 6, 128 );
     Render::renderRect( { 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 }, 2 );
 	cloud_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
-	skyline_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
-	skyscrapers_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
 	logo_.render();
+	skyline_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
+	//skyscrapers_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
 	created_by_.render();
 };
 
