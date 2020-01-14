@@ -900,7 +900,7 @@ void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool 
 						level.entranceY() + 10,
 						PlayerSprite::DEFAULT_JUMP_START_SPEED,
 						PlayerSprite::DEFAULT_JUMP_TOP_SPEED,
-						( trainer ) ? std::unique_ptr<InputComponent> ( new InputComponentSequence( "trainer-" + level.getCodeName(), true ) ) : std::unique_ptr<InputComponent> ( new InputComponentPlayerRecord() )
+						( trainer ) ? std::unique_ptr<InputComponent> ( new InputComponentSequence( "trainer-" + level.getCodeName(), true ) ) : std::unique_ptr<InputComponent> ( new InputComponentPlayer() )
 					)
 				);
 			break;
