@@ -9,18 +9,18 @@
 #include "level_select_state.hpp"
 #include "time_start_state.hpp"
 
-LevelState::LevelState( int lvname )
+LevelState::LevelState( int level_id )
 :
 	GameState ( StateID::LEVEL_STATE ),
 	inventory_screen_ (),
-	level_ ( Level::getLevel( lvname ) ),
+	level_ ( Level::getLevel( level_id ) ),
 	events_ ( level_.startOn() ),
 	camera_ ( { level_.cameraX(), level_.cameraY() } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
 	blocks_ ( level_.currentMap() ),
 	health_ ()
 {
-	Inventory::levelStart( lvname );
+	Inventory::levelStart( level_id );
 }
 
 LevelState::~LevelState()

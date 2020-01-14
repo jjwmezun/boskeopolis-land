@@ -35,7 +35,7 @@ class Level
 		void warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks );
 		void sewerWarp( SpriteSystem& sprites, EventSystem& events );
 		const std::string& message() const;
-		int id() const;
+		std::string getCodeName() const;
 		int allEnemiesToKill() const;
 		bool startOn() const;
 
@@ -47,6 +47,8 @@ class Level
 		static std::string gemChallengeText( unsigned int n );
 		static std::string timeChallengeText( unsigned int n );
 		static void buildLevelList();
+		static std::string getCodeNameByID( int id );
+		static int getIDFromCodeName( std::string code_name );
 
 	private:
 		std::vector<Map> maps_;

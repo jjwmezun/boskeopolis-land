@@ -88,13 +88,13 @@ namespace mezun
 	class MissingLevel : public std::runtime_error
 	{
 		public:
-			MissingLevel( int level_id );
+			MissingLevel( const std::string& lvname );
 	};
 
 	class BrokenLevelFile : public std::runtime_error
 	{
 		public:
-			BrokenLevelFile( int level_id );
+			BrokenLevelFile( const std::string& lvname );
 	};
 
 	class CantLoadLevelNames : public std::runtime_error

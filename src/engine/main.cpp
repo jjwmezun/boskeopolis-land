@@ -7,6 +7,7 @@
 #include "input.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
+#include "level.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_math.hpp"
@@ -115,6 +116,7 @@ namespace Main
 		mezun::initRand();
 		Render::init( args.windowed(), args.magnification() );
 		Audio::init( args.noaudio() );
+		Level::buildLevelList();
 		firstState();
 		Input::init();
 	};

@@ -38,9 +38,9 @@ enum class Option
 static constexpr int OPTIONS_SIZE = 4;
 
 static constexpr int NUMBER_OF_TRAINER_LEVELS = 4;
-static constexpr int TRAINER_LEVELS[ NUMBER_OF_TRAINER_LEVELS ] = { 1, 2, 23, 37 };
+static const std::string TRAINER_LEVELS[ NUMBER_OF_TRAINER_LEVELS ] = { "city-1", "woods-1", "factory-2", "city-4" };
 
-static int getRandomTrainerLevel()
+static const std::string& getRandomTrainerLevel()
 {
     return TRAINER_LEVELS[ mezun::randInt( NUMBER_OF_TRAINER_LEVELS - 1, 0 ) ];
 };
@@ -48,7 +48,7 @@ static int getRandomTrainerLevel()
 TitleState::TitleState( int start_selection )
 :
 	GameState ( StateID::TITLE_STATE ),
-	level_ ( Level::getLevel( getRandomTrainerLevel() ) ),
+	level_ ( Level::getLevel( Level::getIDFromCodeName( getRandomTrainerLevel() ) ) ),
 	events_ ( level_.startOn() ),
 	camera_ ( { level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4 } ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
@@ -67,7 +67,9 @@ TitleState::TitleState( int start_selection )
 	logo_ ( "bosko_logo.png", { 0, 0, LOGO_WIDTH, LOGO_HEIGHT }, { ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT } ),
 	can_load_ ( false ),
     paused_ ( false )
-{};
+{
+    std::cout << Level::getIDFromCodeName( getRandomTrainerLevel() ) << std::endl;
+};
 
 TitleState::~TitleState()
 {

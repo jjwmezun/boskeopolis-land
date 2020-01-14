@@ -46,6 +46,31 @@ static std::vector<int> gem_challenge_list_;
 static std::vector<int> time_challenge_list_;
 static unsigned int real_level_num_ = 0;
 
+static constexpr int NUMBER_OF_THEMES = 15;
+static constexpr int NUMBER_OF_CYCLES = 4;
+static const std::string THEMES[ NUMBER_OF_THEMES ] =
+{
+	"city",
+	"woods",
+	"mines",
+	"desert",
+	"mountain",
+	"sky",
+	"space",
+	"ice",
+	"pirate",
+	"swamp",
+	"sewer",
+	"factory",
+	"domestic",
+	"dungeon",
+	"special"
+};
+static std::string code_names_[ NUMBER_OF_CYCLES * NUMBER_OF_THEMES ] =
+{
+	""
+};
+
 Level::Level ( Level&& m )
 :
 	id_ ( m.id_ ),
@@ -178,10 +203,6 @@ const std::string& Level::NameOLevel( unsigned int n )
 
 int Level::gemChallenge( unsigned int n )
 {
-	if ( level_list_.empty() )
-	{
-		buildLevelList();
-	}
 	assert( n < level_list_.size() );
 	return gem_challenge_list_.at( n );
 };
@@ -193,10 +214,6 @@ std::string Level::gemChallengeText( unsigned int n )
 
 int Level::timeChallenge( unsigned int n )
 {
-	if ( level_list_.empty() )
-	{
-		buildLevelList();
-	}
 	assert( n < level_list_.size() );
 	return time_challenge_list_.at( n );
 };
@@ -211,9 +228,9 @@ const std::string& Level::message() const
 	return message_;
 };
 
-int Level::id() const
+std::string Level::getCodeName() const
 {
-	return id_;
+	return Level::getCodeNameByID( id_ );
 };
 
 void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health )
@@ -228,23 +245,20 @@ void Level::updateGoal( InventoryLevel& inventory_screen, EventSystem& events, S
 
 unsigned int Level::realLevelNum()
 {
-	if ( real_level_num_ == 0 )
-	{
-		buildLevelList();
-	}
 	return real_level_num_;
 };
 
 
 Level Level::getLevel( int id )
 {
-	const std::string file_path = Main::resourcePath() + "levels" + Main::pathDivider() + Text::formatNumDigitPadding( id, 3 ) + ".json";
+	const std::string lvname = getCodeNameByID( id );
+	const std::string file_path = Main::resourcePath() + "levels" + Main::pathDivider() + lvname + ".json";
 
 	std::ifstream ifs( file_path );
 
 	if( !ifs.is_open() )
 	{
-		throw mezun::MissingLevel( id );
+		throw mezun::MissingLevel( lvname );
 	}
 
 	rapidjson::IStreamWrapper ifs_wrap( ifs );
@@ -253,7 +267,7 @@ Level Level::getLevel( int id )
 
 	if ( !lv.IsObject() )
 	{
-		throw mezun::BrokenLevelFile( id );
+		throw mezun::BrokenLevelFile( lvname );
 	}
 
 	auto lvobj = lv.GetObject();
@@ -263,7 +277,7 @@ Level Level::getLevel( int id )
 
 	if ( !lvobj.HasMember( "maps" ) || !lvobj[ "maps" ].IsArray() )
 	{
-		throw mezun::BrokenLevelFile( id );
+		throw mezun::BrokenLevelFile( lvname );
 	}
 
 	std::vector<Map> maps;
@@ -829,10 +843,6 @@ Level Level::getLevel( int id )
 	/* OTHER
 	==============================================================*/
 	const bool start_on = ( lvobj.HasMember( "start_on" ) && lvobj[ "start_on" ].IsBool() && lvobj[ "start_on" ].GetBool() );
-	if ( lvobj.HasMember( "start_on" ) )
-	{
-		std::cout<<lvobj[ "start_on" ].GetBool()<<std::endl;
-	}
 
 
 
@@ -851,55 +861,61 @@ void Level::buildLevelList()
 		throw mezun::CantLoadLevelNames();
 	}
 
-	for ( int i = 0; i < MAX; ++i )
+	int i = 0;
+	for ( int cycle = 1; cycle <= NUMBER_OF_CYCLES; ++cycle )
 	{
-		const std::string file_path = path + Text::formatNumDigitPadding( i, 3 ) + ".json";
-
-		std::ifstream ifs( file_path );
-
-		if ( ifs.is_open() )
+		for ( int theme_id = 0; theme_id < NUMBER_OF_THEMES; ++theme_id )
 		{
-			rapidjson::IStreamWrapper ifs_wrap( ifs );
-			rapidjson::Document lv;
-			lv.ParseStream( ifs_wrap );
+			const std::string& theme = THEMES[ theme_id ];
+			code_names_[ i ] = theme + "-" + std::to_string( cycle );
+			const std::string file_path = path + code_names_[ i ]  + ".json";
 
-			if ( lv.IsObject() && lv.HasMember( "name" ) && lv[ "name" ].IsString() )
+			std::ifstream ifs( file_path );
+
+			if ( ifs.is_open() )
 			{
-				level_list_.emplace_back( lv[ "name" ].GetString() );
-				++real_level_num_;
+				rapidjson::IStreamWrapper ifs_wrap( ifs );
+				rapidjson::Document lv;
+				lv.ParseStream( ifs_wrap );
+
+				if ( lv.IsObject() && lv.HasMember( "name" ) && lv[ "name" ].IsString() )
+				{
+					level_list_.emplace_back( lv[ "name" ].GetString() );
+					++real_level_num_;
+				}
+				else
+				{
+					level_list_.emplace_back( "" );
+				}
+
+				if ( lv.IsObject() && lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
+				{
+					gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
+				}
+				else
+				{
+					gem_challenge_list_.emplace_back( 0 );
+				}
+
+				if ( lv.IsObject() && lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
+				{
+					time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
+				}
+				else
+				{
+					time_challenge_list_.emplace_back( 0 );
+				}
+
+				ifs.close();
 			}
 			else
 			{
-				level_list_.emplace_back( "" );
-			}
-
-			if ( lv.IsObject() && lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
-			{
-				gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
-			}
-			else
-			{
+				level_list_.emplace_back( "=BROKEN_LEVEL=" );
 				gem_challenge_list_.emplace_back( 0 );
-			}
-
-			if ( lv.IsObject() && lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
-			{
-				time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
-			}
-			else
-			{
 				time_challenge_list_.emplace_back( 0 );
 			}
-
-			ifs.close();
+			++i;
 		}
-		else
-		{
-			level_list_.emplace_back( "=BROKEN_LEVEL=" );
-			gem_challenge_list_.emplace_back( 0 );
-			time_challenge_list_.emplace_back( 0 );
-		}
-
 	}
 };
 
@@ -929,4 +945,21 @@ int Level::allEnemiesToKill() const
 bool Level::startOn() const
 {
 	return start_on_;
-}
+};
+
+std::string Level::getCodeNameByID( int id )
+{
+	return code_names_[ id ];
+};
+
+int Level::getIDFromCodeName( std::string code_name )
+{
+	for ( int i = 0; i < NUMBER_OF_CYCLES * NUMBER_OF_THEMES; ++i )
+	{
+		if ( code_name == code_names_[ i ] )
+		{
+			return i;
+		}
+	}
+	assert( false );
+};

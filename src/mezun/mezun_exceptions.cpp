@@ -2,14 +2,14 @@
 
 namespace mezun
 {
-	MissingLevel::MissingLevel( int level_id )
+	MissingLevel::MissingLevel( const std::string& lvname )
 	:
-		std::runtime_error( "Level #" + Text::stringifyNum( level_id ) + " is missing its JSON file in the resources/levels directory.\nPlease redownload game." )
+		std::runtime_error( "Level “" + lvname + "” is missing its JSON file in the resources/levels directory.\nPlease redownload game." )
 	{};
 
-	BrokenLevelFile::BrokenLevelFile( int level_id )
+	BrokenLevelFile::BrokenLevelFile( const std::string& lvname )
 	:
-		std::runtime_error( "The JSON file for level #" + Text::stringifyNum( level_id ) + " in the resources/levels directory has become corrupted & isn't valid JSON & can't be loaded.\nPlease redownload game." )
+		std::runtime_error( "The JSON file for level “" + lvname + "” in the resources/levels directory has become corrupted & isn't valid JSON & can't be loaded.\nPlease redownload game." )
 	{};
 
 	CantLoadLevelNames::CantLoadLevelNames()

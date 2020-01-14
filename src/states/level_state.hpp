@@ -14,7 +14,7 @@
 class LevelState : public GameState
 {
 	public:
-		LevelState( int lvname );
+		LevelState( int level_id );
 		~LevelState();
 		void stateUpdate() override;
 		void stateRender() override;

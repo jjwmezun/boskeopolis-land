@@ -247,7 +247,7 @@ void OverworldState::mapData()
 
 						if ( l >= 32 && l < 32 + Level::MAX )
 						{
-							level_tiles_.emplace_back( list[ j ].GetInt() - 33, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ), lv_gfx_ );
+							level_tiles_.emplace_back( list[ j ].GetInt() - 34, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ), lv_gfx_ );
 						}
 					}
 					else if ( i == PAL_CHANGE_INDEX )
@@ -256,7 +256,7 @@ void OverworldState::mapData()
 
 						if ( p >= 32 && p < 32 + Level::MAX )
 						{
-							pal_change_tiles_.emplace_back( list[ j ].GetInt() - 33, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ) );
+							pal_change_tiles_.emplace_back( list[ j ].GetInt() - 34, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ) );
 						}
 					}
 					else
