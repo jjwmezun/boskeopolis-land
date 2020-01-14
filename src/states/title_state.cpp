@@ -67,9 +67,7 @@ TitleState::TitleState( int start_selection )
 	logo_ ( "bosko_logo.png", { 0, 0, LOGO_WIDTH, LOGO_HEIGHT }, { ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT } ),
 	can_load_ ( false ),
     paused_ ( false )
-{
-    std::cout << Level::getIDFromCodeName( getRandomTrainerLevel() ) << std::endl;
-};
+{};
 
 TitleState::~TitleState()
 {
@@ -213,18 +211,6 @@ void TitleState::renderHeader()
 
 void TitleState::init()
 {
-	try
-	{
-		Level::buildLevelList();
-	}
-	catch ( const mezun::CantLoadLevelNames e )
-	{
-		Main::changeState
-		(
-			std::unique_ptr<MessageState> ( MessageState::errorMessage( e.what() ) )
-		);
-	}
-
 	std::ifstream ifs( Main::savePath() );
 	if ( ifs.is_open() )
 	{

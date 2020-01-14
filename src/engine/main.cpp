@@ -9,7 +9,9 @@
 #include "localization_language.hpp"
 #include "level.hpp"
 #include "main.hpp"
+#include "message_state.hpp"
 #include "mezun_helpers.hpp"
+#include "mezun_exceptions.hpp"
 #include "mezun_math.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
@@ -116,8 +118,18 @@ namespace Main
 		mezun::initRand();
 		Render::init( args.windowed(), args.magnification() );
 		Audio::init( args.noaudio() );
-		Level::buildLevelList();
-		firstState();
+		try
+		{
+			Level::buildLevelList();
+			firstState();
+		}
+		catch ( const mezun::CantLoadLevelNames e )
+		{
+			Main::changeState
+			(
+				std::unique_ptr<MessageState> ( MessageState::errorMessage( e.what() ) )
+			);
+		}
 		Input::init();
 	};
 
