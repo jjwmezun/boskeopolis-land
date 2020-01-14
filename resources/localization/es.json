@@ -221,6 +221,12 @@
 		"options": "Las Opciones",
 		"quit": "Cerra Juego"
     },
+    "level_select":
+    {
+        "title": "Level Select",
+        "cycle_name": "Cycle",
+        "percent_symbol": "%"
+    },
     "goals":
     {
         "avoid_money": "¡No toca ninguno dinero!",

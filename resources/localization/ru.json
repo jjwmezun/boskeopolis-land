@@ -243,6 +243,12 @@
 		"options": "Alternativ",
 		"quit": "Slutar"
     },
+    "level_select":
+    {
+        "title": "Level Select",
+        "cycle_name": "Cycle",
+        "percent_symbol": "%"
+    },
     "goals":
     {
         "avoid_money": "¡Don't touch any money!",

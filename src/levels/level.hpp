@@ -11,12 +11,33 @@ class SpriteSystem;
 #include "goal.hpp"
 #include "map.hpp"
 #include "rapidjson/document.h"
+#include <string>
 #include <vector>
 
 class Level
 {
 	public:
-		static constexpr int MAX = 80;
+		static constexpr int NUMBER_OF_THEMES = 15;
+		static constexpr int NUMBER_OF_CYCLES = 4;
+		static constexpr int NUMBER_OF_LEVELS = NUMBER_OF_THEMES * NUMBER_OF_CYCLES;
+		static constexpr char THEMES[ Level::NUMBER_OF_THEMES ][ 9 ] =
+		{
+			"city",
+			"woods",
+			"mines",
+			"desert",
+			"mountain",
+			"sky",
+			"space",
+			"ice",
+			"pirate",
+			"swamp",
+			"sewer",
+			"factory",
+			"domestic",
+			"dungeon",
+			"special"
+		};
 
 		~Level();
 		Level( Level&& m );
@@ -49,6 +70,7 @@ class Level
 		static void buildLevelList();
 		static std::string getCodeNameByID( int id );
 		static int getIDFromCodeName( std::string code_name );
+		static const std::u32string* getLevelNames();
 
 	private:
 		std::vector<Map> maps_;

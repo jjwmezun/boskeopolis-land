@@ -153,4 +153,11 @@ namespace mezun
 	{
 		return std::regex_replace( in, std::regex( from ), to );
 	};
+
+	std::u32string removeEndingZeroFrom32String( const std::u32string& string )
+	{
+		return ( ( int )( string[ string.length() - 1 ] ) == 0 )
+			? string.substr( 0, string.length() - 1 )
+			: string;
+	};
 }

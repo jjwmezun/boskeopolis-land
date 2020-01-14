@@ -1,5 +1,7 @@
 #include "audio.hpp"
 #include "level_message_state.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "map_layer_constellation_moving.hpp"
 #include "map_layer_constellation_scrolling.hpp"
 #include "map_layer_doom.hpp"
@@ -46,29 +48,14 @@ static std::vector<int> gem_challenge_list_;
 static std::vector<int> time_challenge_list_;
 static unsigned int real_level_num_ = 0;
 
-static constexpr int NUMBER_OF_THEMES = 15;
-static constexpr int NUMBER_OF_CYCLES = 4;
-static const std::string THEMES[ NUMBER_OF_THEMES ] =
-{
-	"city",
-	"woods",
-	"mines",
-	"desert",
-	"mountain",
-	"sky",
-	"space",
-	"ice",
-	"pirate",
-	"swamp",
-	"sewer",
-	"factory",
-	"domestic",
-	"dungeon",
-	"special"
-};
-static std::string code_names_[ NUMBER_OF_CYCLES * NUMBER_OF_THEMES ] =
+static std::string code_names_[ Level::NUMBER_OF_LEVELS ] =
 {
 	""
+};
+
+static std::u32string level_names_[ Level::NUMBER_OF_LEVELS ] =
+{
+	U"MISSING LEVEL"
 };
 
 Level::Level ( Level&& m )
@@ -866,8 +853,10 @@ void Level::buildLevelList()
 	{
 		for ( int theme_id = 0; theme_id < NUMBER_OF_THEMES; ++theme_id )
 		{
-			const std::string& theme = THEMES[ theme_id ];
+			const std::string theme = Level::THEMES[ theme_id ];
 			code_names_[ i ] = theme + "-" + std::to_string( cycle );
+			level_names_[ i ] = Localization::getCurrentLanguage().getLevelName( code_names_[ i ] );
+
 			const std::string file_path = path + code_names_[ i ]  + ".json";
 
 			std::ifstream ifs( file_path );
@@ -954,7 +943,7 @@ std::string Level::getCodeNameByID( int id )
 
 int Level::getIDFromCodeName( std::string code_name )
 {
-	for ( int i = 0; i < NUMBER_OF_CYCLES * NUMBER_OF_THEMES; ++i )
+	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
 	{
 		if ( code_name == code_names_[ i ] )
 		{
@@ -962,4 +951,9 @@ int Level::getIDFromCodeName( std::string code_name )
 		}
 	}
 	assert( false );
+};
+
+const std::u32string* Level::getLevelNames()
+{
+	return level_names_;
 };

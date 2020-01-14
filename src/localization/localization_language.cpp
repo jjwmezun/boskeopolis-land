@@ -1,5 +1,6 @@
 #include <fstream>
 #include "invalid_localization_language_exception.hpp"
+#include "level.hpp"
 #include "localization_language.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_time.hpp"
@@ -35,6 +36,8 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadTitleText( data, path );
     loadOptionsText( data, path );
     loadScreenOptions( data, path );
+    loadLevelSelectText( data, path );
+    loadLevelText( data, path );
 };
 
 int LocalizationLanguage::getOrder() const
@@ -412,4 +415,91 @@ void LocalizationLanguage::loadOptionsText( const auto& data, const std::string&
 const std::string& LocalizationLanguage::getPathName() const
 {
     return path_name_;
+};
+
+void LocalizationLanguage::loadLevelSelectText( const auto& data, const std::string& path )
+{
+    if ( !data.HasMember( "level_select" ) || !data[ "level_select" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    const auto level_select = data[ "level_select" ].GetObject();
+    if
+    (
+        !level_select.HasMember( "title" ) ||
+        !level_select[ "title" ].IsString() ||
+        !level_select.HasMember( "cycle_name" ) ||
+        !level_select[ "cycle_name" ].IsString() ||
+        !level_select.HasMember( "percent_symbol" ) ||
+        !level_select[ "percent_symbol" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    level_select_title_ = mezun::charToChar32String( level_select[ "title" ].GetString() );
+    level_select_cycle_name_ = mezun::charToChar32String( level_select[ "cycle_name" ].GetString() );
+    level_select_percent_symbol_ = mezun::charToChar32String( level_select[ "percent_symbol" ].GetString() );
+};
+
+void LocalizationLanguage::loadLevelText( const auto& data, const std::string& path )
+{
+    if ( !data.HasMember( "levels" ) || !data[ "levels" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    const auto levels = data[ "levels" ].GetObject();
+    if
+    (
+        !levels.HasMember( "names" ) ||
+        !levels[ "names" ].IsObject() ||
+        !levels.HasMember( "messages" ) ||
+        !levels[ "messages" ].IsObject() ||
+        !levels.HasMember( "goals" ) ||
+        !levels[ "goals" ].IsObject()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    const auto level_names = levels[ "names" ].GetObject();
+    for ( int cycle = 1; cycle < Level::NUMBER_OF_CYCLES; ++cycle )
+    {
+        for ( int theme_id = 0; theme_id < Level::NUMBER_OF_THEMES; ++theme_id )
+        {
+            const std::string code_name = std::string( Level::THEMES[ theme_id ] ) + "-" + std::to_string( cycle );
+            if ( level_names.HasMember( code_name.c_str() ) && level_names[ code_name.c_str() ].IsString() )
+            {
+                level_names_.insert
+                ({
+                    std::string( code_name.c_str() ),
+                    mezun::charToChar32String( level_names[ code_name.c_str() ].GetString() )
+                });
+            }
+        }
+    }
+};
+
+const std::u32string& LocalizationLanguage::getLevelSelectTitle() const
+{
+    return level_select_title_;
+};
+
+const std::u32string& LocalizationLanguage::getLevelSelectCycleName() const
+{
+    return level_select_cycle_name_;
+};
+
+const std::u32string& LocalizationLanguage::getLevelSelectPercentSymbol() const
+{
+    return level_select_percent_symbol_;
+};
+
+std::u32string LocalizationLanguage::getLevelName( const std::string& code_name ) const
+{
+    const auto& search = level_names_.find( code_name );
+    return ( search == level_names_.end() )
+        ? U"MISSING LEVEL"
+        : search->second;
 };

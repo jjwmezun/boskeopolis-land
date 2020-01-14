@@ -86,6 +86,7 @@ void OWInventory::update( int lv_select )
 void OWInventory::render( int lv_select )
 {
 	Render::renderRect( area_ );
+	Render::renderObject( "bg/overworld-level-name-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, 40 }, area_ );
 	renderLevelInfo( lv_select );
 	renderPts();
 };

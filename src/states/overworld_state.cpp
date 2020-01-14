@@ -245,7 +245,7 @@ void OverworldState::mapData()
 					{
 						const int l = list[ j ].GetInt();
 
-						if ( l >= 32 && l < 32 + Level::MAX )
+						if ( l >= 32 && l < 32 + Level::NUMBER_OF_LEVELS )
 						{
 							level_tiles_.emplace_back( list[ j ].GetInt() - 34, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ), lv_gfx_ );
 						}
@@ -254,7 +254,7 @@ void OverworldState::mapData()
 					{
 						const int p = list[ j ].GetInt();
 
-						if ( p >= 32 && p < 32 + Level::MAX )
+						if ( p >= 32 && p < 32 + Level::NUMBER_OF_LEVELS )
 						{
 							pal_change_tiles_.emplace_back( list[ j ].GetInt() - 34, Unit::BlocksToPixels( mezun::xOfN( j, map_width_ ) ), Unit::BlocksToPixels( mezun::yOfN( j, map_width_ ) ) );
 						}
@@ -377,7 +377,7 @@ Collision OverworldState::testCollision( const sdl2::SDLRect& lhs, const sdl2::S
 
 void OverworldState::mapEvents()
 {
-	for ( int i = 0; i < Level::MAX; ++i )
+	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 	{
 		if ( Inventory::victory( i ) )
 		{
