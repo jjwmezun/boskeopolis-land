@@ -8,7 +8,12 @@
 #include "localization_language.hpp"
 #include "mezun_helpers.hpp"
 #include "render.hpp"
-#include "wtext_obj.hpp"
+
+static constexpr int NUMBER_OF_FLASH_FRAMES = 12;
+static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
+{
+	0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0
+};
 
 LevelSelectState::LevelSelectState( int current_level )
 :
@@ -18,7 +23,9 @@ LevelSelectState::LevelSelectState( int current_level )
 	back_position_timer_ ( 0 ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
-	page_ ( 0 )
+	page_ ( 0 ),
+	flash_timer_ ( 0 ),
+	flash_frame_ ( 0 )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -71,6 +78,20 @@ void LevelSelectState::stateUpdate()
 	{
 		--selection_timer_;
 	}
+
+	if ( flash_timer_ > 7 )
+	{
+		flash_timer_ = 0;
+		++flash_frame_;
+		if ( flash_frame_ == NUMBER_OF_FLASH_FRAMES )
+		{
+			flash_frame_ = 0;
+		}
+	}
+	else
+	{
+		++flash_timer_;
+	}
 };
 
 void LevelSelectState::stateRender()
@@ -110,16 +131,40 @@ void LevelSelectState::stateRender()
 	{
 		const int y = ( i + 1 ) * 24;
 		const std::u32string& level_name = U" " + mezun::intToChar32String( 1 ) + U": " + level_names[ i ];
-		WTextObj level_name_text{ level_name, 24, y, WTextObj::Color::DARK_GRAY, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 4, 4 };
-		Render::renderObject( "tilesets/ow.png", { i * 8, 32, 8, 8 }, { 28, y + 4, 8, 8 } );
+		const WTextObj::Color name_color = flashOnCondition( Inventory::levelComplete( i ) );
+		WTextObj level_name_text{ level_name, 24, y, name_color, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 4, 4 };
+		const int theme_icon_color = ( Inventory::levelComplete( i ) ) ? FLASH_FRAMES[ flash_frame_ ] * 8 : 8;
+		Render::renderObject( "bg/level-select-characters.png", { theme_icon_color, 48 + ( i * 8 ), 8, 8 }, { 28, y + 4, 8, 8 } );
 		level_name_text.render();
-		if ( Inventory::victory( i ) )
+		if ( Inventory::levelComplete( i ) )
 		{
-			Render::renderObject( "tilesets/universal.png", { 48, 8, 8, 8 }, { 8, y + 4, 8, 8 } );
+			Render::renderObject( "bg/level-select-characters.png", { FLASH_FRAMES[ flash_frame_ ] * 8, 40, 8, 8 }, { 8, y + 4, 8, 8 } );
+			Render::renderObject( "bg/level-select-characters.png", { FLASH_FRAMES[ flash_frame_ ] * 8, 32, 8, 8 }, { 8, y + 12, 8, 8 } );
 		}
-		if ( Inventory::haveDiamond( i ) )
+		else
 		{
-			Render::renderObject( "tilesets/universal.png", { 48, 0, 8, 8 }, { 8, y + 12, 8, 8 } );
+			if ( Inventory::victory( i ) )
+			{
+				Render::renderObject( "tilesets/universal.png", { 48, 8, 8, 8 }, { 8, y + 4, 8, 8 } );
+			}
+			if ( Inventory::haveDiamond( i ) )
+			{
+				Render::renderObject( "tilesets/universal.png", { 48, 0, 8, 8 }, { 8, y + 12, 8, 8 } );
+			}
+		}
+		const WTextObj::Color gem_color = flashOnCondition( Inventory::gemChallengeBeaten( i ) );
+		WTextObj gem_score{ mezun::charToChar32String( Inventory::gemScore( i ).c_str() ), 352, y, gem_color, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 0, 4 };
+		gem_score.render();
+		const WTextObj::Color time_color = flashOnCondition( Inventory::timeChallengeBeaten( i ) );
+		WTextObj time_score{ mezun::charToChar32String( Inventory::timeScore( i ).c_str() ), 360, y + 8, time_color, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 0, 4 };
+		time_score.render();
+		if ( Inventory::gemChallengeBeaten( i ) )
+		{
+			Render::renderObject( "bg/level-select-characters.png", { FLASH_FRAMES[ flash_frame_ ] * 8, 0, 8, 8 }, { 344, y + 4, 8, 8 } );
+		}
+		if ( Inventory::timeChallengeBeaten( i ) )
+		{
+			Render::renderObject( "bg/level-select-characters.png", { FLASH_FRAMES[ flash_frame_ ] * 8, 8, 8, 8 }, { 352, y + 12, 8, 8 } );
 		}
 	}
 };
@@ -127,3 +172,10 @@ void LevelSelectState::stateRender()
 void LevelSelectState::init()
 {
 };
+
+WTextObj::Color LevelSelectState::flashOnCondition( bool condition ) const
+{
+	return ( condition )
+		? ( WTextObj::Color )( FLASH_FRAMES[ flash_frame_ ] )
+		: WTextObj::Color::DARK_GRAY;
+}
