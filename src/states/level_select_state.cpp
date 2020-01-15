@@ -9,6 +9,8 @@
 #include "mezun_helpers.hpp"
 #include "render.hpp"
 
+static constexpr int PAGES_PER_CYCLE = 2;
+static constexpr int NUMBER_OF_PAGES = PAGES_PER_CYCLE * Level::NUMBER_OF_CYCLES;
 static constexpr int NUMBER_OF_FLASH_FRAMES = 12;
 static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
 {
@@ -20,6 +22,8 @@ LevelSelectState::LevelSelectState( int current_level )
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Pale Green", 1 } ),
 	screen_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
 	back_position_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
+	current_page_ ( nullptr ),
+	previous_page_ ( nullptr ),
 	back_position_timer_ ( 0 ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
@@ -53,30 +57,34 @@ void LevelSelectState::stateUpdate()
 	{
 		Main::popState();
 	}
-	else if ( selection_timer_ == 0 )
-	{
-		if ( Input::held( Input::Action::MOVE_DOWN ) )
-		{
-			++selection_;
-			if ( selection_ > 7 )
-			{
-				selection_ = 0;
-			}
-			selection_timer_ = 8;
-		}
-		else if ( Input::held( Input::Action::MOVE_UP ) )
-		{
-			--selection_;
-			if ( selection_ < 0 )
-			{
-				selection_ = 7;
-			}
-			selection_timer_ = 8;
-		}
-	}
 	else
 	{
-		--selection_timer_;
+		if ( selection_timer_ == 0 )
+		{
+			// TODO: PAGE CHANGES
+			if ( Input::held( Input::Action::MOVE_DOWN ) )
+			{
+				++selection_;
+				if ( selection_ > 7 )
+				{
+					selection_ = 0;
+				}
+				selection_timer_ = 8;
+			}
+			else if ( Input::held( Input::Action::MOVE_UP ) )
+			{
+				--selection_;
+				if ( selection_ < 0 )
+				{
+					selection_ = 7;
+				}
+				selection_timer_ = 8;
+			}
+		}
+		else
+		{
+			--selection_timer_;
+		}
 	}
 
 	if ( flash_timer_ > 7 )

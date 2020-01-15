@@ -17,11 +17,13 @@ class LevelSelectState : public GameState
 
 		sdl2::SDLRect screen_;
 		sdl2::SDLRect back_position_;
+		TextureBox current_page_;
+		TextureBox previous_page_;
 		int back_position_timer_;
 		int selection_timer_;
 		int selection_;
 		int page_;
 		int flash_timer_;
 		int flash_frame_;
-		char scratch_[ 1832 ];
+		char scratch_[ 1600 ];
 };
