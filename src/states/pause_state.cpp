@@ -2,8 +2,9 @@
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
-#include "pause_state.hpp"
 #include "level_select_state.hpp"
+#include "pause_state.hpp"
+#include "render.hpp"
 
 static constexpr int PAUSE_BOX_WIDTH = 24;
 static constexpr int PAUSE_BOX_HEIGHT = 7;

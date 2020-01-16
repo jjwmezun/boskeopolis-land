@@ -1,5 +1,6 @@
 #pragma once
 
+#include "direction.hpp"
 #include "game_state.hpp"
 #include "wtext_obj.hpp"
 
@@ -13,7 +14,7 @@ class LevelSelectState : public GameState
 		void init() override;
 
 	private:
-		WTextObj::Color flashOnCondition( bool condition ) const;
+		WTextCharacter::Color flashOnCondition( bool condition ) const;
 
 		WTextObj title_;
 		sdl2::SDLRect screen_;
@@ -23,10 +24,12 @@ class LevelSelectState : public GameState
 		int back_position_timer_;
 		int selection_timer_;
 		int selection_;
+		int page_timer_;
 		int page_;
 		int flash_timer_;
 		int flash_frame_;
 		int title_character_;
 		int title_highlight_timer_;
+		Direction::Horizontal page_change_direction_;
 		char scratch_[ 1500 ];
 };

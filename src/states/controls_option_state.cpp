@@ -1,5 +1,5 @@
 #include "audio.hpp"
-#include "char_frame.hpp"
+#include "wtext_character.hpp"
 #include "controls_option_state.hpp"
 #include "controls_option_prompt_state.hpp"
 #include "localization.hpp"
@@ -8,6 +8,7 @@
 #include "options_state.hpp"
 #include "render.hpp"
 #include "screen_option_state.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int OPTION_NAME_X = 16;
 static constexpr int OPTION_NAME_START_Y = 48;
@@ -27,7 +28,7 @@ static int calculateMaxActionNameLength( const std::u32string* action_names )
 
 static int calculateKeyNameX( const std::u32string* action_names )
 {
-	return OPTION_NAME_X + ( calculateMaxActionNameLength( action_names ) * CharFrame::SIZE_PIXELS ) + ( CharFrame::SIZE_PIXELS * 2 );
+	return OPTION_NAME_X + ( calculateMaxActionNameLength( action_names ) * WTextCharacter::SIZE_PIXELS ) + ( WTextCharacter::SIZE_PIXELS * 2 );
 };
 
 ControlsOptionState::ControlsOptionState()
@@ -72,10 +73,10 @@ void ControlsOptionState::init()
 		Localization::getCurrentLanguage().getControlsOptionsTitle(),
 		0,
 		16,
-		WTextObj::Color::WHITE,
+		WTextCharacter::Color::WHITE,
 		Unit::WINDOW_WIDTH_PIXELS,
 		WTextObj::Align::CENTER,
-		WTextObj::Color::BLACK,
+		WTextCharacter::Color::BLACK,
 		16
 	);
 
@@ -106,10 +107,10 @@ void ControlsOptionState::init()
 			action_names[ i ],
 			OPTION_NAME_X,
 			y,
-			WTextObj::Color::WHITE,
+			WTextCharacter::Color::WHITE,
 			Unit::WINDOW_WIDTH_PIXELS,
 			WTextObj::Align::LEFT,
-			WTextObj::Color::BLACK
+			WTextCharacter::Color::BLACK
 		};
 		action_name_obj.render();
 
@@ -118,10 +119,10 @@ void ControlsOptionState::init()
 			key_names[ i ],
 			KEY_NAME_X,
 			y,
-			WTextObj::Color::WHITE,
+			WTextCharacter::Color::WHITE,
 			Unit::WINDOW_WIDTH_PIXELS,
 			WTextObj::Align::LEFT,
-			WTextObj::Color::BLACK
+			WTextCharacter::Color::BLACK
 		};
 		key_name_obj.render();
 
@@ -130,24 +131,24 @@ void ControlsOptionState::init()
 			button_names[ i ],
 			Unit::WINDOW_WIDTH_PIXELS - 72,
 			y,
-			WTextObj::Color::WHITE,
+			WTextCharacter::Color::WHITE,
 			Unit::WINDOW_WIDTH_PIXELS,
 			WTextObj::Align::LEFT,
-			WTextObj::Color::BLACK
+			WTextCharacter::Color::BLACK
 		};
 		button_name_obj.render();
 
 		// Generate highlight texture.
 		highlights_[ i ].init();
 		highlights_[ i ].startDrawing();
-		action_name_obj.changeColor( WTextObj::Color::LIGHT_GRAY );
+		action_name_obj.changeColor( WTextCharacter::Color::LIGHT_GRAY );
 		action_name_obj.render();
-		key_name_obj.changeColor( WTextObj::Color::LIGHT_GRAY );
+		key_name_obj.changeColor( WTextCharacter::Color::LIGHT_GRAY );
 		key_name_obj.render();
-		button_name_obj.changeColor( WTextObj::Color::LIGHT_GRAY );
+		button_name_obj.changeColor( WTextCharacter::Color::LIGHT_GRAY );
 		button_name_obj.render();
 
-		y += CharFrame::SIZE_PIXELS;
+		y += WTextCharacter::SIZE_PIXELS;
 	}
 	highlights_[ Input::NUM_O_ACTIONS - 1 ].endDrawing();
 };

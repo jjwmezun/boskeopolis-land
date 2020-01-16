@@ -1,6 +1,6 @@
 #pragma once
 
-#include "char_frame.hpp"
+#include "wtext_character.hpp"
 #include <filesystem>
 #include "input.hpp"
 #include <string>
@@ -23,7 +23,7 @@ class LocalizationLanguage
         const std::u32string& getLevelSelectTitle() const;
         const std::u32string& getLevelSelectCycleName() const;
         const std::u32string& getLevelSelectPercentSymbol() const;
-        const std::vector<CharFrame> getCharacterFrames( char32_t character ) const;
+        const std::vector<WTextCharacter> getCharacterFrames( char32_t character ) const;
         const std::vector<std::u32string>& getTitleOptions() const;
         const std::vector<std::u32string>& getOptionsOptions() const;
         int getOrder() const;
@@ -61,12 +61,12 @@ class LocalizationLanguage
         std::u32string level_select_cycle_name_;
         std::u32string level_select_percent_symbol_;
         std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
-        std::unordered_map<char32_t, std::vector<CharFrame>> charset_;
+        std::unordered_map<char32_t, std::vector<WTextCharacter>> charset_;
         std::vector<std::u32string> title_options_;
         std::vector<std::u32string> options_options_;
         int order_;
         std::string charset_image_src_;
         int charset_height_;
-        std::vector<CharFrame> default_character_;
+        std::vector<WTextCharacter> default_character_;
         std::string path_name_;
 };

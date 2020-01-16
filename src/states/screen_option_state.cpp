@@ -7,6 +7,7 @@
 #include "options_state.hpp"
 #include "render.hpp"
 #include "screen_option_state.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int FULL_OR_WINDOW_OPTION_WIDTH = 12;
 static constexpr int FULL_OR_WINDOW_OPTION_WIDTH_PIXELS = Unit::MiniBlocksToPixels( FULL_OR_WINDOW_OPTION_WIDTH );
@@ -63,7 +64,7 @@ void ScreenOptionState::stateRender()
 
 void ScreenOptionState::init()
 {
-	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getScreenOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getScreenOptionsTitle(), 0, 16, WTextCharacter::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK );
 	fullscreen_option_.init();
 	window_option_.init();
 	for ( auto& option : other_options_ )

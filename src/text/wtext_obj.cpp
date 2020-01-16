@@ -4,11 +4,6 @@
 #include <unordered_map>
 #include "wtext_obj.hpp"
 
-static int calculateColorOffset( WTextObj::Color color )
-{
-    return ( color == WTextObj::Color::__NULL ) ? 0 : ( int )( color ) * Localization::getCurrentLanguage().getCharsetHeight() * CharFrame::SIZE_PIXELS;
-};
-
 WTextObj::WTextObj() {};
 
 WTextObj::WTextObj
@@ -16,17 +11,17 @@ WTextObj::WTextObj
     const std::u32string& text,
     int x,
     int y,
-    Color color,
+    WTextCharacter::Color color,
     int width,
     Align align,
-    Color shadow,
+    WTextCharacter::Color shadow,
     int x_padding,
     int y_padding,
     VAlign valign,
     int height
 )
 :
-    shadow_ ( shadow != Color::__NULL )
+    shadow_ ( shadow != WTextCharacter::Color::__NULL )
 {
     // Apply x_padding to width ( pushes in from both sides, so x2 ).
     width -= ( x_padding * 2 );
@@ -40,10 +35,10 @@ WTextObj::WTextObj
     // Create 1st line.
     lines_.push_back({ {}, {}, x, y });
 
-    const int color_offset = calculateColorOffset( color );
-    const int shadow_offset = calculateColorOffset( shadow );
+    const int color_offset = WTextCharacter::calculateColorOffset( color );
+    const int shadow_offset = WTextCharacter::calculateColorOffset( shadow );
 
-    std::vector<CharFrame> frames;
+    std::vector<WTextCharacter> frames;
     for ( const char32_t character : text )
     {
         if ( character == '\0' )
@@ -78,7 +73,7 @@ WTextObj::WTextObj
             else if ( xb > line_end )
             {
                 x = start_x;
-                y += CharFrame::SIZE_PIXELS;
+                y += WTextCharacter::SIZE_PIXELS;
                 lines_.push_back({ {}, {}, x, y });
                 look_ahead = false;
             }
@@ -89,7 +84,7 @@ WTextObj::WTextObj
             }
 
             ++ib;
-            xb += CharFrame::SIZE_PIXELS;
+            xb += WTextCharacter::SIZE_PIXELS;
         }
 
         while ( i < ib )
@@ -98,7 +93,7 @@ WTextObj::WTextObj
             if ( frame.isNewline() || x > line_end )
             {
                 x = start_x;
-                y += CharFrame::SIZE_PIXELS;
+                y += WTextCharacter::SIZE_PIXELS;
                 lines_.push_back({ {}, {}, x, y });
             }
             else
@@ -113,7 +108,7 @@ WTextObj::WTextObj
                 }
             }
             ++i;
-            x += CharFrame::SIZE_PIXELS;
+            x += WTextCharacter::SIZE_PIXELS;
         }
     }
 
@@ -133,39 +128,39 @@ WTextObj::WTextObj
     {
         for ( auto& line : lines_ )
         {
-            line.x_ = start_x + ( ( width - ( line.frames_.size() * CharFrame::SIZE_PIXELS ) ) / 2 );
+            line.x_ = start_x + ( ( width - ( line.frames_.size() * WTextCharacter::SIZE_PIXELS ) ) / 2 );
         }
     }
     else if ( align == Align::RIGHT )
     {
         for ( auto& line : lines_ )
         {
-            line.x_ = line_end - ( line.frames_.size() * CharFrame::SIZE_PIXELS );
+            line.x_ = line_end - ( line.frames_.size() * WTextCharacter::SIZE_PIXELS );
         }
     }
 
     if ( valign == VAlign::CENTER )
     {
-        int center_y = start_y + ( ( height - ( lines_.size() * CharFrame::SIZE_PIXELS )) / 2 );
+        int center_y = start_y + ( ( height - ( lines_.size() * WTextCharacter::SIZE_PIXELS )) / 2 );
         for ( auto& line : lines_ )
         {
             line.y_ = center_y;
-            center_y += CharFrame::SIZE_PIXELS;
+            center_y += WTextCharacter::SIZE_PIXELS;
         }
     }
     else if ( valign == VAlign::BOTTOM )
     {
         int bottom = start_y + height;
-        int bottom_y = bottom - ( lines_.size() * CharFrame::SIZE_PIXELS );
+        int bottom_y = bottom - ( lines_.size() * WTextCharacter::SIZE_PIXELS );
         for ( auto& line : lines_ )
         {
             line.y_ = bottom_y;
-            bottom_y += CharFrame::SIZE_PIXELS;
+            bottom_y += WTextCharacter::SIZE_PIXELS;
         }
     }
 };
 
-WTextObj::MessageData::MessageData( const std::u32string& _text, Color _color, Color _shadow )
+WTextObj::MessageData::MessageData( const std::u32string& _text, WTextCharacter::Color _color, WTextCharacter::Color _shadow )
 :
     text ( _text ),
     color ( _color ),
@@ -190,9 +185,9 @@ void WTextObj::render() const
     }
 };
 
-void WTextObj::changeColor( Color color )
+void WTextObj::changeColor( WTextCharacter::Color color )
 {
-    int offset = calculateColorOffset( color );
+    const int offset = WTextCharacter::calculateColorOffset( color );
     for ( auto& line : lines_ )
     {
         line.changeColorOffset( offset );
@@ -214,10 +209,10 @@ void WTextObj::generateTexture
     const std::u32string& text,
     int x,
     int y,
-    Color color,
+    WTextCharacter::Color color,
     int width,
     Align align,
-    Color shadow,
+    WTextCharacter::Color shadow,
     int x_padding,
     int y_padding,
     VAlign valign,

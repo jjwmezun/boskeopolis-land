@@ -75,9 +75,9 @@ const std::u32string& LocalizationLanguage::getInputQuitting() const
     return input_quitting_;
 };
 
-const std::vector<CharFrame> LocalizationLanguage::getCharacterFrames( char32_t character ) const
+const std::vector<WTextCharacter> LocalizationLanguage::getCharacterFrames( char32_t character ) const
 {
-    std::unordered_map<char32_t,std::vector<CharFrame>>::const_iterator found = charset_.find( character );
+    std::unordered_map<char32_t,std::vector<WTextCharacter>>::const_iterator found = charset_.find( character );
     if ( found == charset_.end() )
     {
         return default_character_;
@@ -168,14 +168,14 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
     {
         throw InvalidLocalizationLanguageException( path );
     }
-    default_character_.push_back( CharFrame( default_character_obj[ "x" ].GetInt(), default_character_obj[ "y" ].GetInt(), CharFrame::Type::WHITESPACE ) );
+    default_character_.push_back( WTextCharacter( default_character_obj[ "x" ].GetInt(), default_character_obj[ "y" ].GetInt(), WTextCharacter::Type::WHITESPACE ) );
 
     for ( const auto& item : charset[ "characters" ].GetArray() )
     {
         if ( item.IsObject() && item.HasMember( "key" ) && item[ "key" ].IsString() && item.HasMember( "values" ) )
         {
             char32_t key = mezun::copyCharToChar32( item[ "key" ].GetString() );
-            std::vector<CharFrame> values;
+            std::vector<WTextCharacter> values;
             if
             (
                 item[ "values" ].IsObject() &&
@@ -185,17 +185,17 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
                 item[ "values" ][ "y" ].IsInt()
             )
             {
-                CharFrame::Type type = CharFrame::Type::NORMAL;
+                WTextCharacter::Type type = WTextCharacter::Type::NORMAL;
                 if ( item[ "values" ].HasMember( "whitespace" ) && item[ "values" ][ "whitespace" ].IsBool() && item[ "values" ][ "whitespace" ].GetBool() )
                 {
-                    type = CharFrame::Type::WHITESPACE;
+                    type = WTextCharacter::Type::WHITESPACE;
                 }
                 else if ( item[ "values" ].HasMember( "newline" ) && item[ "values" ][ "newline" ].IsBool() && item[ "values" ][ "newline" ].GetBool() )
                 {
-                    type = CharFrame::Type::NEWLINE;
+                    type = WTextCharacter::Type::NEWLINE;
                 }
                 values.push_back({ item[ "values" ][ "x" ].GetInt(), item[ "values" ][ "y" ].GetInt(), type });
-                charset_.insert( std::pair<char32_t, std::vector<CharFrame>> ( key, values ) );
+                charset_.insert( std::pair<char32_t, std::vector<WTextCharacter>> ( key, values ) );
             }
             else if ( item[ "values" ].IsArray() )
             {
@@ -211,19 +211,19 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
                         subitem[ "y" ].IsInt()
                     )
                     {
-                        CharFrame::Type type = CharFrame::Type::NORMAL;
+                        WTextCharacter::Type type = WTextCharacter::Type::NORMAL;
                         if ( subitem.HasMember( "whitespace" ) && subitem[ "whitespace" ].IsBool() && subitem[ "whitespace" ].GetBool() )
                         {
-                            type = CharFrame::Type::WHITESPACE;
+                            type = WTextCharacter::Type::WHITESPACE;
                         }
                         else if ( subitem.HasMember( "newline" ) && subitem[ "newline" ].IsBool() && subitem[ "newline" ].GetBool() )
                         {
-                            type = CharFrame::Type::NEWLINE;
+                            type = WTextCharacter::Type::NEWLINE;
                         }
                         values.push_back({ subitem[ "x" ].GetInt(), subitem[ "y" ].GetInt(), type });
                     }
                 }
-                charset_.insert( std::pair<char32_t, std::vector<CharFrame>> ( key, values ) );
+                charset_.insert( std::pair<char32_t, std::vector<WTextCharacter>> ( key, values ) );
             }
         }
     }

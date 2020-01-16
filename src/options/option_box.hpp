@@ -3,14 +3,15 @@
 #include "mezun_sdl2.hpp"
 #include <string>
 #include "texture_box.hpp"
-#include "wtext_obj.hpp"
+#include "wtext_character.hpp"
+#include <vector>
 
 class OptionBox
 {
 	public:
 		static constexpr int VERTICAL_PADDING_MINIBLOCKS = 1;
-		static constexpr int VERTICAL_PADDING_PIXELS = VERTICAL_PADDING_MINIBLOCKS * CharFrame::SIZE_PIXELS;
-		static constexpr int BOX_HEIGHT = VERTICAL_PADDING_PIXELS * 2 + CharFrame::SIZE_PIXELS;
+		static constexpr int VERTICAL_PADDING_PIXELS = VERTICAL_PADDING_MINIBLOCKS * WTextCharacter::SIZE_PIXELS;
+		static constexpr int BOX_HEIGHT = VERTICAL_PADDING_PIXELS * 2 + WTextCharacter::SIZE_PIXELS;
 
 		OptionBox( const std::u32string& words, int y, int width, int x = -1 );
 		~OptionBox();
@@ -40,7 +41,7 @@ class OptionBox
 			NULLIFIED
 		};
 
-		TextureBox text_[ WTextObj::NUMBER_OF_COLORS ];
+		TextureBox text_[ WTextCharacter::NUMBER_OF_COLORS ];
 		std::u32string words_;
 		sdl2::SDLRect box_;
 		sdl2::SDLRect shadow_box_;

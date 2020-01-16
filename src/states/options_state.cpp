@@ -9,6 +9,7 @@
 #include "render.hpp"
 #include "screen_option_state.hpp"
 #include "title_state.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int NUMBER_OF_OPTIONS = 3;
 
@@ -43,7 +44,7 @@ void OptionsState::stateRender()
 
 void OptionsState::init()
 {
-	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextCharacter::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK );
 	options_.init();
 };
 

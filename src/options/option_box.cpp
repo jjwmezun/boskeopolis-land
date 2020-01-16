@@ -1,6 +1,7 @@
 #include "option_box.hpp"
 #include "render.hpp"
 #include "unit.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int SHADOW_LENGTH = 2;
 static constexpr int SHADOW_COLOR = 6;
@@ -25,7 +26,7 @@ OptionBox::OptionBox( const std::u32string& words, int y, int width, int x )
 
 OptionBox::~OptionBox()
 {
-	for ( int i = 0; i < WTextObj::NUMBER_OF_COLORS; ++i )
+	for ( int i = 0; i < WTextCharacter::NUMBER_OF_COLORS; ++i )
 	{
 		text_[ i ].destroy();
 	}
@@ -46,22 +47,22 @@ OptionBox::OptionBox( OptionBox&& o )
 
 void OptionBox::init()
 {
-	for ( int i = 0; i < WTextObj::NUMBER_OF_COLORS - 1; ++i )
+	for ( int i = 0; i < WTextCharacter::NUMBER_OF_COLORS - 1; ++i )
 	{
 		WTextObj::generateTexture
 		(
 			text_[ i ],
-			words_, x_, y_, ( WTextObj::Color )( i ),
-			width_, WTextObj::Align::CENTER, WTextObj::Color::__NULL,
+			words_, x_, y_, ( WTextCharacter::Color )( i ),
+			width_, WTextObj::Align::CENTER, WTextCharacter::Color::__NULL,
 			Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
 			WTextObj::VAlign::CENTER, BOX_HEIGHT
 		);
 	}
 	WTextObj::generateTexture
 	(
-		text_[ WTextObj::NUMBER_OF_COLORS - 1 ],
-		words_, x_ + 2, y_ + 2, ( WTextObj::Color )( 2 ),
-		width_, WTextObj::Align::CENTER, WTextObj::Color::__NULL,
+		text_[ WTextCharacter::NUMBER_OF_COLORS - 1 ],
+		words_, x_ + 2, y_ + 2, ( WTextCharacter::Color )( 2 ),
+		width_, WTextObj::Align::CENTER, WTextCharacter::Color::__NULL,
 		Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
 		WTextObj::VAlign::CENTER, BOX_HEIGHT
 	);
@@ -206,5 +207,5 @@ int OptionBox::calculateMaxBoxWidthWithPadding( const std::vector<std::u32string
 	{
 		max_width = Unit::MINIBLOCKS_PER_SCREEN - 4;
 	}
-	return ( max_width + 2 ) * CharFrame::SIZE_PIXELS;
+	return ( max_width + 2 ) * WTextCharacter::SIZE_PIXELS;
 }

@@ -63,14 +63,14 @@ namespace Inventory
 	static Counter total_funds_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
 	static Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
 	static Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
-	static Counter current_level_ = Counter( 0, Level::MAX, 0 );
+	static Counter current_level_ = Counter( 0, Level::NUMBER_OF_LEVELS, 0 );
 	static Counter heart_upgrades_ = Counter( 0, MAX_HEART_UPGRADES );
 
-	static bool been_to_level_[ Level::MAX ];
-	static bool victories_[ Level::MAX ];
-	static bool diamonds_[ Level::MAX ];
-	static int gem_scores_[ Level::MAX ];
-	static int time_scores_[ Level::MAX ];
+	static bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
+	static bool victories_[ Level::NUMBER_OF_LEVELS ];
+	static bool diamonds_[ Level::NUMBER_OF_LEVELS ];
+	static int gem_scores_[ Level::NUMBER_OF_LEVELS ];
+	static int time_scores_[ Level::NUMBER_OF_LEVELS ];
 
 	static Clock clock_ = Clock();
 
@@ -85,7 +85,7 @@ namespace Inventory
 		total_funds_ = 0;
 		clock_.reset();
 
-		for ( int i = 0; i < Level::MAX; ++i )
+		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 		{
 			been_to_level_[ i ] = victories_[ i ] = diamonds_[ i ] = false;
 			gem_scores_[ i ] = DEFAULT_GEM_SCORE;
@@ -315,7 +315,7 @@ namespace Inventory
 	{
 		int n = 0;
 
-		for ( int i = 0; i < Level::MAX; ++i )
+		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 		{
 			if ( gemChallengeBeaten( i ) )
 			{
@@ -330,7 +330,7 @@ namespace Inventory
 	{
 		int n = 0;
 
-		for ( int i = 0; i < Level::MAX; ++i )
+		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 		{
 			if ( timeChallengeBeaten( i ) )
 			{
@@ -427,17 +427,17 @@ namespace Inventory
 			// Then pack them into chars (single bytes) & save these.
 				std::vector<bool> bools;
 
-				for ( int vi = 0; vi < Level::MAX; ++vi )
+				for ( int vi = 0; vi < Level::NUMBER_OF_LEVELS; ++vi )
 				{
 					bools.push_back( victories_[ vi ] );
 				}
 
-				for ( int li = 0; li < Level::MAX; ++li )
+				for ( int li = 0; li < Level::NUMBER_OF_LEVELS; ++li )
 				{
 					bools.push_back( been_to_level_[ li ] );
 				}
 
-				for ( int di = 0; di < Level::MAX; ++di )
+				for ( int di = 0; di < Level::NUMBER_OF_LEVELS; ++di )
 				{
 					bools.push_back( diamonds_[ di ] );
 				}
@@ -466,14 +466,14 @@ namespace Inventory
 				}
 
 			// Save gem scores as 4-byte ints each.
-				for ( int gi = 0; gi < Level::MAX; ++gi )
+				for ( int gi = 0; gi < Level::NUMBER_OF_LEVELS; ++gi )
 				{
 					int32_t gb = gem_scores_[ gi ];
 					binofs.write( (char*)&gb, sizeof( gb ) );
 				}
 
 			// Save time scores as 4-byte ints each.
-				for ( int ti = 0; ti < Level::MAX; ++ti )
+				for ( int ti = 0; ti < Level::NUMBER_OF_LEVELS; ++ti )
 				{
 					int32_t tb = time_scores_[ ti ];
 					binofs.write( (char*)&tb, sizeof( tb ) );
@@ -541,7 +541,7 @@ namespace Inventory
 					// Space for 2x bools for levels (victories & diamonds).
 					// 8 bool (bits) fit in a byte--hence dividing by 8, rounding up to ensure there's always the minimum space needed.
 					// C++ oddly makes int / int output an auto-floored int rather than a double, so a val needs to be forced as a double.
-					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::MAX * 3 ) ) ) / 8 );
+					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUMBER_OF_LEVELS * 3 ) ) ) / 8 );
 					current_block_end += blocks_for_bools;
 
 					assert( binsize >= current_block_end );
@@ -556,17 +556,17 @@ namespace Inventory
 							int b = ( i * 8 ) + bit;
 							bool val = ( c & ( 1 << bit ) ) != 0;
 
-							if ( b < Level::MAX )
+							if ( b < Level::NUMBER_OF_LEVELS )
 							{
 								victories_[ b ] = val;
 							}
-							else if ( b < Level::MAX * 2 )
+							else if ( b < Level::NUMBER_OF_LEVELS * 2 )
 							{
-								been_to_level_[ b - Level::MAX ] = val;
+								been_to_level_[ b - Level::NUMBER_OF_LEVELS ] = val;
 							}
-							else if ( b < Level::MAX * 3 )
+							else if ( b < Level::NUMBER_OF_LEVELS * 3 )
 							{
-								diamonds_[ b - ( Level::MAX * 2 ) ] = val;
+								diamonds_[ b - ( Level::NUMBER_OF_LEVELS * 2 ) ] = val;
 							}
 							else
 							{
@@ -578,12 +578,12 @@ namespace Inventory
 
 				// GEM SCORE CLUMP
 					current_block_start = current_block_end;
-					const int NUM_O_GEM_SCORE_BLOCKS = sizeof( int32_t ) * Level::MAX;
+					const int NUM_O_GEM_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUMBER_OF_LEVELS;
 					current_block_end += NUM_O_GEM_SCORE_BLOCKS;
 
 					assert( binsize >= current_block_end );
 
-					for ( int gi = 0; gi < Level::MAX; ++gi )
+					for ( int gi = 0; gi < Level::NUMBER_OF_LEVELS; ++gi )
 					{
 						int32_t gblock;
 						std::memcpy( &gblock, &bindata[ current_block_start + ( gi * sizeof( int32_t ) ) ], sizeof( int32_t ) );
@@ -593,12 +593,12 @@ namespace Inventory
 
 				// TIME SCORE CLUMP
 					current_block_start = current_block_end;
-					const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::MAX;
+					const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUMBER_OF_LEVELS;
 					current_block_end += NUM_O_TIME_SCORE_BLOCKS;
 
 					assert( binsize >= current_block_end );
 
-					for ( int ti = 0; ti < Level::MAX; ++ti )
+					for ( int ti = 0; ti < Level::NUMBER_OF_LEVELS; ++ti )
 					{
 						int32_t tblock;
 						std::memcpy( &tblock, &bindata[ current_block_start + ( ti * sizeof( int32_t ) ) ], sizeof( int32_t ) );
@@ -613,7 +613,7 @@ namespace Inventory
 
 					int32_t recent_level;
 					std::memcpy( &recent_level, &bindata[ current_block_start ], sizeof( int32_t ) );
-					assert( recent_level >= 0 && recent_level < Level::MAX );
+					assert( recent_level >= 0 && recent_level < Level::NUMBER_OF_LEVELS );
 					current_level_ = recent_level;
 
 

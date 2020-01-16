@@ -1,8 +1,20 @@
 #pragma once
 
-class CharFrame
+class WTextCharacter
 {
     public:
+		enum class Color
+		{
+			BLACK = 0,
+			DARK_GRAY = 1,
+			DARK_MID_GRAY = 2,
+			LIGHT_MID_GRAY = 3,
+			LIGHT_GRAY = 4,
+			WHITE = 5,
+			__NULL = 6
+		};
+		static constexpr int NUMBER_OF_COLORS = ( int )( Color::__NULL );
+
         enum class Type
         {
             NORMAL,
@@ -12,7 +24,7 @@ class CharFrame
 
         static constexpr int SIZE_PIXELS = 8;
 
-        constexpr CharFrame( int x, int y, Type type )
+        constexpr WTextCharacter( int x, int y, Type type )
         :
             x_ ( x * SIZE_PIXELS ),
             y_ ( y * SIZE_PIXELS ),
@@ -27,7 +39,8 @@ class CharFrame
             y_ += color_offset;
         };
 
-        int changeColorOffset( int color_offset );
+        void changeColorOffset( int color_offset );
+        void changeColor( WTextCharacter::Color color );
 
         constexpr bool isWhitespace() const
         {
@@ -38,6 +51,8 @@ class CharFrame
         {
             return type_ == Type::NEWLINE;
         };
+
+        static int calculateColorOffset( Color color );
 
     private:
         int x_;

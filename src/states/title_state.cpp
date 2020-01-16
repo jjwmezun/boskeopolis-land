@@ -224,7 +224,7 @@ void TitleState::init()
 	Inventory::reset();
 
 	newPalette( level_.currentMap().palette_ );
-	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
+	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextCharacter::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();
 	sprites_.resetTrainer( level_, events_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );

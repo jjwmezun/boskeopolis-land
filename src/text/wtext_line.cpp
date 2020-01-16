@@ -20,10 +20,10 @@ void WTextLine::render() const
 void WTextLine::renderWithoutShadow() const
 {
     int x = x_;
-    for ( const CharFrame& frame : frames_ )
+    for ( const WTextCharacter& frame : frames_ )
     {
         renderChar( frame, x, y_ );
-        x += CharFrame::SIZE_PIXELS;
+        x += WTextCharacter::SIZE_PIXELS;
     }
 }
 
@@ -35,11 +35,11 @@ void WTextLine::renderWithShadow() const
     {
         renderChar( shadow_frames_[ i ], x + 1, y_ + 1 );
         renderChar( frames_[ i ], x, y_ );
-        x += CharFrame::SIZE_PIXELS;
+        x += WTextCharacter::SIZE_PIXELS;
     }
 }
 
-void WTextLine::renderChar( const CharFrame character, int x, int y ) const
+void WTextLine::renderChar( const WTextCharacter character, int x, int y ) const
 {
     Render::renderObject
     (
@@ -47,14 +47,14 @@ void WTextLine::renderChar( const CharFrame character, int x, int y ) const
         {
             character.x(),
             character.y(),
-            CharFrame::SIZE_PIXELS,
-            CharFrame::SIZE_PIXELS
+            WTextCharacter::SIZE_PIXELS,
+            WTextCharacter::SIZE_PIXELS
         },
         {
             x,
             y,
-            CharFrame::SIZE_PIXELS,
-            CharFrame::SIZE_PIXELS
+            WTextCharacter::SIZE_PIXELS,
+            WTextCharacter::SIZE_PIXELS
         }
     );
 }

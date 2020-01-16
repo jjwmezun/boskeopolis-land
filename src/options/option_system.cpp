@@ -4,7 +4,7 @@
 #include "option_system.hpp"
 #include "render.hpp"
 
-static constexpr int SPACE_BETWEEN_OPTIONS_PIXELS = CharFrame::SIZE_PIXELS;
+static constexpr int SPACE_BETWEEN_OPTIONS_PIXELS = WTextCharacter::SIZE_PIXELS;
 static constexpr int GRID_WIDTH = Unit::WINDOW_WIDTH_PIXELS - ( SPACE_BETWEEN_OPTIONS_PIXELS * 2 );
 
 static constexpr int calculateNumberOfGridColumns( int box_width )

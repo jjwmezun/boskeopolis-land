@@ -28,11 +28,13 @@ LevelSelectState::LevelSelectState( int current_level )
 	back_position_timer_ ( 0 ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
+	page_timer_ ( 0 ),
 	page_ ( 0 ),
 	flash_timer_ ( 0 ),
 	flash_frame_ ( 0 ),
 	title_character_ ( -1 ),
-	title_highlight_timer_ ( 0 )
+	title_highlight_timer_ ( 0 ),
+	page_change_direction_ ( Direction::Horizontal::__NULL )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -133,16 +135,16 @@ void LevelSelectState::stateUpdate()
 
 			if ( title_character_ == 0 )
 			{
-				title_.lines_[ 0 ].frames_[ 0 ].changeColorOffset( 5 );
+				title_.lines_[ 0 ].frames_[ 0 ].changeColor( WTextCharacter::Color::WHITE );
 			}
 			else if ( title_character_ == -1 )
 			{
-				title_.lines_[ 0 ].frames_[ title_.lines_[ 0 ].frames_.size() - 1 ].changeColorOffset( 4 );
+				title_.lines_[ 0 ].frames_[ title_.lines_[ 0 ].frames_.size() - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
 			}
 			else
 			{
-				title_.lines_[ 0 ].frames_[ title_character_ ].changeColorOffset( 5 );
-				title_.lines_[ 0 ].frames_[ title_character_ - 1 ].changeColorOffset( 4 );
+				title_.lines_[ 0 ].frames_[ title_character_ ].changeColor( WTextCharacter::Color::WHITE );
+				title_.lines_[ 0 ].frames_[ title_character_ - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
 			}
 		}
 	}
@@ -153,15 +155,13 @@ void LevelSelectState::stateRender()
 	Render::renderObject( "bg/level-select-back.png", back_position_, screen_ );
 	Render::renderObject( "bg/level-select.png", screen_, screen_ );
 
-	title_.render();
-
 	std::u32string completion_string = mezun::intToChar32String( 15 ) + U"%";
-	WTextObj completion_text{ completion_string, 0, 8, WTextObj::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextObj::Color::__NULL, 8, 4 };
+	WTextObj completion_text{ completion_string, 0, 8, WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextCharacter::Color::__NULL, 8, 4 };
 	completion_text.render();
 
 	const std::u32string& cycle_name = Localization::getCurrentLanguage().getLevelSelectCycleName();
 	std::u32string cycle_string = mezun::removeEndingZeroFrom32String( cycle_name ) + U" " + mezun::intToChar32String( 1 );
-	WTextObj cycle_text{ cycle_string, 4, 8, WTextObj::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 4, 4 };
+	WTextObj cycle_text{ cycle_string, 4, 8, WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 	cycle_text.render();
 
 	if ( selection_ == 0 )
@@ -183,8 +183,8 @@ void LevelSelectState::stateRender()
 	{
 		const int y = ( i + 1 ) * 24;
 		const std::u32string& level_name = U" " + mezun::intToChar32String( 1 ) + U": " + level_names[ i ];
-		const WTextObj::Color name_color = flashOnCondition( Inventory::levelComplete( i ) );
-		WTextObj level_name_text{ level_name, 24, y, name_color, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 4, 4 };
+		const WTextCharacter::Color name_color = flashOnCondition( Inventory::levelComplete( i ) );
+		WTextObj level_name_text{ level_name, 24, y, name_color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 		const int theme_icon_color = ( Inventory::levelComplete( i ) ) ? FLASH_FRAMES[ flash_frame_ ] * 8 : 8;
 		Render::renderObject( "bg/level-select-characters.png", { theme_icon_color, 48 + ( i * 8 ), 8, 8 }, { 28, y + 4, 8, 8 } );
 		level_name_text.render();
@@ -204,11 +204,11 @@ void LevelSelectState::stateRender()
 				Render::renderObject( "tilesets/universal.png", { 48, 0, 8, 8 }, { 8, y + 12, 8, 8 } );
 			}
 		}
-		const WTextObj::Color gem_color = flashOnCondition( Inventory::gemChallengeBeaten( i ) );
-		WTextObj gem_score{ mezun::charToChar32String( Inventory::gemScore( i ).c_str() ), 352, y, gem_color, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 0, 4 };
+		const WTextCharacter::Color gem_color = flashOnCondition( Inventory::gemChallengeBeaten( i ) );
+		WTextObj gem_score{ mezun::charToChar32String( Inventory::gemScore( i ).c_str() ), 352, y, gem_color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 		gem_score.render();
-		const WTextObj::Color time_color = flashOnCondition( Inventory::timeChallengeBeaten( i ) );
-		WTextObj time_score{ mezun::charToChar32String( Inventory::timeScore( i ).c_str() ), 360, y + 8, time_color, 312, WTextObj::Align::LEFT, WTextObj::Color::__NULL, 0, 4 };
+		const WTextCharacter::Color time_color = flashOnCondition( Inventory::timeChallengeBeaten( i ) );
+		WTextObj time_score{ mezun::charToChar32String( Inventory::timeScore( i ).c_str() ), 360, y + 8, time_color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 		time_score.render();
 		if ( Inventory::gemChallengeBeaten( i ) )
 		{
@@ -219,16 +219,18 @@ void LevelSelectState::stateRender()
 			Render::renderObject( "bg/level-select-characters.png", { FLASH_FRAMES[ flash_frame_ ] * 8, 8, 8, 8 }, { 352, y + 12, 8, 8 } );
 		}
 	}
+
+	title_.render();
 };
 
 void LevelSelectState::init()
 {
-	title_ = { Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextObj::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, 8, 8 };
+	title_ = { Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8, 8 };
 };
 
-WTextObj::Color LevelSelectState::flashOnCondition( bool condition ) const
+WTextCharacter::Color LevelSelectState::flashOnCondition( bool condition ) const
 {
 	return ( condition )
-		? ( WTextObj::Color )( FLASH_FRAMES[ flash_frame_ ] )
-		: WTextObj::Color::DARK_GRAY;
+		? ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] )
+		: WTextCharacter::Color::DARK_GRAY;
 }

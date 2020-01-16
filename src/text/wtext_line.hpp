@@ -1,6 +1,6 @@
 #pragma once
 
-#include "char_frame.hpp"
+#include "wtext_character.hpp"
 #include <vector>
 
 class WTextLine
@@ -9,11 +9,11 @@ class WTextLine
         void render() const;
         void renderWithoutShadow() const;
         void renderWithShadow() const;
-        void renderChar( const CharFrame character, int x, int y ) const;
+        void renderChar( const WTextCharacter character, int x, int y ) const;
         void changeColorOffset( int offset );
 
-        std::vector<CharFrame> frames_;
-        std::vector<CharFrame> shadow_frames_;
+        std::vector<WTextCharacter> frames_;
+        std::vector<WTextCharacter> shadow_frames_;
         int x_;
         int y_;
 };

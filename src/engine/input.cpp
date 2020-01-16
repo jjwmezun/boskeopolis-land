@@ -656,10 +656,10 @@ namespace Input
 				Localization::getCurrentLanguage().getInputQuitting(),
 				8,
 				Unit::WINDOW_HEIGHT_PIXELS - 16,
-				WTextObj::Color::WHITE,
+				WTextCharacter::Color::WHITE,
 				WTextObj::DEFAULT_WIDTH,
 				WTextObj::Align::LEFT,
-				WTextObj::Color::BLACK
+				WTextCharacter::Color::BLACK
 			);
 		}
 };

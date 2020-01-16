@@ -10,6 +10,7 @@
 #include "rapidjson/document.h"
 #include "render.hpp"
 #include "screen_option_state.hpp"
+#include "wtext_obj.hpp"
 
 LanguageOptionState::LanguageOptionState()
 :
@@ -66,7 +67,7 @@ void LanguageOptionState::updateInput()
 
 void LanguageOptionState::initTitle()
 {
-	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextObj::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextObj::Color::BLACK );
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getLanguageOptionsTitle(), 0, 16, WTextCharacter::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK );
 };
 
 void LanguageOptionState::resetTitle()
