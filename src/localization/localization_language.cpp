@@ -464,7 +464,7 @@ void LocalizationLanguage::loadLevelText( const auto& data, const std::string& p
     }
 
     const auto level_names = levels[ "names" ].GetObject();
-    for ( int cycle = 1; cycle < Level::NUMBER_OF_CYCLES; ++cycle )
+    for ( int cycle = 1; cycle <= Level::NUMBER_OF_CYCLES; ++cycle )
     {
         for ( int theme_id = 0; theme_id < Level::NUMBER_OF_THEMES; ++theme_id )
         {
