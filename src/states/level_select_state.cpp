@@ -20,16 +20,19 @@ static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
 LevelSelectState::LevelSelectState( int current_level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Pale Green", 1 } ),
+	title_ (),
 	screen_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
 	back_position_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
-	current_page_ ( nullptr ),
-	previous_page_ ( nullptr ),
+	current_page_ (),
+	previous_page_ (),
 	back_position_timer_ ( 0 ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
 	page_ ( 0 ),
 	flash_timer_ ( 0 ),
-	flash_frame_ ( 0 )
+	flash_frame_ ( 0 ),
+	title_character_ ( -1 ),
+	title_highlight_timer_ ( 0 )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -100,16 +103,57 @@ void LevelSelectState::stateUpdate()
 	{
 		++flash_timer_;
 	}
+
+	if ( title_character_ == -1 )
+	{
+		if ( title_highlight_timer_ > 30 )
+		{
+			++title_character_;
+			title_highlight_timer_ = 0;
+		}
+		else
+		{
+			++title_highlight_timer_;
+		}
+	}
+	else
+	{
+		if ( title_highlight_timer_ > 4 )
+		{
+			++title_character_;
+			title_highlight_timer_ = 0;
+		}
+		else
+		{
+			++title_highlight_timer_;
+			if ( title_character_ == title_.lines_[ 0 ].frames_.size() )
+			{
+				title_character_ = -1;
+			}
+
+			if ( title_character_ == 0 )
+			{
+				title_.lines_[ 0 ].frames_[ 0 ].changeColorOffset( 5 );
+			}
+			else if ( title_character_ == -1 )
+			{
+				title_.lines_[ 0 ].frames_[ title_.lines_[ 0 ].frames_.size() - 1 ].changeColorOffset( 4 );
+			}
+			else
+			{
+				title_.lines_[ 0 ].frames_[ title_character_ ].changeColorOffset( 5 );
+				title_.lines_[ 0 ].frames_[ title_character_ - 1 ].changeColorOffset( 4 );
+			}
+		}
+	}
 };
 
 void LevelSelectState::stateRender()
 {
-	Render::colorCanvas( 1 );
 	Render::renderObject( "bg/level-select-back.png", back_position_, screen_ );
 	Render::renderObject( "bg/level-select.png", screen_, screen_ );
 
-	WTextObj title{ Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextObj::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, 8, 8 };
-	title.render();
+	title_.render();
 
 	std::u32string completion_string = mezun::intToChar32String( 15 ) + U"%";
 	WTextObj completion_text{ completion_string, 0, 8, WTextObj::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextObj::Color::__NULL, 8, 4 };
@@ -179,6 +223,7 @@ void LevelSelectState::stateRender()
 
 void LevelSelectState::init()
 {
+	title_ = { Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextObj::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextObj::Color::BLACK, 8, 8 };
 };
 
 WTextObj::Color LevelSelectState::flashOnCondition( bool condition ) const

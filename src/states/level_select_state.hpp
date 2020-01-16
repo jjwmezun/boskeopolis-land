@@ -15,6 +15,7 @@ class LevelSelectState : public GameState
 	private:
 		WTextObj::Color flashOnCondition( bool condition ) const;
 
+		WTextObj title_;
 		sdl2::SDLRect screen_;
 		sdl2::SDLRect back_position_;
 		TextureBox current_page_;
@@ -25,5 +26,7 @@ class LevelSelectState : public GameState
 		int page_;
 		int flash_timer_;
 		int flash_frame_;
-		char scratch_[ 1600 ];
+		int title_character_;
+		int title_highlight_timer_;
+		char scratch_[ 1500 ];
 };
