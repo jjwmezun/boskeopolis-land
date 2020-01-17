@@ -263,7 +263,7 @@ namespace Inventory
 
 	double percentPerLevel()
 	{
-		return 100.0 / ( double )( Level::realLevelNum() );
+		return 100.0 / ( double )( Level::NUMBER_OF_LEVELS );
 	};
 
 	double percentPerVictory()
@@ -375,7 +375,7 @@ namespace Inventory
 
 	std::string percentShown()
 	{
-		return Text::stringifyNum( percent() ) + "%";
+		return std::to_string( ( int )( std::floor( percent() ) ) ) + "%";
 	};
 
 	void update()

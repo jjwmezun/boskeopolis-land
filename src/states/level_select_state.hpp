@@ -14,6 +14,11 @@ class LevelSelectState : public GameState
 		void init() override;
 
 	private:
+		void setInfoToNextPage();
+		void redrawMainPageTexture();
+		void animateTextFlashColor();
+		void updateBackgroundAnimation();
+		void animateTitleHighlight();
 		void generatePageTextures();
 		void turnOffAndResetAnimations();
 		void renderSelectHighlight() const;
@@ -54,7 +59,12 @@ class LevelSelectState : public GameState
 		Direction::Horizontal page_change_direction_;
 		int next_page_;
 		TextureBox page_textures_[ NUMBER_OF_PAGES ];
-		char scratch_[ 1200 ];
+		bool show_target_scores_;
+		TextureBox main_page_texture_;
+		int cycle_;
+		int first_level_of_page_;
+		int number_of_pages_;
+		char scratch_[ 1000 ];
 
 		
 };
