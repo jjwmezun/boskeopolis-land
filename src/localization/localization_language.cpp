@@ -5,11 +5,32 @@
 #include "mezun_helpers.hpp"
 #include "mezun_time.hpp"
 #include "rapidjson/istreamwrapper.h"
-#include "rapidjson/document.h"
 
 LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_entry& file )
 :
-    path_name_ ( file.path().stem() )
+    order_ ( 0 ),
+    charset_height_ ( 0 ),
+    default_character_ (),
+    title_options_ (),
+    options_options_ (),
+    language_ (),
+    intro_text_ (),
+    title_created_by_ (),
+    input_quitting_ (),
+    screen_option_fullscreen_ (),
+    screen_option_window_ (),
+    options_title_ (),
+    screen_options_title_ (),
+    language_options_title_ (),
+    controls_options_title_ (),
+    level_select_title_ (),
+    level_select_cycle_name_ (),
+    level_select_percent_symbol_ (),
+    path_name_ ( file.path().stem() ),
+    charset_image_src_ (),
+    charset_ (),
+    level_names_ (),
+    controls_actions_names_ ()
 {
     const std::string path = file.path();
 
@@ -131,7 +152,7 @@ int LocalizationLanguage::getCharsetHeight() const
     return charset_height_;
 };
 
-void LocalizationLanguage::loadCharset( const auto& data, const std::string& path )
+void LocalizationLanguage::loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "charset" ) || !data[ "charset" ].IsObject() )
     {
@@ -229,7 +250,7 @@ void LocalizationLanguage::loadCharset( const auto& data, const std::string& pat
     }
 };
 
-void LocalizationLanguage::loadOrder( const auto& data, const std::string& path )
+void LocalizationLanguage::loadOrder( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "order" ) || !data[ "order" ].IsInt() )
     {
@@ -238,7 +259,7 @@ void LocalizationLanguage::loadOrder( const auto& data, const std::string& path 
     order_ = data[ "order" ].GetInt();
 };
 
-void LocalizationLanguage::loadIntroMessage( const auto& data, const std::string& path )
+void LocalizationLanguage::loadIntroMessage( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "intro_text" ) || !data[ "intro_text" ].IsString() )
     {
@@ -247,7 +268,7 @@ void LocalizationLanguage::loadIntroMessage( const auto& data, const std::string
     intro_text_ = mezun::charToChar32String( data[ "intro_text" ].GetString() );
 };
 
-void LocalizationLanguage::loadLanguageName( const auto& data, const std::string& path )
+void LocalizationLanguage::loadLanguageName( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "language" ) || !data[ "language" ].IsString() )
     {
@@ -256,7 +277,7 @@ void LocalizationLanguage::loadLanguageName( const auto& data, const std::string
     language_ = mezun::charToChar32String( data[ "language" ].GetString() );
 };
 
-void LocalizationLanguage::loadInputText( const auto& data, const std::string& path )
+void LocalizationLanguage::loadInputText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "input" ) || !data[ "input" ].IsObject() )
     {
@@ -291,7 +312,7 @@ void LocalizationLanguage::loadInputText( const auto& data, const std::string& p
     }
 };
 
-void LocalizationLanguage::loadScreenOptions( const auto& data, const std::string& path )
+void LocalizationLanguage::loadScreenOptions( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "screen_options" ) || !data[ "screen_options" ].IsObject() )
     {
@@ -328,7 +349,7 @@ void LocalizationLanguage::loadScreenOptions( const auto& data, const std::strin
     screen_option_window_ = mezun::charToChar32String( options[ "window" ].GetString() );
 };
 
-void LocalizationLanguage::loadTitleText( const auto& data, const std::string& path )
+void LocalizationLanguage::loadTitleText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "title" ) || !data[ "title" ].IsObject() )
     {
@@ -372,7 +393,7 @@ void LocalizationLanguage::loadTitleText( const auto& data, const std::string& p
     title_options_.emplace_back( mezun::charToChar32String( options[ "quit" ].GetString() ) );
 };
 
-void LocalizationLanguage::loadOptionsText( const auto& data, const std::string& path )
+void LocalizationLanguage::loadOptionsText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "options" ) || !data[ "options" ].IsObject() )
     {
@@ -417,7 +438,7 @@ const std::string& LocalizationLanguage::getPathName() const
     return path_name_;
 };
 
-void LocalizationLanguage::loadLevelSelectText( const auto& data, const std::string& path )
+void LocalizationLanguage::loadLevelSelectText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "level_select" ) || !data[ "level_select" ].IsObject() )
     {
@@ -442,7 +463,7 @@ void LocalizationLanguage::loadLevelSelectText( const auto& data, const std::str
     level_select_percent_symbol_ = mezun::charToChar32String( level_select[ "percent_symbol" ].GetString() );
 };
 
-void LocalizationLanguage::loadLevelText( const auto& data, const std::string& path )
+void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "levels" ) || !data[ "levels" ].IsObject() )
     {

@@ -52,15 +52,8 @@ class LevelSelectState : public GameState
 		void renderFlashFrame();
 		void generateLevelNames();
 
-		WTextObj level_names_[ Level::NUMBER_OF_LEVELS ];
-		TextureBox moving_page_textures_[ NUMBER_OF_PAGES ];
-		WTextObj title_;
-		sdl2::SDLRect screen_;
-		sdl2::SDLRect background_position_;
-		TextureBox static_page_texture_;
-		TextureBox final_table_texture_;
-		TextureBox* current_page_texture_;
-		TextureBox* next_page_texture_;
+		bool show_target_scores_;
+		Direction::Horizontal page_change_direction_;
 		int background_position_timer_;
 		int selection_timer_;
 		int selection_;
@@ -72,6 +65,13 @@ class LevelSelectState : public GameState
 		int next_page_;
 		int first_level_of_page_;
 		int number_of_pages_;
-		Direction::Horizontal page_change_direction_;
-		bool show_target_scores_;
+		TextureBox* current_page_texture_;
+		TextureBox* next_page_texture_;
+		sdl2::SDLRect screen_;
+		sdl2::SDLRect background_position_;
+		TextureBox moving_page_textures_[ NUMBER_OF_PAGES ];
+		TextureBox static_page_texture_;
+		TextureBox final_table_texture_;
+		WTextObj title_;
+		WTextObj level_names_[ Level::NUMBER_OF_LEVELS ];
 };

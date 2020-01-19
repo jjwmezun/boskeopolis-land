@@ -486,7 +486,8 @@ void LevelSelectState::animateTitleHighlight()
 		{
 			++title_character_;
 			title_highlight_timer_ = 0;
-			if ( title_character_ == title_.lines_[ 0 ].frames_.size() )
+			const int number_of_characters = ( int )( title_.lines_[ 0 ].frames_.size() );
+			if ( title_character_ == number_of_characters )
 			{
 				title_character_ = NO_CHARACTER_HIGHLIGHTED;
 			}
@@ -670,7 +671,8 @@ void LevelSelectState::generateLevelNames()
 		}
 		else
 		{
-			for ( int i = 0; i < level_name.size(); ++i )
+			const int number_of_levels = ( int )( level_name.size() );
+			for ( int i = 0; i < number_of_levels; ++i )
 			{
 				if ( level_name[ i ] == char32_t( ' ' ) )
 				{
