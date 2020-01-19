@@ -7,12 +7,14 @@
 class OWInventory
 {
 	public:
+		static constexpr int HEIGHT = 40;
+
 		OWInventory();
-		void update( int lv_select );
-		void render( int lv_select );
+		void update( int level );
+		void render( int level );
 
 	private:
-		static constexpr sdl2::SDLRect AREA = { 0, Unit::WINDOW_HEIGHT_PIXELS - 40, Unit::WINDOW_WIDTH_PIXELS, 40 };
+		static constexpr sdl2::SDLRect AREA = { 0, Unit::WINDOW_HEIGHT_PIXELS - HEIGHT, Unit::WINDOW_WIDTH_PIXELS, HEIGHT };
 		static constexpr int ROW_1 = AREA.y + 8;
 		static constexpr int ROW_2 = AREA.y + 24;
 		static constexpr int LEFT_EDGE = AREA.x + 8;
@@ -23,7 +25,7 @@ class OWInventory
 		static constexpr int HAVE_X = 48;
 		static constexpr int DONT_HAVE_X = 56;
 
-		void renderLevelInfo( int lv_select );
+		void renderLevelInfo( int level );
 		void renderPts();
 
 		SpriteGraphics win_icon_gfx_;
@@ -44,4 +46,5 @@ class OWInventory
 		bool show_challenges_lock_;
 		bool color_going_up_;
 		bool sound_lock_;
+		char scratch_[ 3000 ];
 };

@@ -74,6 +74,4 @@ class LevelSelectState : public GameState
 		int number_of_pages_;
 		Direction::Horizontal page_change_direction_;
 		bool show_target_scores_;
-
-		
 };

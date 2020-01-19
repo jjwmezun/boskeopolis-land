@@ -27,7 +27,7 @@ OWInventory::OWInventory()
 	sound_lock_ ( false )
 {};
 
-void OWInventory::update( int lv_select )
+void OWInventory::update( int level )
 {
 	Inventory::update();
 
@@ -35,7 +35,7 @@ void OWInventory::update( int lv_select )
 	{
 		show_challenges_lock_ = false;
 	}
-	else if ( lv_select <= 0 )
+	else if ( level <= 0 )
 	{
 		show_challenges_lock_ = true;
 	}
@@ -83,17 +83,17 @@ void OWInventory::update( int lv_select )
 	}
 };
 
-void OWInventory::render( int lv_select )
+void OWInventory::render( int level )
 {
 	Render::renderRect( area_ );
 	Render::renderObject( "bg/overworld-level-name-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, 40 }, area_ );
-	renderLevelInfo( lv_select );
+	renderLevelInfo( level );
 	renderPts();
 };
 
-void OWInventory::renderLevelInfo( int lv_select )
+void OWInventory::renderLevelInfo( int level )
 {
-	if ( lv_select > 0 )
+	if ( level > 0 )
 	{
 		Text::FontColor name_shade = Text::FontColor::BLACK;
 		Text::FontColor gem_shade = Text::FontColor::BLACK;
@@ -103,37 +103,37 @@ void OWInventory::renderLevelInfo( int lv_select )
 
 		if ( show_challenges_ )
 		{
-			gem_score  = Level::gemChallengeText( lv_select );
-			time_score = Level::timeChallengeText( lv_select );
+			gem_score  = Level::gemChallengeText( level );
+			time_score = Level::timeChallengeText( level );
 			name_shade = Text::FontColor::DARK_MID_GRAY;
 			gem_shade = Text::FontColor::DARK_MID_GRAY;
 			time_shade = Text::FontColor::DARK_MID_GRAY;
 		}
 		else
 		{
-			gem_score  = Inventory::gemScore( lv_select );
-			time_score = Inventory::timeScore( lv_select );
+			gem_score  = Inventory::gemScore( level );
+			time_score = Inventory::timeScore( level );
 
-			if ( Inventory::levelComplete( lv_select ) )
+			if ( Inventory::levelComplete( level ) )
 			{
 				name_shade = ( Text::FontColor )( color_animation_ );
 			}
 
-			if ( Inventory::gemChallengeBeaten( lv_select ) )
+			if ( Inventory::gemChallengeBeaten( level ) )
 			{
 				gem_shade = ( Text::FontColor )( color_animation_ );
 			}
 
-			if ( Inventory::timeChallengeBeaten( lv_select ) )
+			if ( Inventory::timeChallengeBeaten( level ) )
 			{
 				time_shade = ( Text::FontColor )( color_animation_ );
 			}
 		}
 
-		if ( prev_level_select_ != lv_select )
+		if ( prev_level_select_ != level )
 		{
-			level_name_ = { Text::autoformat( Level::NameOLevel( ( unsigned int )( lv_select ) ), 39 ), LEFT_EDGE + 16, ROW_1, name_shade, Text::FontAlign::LEFT, Text::FontColor::__NULL, false, 39 };
-			prev_level_select_ = lv_select;
+			level_name_ = { Text::autoformat( Level::NameOLevel( ( unsigned int )( level ) ), 39 ), LEFT_EDGE + 16, ROW_1, name_shade, Text::FontAlign::LEFT, Text::FontColor::__NULL, false, 39 };
+			prev_level_select_ = level;
 		}
 		level_name_.render( nullptr );
 
@@ -144,14 +144,14 @@ void OWInventory::renderLevelInfo( int lv_select )
 		Text::renderText( time_score, RIGHT_EDGE - ( 4 * 8 ), ROW_1 + 8, nullptr, time_shade );
 
 		win_icon_gfx_.current_frame_x_ = DONT_HAVE_X;
-		if ( Inventory::victory( lv_select ) )
+		if ( Inventory::victory( level ) )
 		{
 			win_icon_gfx_.current_frame_x_ = HAVE_X;
 		}
 		win_icon_gfx_.render( win_icon_pos_ );
 
 		diamond_gfx_.current_frame_x_ = DONT_HAVE_X;
-		if ( Inventory::haveDiamond( lv_select ) )
+		if ( Inventory::haveDiamond( level ) )
 		{
 			diamond_gfx_.current_frame_x_ = HAVE_X;
 		}

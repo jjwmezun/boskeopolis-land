@@ -1,5 +1,6 @@
 #include "audio.hpp"
 #include "input.hpp"
+#include "level_select_state.hpp"
 #include "main.hpp"
 #include "options_state.hpp"
 #include "overworld_menu_state.hpp"
@@ -17,7 +18,7 @@ static std::string getOptionName( int i );
 static int getOptionY( int i );
 static TextObj getOption( int i );
 
-OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal )
+OverworldMenuState::OverworldMenuState( const Palette& pal )
 :
 	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
 	option_text_
@@ -35,8 +36,6 @@ OverworldMenuState::OverworldMenuState( bool& go_to_list, bool& camera_mode, con
 		BG_WIDTH,
 		BG_HEIGHT
 	),
-	go_to_list_ ( go_to_list ),
-	camera_mode_ ( camera_mode ),
 	option_selection_ ( ( int )( Option::CONTINUE ) )
 {
 	Audio::playSound( Audio::SoundType::PAUSE );
@@ -81,12 +80,10 @@ void OverworldMenuState::stateUpdate()
 			break;
 
 			case ( ( int )( Option::LIST ) ):
-				go_to_list_ = true;
-				Main::popState();
+				Main::changeState( std::make_unique<LevelSelectState> ( 0 ) );
 			break;
 
 			case ( ( int )( Option::CAMERA ) ):
-				camera_mode_ = true;
 				Main::popState();
 			break;
 

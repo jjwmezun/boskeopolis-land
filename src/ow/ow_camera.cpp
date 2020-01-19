@@ -1,63 +1,68 @@
 #include "input.hpp"
-#include <iostream>
 #include "ow_camera.hpp"
 
-void OWCamera::adjust( int x, int y, int w, int h, int map_w, int map_h )
+static constexpr int NORMAL_SPEED = 5;
+static constexpr int FAST_SPEED = 10;
+
+void OWCamera::adjust( const sdl2::SDLRect& target )
 {
-	if ( x < leftBoundary() )
+	if ( target.x < leftBoundary() )
 	{
-		x_ -= leftBoundary() - x;
+		coords_.x -= leftBoundary() - target.x;
 	}
-	else if ( x + w > rightBoundary() )
+	else if ( target.right() > rightBoundary() )
 	{
-		x_ += x + w - rightBoundary();
+		std::cout << coords_.x << std::endl;
+		std::cout << coords_.x << std::endl;
 	}
 
-	if ( y < topBoundary() )
+	if ( target.y < topBoundary() )
 	{
-		y_ -= topBoundary() - y;
+		coords_.y -= topBoundary() - target.y;
 	}
-	else if ( y + h > bottomBoundary() )
+	else if ( target.bottom() > bottomBoundary() )
 	{
-		y_ += y + h - bottomBoundary();
+		coords_.y += target.bottom() - bottomBoundary();
 	}
-	
-	bounds( map_w, map_h );
+
+	keepInBounds();
 };
 
 
-void OWCamera::center( int x, int y, int w, int h, int map_w, int map_h )
+void OWCamera::center( const Point& target )
 {
-	x_ = x - ( W / 2 ) - ( w / 2 );
-	y_ = y - ( H / 2 ) - ( h / 2 );
-	bounds( map_w, map_h );
+	coords_.x = target.x - ( int )( ( double )( WIDTH ) / 2.0 );
+	coords_.y = target.y - ( int )( ( double )( HEIGHT ) / 2.0 );
+	keepInBounds();
 };
 
-bool OWCamera::backToHero( int x, int y, int w, int h, int map_w, int map_h )
+bool OWCamera::moveAutomaticallyToTarget( const Point& target )
 {
 	bool close_nough_x = false;
 	bool close_nough_y = false;
 
-	if ( x_ < x - ( W / 2 ) - ( w / 2 ) - FAST_SPEED )
+	const int center_x = target.x - ( int )( ( double )( WIDTH ) / 2.0 );
+	if ( coords_.x < center_x - FAST_SPEED )
 	{
-		x_ += FAST_SPEED;
+		coords_.x += FAST_SPEED;
 	}
-	else if ( x_ > x - ( W / 2 ) - ( w / 2 ) + FAST_SPEED )
+	else if ( coords_.x > center_x + FAST_SPEED )
 	{
-		x_ -= FAST_SPEED;
+		coords_.x -= FAST_SPEED;
 	}
 	else
 	{
 		close_nough_x = true;
 	}
 
-	if ( y_ < y - ( H / 2 ) - ( h / 2 ) - FAST_SPEED )
+	const int center_y = target.y - ( int )( ( double )( HEIGHT ) / 2.0 );
+	if ( coords_.y < center_y - FAST_SPEED )
 	{
-		y_ += FAST_SPEED;
+		coords_.y += FAST_SPEED;
 	}
-	else if ( y_ > y - ( H / 2 ) - ( h / 2 ) + FAST_SPEED )
+	else if ( coords_.y > center_y + FAST_SPEED )
 	{
-		y_ -= FAST_SPEED;
+		coords_.y -= FAST_SPEED;
 	}
 	else
 	{
@@ -67,55 +72,47 @@ bool OWCamera::backToHero( int x, int y, int w, int h, int map_w, int map_h )
 	return close_nough_x && close_nough_y;
 };
 
-void OWCamera::move( int map_w, int map_h )
+void OWCamera::move()
 {
-	if ( Input::held( Input::Action::RUN) )
-	{
-		speed_ = FAST_SPEED;
-	}
-	else
-	{
-		speed_ = NORMAL_SPEED;
-	}
-
+	const int speed = ( Input::held( Input::Action::RUN) ) ? FAST_SPEED : NORMAL_SPEED;
 	if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
-		x_ -= speed_;
+		coords_.x -= speed;
 	}
 	else if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
-		x_ += speed_;
+		coords_.x += speed;
 	}
 
 	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
-		y_ -= speed_;
+		coords_.y -= speed;
 	}
 	else if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
-		y_ += speed_;
+		coords_.y += speed;
 	}
 	
-	bounds( map_w, map_h );
+	 keepInBounds();
 };
 
-void OWCamera::bounds( int map_w, int map_h )
+void OWCamera::keepInBounds()
 {
-	if ( x_ < 0 )
+	if ( coords_.x < 0 )
 	{
-		x_ = 0;
+		coords_.x = 0;
 	}
-	else if ( x_ + W > map_w )
+	else if ( coords_.x + WIDTH > bounds_w_ )
 	{
-		x_ = map_w - W;
+		coords_.x = bounds_w_ - WIDTH;
 	}
 	
-	if ( y_ < 0 )
+	if ( coords_.y < 0 )
 	{
-		y_ = 0;
+		coords_.y = 0;
 	}
-	else if ( y_ + H > map_h )
+	else if ( coords_.y + HEIGHT > bounds_h_ )
 	{
-		y_ = map_h - H;
+		coords_.y = bounds_h_ - HEIGHT;
 	}
 };

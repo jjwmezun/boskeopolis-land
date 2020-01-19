@@ -1,81 +1,119 @@
-#include "collision.hpp"
-#include <iostream>
 #include "input.hpp"
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
-#include "ow_level.hpp"
+
+static constexpr int WALK_SPEED = 2;
+static constexpr int RUN_SPEED = WALK_SPEED * 2;
+static constexpr int GRAPHICS_WIDTH = 16;
+static constexpr int GRAPHICS_HEIGHT = 16;
+static constexpr int GRAPHICS_HALF_WIDTH = ( int )( ( double )( GRAPHICS_WIDTH ) / 2.0 );
+static constexpr int GRAPHICS_HALF_HEIGHT = ( int )( ( double )( GRAPHICS_WIDTH ) / 2.0 );
+
+static constexpr int calculateGraphicsXFromPositionX( int position_x )
+{
+	return position_x - GRAPHICS_HALF_WIDTH;
+};
+
+static constexpr int calculateGraphicsYFromPositionY( int position_y )
+{
+	return position_y - GRAPHICS_HALF_HEIGHT;
+};
 
 OWHero::OWHero( int x, int y )
 :
-	gfx_ ( "sprites/autumn_overworld.png", { std::make_pair( 0, 0 ), std::make_pair( 15, 0 ) }, false, false, 0, false, -2, -1, 3, 2 ),
-	x_ ( x ),
-	y_ ( y ),
-	speed_ ( 2 )
+	position_ ({ x, y }),
+	graphics_
+	(
+		"sprites/autumn-overworld.png",
+		{ 0, 0, GRAPHICS_WIDTH, GRAPHICS_HEIGHT },
+		{ calculateGraphicsXFromPositionX( x ), calculateGraphicsYFromPositionY( y ), GRAPHICS_WIDTH, GRAPHICS_HEIGHT } ),
+	absolute_graphics_box_ ( graphics_.dest_ )
 {};
 
-void OWHero::update()
+void OWHero::update( const sdl2::SDLRect& bounds )
 {
-	if ( Input::held( Input::Action::RUN ) )
-	{
-		speed_ = 4;
-	}
-	else
-	{
-		speed_ = 2;
-	}
-	
+	const int speed = ( Input::held( Input::Action::RUN ) ) ? RUN_SPEED : WALK_SPEED;
 	if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
-		x_ += speed_;
+		position_.x += speed;
+		updateGraphicsX( bounds );
 	}
 	else if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
-		x_ -= speed_;
+		position_.x -= speed;
+		updateGraphicsX( bounds );
 	}
 
 	if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
-		y_ += speed_;
+		position_.y += speed;
+		updateGraphicsY( bounds );
 	}
 	else if ( Input::held( Input::Action::MOVE_UP ) )
 	{
-		y_ -= speed_;
+		position_.y -= speed;
+		updateGraphicsY( bounds );
 	}
-	
-	gfx_.update();
+	keepInBounds( bounds );
+};
+
+void OWHero::updateGraphics( const sdl2::SDLRect& bounds )
+{
+	updateGraphicsX( bounds );
+	updateGraphicsY( bounds );
+};
+
+void OWHero::updateGraphicsX( const sdl2::SDLRect& bounds )
+{
+	absolute_graphics_box_.x = calculateGraphicsXFromPositionX( position_.x );
+	graphics_.dest_.x = absolute_graphics_box_.x - bounds.x;
+};
+
+void OWHero::updateGraphicsY( const sdl2::SDLRect& bounds )
+{
+	absolute_graphics_box_.y = calculateGraphicsYFromPositionY( position_.y );
+	graphics_.dest_.y = absolute_graphics_box_.y - bounds.y;
 };
 
 void OWHero::render( const OWCamera& camera )
 {
-	gfx_.render( camera.relative( coords() ) );
+	graphics_.render();
 };
 
-int OWHero::x() const { return x_; };
-int OWHero::y() const { return y_; };
-int OWHero::right() const { return x_ + W; };
-int OWHero::bottom() const { return y_ + H; };
+int OWHero::x() const { return position_.x; };
+int OWHero::y() const { return position_.y; };
 
-void OWHero::collideStop( const Collision& collision )
+const Point& OWHero::getPosition() const
 {
-	y_ += collision.overlapYTop();
-	y_ -= collision.overlapYBottom();
-	x_ += collision.overlapXLeft();
-	x_ -= collision.overlapXRight();
+	return position_;
 };
 
-sdl2::SDLRect OWHero::coords() const
+const sdl2::SDLRect& OWHero::getGraphicsBox() const
 {
-	return
+	return absolute_graphics_box_;
+};
+
+void OWHero::keepInBounds( const sdl2::SDLRect& bounds )
+{
+	if ( absolute_graphics_box_.x < 0 )
 	{
-		x_,
-		y_,
-		W,
-		H
-	};
-};
+		position_.x = GRAPHICS_HALF_WIDTH;
+		updateGraphicsX( bounds );
+	}
+	else if ( absolute_graphics_box_.right() > bounds.right() )
+	{
+		position_.x = bounds.right() - GRAPHICS_HALF_WIDTH;
+		updateGraphicsX( bounds );
+	}
 
-void OWHero::placeOnLv( const OWLevel& lv )
-{
-	x_ = lv.x();
-	y_ = lv.y();
-};
+	if ( absolute_graphics_box_.y < 0 )
+	{
+		position_.y = GRAPHICS_HALF_HEIGHT;
+		updateGraphicsY( bounds );
+	}
+	else if ( absolute_graphics_box_.bottom() > bounds.bottom() )
+	{
+		position_.y = bounds.bottom() - GRAPHICS_HALF_HEIGHT;
+		updateGraphicsY( bounds );
+	}
+}

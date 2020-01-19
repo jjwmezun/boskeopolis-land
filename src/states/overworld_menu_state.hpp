@@ -8,7 +8,7 @@
 class OverworldMenuState : public GameState
 {
 	public:
-		OverworldMenuState( bool& go_to_list, bool& camera_mode, const Palette& pal );
+		OverworldMenuState( const Palette& pal );
 		~OverworldMenuState();
 		void stateUpdate() override;
 		void stateRender() override;
@@ -27,7 +27,5 @@ class OverworldMenuState : public GameState
 	private:
 		std::array<TextObj, NUM_O_OPTIONS> option_text_;
 		const sdl2::SDLRect bg_;
-		bool& go_to_list_;
-		bool& camera_mode_;
 		int option_selection_;
 };

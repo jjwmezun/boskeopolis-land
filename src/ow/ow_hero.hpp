@@ -1,34 +1,32 @@
 #pragma once
 
-#include "animated_graphics.hpp"
+#include "image_graphics.hpp"
+#include "point.hpp"
 
 class Collision;
-
-
 class OWCamera;
 class OWLevel;
 
 class OWHero
 {
 	public:
-		static constexpr int W = 12;
-		static constexpr int H = 14;
-
 		OWHero( int x = 0, int y = 0 );
-		void update();
+		void update( const sdl2::SDLRect& bounds );
 		void render( const OWCamera& camera );
-		void placeOnLv( const OWLevel& lv );
+		void updateGraphics( const sdl2::SDLRect& bounds );
 
 		int x() const;
 		int y() const;
-		int right() const;
-		int bottom() const;
-		void collideStop( const Collision& collision );
-		sdl2::SDLRect coords() const;
+		const Point& getPosition() const;
+		const sdl2::SDLRect& getGraphicsBox() const;
 
 	private:
-		AnimatedGraphics gfx_;
-		int x_;
-		int y_;
-		int speed_;
+		void keepInBounds( const sdl2::SDLRect& bounds );
+		void updateGraphicsX( const sdl2::SDLRect& bounds );
+		void updateGraphicsY( const sdl2::SDLRect& bounds );
+
+		Point position_;
+		ImageGraphics graphics_;
+		sdl2::SDLRect absolute_graphics_box_;
+		char scratch_[ 2000 ];
 };
