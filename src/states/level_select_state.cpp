@@ -8,7 +8,6 @@
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
 #include "render.hpp"
-#include "title_state.hpp"
 
 // From dark to light, delaying a li’l @ either end.
 static constexpr int NUMBER_OF_FLASH_FRAMES = 12;
@@ -104,7 +103,7 @@ void LevelSelectState::stateUpdate()
 	if ( Input::held( Input::Action::MENU ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::changeState( std::make_unique<TitleState> () );
+		Main::changeState( std::make_unique<OverworldState> () );
 	}
 	else
 	{

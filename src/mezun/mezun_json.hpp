@@ -15,4 +15,13 @@ namespace mezun
 		void ( *file_load_error_function )() = nullptr,
 		void ( *json_load_error_function )() = nullptr
 	);
+
+	const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > > getJSONData
+	(
+		const std::string& file_path,
+		const char* file_load_error_message = nullptr,
+		const char* json_load_error_message = nullptr,
+		void ( *file_load_error_function )() = nullptr,
+		void ( *json_load_error_function )() = nullptr
+	);
 }

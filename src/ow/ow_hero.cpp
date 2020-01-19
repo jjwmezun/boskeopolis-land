@@ -2,21 +2,24 @@
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
 
-static constexpr int WALK_SPEED = 2;
-static constexpr int RUN_SPEED = WALK_SPEED * 2;
+static constexpr double WALK_ACCELERATION = 0.1;
+static constexpr double RUN_ACCELERATION = WALK_ACCELERATION * 2.0;
+static constexpr double WALK_TOP_SPEED = 2.0;
+static constexpr double RUN_TOP_SPEED = WALK_TOP_SPEED * 2.0;
+static constexpr double BOUNCE_BACK = -0.16;
 static constexpr int GRAPHICS_WIDTH = 16;
 static constexpr int GRAPHICS_HEIGHT = 16;
 static constexpr int GRAPHICS_HALF_WIDTH = ( int )( ( double )( GRAPHICS_WIDTH ) / 2.0 );
 static constexpr int GRAPHICS_HALF_HEIGHT = ( int )( ( double )( GRAPHICS_WIDTH ) / 2.0 );
 
-static constexpr int calculateGraphicsXFromPositionX( int position_x )
+static constexpr int calculateGraphicsXFromPositionX( double position_x )
 {
-	return position_x - GRAPHICS_HALF_WIDTH;
+	return ( int )( std::floor( position_x ) ) - GRAPHICS_HALF_WIDTH;
 };
 
-static constexpr int calculateGraphicsYFromPositionY( int position_y )
+static constexpr int calculateGraphicsYFromPositionY( double position_y )
 {
-	return position_y - GRAPHICS_HALF_HEIGHT;
+	return ( int )( std::floor( position_y ) ) - GRAPHICS_HALF_HEIGHT;
 };
 
 OWHero::OWHero( int x, int y )
@@ -27,33 +30,76 @@ OWHero::OWHero( int x, int y )
 		"sprites/autumn-overworld.png",
 		{ 0, 0, GRAPHICS_WIDTH, GRAPHICS_HEIGHT },
 		{ calculateGraphicsXFromPositionX( x ), calculateGraphicsYFromPositionY( y ), GRAPHICS_WIDTH, GRAPHICS_HEIGHT } ),
-	absolute_graphics_box_ ( graphics_.dest_ )
+	absolute_graphics_box_ ( graphics_.dest_ ),
+	x_speed_ ( 0.0 ),
+	y_speed_ ( 0.0 )
 {};
 
 void OWHero::update( const sdl2::SDLRect& bounds )
 {
-	const int speed = ( Input::held( Input::Action::RUN ) ) ? RUN_SPEED : WALK_SPEED;
+	const double acceleration_speed = ( Input::held( Input::Action::RUN ) ) ? RUN_ACCELERATION : WALK_ACCELERATION;
+	const double top_speed = ( Input::held( Input::Action::RUN ) ) ? RUN_TOP_SPEED : WALK_TOP_SPEED;
+	double x_acceleration = 0.0;
+	double y_acceleration = 0.0;
 	if ( Input::held( Input::Action::MOVE_RIGHT ) )
 	{
-		position_.x += speed;
-		updateGraphicsX( bounds );
+		x_acceleration = acceleration_speed;
 	}
 	else if ( Input::held( Input::Action::MOVE_LEFT ) )
 	{
-		position_.x -= speed;
-		updateGraphicsX( bounds );
+		x_acceleration = -acceleration_speed;
 	}
 
 	if ( Input::held( Input::Action::MOVE_DOWN ) )
 	{
-		position_.y += speed;
-		updateGraphicsY( bounds );
+		y_acceleration = acceleration_speed;
 	}
 	else if ( Input::held( Input::Action::MOVE_UP ) )
 	{
-		position_.y -= speed;
+		y_acceleration = -acceleration_speed;
+	}
+
+	x_speed_ += x_acceleration;
+	if ( x_speed_ > top_speed )
+	{
+		x_speed_ = top_speed;
+	}
+	else if ( x_speed_ < -top_speed )
+	{
+		x_speed_ = -top_speed;
+	}
+	y_speed_ += y_acceleration;
+	if ( y_speed_ > top_speed )
+	{
+		y_speed_ = top_speed;
+	}
+	else if ( y_speed_ < -top_speed )
+	{
+		y_speed_ = -top_speed;
+	}
+
+	if ( x_acceleration == 0.0 )
+	{
+		x_speed_ /= 1.15;
+	}
+
+	if ( y_acceleration == 0.0 )
+	{
+		y_speed_ /= 1.15;
+	}
+
+	if ( x_speed_ != 0.0 )
+	{
+		position_.x += x_speed_;
+		updateGraphicsX( bounds );
+	}
+
+	if ( y_speed_ != 0.0 )
+	{
+		position_.y += y_speed_;
 		updateGraphicsY( bounds );
 	}
+
 	keepInBounds( bounds );
 };
 
@@ -83,9 +129,13 @@ void OWHero::render( const OWCamera& camera )
 int OWHero::x() const { return position_.x; };
 int OWHero::y() const { return position_.y; };
 
-const Point& OWHero::getPosition() const
+const Point OWHero::getPosition() const
 {
-	return position_;
+	return Point
+	{
+		( int )( std::floor( position_.x ) ),
+		( int )( std::floor( position_.y ) )
+	};
 };
 
 const sdl2::SDLRect& OWHero::getGraphicsBox() const
@@ -98,22 +148,26 @@ void OWHero::keepInBounds( const sdl2::SDLRect& bounds )
 	if ( absolute_graphics_box_.x < 0 )
 	{
 		position_.x = GRAPHICS_HALF_WIDTH;
+		x_speed_ *= BOUNCE_BACK;
 		updateGraphicsX( bounds );
 	}
 	else if ( absolute_graphics_box_.right() > bounds.right() )
 	{
 		position_.x = bounds.right() - GRAPHICS_HALF_WIDTH;
+		x_speed_ *= BOUNCE_BACK;
 		updateGraphicsX( bounds );
 	}
 
 	if ( absolute_graphics_box_.y < 0 )
 	{
 		position_.y = GRAPHICS_HALF_HEIGHT;
+		y_speed_ *= BOUNCE_BACK;
 		updateGraphicsY( bounds );
 	}
 	else if ( absolute_graphics_box_.bottom() > bounds.bottom() )
 	{
 		position_.y = bounds.bottom() - GRAPHICS_HALF_HEIGHT;
+		y_speed_ *= BOUNCE_BACK;
 		updateGraphicsY( bounds );
 	}
 }

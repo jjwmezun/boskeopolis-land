@@ -4,6 +4,7 @@
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
 #include "ow_inventory.hpp"
+#include "rapidjson/document.h"
 #include <vector>
 
 class Collision;
@@ -29,10 +30,16 @@ class OverworldState : public GameState
 
 		void testForMenuAction();
 		void renderCameraArrows();
+		void updateBackgroundAnimation();
+		void updateBackgroundPosition();
+		void loadMap( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data );
 
 		OWInventory inventory_;
 		OWHero hero_;
 		OWCamera camera_;
 		CameraState camera_state_;
+		int background_animation_timer_;
+		int background_animation_frame_;
+		ImageGraphics water_background_;
 		char scratch_[ 3000 ];
 };

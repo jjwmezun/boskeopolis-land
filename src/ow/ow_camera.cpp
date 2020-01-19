@@ -12,8 +12,7 @@ void OWCamera::adjust( const sdl2::SDLRect& target )
 	}
 	else if ( target.right() > rightBoundary() )
 	{
-		std::cout << coords_.x << std::endl;
-		std::cout << coords_.x << std::endl;
+		coords_.x += target.right() - rightBoundary();
 	}
 
 	if ( target.y < topBoundary() )

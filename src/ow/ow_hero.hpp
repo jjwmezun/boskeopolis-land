@@ -1,7 +1,7 @@
 #pragma once
 
 #include "image_graphics.hpp"
-#include "point.hpp"
+#include "dpoint.hpp"
 
 class Collision;
 class OWCamera;
@@ -17,7 +17,7 @@ class OWHero
 
 		int x() const;
 		int y() const;
-		const Point& getPosition() const;
+		const Point getPosition() const;
 		const sdl2::SDLRect& getGraphicsBox() const;
 
 	private:
@@ -25,8 +25,10 @@ class OWHero
 		void updateGraphicsX( const sdl2::SDLRect& bounds );
 		void updateGraphicsY( const sdl2::SDLRect& bounds );
 
-		Point position_;
+		DPoint position_;
 		ImageGraphics graphics_;
 		sdl2::SDLRect absolute_graphics_box_;
-		char scratch_[ 2000 ];
+		double x_speed_;
+		double y_speed_;
+		char scratch_[ 1800 ];
 };
