@@ -27,7 +27,8 @@ namespace Audio
 		UNLOCK = 19,
 		BUMP = 20,
 		SWITCH = 21,
-		GHOST = 22
+		GHOST = 22,
+		PAGE = 23
 	};
 
 	void init( bool noaudio );

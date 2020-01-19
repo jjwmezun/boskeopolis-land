@@ -77,4 +77,11 @@ namespace mezun
     {
         return array[ randInt( count - 1, 0 ) ];
     }
+
+    constexpr int32_t ceil( double num )
+    {
+        return ( ( double )( ( int )( num ) ) == num )
+            ? ( int )( num )
+            : ( int )( num ) + ( ( num > 0.0 ) ? 1 : 0 );
+    }
 };

@@ -14,8 +14,8 @@ class TextureBox
         TextureBox( const TextureBox& ) = delete;
         TextureBox& operator=( const TextureBox& ) = delete;
         void init();
-        void startDrawing();
-        void endDrawing();
+        void startDrawing() const;
+        void endDrawing() const;
         void render() const;
         void destroy();
         void moveLeft( int amount = 1 );

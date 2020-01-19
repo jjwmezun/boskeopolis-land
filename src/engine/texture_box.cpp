@@ -30,12 +30,12 @@ void TextureBox::init()
     token_ = true;
 }
 
-void TextureBox::startDrawing()
+void TextureBox::startDrawing() const
 {
     Render::setRenderTarget( texture_ );
 };
 
-void TextureBox::endDrawing()
+void TextureBox::endDrawing() const
 {
     Render::releaseRenderTarget();
 };

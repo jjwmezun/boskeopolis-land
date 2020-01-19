@@ -2,18 +2,38 @@
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
-#include "level.hpp"
 #include "level_select_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "mezun_helpers.hpp"
+#include "overworld_state.hpp"
 #include "render.hpp"
 
-static constexpr int PAGE_MOVE_SPEED = 8;
+// From dark to light, delaying a li’l @ either end.
+static constexpr int NUMBER_OF_FLASH_FRAMES = 12;
+static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
+{
+	0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0
+};
 
+static constexpr int NO_CHARACTER_HIGHLIGHTED = -1;
+static constexpr int TITLE_HIGHLIGHT_SPEED = 4;
+static constexpr int TITLE_HIGHLIGHT_DELAY = 60;
+static constexpr int BACKGROUND_SPEED = 4;
+static constexpr int BACKGROUND_TILE_SIZE = 32;
+static constexpr int INPUT_DELAY = 8;
+static constexpr int PAGE_MOVE_SPEED = 8;
+static constexpr int FLASH_SPEED = 8;
+static constexpr int GRID_Y = 24;
+static constexpr int ROW_HEIGHT = 24;
 static constexpr int calculateEntryY( int entry )
 {
-	return ( entry + 1 ) * 24;
+	return entry * ROW_HEIGHT + GRID_Y;
+};
+static constexpr int calculateNumberOfLevelsInPage( int page )
+{
+	// If last page o’ cycle, calculate remaining levels that fit ( since it could be less than max ); else, max per page.
+	return ( page % LevelSelectState::PAGES_PER_CYCLE == LevelSelectState::PAGES_PER_CYCLE - 1 ) ? Level::NUMBER_OF_THEMES % LevelSelectState::LEVELS_PER_PAGE : LevelSelectState::LEVELS_PER_PAGE;
 };
 
 static void renderGemScoreOfColor( WTextCharacter::Color color, int level, int y );
@@ -30,8 +50,6 @@ static void renderPtSymbolOfColorOffset( int color_offset, int y );
 static void renderClockSymbolOfColorOffset( int color_offset, int y );
 static void renderPtSymbol( int y );
 static void renderClockSymbol( int y );
-static void renderLevelNameOfColor( WTextCharacter::Color color, int level, int cycle, int y );
-static void renderLevelName( int level, int cycle, int y );
 static void renderThemeIconOfColorOffset( int color_offset, int theme, int y );
 static void renderThemeIcon( int theme, int y );
 static int getThemeFromLevel( int level );
@@ -43,46 +61,49 @@ static void renderClockTargetSymbol( int y );
 LevelSelectState::LevelSelectState( int current_level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Pale Green", 1 } ),
+	level_names_ (),
+	moving_page_textures_ (),
 	title_ (),
 	screen_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
-	back_position_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
-	current_page_texture_ ( &page_textures_[ 0 ] ),
-	next_page_texture_ ( &page_textures_[ 1 ] ),
-	back_position_timer_ ( 0 ),
+	background_position_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
+	static_page_texture_ (),
+	final_table_texture_ (),
+	current_page_texture_ ( &moving_page_textures_[ 0 ] ),
+	next_page_texture_ ( &moving_page_textures_[ 1 ] ),
+	background_position_timer_ ( 0 ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
-	page_timer_ ( 0 ),
 	page_ ( 0 ),
 	flash_timer_ ( 0 ),
 	flash_frame_ ( 0 ),
 	title_character_ ( -1 ),
 	title_highlight_timer_ ( 0 ),
-	page_change_direction_ ( Direction::Horizontal::__NULL ),
 	next_page_ ( 1 ),
-	page_textures_ (),
-	show_target_scores_ ( false ),
-	main_page_texture_ (),
-	cycle_ ( 1 ),
 	first_level_of_page_ ( 0 ),
-	number_of_pages_ ( 2 )
+	number_of_pages_ ( 2 ),
+	page_change_direction_ ( Direction::Horizontal::__NULL ),
+	show_target_scores_ ( false )
 {
 	Audio::changeSong( "level-select" );
 };
 
 LevelSelectState::~LevelSelectState()
 {
+	// Destroy all textures.
 	for ( int page = 0; page < NUMBER_OF_PAGES; ++page )
 	{
-		page_textures_[ page ].destroy();
+		moving_page_textures_[ page ].destroy();
 	}
-	main_page_texture_.destroy();
+	static_page_texture_.destroy();
+	final_table_texture_.destroy();
 };
 
 void LevelSelectState::stateUpdate()
 {
 	if ( Input::held( Input::Action::MENU ) )
 	{
-		Main::popState();
+		Audio::playSound( Audio::SoundType::CANCEL );
+		Main::changeState( std::make_unique<OverworldState> () );
 	}
 	else
 	{
@@ -90,91 +111,68 @@ void LevelSelectState::stateUpdate()
 		animateTitleHighlight();
 		switch ( page_change_direction_ )
 		{
+			// Move both pages rightward ( so the left page is where the current is — its right )
+			// till the current page is offscreen ( past the rightmost edge )
+			//
+			// Then it switches the next page to current, rerenders, & turns off movement direction.
 			case ( Direction::Horizontal::LEFT ):
 			{
 				if ( current_page_texture_->getX() >= Unit::WINDOW_WIDTH_PIXELS )
 				{
-					setInfoToNextPage();
-					current_page_texture_ = &page_textures_[ page_ ];
-					current_page_texture_->setX( 0 );
-					page_change_direction_ = Direction::Horizontal::__NULL;
-					redrawMainPageTexture();
+					finishPageFlip();
 				}
 				else
 				{
 					current_page_texture_->moveRight( PAGE_MOVE_SPEED );
 					next_page_texture_->moveRight( PAGE_MOVE_SPEED );
+					drawFlippedTexture();
 				}
 			}
 			break;
 
+			// Move both pages leftward ( so the left page is where the current is — its left )
+			// till the current page is offscreen ( past the leftmost edge )
+			//
+			// Then it switches the next page to current, rerenders, & turns off movement direction.
 			case ( Direction::Horizontal::RIGHT ):
 			{
 				if ( current_page_texture_->getX() <= -Unit::WINDOW_WIDTH_PIXELS )
 				{
-					setInfoToNextPage();
-					current_page_texture_ = &page_textures_[ page_ ];
-					current_page_texture_->setX( 0 );
-					page_change_direction_ = Direction::Horizontal::__NULL;
-					redrawMainPageTexture();
+					finishPageFlip();
 				}
 				else
 				{
 					current_page_texture_->moveLeft( PAGE_MOVE_SPEED );
 					next_page_texture_->moveLeft( PAGE_MOVE_SPEED );
+					drawFlippedTexture();
 				}
 			}
 			break;
 
 			case ( Direction::Horizontal::__NULL ):
 			{
-				if ( !show_target_scores_ )
-				{
-					if ( Input::held( Input::Action::CANCEL ) && Inventory::beenToLevel( first_level_of_page_ + selection_ ) )
-					{
-						show_target_scores_ = true;
-						Audio::playSound( Audio::SoundType::SELECT );
-						redrawMainPageTexture();
-					}
-				}
-				else
-				{
-					if ( !Input::held( Input::Action::CANCEL ) )
-					{
-						show_target_scores_ = false;
-						redrawMainPageTexture();
-					}
-				}
+				handleTargetScoreBehavior();
 
+				// Only allow actions if not in the middle o’ movement animation.
 				if ( selection_timer_ == 0 )
 				{
 					if ( Input::held( Input::Action::MOVE_RIGHT ) )
 					{
-						page_change_direction_ = Direction::Horizontal::RIGHT;
-						next_page_ = ( number_of_pages_ == 2 ) ? ( ( page_ == 0 ) ? 1 : 0 ) : ( ( page_ < number_of_pages_ - 1 ) ? page_ + 1 : 0 );
-						next_page_texture_ = &page_textures_[ next_page_ ];
-						next_page_texture_->setX( Unit::WINDOW_WIDTH_PIXELS );
-						Audio::playSound( Audio::SoundType::SEWER_HOLE );
-						turnOffAndResetAnimations();
+						flipPageRight();
 					}
 					else if ( Input::held( Input::Action::MOVE_LEFT ) )
 					{
-						page_change_direction_ = Direction::Horizontal::LEFT;
-						next_page_ = ( number_of_pages_ == 2 ) ? ( ( page_ == 0 ) ? 1 : 0 ) : ( ( page_ > 0 ) ? page_ - 1 : number_of_pages_ - 1 );
-						next_page_texture_ = &page_textures_[ next_page_ ];
-						next_page_texture_->setX( -Unit::WINDOW_WIDTH_PIXELS );
-						Audio::playSound( Audio::SoundType::SEWER_HOLE );
-						turnOffAndResetAnimations();
+						flipPageLeft();
 					}
 					else if ( Input::held( Input::Action::MOVE_DOWN ) )
 					{
 						++selection_;
-						if ( selection_ > 7 )
+						if ( selection_ > LEVELS_PER_PAGE - 1 )
 						{
 							selection_ = 0;
 						}
-						selection_timer_ = 8;
-						redrawMainPageTexture();
+						selection_timer_ = INPUT_DELAY;
+						redrawStaticPageTexture();
 						Audio::playSound( Audio::SoundType::SELECT );
 					}
 					else if ( Input::held( Input::Action::MOVE_UP ) )
@@ -182,10 +180,10 @@ void LevelSelectState::stateUpdate()
 						--selection_;
 						if ( selection_ < 0 )
 						{
-							selection_ = 7;
+							selection_ = LEVELS_PER_PAGE - 1;
 						}
-						selection_timer_ = 8;
-						redrawMainPageTexture();
+						selection_timer_ = INPUT_DELAY;
+						redrawStaticPageTexture();
 						Audio::playSound( Audio::SoundType::SELECT );
 					}
 				}
@@ -203,85 +201,104 @@ void LevelSelectState::stateUpdate()
 
 void LevelSelectState::stateRender()
 {
-	Render::renderObject( "bg/level-select-back.png", back_position_, screen_ );
-
-	if ( page_change_direction_ == Direction::Horizontal::__NULL )
-	{
-		main_page_texture_.render();
-
-		int level = first_level_of_page_;
-		const auto* level_names = Level::getLevelNames();
-		for ( int entry = 0; entry < calculateNumberOfLevelsInPage( page_ ); ++entry )
-		{
-			const int y = calculateEntryY( entry );
-			const int theme = getThemeFromLevel( level );
-
-			if ( Inventory::levelComplete( level ) )
-			{
-				renderFlashingLevelName( level, cycle_, y );
-				renderFlashingThemeIcon( theme, y );
-				renderFlashingVictoryCheck( y );
-				renderFlashingDiamondWinIcon( y );
-			}
-
-			if ( !show_target_scores_ || entry != selection_ )
-			{
-				if ( Inventory::gemChallengeBeaten( level ) )
-				{
-					renderFlashingPtSymbol( y );
-					renderFlashingGemScore( level, y );
-				}
-
-				if ( Inventory::timeChallengeBeaten( level ) )
-				{
-					renderFlashingClockSymbol( y );
-					renderFlashingTimeScore( level, y );
-				}
-			}
-
-			++level;
-		}
-
-		if ( flash_frame_ % 6 > 2 )
-		{
-			Render::renderObject( "bg/level-select-characters.png", { 16, 16, 16, 16 }, { 0, 116, 16, 16 } );
-			Render::renderObject( "bg/level-select-characters.png", { 16, 16, 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS - 16, 116, 16, 16 }, SDL_FLIP_HORIZONTAL );
-		}
-	}
-	else
-	{
-		current_page_texture_->render();
-		next_page_texture_->render();
-	}
-
+	renderBackground();
+	final_table_texture_.render();
 	title_.render();
+};
+
+void LevelSelectState::renderBackground() const
+{
+	Render::renderObject( "bg/level-select-back.png", background_position_, screen_ );
 };
 
 void LevelSelectState::init()
 {
 	title_ = { Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8, 8 };
+	generateLevelNames();
 	generatePageTextures();
+};
+
+void LevelSelectState::handleTargetScoreBehavior()
+{
+	if ( !show_target_scores_ )
+	{
+		if ( Input::held( Input::Action::CANCEL ) && Inventory::beenToLevel( first_level_of_page_ + selection_ ) )
+		{
+			show_target_scores_ = true;
+			Audio::playSound( Audio::SoundType::SELECT );
+			redrawStaticPageTexture(); // Score state changes, so we must redraw.
+		}
+	}
+	else
+	{
+		if ( !Input::held( Input::Action::CANCEL ) )
+		{
+			show_target_scores_ = false;
+			redrawStaticPageTexture(); // Score state changes, so we must redraw.
+		}
+	}
+};
+
+void LevelSelectState::flipPage( Direction::Horizontal direction, int next_page, int position )
+{
+	page_change_direction_ = direction;
+	next_page_ = next_page;
+	next_page_texture_ = &moving_page_textures_[ next_page_ ];
+	next_page_texture_->setX( position );
+	Audio::playSound( Audio::SoundType::PAGE );
+	turnOffAndResetAnimations();
+};
+
+void LevelSelectState::flipPageLeft()
+{
+	const int next_page = ( number_of_pages_ == 2 ) ? ( ( page_ == 0 ) ? 1 : 0 ) : ( ( page_ > 0 ) ? page_ - 1 : number_of_pages_ - 1 );
+	flipPage( Direction::Horizontal::LEFT, next_page, -Unit::WINDOW_WIDTH_PIXELS );
+};
+
+void LevelSelectState::flipPageRight()
+{
+	const int next_page = ( number_of_pages_ == 2 ) ? ( ( page_ == 0 ) ? 1 : 0 ) : ( ( page_ < number_of_pages_ - 1 ) ? page_ + 1 : 0 );
+	flipPage( Direction::Horizontal::RIGHT, next_page, Unit::WINDOW_WIDTH_PIXELS );
+};
+
+void LevelSelectState::finishPageFlip()
+{
+	setInfoToNextPage();
+	current_page_texture_ = &moving_page_textures_[ page_ ];
+	current_page_texture_->setX( 0 );
+	page_change_direction_ = Direction::Horizontal::__NULL;
+	redrawStaticPageTexture();
 };
 
 void LevelSelectState::generatePageTextures()
 {
-	const double pages_per_cycle_double = ( double )( PAGES_PER_CYCLE );
+	generateMovingPageTextures();
+	static_page_texture_.init();
+	final_table_texture_.init();
+	redrawStaticPageTexture();
+};
+
+// Used for generating the textures for all pages used when they are moving ( during which they don’t animate ).
+// Since these textures ne’er change, they can be generated once @ the start & then just drawn directly during moving states.
+void LevelSelectState::generateMovingPageTextures()
+{
 	const WTextObj completion_text{ mezun::charToChar32String( Inventory::percentShown().c_str() ), 0, 8, WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextCharacter::Color::__NULL, 8, 4 };
 	const std::u32string& cycle_name = Localization::getCurrentLanguage().getLevelSelectCycleName();
-	int cycle = 1;
 	WTextObj cycle_text;
+	int cycle = 1;
 	int level = 0;
 	for ( int page = 0; page < NUMBER_OF_PAGES; ++page )
 	{
-		if ( page % PAGES_PER_CYCLE == 0 )
+		const bool is_new_cycle = page % PAGES_PER_CYCLE == 0;
+		if ( is_new_cycle )
 		{
 			const std::u32string cycle_string = mezun::removeEndingZeroFrom32String( cycle_name ) + U" " + mezun::intToChar32String( cycle );
 			cycle_text = { cycle_string, 4, 8, WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 			++cycle;
 		}
 
-		page_textures_[ page ].init();
-		page_textures_[ page ].startDrawing();
+		moving_page_textures_[ page ].init();
+		moving_page_textures_[ page ].startDrawing();
 		Render::clearScreenTransparency();
 		Render::renderObject( "bg/level-select.png", screen_, screen_ );
 		cycle_text.render();
@@ -293,7 +310,7 @@ void LevelSelectState::generatePageTextures()
 			const int theme = getThemeFromLevel( level );
 			const int y = calculateEntryY( entry );
 
-			renderLevelName( level, cycle - 1, y );
+			renderLevelName( level );
 			renderThemeIcon( theme, y );
 
 			if ( Inventory::victory( level ) )
@@ -307,6 +324,8 @@ void LevelSelectState::generatePageTextures()
 			renderGemScore( level, y );
 			renderTimeScore( level, y );
 
+			// If we have been to this level, update the latest cycle.
+			// This means the latest cycle doesn’t include levels we haven’t been to yet.
 			if ( Inventory::beenToLevel( level ) )
 			{
 				number_of_pages_ = ( cycle - 1 ) * 2;
@@ -314,22 +333,18 @@ void LevelSelectState::generatePageTextures()
 			++level;
 		}
 
-		page_textures_[ page ].endDrawing();
+		moving_page_textures_[ page ].endDrawing();
 	}
-	main_page_texture_.init();
-	redrawMainPageTexture();
-	std::cout << number_of_pages_ << std::endl;
 };
 
-void LevelSelectState::redrawMainPageTexture()
+void LevelSelectState::redrawStaticPageTexture()
 {
-	main_page_texture_.startDrawing();
+	static_page_texture_.startDrawing();
 	Render::clearScreenTransparency();
 	current_page_texture_->render();
 	renderSelectHighlight();
 
 	int level = first_level_of_page_;
-	const auto* level_names = Level::getLevelNames();
 	for ( int entry = 0; entry < calculateNumberOfLevelsInPage( page_ ); ++entry )
 	{
 		const int y = calculateEntryY( entry );
@@ -337,7 +352,7 @@ void LevelSelectState::redrawMainPageTexture()
 
 		if ( entry == selection_ )
 		{
-			renderLevelName( level, cycle_, y );
+			renderLevelName( level );
 			renderThemeIcon( theme, y );
 
 			if ( Inventory::victory( level ) )
@@ -383,8 +398,18 @@ void LevelSelectState::redrawMainPageTexture()
 
 		++level;
 	}
-	main_page_texture_.endDrawing();
+	static_page_texture_.endDrawing();
+	renderFlashFrame();
 };
+
+void LevelSelectState::drawFlippedTexture()
+{
+	final_table_texture_.startDrawing();
+	Render::clearScreenTransparency();
+	current_page_texture_->render();
+	next_page_texture_->render();
+	final_table_texture_.endDrawing();
+}
 
 void LevelSelectState::renderSelectHighlight() const
 {
@@ -392,7 +417,7 @@ void LevelSelectState::renderSelectHighlight() const
 	{
 		Render::renderObject( "bg/level-select-bar.png", { 0, 0, 392, 24 }, { 4, 24, 392, 24 } );
 	}
-	else if ( selection_ == 7 )
+	else if ( selection_ == LEVELS_PER_PAGE - 1 )
 	{
 		Render::renderObject( "bg/level-select-bar.png", { 0, 0, 392, 24 }, { 4, 192, 392, 24 }, SDL_FLIP_VERTICAL );
 	}
@@ -415,37 +440,39 @@ WTextCharacter::Color LevelSelectState::flashOnCondition( bool condition ) const
 		: WTextCharacter::Color::DARK_GRAY;
 }
 
-int LevelSelectState::calculateNumberOfLevelsInPage( int page )
-{
-	return ( page % PAGES_PER_CYCLE == PAGES_PER_CYCLE - 1 ) ? Level::NUMBER_OF_THEMES % LEVELS_PER_PAGE : LEVELS_PER_PAGE;
-};
-
+// “Animates” background by just moving it up & left relative to the screen.
+// When the position reaches the size o’ the tile, move it back to the beginning,
+// so it can go back & forth, giving the illusion o’ infinite movement.
 void LevelSelectState::updateBackgroundAnimation()
 {
-	if ( back_position_timer_ == 4 )
+	if ( background_position_timer_ == BACKGROUND_SPEED )
 	{
-		back_position_timer_ = 0;
-		++back_position_.x;
-		if ( back_position_.x == 32 )
+		background_position_timer_ = 0;
+		++background_position_.x;
+		if ( background_position_.x == BACKGROUND_TILE_SIZE )
 		{
-			back_position_.x = 0;
+			background_position_.x = 0;
 		}
-		back_position_.y = back_position_.x;
+		// Since vertical & horizontal movement are the same, y can always be the same as x.
+		background_position_.y = background_position_.x;
 	}
 	else
 	{
-		++back_position_timer_;
+		++background_position_timer_;
 	}
 };
 
+// NOTE: As yet only works for 1st line.
+// Could potentially break game if for some reason there is no 1st line.
 void LevelSelectState::animateTitleHighlight()
 {
-	if ( title_character_ == -1 )
+	if ( title_character_ == NO_CHARACTER_HIGHLIGHTED )
 	{
-		if ( title_highlight_timer_ > 30 )
+		if ( title_highlight_timer_ == TITLE_HIGHLIGHT_DELAY )
 		{
 			++title_character_;
 			title_highlight_timer_ = 0;
+			updateTitleHighlightGraphics();
 		}
 		else
 		{
@@ -454,39 +481,46 @@ void LevelSelectState::animateTitleHighlight()
 	}
 	else
 	{
-		if ( title_highlight_timer_ > 4 )
+		if ( title_highlight_timer_ == TITLE_HIGHLIGHT_SPEED )
 		{
 			++title_character_;
 			title_highlight_timer_ = 0;
+			if ( title_character_ == title_.lines_[ 0 ].frames_.size() )
+			{
+				title_character_ = NO_CHARACTER_HIGHLIGHTED;
+			}
+			updateTitleHighlightGraphics();
 		}
 		else
 		{
 			++title_highlight_timer_;
-			if ( title_character_ == title_.lines_[ 0 ].frames_.size() )
-			{
-				title_character_ = -1;
-			}
-
-			if ( title_character_ == 0 )
-			{
-				title_.lines_[ 0 ].frames_[ 0 ].changeColor( WTextCharacter::Color::WHITE );
-			}
-			else if ( title_character_ == -1 )
-			{
-				title_.lines_[ 0 ].frames_[ title_.lines_[ 0 ].frames_.size() - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
-			}
-			else
-			{
-				title_.lines_[ 0 ].frames_[ title_character_ ].changeColor( WTextCharacter::Color::WHITE );
-				title_.lines_[ 0 ].frames_[ title_character_ - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
-			}
 		}
 	}
 };
+
+void LevelSelectState::updateTitleHighlightGraphics()
+{
+	// If 1st character, we only need to highlight the 1st character.
+	if ( title_character_ == 0 )
+	{
+		title_.lines_[ 0 ].frames_[ 0 ].changeColor( WTextCharacter::Color::WHITE );
+	}
+	// If last character, we only need to unhighlight last character.
+	else if ( title_character_ == NO_CHARACTER_HIGHLIGHTED )
+	{
+		title_.lines_[ 0 ].frames_[ title_.lines_[ 0 ].frames_.size() - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
+	}
+	// Any other character, highlight current character & unhighlight previous.
+	else
+	{
+		title_.lines_[ 0 ].frames_[ title_character_ ].changeColor( WTextCharacter::Color::WHITE );
+		title_.lines_[ 0 ].frames_[ title_character_ - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
+	}
+}
 
 void LevelSelectState::animateTextFlashColor()
 {
-	if ( flash_timer_ > 7 )
+	if ( flash_timer_ > FLASH_SPEED - 1 )
 	{
 		flash_timer_ = 0;
 		++flash_frame_;
@@ -494,6 +528,7 @@ void LevelSelectState::animateTextFlashColor()
 		{
 			flash_frame_ = 0;
 		}
+		renderFlashFrame();
 	}
 	else
 	{
@@ -504,8 +539,8 @@ void LevelSelectState::animateTextFlashColor()
 void LevelSelectState::setInfoToNextPage()
 {
 	page_ = next_page_;
-	cycle_ = ( int )( std::floor( ( double )( page_ ) / ( double )( PAGES_PER_CYCLE ) ) ) + 1;
-	first_level_of_page_ = ( ( cycle_ - 1 ) * Level::NUMBER_OF_THEMES ) + ( ( page_ % PAGES_PER_CYCLE ) * LEVELS_PER_PAGE );
+	const int cycle = ( int )( std::floor( ( double )( page_ ) / ( double )( PAGES_PER_CYCLE ) ) ) + 1;
+	first_level_of_page_ = ( ( cycle - 1 ) * Level::NUMBER_OF_THEMES ) + ( ( page_ % PAGES_PER_CYCLE ) * LEVELS_PER_PAGE );
 }
 
 void LevelSelectState::renderFlashingPtSymbol( int y ) const
@@ -518,9 +553,20 @@ void LevelSelectState::renderFlashingClockSymbol( int y ) const
 	renderClockSymbolOfColorOffset( FLASH_FRAMES[ flash_frame_ ], y );
 };
 
-void LevelSelectState::renderFlashingLevelName( int level, int cycle, int y ) const
+void LevelSelectState::renderLevelNameOfColor( WTextCharacter::Color color, int level )
 {
-	renderLevelNameOfColor( ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] ), level, cycle, y );
+	level_names_[ level ].changeColor( color );
+	level_names_[ level ].render();
+};
+
+void LevelSelectState::renderLevelName( int level )
+{
+	renderLevelNameOfColor( WTextCharacter::Color::DARK_GRAY, level );
+};
+
+void LevelSelectState::renderFlashingLevelName( int level )
+{
+	renderLevelNameOfColor( ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] ), level );
 };
 
 void LevelSelectState::renderFlashingThemeIcon( int theme, int y ) const
@@ -546,6 +592,97 @@ void LevelSelectState::renderFlashingGemScore( int level, int y ) const
 void LevelSelectState::renderFlashingTimeScore( int level, int y ) const
 {
 	renderTimeScoreOfColor( ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] ), level, y );
+};
+
+void LevelSelectState::renderFlashingArrows() const
+{
+	if ( flash_frame_ % ( int )( ( double )( NUMBER_OF_FLASH_FRAMES ) / 2.0 ) > 2 )
+	{
+		Render::renderObject( "bg/level-select-characters.png", { 16, 16, 16, 16 }, { 0, 116, 16, 16 } );
+		Render::renderObject( "bg/level-select-characters.png", { 16, 16, 16, 16 }, { Unit::WINDOW_WIDTH_PIXELS - 16, 116, 16, 16 }, SDL_FLIP_HORIZONTAL );
+	}
+};
+
+void LevelSelectState::renderFlashFrame()
+{
+	final_table_texture_.startDrawing();
+	Render::clearScreenTransparency();
+	static_page_texture_.render();
+	int level = first_level_of_page_;
+	for ( int entry = 0; entry < calculateNumberOfLevelsInPage( page_ ); ++entry )
+	{
+		const int y = calculateEntryY( entry );
+		const int theme = getThemeFromLevel( level );
+
+		if ( Inventory::levelComplete( level ) )
+		{
+			renderFlashingLevelName( level );
+			renderFlashingThemeIcon( theme, y );
+			renderFlashingVictoryCheck( y );
+			renderFlashingDiamondWinIcon( y );
+		}
+
+		if ( !show_target_scores_ || entry != selection_ )
+		{
+			if ( Inventory::gemChallengeBeaten( level ) )
+			{
+				renderFlashingPtSymbol( y );
+				renderFlashingGemScore( level, y );
+			}
+
+			if ( Inventory::timeChallengeBeaten( level ) )
+			{
+				renderFlashingClockSymbol( y );
+				renderFlashingTimeScore( level, y );
+			}
+		}
+
+		++level;
+	}
+	renderFlashingArrows();
+	final_table_texture_.endDrawing();
+};
+
+void LevelSelectState::generateLevelNames()
+{
+	int theme_positions[ Level::NUMBER_OF_THEMES ];
+	int entry_per_page = 0;
+	for ( int entry = 0; entry < Level::NUMBER_OF_THEMES; ++entry )
+	{
+		theme_positions[ entry ] = calculateEntryY( entry_per_page );
+		++entry_per_page;
+		if ( entry_per_page == LEVELS_PER_PAGE )
+		{
+			entry_per_page = 0;
+		}
+	};
+
+	for ( int level = 0; level < Level::NUMBER_OF_LEVELS; ++level )
+	{
+		const int cycle = ( int )( std::floor( ( double )( level ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
+		const int theme = level % Level::NUMBER_OF_THEMES;
+		const std::u32string& level_name = Level::getLevelNames()[ level ];
+		std::u32string level_name_string = U" " + mezun::intToChar32String( cycle ) + U": ";
+		if ( Inventory::beenToLevel( level ) )
+		{
+			level_name_string += level_name;
+		}
+		else
+		{
+			for ( int i = 0; i < level_name.size(); ++i )
+			{
+				if ( level_name[ i ] == char32_t( ' ' ) )
+				{
+					level_name_string += U" ";
+				}
+				else
+				{
+					level_name_string += U"?";
+				}
+			}
+		}
+		level_names_[ level ] = { level_name_string, 24, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
+	}
 };
 
 static void renderGemScoreOfColor( WTextCharacter::Color color, int level, int y )
@@ -618,37 +755,6 @@ static void renderPtSymbol( int y )
 static void renderClockSymbol( int y )
 {
 	renderClockSymbolOfColorOffset( 1, y );
-};
-
-static void renderLevelNameOfColor( WTextCharacter::Color color, int level, int cycle, int y )
-{
-	const std::u32string& level_name = Level::getLevelNames()[ level ];
-	std::u32string level_name_string = U" " + mezun::intToChar32String( cycle ) + U": ";
-	if ( Inventory::beenToLevel( level ) )
-	{
-		level_name_string += level_name;
-	}
-	else
-	{
-		for ( int i = 0; i < level_name.size(); ++i )
-		{
-			if ( level_name[ i ] == char32_t( ' ' ) )
-			{
-				level_name_string += U" ";
-			}
-			else
-			{
-				level_name_string += U"?";
-			}
-		}
-	}
-	WTextObj level_name_text{ level_name_string, 24, y, color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
-	level_name_text.render();
-};
-
-static void renderLevelName( int level, int cycle, int y )
-{
-	renderLevelNameOfColor( WTextCharacter::Color::DARK_GRAY, level, cycle, y );
 };
 
 static void renderThemeIconOfColorOffset( int color_offset, int theme, int y )

@@ -5,7 +5,7 @@
 
 namespace Audio
 {
-	static constexpr int NUM_O_SOUNDS = 23;
+	static constexpr int NUM_O_SOUNDS = 24;
 	const std::string RELATIVE_DIR = "music";
 	const std::string EXT = "mp3";
 	std::string current_song_ = "";
@@ -43,6 +43,7 @@ namespace Audio
 		ChannelType::MISC,
 		ChannelType::MISC,
 		ChannelType::JUMP,
+		ChannelType::MISC,
 		ChannelType::MISC,
 		ChannelType::MISC,
 		ChannelType::MISC,
@@ -88,6 +89,7 @@ namespace Audio
 			sounds_[ ( int )( SoundType::BUMP ) ] = loadSound( "bump.wav" );
 			sounds_[ ( int )( SoundType::SWITCH ) ] = loadSound( "switch.wav" );
 			sounds_[ ( int )( SoundType::GHOST ) ] = loadSound( "ghost.wav" );
+			sounds_[ ( int )( SoundType::PAGE ) ] = loadSound( "page.wav" );
 		}
 	};
 
