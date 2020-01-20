@@ -145,13 +145,9 @@ void OWHero::render( const OWCamera& camera )
 int OWHero::x() const { return position_.x; };
 int OWHero::y() const { return position_.y; };
 
-const Point OWHero::getPosition() const
+const DPoint& OWHero::getPosition() const
 {
-	return Point
-	{
-		( int )( std::floor( position_.x ) ),
-		( int )( std::floor( position_.y ) )
-	};
+	return position_;
 };
 
 const sdl2::SDLRect& OWHero::getGraphicsBox() const

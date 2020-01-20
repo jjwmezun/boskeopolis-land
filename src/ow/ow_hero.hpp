@@ -20,7 +20,7 @@ class OWHero
 
 		int x() const;
 		int y() const;
-		const Point getPosition() const;
+		const DPoint& getPosition() const;
 		const sdl2::SDLRect& getGraphicsBox() const;
 
 	private:

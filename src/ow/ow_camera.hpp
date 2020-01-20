@@ -1,9 +1,10 @@
 #pragma once
 
-#include "point.hpp"
 #include "mezun_sdl2.hpp"
 #include "ow_inventory.hpp"
 #include "unit.hpp"
+
+class DPoint;
 
 class OWCamera
 {
@@ -29,8 +30,8 @@ class OWCamera
 		};
 
 		void adjust( const sdl2::SDLRect& target );
-		void center( const Point& target );
-		bool moveAutomaticallyToTarget( const Point& target );
+		void center( const DPoint& target );
+		bool moveAutomaticallyToTarget( const DPoint& target );
 		void move();
 
 		constexpr sdl2::SDLRect relative( const sdl2::SDLRect& r ) const

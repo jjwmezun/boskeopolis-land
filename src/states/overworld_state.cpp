@@ -1,6 +1,8 @@
 #include "audio.hpp"
 #include "main.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
+#include "main.hpp"
 #include "mezun_json.hpp"
 #include "overworld_state.hpp"
 #include "overworld_menu_state.hpp"
@@ -27,14 +29,18 @@ static constexpr bool testIsSolid( int tile )
 OverworldState::OverworldState()
 :
 	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),
-	inventory_ (),
-	hero_ ( 300, 300 ),
-	camera_ ( 800, 448 ),
 	camera_state_ ( CameraState::MOVE_PLAYER ),
 	background_animation_timer_ ( 0 ),
 	background_animation_frame_ ( 0 ),
+	tilemap_ (),
+	bg_texture_ (),
+	fg_texture_ (),
 	water_background_ ( "bg/overworld-water.png", { 0, 0, 400, 224 } ),
-	bg_texture_ ()
+	camera_ ( 800, 448 ),
+	hero_ ( 300, 300 ),
+	inventory_ (),
+	objects_ (),
+	current_level_ ( -1 )
 {};
 
 OverworldState::~OverworldState()
@@ -52,7 +58,26 @@ void OverworldState::stateUpdate()
 			testForMenuAction();
 			camera_.adjust( hero_.getGraphicsBox() );
 			hero_.update( tilemap_, camera_.getBox() );
-			inventory_.update( 0 );
+
+			current_level_ = -1;
+			const DPoint& hero_position = hero_.getPosition();
+			const int tile_x = ( int )( std::floor( ( hero_position.x ) / 16.0 ) );
+			const int tile_y = ( int )( std::floor( ( hero_position.y ) / 16.0 ) );
+			const int tile = tile_y * tilemap_.map_width + tile_x;
+			const auto& seek = objects_.find( tile );
+			if ( seek != objects_.end() )
+			{
+				current_level_ = seek->second.value.level + 1;
+			}
+			inventory_.update( current_level_ );
+
+			if ( Input::held( Input::Action::CONFIRM ) )
+			{
+				if ( current_level_ > 0 )
+				{
+					Main::changeState( std::make_unique<LevelState> ( current_level_ ) );
+				}
+			}
 		}
 		break;
 
@@ -98,7 +123,7 @@ void OverworldState::stateRender()
 	{
 		case ( CameraState::MOVE_PLAYER ):
 		{
-			inventory_.render( 0 );
+			inventory_.render();
 		}
 		break;
 
@@ -133,14 +158,14 @@ void OverworldState::init()
 	const int width_blocks = data[ "width" ].GetInt();
 	const double width_blocks_d = ( double )( width_blocks );
 	tilemap_.map_width = data[ "width" ].GetInt();
-	width_ = Unit::BlocksToPixels( tilemap_.map_width );
-	height_ = Unit::BlocksToPixels( data[ "height" ].GetInt() );
-	bg_texture_.changeSize( width_, height_ );
-	fg_texture_.changeSize( width_, height_ );
+	const int width = Unit::BlocksToPixels( tilemap_.map_width );
+	const int height = Unit::BlocksToPixels( data[ "height" ].GetInt() );
+	bg_texture_.changeSize( width, height );
+	fg_texture_.changeSize( width, height );
 	std::vector<int> bg_tiles;
 	std::vector<int> block_tiles;
 	std::vector<int> sprites_tiles;
-	bg_tiles.reserve( width_ & height_ );
+	bg_tiles.reserve( width & height );
 
 	for ( const auto& i : data[ "layers" ].GetArray() )
 	{
@@ -214,7 +239,7 @@ void OverworldState::init()
 		throw std::runtime_error( "Missing sprite layer for o’erworld map." );
 	}
 
-	camera_.setBounds( width_, height_ );
+	camera_.setBounds( width, height );
 	bg_texture_.init();
 	fg_texture_.init();
 	sdl2::SDLRect src = { 0, 0, 16, 16 };
@@ -223,8 +248,10 @@ void OverworldState::init()
 	for ( int i = 0; i < bg_tiles.size(); ++i )
 	{
 		const int bg_tile = bg_tiles[ i ] - 1;
-		dest.x = Unit::BlocksToPixels( i % width_blocks );
-		dest.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( i ) / width_blocks_d ) ) );
+		const int x = i % width_blocks;
+		const int y = ( int )( std::floor( ( double )( i ) / width_blocks_d ) );
+		dest.x = Unit::BlocksToPixels( x );
+		dest.y = Unit::BlocksToPixels( y );
 		if ( bg_tile > -1 )
 		{
 			src.x = Unit::BlocksToPixels( bg_tile % 16 );
@@ -243,6 +270,10 @@ void OverworldState::init()
 			if ( sprite_tile == 2048 )
 			{
 				hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
+			}
+			else if ( sprite_tile > 2063 && sprite_tile < 2063 + ( 16 * 4 ) )
+			{
+				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( sprite_tile - 2064 ) ) );
 			}
 		}
 	}

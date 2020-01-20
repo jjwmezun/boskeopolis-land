@@ -1,3 +1,5 @@
+#pragma once
+
 class Palette;
 
 #include "game_state.hpp"

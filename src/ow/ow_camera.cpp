@@ -1,5 +1,6 @@
 #include "input.hpp"
 #include "ow_camera.hpp"
+#include "dpoint.hpp"
 
 static constexpr int NORMAL_SPEED = 5;
 static constexpr int FAST_SPEED = 10;
@@ -28,19 +29,19 @@ void OWCamera::adjust( const sdl2::SDLRect& target )
 };
 
 
-void OWCamera::center( const Point& target )
+void OWCamera::center( const DPoint& target )
 {
-	coords_.x = target.x - ( int )( ( double )( WIDTH ) / 2.0 );
-	coords_.y = target.y - ( int )( ( double )( HEIGHT ) / 2.0 );
+	coords_.x = ( int )( target.x ) - ( int )( ( double )( WIDTH ) / 2.0 );
+	coords_.y = ( int )( target.y ) - ( int )( ( double )( HEIGHT ) / 2.0 );
 	keepInBounds();
 };
 
-bool OWCamera::moveAutomaticallyToTarget( const Point& target )
+bool OWCamera::moveAutomaticallyToTarget( const DPoint& target )
 {
 	bool close_nough_x = false;
 	bool close_nough_y = false;
 
-	const int center_x = target.x - ( int )( ( double )( WIDTH ) / 2.0 );
+	const int center_x = ( int )( target.x ) - ( int )( ( double )( WIDTH ) / 2.0 );
 	if ( coords_.x < center_x - FAST_SPEED )
 	{
 		coords_.x += FAST_SPEED;
@@ -54,7 +55,7 @@ bool OWCamera::moveAutomaticallyToTarget( const Point& target )
 		close_nough_x = true;
 	}
 
-	const int center_y = target.y - ( int )( ( double )( HEIGHT ) / 2.0 );
+	const int center_y = ( int )( target.y ) - ( int )( ( double )( HEIGHT ) / 2.0 );
 	if ( coords_.y < center_y - FAST_SPEED )
 	{
 		coords_.y += FAST_SPEED;
