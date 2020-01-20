@@ -4,7 +4,9 @@
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
 #include "ow_inventory.hpp"
+#include "ow_tilemap.hpp"
 #include "rapidjson/document.h"
+#include "texture_box.hpp"
 #include <vector>
 
 class Collision;
@@ -41,5 +43,11 @@ class OverworldState : public GameState
 		int background_animation_timer_;
 		int background_animation_frame_;
 		ImageGraphics water_background_;
+		int width_;
+		int height_;
+		TextureBox bg_texture_;
+		TextureBox fg_texture_;
+		OWTileMap tilemap_;
+
 		char scratch_[ 3000 ];
 };

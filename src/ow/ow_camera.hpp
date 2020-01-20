@@ -22,6 +22,12 @@ class OWCamera
 			bounds_h_ ( bounds_h )
 		{};
 
+		constexpr void setBounds( int bounds_w, int bounds_h )
+		{
+			bounds_w_ = bounds_w;
+			bounds_h_ = bounds_h;
+		};
+
 		void adjust( const sdl2::SDLRect& target );
 		void center( const Point& target );
 		bool moveAutomaticallyToTarget( const Point& target );

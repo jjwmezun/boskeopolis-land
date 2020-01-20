@@ -2,18 +2,21 @@
 
 #include "image_graphics.hpp"
 #include "dpoint.hpp"
+#include <vector>
 
 class Collision;
 class OWCamera;
 class OWLevel;
+class OWTileMap;
 
 class OWHero
 {
 	public:
 		OWHero( int x = 0, int y = 0 );
-		void update( const sdl2::SDLRect& bounds );
+		void update( const OWTileMap& tilemap, const sdl2::SDLRect& bounds );
 		void render( const OWCamera& camera );
 		void updateGraphics( const sdl2::SDLRect& bounds );
+		void setPosition( int x, int y, const sdl2::SDLRect& bounds );
 
 		int x() const;
 		int y() const;

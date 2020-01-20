@@ -30,6 +30,12 @@ void TextureBox::init()
     token_ = true;
 }
 
+void TextureBox::changeSize( int width, int height )
+{
+    dest_.w = src_.w = width;
+    dest_.h = src_.h = height;
+};
+
 void TextureBox::startDrawing() const
 {
     Render::setRenderTarget( texture_ );

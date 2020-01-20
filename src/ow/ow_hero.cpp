@@ -1,6 +1,7 @@
 #include "input.hpp"
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
+#include "ow_tilemap.hpp"
 
 static constexpr double WALK_ACCELERATION = 0.1;
 static constexpr double RUN_ACCELERATION = WALK_ACCELERATION * 2.0;
@@ -19,7 +20,7 @@ static constexpr int calculateGraphicsXFromPositionX( double position_x )
 
 static constexpr int calculateGraphicsYFromPositionY( double position_y )
 {
-	return ( int )( std::floor( position_y ) ) - GRAPHICS_HALF_HEIGHT;
+	return ( int )( std::floor( position_y ) ) - ( GRAPHICS_HEIGHT - 4 );
 };
 
 OWHero::OWHero( int x, int y )
@@ -35,7 +36,7 @@ OWHero::OWHero( int x, int y )
 	y_speed_ ( 0.0 )
 {};
 
-void OWHero::update( const sdl2::SDLRect& bounds )
+void OWHero::update( const OWTileMap& tilemap, const sdl2::SDLRect& bounds )
 {
 	const double acceleration_speed = ( Input::held( Input::Action::RUN ) ) ? RUN_ACCELERATION : WALK_ACCELERATION;
 	const double top_speed = ( Input::held( Input::Action::RUN ) ) ? RUN_TOP_SPEED : WALK_TOP_SPEED;
@@ -88,19 +89,34 @@ void OWHero::update( const sdl2::SDLRect& bounds )
 		y_speed_ /= 1.15;
 	}
 
-	if ( x_speed_ != 0.0 )
-	{
-		position_.x += x_speed_;
-		updateGraphicsX( bounds );
-	}
-
-	if ( y_speed_ != 0.0 )
+	const int v_tile_x = ( int )( std::floor( ( position_.x ) / 16.0 ) );
+	const int v_tile_y = ( int )( std::floor( ( position_.y + y_speed_ ) / 16.0 ) );
+	const int v_tile = v_tile_y * tilemap.map_width + v_tile_x;
+	const bool v_on_solid_tile = tilemap.tiles[ v_tile ];
+	if ( !v_on_solid_tile )
 	{
 		position_.y += y_speed_;
-		updateGraphicsY( bounds );
+	}
+	else
+	{
+		y_speed_ *= BOUNCE_BACK;
+	}
+
+	const int h_tile_x = ( int )( std::floor( ( position_.x + x_speed_ ) / 16.0 ) );
+	const int h_tile_y = ( int )( std::floor( ( position_.y ) / 16.0 ) );
+	const int h_tile = h_tile_y * tilemap.map_width + h_tile_x;
+	const bool h_on_solid_tile = tilemap.tiles[ h_tile ];
+	if ( !h_on_solid_tile )
+	{
+		position_.x += x_speed_;
+	}
+	else
+	{
+		x_speed_ *= BOUNCE_BACK;
 	}
 
 	keepInBounds( bounds );
+	updateGraphics( bounds );
 };
 
 void OWHero::updateGraphics( const sdl2::SDLRect& bounds )
@@ -170,4 +186,11 @@ void OWHero::keepInBounds( const sdl2::SDLRect& bounds )
 		y_speed_ *= BOUNCE_BACK;
 		updateGraphicsY( bounds );
 	}
-}
+};
+
+void OWHero::setPosition( int x, int y, const sdl2::SDLRect& bounds )
+{
+	position_.x = ( double )( x );
+	position_.y = ( double )( y );
+	updateGraphics( bounds );
+};
