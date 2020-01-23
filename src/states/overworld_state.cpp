@@ -1,5 +1,6 @@
 #include "audio.hpp"
 #include "main.hpp"
+#include <fstream>
 #include "input.hpp"
 #include "level_state.hpp"
 #include "main.hpp"
@@ -67,13 +68,13 @@ void OverworldState::stateUpdate()
 			const auto& seek = objects_.find( tile );
 			if ( seek != objects_.end() )
 			{
-				current_level_ = seek->second.value.level + 1;
+				current_level_ = seek->second.value.level;
 			}
 			inventory_.update( current_level_ );
 
 			if ( Input::held( Input::Action::CONFIRM ) )
 			{
-				if ( current_level_ > 0 )
+				if ( current_level_ > -1 )
 				{
 					Main::changeState( std::make_unique<LevelState> ( current_level_ ) );
 				}
@@ -142,7 +143,22 @@ void OverworldState::stateRender()
 
 void OverworldState::init()
 {
-	const auto& data = mezun::getJSONData( Main::resourcePath() + "maps/land-ow.json", "The o’erworld map data is missing. Please redownload this game & try ’gain.", "The o’erworld map data is broken. Please redownload this game & try ’gain." );
+	const std::string path = Main::resourcePath() + "maps/land-ow.json";
+	std::ifstream ifs( path );
+	if( !ifs.is_open() )
+	{
+		throw std::runtime_error( "The o’erworld map data is missing. Please redownload this game & try ’gain." );
+	}
+	rapidjson::IStreamWrapper ifs_wrap( ifs );
+    rapidjson::Document document;
+    document.ParseStream( ifs_wrap );
+
+    if ( !document.IsObject() )
+    {
+		throw std::runtime_error( "The o’erworld map data is broken. Please redownload this game & try ’gain." );
+    }
+
+    const auto data = document.GetObject();
 	if
 	(
 		!data.HasMember( "width" )  ||
@@ -172,54 +188,42 @@ void OverworldState::init()
 		if ( i.IsObject() )
 		{
 			const auto& item = i.GetObject();
-			if
-			(
-				item.HasMember( "name" ) &&
-				item[ "name" ].IsString() &&
-				std::string( item[ "name" ].GetString() ) == "BG" &&
-				item.HasMember( "data" ) &&
-				item[ "data" ].IsArray() )
+			const bool has_name = item.HasMember( "name" );
+			const bool name_is_string = item[ "name" ].IsString();
+			const bool has_data = item.HasMember( "data" );
+			const bool data_is_array = item[ "data" ].IsArray();
+
+			if ( has_name && name_is_string && has_data && data_is_array )
 			{
-				std::cout << "WHY" << std::endl;
-				for ( const auto& bg_tile : item[ "data" ].GetArray() )
+				const int name_is_bg = strcmp( item[ "name" ].GetString(), "BG" );
+				if ( name_is_bg == 0 )
 				{
-					if ( bg_tile.IsInt() )
+					for ( const auto& bg_tile : item[ "data" ].GetArray() )
 					{
-						bg_tiles.emplace_back( bg_tile.GetInt() );
+						if ( bg_tile.IsInt() )
+						{
+							bg_tiles.emplace_back( bg_tile.GetInt() );
+						}
 					}
 				}
-			}
-			else if
-			(
-				item.HasMember( "name" ) &&
-				item[ "name" ].IsString() &&
-				std::string( item[ "name" ].GetString() ) == "Blocks" &&
-				item.HasMember( "data" ) &&
-				item[ "data" ].IsArray() )
-			{
-				std::cout << "WHY" << std::endl;
-				for ( const auto& block_tile : item[ "data" ].GetArray() )
+				else if ( strcmp( item[ "name" ].GetString(), "Blocks" ) == 0 )
 				{
-					if ( block_tile.IsInt() )
+					for ( const auto& block_tile : item[ "data" ].GetArray() )
 					{
-						block_tiles.emplace_back( block_tile.GetInt() );
+						if ( block_tile.IsInt() )
+						{
+							block_tiles.emplace_back( block_tile.GetInt() );
+						}
 					}
 				}
-			}
-			else if
-			(
-				item.HasMember( "name" ) &&
-				item[ "name" ].IsString() &&
-				std::string( item[ "name" ].GetString() ) == "Sprites" &&
-				item.HasMember( "data" ) &&
-				item[ "data" ].IsArray() )
-			{
-				std::cout << "WHY" << std::endl;
-				for ( const auto& sprites_tile : item[ "data" ].GetArray() )
+				else if ( strcmp( item[ "name" ].GetString(), "Sprites" ) == 0 )
 				{
-					if ( sprites_tile.IsInt() )
+					for ( const auto& sprites_tile : item[ "data" ].GetArray() )
 					{
-						sprites_tiles.emplace_back( sprites_tile.GetInt() );
+						if ( sprites_tile.IsInt() )
+						{
+							sprites_tiles.emplace_back( sprites_tile.GetInt() );
+						}
 					}
 				}
 			}
@@ -305,6 +309,8 @@ void OverworldState::init()
 
 	camera_.center( hero_.getPosition() );
 	hero_.updateGraphics( camera_.getBox() );
+
+	inventory_.init();
 
 	Audio::changeSong( "overworld" );
 };

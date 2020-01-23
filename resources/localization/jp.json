@@ -352,8 +352,8 @@
     },
     "level_select":
     {
-        "title": "Level Select",
-        "cycle_name": "Cycle",
+        "title": "レベルを決めて下さい",
+        "cycle_name": "じゅんかん",
         "percent_symbol": "%"
     },
     "goals":
@@ -376,10 +376,10 @@
     {
         "names":
         {
-            "city-1": "Blueberry Burroughs",
-            "woods-1": "Wasabi Woods (わさびのもり)",
-            "mines-1": "Minty Mines",
-            "desert-1": "Dry, Drought Desert",
+            "city-1": "ブルーベリーブロス",
+            "woods-1": "わさびウードス",
+            "mines-1": "ミントミネス",
+            "desert-1": "ドライードロトデサート",
             "mountain-1": "Foul Fowl Farm",
             "sky-1": "Cotton Candy Clouds",
             "space-1": "Lunacy",
