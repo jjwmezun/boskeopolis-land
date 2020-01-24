@@ -1,5 +1,7 @@
 #pragma once
 
+#include "mezun_sdl2.hpp"
+
 struct OWObject
 {
     enum class Type
@@ -14,8 +16,9 @@ struct OWObject
 
     Type type;
     Value value;
+    sdl2::SDLRect position;
 
-    static OWObject createLevel( int level )
+    constexpr static OWObject createLevel( int level )
     {
         return { Type::LEVEL, level };
     };

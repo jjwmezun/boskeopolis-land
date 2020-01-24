@@ -41,7 +41,8 @@ OverworldState::OverworldState()
 	hero_ ( 300, 300 ),
 	inventory_ (),
 	objects_ (),
-	current_level_ ( -1 )
+	current_level_ ( -1 ),
+	level_tile_graphics_ ()
 {};
 
 OverworldState::~OverworldState()
@@ -111,6 +112,7 @@ void OverworldState::stateUpdate()
 	fg_texture_.setY( -camera_.y() );
 	updateBackgroundAnimation();
 	updateBackgroundPosition();
+	level_tile_graphics_.update( camera_.getBox() );
 };
 
 void OverworldState::stateRender()
@@ -118,6 +120,7 @@ void OverworldState::stateRender()
 	Render::colorCanvas( 2 );
 	water_background_.render();
 	bg_texture_.render();
+	level_tile_graphics_.render( camera_.getBox() );
 	hero_.render( camera_ );
 	fg_texture_.render();
 	switch ( camera_state_ )
@@ -278,6 +281,7 @@ void OverworldState::init()
 			else if ( sprite_tile > 2063 && sprite_tile < 2063 + ( 16 * 4 ) )
 			{
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( sprite_tile - 2064 ) ) );
+				level_tile_graphics_.add( dest );
 			}
 		}
 	}

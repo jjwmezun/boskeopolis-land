@@ -1,6 +1,6 @@
 #pragma once
 
-template<int upper_limit_, int lower_limit_, int init_value_, bool reset_>
+template<int upper_limit_, int lower_limit_ = 0, int init_value_ = 0, bool reset_ = false>
 class CounterT
 {
 	public:

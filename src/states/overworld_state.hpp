@@ -4,6 +4,7 @@
 #include "ow_camera.hpp"
 #include "ow_hero.hpp"
 #include "ow_inventory.hpp"
+#include "ow_level_tile_graphics.hpp"
 #include "ow_object.hpp"
 #include "ow_tilemap.hpp"
 #include "rapidjson/document.h"
@@ -49,5 +50,6 @@ class OverworldState : public GameState
 		OWInventory inventory_;
 		std::unordered_map<int, OWObject> objects_;
 		int current_level_;
+		OWLevelTileGraphics level_tile_graphics_;
 		char scratch_[ 3000 ];
 };
