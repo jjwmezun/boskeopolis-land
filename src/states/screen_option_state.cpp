@@ -15,13 +15,13 @@ static constexpr int START_Y = 64;
 ScreenOptionState::ScreenOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
-	bg_ (),
-	title_ (),
-	fullscreen_option_ ( Localization::getCurrentLanguage().getScreenOptionFullscreen(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
-	window_option_ ( Localization::getCurrentLanguage().getScreenOptionWindow(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
-	selection_ ( Render::getMaxMagnification() ),
+	max_options_ ( Render::getMaxMagnification() + 1 ),
 	other_options_ (),
-	max_options_ ( Render::getMaxMagnification() + 1 )
+	selection_ ( Render::getMaxMagnification() ),
+	title_ (),
+	window_option_ ( Localization::getCurrentLanguage().getScreenOptionWindow(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) + 8 ),
+	fullscreen_option_ ( Localization::getCurrentLanguage().getScreenOptionFullscreen(), START_Y, FULL_OR_WINDOW_OPTION_WIDTH_PIXELS, ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - FULL_OR_WINDOW_OPTION_WIDTH_PIXELS - 8 ),
+	bg_ ()
 {
 	int y = START_Y + 32;
 	for ( int i = 1; i < max_options_; ++i )

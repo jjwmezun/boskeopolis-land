@@ -4,6 +4,7 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level_state.hpp"
+#include "localization.hpp"
 #include "main.hpp"
 #include "mezun_json.hpp"
 #include "overworld_state.hpp"
@@ -42,6 +43,7 @@ OverworldState::OverworldState( int previous_level, bool show_event, bool new_ga
 	background_animation_frame_ ( 0 ),
 	current_level_ ( -1 ),
 	previous_level_ ( previous_level ),
+	language_id_ ( Localization::getCurrentLanguageIndex() ),
 	objects_ (),
 	tilemap_ (),
 	bg_texture_ (),
@@ -266,7 +268,7 @@ void OverworldState::testForMenuAction()
 	{
 		Main::pushState
 		(
-			std::make_unique<OverworldMenuState> ( palette(), &state_ )
+			std::make_unique<OverworldMenuState> ( palette(), &state_, current_level_, inventory_.getFlashColor() )
 		);
 	}
 };
@@ -277,6 +279,11 @@ void OverworldState::backFromPop()
 	if ( state_ == OWState::MOVE_CAMERA )
 	{
 		Audio::playSound( Audio::SoundType::PAUSE );
+	}
+	if ( testLanguageHasChanged() )
+	{
+		inventory_.forceLevelNameRedraw();
+		language_id_ = Localization::getCurrentLanguageIndex();
 	}
 };
 
@@ -506,4 +513,9 @@ void OverworldState::generateMap()
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
 		}
 	}
+};
+
+bool OverworldState::testLanguageHasChanged() const
+{
+	return Localization::getCurrentLanguageIndex() != language_id_;
 };

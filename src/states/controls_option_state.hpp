@@ -18,11 +18,11 @@ class ControlsOptionState : public GameState
 		void backFromPop() override;
 
 	private:
-		OptionsBG bg_;
+		OptionSelectionVertical selection_;
 		TextureBox title_;
 		TextureBox text_;
 		TextureBox highlights_[ Input::NUM_O_ACTIONS ];
-		OptionSelectionVertical selection_;
+		OptionsBG bg_;
 
 		void updateSelection();
 		void updateInput();

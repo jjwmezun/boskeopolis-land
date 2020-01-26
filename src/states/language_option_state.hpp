@@ -16,9 +16,9 @@ class LanguageOptionState : public GameState
 		void init() override;
 
 	private:
-		OptionsBG bg_;
-		TextureBox title_;
 		OptionSystem options_;
+		TextureBox title_;
+		OptionsBG bg_;
 
 		void updateInput();
 		void setButtonsPressState();

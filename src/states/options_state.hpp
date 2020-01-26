@@ -24,9 +24,14 @@ class OptionsState : public GameState
 			LANGUAGE
 		};
 
-		OptionsBG bg_;
+		void updateInput();
+		bool testLanguageHasChanged() const;
+		void resetOptionsText();
+		void generateTitle();
+
+		bool from_title_;
+		int language_id_;
 		TextureBox title_;
 		OptionSystem options_;
-		bool from_title_;
-		void updateInput();
+		OptionsBG bg_;
 };

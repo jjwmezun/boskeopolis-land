@@ -18,12 +18,6 @@ static constexpr int HAVE_X = 48;
 static constexpr int DONT_HAVE_X = 56;
 static constexpr int SCORE_X = Unit::MiniBlocksToPixels( Unit::WINDOW_WIDTH_MINIBLOCKS - 6 );
 
-// From dark to light, delaying a li’l @ either end.
-static constexpr int NUMBER_OF_FLASH_FRAMES = 10;
-static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
-{
-	0, 1, 2, 3, 4, 4, 3, 2, 1, 0
-};
 
 OWInventory::OWInventory()
 :
@@ -163,12 +157,7 @@ void OWInventory::updateTextFlashColor()
 	}
 };
 
-inline int OWInventory::getFlashColor() const
-{
-	return FLASH_FRAMES[ color_animation_ ];
-};
-
-inline bool OWInventory::testOnDifferentLevel() const
+bool OWInventory::testOnDifferentLevel() const
 {
 	return prev_level_ != level_ && testStandingOnLevel();
 };
@@ -198,17 +187,12 @@ void OWInventory::regenerateLevelGraphics()
 
 	WTextObj gem_score = { mezun::charToChar32String( Inventory::gemScore( level_ ).c_str() ), SCORE_X, ROW_1 };
 	WTextObj time_score = { mezun::charToChar32String( Inventory::timeScore( level_ ).c_str() ), SCORE_X + 8, ROW_2 };
-	WTextObj level_name = { Level::getLevelNames()[ level_ ], LEVEL_NAME_X, ROW_1, WTextCharacter::Color::BLACK, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 8 };
+	WTextObj level_name = generateLevelName();
 
 	// Generate texture for each color o’ flashing text.
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
-		level_name.changeColor( Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
-		level_name_textures_[ i ].init();
-		level_name_textures_[ i ].startDrawing();
-		Render::clearScreenTransparency();
-		level_name.render();
-		level_name_textures_[ i ].endDrawing();
+		regenerateLevelNameGraphics( level_name, i );
 
 		gem_score.changeColor( Inventory::gemChallengeBeaten( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
 		gem_score_textures_[ i ].init();
@@ -235,6 +219,21 @@ void OWInventory::regenerateLevelGraphics()
 	time_score_target.render();
 	time_score_target_texture_.endDrawing();
 	updateTextFlashColor();
+};
+
+WTextObj OWInventory::generateLevelName() const
+{
+	return { Level::getLevelNames()[ level_ ], LEVEL_NAME_X, ROW_1, WTextCharacter::Color::BLACK, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 8 };
+};
+
+void OWInventory::regenerateLevelNameGraphics( WTextObj& level_name, int i )
+{
+	level_name.changeColor( Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
+	level_name_textures_[ i ].init();
+	level_name_textures_[ i ].startDrawing();
+	Render::clearScreenTransparency();
+	level_name.render();
+	level_name_textures_[ i ].endDrawing();
 };
 
 void OWInventory::updateFlashColor()
@@ -279,12 +278,21 @@ void OWInventory::updateShowChallengeScoresInput()
 	}
 };
 
-inline bool OWInventory::testMoneyInTheRed() const
+bool OWInventory::testMoneyInTheRed() const
 {
 	return Inventory::totalFundsShown() < 0;
 };
 
-inline bool OWInventory::testStandingOnLevel() const
+bool OWInventory::testStandingOnLevel() const
 {
 	return level_ > -1;
+};
+
+void OWInventory::forceLevelNameRedraw()
+{
+	WTextObj level_name = generateLevelName();
+	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
+	{
+		regenerateLevelNameGraphics( level_name, i );
+	}
 };

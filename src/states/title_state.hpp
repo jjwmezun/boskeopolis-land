@@ -37,26 +37,23 @@ class TitleState : public GameState
 		void generateLevelTexture();
 		void renderHeader();
 
-		Level level_;
-		EventSystem events_;
-		Camera camera_;
-		SpriteSystem sprites_;
-		BlockSystem blocks_;
-		Health health_;
-
-		TextureBox created_by_;
-		MapLayerImage light_gradient_bg_;
-		MapLayerImage skyline_bg_;
-		MapLayerImage skyscrapers_bg_;
-		MapLayerImage cloud_bg_;
-
-		OptionSystem options_;
+		bool can_load_;
+        bool paused_;
         SDL_Texture* screen_texture_;
+		TextureBox created_by_;
+		Health health_;
+		OptionSystem options_;
         sdl2::SDLRect screen_src_;
         sdl2::SDLRect screen_dest_;
 		const ImageGraphics curtain_;
 		const ImageGraphics logo_;
-
-		bool can_load_;
-        bool paused_;
+		MapLayerImage light_gradient_bg_;
+		MapLayerImage skyline_bg_;
+		MapLayerImage skyscrapers_bg_;
+		MapLayerImage cloud_bg_;
+		Level level_;
+		Camera camera_;
+		BlockSystem blocks_;
+		SpriteSystem sprites_;
+		EventSystem events_;
 };

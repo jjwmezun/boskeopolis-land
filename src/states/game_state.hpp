@@ -45,10 +45,8 @@ class GameState
 		bool testRenderBelow() const;
 
 	protected:
-		const StateID id_;
-
-	private:
-		Palette palette_;
-		int frame_counter_;
 		const bool render_below_;
+		const StateID id_;
+		int frame_counter_;
+		Palette palette_;
 };

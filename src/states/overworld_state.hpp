@@ -37,12 +37,14 @@ class OverworldState : public GameState
 		void generateBGMapTexture();
 		void generateFGMapTexture();
 		void generateMap();
+		bool testLanguageHasChanged() const;
 
 		OWState state_;
 		int background_animation_timer_;
 		int background_animation_frame_;
 		int current_level_;
 		int previous_level_;
+		int language_id_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;
 		TextureBox bg_texture_;

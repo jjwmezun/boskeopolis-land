@@ -9,10 +9,10 @@ GameState::GameState
 	bool render_below
 )
 :
+	render_below_ ( render_below ),
 	id_ ( id ),
-	palette_ ( palette ),
 	frame_counter_ ( 0 ),
-	render_below_ ( render_below )
+	palette_ ( palette )
 {};
 
 GameState::~GameState() {};

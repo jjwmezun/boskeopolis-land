@@ -48,25 +48,25 @@ static const std::string& getRandomTrainerLevel()
 TitleState::TitleState()
 :
 	GameState ( StateID::TITLE_STATE ),
-	level_ ( Level::getLevel( Level::getIDFromCodeName( getRandomTrainerLevel() ) ) ),
-	events_ ( level_.startOn() ),
-	camera_ ( { level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4 } ),
-	sprites_ ( level_.entranceX(), level_.entranceY() ),
-	blocks_ ( level_.currentMap() ),
-	health_ (),
-	created_by_ (),
-	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 496, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
-	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
-	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
-	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
-	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y ) ),
+	can_load_ ( false ),
+    paused_ ( false ),
     screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ) ),
+	created_by_ (),
+	health_ (),
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y ) ),
     screen_src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
     screen_dest_ ( 0, 64, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
     curtain_ ( "bg/stageplay.png", { 0, 0, 400, 224 }, { 0, 68, 400, 224 } ),
 	logo_ ( "bosko_logo.png", { 0, 0, LOGO_WIDTH, LOGO_HEIGHT }, { ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT } ),
-	can_load_ ( false ),
-    paused_ ( false )
+	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 496, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
+	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
+	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
+	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
+	level_ ( Level::getLevel( Level::getIDFromCodeName( getRandomTrainerLevel() ) ) ),
+	camera_ ( { level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4 } ),
+	blocks_ ( level_.currentMap() ),
+	sprites_ ( level_.entranceX(), level_.entranceY() ),
+	events_ ( level_.startOn() )
 {};
 
 TitleState::~TitleState()

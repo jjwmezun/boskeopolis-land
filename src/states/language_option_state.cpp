@@ -3,6 +3,7 @@
 #include "controls_option_state.hpp"
 #include "input.hpp"
 #include "language_option_state.hpp"
+#include "level.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -14,9 +15,9 @@
 LanguageOptionState::LanguageOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
-	bg_ (),
+	options_ ( OptionSystem::generateGridOptionSystem( Localization::getLanguageNames() ) ),
 	title_ (),
-	options_ ( OptionSystem::generateGridOptionSystem( Localization::getLanguageNames() ) )
+	bg_ ()
 {
 	Audio::changeSong( "level-select" );
 };
@@ -73,7 +74,7 @@ void LanguageOptionState::resetTitle()
 {
 	title_.destroy();
 	initTitle();
-}
+};
 
 void LanguageOptionState::saveLanguageSettings() const
 {
@@ -90,4 +91,5 @@ void LanguageOptionState::saveLanguageSettings() const
 		document.AddMember( "language", language, document.GetAllocator() );
 	}
 	Config::saveData( document );
-}
+	Level::regenerateLevelNames();
+};

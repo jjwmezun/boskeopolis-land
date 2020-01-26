@@ -33,11 +33,11 @@ static int calculateKeyNameX( const std::u32string* action_names )
 ControlsOptionState::ControlsOptionState()
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
-	bg_ (),
+	selection_ ( Input::NUM_O_ACTIONS - 1 ),
 	title_ (),
 	text_ (),
 	highlights_ (),
-	selection_ ( Input::NUM_O_ACTIONS - 1 )
+	bg_ ()
 {};
 
 ControlsOptionState::~ControlsOptionState()

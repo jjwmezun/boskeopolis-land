@@ -72,6 +72,7 @@ class Level
 		static int getIDFromCodeName( std::string code_name );
 		static const std::u32string* getLevelNames();
 		static const std::string& getCodeName( int level_id );
+		static void regenerateLevelNames();
 
 	private:
 		std::vector<Map> maps_;

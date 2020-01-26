@@ -15,8 +15,8 @@ class ControlsOptionPromptState : public GameState
 		void init() override;
 
 	private:
+		Input::Action action_;
 		TextObjBasic text_;
 		sdl2::SDLRect bg_;
 		sdl2::SDLRect shadow_;
-		Input::Action action_;
 };

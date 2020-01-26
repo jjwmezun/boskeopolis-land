@@ -908,6 +908,14 @@ void Level::buildLevelList()
 	}
 };
 
+void Level::regenerateLevelNames()
+{
+	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
+	{
+		level_names_[ i ] = Localization::getCurrentLanguage().getLevelName( code_names_[ i ] );
+	}
+};
+
 // For "Kill All Enemies" goal.
 int Level::allEnemiesToKill() const
 {

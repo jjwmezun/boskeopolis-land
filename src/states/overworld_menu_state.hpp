@@ -10,8 +10,9 @@
 class OverworldMenuState : public GameState
 {
 	public:
-		OverworldMenuState( const Palette& pal, OWState* camera_state );
+		OverworldMenuState( const Palette& pal, OWState* camera_state, int level, int level_color );
 		~OverworldMenuState();
+		void init() override;
 		void stateUpdate() override;
 		void stateRender() override;
 		void backFromPop() override;
@@ -27,8 +28,18 @@ class OverworldMenuState : public GameState
 		static constexpr int NUM_O_OPTIONS = ( int )( Option::QUIT ) + 1;
 
 	private:
+		void renderOptionsText();
+		void regenerateOptionsTextOnLanguageChange();
+		void generateOptionsText();
+		bool testOverworldShowsLevelName() const;
+		void generateReplacementLevelNameTexture();
+
+		int language_id_;
+		int level_;
+		int level_color_;
 		CounterFlip<NUM_O_OPTIONS - 1> option_selection_;
 		OWState* camera_state_;
+		TextureBox level_name_replacement_;
 		WTextObj options_text_[ NUM_O_OPTIONS ];
 		const sdl2::SDLRect bg_;
 		ImageGraphics frame_;

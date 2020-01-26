@@ -18,13 +18,13 @@ class ScreenOptionState : public GameState
 
 
 	private:
-		OptionsBG bg_;
-		TextureBox title_;
-		OptionBox fullscreen_option_;
-		OptionBox window_option_;
-		OptionSelectionVertical selection_;
-		std::vector<OptionBox> other_options_;
 		int max_options_;
+		std::vector<OptionBox> other_options_;
+		OptionSelectionVertical selection_;
+		TextureBox title_;
+		OptionBox window_option_;
+		OptionBox fullscreen_option_;
+		OptionsBG bg_;
 
 		void updateOptions();
 		void updateInput();

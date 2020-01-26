@@ -17,9 +17,10 @@ OptionsState::OptionsState( bool from_title )
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
 	from_title_ ( from_title ),
-	bg_ (),
+	language_id_ ( Localization::getCurrentLanguageIndex() ),
 	title_ (),
-	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getOptionsOptions(), 64 ) )
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getOptionsOptions(), 64 ) ),
+	bg_ ()
 {
 	Audio::changeSong( "level-select" );
 };
@@ -45,7 +46,7 @@ void OptionsState::stateRender()
 
 void OptionsState::init()
 {
-	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextCharacter::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK );
+	generateTitle();
 	options_.init();
 };
 
@@ -90,5 +91,31 @@ void OptionsState::updateInput()
 
 void OptionsState::backFromPop()
 {
-	options_.setAllNotPressedDown();
+	if ( testLanguageHasChanged() )
+	{
+		resetOptionsText();
+		generateTitle();
+		language_id_ = Localization::getCurrentLanguageIndex();
+	}
+	else
+	{
+		options_.setAllNotPressedDown();
+	}
+};
+
+bool OptionsState::testLanguageHasChanged() const
+{
+	return language_id_ != Localization::getCurrentLanguageIndex();
+};
+
+void OptionsState::resetOptionsText()
+{
+	const int selection = options_.selection();
+	options_ = { OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getOptionsOptions(), 64, selection ) };
+	options_.init();
+};
+
+void OptionsState::generateTitle()
+{
+	WTextObj::generateTexture( title_, Localization::getCurrentLanguage().getOptionsTitle(), 0, 16, WTextCharacter::Color::WHITE, WTextObj::DEFAULT_WIDTH, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK );
 };

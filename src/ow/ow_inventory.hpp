@@ -10,6 +10,13 @@
 class OWInventory
 {
 	public:
+		// From dark to light, delaying a li’l @ either end.
+		static constexpr int NUMBER_OF_FLASH_FRAMES = 10;
+		static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
+		{
+			0, 1, 2, 3, 4, 4, 3, 2, 1, 0
+		};
+
 		static constexpr int HEIGHT = 40;
 
 		OWInventory();
@@ -21,6 +28,12 @@ class OWInventory
 		void update( int level );
 		void render();
 		void init();
+		void forceLevelNameRedraw();
+
+		inline int getFlashColor() const
+		{
+			return FLASH_FRAMES[ color_animation_ ];
+		};
 
 	private:
 		void renderLevelInfo();
@@ -31,10 +44,11 @@ class OWInventory
 		void setShowChallengesOn();
 		void setShowChallengesOff();
 		void updateTextFlashColor();
-		inline int getFlashColor() const;
-		inline bool testOnDifferentLevel() const;
-		inline bool testMoneyInTheRed() const;
-		inline bool testStandingOnLevel() const;
+		bool testOnDifferentLevel() const;
+		bool testMoneyInTheRed() const;
+		bool testStandingOnLevel() const;
+		void regenerateLevelNameGraphics( WTextObj& level_name, int i );
+		WTextObj generateLevelName() const;
 
 		bool show_challenges_;
 		bool show_challenges_lock_;
