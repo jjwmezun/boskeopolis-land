@@ -27,7 +27,7 @@ class OWLevelTileGraphics
         int prev_camera_x_;
         int prev_camera_y_;
         TimerRepeatT2<Unit::DEFAULT_ANIMATION_SPEED> animation_timer_;
-        CounterT<NUMBER_OF_ANIMATION_FRAMES, 0, 0, true> animation_frame_;
+        CounterT<NUMBER_OF_ANIMATION_FRAMES - 1, 0, 0, true> animation_frame_;
         std::string tileset_;
         std::vector<sdl2::SDLRect> positions_;
         std::vector<sdl2::SDLRect> destinations_;

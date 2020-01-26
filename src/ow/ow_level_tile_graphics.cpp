@@ -38,6 +38,7 @@ void OWLevelTileGraphics::update( const sdl2::SDLRect& camera )
     {
         ++animation_frame_;
         source_.x = Unit::BlocksToPixels( ANIMATION_FRAMES[ animation_frame_() ] );
+        std::cout << animation_frame_() << std::endl;
     }
 };
 
