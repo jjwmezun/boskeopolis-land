@@ -45,7 +45,7 @@ static const std::string& getRandomTrainerLevel()
     return TRAINER_LEVELS[ mezun::randInt( NUMBER_OF_TRAINER_LEVELS - 1, 0 ) ];
 };
 
-TitleState::TitleState( int start_selection )
+TitleState::TitleState()
 :
 	GameState ( StateID::TITLE_STATE ),
 	level_ ( Level::getLevel( Level::getIDFromCodeName( getRandomTrainerLevel() ) ) ),
@@ -59,7 +59,7 @@ TitleState::TitleState( int start_selection )
 	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
 	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
-	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y, start_selection ) ),
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y ) ),
     screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ) ),
     screen_src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
     screen_dest_ ( 0, 64, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
@@ -99,7 +99,7 @@ void TitleState::stateUpdate()
 
                 case ( Option::OPTIONS ):
                 {
-                    Main::pushState( std::make_unique<OptionsState> () );
+                    Main::pushState( std::make_unique<OptionsState> ( true ), true );
                 }
                 break;
 

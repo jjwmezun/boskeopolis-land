@@ -50,3 +50,8 @@ void OptionSelection::setNotAllowed( int not_allowed )
 		shoveForward();
 	}
 };
+
+void OptionSelection::setAllAllowed()
+{
+	not_allowed_ = -1;
+};

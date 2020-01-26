@@ -6,7 +6,6 @@
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
-#include "options_state.hpp"
 #include "rapidjson/document.h"
 #include "render.hpp"
 #include "screen_option_state.hpp"
@@ -53,7 +52,7 @@ void LanguageOptionState::updateInput()
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::changeState( std::make_unique<OptionsState> ( 2 ) );
+		Main::popState( true );
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{

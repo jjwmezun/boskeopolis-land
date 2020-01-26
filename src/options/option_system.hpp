@@ -20,6 +20,9 @@ class OptionSystem
 		void changeOptions( const std::vector<std::u32string>& options );
 		void setSelectedPressedDown();
 		void setPressedDown( int option );
+		void setAllNotPressedDown();
+		void setVisuallyPressedDown( int option );
+		void setSelectedVisuallyPressedDown();
 
 	private:
 		std::vector<OptionBox> options_;

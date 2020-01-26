@@ -8,12 +8,13 @@
 class OptionsState : public GameState
 {
 	public:
-		OptionsState( int start_selection = 0 );
+		OptionsState( bool from_title = false );
 		~OptionsState();
 
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
+		void backFromPop() override;
 
 	private:
 		enum class Option
@@ -26,5 +27,6 @@ class OptionsState : public GameState
 		OptionsBG bg_;
 		TextureBox title_;
 		OptionSystem options_;
+		bool from_title_;
 		void updateInput();
 };

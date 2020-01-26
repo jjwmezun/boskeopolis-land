@@ -13,12 +13,13 @@
 
 static constexpr int NUMBER_OF_OPTIONS = 3;
 
-OptionsState::OptionsState( int start_selection )
+OptionsState::OptionsState( bool from_title )
 :
 	GameState( StateID::OPTIONS_STATE, { "Mountain Red", 2 }, false ),
+	from_title_ ( from_title ),
 	bg_ (),
 	title_ (),
-	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getOptionsOptions(), 64, start_selection ) )
+	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getOptionsOptions(), 64 ) )
 {
 	Audio::changeSong( "level-select" );
 };
@@ -53,7 +54,14 @@ void OptionsState::updateInput()
 	if ( Input::pressed( Input::Action::CANCEL ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::changeState( std::make_unique<TitleState> ( 2 ) );
+		if ( from_title_ )
+		{
+			Main::changeState( std::make_unique<TitleState> () );
+		}
+		else
+		{
+			Main::popState( true );
+		}
 	}
 	else if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
@@ -61,21 +69,26 @@ void OptionsState::updateInput()
 		{
 			case ( Option::RESOLUTION ):
 			{
-				Main::changeState( std::make_unique<ScreenOptionState> () );
+				Main::pushState( std::make_unique<ScreenOptionState> (), true );
 			}
 			break;
 			case ( Option::CONTROLS ):
 			{
-				Main::changeState( std::make_unique<ControlsOptionState> () );
+				Main::pushState( std::make_unique<ControlsOptionState> (), true );
 			}
 			break;
 			case ( Option::LANGUAGE ):
 			{
-				Main::changeState( std::make_unique<LanguageOptionState> () );
+				Main::pushState( std::make_unique<LanguageOptionState> (), true );
 			}
 			break;
 		}
-		options_.setSelectedPressedDown();
+		options_.setSelectedVisuallyPressedDown();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
+};
+
+void OptionsState::backFromPop()
+{
+	options_.setAllNotPressedDown();
 };

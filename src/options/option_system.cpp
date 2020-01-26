@@ -119,6 +119,21 @@ void OptionSystem::setSelectedPressedDown()
 
 void OptionSystem::setPressedDown( int option )
 {
+	setVisuallyPressedDown( option );
+	selection_->setNotAllowed( option );
+};
+
+void OptionSystem::setAllNotPressedDown()
+{
+	for ( int i = 0; i < options_.size(); ++i )
+	{
+		options_[ i ].setToNormal();
+	}
+	selection_->setAllAllowed();
+};
+
+void OptionSystem::setVisuallyPressedDown( int option )
+{
 	for ( int i = 0; i < options_.size(); ++i )
 	{
 		if ( i == option )
@@ -130,5 +145,9 @@ void OptionSystem::setPressedDown( int option )
 			options_[ i ].setToNormal();
 		}
 	}
-	selection_->setNotAllowed( option );
+};
+
+void OptionSystem::setSelectedVisuallyPressedDown()
+{
+	setVisuallyPressedDown( selection_->selection() );
 };

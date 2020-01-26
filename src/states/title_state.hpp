@@ -22,7 +22,7 @@ class TitleState : public GameState
 	public:
 		static constexpr int OPTIONS_SIZE = 4;
 
-		TitleState( int start_selection = 0 );
+		TitleState();
 		~TitleState();
         TitleState( const TitleState& ) = delete;
         TitleState& operator=( const TitleState& ) = delete;

@@ -12,6 +12,7 @@ class OptionSelection
 		int previousSelection() const;
 		void setSelect( int value );
 		void setNotAllowed( int not_allowed );
+		void setAllAllowed();
 
 	protected:
 		int selection_;
