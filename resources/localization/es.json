@@ -160,6 +160,7 @@
     {
         "quitting": "Cerrando…",
         "title": "Los Mandos",
+        "change": "Presione una tecla",
         "actions":
         {
             "confirm": "Confirmar",
@@ -313,7 +314,7 @@
         },
         "messages":
         {
-            "city-1": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
+            "city-1": "Los valores de las joyas por luminosidad:\n\n* Medianas:   100\t\n* Brillantes: 250\t\n* Oscuras:    500\t",
             "city-2": "Paper planes are o'erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o' their gluish grasp.",
             "ice-1": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o' her jump a bit o'a boost.",
             "pirate-3": "Warning: this oily water is e'en easier to drown in than normal water & sticks to you so you can't reoxygenate till you reach land.\n\nIn short: keep to land as much as possible.",

@@ -3,9 +3,17 @@
 #include "input.hpp"
 #include "inventory_level.hpp"
 #include "level_message_state.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "render.hpp"
 #include "text_component_gradual.hpp"
 #include <memory>
+
+static constexpr int WIDTH = 368;
+static constexpr int HEIGHT = 128;
+static constexpr int X = ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - WIDTH ) / 2.0 );
+static constexpr int Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevel::HEIGHT - HEIGHT ) / 2.0 );
+static constexpr int PADDING = 16;
 
 static constexpr int MESSAGE_BOX_HEIGHT_MINIBLOCKS = 12;
 static constexpr int MESSAGE_BOX_WIDTH_PIXELS = Unit::MiniBlocksToPixels( LevelMessageState::MESSAGE_BOX_WIDTH_MINIBLOCKS );
@@ -17,7 +25,7 @@ static constexpr int TEXT_X = MESSAGE_BOX_X + MESSAGE_BOX_PADDING_PIXELS;
 static constexpr int TEXT_Y = MESSAGE_BOX_Y + MESSAGE_BOX_PADDING_PIXELS;
 static constexpr int BORDER_WIDTH = 8;
 
-LevelMessageState::LevelMessageState( const Palette& palette, std::string message )
+LevelMessageState::LevelMessageState( const Palette& palette, std::u32string message )
 :
 	GameState( StateID::PAUSE_STATE, palette ),
 	backdrop_
@@ -35,19 +43,18 @@ LevelMessageState::LevelMessageState( const Palette& palette, std::string messag
 		MESSAGE_BOX_HEIGHT_PIXELS + ( BORDER_WIDTH * 2 )
 	),
 	message_
-	(
-		Text::autoformat( message, LINE_LIMIT ),
-		TEXT_X,
-		TEXT_Y,
-		Text::FontColor::WHITE,
-		Text::FontAlign::LEFT,
-		Text::FontColor::__NULL,
-		false,
-		LINE_LIMIT,
-		0,
-		1,
-		std::make_unique<TextComponentGradual> ( 2 )
-	)
+	({
+		message,
+		X,
+		Y,
+		WTextCharacter::Color::BLACK,
+		MESSAGE_BOX_WIDTH_PIXELS,
+		WTextObj::Align::LEFT,
+		WTextCharacter::Color::__NULL,
+		PADDING,
+		PADDING
+	}),
+	frame_ { "bg/level-message-frame.png", { 0, 0, WIDTH, HEIGHT }, { X, Y, WIDTH, HEIGHT } }
 {
 	Audio::playSound( Audio::SoundType::PAUSE );
 };
@@ -60,13 +67,11 @@ void LevelMessageState::stateUpdate()
 	{
 		Main::popState();
 	}
-
 	message_.update();
 };
 
 void LevelMessageState::stateRender()
 {
-	Render::renderRect( border_, 1 );
-	Render::renderRect( backdrop_, 6 );
+	frame_.render();
 	message_.render();
 };

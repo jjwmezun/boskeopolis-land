@@ -55,8 +55,10 @@ class WTextObj
 			int height = DEFAULT_HEIGHT
 		);
 		void render() const;
+		void render( int limit ) const;
 		void changeColor( WTextCharacter::Color color );
 		void generateTexture( TextureBox& texture_box ) const;
+		int getNumberOfCharacters() const;
 		static void generateTexture
 		(
     		TextureBox& texture_box,
@@ -73,6 +75,6 @@ class WTextObj
 			int height = DEFAULT_HEIGHT
 		);
 
-		std::vector<WTextLine> lines_;
 		bool shadow_;
+		std::vector<WTextLine> lines_;
 };

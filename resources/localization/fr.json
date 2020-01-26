@@ -160,6 +160,7 @@
     {
         "quitting": "En quittant…",
         "title": "Les contrôles",
+        "change": "Appuyez sur une touche",
         "actions":
         {
             "confirm": "Confirmer",

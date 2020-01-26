@@ -292,6 +292,8 @@ void LocalizationLanguage::loadInputText( const rapidjson::GenericObject<false, 
         !input[ "quitting" ].IsString() ||
         !input.HasMember( "title" ) ||
         !input[ "title" ].IsString() ||
+        !input.HasMember( "change" ) ||
+        !input[ "change" ].IsString() ||
         !input.HasMember( "actions" ) ||
         !input[ "actions" ].IsObject()
     )
@@ -301,6 +303,7 @@ void LocalizationLanguage::loadInputText( const rapidjson::GenericObject<false, 
 
     controls_options_title_ = mezun::charToChar32String( input[ "title" ].GetString() );
     input_quitting_ = mezun::charToChar32String( input[ "quitting" ].GetString() );
+    press_any_key_ = mezun::charToChar32String( input[ "change" ].GetString() );
 
     const auto actions = input[ "actions" ].GetObject();
     for ( int i = 0; i < Input::NUM_O_ACTIONS; ++i )
@@ -471,7 +474,7 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
         throw InvalidLocalizationLanguageException( path );
     }
 
-    const auto levels = data[ "levels" ].GetObject();
+    const auto& levels = data[ "levels" ].GetObject();
     if
     (
         !levels.HasMember( "names" ) ||
@@ -485,7 +488,9 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
         throw InvalidLocalizationLanguageException( path );
     }
 
-    const auto level_names = levels[ "names" ].GetObject();
+    const auto& level_names = levels[ "names" ].GetObject();
+    const auto& level_messages = levels[ "messages" ].GetObject();
+    const auto& level_goal_messages = levels[ "goals" ].GetObject();
     for ( int cycle = 1; cycle <= Level::NUMBER_OF_CYCLES; ++cycle )
     {
         for ( int theme_id = 0; theme_id < Level::NUMBER_OF_THEMES; ++theme_id )
@@ -497,6 +502,22 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
                 ({
                     std::string( code_name.c_str() ),
                     mezun::charToChar32String( level_names[ code_name.c_str() ].GetString() )
+                });
+            }
+            if ( level_messages.HasMember( code_name.c_str() ) && level_messages[ code_name.c_str() ].IsString() )
+            {
+                level_messages_.insert
+                ({
+                    std::string( code_name.c_str() ),
+                    mezun::charToChar32String( level_messages[ code_name.c_str() ].GetString() )
+                });
+            }
+            if ( level_goal_messages.HasMember( code_name.c_str() ) && level_goal_messages[ code_name.c_str() ].IsString() )
+            {
+                level_goal_messages_.insert
+                ({
+                    std::string( code_name.c_str() ),
+                    mezun::charToChar32String( level_goal_messages[ code_name.c_str() ].GetString() )
                 });
             }
         }
@@ -565,7 +586,28 @@ std::u32string LocalizationLanguage::getLevelName( const std::string& code_name 
         : search->second;
 };
 
+std::u32string LocalizationLanguage::getLevelMessage( const std::string& code_name ) const
+{
+    const auto& search = level_messages_.find( code_name );
+    return ( search == level_messages_.end() )
+        ? U"MISSING LEVEL MESSAGE"
+        : search->second;
+};
+
+std::u32string LocalizationLanguage::getLevelGoalMessage( const std::string& code_name ) const
+{
+    const auto& search = level_goal_messages_.find( code_name );
+    return ( search == level_goal_messages_.end() )
+        ? U"MISSING GOAL MESSAGE"
+        : search->second;
+};
+
 const std::u32string* LocalizationLanguage::getOverworldMenuNames() const
 {
     return overworld_menu_names_;
+};
+
+const std::u32string& LocalizationLanguage::getPressAnyKey() const
+{
+    return press_any_key_;
 };

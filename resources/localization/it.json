@@ -160,6 +160,7 @@
     {
         "quitting": "Cessare…",
         "title": "Controlli",
+        "change": "Premere un tasto qualsiasi",
         "actions":
         {
             "confirm": "Confermare",

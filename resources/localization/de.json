@@ -160,6 +160,7 @@
     {
         "quitting": "Verlassen…",
         "title": "Kontrollen",
+        "change": "Drücke irgendeine Taste",
         "actions":
         {
             "confirm": "Bestätigen",

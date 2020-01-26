@@ -160,6 +160,7 @@
     {
         "quitting": "Quitting…",
         "title": "Controls",
+        "change": "Press Any Key",
         "actions":
         {
             "confirm": "Confirm",

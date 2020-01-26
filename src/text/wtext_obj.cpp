@@ -33,7 +33,7 @@ WTextObj::WTextObj
     const int line_end = start_x + width;
 
     // Create 1st line.
-    lines_.push_back({ {}, {}, x, y });
+    lines_.emplace_back( x, y, std::vector<WTextCharacter>{}, std::vector<WTextCharacter>{} );
 
     const int color_offset = WTextCharacter::calculateColorOffset( color );
     const int shadow_offset = WTextCharacter::calculateColorOffset( shadow );
@@ -74,7 +74,7 @@ WTextObj::WTextObj
             {
                 x = start_x;
                 y += WTextCharacter::SIZE_PIXELS;
-                lines_.push_back({ {}, {}, x, y });
+                lines_.emplace_back( x, y, std::vector<WTextCharacter>{}, std::vector<WTextCharacter>{} );
                 look_ahead = false;
             }
             else if ( ib >= frames.size() )
@@ -94,7 +94,7 @@ WTextObj::WTextObj
             {
                 x = start_x;
                 y += WTextCharacter::SIZE_PIXELS;
-                lines_.push_back({ {}, {}, x, y });
+                lines_.emplace_back( x, y, std::vector<WTextCharacter>{}, std::vector<WTextCharacter>{} );
             }
             else
             {
@@ -185,6 +185,34 @@ void WTextObj::render() const
     }
 };
 
+void WTextObj::render( int limit ) const
+{
+    if ( shadow_ )
+    {
+        for ( const WTextLine& line : lines_ )
+        {
+            line.renderWithShadow( limit );
+            limit -= line.frames_.size();
+            if ( limit <= 0 )
+            {
+                return;
+            }
+        }
+    }
+    else
+    {
+        for ( const WTextLine& line : lines_ )
+        {
+            line.renderWithoutShadow( limit );
+            limit -= line.frames_.size();
+            if ( limit <= 0 )
+            {
+                return;
+            }
+        }
+    }
+};
+
 void WTextObj::changeColor( WTextCharacter::Color color )
 {
     const int offset = WTextCharacter::calculateColorOffset( color );
@@ -221,4 +249,14 @@ void WTextObj::generateTexture
 {
     WTextObj o( text, x, y, color, width, align, shadow, x_padding, y_padding, valign, height );
     o.generateTexture( texture_box );
+};
+
+int WTextObj::getNumberOfCharacters() const
+{
+    int n = 0;
+    for ( const auto& line : lines_ )
+    {
+        n += line.frames_.size();
+    }
+    return n;
 };

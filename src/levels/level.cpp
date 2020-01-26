@@ -81,7 +81,7 @@ Level::Level
 	int entrance_y,
 	int camera_x,
 	int camera_y,
-	std::string message,
+	std::u32string message,
 	bool start_on
 )
 :
@@ -210,7 +210,7 @@ std::string Level::timeChallengeText( unsigned int n )
 	return Clock::timeToString( timeChallenge( n ) );
 };
 
-const std::string& Level::message() const
+const std::u32string& Level::message() const
 {
 	return message_;
 };
@@ -818,12 +818,7 @@ Level Level::getLevel( int id )
 
 	/* CAMERA
 	==============================================================*/
-	std::string message = "";
-
-	if ( lvobj.HasMember( "message" ) && lvobj[ "message" ].IsString() )
-	{
-		message = lvobj[ "message" ].GetString(), LevelMessageState::LINE_LIMIT;
-	}
+	const std::u32string message = Localization::getCurrentLanguage().getLevelMessage( lvname );
 
 
 

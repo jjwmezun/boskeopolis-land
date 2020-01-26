@@ -174,6 +174,7 @@
     {
         "quitting": "Slutar…",
         "title": "Kontroller",
+        "change": "Tryck Valfri Knapp",
         "actions":
         {
             "confirm": "Bekräfta",

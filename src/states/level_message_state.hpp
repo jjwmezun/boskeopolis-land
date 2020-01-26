@@ -1,12 +1,13 @@
 #pragma once
 
 #include "game_state.hpp"
-#include "text_obj.hpp"
+#include "image_graphics.hpp"
+#include "wtext_gradual.hpp"
 
 class LevelMessageState : public GameState
 {
 	public:
-		LevelMessageState( const Palette& palette, std::string message );
+		LevelMessageState( const Palette& palette, std::u32string message );
 		~LevelMessageState();
 		void stateUpdate() override;
 		void stateRender() override;
@@ -18,5 +19,6 @@ class LevelMessageState : public GameState
 	private:
 		const sdl2::SDLRect backdrop_;
 		const sdl2::SDLRect border_;
-		TextObj message_;
+		WTextGradual message_;
+		ImageGraphics frame_;
 };

@@ -55,7 +55,7 @@ class Level
 		int cameraY() const;
 		void warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks );
 		void sewerWarp( SpriteSystem& sprites, EventSystem& events );
-		const std::string& message() const;
+		const std::u32string& message() const;
 		std::string getCodeName() const;
 		int allEnemiesToKill() const;
 		bool startOn() const;
@@ -76,7 +76,7 @@ class Level
 
 	private:
 		std::vector<Map> maps_;
-		const std::string message_;
+		const std::u32string message_;
 		std::unique_ptr<Goal> goal_;
 		unsigned int current_map_;
 		const int id_;
@@ -95,7 +95,7 @@ class Level
 			int entrance_y = 0,
 			int camera_x = 0,
 			int camera_y = 0,
-			std::string message = "",
+			std::u32string message = U"",
 			bool start_on = false
 		);
 		unsigned int testCurrentMap() const;

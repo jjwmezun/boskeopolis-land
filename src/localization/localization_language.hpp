@@ -37,7 +37,10 @@ class LocalizationLanguage
         int getCharsetHeight() const;
         const std::string& getPathName() const;
         std::u32string getLevelName( const std::string& code_name ) const;
+        std::u32string getLevelMessage( const std::string& code_name ) const;
+        std::u32string getLevelGoalMessage( const std::string& code_name ) const;
         const std::u32string* getOverworldMenuNames() const;
+        const std::u32string& getPressAnyKey() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -70,10 +73,13 @@ class LocalizationLanguage
         std::u32string level_select_title_;
         std::u32string level_select_cycle_name_;
         std::u32string level_select_percent_symbol_;
+        std::u32string press_any_key_;
         std::string path_name_;
         std::string charset_image_src_;
         std::unordered_map<char32_t, std::vector<WTextCharacter>> charset_;
         std::unordered_map<std::string, std::u32string> level_names_;
+        std::unordered_map<std::string, std::u32string> level_messages_;
+        std::unordered_map<std::string, std::u32string> level_goal_messages_;
         std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
         std::u32string overworld_menu_names_[ NUMBER_OF_OVERWORLD_MENU_OPTIONS ];
 };
