@@ -82,6 +82,7 @@ void OWInventory::update( int level )
 	if ( testOnDifferentLevel() )
 	{
 		regenerateLevelGraphics();
+		prev_level_ = level_;
 	}
 };
 
