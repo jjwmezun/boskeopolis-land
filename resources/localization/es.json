@@ -215,11 +215,14 @@
     },
     "overworld":
     {
-		"continue": "Continua",
-		"level_list": "La lista de niveles",
-		"camera_view": "La Vista de Cámera",
-		"options": "Las Opciones",
-		"quit": "Cerra Juego"
+        "menu":
+        {
+            "continue": "Continua",
+            "level_list": "La lista de niveles",
+            "camera_view": "La Vista de Cámera",
+            "options": "Las Opciones",
+            "quit": "Cerra Juego"
+        }
     },
     "level_select":
     {

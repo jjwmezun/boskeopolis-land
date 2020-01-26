@@ -229,11 +229,14 @@
     },
     "overworld":
     {
-		"continue": "Fortsätta",
-		"level_list": "Nivå lista",
-		"camera_view": "Kameravy",
-		"options": "Alternativ",
-		"quit": "Slutar"
+        "menu":
+        {
+            "continue": "Fortsätta",
+            "level_list": "Nivå lista",
+            "camera_view": "Kameravy",
+            "options": "Alternativ",
+            "quit": "Slutar"
+        }
     },
     "level_select":
     {

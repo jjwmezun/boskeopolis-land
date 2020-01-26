@@ -1,6 +1,8 @@
 #include "audio.hpp"
 #include "input.hpp"
 #include "level_select_state.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
 #include "options_state.hpp"
 #include "overworld_menu_state.hpp"
@@ -14,23 +16,14 @@ static constexpr int START_X = Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WID
 static constexpr int START_Y = Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( BG_HEIGHT_MINIBLOCKS / 2 ) );
 static constexpr int OPTION_X = START_X + 8;
 
-static std::string getOptionName( int i );
 static int getOptionY( int i );
-static TextObj getOption( int i );
 
 OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_state )
 :
 	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
 	option_selection_ ( ( int )( Option::CONTINUE ) ),
 	camera_state_ ( camera_state ),
-	option_text_
-	({{
-		getOption( 0 ),
-		getOption( 1 ),
-		getOption( 2 ),
-		getOption( 3 ),
-		getOption( 4 )
-	}}),
+	options_text_ (),
 	bg_
 	(
 		START_X,
@@ -39,6 +32,11 @@ OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_stat
 		BG_HEIGHT
 	)
 {
+	const std::u32string* names = Localization::getCurrentLanguage().getOverworldMenuNames();
+	for ( int i = 0; i < LocalizationLanguage::NUMBER_OF_OVERWORLD_MENU_OPTIONS; ++i )
+	{
+		options_text_[ i ] = WTextObj( names[ i ], START_X, getOptionY( i ), WTextCharacter::Color::LIGHT_MID_GRAY, BG_WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 8 );
+	}
 	Audio::playSound( Audio::SoundType::PAUSE );
 };
 
@@ -104,17 +102,9 @@ void OverworldMenuState::stateUpdate()
 void OverworldMenuState::stateRender()
 {
 	Render::renderRect( bg_, 6 );
-
-	for ( int i = 0; i < NUM_O_OPTIONS; ++i )
+	for ( int i = 0; i < LocalizationLanguage::NUMBER_OF_OVERWORLD_MENU_OPTIONS; ++i )
 	{
-		option_text_[ i ].color_ = Text::FontColor::LIGHT_MID_GRAY;
-
-		if ( option_selection_ == i )
-		{
-			option_text_[ i ].color_ = Text::FontColor::WHITE;
-		}
-
-		option_text_[ i ].render( nullptr );
+		options_text_[ i ].render();
 	}
 };
 
@@ -123,24 +113,7 @@ void OverworldMenuState::backFromPop()
 	Audio::changeSong( "overworld" );
 };
 
-static std::string getOptionName( int i )
-{
-	switch ( i )
-	{
-		case ( 0 ): { return "Continue";    } break;
-		case ( 1 ): { return "Level List";  } break;
-		case ( 2 ): { return "Camera View"; } break;
-		case ( 3 ): { return "Options";     } break;
-		case ( 4 ): { return "Quit";        } break;
-	}
-};
-
 static int getOptionY( int i )
 {
 	return START_Y + 16 + ( 16 * i );
-};
-
-static TextObj getOption( int i )
-{
-	return TextObj( getOptionName( i ), OPTION_X, getOptionY( i ), Text::FontColor::LIGHT_MID_GRAY );
 };

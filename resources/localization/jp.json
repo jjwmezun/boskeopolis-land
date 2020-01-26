@@ -344,11 +344,14 @@
     },
     "overworld":
     {
-		"continue": "じぞくする",
-		"level_list": "レベルリスト",
-		"camera_view": "カメラ",
-		"options": "オプション",
-		"quit": "ゲームをやめる"
+        "menu":
+        {
+            "continue": "じぞくする",
+            "level_list": "レベルリスト",
+            "camera_view": "カメラ",
+            "options": "オプション",
+            "quit": "ゲームをやめる"
+        }
     },
     "level_select":
     {

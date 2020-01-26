@@ -12,6 +12,9 @@ class LocalizationLanguage
 {
     public:
         LocalizationLanguage( const std::filesystem::directory_entry& file );
+
+        static constexpr int NUMBER_OF_OVERWORLD_MENU_OPTIONS = 5;
+
         const std::u32string& getLanguageName() const;
         const std::u32string& getIntroText() const;
         const std::u32string& getTitleCreatedBy() const;
@@ -34,6 +37,7 @@ class LocalizationLanguage
         int getCharsetHeight() const;
         const std::string& getPathName() const;
         std::u32string getLevelName( const std::string& code_name ) const;
+        const std::u32string* getOverworldMenuNames() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -46,6 +50,7 @@ class LocalizationLanguage
         void loadOptionsText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadLevelSelectText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadLevelText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadOverworldText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
 
         int order_;
         int charset_height_;
@@ -70,4 +75,5 @@ class LocalizationLanguage
         std::unordered_map<char32_t, std::vector<WTextCharacter>> charset_;
         std::unordered_map<std::string, std::u32string> level_names_;
         std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
+        std::u32string overworld_menu_names_[ NUMBER_OF_OVERWORLD_MENU_OPTIONS ];
 };

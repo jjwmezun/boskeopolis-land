@@ -59,6 +59,7 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadScreenOptions( data, path );
     loadLevelSelectText( data, path );
     loadLevelText( data, path );
+    loadOverworldText( data, path );
 };
 
 int LocalizationLanguage::getOrder() const
@@ -502,6 +503,45 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
     }
 };
 
+
+
+void LocalizationLanguage::loadOverworldText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "overworld" ) || !data[ "overworld" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    const auto& overworld = data[ "overworld" ].GetObject();
+    if ( !overworld.HasMember( "menu" ) || !overworld[ "menu" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    const auto& menu = overworld[ "menu" ].GetObject();
+
+    if
+    (
+        !menu.HasMember( "continue" )
+        || !menu[ "continue" ].IsString()
+        || !menu.HasMember( "level_list" )
+        || !menu[ "level_list" ].IsString()
+        || !menu.HasMember( "camera_view" )
+        || !menu[ "camera_view" ].IsString()
+        || !menu.HasMember( "options" )
+        || !menu[ "options" ].IsString()
+        || !menu.HasMember( "quit" )
+        || !menu[ "quit" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    overworld_menu_names_[ 0 ] = mezun::charToChar32String( menu[ "continue" ].GetString() );
+    overworld_menu_names_[ 1 ] = mezun::charToChar32String( menu[ "level_list" ].GetString() );
+    overworld_menu_names_[ 2 ] = mezun::charToChar32String( menu[ "camera_view" ].GetString() );
+    overworld_menu_names_[ 3 ] = mezun::charToChar32String( menu[ "options" ].GetString() );
+    overworld_menu_names_[ 4 ] = mezun::charToChar32String( menu[ "quit" ].GetString() );
+};
+
 const std::u32string& LocalizationLanguage::getLevelSelectTitle() const
 {
     return level_select_title_;
@@ -523,4 +563,9 @@ std::u32string LocalizationLanguage::getLevelName( const std::string& code_name 
     return ( search == level_names_.end() )
         ? U"MISSING LEVEL"
         : search->second;
+};
+
+const std::u32string* LocalizationLanguage::getOverworldMenuNames() const
+{
+    return overworld_menu_names_;
 };

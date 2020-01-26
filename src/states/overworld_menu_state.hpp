@@ -1,10 +1,9 @@
 #pragma once
 
-#include <array>
 #include "game_state.hpp"
 #include "mezun_sdl2.hpp"
 #include "ow_state.hpp"
-#include "text_obj.hpp"
+#include "wtext_obj.hpp"
 
 class OverworldMenuState : public GameState
 {
@@ -28,6 +27,6 @@ class OverworldMenuState : public GameState
 	private:
 		int option_selection_;
 		OWState* camera_state_;
-		std::array<TextObj, NUM_O_OPTIONS> option_text_;
+		WTextObj options_text_[ NUM_O_OPTIONS ];
 		const sdl2::SDLRect bg_;
 };

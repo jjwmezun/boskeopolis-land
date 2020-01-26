@@ -215,11 +215,14 @@
     },
     "overworld":
     {
-		"continue": "Weitermachen",
-		"level_list": "Ebenenauswahl",
-		"camera_view": "Kameraansicht",
-		"options": "Optionen",
-		"quit": "Verlassen"
+        "menu":
+        {
+            "continue": "Weitermachen",
+            "level_list": "Ebenenauswahl",
+            "camera_view": "Kameraansicht",
+            "options": "Optionen",
+            "quit": "Verlassen"
+        }
     },
     "level_select":
     {
