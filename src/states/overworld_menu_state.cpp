@@ -18,7 +18,7 @@ static std::string getOptionName( int i );
 static int getOptionY( int i );
 static TextObj getOption( int i );
 
-OverworldMenuState::OverworldMenuState( const Palette& pal, OverworldState::CameraState* camera_state )
+OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_state )
 :
 	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
 	option_selection_ ( ( int )( Option::CONTINUE ) ),
@@ -85,7 +85,7 @@ void OverworldMenuState::stateUpdate()
 			break;
 
 			case ( ( int )( Option::CAMERA ) ):
-				*camera_state_ = OverworldState::CameraState::MOVE_CAMERA;
+				*camera_state_ = OWState::MOVE_CAMERA;
 				Main::popState();
 			break;
 

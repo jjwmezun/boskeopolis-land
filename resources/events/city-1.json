@@ -1,0 +1,47 @@
+{
+    "camera_target_x": 57,
+    "camera_target_y": 145,
+    "changes":
+    [
+        [
+            {
+                "layer": "FG",
+                "x": 57,
+                "y": 144,
+                "tile": 47
+            },
+            {
+                "layer": "FG",
+                "x": 57,
+                "y": 145,
+                "tile": 46
+            }
+        ],
+        [
+            {
+                "layer": "FG",
+                "x": 57,
+                "y": 145,
+                "tile": -1
+            },
+            {
+                "layer": "FG",
+                "x": 57,
+                "y": 144,
+                "tile": -1
+            },
+            {
+                "layer": "BG",
+                "x": 57,
+                "y": 144,
+                "tile": 46
+            },
+            {
+                "layer": "FG",
+                "x": 57,
+                "y": 143,
+                "tile": 47
+            }
+        ]
+    ]
+}

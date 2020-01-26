@@ -15,6 +15,8 @@ class OWCamera
 		static constexpr int RIGHT_BOUNDARY_POINT = ( int )( ( double )( WIDTH ) * 0.75 );
 		static constexpr int TOP_BOUNDARY_POINT = ( int )( ( double )( HEIGHT ) * 0.25 );
 		static constexpr int BOTTOM_BOUNDARY_POINT = ( int )( ( double )( HEIGHT ) * 0.75 );
+		static constexpr int NORMAL_SPEED = 5;
+		static constexpr int FAST_SPEED = NORMAL_SPEED * 2;
 
 		constexpr OWCamera( int bounds_w = WIDTH, int bounds_h = HEIGHT )
 		:
@@ -31,7 +33,7 @@ class OWCamera
 
 		void adjust( const sdl2::SDLRect& target );
 		void center( const DPoint& target );
-		bool moveAutomaticallyToTarget( const DPoint& target );
+		bool moveAutomaticallyToTarget( const DPoint& target, int speed = FAST_SPEED );
 		void move();
 
 		constexpr sdl2::SDLRect relative( const sdl2::SDLRect& r ) const

@@ -312,10 +312,14 @@ void EventSystem::failEvent( Level& level )
 
 void EventSystem::winEvent( Level& level )
 {
+	const bool win_momento = Inventory::victory( Inventory::currentLevel() );
+	//std::cout << win_momento << std::endl;
 	Inventory::win();
+	//std::cout << Inventory::currentLevel() << std::endl;
+	const bool new_event = Inventory::victory( Inventory::currentLevel() ) != win_momento;
 	Main::pushState
 	(
-		std::make_unique<MessageState> ( "¡Success!", MessageState::Type::CHANGE, Palette( "Go Green", 2 ), std::make_unique<OverworldState> ( Inventory::currentLevel() ), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "success", true, true ),
+		std::make_unique<MessageState> ( "¡Success!", MessageState::Type::CHANGE, Palette( "Go Green", 2 ), std::make_unique<OverworldState> ( Inventory::currentLevel(), new_event ), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "success", true, true ),
 		true
 	);
 };

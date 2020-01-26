@@ -957,3 +957,9 @@ const std::u32string* Level::getLevelNames()
 {
 	return level_names_;
 };
+
+const std::string& Level::getCodeName( int level_id )
+{
+	assert( level_id >= 0 && level_id < Level::NUMBER_OF_LEVELS );
+	return code_names_[ level_id ];
+};
