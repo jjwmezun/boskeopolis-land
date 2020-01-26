@@ -93,7 +93,7 @@ void TitleState::stateUpdate()
                 case ( Option::LOAD ):
                 {
                     Inventory::load();
-                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel() ) ) );
+                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), false, true ) ) );
                 }
                 break;
 
