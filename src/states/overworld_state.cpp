@@ -266,6 +266,10 @@ void OverworldState::testForMenuAction()
 void OverworldState::backFromPop()
 {
 	Audio::changeSong( "overworld" );
+	if ( state_ == OWState::MOVE_CAMERA )
+	{
+		Audio::playSound( Audio::SoundType::PAUSE );
+	}
 };
 
 void OverworldState::updateBackgroundAnimation()
