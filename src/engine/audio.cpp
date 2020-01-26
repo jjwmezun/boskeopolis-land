@@ -63,6 +63,13 @@ namespace Audio
 				printf( "SDL_mixer couldn't initialize. SDL_mixer Error: %s\n", Mix_GetError() );
 				exit( -1 );
 			}
+			int flags = MIX_INIT_MP3;
+			int initted = Mix_Init( flags );
+			if( initted & flags != flags )
+			{
+				printf( "Mix_Init: Failed to init required mp3 support.\n" );
+				printf( "Mix_Init: %s\n", Mix_GetError() );
+			}
 			Mix_AllocateChannels( MAX_CHANNELS );
 			Mix_VolumeMusic( MIX_MAX_VOLUME / 2 );
 			Mix_Volume( -1, MIX_MAX_VOLUME );
@@ -106,7 +113,7 @@ namespace Audio
 				music_ = Mix_LoadMUS( song_file_path_raw );
 				if ( music_ == nullptr )
 				{
-					printf( "Failed to load music. SDL_mixer Error: %s\n", Mix_GetError() );
+					//printf( "Failed to load music “%s”. SDL_mixer Error: %s\n", song_file_path_raw, Mix_GetError() );
 				}
 				else
 				{
