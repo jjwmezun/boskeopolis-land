@@ -304,7 +304,7 @@ void EventSystem::failEvent( Level& level )
 	Inventory::fail();
 	Main::pushState
 	(
-		std::make_unique<MessageState> ( "Failure...", MessageState::Type::CHANGE, Palette( "Stop Red", 2 ), std::make_unique<OverworldState> (), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "low", true, false ),
+		std::make_unique<MessageState> ( "Failure...", MessageState::Type::CHANGE, Palette( "Stop Red", 2 ), std::make_unique<OverworldState> ( Inventory::currentLevel() ), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "low", true, false ),
 		true
 	);
 	playDeathSoundIfNotAlreadyPlaying();
@@ -315,7 +315,7 @@ void EventSystem::winEvent( Level& level )
 	Inventory::win();
 	Main::pushState
 	(
-		std::make_unique<MessageState> ( "¡Success!", MessageState::Type::CHANGE, Palette( "Go Green", 2 ), std::make_unique<OverworldState> (), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "success", true, true ),
+		std::make_unique<MessageState> ( "¡Success!", MessageState::Type::CHANGE, Palette( "Go Green", 2 ), std::make_unique<OverworldState> ( Inventory::currentLevel() ), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "success", true, true ),
 		true
 	);
 };
@@ -323,7 +323,7 @@ void EventSystem::winEvent( Level& level )
 void EventSystem::quitEvent( Level& level )
 {
 	Inventory::quit();
-	Main::changeState( std::make_unique<OverworldState> () );
+	Main::changeState( std::make_unique<OverworldState> ( Inventory::currentLevel() ) );
 };
 
 bool EventSystem::waterShouldMove() const

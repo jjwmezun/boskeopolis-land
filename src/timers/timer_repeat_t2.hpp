@@ -4,7 +4,7 @@ template<int max_T, int min_T = 0>
 class TimerRepeatT2
 {
 	public:
-		TimerRepeatT2()
+		constexpr TimerRepeatT2()
 		:
 			timer_ ( min_T )
 		{};
@@ -21,6 +21,11 @@ class TimerRepeatT2
                 ++timer_;
                 return false;
             }
+		};
+
+		constexpr int value() const
+		{
+			return timer_;
 		};
 
 	private:

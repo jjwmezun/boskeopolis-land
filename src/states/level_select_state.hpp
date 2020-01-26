@@ -51,6 +51,7 @@ class LevelSelectState : public GameState
 		void renderFlashingArrows() const;
 		void renderFlashFrame();
 		void generateLevelNames();
+		int getSelectedLevel() const;
 
 		bool show_target_scores_;
 		Direction::Horizontal page_change_direction_;

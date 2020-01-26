@@ -86,14 +86,14 @@ void TitleState::stateUpdate()
             {
                 case ( Option::NEW ):
                 {
-                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel() ) ) );
                 }
                 break;
 
                 case ( Option::LOAD ):
                 {
                     Inventory::load();
-                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState() ) );
+                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel() ) ) );
                 }
                 break;
 

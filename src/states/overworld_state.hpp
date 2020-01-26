@@ -2,6 +2,7 @@
 
 #include "game_state.hpp"
 #include "ow_camera.hpp"
+#include "ow_camera_arrows.hpp"
 #include "ow_hero.hpp"
 #include "ow_inventory.hpp"
 #include "ow_level_tile_graphics.hpp"
@@ -16,7 +17,7 @@ class Collision;
 class OverworldState : public GameState
 {
 	public:
-		OverworldState();
+		OverworldState( int previous_level );
 		~OverworldState();
 
 		void stateUpdate() override;
@@ -24,7 +25,6 @@ class OverworldState : public GameState
 		void init() override;
 		void backFromPop() override;
 
-	private:
 		enum class CameraState
 		{
 			MOVE_PLAYER,
@@ -32,8 +32,8 @@ class OverworldState : public GameState
 			CAMERA_MOVES_AUTOMATICALLY_TO_PLAYER
 		};
 
+	private:
 		void testForMenuAction();
-		void renderCameraArrows();
 		void updateBackgroundAnimation();
 		void updateBackgroundPosition();
 		void loadMap( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data );
@@ -51,5 +51,7 @@ class OverworldState : public GameState
 		std::unordered_map<int, OWObject> objects_;
 		int current_level_;
 		OWLevelTileGraphics level_tile_graphics_;
+		int previous_level_;
+		OWCameraArrows camera_arrows_;
 		char scratch_[ 3000 ];
 };

@@ -41,7 +41,7 @@ void OWLevelTileGraphics::update( const sdl2::SDLRect& camera )
     }
 };
 
-void OWLevelTileGraphics::render( const sdl2::SDLRect& camera ) const
+void OWLevelTileGraphics::render() const
 {
     for ( const auto& dest : destinations_ )
     {
@@ -53,7 +53,7 @@ bool OWLevelTileGraphics::testOnCamera( const sdl2::SDLRect& position, const sdl
 {
     return
         position.right() > camera.x &&
-        position.x < camera.right() &&
+        position.x < camera.x + Unit::WINDOW_WIDTH_PIXELS &&
         position.bottom() > camera.y &&
-        position.y < camera.bottom();
+        position.y < camera.y + Unit::WINDOW_HEIGHT_PIXELS;
 };

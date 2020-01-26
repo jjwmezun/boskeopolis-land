@@ -100,10 +100,24 @@ LevelSelectState::~LevelSelectState()
 
 void LevelSelectState::stateUpdate()
 {
-	if ( Input::held( Input::Action::MENU ) )
+	if ( Input::pressed( Input::Action::CONFIRM ) )
+	{
+		if ( Inventory::beenToLevel( getSelectedLevel() ) )
+		{
+			Audio::playSound( Audio::SoundType::CONFIRM );
+			Main::changeState( std::make_unique<OverworldState> ( getSelectedLevel() ) );
+			return;
+		}
+		else
+		{
+			Audio::playSound( Audio::SoundType::CANCEL );
+		}
+	}
+
+	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );
-		Main::changeState( std::make_unique<OverworldState> () );
+		Main::popState( true );
 	}
 	else
 	{
@@ -222,7 +236,7 @@ void LevelSelectState::handleTargetScoreBehavior()
 {
 	if ( !show_target_scores_ )
 	{
-		if ( Input::held( Input::Action::CANCEL ) && Inventory::beenToLevel( first_level_of_page_ + selection_ ) )
+		if ( Input::held( Input::Action::CANCEL ) && Inventory::beenToLevel( getSelectedLevel() ) )
 		{
 			show_target_scores_ = true;
 			Audio::playSound( Audio::SoundType::SELECT );
@@ -685,6 +699,11 @@ void LevelSelectState::generateLevelNames()
 		}
 		level_names_[ level ] = { level_name_string, 24, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 	}
+};
+
+int LevelSelectState::getSelectedLevel() const
+{
+	return first_level_of_page_ + selection_;
 };
 
 static void renderGemScoreOfColor( WTextCharacter::Color color, int level, int y )

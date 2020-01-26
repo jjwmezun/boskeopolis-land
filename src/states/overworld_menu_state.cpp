@@ -18,9 +18,11 @@ static std::string getOptionName( int i );
 static int getOptionY( int i );
 static TextObj getOption( int i );
 
-OverworldMenuState::OverworldMenuState( const Palette& pal )
+OverworldMenuState::OverworldMenuState( const Palette& pal, OverworldState::CameraState* camera_state )
 :
 	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
+	option_selection_ ( ( int )( Option::CONTINUE ) ),
+	camera_state_ ( camera_state ),
 	option_text_
 	({{
 		getOption( 0 ),
@@ -35,8 +37,7 @@ OverworldMenuState::OverworldMenuState( const Palette& pal )
 		START_Y,
 		BG_WIDTH,
 		BG_HEIGHT
-	),
-	option_selection_ ( ( int )( Option::CONTINUE ) )
+	)
 {
 	Audio::playSound( Audio::SoundType::PAUSE );
 };
@@ -80,10 +81,11 @@ void OverworldMenuState::stateUpdate()
 			break;
 
 			case ( ( int )( Option::LIST ) ):
-				Main::changeState( std::make_unique<LevelSelectState> ( 0 ) );
+				Main::pushState( std::make_unique<LevelSelectState> ( 0 ), true );
 			break;
 
 			case ( ( int )( Option::CAMERA ) ):
+				*camera_state_ = OverworldState::CameraState::MOVE_CAMERA;
 				Main::popState();
 			break;
 

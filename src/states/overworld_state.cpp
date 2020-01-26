@@ -2,6 +2,7 @@
 #include "main.hpp"
 #include <fstream>
 #include "input.hpp"
+#include "inventory.hpp"
 #include "level_state.hpp"
 #include "main.hpp"
 #include "mezun_json.hpp"
@@ -27,7 +28,7 @@ static constexpr bool testIsSolid( int tile )
 	return false;
 };
 
-OverworldState::OverworldState()
+OverworldState::OverworldState( int previous_level )
 :
 	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),
 	camera_state_ ( CameraState::MOVE_PLAYER ),
@@ -42,7 +43,9 @@ OverworldState::OverworldState()
 	inventory_ (),
 	objects_ (),
 	current_level_ ( -1 ),
-	level_tile_graphics_ ()
+	level_tile_graphics_ (),
+	previous_level_ ( previous_level ),
+	camera_arrows_ ()
 {};
 
 OverworldState::~OverworldState()
@@ -73,7 +76,7 @@ void OverworldState::stateUpdate()
 			}
 			inventory_.update( current_level_ );
 
-			if ( Input::held( Input::Action::CONFIRM ) )
+			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
 				if ( current_level_ > -1 )
 				{
@@ -92,12 +95,15 @@ void OverworldState::stateUpdate()
 			else
 			{
 				camera_.move();
+				hero_.updateGraphics( camera_.getBox() );
+				camera_arrows_.update( camera_.getBox() );
 			}
 		}
 		break;
 
 		case ( CameraState::CAMERA_MOVES_AUTOMATICALLY_TO_PLAYER ):
 		{
+			hero_.updateGraphics( camera_.getBox() );
 			if ( camera_.moveAutomaticallyToTarget( hero_.getPosition() ) )
 			{
 				camera_state_ = CameraState::MOVE_PLAYER;
@@ -120,7 +126,7 @@ void OverworldState::stateRender()
 	Render::colorCanvas( 2 );
 	water_background_.render();
 	bg_texture_.render();
-	level_tile_graphics_.render( camera_.getBox() );
+	level_tile_graphics_.render();
 	hero_.render( camera_ );
 	fg_texture_.render();
 	switch ( camera_state_ )
@@ -133,7 +139,7 @@ void OverworldState::stateRender()
 
 		case ( CameraState::MOVE_CAMERA ):
 		{
-			renderCameraArrows();
+			camera_arrows_.render();
 		}
 		break;
 
@@ -276,11 +282,19 @@ void OverworldState::init()
 			}
 			if ( sprite_tile == 2048 )
 			{
-				hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
+				if ( previous_level_ == -1 )
+				{
+					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
+				}
 			}
 			else if ( sprite_tile > 2063 && sprite_tile < 2063 + ( 16 * 4 ) )
 			{
-				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( sprite_tile - 2064 ) ) );
+				const int level_id = sprite_tile - 2064;
+				if ( previous_level_ == level_id )
+				{
+					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
+				}
+				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( level_id ) ) );
 				level_tile_graphics_.add( dest );
 			}
 		}
@@ -330,7 +344,7 @@ void OverworldState::testForMenuAction()
 	{
 		Main::pushState
 		(
-			std::make_unique<OverworldMenuState> ( palette() )
+			std::make_unique<OverworldMenuState> ( palette(), &camera_state_ )
 		);
 	}
 };
@@ -338,11 +352,6 @@ void OverworldState::testForMenuAction()
 void OverworldState::backFromPop()
 {
 	Audio::changeSong( "overworld" );
-};
-
-void OverworldState::renderCameraArrows()
-{
-
 };
 
 void OverworldState::updateBackgroundAnimation()

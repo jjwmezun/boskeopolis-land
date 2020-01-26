@@ -63,7 +63,7 @@ namespace Inventory
 	static Counter total_funds_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
 	static Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
 	static Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
-	static Counter current_level_ = Counter( 0, Level::NUMBER_OF_LEVELS, 0 );
+	static Counter current_level_ = Counter( -1, Level::NUMBER_OF_LEVELS, -1 );
 	static Counter heart_upgrades_ = Counter( 0, MAX_HEART_UPGRADES );
 
 	static bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
@@ -94,7 +94,7 @@ namespace Inventory
 
 		funds_shown_ = 0;
 		total_funds_shown_ = 0;
-		current_level_ = 0;
+		current_level_ = -1;
 		heart_upgrades_ = 0;
 		mcguffins_ = 0;
 		oxygen_upgrade_ = false;

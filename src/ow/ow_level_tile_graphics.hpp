@@ -13,7 +13,7 @@ class OWLevelTileGraphics
         OWLevelTileGraphics();
         void add( sdl2::SDLRect position );
         void update( const sdl2::SDLRect& camera );
-        void render( const sdl2::SDLRect& camera ) const;
+        void render() const;
 
     private:
         static constexpr int NUMBER_OF_ANIMATION_FRAMES = 12;

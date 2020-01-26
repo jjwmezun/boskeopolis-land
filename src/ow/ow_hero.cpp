@@ -81,12 +81,12 @@ void OWHero::update( const OWTileMap& tilemap, const sdl2::SDLRect& bounds )
 
 	if ( x_acceleration == 0.0 )
 	{
-		x_speed_ /= 1.15;
+		x_speed_ /= 1.25;
 	}
 
 	if ( y_acceleration == 0.0 )
 	{
-		y_speed_ /= 1.15;
+		y_speed_ /= 1.25;
 	}
 
 	const int v_tile_x = ( int )( std::floor( ( position_.x ) / 16.0 ) );
