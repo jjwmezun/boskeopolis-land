@@ -78,6 +78,7 @@ void OverworldState::stateUpdate()
 			camera_.adjust( hero_.getGraphicsBox() );
 			hero_.update( tilemap_, camera_.getBox() );
 
+			const int level_momento = current_level_;
 			current_level_ = -1;
 			const DPoint& hero_position = hero_.getPosition();
 			const int tile_x = ( int )( std::floor( ( hero_position.x ) / 16.0 ) );
@@ -95,6 +96,13 @@ void OverworldState::stateUpdate()
 				if ( current_level_ > -1 )
 				{
 					Main::changeState( std::make_unique<LevelState> ( current_level_ ) );
+				}
+			}
+			else
+			{
+				if ( current_level_ != -1 && current_level_ != level_momento )
+				{
+					Audio::playSound( Audio::SoundType::SELECT );
 				}
 			}
 		}
