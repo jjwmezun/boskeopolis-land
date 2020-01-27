@@ -16,7 +16,7 @@ void KillAllGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLeve
 {
 	const int kill_count = sprites_to_kill_ - sprites.permanentlyKilledEnemies();
 
-	inventory_screen.kill_counter_ = kill_count;
+	inventory_screen.setKillCounter( kill_count );
 
 	if ( kill_count <= 0 )
 	{

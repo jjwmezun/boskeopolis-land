@@ -61,8 +61,8 @@ void ShmupEnemySprite::reset()
 
 void ShmupEnemySprite::doReset( const Camera& camera )
 {
-	hit_box_.x = Unit::PixelsToSubPixels( camera.x() + camera.widthPixels() + 16 );
-	hit_box_.y = Unit::PixelsToSubPixels( mezun::randInt( camera.y() + camera.heightPixels() - 16, camera.y() + 8 ) );
+	hit_box_.x = Unit::PixelsToSubPixels( camera.x() + camera.width() + 16 );
+	hit_box_.y = Unit::PixelsToSubPixels( mezun::randInt( camera.y() + camera.height() - 16, camera.y() + 8 ) );
 	vx_ = 0;
 	reset_ = false;
 	shoot_timer_ = 0;

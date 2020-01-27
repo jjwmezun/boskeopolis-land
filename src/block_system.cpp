@@ -70,10 +70,10 @@ void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority 
 	else
 	{
 		// Only render blocks in-camera.
-		const int first_x = floor( camera.x()      / Unit::PIXELS_PER_BLOCK ) - 2; // Block x just left o' camera.
-		const int first_y = floor( camera.y()      / Unit::PIXELS_PER_BLOCK ) - 2; // Block y just 'bove camera.
-		const int last_x  = ceil ( camera.right()  / Unit::PIXELS_PER_BLOCK ) + 2; // Block x just right o' camera.
-		const int last_y  = ceil ( camera.bottom() / Unit::PIXELS_PER_BLOCK ) + 2; // Block y just below camera.
+		const int first_x = Unit::PixelsToBlocks( camera.x() ) - 2; // Block x just left o' camera.
+		const int first_y = Unit::PixelsToBlocks( camera.y() ) - 2; // Block y just 'bove camera.
+		const int last_x  = Unit::PixelsToBlocks( camera.screenRight() ) + 2; // Block x just right o' screen.
+		const int last_y  = Unit::PixelsToBlocks( camera.screenBottom() ) + 2; // Block y just below screen.
 		for ( int y = first_y; y < last_y; ++y )
 		{
 			for ( int x = first_x; x < last_x; ++x )
@@ -96,8 +96,8 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 		// Only test sprite interaction with blocks round it.
 		const int first_x = floor( camera.relativeX( sprite.xPixels()      ) / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block x a bit left o' sprite.
 		const int first_y = floor( camera.relativeY( sprite.yPixels()      ) / Unit::PIXELS_PER_BLOCK ) - INTERACT_PADDING; // Block y a bit 'bove sprite.
-		const int last_x  = ceil ( camera.relativeX( sprite.rightPixels()  ) / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block x a bit right o' sprite.
-		const int last_y  = ceil ( camera.relativeY( sprite.bottomPixels() ) / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block y a bit below sprite.
+		const int last_x  = ceil( camera.relativeX( sprite.rightPixels()  ) / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block x a bit right o' sprite.
+		const int last_y  = ceil( camera.relativeY( sprite.bottomPixels() ) / Unit::PIXELS_PER_BLOCK ) + INTERACT_PADDING; // Block y a bit below sprite.
 		for ( int y = first_y; y < last_y; ++y )
 		{
 			for ( int x = first_x; x < last_x; ++x )
@@ -140,11 +140,10 @@ void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 		if ( camera.changed() || lvmap.changed_ )
 		{
 			blocks_.clear();
-
-			const int first_x = floor( camera.x()      / Unit::PIXELS_PER_BLOCK ) - CAMERA_PADDING; // Block a bit left o' camera.
-			const int first_y = floor( camera.y()      / Unit::PIXELS_PER_BLOCK ) - CAMERA_PADDING; // Block a bit 'bove camera.
-			const int last_x  = ceil ( camera.right()  / Unit::PIXELS_PER_BLOCK ) + CAMERA_PADDING; // Block a bit right o' camera.
-			const int last_y  = ceil ( camera.bottom() / Unit::PIXELS_PER_BLOCK ) + CAMERA_PADDING; // Block a bit below camera.
+			const int first_x = Unit::PixelsToBlocks( camera.x() ) - CAMERA_PADDING; // Block a bit left o' camera.
+			const int first_y = Unit::PixelsToBlocks( camera.y() ) - CAMERA_PADDING; // Block a bit 'bove camera.
+			const int last_x  = Unit::PixelsToBlocks( camera.screenRight() ) + CAMERA_PADDING; // Block a bit right o' camera.
+			const int last_y  = Unit::PixelsToBlocks( camera.screenBottom() ) + CAMERA_PADDING; // Block a bit below camera.
 
 			for ( int y = first_y; y < last_y; ++y )
 			{

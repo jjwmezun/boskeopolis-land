@@ -56,4 +56,5 @@ class TitleState : public GameState
 		BlockSystem blocks_;
 		SpriteSystem sprites_;
 		EventSystem events_;
+		InventoryLevel inventory_screen_;
 };

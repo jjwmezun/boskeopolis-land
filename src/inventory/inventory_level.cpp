@@ -8,15 +8,6 @@
 #include "render.hpp"
 #include "sprite.hpp"
 
-constexpr sdl2::SDLRect InventoryLevel::BG_DEST;
-constexpr sdl2::SDLRect InventoryLevel::VICTORY_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::DIAMOND_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::GEM_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::CLOCK_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::KEY_ICON_DEST;
-constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_DEST;
-constexpr sdl2::SDLRect InventoryLevel::MCGUFFIN_CROSS_DEST;
-
 static constexpr int FLASHING_TIMER_SHADES_NUM = 8;
 static constexpr Text::FontColor FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
 {
@@ -35,30 +26,34 @@ InventoryLevel::InventoryLevel()
 :
 	health_gfx_ ( Y ),
 	oxygen_meter_ ( Y ),
-	ticker_ ( NewsTicker::make( Y + 16 ) ),
-	show_mcguffins_ ( false ),
-	kill_counter_ ( -1 ),
+	ticker_ ( NewsTicker::make( Y + 8 ) ),
 	flashing_timer_ ( 0 ),
-	flashing_time_shade_ ( 0 )
+	flashing_time_shade_ ( 0 ),
+	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y )
 {};
+
+InventoryLevel::~InventoryLevel()
+{
+	main_texture_.destroy();
+};
 
 void InventoryLevel::update( EventSystem& events, const Health& health )
 {
 	oxygen_meter_.update( health );
 	Inventory::update();
-	health_gfx_.update( health );
+	if ( health_gfx_.update( health ) )
+	{
+		updateHealthGraphics();
+	}
 	ticker_.update();
-
 	if ( Inventory::clock().lowOnTime() )
 	{
 		++flashing_timer_;
-
 		if ( flashing_timer_ >= Inventory::clock().timeRemaining() )
 		{
-			++flashing_time_shade_;
 			flashing_timer_ = 0;
-
-			if ( flashing_time_shade_ >= FLASHING_TIMER_SHADES_NUM )
+			++flashing_time_shade_;
+			if ( flashing_time_shade_ == FLASHING_TIMER_SHADES_NUM )
 			{
 				flashing_time_shade_ = 0;
 			}
@@ -66,44 +61,35 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	}
 };
 
-void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
+void InventoryLevel::init()
 {
-	// BG
-	Render::renderRect( BG_DEST, lvmap.ui_bg_color_ );
-
-	// VICTORY
+	main_texture_.init();
+	main_texture_.startDrawing();
+	Render::renderObject( "bg/level-inventory-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT }, { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT } );
 	if ( Inventory::victory() )
 	{
-		victory_gfx_.current_frame_x_ = HAVE_X;
+		Render::renderObject( "bg/level-inventory-frame.png", { 16, 40, 8, 8 }, { 10, 10, 8, 8 } );
 	}
-	else
-	{
-		victory_gfx_.current_frame_x_ = DONT_HAVE_X;
-	}
-	victory_gfx_.render( VICTORY_ICON_DEST, nullptr );
-
-	// DIAMOND
 	if ( Inventory::haveDiamond() )
 	{
-		diamond_gfx_.current_frame_x_ = HAVE_X;
+		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, 10, 8, 8 } );
 	}
-	else
-	{
-		diamond_gfx_.current_frame_x_ = DONT_HAVE_X;
-	}
-	diamond_gfx_.render( DIAMOND_ICON_DEST, nullptr );
-
-	// GEMS
-	gem_icon_gfx_.render( GEM_ICON_DEST, nullptr );
-	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, Text::FontColor::DARK_GRAY );
-
-	// HEALTH
 	health_gfx_.render();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
+{
+	main_texture_.render();
+
+/*
+	// GEMS
+	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, Text::FontColor::DARK_GRAY );
 
 	// TIME
 	Inventory::clock().render( CLOCK_X, Y, nullptr, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] );
 	clock_gfx_.render( CLOCK_ICON_DEST, nullptr );
-
+/*
 	// MISC
 		// KEY
 		if ( events.hasKey() )
@@ -124,21 +110,22 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 			}
 		}
 
+		/*
 		// McGuffins
-		if ( show_mcguffins_ )
+		//if ( show_mcguffins_ )
 		{
 			mcguffins_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
 			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
-		}
+		}*/
 
 		// Kill Count
-		if ( kill_counter_ > -1 )
+		/*if ( kill_counter_ > -1 )
 		{
 			kills_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
 			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
-		}
+		}*/
 
 	// OXYGEN
 	oxygen_meter_.render();
@@ -162,4 +149,21 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	{
 		Text::renderNumber( Inventory::howManyGhostKills(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontColor::DARK_GRAY );
 	}
+};
+
+void InventoryLevel::setShowMcGuffins()
+{
+
+};
+
+void InventoryLevel::setKillCounter( int count )
+{
+
+};
+
+void InventoryLevel::updateHealthGraphics()
+{
+	main_texture_.startDrawing();
+	health_gfx_.render();
+	main_texture_.endDrawing();
 };

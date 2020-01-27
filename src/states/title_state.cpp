@@ -19,6 +19,7 @@
 #include "wtext_obj.hpp"
 #include "time_start_state.hpp"
 
+static constexpr int CAMERA_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 64;
 static constexpr int LOGO_WIDTH = 352;
 static constexpr int LOGO_HEIGHT = 36;
 static constexpr int LOGO_Y = 8;
@@ -50,12 +51,12 @@ TitleState::TitleState()
 	GameState ( StateID::TITLE_STATE ),
 	can_load_ ( false ),
     paused_ ( false ),
-    screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ) ),
+    screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ) ),
 	created_by_ (),
 	health_ (),
 	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y ) ),
-    screen_src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
-    screen_dest_ ( 0, 64, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 64 ),
+    screen_src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ),
+    screen_dest_ ( 0, 64, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ),
     curtain_ ( "bg/stageplay.png", { 0, 0, 400, 224 }, { 0, 68, 400, 224 } ),
 	logo_ ( "bosko_logo.png", { 0, 0, LOGO_WIDTH, LOGO_HEIGHT }, { ( Unit::WINDOW_WIDTH_PIXELS - LOGO_WIDTH ) / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT } ),
 	skyscrapers_bg_ ( "bg/title_skyscrapers.png", 496, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -1000 ),
@@ -63,10 +64,11 @@ TitleState::TitleState()
 	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
 	level_ ( Level::getLevel( Level::getIDFromCodeName( getRandomTrainerLevel() ) ) ),
-	camera_ ( { level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_BLOCKS, Unit::WINDOW_HEIGHT_BLOCKS - 4 } ),
+	camera_ ( level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT, 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ),
 	blocks_ ( level_.currentMap() ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
-	events_ ( level_.startOn() )
+	events_ ( level_.startOn() ),
+    inventory_screen_ ()
 {};
 
 TitleState::~TitleState()

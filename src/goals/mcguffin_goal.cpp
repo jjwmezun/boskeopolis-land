@@ -22,7 +22,7 @@ void McGuffinGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLev
 
 void McGuffinGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
-	inventory_screen.show_mcguffins_ = true;
+	inventory_screen.setShowMcGuffins();
 };
 
 const std::string McGuffinGoal::collectMessage( int amount_needed, std::string message ) const

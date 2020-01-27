@@ -6,23 +6,13 @@
 static constexpr int SHAKE_MAX = 8;
 static constexpr int SCROLL_SPEED = 8;
 
-bool Camera::changed() const
-{
-	return changed_;
-};
-
-void Camera::update()
-{
-	changed_ = false;
-}
-
 void Camera::scroll( const Map& m )
 {
 	switch ( scroll_dir_ )
 	{
 		case ( Direction::Simple::UP ):
 		{
-			if ( camera_.y_ > position_before_scroll_ - camera_.heightPixels() && camera_.y_ > 0 )
+			if ( y_ > position_before_scroll_ - height_ && y_ > 0 )
 			{
 				moveUp( SCROLL_SPEED );
 			}
@@ -35,7 +25,7 @@ void Camera::scroll( const Map& m )
 
 		case ( Direction::Simple::RIGHT ):
 		{
-			if ( camera_.x_ < position_before_scroll_ + camera_.widthPixels() && camera_.right() < m.widthPixels() )
+			if ( x_ < position_before_scroll_ + width_ && screenRight() < m.widthPixels() )
 			{
 				moveRight( SCROLL_SPEED );
 			}
@@ -48,7 +38,7 @@ void Camera::scroll( const Map& m )
 
 		case ( Direction::Simple::DOWN ):
 		{
-			if ( camera_.y_ < position_before_scroll_ + camera_.heightPixels() && camera_.bottom() < m.heightPixels() )
+			if ( y_ < position_before_scroll_ + height_ && screenBottom() < m.heightPixels() )
 			{
 				moveDown( SCROLL_SPEED );
 			}
@@ -61,7 +51,7 @@ void Camera::scroll( const Map& m )
 
 		case ( Direction::Simple::LEFT ):
 		{
-			if ( camera_.x_ > position_before_scroll_ - camera_.widthPixels() && camera_.x_ > 0 )
+			if ( x_ > position_before_scroll_ - width_ && x_ > 0 )
 			{
 				moveLeft( SCROLL_SPEED );
 			}
@@ -77,7 +67,7 @@ void Camera::scroll( const Map& m )
 void Camera::adjust( const Sprite& o, const Map& m )
 {
 	// Temporarily undo shake before updating position.
-	camera_.x_ -= shake_amount_;
+	x_ -= shake_amount_;
 	setPrev();
 	move( o, m.camera_type_ );
 	contain( m );
@@ -120,24 +110,24 @@ void Camera::move( const Sprite& o, const Type type )
 		{
 			if ( scroll_dir_ == Direction::Simple::__NULL )
 			{
-				if ( Input::held( Input::Action::MOVE_UP ) && o.yPixels() <= camera_.y_ && camera_.y_ > 0 )
+				if ( Input::held( Input::Action::MOVE_UP ) && o.yPixels() <= y_ && y_ > 0 )
 				{
-					position_before_scroll_ = camera_.y_;
+					position_before_scroll_ = y_;
 					scroll_dir_ = Direction::Simple::UP;
 				}
-				else if ( Input::held( Input::Action::MOVE_RIGHT ) &&  o.rightPixels() >= camera_.right() )
+				else if ( Input::held( Input::Action::MOVE_RIGHT ) &&  o.rightPixels() >= screenRight() )
 				{
-					position_before_scroll_ = camera_.x_;
+					position_before_scroll_ = x_;
 					scroll_dir_ = Direction::Simple::RIGHT;
 				}
-				else if ( Input::held( Input::Action::MOVE_DOWN ) &&  o.bottomPixels() >= camera_.bottom() )
+				else if ( Input::held( Input::Action::MOVE_DOWN ) &&  o.bottomPixels() >= screenBottom() )
 				{
-					position_before_scroll_ = camera_.y_;
+					position_before_scroll_ = y_;
 					scroll_dir_ = Direction::Simple::DOWN;
 				}
-				else if ( Input::held( Input::Action::MOVE_LEFT ) && o.xPixels() <= camera_.x_ )
+				else if ( Input::held( Input::Action::MOVE_LEFT ) && o.xPixels() <= x_ )
 				{
-					position_before_scroll_ = camera_.x_;
+					position_before_scroll_ = x_;
 					scroll_dir_ = Direction::Simple::LEFT;
 				}
 			}
@@ -155,8 +145,8 @@ void Camera::adjustCart( const Sprite& o, const Map& m )
 
 void Camera::setPrev()
 {
-	prev_x_ = camera_.x_;
-	prev_y_ = camera_.y_;
+	prev_x_ = x_;
+	prev_y_ = y_;
 };
 
 void Camera::contain( const Map& m )
@@ -164,46 +154,46 @@ void Camera::contain( const Map& m )
 
 	if ( !m.scrollLoop() )
 	{
-		if ( camera_.x_ < 0)
+		if ( x_ < 0)
 		{
-			camera_.x_ = 0;
+			x_ = 0;
 		}
-		if ( camera_.x_ > m.widthPixels() - widthPixels() - 0 )
+		if ( x_ > m.widthPixels() - width_ - 0 )
 		{
-			camera_.x_ = m.widthPixels()  - widthPixels() - 0;
+			x_ = m.widthPixels()  - width_ - 0;
 		}
 	}
 
-	if ( camera_.y_ < 0 )
+	if ( y_ < 0 )
 	{
-		camera_.y_ = 0;
+		y_ = 0;
 	}
-	if ( camera_.y_ > m.heightPixels() - heightPixels() - 0 )
+	if ( y_ > m.heightPixels() - container_height_ - 0 )
 	{
-		camera_.y_ = m.heightPixels() - heightPixels() - 0;
+		y_ = m.heightPixels() - container_height_ - 0;
 	}
 
 	if ( m.top_limit_ > -1 )
 	{
-		if ( m.top_limit_ > camera_.y_ )
+		if ( m.top_limit_ > y_ )
 		{
-			camera_.y_ = m.top_limit_;
+			y_ = m.top_limit_;
 		}
 	}
 
 	if ( m.bottom_limit_ > -1 )
 	{
-		if ( m.heightPixels() - m.bottom_limit_ < bottom() )
+		if ( m.heightPixels() - m.bottom_limit_ < y_ + container_height_ )
 		{
-			camera_.y_ = m.heightPixels() - m.bottom_limit_ - heightPixels();
+			y_ = m.heightPixels() - m.bottom_limit_ - container_height_;
 		}
 	}
 
 	if ( m.left_limit_ > -1 )
 	{
-		if ( m.left_limit_ > camera_.x_ )
+		if ( m.left_limit_ > x_ )
 		{
-			camera_.x_ = m.left_limit_;
+			x_ = m.left_limit_;
 		}
 	}
 
@@ -211,7 +201,7 @@ void Camera::contain( const Map& m )
 	{
 		if ( m.widthPixels() - m.right_limit_ < right() )
 		{
-			camera_.x_ = m.widthPixels() - m.right_limit_ - widthPixels();
+			x_ = m.widthPixels() - m.right_limit_ - width_;
 		}
 	}
 
@@ -223,47 +213,64 @@ void Camera::contain( const Map& m )
 
 bool Camera::onscreen( sdl2::SDLRect r, int padding ) const
 {
-	return camera_.onscreen( r, padding );
+	return !offscreen( r, padding );
 };
 
 bool Camera::onscreenPixels( sdl2::SDLRect r, int padding ) const
 {
-	return camera_.onscreenPixels( r, padding );
+	return !offscreen( Unit::PixelsToSubPixels( r ), padding );
 };
 
 bool Camera::offscreen( sdl2::SDLRect r, int padding, Direction::Simple dir ) const
 {
-	return camera_.offscreen( r, padding, dir );
+	switch( dir )
+	{
+		case ( Direction::Simple::UP ):
+			return offscreenTop( r, padding );
+		break;
+		case ( Direction::Simple::RIGHT ):
+			return offscreenRight( r, padding );
+		break;
+		case ( Direction::Simple::DOWN ):
+			return offscreenBottom( r, padding );
+		break;
+		case ( Direction::Simple::LEFT ):
+			return offscreenLeft( r, padding );
+		break;
+		default:
+			return offscreenTop( r, padding ) || offscreenRight( r, padding ) || offscreenBottom( r, padding ) || offscreenLeft( r, padding );
+		break;
+	}
 };
 
 void Camera::moveDown( int amount )
 {
-	camera_.y_ += amount;
+	y_ += amount;
 	changed_ = true;
 };
 
 void Camera::moveUp( int amount )
 {
-	camera_.y_ -= amount;
+	y_ -= amount;
 	changed_ = true;
 };
 
 void Camera::moveLeft( int amount )
 {
-	camera_.x_ -= amount;
+	x_ -= amount;
 	changed_ = true;
 };
 
 void Camera::moveRight( int amount )
 {
-	camera_.x_ += amount;
+	x_ += amount;
 	changed_ = true;
 };
 
 void Camera::setPosition( int x, int y )
 {
-	camera_.x_ = x;
-	camera_.y_ = y;
+	x_ = x;
+	y_ = y;
 	changed_ = true;
 };
 
@@ -276,12 +283,12 @@ void Camera::moveXNormal( const Sprite& o )
 {
 	if ( o.xPixels() < boundaryLeft() )
 	{
-		camera_.x_ -= boundaryLeft() - o.xPixels();
+		x_ -= boundaryLeft() - o.xPixels();
 	}
 
 	if ( o.rightPixels() > boundaryRight() )
 	{
-		camera_.x_ += o.rightPixels() - boundaryRight();
+		x_ += o.rightPixels() - boundaryRight();
 	}
 };
 
@@ -291,12 +298,12 @@ void Camera::moveYNormal( const Sprite& o )
 
 	if ( o.yPixels() < boundaryTop() )
 	{
-		camera_.y_ -= boundaryTop() - o.yPixels();
+		y_ -= boundaryTop() - o.yPixels();
 	}
 
 	if ( o. bottomPixels() > boundaryBottom() )
 	{
-		camera_.y_ += o. bottomPixels() - boundaryBottom();
+		y_ += o. bottomPixels() - boundaryBottom();
 	}
 };
 
@@ -304,7 +311,7 @@ void Camera::moveXCenter( const Sprite& o )
 {
 	if ( o.centerXPixels() != boundaryCenterX() )
 	{
-		camera_.x_ = o.centerXPixels() - round( widthPixels() / 2 );
+		x_ = o.centerXPixels() - ( int )( std::round( ( double )( width_ ) / 2.0 ) );
 	}
 };
 
@@ -312,7 +319,7 @@ void Camera::moveYCenter( const Sprite& o )
 {
 	if ( o.centerYPixels() != boundaryCenterY() )
 	{
-		camera_.y_ = o.centerYPixels() - round( heightPixels() / 2 );
+		y_ = o.centerYPixels() - ( int )( std::round( ( double )( height_ ) / 2.0 ) );
 	}
 };
 
@@ -340,10 +347,5 @@ void Camera::updateShaking()
 		}
 		break;
 	}
-	camera_.x_ += shake_amount_;
-};
-
-bool Camera::testPause() const
-{
-	return scroll_dir_ != Direction::Simple::__NULL;
+	x_ += shake_amount_;
 };

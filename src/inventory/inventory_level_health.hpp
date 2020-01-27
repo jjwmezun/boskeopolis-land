@@ -2,21 +2,21 @@
 
 class Health;
 
-#include "sprite_graphics.hpp"
-#include "unit.hpp"
+#include "mezun_sdl2.hpp"
+#include <string>
 
 class InventoryLevelHealth
 {
 	public:
 		InventoryLevelHealth( int y );
-		void update( const Health& health );
+		bool update( const Health& health );
 		void render();
 
 	private:
-		static constexpr int X = Unit::MiniBlocksToPixels( 11 );
-
-		sdl2::SDLRect dest_;
-		const SpriteGraphics gfx_;
-		const SpriteGraphics empty_gfx_;
 		int hearts_shown_;
+		std::string image_;
+		sdl2::SDLRect empty_heart_src_;
+		sdl2::SDLRect empty_heart_dest_;
+		sdl2::SDLRect full_heart_src_;
+		sdl2::SDLRect full_heart_dest_;
 };

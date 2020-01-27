@@ -7,7 +7,6 @@ class Sprite;
 #include "line.hpp"
 #include "unit.hpp"
 #include <SDL2/SDL.h>
-#include "simple_camera.hpp"
 
 class Camera
 {
@@ -25,215 +24,236 @@ class Camera
 		(
 			int x = 0,
 			int y = 0,
-			int width = Unit::WINDOW_WIDTH_BLOCKS,
-			int height = Unit::WINDOW_HEIGHT_BLOCKS - 2,
+			int width = Unit::WINDOW_WIDTH_PIXELS,
+			int height = Unit::WINDOW_HEIGHT_PIXELS - 32,
 			int x_offset = 0,
-			int y_offset = 0
+			int y_offset = 0,
+			int container_width = Unit::WINDOW_WIDTH_PIXELS,
+			int container_height = Unit::WINDOW_HEIGHT_PIXELS
 		)
 		:
 			changed_ ( true ),
+			position_before_scroll_ ( -1 ),
+			scroll_dir_ ( Direction::Simple::__NULL ),
+			x_ ( x ),
+			y_ ( y ),
+			width_ ( width ),
+			height_ ( height ),
+			x_offset_ ( x_offset ),
+			y_offset_ ( y_offset ),
+			container_width_ ( container_width ),
+			container_height_ ( container_height ),
 			prev_x_ ( -87654 ),
 			prev_y_ ( -87654 ),
 			shake_amount_ ( 0 ),
-			shake_dir_ ( Direction::Horizontal::__NULL ),
-			position_before_scroll_ ( -1 ),
-			scroll_dir_ ( Direction::Simple::__NULL ),
-			camera_ ( x, y, width, height, x_offset, y_offset )
+			shake_dir_ ( Direction::Horizontal::__NULL )
 		{};
 
-		constexpr inline sdl2::SDLRect rect() const
+		constexpr sdl2::SDLRect rect() const
 		{
-			return { camera_.x_, camera_.y_, widthPixels(), heightPixels() };
+			return { x_, y_, container_width_, container_height_ };
 		};
 
-		constexpr inline int widthBlocks() const
+		constexpr int width() const
 		{
-			return camera_.width_;
+			return width_;
 		};
 
-		constexpr inline int heightBlocks() const
+		constexpr int height() const
 		{
-			return camera_.height_;
+			return height_;
 		};
 
-		constexpr inline int widthPixels() const
+		constexpr int x() const
 		{
-			return Unit::BlocksToPixels( camera_.width_ );
+			return x_;
 		};
 
-		constexpr inline int heightPixels() const
+		constexpr int y() const
 		{
-			return Unit::BlocksToPixels( camera_.height_ );
+			return y_;
 		};
 
-		constexpr inline int x() const
+		constexpr int xOffset() const
 		{
-			return camera_.x_;
+			return x_offset_;
 		};
 
-		constexpr inline int y() const
+		constexpr int yOffset() const
 		{
-			return camera_.y_;
+			return y_offset_;
 		};
 
-		constexpr inline int xOffset() const
-		{
-			return camera_.x_offset_;
-		};
-
-		constexpr inline int yOffset() const
-		{
-			return camera_.y_offset_;
-		};
-
-		constexpr inline int prevX() const
+		constexpr int prevX() const
 		{
 			return prev_x_;
 		};
 
-		constexpr inline int prevY() const
+		constexpr int prevY() const
 		{
 			return prev_y_;
 		};
 
-		constexpr inline int right() const
+		constexpr int right() const
 		{
-			return camera_.x_ + widthPixels();
+			return x_ + width_;
 		};
 
-		constexpr inline int bottom() const
+		constexpr int bottom() const
 		{
-			return camera_.y_ + heightPixels();
+			return y_ + height_;
 		};
 
-		constexpr inline int left() const
+		constexpr int screenRight() const
 		{
-			return camera_.x_ + xOffset();
+			return x_ + container_width_;
+		};
+
+		constexpr int screenBottom() const
+		{
+			return y_ + container_height_;
+		};
+
+		constexpr int left() const
+		{
+			return x_ + xOffset();
 		};
 
 		constexpr int top() const
 		{
-			return camera_.y_ + yOffset();
+			return y_ + yOffset();
 		};
 
-		constexpr inline int boundaryTop() const
+		constexpr int boundaryTop() const
 		{
-			return camera_.y_ + ( heightPixels() * .25 );
+			return y_ + ( height_ * .25 );
 		};
 
-		constexpr inline int boundaryTopWeaker() const
+		constexpr int boundaryTopWeaker() const
 		{
-			return camera_.y_ + ( heightPixels() * .25 );
+			return y_ + ( height_ * .25 );
 		};
 
-		constexpr inline int boundaryCenterY() const
+		constexpr int boundaryCenterY() const
 		{
-			return camera_.y_ + ( heightPixels() * .5 );
+			return y_ + ( height_ * .5 );
 		};
 
-		constexpr inline int boundaryBottom() const
+		constexpr int boundaryBottom() const
 		{
-			return camera_.y_ + ( heightPixels() * .75 );
+			return y_ + ( height_ * .75 );
 		};
 
-		constexpr inline int boundaryLeft() const
+		constexpr int boundaryLeft() const
 		{
-			return camera_.x_ + ( widthPixels() * .35 );
+			return x_ + ( width_ * .35 );
 		};
 
-		constexpr inline int boundaryCenterX() const
+		constexpr int boundaryCenterX() const
 		{
-			return camera_.x_ + ( widthPixels() * .5 );
+			return x_ + ( width_ * .5 );
 		};
 
-		constexpr inline int boundaryRight() const
+		constexpr int boundaryRight() const
 		{
-			return camera_.x_ + ( widthPixels() * .65 );
+			return x_ + ( width_ * .65 );
 		};
 
-		constexpr inline bool offscreenTop( sdl2::SDLRect r, int padding = 0 ) const
+		constexpr bool offscreenTop( sdl2::SDLRect r, int padding = 0 ) const
 		{
-			return r.y + r.h < Unit::PixelsToSubPixels( y() - padding );
+			return r.y + r.h < Unit::PixelsToSubPixels( y_ - padding );
 		};
 
-		constexpr inline bool offscreenLeft( sdl2::SDLRect r, int padding = 0 ) const
+		constexpr bool offscreenLeft( sdl2::SDLRect r, int padding = 0 ) const
 		{
-			return r.x + r.w < Unit::PixelsToSubPixels( x() - padding );
+			return r.x + r.w < Unit::PixelsToSubPixels( x_ - padding );
 		};
 
-		constexpr inline bool offscreenBottom( sdl2::SDLRect r, int padding = 0 ) const
+		constexpr bool offscreenBottom( sdl2::SDLRect r, int padding = 0 ) const
 		{
-			return r.y > Unit::PixelsToSubPixels( bottom() + padding );
+			return r.y > Unit::PixelsToSubPixels( screenBottom() + padding );
 		};
 
-		constexpr inline bool offscreenRight( sdl2::SDLRect r, int padding = 0 ) const
+		constexpr bool offscreenRight( sdl2::SDLRect r, int padding = 0 ) const
 		{
-			return r.x > Unit::PixelsToSubPixels( right() + padding );
+			return r.x > Unit::PixelsToSubPixels( screenRight() + padding );
 		};
 
-		constexpr inline bool offscreenPartwayTop( sdl2::SDLRect r ) const
+		constexpr bool offscreenPartwayTop( sdl2::SDLRect r ) const
 		{
-			return r.y < y();
+			return r.y < y_;
 		};
 
-		constexpr inline bool offscreenPartwayRight( sdl2::SDLRect r ) const
+		constexpr bool offscreenPartwayRight( sdl2::SDLRect r ) const
 		{
-			return r.x + r.h > widthPixels();
+			return r.x + r.h > container_width_;
 		};
 
-		constexpr inline bool offscreenPartwayBottom( sdl2::SDLRect r ) const
+		constexpr bool offscreenPartwayBottom( sdl2::SDLRect r ) const
 		{
-			return r.y + r.w > heightPixels();
+			return r.y + r.w > container_height_;
 		};
 
-		constexpr inline bool offscreenPartwayLeft( sdl2::SDLRect r ) const
+		constexpr bool offscreenPartwayLeft( sdl2::SDLRect r ) const
 		{
-			return r.x < x();
+			return r.x < x_;
 		};
 
-		constexpr inline int relativeX( sdl2::SDLRect r ) const
+		constexpr int relativeX( sdl2::SDLRect r ) const
 		{
-			return r.x - x() + xOffset();
+			return r.x - x_ + xOffset();
 		};
 
-		constexpr inline int relativeY( sdl2::SDLRect r ) const
+		constexpr int relativeY( sdl2::SDLRect r ) const
 		{
-			return r.y - y() + yOffset();
+			return r.y - y_ + yOffset();
 		};
 
-		constexpr inline int relativeX( int n ) const
+		constexpr int relativeX( int n ) const
 		{
-			return n - x() + xOffset();
+			return n - x_ + xOffset();
 		};
 
-		constexpr inline int relativeY( int n ) const
+		constexpr int relativeY( int n ) const
 		{
-			return n - y() + yOffset();
+			return n - y_ + yOffset();
 		};
 
-		constexpr inline sdl2::SDLRect relativeRect( sdl2::SDLRect r ) const
+		constexpr sdl2::SDLRect relativeRect( sdl2::SDLRect r ) const
 		{
 			return { relativeX( r ), relativeY( r ), r.w, r.h };
 		};
 
-		constexpr inline Point relativePoint( Point p ) const
+		constexpr Point relativePoint( Point p ) const
 		{
 			return { relativeX( p.x ), relativeY( p.y ) };
 		};
 
-		constexpr inline Line relativeLine( Line l ) const
+		constexpr Line relativeLine( Line l ) const
 		{
 			return { relativePoint( l.p1 ), relativePoint( l.p2 ) };
+		};
+		
+		constexpr bool changed() const
+		{
+			return changed_;
+		};
+
+		constexpr void update()
+		{
+			changed_ = false;
+		};
+
+		constexpr bool testPause() const
+		{
+			return scroll_dir_ != Direction::Simple::__NULL;
 		};
 
 		bool onscreen( sdl2::SDLRect r, int padding = 0 )  const;
 		bool onscreenPixels( sdl2::SDLRect r, int padding = 0 )  const;
 		bool offscreen( sdl2::SDLRect r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
 
-		bool changed() const;
-		void update();
 		void scroll( const Map& m );
-
 		void adjust( const Sprite& o, const Map& m );
 		void adjustCart( const Sprite& o, const Map& m );
 		void setPrev();
@@ -243,18 +263,23 @@ class Camera
 		void moveRight( int amount = 1 );
 		void setPosition( int x, int y );
 		void startShaking();
-		bool testPause() const;
-
 
 	private:
 		bool changed_;
+		Direction::Horizontal shake_dir_;
+		Direction::Simple scroll_dir_;
+		int x_;
+		int y_;
+		int x_offset_;
+		int y_offset_;
+		int width_;
+		int height_;
+		int container_width_;
+		int container_height_;
 		int prev_x_;
 		int prev_y_;
 		int shake_amount_;
 		int position_before_scroll_;
-		Direction::Horizontal shake_dir_;
-		Direction::Simple scroll_dir_;
-		SimpleCamera camera_;
 
 		void move( const Sprite& o, const Type type );
 		void contain( const Map& m );

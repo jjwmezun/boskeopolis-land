@@ -2,8 +2,6 @@
 #include "change_camera_autoscroll_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-#include <iostream>
-
 ChangeCameraAutoscrollSprite::ChangeCameraAutoscrollSprite( int x, int y, Direction::Simple direction )
 :
 	Sprite( nullptr, x, y, 48, 128, { SpriteType::CAMERA_MOVE }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true ),
@@ -20,7 +18,7 @@ void ChangeCameraAutoscrollSprite::customUpdate( Camera& camera, Map& lvmap, Eve
 		case ( Direction::Simple::UP ):
 		case ( Direction::Simple::DOWN ):
 		{
-			const int camera_center = ( int )( floor( ( float )( camera.x() ) + ( ( float )( camera.widthPixels() ) / 2 ) ) );
+			const int camera_center = ( int )( floor( ( float )( camera.x() ) + ( ( float )( camera.width() ) / 2 ) ) );
 			const bool condition = ( movement_speed == Direction::Simple::RIGHT ) ? centerXPixels() <= camera_center : centerXPixels() >= camera_center;
 			if ( condition )
 			{
@@ -32,8 +30,7 @@ void ChangeCameraAutoscrollSprite::customUpdate( Camera& camera, Map& lvmap, Eve
 		case ( Direction::Simple::RIGHT ):
 		case ( Direction::Simple::LEFT ):
 		{
-			std::cout<<(int)movement_speed<<std::endl;
-			const int camera_center = ( int )( floor( ( float )( camera.y() ) + ( ( float )( camera.heightPixels() ) / 2 ) ) );
+			const int camera_center = ( int )( floor( ( float )( camera.y() ) + ( ( float )( camera.height() ) / 2 ) ) );
 			const bool condition = ( movement_speed == Direction::Simple::DOWN ) ? centerYPixels() <= camera_center : centerYPixels() >= camera_center;
 			if ( condition )
 			{

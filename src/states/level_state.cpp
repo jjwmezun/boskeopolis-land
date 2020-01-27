@@ -15,7 +15,7 @@ LevelState::LevelState( int level_id )
 	inventory_screen_ (),
 	level_ ( Level::getLevel( level_id ) ),
 	events_ ( level_.startOn() ),
-	camera_ ( { level_.cameraX(), level_.cameraY() } ),
+	camera_ ( level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 32, 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
 	sprites_ ( level_.entranceX(), level_.entranceY() ),
 	blocks_ ( level_.currentMap() ),
 	health_ ()
@@ -91,6 +91,7 @@ void LevelState::init()
 	sprites_.reset( level_, events_ );
 	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
+	inventory_screen_.init();
 };
 
 void LevelState::testPause()

@@ -337,7 +337,9 @@ void OverworldState::generateSprites()
 			}
 			else if ( sprite_tile > 2063 && sprite_tile < 2063 + ( 16 * 4 ) )
 			{
-				const int level_id = sprite_tile - 2064;
+				const int theme = ( sprite_tile - 2064 ) % 16;
+				const int cycle = ( int )( std::floor( ( double )( sprite_tile - 2064 ) / 16.0 ) );
+				const int level_id = cycle * Level::NUMBER_OF_THEMES + theme;
 				if ( previous_level_ == level_id )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
