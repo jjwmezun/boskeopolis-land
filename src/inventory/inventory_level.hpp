@@ -33,7 +33,7 @@ class InventoryLevel
 		void update( EventSystem& events, const Health& health );
 		void render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap );
 		void setShowMcGuffins();
-		void setKillCounter( int count );
+		void changeKillCounter( int count );
 		void forceRerender();
 
 	private:
@@ -42,6 +42,8 @@ class InventoryLevel
 		void renderPtsGraphics();
 		void updateTimerGraphics();
 		void renderTimerGraphics();
+		void updateKillCountGraphics();
+		void renderKillCountGraphics();
 	/*
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );
@@ -85,5 +87,6 @@ class InventoryLevel
 
 
 		TextureBox main_texture_;
+		int kill_count_;
 		char scratch_[ 3000 ];
 };

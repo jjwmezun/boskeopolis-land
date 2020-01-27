@@ -14,4 +14,5 @@ class KillAllGoal : public Goal
 
 	private:
 		int sprites_to_kill_;
+		int sprites_left_;
 };

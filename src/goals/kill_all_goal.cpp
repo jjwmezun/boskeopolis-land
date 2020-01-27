@@ -7,18 +7,23 @@
 KillAllGoal::KillAllGoal( std::string message )
 :
 	Goal( message ),
-	sprites_to_kill_ ( 99 )
+	sprites_to_kill_ ( 99 ),
+	sprites_left_ ( 0 )
 {};
 
 KillAllGoal::~KillAllGoal() {};
 
 void KillAllGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
-	const int kill_count = sprites_to_kill_ - sprites.permanentlyKilledEnemies();
+	const int sprites_left_momento = sprites_left_;
+	sprites_left_ = sprites_to_kill_ - sprites.permanentlyKilledEnemies();
 
-	inventory_screen.setKillCounter( kill_count );
+	if ( sprites_left_ != sprites_left_momento )
+	{
+		inventory_screen.changeKillCounter( sprites_left_ );
+	}
 
-	if ( kill_count <= 0 )
+	if ( sprites_left_ <= 0 )
 	{
 		events.win();
 	}

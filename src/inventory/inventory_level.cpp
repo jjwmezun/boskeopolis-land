@@ -4,11 +4,13 @@
 #include "inventory.hpp"
 #include "inventory_level.hpp"
 #include "map.hpp"
+#include "mezun_helpers.hpp"
 #include "news_ticker.hpp"
 #include "render.hpp"
 #include "sprite.hpp"
 #include "wtext_obj.hpp"
 
+static constexpr int MISC_X = 185;
 static constexpr int FLASHING_TIMER_SHADES_NUM = 8;
 static constexpr Text::FontColor FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
 {
@@ -30,7 +32,8 @@ InventoryLevel::InventoryLevel()
 	ticker_ ( NewsTicker::make( Y + 8 ) ),
 	flashing_timer_ ( 0 ),
 	flashing_time_shade_ ( 0 ),
-	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y )
+	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
+	kill_count_ ( -1 )
 {};
 
 InventoryLevel::~InventoryLevel()
@@ -153,9 +156,10 @@ void InventoryLevel::setShowMcGuffins()
 
 };
 
-void InventoryLevel::setKillCounter( int count )
+void InventoryLevel::changeKillCounter( int count )
 {
-
+	kill_count_ = count;
+	updateKillCountGraphics();
 };
 
 void InventoryLevel::updateHealthGraphics()
@@ -172,15 +176,19 @@ void InventoryLevel::forceRerender()
 	Render::renderObject( "bg/level-inventory-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT }, { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT } );
 	if ( Inventory::victory() )
 	{
-		Render::renderObject( "bg/level-inventory-frame.png", { 16, 40, 8, 8 }, { 10, TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { 16, 40, 8, 8 }, { 10, TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	if ( Inventory::haveDiamond() )
 	{
-		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	health_gfx_.render();
 	renderPtsGraphics();
 	renderTimerGraphics();
+	if ( kill_count_ != -1 )
+	{
+		renderKillCountGraphics();
+	}
 	main_texture_.endDrawing();
 };
 
@@ -209,5 +217,20 @@ void InventoryLevel::updateTimerGraphics()
 void InventoryLevel::renderTimerGraphics()
 {
 	WTextObj text{ Inventory::clock().getTimeString(), 146, TOP_ROW_Y_RELATIVE };
+	text.render();
+};
+
+void InventoryLevel::updateKillCountGraphics()
+{
+	main_texture_.startDrawing();
+	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8 * 4, 8 }, 1 );
+	renderKillCountGraphics();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::renderKillCountGraphics()
+{
+	Render::renderObject( "bg/level-select-characters.png", { 0, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
+	WTextObj text{ U"x" + mezun::intToChar32StringWithPadding( kill_count_, 2 ), MISC_X + 8, TOP_ROW_Y_RELATIVE };
 	text.render();
 };
