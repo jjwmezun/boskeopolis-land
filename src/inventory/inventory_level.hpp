@@ -44,6 +44,8 @@ class InventoryLevel
 		void renderTimerGraphics();
 		void updateKillCountGraphics();
 		void renderKillCountGraphics();
+		void updateKeyGraphics();
+		void renderKeyGraphics();
 	/*
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );

@@ -37,7 +37,8 @@ InventoryLevel::InventoryLevel()
 	flashing_timer_ ( 0 ),
 	flashing_time_shade_ ( 0 ),
 	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
-	kill_count_ ( -1 )
+	kill_count_ ( -1 ),
+	showing_key_ ( false )
 {};
 
 InventoryLevel::~InventoryLevel()
@@ -74,6 +75,11 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 			}
 			updateTimerGraphics();
 		}
+	}
+	if ( !showing_key_ && events.hasKey() )
+	{
+		updateKeyGraphics();
+		showing_key_ = true;
 	}
 };
 
@@ -196,6 +202,10 @@ void InventoryLevel::forceRerender()
 	{
 		renderKillCountGraphics();
 	}
+	if ( showing_key_ )
+	{
+		renderKeyGraphics();
+	}
 	main_texture_.endDrawing();
 };
 
@@ -240,4 +250,17 @@ void InventoryLevel::renderKillCountGraphics()
 	Render::renderObject( "bg/level-select-characters.png", { 0, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
 	WTextObj text{ U"x" + mezun::intToChar32StringWithPadding( kill_count_, 2 ), MISC_X + 8, TOP_ROW_Y_RELATIVE };
 	text.render();
+};
+
+void InventoryLevel::updateKeyGraphics()
+{
+	main_texture_.startDrawing();
+	renderKeyGraphics();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::renderKeyGraphics()
+{
+	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+	Render::renderObject( "bg/level-select-characters.png", { 8, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
