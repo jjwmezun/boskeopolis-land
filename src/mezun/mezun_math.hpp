@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <vector>
 
 namespace mezun
 {
@@ -84,4 +85,15 @@ namespace mezun
             ? ( int )( num )
             : ( int )( num ) + ( ( num > 0.0 ) ? 1 : 0 );
     }
+
+    template<typename S>
+    inline const S& randEntry( const std::vector<S>& list )
+    {
+        return list[ randInt( list.size() - 1 ) ];
+    };
+
+    inline int randEntry( const std::vector<int>& list )
+    {
+        return list[ randInt( list.size() - 1 ) ];
+    };
 };

@@ -41,6 +41,8 @@ class LocalizationLanguage
         std::u32string getLevelGoalMessage( const std::string& code_name ) const;
         const std::u32string* getOverworldMenuNames() const;
         const std::u32string& getPressAnyKey() const;
+        const std::u32string& getRandomNewsTickerMessage() const;
+        int getMaxNewsTickerMessageWidth() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -54,6 +56,7 @@ class LocalizationLanguage
         void loadLevelSelectText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadLevelText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadOverworldText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadNewsTickerText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
 
         int order_;
         int charset_height_;
@@ -82,4 +85,6 @@ class LocalizationLanguage
         std::unordered_map<std::string, std::u32string> level_goal_messages_;
         std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
         std::u32string overworld_menu_names_[ NUMBER_OF_OVERWORLD_MENU_OPTIONS ];
+        std::vector<std::u32string> news_ticker_messages_;
+        int max_news_ticker_message_width_;
 };

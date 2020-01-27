@@ -1,20 +1,27 @@
 #pragma once
 
-#include "text_component.hpp"
-#include "text_component_marquee.hpp"
-#include "text_obj.hpp"
+#include "texture_box.hpp"
 
-class NewsTicker : public TextComponent
+class NewsTicker
 {
 	public:
-		static TextObj make( int y );
+		NewsTicker( int y );
 		~NewsTicker();
-		void update( TextObj& text ) override;
+		NewsTicker( const NewsTicker& ) = delete;
+		NewsTicker( NewsTicker&& ) = delete;
+		NewsTicker& operator=( const NewsTicker& ) = delete;
+		NewsTicker& operator=( NewsTicker&& ) = delete;
+		void update();
+		void init();
+		void render() const;
+		void forceRedraw();
 
 	private:
-		NewsTicker();
-		static std::string newMessage();
-		void changeMessage( TextObj& text );
-		
-		TextComponentMarquee marquee_;
+		void recalculateWidth();
+
+		int y_;
+		int w_;
+		TextureBox texture_;
+		std::u32string selected_message_;
+		char scratch_[ 3000 ];
 };

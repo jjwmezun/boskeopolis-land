@@ -60,6 +60,7 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadLevelSelectText( data, path );
     loadLevelText( data, path );
     loadOverworldText( data, path );
+    loadNewsTickerText( data, path );
 };
 
 int LocalizationLanguage::getOrder() const
@@ -524,8 +525,6 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
     }
 };
 
-
-
 void LocalizationLanguage::loadOverworldText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if ( !data.HasMember( "overworld" ) || !data[ "overworld" ].IsObject() )
@@ -562,6 +561,27 @@ void LocalizationLanguage::loadOverworldText( const rapidjson::GenericObject<fal
     overworld_menu_names_[ 3 ] = mezun::charToChar32String( menu[ "options" ].GetString() );
     overworld_menu_names_[ 4 ] = mezun::charToChar32String( menu[ "quit" ].GetString() );
 };
+
+void LocalizationLanguage::loadNewsTickerText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "news_ticker" ) || !data[ "news_ticker" ].IsArray() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    max_news_ticker_message_width_ = 0;
+    for ( const auto& message_t : data[ "news_ticker" ].GetArray() )
+    {
+        if ( message_t.IsString() )
+        {
+            std::u32string message = mezun::charToChar32String( message_t.GetString() );
+            if ( max_news_ticker_message_width_ < message.size() )
+            {
+                max_news_ticker_message_width_ = message.size();
+            }
+            news_ticker_messages_.push_back( message );
+        }
+    }
+}
 
 const std::u32string& LocalizationLanguage::getLevelSelectTitle() const
 {
@@ -610,4 +630,14 @@ const std::u32string* LocalizationLanguage::getOverworldMenuNames() const
 const std::u32string& LocalizationLanguage::getPressAnyKey() const
 {
     return press_any_key_;
+};
+
+const std::u32string& LocalizationLanguage::getRandomNewsTickerMessage() const
+{
+    return mezun::randEntry( news_ticker_messages_ );
+};
+
+int LocalizationLanguage::getMaxNewsTickerMessageWidth() const
+{
+    return max_news_ticker_message_width_;
 };

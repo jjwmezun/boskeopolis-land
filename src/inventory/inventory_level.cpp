@@ -5,7 +5,6 @@
 #include "inventory_level.hpp"
 #include "map.hpp"
 #include "mezun_helpers.hpp"
-#include "news_ticker.hpp"
 #include "render.hpp"
 #include "sprite.hpp"
 #include "wtext_obj.hpp"
@@ -33,7 +32,7 @@ InventoryLevel::InventoryLevel()
 :
 	health_gfx_ ( Y ),
 	oxygen_meter_ ( Y ),
-	ticker_ ( NewsTicker::make( Y + 8 ) ),
+	ticker_ ( BOTTOM_ROW_Y ),
 	flashing_timer_ ( 0 ),
 	flashing_time_shade_ ( 0 ),
 	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
@@ -107,51 +106,6 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 {
 	main_texture_.render();
 
-/*
-	// GEMS
-	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, WTextCharacter::Color::DARK_GRAY );
-
-	// TIME
-	Inventory::clock().render( CLOCK_X, Y, nullptr, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] );
-	clock_gfx_.render( CLOCK_ICON_DEST, nullptr );
-/*
-	// MISC
-		// KEY
-		if ( events.hasKey() )
-		{
-			key_gfx_.render( KEY_ICON_DEST, nullptr );
-		}
-
-		// SWITCH
-		if ( lvmap.show_on_off_ )
-		{
-			if ( events.switchOn() )
-			{
-				switch_on_.render();
-			}
-			else
-			{
-				switch_off_.render();
-			}
-		}
-
-		/*
-		// McGuffins
-		//if ( show_mcguffins_ )
-		{
-			mcguffins_gfx_.render( MCGUFFIN_DEST, nullptr );
-			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
-			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, WTextCharacter::Color::DARK_GRAY );
-		}*/
-
-		// Kill Count
-		/*if ( kill_counter_ > -1 )
-		{
-			kills_gfx_.render( MCGUFFIN_DEST, nullptr );
-			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
-			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, WTextCharacter::Color::DARK_GRAY );
-		}*/
-
 	// OXYGEN
 	oxygen_meter_.render();
 
@@ -162,7 +116,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	}
 	else
 	{
-		//ticker_.render();
+		ticker_.render();
 	}
 
 	// BOPS
@@ -232,6 +186,7 @@ void InventoryLevel::forceRerender()
 		renderMcGuffinGraphics();
 	}
 	main_texture_.endDrawing();
+	ticker_.forceRedraw();
 };
 
 void InventoryLevel::updatePtsGraphics()

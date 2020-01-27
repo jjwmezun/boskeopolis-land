@@ -102,22 +102,7 @@ int TextureBox::getY() const
     return dest_.y;
 };
 
-void TextureBox::changeWidth( int value )
+const sdl2::SDLRect& TextureBox::getDest() const
 {
-    dest_.w = value;
-};
-
-void TextureBox::changeHeight( int value )
-{
-    dest_.h = value;
-};
-
-int TextureBox::getWidth() const
-{
-    return dest_.w;
-};
-
-int TextureBox::getHeight() const
-{
-    return dest_.h;
+    return dest_;
 };

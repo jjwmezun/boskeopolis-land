@@ -1,74 +1,55 @@
-#include "mezun_helpers.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
+#include "mezun_math.hpp"
 #include "news_ticker.hpp"
+#include "render.hpp"
+#include "wtext_obj.hpp"
 
-const std::vector<std::string> strings_ =
+static constexpr int START_POSITION = Unit::WINDOW_WIDTH_PIXELS + 64;
+
+NewsTicker::NewsTicker( int y )
+:
+	y_ ( y ),
+	w_ ( 0 ),
+	texture_ ( Unit::MiniBlocksToPixels( Localization::getCurrentLanguage().getMaxNewsTickerMessageWidth() ), 8, START_POSITION, y ),
+	selected_message_ ( Localization::getCurrentLanguage().getRandomNewsTickerMessage() )
 {
-	"Kitties Want Answers In Possible Kitty Kibble Shortage",
-	"Thank you for reading this message. This message loves you.",
-	//"Clean up on aisle Delfino.",
-	//"Experts declare, SimCity 3000 Marquee + platformer = bad game - 9/10.",
-	//"Experts declare, changing code through simple search & replace ne'er messes with in-Main:: text.",
-	//"Experts declare, those who died are justified by wearing the badge, they're your chosen whites. Details @ 11.",
-	//"Experts declare, \"Playing Railroad\" taking way too long to finish.",
-	//"...& that's the news you can choose.",
-	"NEWSFLASH: Crazy woman running round grabbing floating gems everywhere she goes. Details @ 11.",
-	"¡AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!",
-	"WARNING: Playing games for too long can be dangerous. Take 15-minute breaks 'tween each session or we'll come to smash your hand with a hammer-& yes, Jacob, we'll find you @ 2456 Acorn Avenue. We know where you live.",
-	"NEWSFLASH: Despite all o' my rage, I am still just a rat in a cage. Details @ 11.",
-	//"Thou shalt not waste thine time reading these dumb newsflashes 'stead o' playing the game - ¡Look out for that Bad Apple! ¡You fool!",
-	//"If you don't know 'bout the tavern, then it is time.",
-	//"Achievement Unlocked: You read a pointless message.",
-	"You are dead. Details @ 11.",
-	"Reported sightings o’ Bigfoot believing in conspiracy theories surrounding aliens & the Boskeopoleon government.",
-	//"Experts declare, when the people all stop & stare & say, \"¿Why you gotta be like that?\", to just look them in the eyes & tell them you were raised by bats. Details @ 11.",
-	"NEWSFLASH: I just cut my fingers trying to chop onions. Ow.",
-	"Boo.",
-	"Citizens claim they find boring religious pamphletes hidden in Muertoween candy. Details @ 11.",
-	"25% off costumes this Muertoween @ FredMart: We possess everything."
+	texture_.init();
+	recalculateWidth();
 };
 
-TextObj NewsTicker::make( int y )
+NewsTicker::~NewsTicker()
 {
-	return TextObj
-	(
-		newMessage(),
-		Unit::WINDOW_WIDTH_PIXELS,
-		y,
-		Text::FontColor::DARK_GRAY,
-		Text::FontAlign::LEFT,
-		Text::FontColor::__NULL,
-		false,
-		Text::DEFAULT_LINE_LENGTH,
-		-1,
-		1,
-		std::unique_ptr<TextComponent>
-		(
-			new NewsTicker()
-		)
-	);
+	texture_.destroy();
 };
 
-NewsTicker::NewsTicker() : marquee_ ( Direction::Horizontal::LEFT, 1 ) {};
-NewsTicker::~NewsTicker() {};
-
-void NewsTicker::update( TextObj& text )
+void NewsTicker::update()
 {
-	// Check just before position changes from marquee.
-	if ( text.right() == 0 )
+	texture_.moveLeft();
+	if ( texture_.getX() + w_ < 0 )
 	{
-		changeMessage( text );
+		texture_.setX( START_POSITION );
+		selected_message_ = Localization::getCurrentLanguage().getRandomNewsTickerMessage();
+		recalculateWidth();
+		forceRedraw();
 	}
-
-	marquee_.update( text );
 };
 
-std::string NewsTicker::newMessage()
+void NewsTicker::render() const
 {
-	return mezun::randomListItem( strings_ );
+	texture_.render();
 };
 
-void NewsTicker::changeMessage( TextObj& text )
+void NewsTicker::forceRedraw()
 {
-	text.words_ = newMessage();
-	text.x_ = -text.width(); // Readjust position so still left o' screen with new string size.
+	texture_.startDrawing();
+	Render::clearScreenTransparency();
+	WTextObj text( selected_message_, 0, 0 );
+	text.render();
+	texture_.endDrawing();
+};
+
+void NewsTicker::recalculateWidth()
+{
+	w_ = Unit::MiniBlocksToPixels( selected_message_.size() );
 };
