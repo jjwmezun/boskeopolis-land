@@ -38,7 +38,9 @@ InventoryLevel::InventoryLevel()
 	flashing_time_shade_ ( 0 ),
 	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
 	kill_count_ ( -1 ),
-	showing_key_ ( false )
+	showing_key_ ( false ),
+	show_on_off_ ( false ),
+	on_off_state_ ( false )
 {};
 
 InventoryLevel::~InventoryLevel()
@@ -81,15 +83,21 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 		updateKeyGraphics();
 		showing_key_ = true;
 	}
+	if ( show_on_off_ && on_off_state_ != events.switch_ )
+	{
+		on_off_state_ = events.switch_;
+		updateSwitchGraphics();
+	}
 };
 
-void InventoryLevel::init()
+void InventoryLevel::init( const Map& lvmap )
 {
+	show_on_off_ = lvmap.show_on_off_;
 	main_texture_.init();
 	forceRerender();
 };
 
-void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
+void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera )
 {
 	main_texture_.render();
 
@@ -206,6 +214,10 @@ void InventoryLevel::forceRerender()
 	{
 		renderKeyGraphics();
 	}
+	if ( show_on_off_ )
+	{
+		renderSwitchGraphics();
+	}
 	main_texture_.endDrawing();
 };
 
@@ -255,12 +267,27 @@ void InventoryLevel::renderKillCountGraphics()
 void InventoryLevel::updateKeyGraphics()
 {
 	main_texture_.startDrawing();
+	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
 	renderKeyGraphics();
 	main_texture_.endDrawing();
 };
 
 void InventoryLevel::renderKeyGraphics()
 {
-	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
 	Render::renderObject( "bg/level-select-characters.png", { 8, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
+};
+
+void InventoryLevel::updateSwitchGraphics()
+{
+	main_texture_.startDrawing();
+	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8 * 3, 8 }, 1 );
+	renderSwitchGraphics();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::renderSwitchGraphics()
+{
+	const std::u32string string = ( on_off_state_ ) ? U"ON" : U"OFF";
+	WTextObj text( string, MISC_X, TOP_ROW_Y_RELATIVE );
+	text.render();
 };

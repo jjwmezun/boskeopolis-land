@@ -29,9 +29,9 @@ class InventoryLevel
 		InventoryLevel( InventoryLevel&& ) = delete;
 		InventoryLevel& operator=( const InventoryLevel& ) = delete;
 		InventoryLevel& operator=( InventoryLevel&& ) = delete;
-		void init();
+		void init( const Map& lvmap );
 		void update( EventSystem& events, const Health& health );
-		void render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap );
+		void render( const EventSystem& events, const Sprite& hero, const Camera& camera );
 		void setShowMcGuffins();
 		void changeKillCounter( int count );
 		void forceRerender();
@@ -46,6 +46,8 @@ class InventoryLevel
 		void renderKillCountGraphics();
 		void updateKeyGraphics();
 		void renderKeyGraphics();
+		void updateSwitchGraphics();
+		void renderSwitchGraphics();
 	/*
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );
@@ -91,5 +93,7 @@ class InventoryLevel
 		TextureBox main_texture_;
 		int kill_count_;
 		bool showing_key_;
+		bool show_on_off_;
+		bool on_off_state_;
 		char scratch_[ 3000 ];
 };

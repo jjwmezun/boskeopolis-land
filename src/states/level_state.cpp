@@ -82,7 +82,7 @@ void LevelState::stateRender()
 	sprites_.render( camera_, true );
 	level_.currentMap().renderFG( camera_ );
 	events_.renderSewer( camera_ );
-	inventory_screen_.render( events_, sprites_.hero(), camera_, level_.currentMap() );
+	inventory_screen_.render( events_, sprites_.hero(), camera_ );
 };
 
 void LevelState::init()
@@ -91,7 +91,7 @@ void LevelState::init()
 	sprites_.reset( level_, events_ );
 	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
-	inventory_screen_.init();
+	inventory_screen_.init( level_.currentMap() );
 };
 
 void LevelState::testPause()
