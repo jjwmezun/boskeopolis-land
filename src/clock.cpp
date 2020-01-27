@@ -21,26 +21,9 @@ bool Clock::update()
 	return false;
 };
 
-void Clock::renderTime( int x, int y, int total_seconds, const Camera* camera, Text::FontColor color, Text::FontAlign align, Text::FontColor shadow, int magnification )
-{
-	Text::renderText( Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) ), x, y, camera, color, Text::DEFAULT_LINE_LENGTH, align, shadow, magnification );
-}
-
 std::string Clock::timeToString2( int total_seconds )
 {
 	return Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) );
-};
-
-void Clock::render( int x, int y, const Camera* camera, Text::FontColor color, Text::FontAlign align, Text::FontColor shadow, int magnification ) const
-{
-	if ( direction_ == Direction::Vertical::DOWN )
-	{
-		renderTime( x, y, timeRemaining(), camera, color, align, shadow, magnification );
-	}
-	else
-	{
-		renderTime( x, y, total_seconds_, camera, color, align, shadow, magnification );
-	}
 };
 
 void Clock::reset( Direction::Vertical direction, int limit )

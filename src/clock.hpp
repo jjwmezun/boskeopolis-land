@@ -21,29 +21,6 @@ class Clock
 			on_ ( true )
 		{};
 
-		void render
-		(
-			int x,
-			int y,
-			const Camera* camera = nullptr,
-			Text::FontColor color = Text::FontColor::BLACK,
-			Text::FontAlign align = Text::FontAlign::LEFT,
-			Text::FontColor shadow = Text::FontColor::__NULL,
-			int magnification = 1
-		) const;
-
-		static void renderTime
-		(
-			int x,
-			int y,
-			int total_seconds,
-			const Camera* camera = nullptr,
-			Text::FontColor color = Text::FontColor::BLACK,
-			Text::FontAlign align = Text::FontAlign::LEFT,
-			Text::FontColor shadow = Text::FontColor::__NULL,
-			int magnification = 1
-		);
-
 		bool update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
 		void startMoonCountdown( int start_time );
