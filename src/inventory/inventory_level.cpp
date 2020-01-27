@@ -40,7 +40,8 @@ InventoryLevel::InventoryLevel()
 	kill_count_ ( -1 ),
 	showing_key_ ( false ),
 	show_on_off_ ( false ),
-	on_off_state_ ( false )
+	on_off_state_ ( false ),
+	mcguffins_to_render_ ( -1 )
 {};
 
 InventoryLevel::~InventoryLevel()
@@ -87,6 +88,11 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	{
 		on_off_state_ = events.switch_;
 		updateSwitchGraphics();
+	}
+	if ( mcguffins_to_render_ != -1 && mcguffins_to_render_ != Inventory::McGuffins() )
+	{
+		mcguffins_to_render_ = Inventory::McGuffins();
+		updateMcGuffinGraphics();
 	}
 };
 
@@ -174,7 +180,10 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 
 void InventoryLevel::setShowMcGuffins()
 {
-
+	if ( mcguffins_to_render_ == -1 )
+	{
+		mcguffins_to_render_ = 0;
+	}
 };
 
 void InventoryLevel::changeKillCounter( int count )
@@ -217,6 +226,10 @@ void InventoryLevel::forceRerender()
 	if ( show_on_off_ )
 	{
 		renderSwitchGraphics();
+	}
+	if ( mcguffins_to_render_ != -1 )
+	{
+		renderMcGuffinGraphics();
 	}
 	main_texture_.endDrawing();
 };
@@ -289,5 +302,20 @@ void InventoryLevel::renderSwitchGraphics()
 {
 	const std::u32string string = ( on_off_state_ ) ? U"ON" : U"OFF";
 	WTextObj text( string, MISC_X, TOP_ROW_Y_RELATIVE );
+	text.render();
+};
+
+void InventoryLevel::updateMcGuffinGraphics()
+{
+	main_texture_.startDrawing();
+	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8 * 3, 8 }, 1 );
+	renderMcGuffinGraphics();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::renderMcGuffinGraphics()
+{
+	Render::renderObject( "bg/level-select-characters.png", { 16, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
+	WTextObj text{ U"x" + mezun::intToChar32String( mcguffins_to_render_ ), MISC_X + 8, TOP_ROW_Y_RELATIVE };
 	text.render();
 };

@@ -48,6 +48,8 @@ class InventoryLevel
 		void renderKeyGraphics();
 		void updateSwitchGraphics();
 		void renderSwitchGraphics();
+		void updateMcGuffinGraphics();
+		void renderMcGuffinGraphics();
 	/*
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );
@@ -95,5 +97,6 @@ class InventoryLevel
 		bool showing_key_;
 		bool show_on_off_;
 		bool on_off_state_;
+		int mcguffins_to_render_;
 		char scratch_[ 3000 ];
 };
