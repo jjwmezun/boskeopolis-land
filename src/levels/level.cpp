@@ -207,7 +207,7 @@ int Level::timeChallenge( unsigned int n )
 
 std::string Level::timeChallengeText( unsigned int n )
 {
-	return Clock::timeToString( timeChallenge( n ) );
+	return Clock::timeToString2( timeChallenge( n ) );
 };
 
 const std::u32string& Level::message() const

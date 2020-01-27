@@ -41,9 +41,13 @@ InventoryLevel::~InventoryLevel()
 void InventoryLevel::update( EventSystem& events, const Health& health )
 {
 	oxygen_meter_.update( health );
-	if ( Inventory::updateForLevel() )
+	if ( Inventory::updateLevelFunds() )
 	{
 		updatePtsGraphics();
+	}
+	if ( Inventory::clock().update() )
+	{
+		updateTimerGraphics();
 	}
 	if ( health_gfx_.update( health ) )
 	{
@@ -168,27 +172,42 @@ void InventoryLevel::forceRerender()
 	Render::renderObject( "bg/level-inventory-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT }, { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT } );
 	if ( Inventory::victory() )
 	{
-		Render::renderObject( "bg/level-inventory-frame.png", { 16, 40, 8, 8 }, { 10, 10, 8, 8 } );
+		Render::renderObject( "bg/level-inventory-frame.png", { 16, 40, 8, 8 }, { 10, TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	if ( Inventory::haveDiamond() )
 	{
-		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, 10, 8, 8 } );
+		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	health_gfx_.render();
 	renderPtsGraphics();
+	renderTimerGraphics();
 	main_texture_.endDrawing();
 };
 
 void InventoryLevel::updatePtsGraphics()
 {
 	main_texture_.startDrawing();
-	Render::renderRect( { 42, 10, 8 * 5, 8 }, 1 );
+	Render::renderRect( { 42, TOP_ROW_Y_RELATIVE, 8 * 5, 8 }, 1 );
 	renderPtsGraphics();
 	main_texture_.endDrawing();
 };
 
 void InventoryLevel::renderPtsGraphics()
 {
-	WTextObj text{ Inventory::fundsString(), 42, 10 };
+	WTextObj text{ Inventory::fundsString(), 42, TOP_ROW_Y_RELATIVE };
+	text.render();
+};
+
+void InventoryLevel::updateTimerGraphics()
+{
+	main_texture_.startDrawing();
+	Render::renderRect( { 146, TOP_ROW_Y_RELATIVE, 8 * 4, 8 }, 1 );
+	renderTimerGraphics();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::renderTimerGraphics()
+{
+	WTextObj text{ Inventory::clock().getTimeString(), 146, TOP_ROW_Y_RELATIVE };
 	text.render();
 };

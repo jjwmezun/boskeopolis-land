@@ -191,7 +191,7 @@ namespace Inventory
 	{
 		if ( time_scores_[ level ] > DEFAULT_GEM_SCORE )
 		{
-			return Clock::timeToString( time_scores_[ level ] );
+			return Clock::timeToString2( time_scores_[ level ] );
 		}
 		else
 		{
@@ -397,7 +397,7 @@ namespace Inventory
 		}
 	};
 
-	bool updateForLevel()
+	bool updateLevelFunds()
 	{
 		const int funds_shown_momento = funds_shown_();
 		if ( funds_shown_ < funds_ )
@@ -408,7 +408,6 @@ namespace Inventory
 		{
 			funds_shown_ -= FUNDS_SPEED;
 		}
-		clock_.update();
 		return funds_shown_momento != funds_shown_();
 	};
 

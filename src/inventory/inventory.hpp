@@ -48,7 +48,7 @@ namespace Inventory
 	void fail();
 	void quit();
 
-	bool updateForLevel();
+	bool updateLevelFunds();
 	void updateForOverworld();
 	void save();
 	void load();

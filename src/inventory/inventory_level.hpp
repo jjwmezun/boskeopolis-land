@@ -18,7 +18,8 @@ class InventoryLevel
 	public:
 		static constexpr int HEIGHT = 40;
 		static constexpr int Y = Unit::WINDOW_HEIGHT_PIXELS - HEIGHT;
-		static constexpr int TOP_ROW_Y = Y + 11;
+		static constexpr int TOP_ROW_Y_RELATIVE = 10;
+		static constexpr int TOP_ROW_Y = Y + TOP_ROW_Y_RELATIVE;
 		static constexpr int CLOCK_ICON_X = Unit::MiniBlocksToPixels( 17 );
 		static constexpr int CLOCK_X = CLOCK_ICON_X + 8;
 
@@ -39,6 +40,8 @@ class InventoryLevel
 		void updateHealthGraphics();
 		void updatePtsGraphics();
 		void renderPtsGraphics();
+		void updateTimerGraphics();
+		void renderTimerGraphics();
 	/*
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );

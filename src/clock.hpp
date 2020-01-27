@@ -44,11 +44,12 @@ class Clock
 			int magnification = 1
 		);
 
-		void update();
+		bool update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
 		void startMoonCountdown( int start_time );
 		void stop();
-		static std::string timeToString( int total_seconds );
+		std::u32string getTimeString() const;
+		static std::string timeToString2( int total_seconds );
 
 		constexpr int secondsFromTotal() const
 		{

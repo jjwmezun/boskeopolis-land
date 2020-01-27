@@ -1,23 +1,24 @@
 #include "clock.hpp"
 #include <cmath>
+#include "mezun_helpers.hpp"
 #include "unit.hpp"
 
-void Clock::update()
+bool Clock::update()
 {
 	if ( on_ )
 	{
-		if ( frames_timer_ >= Unit::FPS )
+		++frames_timer_;
+		if ( frames_timer_ == Unit::FPS )
 		{
 			frames_timer_ = 0;
-			++total_seconds_;
-
-			if ( total_seconds_ > limit_ )
+			if ( total_seconds_ < limit_ )
 			{
-				total_seconds_ = limit_;
+				++total_seconds_;
+				return true;
 			}
 		}
-		++frames_timer_;
 	}
+	return false;
 };
 
 void Clock::renderTime( int x, int y, int total_seconds, const Camera* camera, Text::FontColor color, Text::FontAlign align, Text::FontColor shadow, int magnification )
@@ -25,7 +26,7 @@ void Clock::renderTime( int x, int y, int total_seconds, const Camera* camera, T
 	Text::renderText( Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) ), x, y, camera, color, Text::DEFAULT_LINE_LENGTH, align, shadow, magnification );
 }
 
-std::string Clock::timeToString( int total_seconds )
+std::string Clock::timeToString2( int total_seconds )
 {
 	return Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) );
 };
@@ -60,4 +61,9 @@ void Clock::startMoonCountdown( int start_time )
 void Clock::stop()
 {
 	on_ = false;
+};
+
+std::u32string Clock::getTimeString() const
+{
+	return mezun::intToChar32String( minutesFromTotalSeconds() ) + U":" + mezun::intToChar32StringWithPadding( secondsFromTotal(), 2 );
 };
