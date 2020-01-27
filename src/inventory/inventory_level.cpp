@@ -11,17 +11,21 @@
 #include "wtext_obj.hpp"
 
 static constexpr int MISC_X = 185;
-static constexpr int FLASHING_TIMER_SHADES_NUM = 8;
-static constexpr Text::FontColor FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
+static constexpr int FLASHING_TIMER_SHADES_NUM = 12;
+static constexpr WTextCharacter::Color FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
 {
-	Text::FontColor::DARK_GRAY,
-	Text::FontColor::DARK_MID_GRAY,
-	Text::FontColor::LIGHT_MID_GRAY,
-	Text::FontColor::LIGHT_GRAY,
-	Text::FontColor::LIGHT_GRAY,
-	Text::FontColor::LIGHT_MID_GRAY,
-	Text::FontColor::DARK_MID_GRAY,
-	Text::FontColor::DARK_GRAY
+	WTextCharacter::Color::BLACK,
+	WTextCharacter::Color::DARK_GRAY,
+	WTextCharacter::Color::DARK_MID_GRAY,
+	WTextCharacter::Color::LIGHT_MID_GRAY,
+	WTextCharacter::Color::LIGHT_GRAY,
+	WTextCharacter::Color::WHITE,
+	WTextCharacter::Color::WHITE,
+	WTextCharacter::Color::LIGHT_GRAY,
+	WTextCharacter::Color::LIGHT_MID_GRAY,
+	WTextCharacter::Color::DARK_MID_GRAY,
+	WTextCharacter::Color::DARK_GRAY,
+	WTextCharacter::Color::BLACK
 };
 static constexpr int FLASHING_TIMER_SPEED = 8;
 
@@ -68,6 +72,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 			{
 				flashing_time_shade_ = 0;
 			}
+			updateTimerGraphics();
 		}
 	}
 };
@@ -84,7 +89,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 
 /*
 	// GEMS
-	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, Text::FontColor::DARK_GRAY );
+	Text::renderNumber( Inventory::fundsShown(), FUNDS_X, Y, 5, WTextCharacter::Color::DARK_GRAY );
 
 	// TIME
 	Inventory::clock().render( CLOCK_X, Y, nullptr, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] );
@@ -116,7 +121,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 		{
 			mcguffins_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
-			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
+			Text::renderNumber( Inventory::McGuffins(), MCGUFFIN_CROSS_DEST.x + 8, Y, 1, WTextCharacter::Color::DARK_GRAY );
 		}*/
 
 		// Kill Count
@@ -124,7 +129,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 		{
 			kills_gfx_.render( MCGUFFIN_DEST, nullptr );
 			mcguffins_cross_.render( MCGUFFIN_CROSS_DEST, nullptr );
-			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, Text::FontColor::DARK_GRAY );
+			Text::renderNumber( kill_counter_, MCGUFFIN_CROSS_DEST.x + 8, Y, 1, WTextCharacter::Color::DARK_GRAY );
 		}*/
 
 	// OXYGEN
@@ -143,11 +148,13 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	// BOPS
 	if ( Inventory::bopsMultiplier() )
 	{
-		Text::renderNumber( Inventory::howManyBops(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontColor::DARK_GRAY );
+		WTextObj text( mezun::intToChar32String( Inventory::howManyBops() ), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), WTextCharacter::Color::DARK_GRAY );
+		text.render();
 	}
 	else if ( Inventory::multipleGhostKills() )
 	{
-		Text::renderNumber( Inventory::howManyGhostKills(), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), 1, Text::FontColor::DARK_GRAY );
+		WTextObj text( mezun::intToChar32String( Inventory::howManyGhostKills() ), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), WTextCharacter::Color::DARK_GRAY );
+		text.render();
 	}
 };
 
@@ -209,14 +216,14 @@ void InventoryLevel::renderPtsGraphics()
 void InventoryLevel::updateTimerGraphics()
 {
 	main_texture_.startDrawing();
-	Render::renderRect( { 146, TOP_ROW_Y_RELATIVE, 8 * 4, 8 }, 1 );
+	Render::renderRect( { CLOCK_X, TOP_ROW_Y_RELATIVE, 8 * 4, 8 }, 1 );
 	renderTimerGraphics();
 	main_texture_.endDrawing();
 };
 
 void InventoryLevel::renderTimerGraphics()
 {
-	WTextObj text{ Inventory::clock().getTimeString(), 146, TOP_ROW_Y_RELATIVE };
+	WTextObj text{ Inventory::clock().getTimeString(), CLOCK_X, TOP_ROW_Y_RELATIVE, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] };
 	text.render();
 };
 

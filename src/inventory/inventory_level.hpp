@@ -21,7 +21,7 @@ class InventoryLevel
 		static constexpr int TOP_ROW_Y_RELATIVE = 10;
 		static constexpr int TOP_ROW_Y = Y + TOP_ROW_Y_RELATIVE;
 		static constexpr int CLOCK_ICON_X = Unit::MiniBlocksToPixels( 17 );
-		static constexpr int CLOCK_X = CLOCK_ICON_X + 8;
+		static constexpr int CLOCK_X = 146;
 
 		InventoryLevel();
 		~InventoryLevel();
@@ -88,5 +88,6 @@ class InventoryLevel
 
 		TextureBox main_texture_;
 		int kill_count_;
+		bool showing_key_;
 		char scratch_[ 3000 ];
 };

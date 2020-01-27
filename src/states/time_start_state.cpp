@@ -89,9 +89,9 @@ void TimeStartState::stateUpdate()
 			++timer_;
 
 			y_ += MOVEMENT_PER_FRAME_Y;
-			if ( y_ > InventoryLevel::Y )
+			if ( y_ > InventoryLevel::TOP_ROW_Y )
 			{
-				y_ = InventoryLevel::Y;
+				y_ = InventoryLevel::TOP_ROW_Y;
 			}
 
 			x_ -= MOVEMENT_PER_FRAME_X;

@@ -60,7 +60,6 @@ void LevelState::stateUpdate()
 
 		if ( events_.timerStart() )
 		{
-			events_.unsetFlag();
 			Main::pushState
 			(
 				std::unique_ptr<GameState>
@@ -111,5 +110,10 @@ void LevelState::testPause()
 
 void LevelState::backFromPop()
 {
+	if ( events_.timerStart() )
+	{
+		events_.unsetFlag();
+		inventory_screen_.forceRerender();
+	}
 	Audio::changeSong( level_.currentMap().music_ );
 };

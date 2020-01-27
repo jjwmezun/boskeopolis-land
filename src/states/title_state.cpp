@@ -17,7 +17,6 @@
 #include "render.hpp"
 #include "title_state.hpp"
 #include "wtext_obj.hpp"
-#include "time_start_state.hpp"
 
 static constexpr int CAMERA_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 64;
 static constexpr int LOGO_WIDTH = 352;
@@ -133,23 +132,6 @@ void TitleState::stateUpdate()
             sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
             health_.update();
             events_.updateTrainer( level_, sprites_, camera_, blocks_ );
-
-            if ( events_.paletteChanged() )
-            {
-                newPalette( events_.getPalette() );
-            }
-
-            if ( events_.timerStart() )
-            {
-                events_.unsetFlag();
-                Main::pushState
-                (
-                    std::unique_ptr<GameState>
-                    (
-                        new TimeStartState( palette() )
-                    )
-                );
-            }
         }
 
         if ( Input::held( Input::Action::CONFIRM ) )

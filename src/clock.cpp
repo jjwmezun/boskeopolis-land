@@ -65,5 +65,7 @@ void Clock::stop()
 
 std::u32string Clock::getTimeString() const
 {
-	return mezun::intToChar32String( minutesFromTotalSeconds() ) + U":" + mezun::intToChar32StringWithPadding( secondsFromTotal(), 2 );
+	return ( direction_ == Direction::Vertical::DOWN ) 
+		? mezun::intToChar32String( minutesFromTotalSeconds( timeRemaining() ) ) + U":" + mezun::intToChar32StringWithPadding( timeRemaining(), 2 )
+		: mezun::intToChar32String( minutesFromTotalSeconds() ) + U":" + mezun::intToChar32StringWithPadding( secondsFromTotal(), 2 );
 };
