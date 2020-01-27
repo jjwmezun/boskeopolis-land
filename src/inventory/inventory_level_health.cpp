@@ -2,8 +2,8 @@
 #include "inventory_level_health.hpp"
 #include "render.hpp"
 
-static constexpr int X = 59;
-static constexpr int Y = 11;
+static constexpr int X = 90;
+static constexpr int Y = 10;
 
 static constexpr int calculateGraphicsWidth( int number_of_hearts )
 {

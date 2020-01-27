@@ -39,6 +39,7 @@ namespace Inventory
 	double percent();
 	std::string percentShown();
 	Clock& clock();
+	std::u32string fundsString();
 
 	void addMcGuffin();
 	int McGuffins();
@@ -47,7 +48,8 @@ namespace Inventory
 	void fail();
 	void quit();
 
-	void update();
+	bool updateForLevel();
+	void updateForOverworld();
 	void save();
 	void load();
 	

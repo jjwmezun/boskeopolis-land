@@ -70,7 +70,7 @@ void OWInventory::init()
 void OWInventory::update( int level )
 {
 	level_ = level;
-	Inventory::update();
+	Inventory::updateForOverworld();
 	updateShowChallengeScoresInput();
 	updateFlashColor();
 	if ( testOnDifferentLevel() )

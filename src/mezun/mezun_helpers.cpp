@@ -9,6 +9,8 @@ namespace mezun
 {
 	static int getCharacterSize( char character );
 	static char32_t combineCharactersByCharsize( int charsize, const char* source );
+	static std::vector<int> breakIntegerIntoDigitList( int n );
+	static std::u32string addDigitsToString( std::u32string text, const std::vector<int>& digits );
 
 	// Combine charsize # o’ 8-bit #s into single 32-bit #.
 	template<int charsize>
@@ -124,19 +126,20 @@ namespace mezun
 
 	std::u32string intToChar32String( int n )
 	{
+		const auto digits = breakIntegerIntoDigitList( n );
+		return addDigitsToString( U"", digits );
+	};
+
+	std::u32string intToChar32StringWithPadding( int n, int padding )
+	{
 		std::u32string text;
-		std::vector<int> digits;
-		while ( n > 0 )
+		const auto digits = breakIntegerIntoDigitList( n );
+		while ( padding > ( int )( digits.size() ) )
 		{
-			digits.push_back( n % 10 );
-			n /= 10;
+			text += ( char32_t )( 48 );
+			--padding;
 		}
-		std::reverse( digits.begin(), digits.end() );
-		for ( int d : digits )
-		{
-			text += ( char32_t )( 48 + d );
-		}
-		return text;
+		return addDigitsToString( text, digits );
 	};
 
 	std::string string32ToString8( const std::u32string source )
@@ -159,5 +162,26 @@ namespace mezun
 		return ( ( int )( string[ string.length() - 1 ] ) == 0 )
 			? string.substr( 0, string.length() - 1 )
 			: string;
+	};
+
+	static std::vector<int> breakIntegerIntoDigitList( int n )
+	{
+		std::vector<int> digits;
+		while ( n > 0 )
+		{
+			digits.emplace_back( n % 10 );
+			n /= 10;
+		}
+		std::reverse( digits.begin(), digits.end() );
+		return digits;
+	};
+
+	static std::u32string addDigitsToString( std::u32string text, const std::vector<int>& digits )
+	{
+		for ( int d : digits )
+		{
+			text += ( char32_t )( 48 + d );
+		}
+		return text;
 	};
 }

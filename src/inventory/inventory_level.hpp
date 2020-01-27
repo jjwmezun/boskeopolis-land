@@ -37,6 +37,8 @@ class InventoryLevel
 
 	private:
 		void updateHealthGraphics();
+		void updatePtsGraphics();
+		void renderPtsGraphics();
 	/*
 		static constexpr int VICTORY_X = Unit::MiniBlocksToPixels( 1 );
 		static constexpr int DIAMOND_X = Unit::MiniBlocksToPixels( 2 );

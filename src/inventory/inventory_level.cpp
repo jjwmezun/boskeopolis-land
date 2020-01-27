@@ -7,6 +7,7 @@
 #include "news_ticker.hpp"
 #include "render.hpp"
 #include "sprite.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int FLASHING_TIMER_SHADES_NUM = 8;
 static constexpr Text::FontColor FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
@@ -40,7 +41,10 @@ InventoryLevel::~InventoryLevel()
 void InventoryLevel::update( EventSystem& events, const Health& health )
 {
 	oxygen_meter_.update( health );
-	Inventory::update();
+	if ( Inventory::updateForLevel() )
+	{
+		updatePtsGraphics();
+	}
 	if ( health_gfx_.update( health ) )
 	{
 		updateHealthGraphics();
@@ -126,7 +130,7 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	}
 	else
 	{
-		ticker_.render();
+		//ticker_.render();
 	}
 
 	// BOPS
@@ -171,5 +175,20 @@ void InventoryLevel::forceRerender()
 		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, 10, 8, 8 } );
 	}
 	health_gfx_.render();
+	renderPtsGraphics();
 	main_texture_.endDrawing();
+};
+
+void InventoryLevel::updatePtsGraphics()
+{
+	main_texture_.startDrawing();
+	Render::renderRect( { 42, 10, 8 * 5, 8 }, 1 );
+	renderPtsGraphics();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::renderPtsGraphics()
+{
+	WTextObj text{ Inventory::fundsString(), 42, 10 };
+	text.render();
 };

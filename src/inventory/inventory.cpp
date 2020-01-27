@@ -6,6 +6,7 @@
 #include "level.hpp"
 #include "main.hpp"
 #include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "text.hpp"
@@ -378,7 +379,7 @@ namespace Inventory
 		return std::to_string( ( int )( std::floor( percent() ) ) ) + "%";
 	};
 
-	void update()
+	void updateForOverworld()
 	{
 		if ( total_funds_shown_ < total_funds_ )
 		{
@@ -394,7 +395,11 @@ namespace Inventory
 			else
 				total_funds_shown_ -= TOTAL_FUNDS_SPEED;
 		}
+	};
 
+	bool updateForLevel()
+	{
+		const int funds_shown_momento = funds_shown_();
 		if ( funds_shown_ < funds_ )
 		{
 			funds_shown_ += FUNDS_SPEED;
@@ -404,6 +409,7 @@ namespace Inventory
 			funds_shown_ -= FUNDS_SPEED;
 		}
 		clock_.update();
+		return funds_shown_momento != funds_shown_();
 	};
 
 	void save()
@@ -756,4 +762,9 @@ namespace Inventory
 		// 100, 200, 400, 800, 1,600, 3,200, 6,400
 		addFunds( ( int )( 100 * pow( 2, value - 2 ) ) );
 	}
+
+	std::u32string fundsString()
+	{
+		return mezun::intToChar32StringWithPadding( funds_shown_(), FUNDS_MAX_DIGITS );
+	};
 };
