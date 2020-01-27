@@ -55,6 +55,7 @@ void LevelState::stateUpdate()
 		if ( events_.paletteChanged() )
 		{
 			newPalette( events_.getPalette() );
+			inventory_screen_.forceRerender();
 		}
 
 		if ( events_.timerStart() )

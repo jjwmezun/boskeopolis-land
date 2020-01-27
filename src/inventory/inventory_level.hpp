@@ -33,6 +33,7 @@ class InventoryLevel
 		void render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap );
 		void setShowMcGuffins();
 		void setKillCounter( int count );
+		void forceRerender();
 
 	private:
 		void updateHealthGraphics();

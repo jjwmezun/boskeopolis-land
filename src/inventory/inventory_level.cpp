@@ -64,18 +64,7 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 void InventoryLevel::init()
 {
 	main_texture_.init();
-	main_texture_.startDrawing();
-	Render::renderObject( "bg/level-inventory-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT }, { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT } );
-	if ( Inventory::victory() )
-	{
-		Render::renderObject( "bg/level-inventory-frame.png", { 16, 40, 8, 8 }, { 10, 10, 8, 8 } );
-	}
-	if ( Inventory::haveDiamond() )
-	{
-		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, 10, 8, 8 } );
-	}
-	health_gfx_.render();
-	main_texture_.endDrawing();
+	forceRerender();
 };
 
 void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const Map& lvmap )
@@ -164,6 +153,23 @@ void InventoryLevel::setKillCounter( int count )
 void InventoryLevel::updateHealthGraphics()
 {
 	main_texture_.startDrawing();
+	health_gfx_.render();
+	main_texture_.endDrawing();
+};
+
+void InventoryLevel::forceRerender()
+{
+	main_texture_.startDrawing();
+	Render::clearScreenTransparency();
+	Render::renderObject( "bg/level-inventory-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT }, { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT } );
+	if ( Inventory::victory() )
+	{
+		Render::renderObject( "bg/level-inventory-frame.png", { 16, 40, 8, 8 }, { 10, 10, 8, 8 } );
+	}
+	if ( Inventory::haveDiamond() )
+	{
+		Render::renderObject( "bg/level-inventory-frame.png", { 16, 32, 8, 8 }, { 18, 10, 8, 8 } );
+	}
 	health_gfx_.render();
 	main_texture_.endDrawing();
 };
