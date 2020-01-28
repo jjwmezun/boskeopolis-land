@@ -43,7 +43,7 @@ namespace Main
 	StateChangeType state_change_type_ = StateChangeType::__NULL;
 
 	int ticks_ = 0;
-	int graphics_ticks_ = 0;
+	int updates_per_frame_ = 0;
 	int frames_ = 0;
 	std::string resource_path_ = "";
 	std::string path_divider_ = "/";
@@ -78,6 +78,8 @@ namespace Main
 
 	void renderStates();
 	void renderTransition();
+
+	void maintainFrameRate();
 
 
 	// Function Implementations
@@ -179,70 +181,69 @@ namespace Main
 				}
 			}
 
-			if ( ( int )( SDL_GetTicks() ) - ticks_ >= fpsMilliseconds() )
+			maintainFrameRate();
+
+			if ( Input::exitButtonHeldLongEnough() )
 			{
-				if ( Input::exitButtonHeldLongEnough() )
-				{
-					quit();
-				}
-
-				switch ( state_change_type_ )
-				{
-					case ( StateChangeType::CHANGE ):
-						changeStateSafe();
-					break;
-					case ( StateChangeType::POP ):
-						popStateSafe();
-					break;
-					case ( StateChangeType::PUSH ):
-						pushStateSafe();
-					break;
-				}
-
-				switch ( transition_state_ )
-				{
-					case ( TransitionState::__NULL ):
-						states_.back()->update();
-					break;
-
-					case ( TransitionState::FADE_OUT ):
-						if ( transition_level_ < TRANSITION_LIMIT )
-						{
-							transition_level_ += TRANSITION_SPEED;
-							if ( transition_level_ > TRANSITION_LIMIT )
-							{
-								transition_level_ = TRANSITION_LIMIT;
-							}
-						}
-						else
-						{
-							transition_state_ = TransitionState::FADE_IN;
-						}
-					break;
-
-					case ( TransitionState::FADE_IN ):
-						states_.back()->update();
-						if ( transition_level_ > 0 )
-						{
-							transition_level_ -= TRANSITION_SPEED;
-							if ( transition_level_ < 0 )
-							{
-								transition_level_ = 0;
-							}
-						}
-						else
-						{
-							transition_state_ = TransitionState::__NULL;
-						}
-					break;
-				}
-
-				++frames_;
-				ticks_ = SDL_GetTicks();
-
-				Input::update();
-				render();
+				quit();
 			}
+
+			switch ( state_change_type_ )
+			{
+				case ( StateChangeType::CHANGE ):
+					changeStateSafe();
+				break;
+				case ( StateChangeType::POP ):
+					popStateSafe();
+				break;
+				case ( StateChangeType::PUSH ):
+					pushStateSafe();
+				break;
+			}
+
+			switch ( transition_state_ )
+			{
+				case ( TransitionState::__NULL ):
+					states_.back()->update();
+				break;
+
+				case ( TransitionState::FADE_OUT ):
+					if ( transition_level_ < TRANSITION_LIMIT )
+					{
+						transition_level_ += TRANSITION_SPEED;
+						if ( transition_level_ > TRANSITION_LIMIT )
+						{
+							transition_level_ = TRANSITION_LIMIT;
+						}
+					}
+					else
+					{
+						transition_state_ = TransitionState::FADE_IN;
+					}
+				break;
+
+				case ( TransitionState::FADE_IN ):
+					states_.back()->update();
+					if ( transition_level_ > 0 )
+					{
+						transition_level_ -= TRANSITION_SPEED;
+						if ( transition_level_ < 0 )
+						{
+							transition_level_ = 0;
+						}
+					}
+					else
+					{
+						transition_state_ = TransitionState::__NULL;
+					}
+				break;
+			}
+
+			++frames_;
+			ticks_ = SDL_GetTicks();
+
+			Input::update();
+			render();
 		}
 	};
 
@@ -460,6 +461,14 @@ namespace Main
 	{
 		return states_.back()->palette();
 	}
+
+	void maintainFrameRate()
+	{
+		if ( ( int )( SDL_GetTicks() ) - ticks_ < fpsMilliseconds() )
+		{
+			SDL_Delay( std::max( 0, fpsMilliseconds() - ( ( int )( SDL_GetTicks() ) - ticks_ ) ) );
+		}
+	};
 };
 
 int main( int argc, char* argv[] )
