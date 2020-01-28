@@ -943,14 +943,17 @@ const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
 
 void Map::interact( Sprite& sprite, Camera& camera, Health& health )
 {
-	for ( auto b : backgrounds_ )
+	if ( !sprite.is_dead_ )
 	{
-		b->interact( sprite, health );
-	}
+		for ( auto b : backgrounds_ )
+		{
+			b->interact( sprite, health );
+		}
 
-	for ( auto f : foregrounds_ )
-	{
-		f->interact( sprite, health );
+		for ( auto f : foregrounds_ )
+		{
+			f->interact( sprite, health );
+		}
 	}
 
 	if ( scrollLoop() )

@@ -31,7 +31,7 @@ static constexpr int FLASHING_TIMER_SPEED = 8;
 InventoryLevel::InventoryLevel()
 :
 	health_gfx_ ( Y ),
-	oxygen_meter_ ( Y ),
+	oxygen_meter_ ( TOP_ROW_Y ),
 	ticker_ ( BOTTOM_ROW_Y ),
 	flashing_timer_ ( 0 ),
 	flashing_time_shade_ ( 0 ),
