@@ -233,8 +233,9 @@
     "pause":
     {
         "continue": "Fortsätta",
-        "exit_leave_unbeaten": "Ge upp",
-        "exit_leave_beaten": "Återgå till kartan"
+        "options": "Опции",
+        "quit_unbeaten": "Ge upp",
+        "quit_beaten": "Återgå till kartan"
     },
     "overworld":
     {

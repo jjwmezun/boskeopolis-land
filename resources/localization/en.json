@@ -211,8 +211,9 @@
     "pause":
     {
         "continue": "Continue",
-        "exit_leave_unbeaten": "Give Up",
-        "exit_leave_beaten": "Back to Level Select"
+        "options": "Options",
+        "quit_unbeaten": "Give Up",
+        "quit_beaten": "Back to Level Select"
     },
     "overworld":
     {

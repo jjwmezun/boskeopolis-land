@@ -340,8 +340,9 @@
     "pause":
     {
         "continue": "じぞくする",
-        "exit_leave_unbeaten": "あきらめる",
-        "exit_leave_beaten": "ちずにもどる"
+        "options": "せつていをかえる",
+        "quit_unbeaten": "あきらめる",
+        "quit_beaten": "ちずにもどる"
     },
     "overworld":
     {

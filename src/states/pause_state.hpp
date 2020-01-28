@@ -1,30 +1,39 @@
 #pragma once
 
+#include "counter_flip.hpp"
 #include "event_system.hpp"
 #include "game_state.hpp"
-#include "text_obj.hpp"
-#include <vector>
+#include "inventory_level.hpp"
 
 class PauseState : public GameState
 {
 	public:
-		PauseState( const Palette& palette, EventSystem& events );
+		PauseState( const Palette& palette, EventSystem& events, InventoryLevel& inventory_box );
 		~PauseState();
+		PauseState( const PauseState& ) = delete;
+		PauseState( PauseState&& ) = delete;
+		PauseState& operator=( const PauseState& ) = delete;
+		PauseState& operator=( PauseState&& ) = delete;
 		void stateUpdate() override;
 		void stateRender() override;
+		void init() override;
+		void backFromPop() override;
 
 	private:
 		enum class PauseOption
 		{
-			PO_CONTINUE,
-			PO_QUIT
+			CONTINUE,
+			OPTIONS,
+			QUIT
 		};
-		static constexpr int NUM_O_PAUSE_OPTIONS = ( int )( PauseOption::PO_QUIT ) + 1;
+		static constexpr int NUMBER_OF_OPTIONS = ( int )( PauseOption::QUIT ) + 1;
+		std::u32string getOptionName( PauseOption type );
+		void generateTextures();
 
-		const sdl2::SDLRect surface_box_;
-		TextObj option_text_ [ PauseState::NUM_O_PAUSE_OPTIONS ];
+		int language_id_;
+		CounterFlip<NUMBER_OF_OPTIONS - 1> selection_;
 		EventSystem& events_;
-		PauseOption option_selection_;
-
-		std::string quitName( bool beaten ) const;
+		InventoryLevel& inventory_box_;
+		TextureBox bg_;
+		TextureBox highlighted_text_[ PauseState::NUMBER_OF_OPTIONS ];
 };

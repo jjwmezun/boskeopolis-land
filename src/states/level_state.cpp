@@ -102,7 +102,7 @@ void LevelState::testPause()
 		(
 			std::unique_ptr<GameState>
 			(
-				new PauseState( palette(), events_ )
+				new PauseState( palette(), events_, inventory_screen_ )
 			)
 		);
 	}

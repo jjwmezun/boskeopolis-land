@@ -2,71 +2,81 @@
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
-#include "level_select_state.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
+#include "main.hpp"
+#include "options_state.hpp"
 #include "pause_state.hpp"
 #include "render.hpp"
+#include "wtext_obj.hpp"
 
-static constexpr int PAUSE_BOX_WIDTH = 24;
-static constexpr int PAUSE_BOX_HEIGHT = 7;
+static constexpr int WIDTH = 208;
+static constexpr int HEIGHT = 72;
+static constexpr int X = ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - WIDTH ) / 2.0 );
+static constexpr int Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - HEIGHT ) / 2.0 );
+static constexpr int ROW_HEIGHT = 16;
+static constexpr int X_PADDING = 16;
+static constexpr int TEXT_WIDTH = WIDTH - ( X_PADDING * 2 );
 
-PauseState::PauseState( const Palette& palette, EventSystem& events )
+PauseState::PauseState( const Palette& palette, EventSystem& events, InventoryLevel& inventory_box )
 :
 	GameState( StateID::PAUSE_STATE, palette ),
-	surface_box_
-	(
-		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_WIDTH_MINIBLOCKS / 2 ) - floor( PAUSE_BOX_WIDTH / 2 ) ),
-		Unit::MiniBlocksToPixels( floor( Unit::WINDOW_HEIGHT_MINIBLOCKS / 2 ) - floor( PAUSE_BOX_HEIGHT / 2 ) ),
-		Unit::MiniBlocksToPixels( PAUSE_BOX_WIDTH ),
-		Unit::MiniBlocksToPixels( PAUSE_BOX_HEIGHT )
-	),
-	option_text_
-	({
-		{ "Continue", surface_box_.x + 8, surface_box_.y + 16, Text::FontColor::LIGHT_MID_GRAY },
-		{ quitName( Inventory::victory() ), surface_box_.x + 8, surface_box_.y + 32, Text::FontColor::LIGHT_MID_GRAY }
-	}),
+	language_id_ ( Localization::getCurrentLanguageIndex() ),
+	selection_ ( 0 ),
 	events_ ( events ),
-	option_selection_ ( PauseOption::PO_CONTINUE )
+	inventory_box_ ( inventory_box ),
+	bg_ ( WIDTH, HEIGHT, X, Y ),
+	highlighted_text_ ()
 {
 	Audio::pauseSong();
 	Audio::playSound( Audio::SoundType::PAUSE );
 };
 
-std::string PauseState::quitName( bool beaten ) const
+PauseState::~PauseState()
 {
-	return ( beaten ) ? "Back to Level Select" : "Give Up";
+	bg_.destroy();
+	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
+	{
+		highlighted_text_[ i ].destroy();
+	}
 };
-
-PauseState::~PauseState() {};
 
 void PauseState::stateUpdate()
 {
-	if ( Input::pressed( Input::Action::MOVE_UP ) || Input::pressed( Input::Action::MOVE_DOWN ) )
+	if ( Input::pressed( Input::Action::MOVE_DOWN ) )
 	{
-		switch ( option_selection_ )
-		{
-			case ( PauseOption::PO_CONTINUE ):
-				option_selection_ = PauseOption::PO_QUIT;
-			break;
-			case ( PauseOption::PO_QUIT ):
-				option_selection_ = PauseOption::PO_CONTINUE;
-			break;
-		}
+		++selection_;
+		Audio::playSound( Audio::SoundType::SELECT );
+	}
+	else if ( Input::pressed( Input::Action::MOVE_UP ) )
+	{
+		--selection_;
 		Audio::playSound( Audio::SoundType::SELECT );
 	}
 
 	if ( Input::pressed( Input::Action::CONFIRM ) )
 	{
-		if ( option_selection_ == PauseOption::PO_QUIT )
+		switch ( ( PauseOption )( selection_() ) )
 		{
-			events_.quitLevel();
-		}
-		else
-		{
-			// Only keep playing song if continuing level.
-			Audio::resumeSong();
+			case ( PauseOption::CONTINUE ):
+			{
+				Audio::resumeSong();
+				Main::popState();
+			}
+			break;
+			case ( PauseOption::OPTIONS ):
+			{
+				Main::pushState( std::make_unique<OptionsState> (), true );
+			}
+			break;
+			case ( PauseOption::QUIT ):
+			{
+				events_.quitLevel();
+				Main::popState();
+			}
+			break;
 		}
 		Input::reset();
-		Main::popState();
 		Audio::playSound( Audio::SoundType::CONFIRM );
 	}
 	else if ( Input::pressed( Input::Action::MENU ) )
@@ -80,17 +90,74 @@ void PauseState::stateUpdate()
 
 void PauseState::stateRender()
 {
-	Render::renderRect( surface_box_, 6 );
+	bg_.render();
+	highlighted_text_[ selection_() ].render();
+};
 
-	for ( int i = 0; i < NUM_O_PAUSE_OPTIONS; ++i )
+void PauseState::init()
+{
+	bg_.init();
+	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
 	{
-		option_text_[ i ].color_ = Text::FontColor::LIGHT_MID_GRAY;
+		const int y = Y + ( ( i + 1 ) * ROW_HEIGHT );
+		highlighted_text_[ i ].changeSize( TEXT_WIDTH, HEIGHT );
+		highlighted_text_[ i ].setX( X + X_PADDING );
+		highlighted_text_[ i ].setY( y );
+		highlighted_text_[ i ].init();
+	}
+	generateTextures();
+};
 
-		if ( ( int )( option_selection_ ) == i )
+void PauseState::generateTextures()
+{
+	bg_.startDrawing();
+	Render::renderObject( "bg/pause-frame.png", { 0, 0, WIDTH, HEIGHT }, { 0, 0, WIDTH, HEIGHT } );
+	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
+	{
+		const int y = ( i + 1 ) * ROW_HEIGHT;
+		WTextObj text{ getOptionName( ( PauseOption )( i ) ), 0, y, WTextCharacter::Color::BLACK, WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, X_PADDING };
+		text.render();
+	}
+	bg_.endDrawing();
+	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
+	{
+		highlighted_text_[ i ].startDrawing();
+		Render::clearScreenTransparency();
+		WTextObj text{ getOptionName( ( PauseOption )( i ) ), 0, 0, WTextCharacter::Color::LIGHT_MID_GRAY, WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL };
+		text.render();
+		highlighted_text_[ i ].endDrawing();
+	}
+};
+
+std::u32string PauseState::getOptionName( PauseOption type )
+{
+	switch ( type )
+	{
+		case ( PauseOption::CONTINUE ):
 		{
-			option_text_[ i ].color_ = Text::FontColor::WHITE;
+			return Localization::getCurrentLanguage().getPauseContinue();
 		}
+		break;
+		case ( PauseOption::OPTIONS ):
+		{
+			return Localization::getCurrentLanguage().getPauseOptions();
+		}
+		break;
+		case ( PauseOption::QUIT ):
+		{
+			return ( Inventory::victory() )
+				? Localization::getCurrentLanguage().getPauseQuitBeaten()
+				: Localization::getCurrentLanguage().getPauseQuitUnbeaten();
+		}
+		break;
+	}
+};
 
-		option_text_[ i ].render( nullptr );
+void PauseState::backFromPop()
+{
+	if ( Localization::getCurrentLanguageIndex() != language_id_ )
+	{
+		generateTextures();
+		inventory_box_.forceRerender();
 	}
 };

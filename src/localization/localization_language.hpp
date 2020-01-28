@@ -43,6 +43,10 @@ class LocalizationLanguage
         const std::u32string& getPressAnyKey() const;
         const std::u32string& getRandomNewsTickerMessage() const;
         int getMaxNewsTickerMessageWidth() const;
+        const std::u32string& getPauseContinue() const;
+        const std::u32string& getPauseOptions() const;
+        const std::u32string& getPauseQuitUnbeaten() const;
+        const std::u32string& getPauseQuitBeaten() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -57,9 +61,11 @@ class LocalizationLanguage
         void loadLevelText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadOverworldText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadNewsTickerText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadPauseText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
 
         int order_;
         int charset_height_;
+        int max_news_ticker_message_width_;
         std::vector<WTextCharacter> default_character_;
         std::vector<std::u32string> title_options_;
         std::vector<std::u32string> options_options_;
@@ -77,6 +83,10 @@ class LocalizationLanguage
         std::u32string level_select_cycle_name_;
         std::u32string level_select_percent_symbol_;
         std::u32string press_any_key_;
+        std::u32string pause_continue_;
+        std::u32string pause_options_;
+        std::u32string pause_quit_unbeaten_;
+        std::u32string pause_quit_beaten_;
         std::string path_name_;
         std::string charset_image_src_;
         std::unordered_map<char32_t, std::vector<WTextCharacter>> charset_;
@@ -86,5 +96,4 @@ class LocalizationLanguage
         std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
         std::u32string overworld_menu_names_[ NUMBER_OF_OVERWORLD_MENU_OPTIONS ];
         std::vector<std::u32string> news_ticker_messages_;
-        int max_news_ticker_message_width_;
 };

@@ -61,6 +61,7 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadLevelText( data, path );
     loadOverworldText( data, path );
     loadNewsTickerText( data, path );
+    loadPauseText( data, path );
 };
 
 int LocalizationLanguage::getOrder() const
@@ -581,7 +582,36 @@ void LocalizationLanguage::loadNewsTickerText( const rapidjson::GenericObject<fa
             news_ticker_messages_.push_back( message );
         }
     }
-}
+};
+
+void LocalizationLanguage::loadPauseText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "pause" ) || !data[ "pause" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    const auto& pause = data[ "pause" ].GetObject();
+
+    if
+    (
+        !pause.HasMember( "continue" )
+        || !pause[ "continue" ].IsString()
+        || !pause.HasMember( "options" )
+        || !pause[ "options" ].IsString()
+        || !pause.HasMember( "quit_unbeaten" )
+        || !pause[ "quit_unbeaten" ].IsString()
+        || !pause.HasMember( "quit_beaten" )
+        || !pause[ "quit_beaten" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    pause_continue_ = mezun::charToChar32String( pause[ "continue" ].GetString() );
+    pause_options_ = mezun::charToChar32String( pause[ "options" ].GetString() );
+    pause_quit_unbeaten_ = mezun::charToChar32String( pause[ "quit_unbeaten" ].GetString() );
+    pause_quit_beaten_ = mezun::charToChar32String( pause[ "quit_beaten" ].GetString() );
+};
 
 const std::u32string& LocalizationLanguage::getLevelSelectTitle() const
 {
@@ -640,4 +670,24 @@ const std::u32string& LocalizationLanguage::getRandomNewsTickerMessage() const
 int LocalizationLanguage::getMaxNewsTickerMessageWidth() const
 {
     return max_news_ticker_message_width_;
+};
+
+const std::u32string& LocalizationLanguage::getPauseContinue() const
+{
+    return pause_continue_;
+};
+
+const std::u32string& LocalizationLanguage::getPauseOptions() const
+{
+    return pause_options_;
+};
+
+const std::u32string& LocalizationLanguage::getPauseQuitUnbeaten() const
+{
+    return pause_quit_unbeaten_;
+};
+
+const std::u32string& LocalizationLanguage::getPauseQuitBeaten() const
+{
+    return pause_quit_beaten_;
 };

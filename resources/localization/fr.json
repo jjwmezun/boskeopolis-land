@@ -211,8 +211,9 @@
     "pause":
     {
         "continue": "Reprendre",
-        "exit_leave_unbeaten": "Capituler",
-        "exit_leave_beaten": "Retour à la carte"
+        "options": "Les options",
+        "quit_unbeaten": "Capituler",
+        "quit_beaten": "Retour à la carte"
     },
     "overworld":
     {
