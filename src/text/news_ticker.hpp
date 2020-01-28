@@ -18,10 +18,17 @@ class NewsTicker
 
 	private:
 		void recalculateWidth();
+		void generateNewNewsItem();
+		int right() const;
+		bool testTickerIsCutOffOnLeftSide() const;
+		bool testTickerHasNotReachedScreenYet() const;
 
 		int y_;
 		int w_;
-		TextureBox texture_;
+		int x_;
+		int texture_width_;
+		SDL_Texture* texture_;
 		std::u32string selected_message_;
-		char scratch_[ 3000 ];
+		sdl2::SDLRect src_;
+		sdl2::SDLRect dest_;
 };
