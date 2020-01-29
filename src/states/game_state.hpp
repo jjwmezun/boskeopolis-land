@@ -17,7 +17,8 @@ class GameState
 			MESSAGE_STATE,
 			PAUSE_STATE,
 			TIME_START_STATE,
-			OPTIONS_STATE
+			OPTIONS_STATE,
+			LEVEL_TILE_MENU
 		};
 
 		GameState

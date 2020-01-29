@@ -355,6 +355,12 @@
             "quit": "ゲームをやめる"
         }
     },
+    "level_tile_menu":
+    {
+        "play": "Play Level",
+        "hard_mode": "Hard Mode",
+        "cancel": "Cancel"
+    },
     "level_select":
     {
         "title": "レベルを決めて下さい",

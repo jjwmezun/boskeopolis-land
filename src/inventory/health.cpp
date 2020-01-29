@@ -134,7 +134,7 @@ double Health::oxygenPercent() const
 
 int Health::maxHP()
 {
-	return START_MAX_HP + Inventory::heartUpgrades();
+	return ( Inventory::isHardMode() ) ? 1 : START_MAX_HP + Inventory::heartUpgrades();
 };
 
 int Health::maxOxygen() const

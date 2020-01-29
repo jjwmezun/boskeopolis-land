@@ -47,6 +47,9 @@ class LocalizationLanguage
         const std::u32string& getPauseOptions() const;
         const std::u32string& getPauseQuitUnbeaten() const;
         const std::u32string& getPauseQuitBeaten() const;
+        const std::u32string& getLevelTilePlay() const;
+        const std::u32string& getLevelTileHardMode() const;
+        const std::u32string& getLevelTileCancel() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -62,6 +65,7 @@ class LocalizationLanguage
         void loadOverworldText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadNewsTickerText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadPauseText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadLevelTileMenuText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
 
         int order_;
         int charset_height_;
@@ -87,6 +91,9 @@ class LocalizationLanguage
         std::u32string pause_options_;
         std::u32string pause_quit_unbeaten_;
         std::u32string pause_quit_beaten_;
+        std::u32string level_tile_play_;
+        std::u32string level_tile_hard_mode_;
+        std::u32string level_tile_cancel_;
         std::string path_name_;
         std::string charset_image_src_;
         std::unordered_map<char32_t, std::vector<WTextCharacter>> charset_;

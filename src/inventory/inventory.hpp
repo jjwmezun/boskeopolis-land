@@ -64,4 +64,9 @@ namespace Inventory
 	void clearGhostKills();
 	int howManyGhostKills();
 	bool multipleGhostKills();
+
+	bool isHardMode();
+	void setDifficultyNormal();
+	void setDifficultyHard();
+	bool hasCrown( int level );
 };

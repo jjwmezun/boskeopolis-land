@@ -57,6 +57,9 @@ static void renderGemTargetScore( int level, int y );
 static void renderTimeTargetScore( int level, int y );
 static void renderPtTargetSymbol( int y );
 static void renderClockTargetSymbol( int y );
+static void renderCrownIconOfColorOffset( int color_offset, int y );
+static void renderCrownWinIcon( int y );
+static void renderEmptyCrownIcon( int y );
 
 LevelSelectState::LevelSelectState( int current_level )
 :
@@ -335,6 +338,10 @@ void LevelSelectState::generateMovingPageTextures()
 			{
 				renderDiamondWinIcon( y );
 			}
+			if ( Inventory::hasCrown( level ) )
+			{
+				renderCrownWinIcon( y );
+			}
 			renderGemScore( level, y );
 			renderTimeScore( level, y );
 
@@ -385,6 +392,15 @@ void LevelSelectState::redrawStaticPageTexture()
 			else
 			{
 				renderEmptyDiamondIcon( y );
+			}
+
+			if ( Inventory::hasCrown( level ) )
+			{
+				renderCrownWinIcon( y );
+			}
+			else
+			{
+				renderEmptyCrownIcon( y );
 			}
 		}
 
@@ -599,6 +615,11 @@ void LevelSelectState::renderFlashingDiamondWinIcon( int y ) const
 	renderDiamondIconOfColorOffset( FLASH_FRAMES[ flash_frame_ ], y );
 };
 
+void LevelSelectState::renderFlashingCrownWinIcon( int y ) const
+{
+	renderCrownIconOfColorOffset( FLASH_FRAMES[ flash_frame_ ], y );
+};
+
 void LevelSelectState::renderFlashingGemScore( int level, int y ) const
 {
 	renderGemScoreOfColor( ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] ), level, y );
@@ -635,6 +656,7 @@ void LevelSelectState::renderFlashFrame()
 			renderFlashingThemeIcon( theme, y );
 			renderFlashingVictoryCheck( y );
 			renderFlashingDiamondWinIcon( y );
+			renderFlashingCrownWinIcon( y );
 		}
 
 		if ( !show_target_scores_ || entry != selection_ )
@@ -756,6 +778,21 @@ static void renderEmptyVictoryCheck( int y )
 static void renderEmptyDiamondIcon( int y )
 {
 	Render::renderObject( "bg/level-select-characters.png", { 8, 24, 8, 8 }, { 8, y + 12, 8, 8 } );
+};
+
+static void renderCrownIconOfColorOffset( int color_offset, int y )
+{
+	Render::renderObject( "bg/level-select-characters.png", { color_offset * 8, 192, 8, 8 }, { 16, y + 4, 8, 8 } );
+}
+
+static void renderCrownWinIcon( int y )
+{
+	renderCrownIconOfColorOffset( 3, y );
+};
+
+static void renderEmptyCrownIcon( int y )
+{
+	renderCrownIconOfColorOffset( 1, y );
 };
 
 static void renderPtSymbolOfColorOffset( int color_offset, int y )

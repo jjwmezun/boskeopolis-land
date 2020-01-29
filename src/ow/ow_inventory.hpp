@@ -70,4 +70,5 @@ class OWInventory
 		ImageGraphics diamond_icon_;
 		ImageGraphics gem_score_icon_;
 		ImageGraphics time_score_icon_;
+		ImageGraphics crown_icon_;
 };

@@ -40,7 +40,8 @@ OWInventory::OWInventory()
 	win_icon_ ( "bg/level-select-characters.png", { 0, 16, 8, 8 }, { LEFT_EDGE, ROW_1, 8, 8 } ),
 	diamond_icon_ ( "bg/level-select-characters.png", { 0, 24, 8, 8 }, { LEFT_EDGE, ROW_2, 8, 8 } ),
 	gem_score_icon_ ( "bg/level-select-characters.png", { 0, 0, 8, 8 }, { SCORE_X - 8, ROW_1, 8, 8 } ),
-	time_score_icon_ ( "bg/level-select-characters.png", { 0, 8, 8, 8 }, { SCORE_X, ROW_2, 8, 8 } )
+	time_score_icon_ ( "bg/level-select-characters.png", { 0, 8, 8, 8 }, { SCORE_X, ROW_2, 8, 8 } ),
+	crown_icon_ ( "bg/level-select-characters.png", { 0, 192, 8, 8 }, { LEFT_EDGE + 8, ROW_1, 8, 8 } )
 {};
 
 OWInventory::~OWInventory()
@@ -94,6 +95,7 @@ void OWInventory::renderLevelInfo()
 {
 	win_icon_.render();
 	diamond_icon_.render();
+	crown_icon_.render();
 	gem_score_icon_.render();
 	time_score_icon_.render();
 	current_gem_score_texture_->render();
@@ -135,6 +137,7 @@ void OWInventory::updateTextFlashColor()
 		{
 			win_icon_.src_.x = getFlashColor() * 8;
 			diamond_icon_.src_.x = getFlashColor() * 8;
+			crown_icon_.src_.x = getFlashColor() * 8;
 		}
 
 		if ( !show_challenges_ )
@@ -183,6 +186,14 @@ void OWInventory::regenerateLevelGraphics()
 	{
 		diamond_icon_.src_.x = 8;
 		diamond_icon_.src_.y = 24;
+	}
+	if ( Inventory::hasCrown( level_ ) )
+	{
+		crown_icon_.src_.x = 24;
+	}
+	else
+	{
+		crown_icon_.src_.x = 0;
 	}
 
 	WTextObj gem_score = { mezun::charToChar32String( Inventory::gemScore( level_ ).c_str() ), SCORE_X, ROW_1 };

@@ -240,6 +240,12 @@
             "quit": "Slutar"
         }
     },
+    "level_tile_menu":
+    {
+        "play": "Play Level",
+        "hard_mode": "Hard Mode",
+        "cancel": "Cancel"
+    },
     "level_select":
     {
         "title": "Level Select",

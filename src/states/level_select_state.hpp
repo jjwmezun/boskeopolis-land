@@ -46,6 +46,7 @@ class LevelSelectState : public GameState
 		void renderFlashingThemeIcon( int theme, int y ) const;
 		void renderFlashingVictoryCheck( int y ) const;
 		void renderFlashingDiamondWinIcon( int y ) const;
+		void renderFlashingCrownWinIcon( int y ) const;
 		void renderFlashingGemScore( int level, int y ) const;
 		void renderFlashingTimeScore( int level, int y ) const;
 		void renderFlashingArrows() const;

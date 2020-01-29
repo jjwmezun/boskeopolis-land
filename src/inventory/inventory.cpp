@@ -42,6 +42,12 @@ namespace Inventory
 
 
 	// Private Variables
+	enum class Difficulty
+	{
+		NORMAL,
+		HARD
+	};
+
 	static constexpr bool DEFAULT_VICTORY        = false;
 	static constexpr bool DEFAULT_DIAMOND        = false;
 	static constexpr int  DEFAULT_GEM_SCORE      = -1;
@@ -70,6 +76,8 @@ namespace Inventory
 	static bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
 	static bool victories_[ Level::NUMBER_OF_LEVELS ];
 	static bool diamonds_[ Level::NUMBER_OF_LEVELS ];
+	static bool crowns_[ Level::NUMBER_OF_LEVELS ];
+	static bool suits_[ Level::NUMBER_OF_LEVELS ];
 	static int gem_scores_[ Level::NUMBER_OF_LEVELS ];
 	static int time_scores_[ Level::NUMBER_OF_LEVELS ];
 
@@ -77,6 +85,8 @@ namespace Inventory
 
 	static int bops_ = 0;
 	static int ghost_kills_ = 0;
+
+	static Difficulty difficulty_ = Difficulty::NORMAL;
 
 
 	// Function Implementations
@@ -134,6 +144,7 @@ namespace Inventory
 	{
 		return haveDiamond( level ) &&
 			victory( level ) &&
+			hasCrown( level ) &&
 			gemChallengeBeaten( level ) &&
 			timeChallengeBeaten( level );
 	};
@@ -447,6 +458,11 @@ namespace Inventory
 					bools.push_back( diamonds_[ di ] );
 				}
 
+				for ( int hmi = 0; hmi < Level::NUMBER_OF_LEVELS; ++hmi )
+				{
+					bools.push_back( crowns_[ hmi ] );
+				}
+
 				// Packs 8 bools into single byte.
 				// Though this saves a few measely bytes,
 				// the true reason for this is simply to make editing the save file a li'l harder.
@@ -505,10 +521,12 @@ namespace Inventory
 		// so there's no elegant fix to this.
 
 		// It'd be better to try understanding this function as a whole than trying to litter it with confusing comments.
-		// Basically, this game saves & loads 4 types o' data:
+		// Basically, this game saves & loads 6 types o' data:
 		// * Total gem count
 		// * Levels beaten
+		// * Levels played ( but not necessarily beaten )
 		// * Levels where you collected a diamond.
+		// * Levels where you collected a crown ( beat it in hard mode )
 		// * Gem high scores for each level.
 		// * Time (low) scores for each level.
 		//
@@ -543,10 +561,10 @@ namespace Inventory
 
 				// VICTORIES, BEEN_TO_LEVEL, & DIAMONDS CLUMP.
 					current_block_start = current_block_end;
-					// Space for 2x bools for levels (victories & diamonds).
+					// Space for 4x bools for levels (victories, been-tos, diamonds, & crowns).
 					// 8 bool (bits) fit in a byte--hence dividing by 8, rounding up to ensure there's always the minimum space needed.
 					// C++ oddly makes int / int output an auto-floored int rather than a double, so a val needs to be forced as a double.
-					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUMBER_OF_LEVELS * 3 ) ) ) / 8 );
+					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUMBER_OF_LEVELS * 4 ) ) ) / 8 );
 					current_block_end += blocks_for_bools;
 
 					assert( binsize >= current_block_end );
@@ -572,6 +590,10 @@ namespace Inventory
 							else if ( b < Level::NUMBER_OF_LEVELS * 3 )
 							{
 								diamonds_[ b - ( Level::NUMBER_OF_LEVELS * 2 ) ] = val;
+							}
+							else if ( b < Level::NUMBER_OF_LEVELS * 4 )
+							{
+								crowns_[ b - ( Level::NUMBER_OF_LEVELS * 3 ) ] = val;
 							}
 							else
 							{
@@ -644,6 +666,10 @@ namespace Inventory
 	void win()
 	{
 		victories_[ current_level_() ] = true;
+		if ( isHardMode() )
+		{
+			crowns_[ current_level_() ] = true;
+		}
 		winGemScore();
 		winTimeScore();
 
@@ -765,5 +791,25 @@ namespace Inventory
 	std::u32string fundsString()
 	{
 		return mezun::intToChar32StringWithPadding( funds_shown_(), FUNDS_MAX_DIGITS );
+	};
+
+	bool isHardMode()
+	{
+		return difficulty_ == Difficulty::HARD;
+	};
+
+	void setDifficultyNormal()
+	{
+		difficulty_ = Difficulty::NORMAL;
+	};
+
+	void setDifficultyHard()
+	{
+		difficulty_ = Difficulty::HARD;
+	};
+
+	bool hasCrown( int level )
+	{
+		return crowns_[ level ];
 	};
 };

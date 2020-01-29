@@ -62,6 +62,7 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadOverworldText( data, path );
     loadNewsTickerText( data, path );
     loadPauseText( data, path );
+    loadLevelTileMenuText( data, path );
 };
 
 int LocalizationLanguage::getOrder() const
@@ -613,6 +614,32 @@ void LocalizationLanguage::loadPauseText( const rapidjson::GenericObject<false, 
     pause_quit_beaten_ = mezun::charToChar32String( pause[ "quit_beaten" ].GetString() );
 };
 
+void LocalizationLanguage::loadLevelTileMenuText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "level_tile_menu" ) || !data[ "level_tile_menu" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    const auto& level_tile_menu = data[ "level_tile_menu" ].GetObject();
+
+    if
+    (
+        !level_tile_menu.HasMember( "play" )
+        || !level_tile_menu[ "play" ].IsString()
+        || !level_tile_menu.HasMember( "hard_mode" )
+        || !level_tile_menu[ "hard_mode" ].IsString()
+        || !level_tile_menu.HasMember( "cancel" )
+        || !level_tile_menu[ "cancel" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    level_tile_play_ = mezun::charToChar32String( level_tile_menu[ "play" ].GetString() );
+    level_tile_hard_mode_ = mezun::charToChar32String( level_tile_menu[ "hard_mode" ].GetString() );
+    level_tile_cancel_ = mezun::charToChar32String( level_tile_menu[ "cancel" ].GetString() );
+};
+
 const std::u32string& LocalizationLanguage::getLevelSelectTitle() const
 {
     return level_select_title_;
@@ -690,4 +717,17 @@ const std::u32string& LocalizationLanguage::getPauseQuitUnbeaten() const
 const std::u32string& LocalizationLanguage::getPauseQuitBeaten() const
 {
     return pause_quit_beaten_;
+};
+
+const std::u32string& LocalizationLanguage::getLevelTilePlay() const
+{
+    return level_tile_play_;
+};
+const std::u32string& LocalizationLanguage::getLevelTileHardMode() const
+{
+    return level_tile_hard_mode_;
+};
+const std::u32string& LocalizationLanguage::getLevelTileCancel() const
+{
+    return level_tile_cancel_;
 };

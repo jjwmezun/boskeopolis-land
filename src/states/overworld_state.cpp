@@ -3,7 +3,8 @@
 #include <fstream>
 #include "input.hpp"
 #include "inventory.hpp"
-#include "level_state.hpp"
+#include "level.hpp"
+#include "level_tile_menu_state.hpp"
 #include "localization.hpp"
 #include "main.hpp"
 #include "mezun_json.hpp"
@@ -97,7 +98,7 @@ void OverworldState::stateUpdate()
 			{
 				if ( current_level_ > -1 )
 				{
-					Main::changeState( std::make_unique<LevelState> ( current_level_ ) );
+					Main::pushState( std::make_unique<LevelTileMenuState> ( palette_, current_level_ ) );
 				}
 			}
 			else
