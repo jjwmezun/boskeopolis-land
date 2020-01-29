@@ -10,6 +10,7 @@
 #include "mezun_json.hpp"
 #include "overworld_state.hpp"
 #include "overworld_menu_state.hpp"
+#include "shop_state.hpp"
 #include "unit.hpp"
 
 static std::vector<int> bg_tiles_ = {};
@@ -45,6 +46,7 @@ OverworldState::OverworldState( int previous_level, bool show_event, bool new_ga
 	current_level_ ( -1 ),
 	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
+	object_on_ ( nullptr ),
 	objects_ (),
 	tilemap_ (),
 	bg_texture_ (),
@@ -88,17 +90,38 @@ void OverworldState::stateUpdate()
 			const int tile_y = ( int )( std::floor( ( hero_position.y ) / 16.0 ) );
 			const int tile = tile_y * tilemap_.map_width + tile_x;
 			const auto& seek = objects_.find( tile );
+			object_on_ = nullptr;
 			if ( seek != objects_.end() )
 			{
-				current_level_ = seek->second.value.level;
+				object_on_ = &seek->second;
+				switch ( seek->second.getType() )
+				{
+					case ( OWObject::Type::LEVEL ):
+					{
+						current_level_ = seek->second.getLevelValue();
+					}
+					break;
+				}
 			}
 			inventory_.update( current_level_ );
 
 			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
-				if ( current_level_ > -1 )
+				if ( object_on_ != nullptr )
 				{
-					Main::pushState( std::make_unique<LevelTileMenuState> ( palette_, current_level_ ) );
+					switch ( object_on_->getType() )
+					{
+						case ( OWObject::Type::LEVEL ):
+						{
+							Main::pushState( std::make_unique<LevelTileMenuState> ( palette_, object_on_->getLevelValue() ) );
+						}
+						break;
+						case ( OWObject::Type::SHOP ):
+						{
+							Main::pushState( std::make_unique<ShopState> ( object_on_->getShopNumber() ), true );
+						}
+						break;
+					}
 				}
 			}
 			else
@@ -347,6 +370,11 @@ void OverworldState::generateSprites()
 				}
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( level_id ) ) );
 				level_tile_graphics_.add( dest );
+			}
+			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
+			{
+				const int shop_number = sprite_tile - 2160 + 1;
+				objects_.insert( std::pair<int, OWObject>( i, OWObject::createShop( shop_number ) ) );
 			}
 		}
 	}

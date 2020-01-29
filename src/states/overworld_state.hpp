@@ -45,6 +45,7 @@ class OverworldState : public GameState
 		int current_level_;
 		int previous_level_;
 		int language_id_;
+		OWObject* object_on_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;
 		TextureBox bg_texture_;

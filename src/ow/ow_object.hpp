@@ -1,25 +1,56 @@
 #pragma once
 
+#include "assert.hpp"
 #include "mezun_sdl2.hpp"
 
-struct OWObject
+class OWObject
 {
-    enum class Type
-    {
-        LEVEL
-    };
+    public:
+        enum class Type
+        {
+            LEVEL,
+            SHOP
+        };
+        union Value
+        {
+            int level;
+            int shop;
+        };
 
-    union Value
-    {
-        int level;
-    };
+        constexpr static OWObject createLevel( int level )
+        {
+            return { Type::LEVEL, Value{ level } };
+        };
 
-    Type type;
-    Value value;
-    sdl2::SDLRect position;
+        constexpr static OWObject createShop( int n )
+        {
+            return { Type::SHOP, Value{ n } };
+        };
 
-    constexpr static OWObject createLevel( int level )
-    {
-        return { Type::LEVEL, level };
-    };
+        constexpr Type getType() const
+        {
+            return type_;
+        };
+
+        constexpr int getLevelValue() const
+        {
+            jassert( type_ == Type::LEVEL );
+            return value_.level;
+        };
+
+        constexpr int getShopNumber() const
+        {
+            jassert( type_ == Type::SHOP );
+            return value_.shop;
+        };
+
+    private:
+        constexpr OWObject( Type type, Value value )
+        :
+            type_ ( type ),
+            value_ ( value )
+        {};
+
+        Type type_;
+        Value value_;
 };
