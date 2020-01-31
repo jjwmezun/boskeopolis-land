@@ -17,6 +17,17 @@ class ShopState : public GameState
 		void init() override;
 
 	private:
+		enum class State
+		{
+			WALKING_IN,
+			CHOOSING
+		};
+		static constexpr int NUMBER_OF_ITEMS = 2;
+
+
         ShopPlayer player_;
+		State state_;
+        CounterFlip<NUMBER_OF_ITEMS-1> item_selection_;
+		ShopItem items_[ NUMBER_OF_ITEMS ];
         char scratch_[3000];
 };

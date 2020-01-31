@@ -10,6 +10,7 @@ class ShopPlayer
         ShopPlayer();
         void update();
         void render() const;
+        bool testIsWalking() const;
 
     private:
         static constexpr int NUMBER_OF_WALK_FRAMES = 4;

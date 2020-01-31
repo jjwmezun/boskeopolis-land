@@ -497,5 +497,22 @@
         "Boo.",
         "Citizens claim they find boring religious pamphletes hidden in Muertoween candy. Details @ 11.",
         "25% off costumes this Muertoween @ FredMart: We possess everything."
-    ]
+    ],
+    "shop":
+    {
+        "greeting": "Good evening, Madame. ¿How may I help you?",
+        "items":
+        {
+            "hp_upgrade":
+            {
+                "name": "Extra Aorta",
+                "description": "Add 1 mo’ heart to your max HP."
+            },
+            "oxygen_upgrade":
+            {
+                "name": "Iron Lung",
+                "description": "Allows you to stay underwater for longer periods."
+            }
+        }
+    }
 }

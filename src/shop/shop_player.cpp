@@ -24,7 +24,7 @@ void ShopPlayer::render() const
 
 void ShopPlayer::updatePosition()
 {
-    if ( speed_ > 0.000001 )
+    if ( testIsWalking() )
     {
         if ( position_ > 250.0 )
         {
@@ -58,4 +58,9 @@ void ShopPlayer::updateGraphics()
 bool ShopPlayer::isMoving() const
 {
     return speed_ > 1.999999;
+};
+
+bool ShopPlayer::testIsWalking() const
+{
+    return speed_ > 0.1;
 };
