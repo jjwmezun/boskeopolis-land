@@ -40,6 +40,7 @@ namespace Inventory
 	std::string percentShown();
 	Clock& clock();
 	std::u32string fundsString();
+	std::u32string totalFundsString();
 
 	void addMcGuffin();
 	int McGuffins();

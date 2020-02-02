@@ -126,13 +126,14 @@ namespace mezun
 
 	std::u32string intToChar32String( int n )
 	{
+		std::u32string text = ( n < 0 ) ? U"-" : U"";
 		const auto digits = breakIntegerIntoDigitList( n );
-		return addDigitsToString( U"", digits );
+		return addDigitsToString( text, digits );
 	};
 
 	std::u32string intToChar32StringWithPadding( int n, int padding )
 	{
-		std::u32string text;
+		std::u32string text = ( n < 0 ) ? U"-" : U"";
 		const auto digits = breakIntegerIntoDigitList( n );
 		while ( padding > ( int )( digits.size() ) )
 		{
@@ -170,6 +171,8 @@ namespace mezun
 		{
 			return { 0 };
 		}
+
+		n = std::abs( n );
 		std::vector<int> digits;
 		while ( n > 0 )
 		{
@@ -187,5 +190,28 @@ namespace mezun
 			text += ( char32_t )( 48 + d );
 		}
 		return text;
+	};
+
+	std::u32string merge32Strings( const std::u32string& first, const std::u32string& second )
+	{
+		std::u32string out = U"";
+		for ( char32_t c : first )
+		{
+			if ( c == ( char32_t )( 0 ) )
+			{
+				break;
+			}
+			out += c;
+		}
+		for ( char32_t c : second )
+		{
+			if ( c == ( char32_t )( 0 ) )
+			{
+				break;
+			}
+			out += c;
+		}
+		out += ( char32_t )( 0 );
+		return out;
 	};
 }

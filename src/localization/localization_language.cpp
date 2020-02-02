@@ -731,3 +731,28 @@ const std::u32string& LocalizationLanguage::getLevelTileCancel() const
 {
     return level_tile_cancel_;
 };
+
+std::u32string LocalizationLanguage::getShopItemHPUpgradeName() const
+{
+    return mezun::charToChar32String( "Aorta" );
+};
+
+std::u32string LocalizationLanguage::getShopItemHPUpgradeDescription() const
+{
+    return mezun::charToChar32String( "Aorta Scorta" );
+};
+
+std::u32string LocalizationLanguage::getShopItemOxygenUpgradeName() const
+{
+    return mezun::charToChar32String( "Iron Lung" );
+};
+
+std::u32string LocalizationLanguage::getShopItemOxygenUpgradeDescription() const
+{
+    return mezun::charToChar32String( "This is our new product — just like the last, a total waste o’ time." );
+};
+
+std::u32string LocalizationLanguage::getShopCheckout() const
+{
+    return U"Checkout";
+};

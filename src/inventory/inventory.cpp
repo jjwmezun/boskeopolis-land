@@ -793,6 +793,13 @@ namespace Inventory
 		return mezun::intToChar32StringWithPadding( funds_shown_(), FUNDS_MAX_DIGITS );
 	};
 
+	std::u32string totalFundsString()
+	{
+		return ( total_funds_shown_ < 0 )
+			? mezun::intToChar32StringWithPadding( total_funds_shown_(), TOTAL_FUNDS_MAX_DIGITS )
+			: mezun::merge32Strings( U" ", mezun::intToChar32StringWithPadding( total_funds_shown_(), TOTAL_FUNDS_MAX_DIGITS ) );
+	};
+
 	bool isHardMode()
 	{
 		return difficulty_ == Difficulty::HARD;

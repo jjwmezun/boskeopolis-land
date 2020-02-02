@@ -8,7 +8,7 @@ ShopPlayer::ShopPlayer()
     blink_counter_ (),
     graphics_ ( "sprites/autumn.png", { 0, 0, 16, 26 }, { -32, 176, 16, 26 } ),
     position_ ( -32.0 ),
-    speed_ ( 2.0 )
+    speed_ ( 4.0 )
 {};
 
 void ShopPlayer::update()

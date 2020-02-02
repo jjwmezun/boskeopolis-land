@@ -70,4 +70,5 @@ namespace mezun
 	std::string string32ToString8( const std::u32string source );
 	std::string stringReplace( const std::string& in, std::string from, std::string to );
 	std::u32string removeEndingZeroFrom32String( const std::u32string& string );
+	std::u32string merge32Strings( const std::u32string& first, const std::u32string& second );
 };

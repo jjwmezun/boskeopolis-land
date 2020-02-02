@@ -50,6 +50,11 @@ class LocalizationLanguage
         const std::u32string& getLevelTilePlay() const;
         const std::u32string& getLevelTileHardMode() const;
         const std::u32string& getLevelTileCancel() const;
+        std::u32string getShopItemHPUpgradeName() const;
+        std::u32string getShopItemHPUpgradeDescription() const;
+        std::u32string getShopItemOxygenUpgradeName() const;
+        std::u32string getShopItemOxygenUpgradeDescription() const;
+        std::u32string getShopCheckout() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
