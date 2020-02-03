@@ -39,12 +39,7 @@ static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-static const char* getPaletteForLevel()
-{
-	const int level = Inventory::currentLevel();
-	std::cout << level << std::endl;
-	return ( level >= 0 ) ? PALETTES[ LEVEL_PALETTES[ level ] ] : PALETTES[ 0 ];
-};
+static const char* getPaletteForLevel();
 
 static constexpr bool testIsSolid( int tile )
 {
@@ -594,4 +589,10 @@ void OverworldState::generateMap()
 bool OverworldState::testLanguageHasChanged() const
 {
 	return Localization::getCurrentLanguageIndex() != language_id_;
+};
+
+static const char* getPaletteForLevel()
+{
+	const int level = Inventory::currentLevel();
+	return ( level >= 0 ) ? PALETTES[ LEVEL_PALETTES[ level ] ] : PALETTES[ 0 ];
 };
