@@ -8,28 +8,29 @@ OWLevelTileGraphics::OWLevelTileGraphics()
     animation_timer_ (),
     animation_frame_ (),
     tileset_ ( "tilesets/ow.png" ),
-    positions_ (),
     destinations_ (),
-    source_ ( 0, 240, 16, 16 )
-{};
-
-void OWLevelTileGraphics::add( sdl2::SDLRect dest )
+    source_ ( 0, 240, 16, 16 ),
+    positions_ (),
+    reveal_ ()
 {
-    positions_.emplace_back( dest );
+    for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+    {
+        reveal_[ i ] = false;
+        positions_[ i ] = { 0, 0, 8, 8 };
+    }
+};
+
+void OWLevelTileGraphics::add( sdl2::SDLRect dest, int level, bool reveal )
+{
+    reveal_[ level ] = reveal;
+    positions_[ level ] = dest;
 };
 
 void OWLevelTileGraphics::update( const sdl2::SDLRect& camera )
 {
     if ( prev_camera_x_ != camera.x || prev_camera_y_ != camera.y )
     {
-        destinations_.clear();
-        for ( const auto& position : positions_ )
-        {
-            if ( testOnCamera( position, camera ) )
-            {
-                destinations_.push_back({ position.x - camera.x, position.y - camera.y, 16, 16 });
-            }
-        }
+        refreshGraphics( camera );
     }
     prev_camera_x_ = camera.x;
     prev_camera_y_ = camera.y;
@@ -56,4 +57,23 @@ bool OWLevelTileGraphics::testOnCamera( const sdl2::SDLRect& position, const sdl
         position.x < camera.x + Unit::WINDOW_WIDTH_PIXELS &&
         position.bottom() > camera.y &&
         position.y < camera.y + Unit::WINDOW_HEIGHT_PIXELS;
+};
+
+void OWLevelTileGraphics::showTile( const sdl2::SDLRect& camera, int level )
+{
+    reveal_[ level ] = true;
+    refreshGraphics( camera );
+};
+
+void OWLevelTileGraphics::refreshGraphics( const sdl2::SDLRect& camera )
+{
+    destinations_.clear();
+    for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+    {
+        const auto& position = positions_[ i ];
+        if ( reveal_[ i ] && testOnCamera( position, camera ) )
+        {
+            destinations_.push_back({ position.x - camera.x, position.y - camera.y, 16, 16 });
+        }
+    }
 };

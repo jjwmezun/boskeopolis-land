@@ -9,12 +9,14 @@ class OWObject
         enum class Type
         {
             LEVEL,
-            SHOP
+            SHOP,
+            PALETTE
         };
         union Value
         {
             int level;
             int shop;
+            int palette;
         };
 
         constexpr static OWObject createLevel( int level )
@@ -25,6 +27,11 @@ class OWObject
         constexpr static OWObject createShop( int n )
         {
             return { Type::SHOP, Value{ n } };
+        };
+
+        constexpr static OWObject createPaletteChanger( int n )
+        {
+            return { Type::PALETTE, Value{ n } };
         };
 
         constexpr Type getType() const
@@ -42,6 +49,12 @@ class OWObject
         {
             jassert( type_ == Type::SHOP );
             return value_.shop;
+        };
+
+        constexpr int getPaletteID() const
+        {
+            jassert( type_ == Type::PALETTE );
+            return value_.palette;
         };
 
     private:

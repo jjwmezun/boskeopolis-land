@@ -19,10 +19,31 @@ static std::vector<int> sprites_tiles_ = {};
 static int width_blocks_ = 0;
 static int height_blocks_ = 0;
 
-static constexpr int NUMBER_OF_SOLID_TILES = 22;
+static constexpr int NUMBER_OF_PALETTES = 2;
+static constexpr int NUMBER_OF_SOLID_TILES = 32;
 static constexpr int SOLID_TILES[ NUMBER_OF_SOLID_TILES ] =
 {
-	-1, 21, 23, 24, 25, 26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47
+	-1, 21, 23, 24, 25, 26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 124, 125, 126, 127, 108, 109, 110, 111, 9, 10
+};
+static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 16 ] =
+{
+	"Overworld Red",
+	"Overworld Green"
+};
+
+static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] = 
+{
+	0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+static const char* getPaletteForLevel()
+{
+	const int level = Inventory::currentLevel();
+	std::cout << level << std::endl;
+	return ( level >= 0 ) ? PALETTES[ LEVEL_PALETTES[ level ] ] : PALETTES[ 0 ];
 };
 
 static constexpr bool testIsSolid( int tile )
@@ -39,13 +60,14 @@ static constexpr bool testIsSolid( int tile )
 
 OverworldState::OverworldState( int previous_level, bool show_event, bool new_game )
 :
-	GameState( StateID::OVERWORLD_STATE, { "Overworld Red", 2 } ),
+	GameState( StateID::OVERWORLD_STATE, { getPaletteForLevel(), 2 } ),
 	state_ ( ( show_event ) ? OWState::CAMERA_MOVES_TO_EVENT : OWState::MOVE_PLAYER ),
 	background_animation_timer_ ( 0 ),
 	background_animation_frame_ ( 0 ),
 	current_level_ ( -1 ),
 	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
+	current_palette_ ( 0 ),
 	object_on_ ( nullptr ),
 	objects_ (),
 	tilemap_ (),
@@ -99,6 +121,16 @@ void OverworldState::stateUpdate()
 					case ( OWObject::Type::LEVEL ):
 					{
 						current_level_ = seek->second.getLevelValue();
+					}
+					break;
+					case ( OWObject::Type::PALETTE ):
+					{
+						if ( current_palette_ != seek->second.getPaletteID() )
+						{
+							current_palette_ = seek->second.getPaletteID();
+							newPalette( PALETTES[ current_palette_ ] );
+							generateMapTextures();
+						}
 					}
 					break;
 				}
@@ -178,7 +210,14 @@ void OverworldState::stateUpdate()
 
 				case ( OWEvent::MessageBack::FG_TILES_CHANGED ):
 				{
+					generateBGMapTexture();
 					generateFGMapTexture();
+				}
+				break;
+
+				case ( OWEvent::MessageBack::SHOW_NEXT_LEVEL ):
+				{
+					level_tile_graphics_.showTile( camera_.getBox(), Inventory::currentLevel() + 1 );
 				}
 				break;
 
@@ -369,12 +408,18 @@ void OverworldState::generateSprites()
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( level_id ) ) );
-				level_tile_graphics_.add( dest );
+				bool reveal = ( state_ != OWState::CAMERA_MOVES_TO_EVENT || level_id != ( Inventory::currentLevel() + 1 ) ) && Inventory::levelUnlocked( level_id );
+				level_tile_graphics_.add( dest, level_id, reveal );
 			}
 			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
 			{
 				const int shop_number = sprite_tile - 2160 + 1;
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createShop( shop_number ) ) );
+			}
+			else if ( sprite_tile >= 2176 && sprite_tile < 2176 + NUMBER_OF_PALETTES )
+			{
+				const int palette_id = sprite_tile - 2176;
+				objects_.insert( std::pair<int, OWObject> ( i, OWObject::createPaletteChanger( palette_id ) ) );
 			}
 		}
 	}

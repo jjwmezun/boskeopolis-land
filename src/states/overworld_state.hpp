@@ -26,6 +26,7 @@ class OverworldState : public GameState
 		void stateRender() override;
 		void init() override;
 		void backFromPop() override;
+		void addLevel( int i, int level_id, sdl2::SDLRect dest );
 
 	private:
 		void testForMenuAction();
@@ -45,6 +46,7 @@ class OverworldState : public GameState
 		int current_level_;
 		int previous_level_;
 		int language_id_;
+		int current_palette_;
 		OWObject* object_on_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;

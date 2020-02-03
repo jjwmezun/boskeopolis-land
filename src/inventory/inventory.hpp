@@ -25,7 +25,7 @@ namespace Inventory
 
 	bool victory();
 	bool victory( int level );
-
+	bool levelUnlocked( int level );
 	bool beenToLevel( int level );
 	void levelStart( int level );
 	void setCurrentLevel( int level );

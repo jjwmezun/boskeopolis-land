@@ -819,4 +819,9 @@ namespace Inventory
 	{
 		return crowns_[ level ];
 	};
+
+	bool levelUnlocked( int level )
+	{
+		return ( level > 0 ) ? victory( level - 1 ) : true;
+	};
 };

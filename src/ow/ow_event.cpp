@@ -9,7 +9,7 @@
 
 OWEvent::OWEvent()
 :
-    timer_ (),
+    timer_ ( 0 ),
     current_change_ ( 0 ),
     changes_ (),
     target_position_ ()
@@ -109,19 +109,33 @@ void OWEvent::init( int level, int map_width )
 
 OWEvent::MessageBack OWEvent::update( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles )
 {
-    if ( timer_.update() )
+    MessageBack message = MessageBack::__NULL;
+    if ( current_change_ == changes_.size() )
     {
-        if ( current_change_ == changes_.size() )
+        if ( timer_ == 64 )
         {
             return MessageBack::EVENT_OVER;
         }
-        else
+        else if ( timer_ == 32 )
+        {
+            message = MessageBack::SHOW_NEXT_LEVEL;
+        }
+        ++timer_;
+    }
+    else
+    {
+        if ( timer_ == 16 )
         {
             Audio::playSound( Audio::SoundType::CHEST_OPEN );
-            return changeTiles( bg_tiles, fg_tiles );
+            message = changeTiles( bg_tiles, fg_tiles );
+            timer_ = 0;
+        }
+        else
+        {
+            ++timer_;
         }
     }
-    return MessageBack::__NULL;
+    return message;
 };
 
 const DPoint& OWEvent::getTargetPosition() const

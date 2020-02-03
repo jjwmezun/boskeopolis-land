@@ -14,6 +14,7 @@ class OWEvent
             BOTH_TILES_CHANGED,
             BG_TILES_CHANGED,
             FG_TILES_CHANGED,
+            SHOW_NEXT_LEVEL,
             EVENT_OVER
         };
 
@@ -26,7 +27,7 @@ class OWEvent
     private:
         OWEvent::MessageBack changeTiles( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles );
 
-        TimerRepeatT2<16> timer_;
+        int timer_;
         int current_change_;
         std::vector<std::vector<OWEventTile>> changes_;
         DPoint target_position_;

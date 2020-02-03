@@ -6,7 +6,8 @@ class OWEventTile
         enum class Layer
         {
             BG,
-            FG
+            FG,
+            SPRITE
         };
 
         constexpr OWEventTile( Layer layer, int position, int tile )
