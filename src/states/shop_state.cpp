@@ -22,7 +22,8 @@ ShopState::ShopState( int shop_number )
         { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 1000000 }
     }),
     input_delay_ ( 0 ),
-    cart_ ()
+    cart_ ( { false, false } ),
+    dialogue_ ( WTextObj{ mezun::charToChar32String( "Good evening, Madame. ¿How ya doing?" ), 304, 72, WTextCharacter::Color::BLACK, 80, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 0, WTextObj::VAlign::BOTTOM, 72 } )
 {};
 
 ShopState::~ShopState() {};
@@ -44,7 +45,22 @@ void ShopState::stateUpdate()
         {
             if ( input_delay_ == 0 )
             {
-                if ( Input::held( Input::Action::MOVE_DOWN ) )
+                if ( Input::pressed( Input::Action::CONFIRM ) )
+                {
+                    if ( testSelectingCheckout() )
+                    {
+                        if ( testCartIsEmpty() )
+                        {
+                            dialogue_ = { WTextObj{ mezun::charToChar32String( "You have nothing in your cart to check out." ), 304, 72, WTextCharacter::Color::BLACK, 80, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 0, WTextObj::VAlign::BOTTOM, 72 } };
+                        }
+                    }
+                    else
+                    {
+                        cart_[ item_selection_() ] = !cart_[ item_selection_() ];
+                    }
+                    input_delay_ = INPUT_DELAY_LENGTH;
+                }
+                else if ( Input::held( Input::Action::MOVE_DOWN ) )
                 {
                     ++item_selection_;
                     input_delay_ = INPUT_DELAY_LENGTH;
@@ -59,6 +75,7 @@ void ShopState::stateUpdate()
             {
                 --input_delay_;
             }
+            dialogue_.update();
         }
         break;
     }
@@ -111,10 +128,29 @@ void ShopState::stateRender()
         WTextCharacter::Color color = ( Inventory::totalFundsShown() < 0 ) ? WTextCharacter::Color::LIGHT_MID_GRAY : WTextCharacter::Color::BLACK;
         WTextObj total_points{ mezun::merge32Strings( mezun::charToChar32String( "₧" ), Inventory::totalFundsString() ), 294, 14, color, 386, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 2, 2 };
         total_points.render();
+
+        dialogue_.render();
     }
 };
 
 void ShopState::init()
 {
     
+};
+
+bool ShopState::testCartIsEmpty() const
+{
+    for ( int i = 0; i < NUMBER_OF_ITEMS; ++i )
+    {
+        if ( cart_[ i ] )
+        {
+            return false;
+        }
+    }
+    return true;
+};
+
+bool ShopState::testSelectingCheckout() const
+{
+    return item_selection_() == -1;
 };

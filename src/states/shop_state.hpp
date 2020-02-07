@@ -3,6 +3,7 @@
 #include "game_state.hpp"
 #include "shop_item.hpp"
 #include "shop_player.hpp"
+#include "wtext_gradual.hpp"
 
 class ShopState : public GameState
 {
@@ -25,11 +26,15 @@ class ShopState : public GameState
 		};
 		static constexpr int NUMBER_OF_ITEMS = 2;
 
+		bool testCartIsEmpty() const;
+		bool testSelectingCheckout() const;
+
         ShopPlayer player_;
 		State state_;
         CounterFlip<NUMBER_OF_ITEMS-1, -1> item_selection_;
 		ShopItem items_[ NUMBER_OF_ITEMS ];
 		int input_delay_;
-		std::vector<int> cart_;
+		bool cart_[ NUMBER_OF_ITEMS ];
+		WTextGradual dialogue_;
         char scratch_[3000];
 };
