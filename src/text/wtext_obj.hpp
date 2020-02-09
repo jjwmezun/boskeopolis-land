@@ -59,6 +59,7 @@ class WTextObj
 		void changeColor( WTextCharacter::Color color );
 		void generateTexture( TextureBox& texture_box ) const;
 		int getNumberOfCharacters() const;
+		int getNumberOfLines() const;
 		static void generateTexture
 		(
     		TextureBox& texture_box,

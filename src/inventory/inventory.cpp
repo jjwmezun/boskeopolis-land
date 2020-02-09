@@ -71,7 +71,6 @@ namespace Inventory
 	static Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
 	static Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
 	static Counter current_level_ = Counter( -1, Level::NUMBER_OF_LEVELS, -1 );
-	static Counter heart_upgrades_ = Counter( 0, MAX_HEART_UPGRADES );
 
 	static bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
 	static bool victories_[ Level::NUMBER_OF_LEVELS ];
@@ -87,6 +86,7 @@ namespace Inventory
 	static int ghost_kills_ = 0;
 
 	static Difficulty difficulty_ = Difficulty::NORMAL;
+	static bool health_upgrades_[ MAX_HEART_UPGRADES ] = { false, false, false };
 
 
 	// Function Implementations
@@ -106,10 +106,15 @@ namespace Inventory
 		funds_shown_ = 0;
 		total_funds_shown_ = 0;
 		current_level_ = -1;
-		heart_upgrades_ = 0;
 		mcguffins_ = 0;
 		oxygen_upgrade_ = false;
+		for ( int i = 0; i < MAX_HEART_UPGRADES; ++i )
+		{
+			health_upgrades_[ i ] = false;
+		}
 		bops_ = 0;
+		ghost_kills_ = 0;
+		difficulty_ = Difficulty::NORMAL;
 	};
 
 	std::string levelName( int level )
@@ -273,6 +278,11 @@ namespace Inventory
 		return total_funds_shown_();
 	};
 
+	int totalFunds()
+	{
+		return total_funds_();
+	};
+
 	double percentPerLevel()
 	{
 		return 100.0 / ( double )( Level::NUMBER_OF_LEVELS );
@@ -406,6 +416,11 @@ namespace Inventory
 			else
 				total_funds_shown_ -= TOTAL_FUNDS_SPEED;
 		}
+	};
+
+	void updateForShop()
+	{
+		updateForOverworld();
 	};
 
 	bool updateLevelFunds()
@@ -720,7 +735,15 @@ namespace Inventory
 
 	int heartUpgrades()
 	{
-		return heart_upgrades_();
+		int upgrade_count = 0;
+		for ( int i = 0; i < MAX_HEART_UPGRADES; ++i )
+		{
+			if ( health_upgrades_[ i ] )
+			{
+				++upgrade_count;
+			}
+		}
+		return upgrade_count;
 	};
 
 	bool haveOxygenUpgrade()
@@ -823,5 +846,30 @@ namespace Inventory
 	bool levelUnlocked( int level )
 	{
 		return ( level > 0 ) ? victory( level - 1 ) : true;
+	};
+
+	std::string getPlayerCostume()
+	{
+		return "sprites/autumn-skirt.png";
+	};
+
+	void loseTotalFunds( int amount )
+	{
+		total_funds_ -= amount;
+	};
+
+	bool hasHPUpgrade( int number )
+	{
+		return health_upgrades_[ number ];
+	};
+
+	void giveOxygenUpgrade()
+	{
+		oxygen_upgrade_ = true;
+	};
+
+	void giveHPUpgrade( int number )
+	{
+		health_upgrades_[ number ] = true;
 	};
 };

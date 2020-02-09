@@ -36,11 +36,13 @@ namespace Inventory
 	void setFunds( int n );
 	int fundsShown();
 	int totalFundsShown();
+	int totalFunds();
 	double percent();
 	std::string percentShown();
 	Clock& clock();
 	std::u32string fundsString();
 	std::u32string totalFundsString();
+	void loseTotalFunds( int amount );
 
 	void addMcGuffin();
 	int McGuffins();
@@ -51,11 +53,15 @@ namespace Inventory
 
 	bool updateLevelFunds();
 	void updateForOverworld();
+	void updateForShop();
 	void save();
 	void load();
 	
 	int heartUpgrades();
 	bool haveOxygenUpgrade();
+	bool hasHPUpgrade( int number );
+	void giveOxygenUpgrade();
+	void giveHPUpgrade( int number );
 	
 	void bop();
 	void clearBops();
@@ -70,4 +76,6 @@ namespace Inventory
 	void setDifficultyNormal();
 	void setDifficultyHard();
 	bool hasCrown( int level );
+
+	std::string getPlayerCostume();
 };

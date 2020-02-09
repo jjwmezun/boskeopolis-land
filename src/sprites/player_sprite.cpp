@@ -33,7 +33,7 @@ PlayerSprite::PlayerSprite
 :
 	Sprite
 	(
-		std::move( gfx ),
+		( gfx == nullptr ) ? std::make_unique<SpriteGraphics> ( Inventory::getPlayerCostume(), 0, 0, false, false, 0, false, -1, -2, 2, 4 ) : std::move( gfx ),
 		x,
 		y,
 		14,

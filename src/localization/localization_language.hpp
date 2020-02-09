@@ -55,6 +55,17 @@ class LocalizationLanguage
         std::u32string getShopItemOxygenUpgradeName() const;
         std::u32string getShopItemOxygenUpgradeDescription() const;
         std::u32string getShopCheckout() const;
+        std::u32string getShopExit() const;
+        std::u32string getNoItemsInCartMessage() const;
+        std::u32string getNotEnoughFundsForCheckoutMessage() const;
+        std::u32string getShopGreeting() const;
+        std::u32string getCheckoutConfirmPrompt() const;
+        std::u32string getCheckoutThanks() const;
+        std::u32string getShopNotAvailableText() const;
+        std::u32string getShopOutOfStockText() const;
+        std::u32string getShopLeavingMessage() const;
+        std::u32string getShopkeeperNotAvailableMessage() const;
+        std::u32string getShopkeeperOutOfStockMessage() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );

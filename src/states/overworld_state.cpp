@@ -145,6 +145,7 @@ void OverworldState::stateUpdate()
 						break;
 						case ( OWObject::Type::SHOP ):
 						{
+							Audio::playSound( Audio::SoundType::CONFIRM );
 							Main::pushState( std::make_unique<ShopState> ( object_on_->getShopNumber() ), true );
 						}
 						break;

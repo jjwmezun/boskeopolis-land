@@ -260,3 +260,8 @@ int WTextObj::getNumberOfCharacters() const
     }
     return n;
 };
+
+int WTextObj::getNumberOfLines() const
+{
+    return ( int )( lines_.size() );
+};

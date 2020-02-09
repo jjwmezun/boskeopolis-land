@@ -19,6 +19,6 @@ class LevelMessageState : public GameState
 	private:
 		const sdl2::SDLRect backdrop_;
 		const sdl2::SDLRect border_;
-		WTextGradual message_;
+		WTextGradual<true> message_;
 		ImageGraphics frame_;
 };

@@ -8,20 +8,22 @@ class ShopPlayer
 {
     public:
         ShopPlayer();
-        void update();
+        void moveRight();
+        void moveLeft();
         void render() const;
-        bool testIsWalking() const;
+        bool testIsAtShopKeeper() const;
+        bool hasLeftStore() const;
+        void updateGraphics();
 
     private:
         static constexpr int NUMBER_OF_WALK_FRAMES = 4;
         static constexpr int WALK_FRAMES[ NUMBER_OF_WALK_FRAMES ] =
         {
-            0, 32, 0, 16
+            0, 58, 0, 29
         };
 
-        void updatePosition();
-        void updateGraphics();
         bool isMoving() const;
+        bool testIsWalking() const;
 
 		TimerRepeatT2<8> animation_timer_;
 		CounterFlip<NUMBER_OF_WALK_FRAMES - 1> walk_counter_;
@@ -29,5 +31,6 @@ class ShopPlayer
         ImageGraphics graphics_;
         double position_;
         double speed_;
+        SDL_RendererFlip flip_;
         char scratch_[3000];
 };

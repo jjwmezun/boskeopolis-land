@@ -24,7 +24,7 @@ class PlayerSprite : public Sprite
 			int jump_top_speed = 6000,
 			std::unique_ptr<InputComponent> input
 				= nullptr,
-			std::unique_ptr<SpriteGraphics>&& gfx = std::make_unique<SpriteGraphics> ( "sprites/autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
+			std::unique_ptr<SpriteGraphics>&& gfx = nullptr,
 			SpriteType type = SpriteType::HERO,
 			int start_speed = 160,
 			int top_speed = 2000,

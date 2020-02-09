@@ -734,12 +734,12 @@ const std::u32string& LocalizationLanguage::getLevelTileCancel() const
 
 std::u32string LocalizationLanguage::getShopItemHPUpgradeName() const
 {
-    return mezun::charToChar32String( "Aorta" );
+    return mezun::charToChar32String( "Extra Aorta" );
 };
 
 std::u32string LocalizationLanguage::getShopItemHPUpgradeDescription() const
 {
-    return mezun::charToChar32String( "Aorta Scorta" );
+    return mezun::charToChar32String( "Add an extra heart to your max health when you play on normal." );
 };
 
 std::u32string LocalizationLanguage::getShopItemOxygenUpgradeName() const
@@ -749,10 +749,65 @@ std::u32string LocalizationLanguage::getShopItemOxygenUpgradeName() const
 
 std::u32string LocalizationLanguage::getShopItemOxygenUpgradeDescription() const
 {
-    return mezun::charToChar32String( "This is our new product — just like the last, a total waste o’ time." );
+    return mezun::charToChar32String( "Allows you to stay underwater longer." );
 };
 
 std::u32string LocalizationLanguage::getShopCheckout() const
 {
     return U"Checkout";
+};
+
+std::u32string LocalizationLanguage::getShopExit() const
+{
+    return U"Exit";
+};
+
+std::u32string LocalizationLanguage::getNoItemsInCartMessage() const
+{
+    return mezun::charToChar32String( "You have nothing in your cart to check out." );
+};
+
+std::u32string LocalizationLanguage::getNotEnoughFundsForCheckoutMessage() const
+{
+    return mezun::charToChar32String( "¡You don’t have ’nough money to buy all that!" );
+};
+
+std::u32string LocalizationLanguage::getShopGreeting() const
+{
+    return mezun::charToChar32String( "Good evening, Madame. ¿How ya doing?" );
+};
+
+std::u32string LocalizationLanguage::getCheckoutConfirmPrompt() const
+{
+    return mezun::charToChar32String( "¿Confirm checkout?\n Yes\n No" );
+};
+
+std::u32string LocalizationLanguage::getCheckoutThanks() const
+{
+    return mezun::charToChar32String( "¡Thank you for your purchase!" );
+};
+
+std::u32string LocalizationLanguage::getShopNotAvailableText() const
+{
+    return mezun::charToChar32String( "Not Available" );
+};
+
+std::u32string LocalizationLanguage::getShopOutOfStockText() const
+{
+    return mezun::charToChar32String( "Out o’ Stock" );
+}
+
+std::u32string LocalizationLanguage::getShopLeavingMessage() const
+{
+    return mezun::charToChar32String( "¡Thank you! ¡Hope to see you ’gain soon!" );
+};
+
+std::u32string LocalizationLanguage::getShopkeeperNotAvailableMessage() const
+{
+    return mezun::charToChar32String( "Sorry, but that product is not available yet. Please try ’nother." );
+};
+
+std::u32string LocalizationLanguage::getShopkeeperOutOfStockMessage() const
+{
+    return mezun::charToChar32String( "Sorry, but we’er out o’ that product. Please try ’nother." );
 };
