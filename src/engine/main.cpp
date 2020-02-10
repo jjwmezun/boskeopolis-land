@@ -379,7 +379,10 @@ namespace Main
 		//Ensure state list is clear:
 		states_.clear();
 
-		states_.push_back( std::unique_ptr<GameState>
+		Audio::playSound( Audio::SoundType::SELECT );
+		states_.push_back
+		(
+			std::unique_ptr<GameState>
 			(
 				new WMessageState
 				(

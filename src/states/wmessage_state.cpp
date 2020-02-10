@@ -10,7 +10,10 @@ WMessageState::WMessageState
 	WTextObj::MessageData message,
 	Type type,
 	Palette palette,
-	std::unique_ptr<GameState> next_state
+	std::unique_ptr<GameState> next_state,
+	std::string music,
+	bool loop_music,
+	bool flash
 )
 :
 	GameState( StateID::MESSAGE_STATE, palette ),
@@ -18,7 +21,10 @@ WMessageState::WMessageState
     text_gfx_ (),
 	next_state_ ( std::move( next_state ) ),
 	type_ ( type )
-{};
+{
+	Audio::turnOffSong();
+	Audio::changeSong( music, loop_music );
+};
 
 WMessageState::~WMessageState()
 {

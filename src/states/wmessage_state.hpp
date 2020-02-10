@@ -19,7 +19,10 @@ class WMessageState : public GameState
 			WTextObj::MessageData message,
 			Type type,
 			Palette palette,
-			std::unique_ptr<GameState> next_state = nullptr
+			std::unique_ptr<GameState> next_state = nullptr,
+			std::string music = "",
+			bool loop_music = true,
+			bool flash = false
 		);
 
 		~WMessageState();
