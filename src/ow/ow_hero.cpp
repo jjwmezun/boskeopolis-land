@@ -33,7 +33,8 @@ OWHero::OWHero( int x, int y )
 		{ calculateGraphicsXFromPositionX( x ), calculateGraphicsYFromPositionY( y ), GRAPHICS_WIDTH, GRAPHICS_HEIGHT } ),
 	absolute_graphics_box_ ( graphics_.dest_ ),
 	x_speed_ ( 0.0 ),
-	y_speed_ ( 0.0 )
+	y_speed_ ( 0.0 ),
+	animation_timer_ ()
 {};
 
 void OWHero::update( const OWTileMap& tilemap, const sdl2::SDLRect& bounds )
@@ -189,4 +190,12 @@ void OWHero::setPosition( int x, int y, const sdl2::SDLRect& bounds )
 	position_.x = ( double )( x );
 	position_.y = ( double )( y );
 	updateGraphics( bounds );
+};
+
+void OWHero::updateAnimation()
+{
+	if ( animation_timer_.update() )
+	{
+		graphics_.src_.x = ( graphics_.src_.x == 0 ) ? 16 : 0;
+	}
 };

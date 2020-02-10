@@ -2,6 +2,7 @@
 
 #include "image_graphics.hpp"
 #include "dpoint.hpp"
+#include "timer_repeat_t2.hpp"
 #include <vector>
 
 class Collision;
@@ -17,6 +18,7 @@ class OWHero
 		void render( const OWCamera& camera );
 		void updateGraphics( const sdl2::SDLRect& bounds );
 		void setPosition( int x, int y, const sdl2::SDLRect& bounds );
+		void updateAnimation();
 
 		int x() const;
 		int y() const;
@@ -33,5 +35,6 @@ class OWHero
 		sdl2::SDLRect absolute_graphics_box_;
 		double x_speed_;
 		double y_speed_;
+		TimerRepeatT2<8> animation_timer_;
 		char scratch_[ 1800 ];
 };

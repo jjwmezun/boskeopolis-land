@@ -244,6 +244,7 @@ void OverworldState::stateUpdate()
 	updateBackgroundAnimation();
 	updateBackgroundPosition();
 	level_tile_graphics_.update( camera_.getBox() );
+	hero_.updateAnimation();
 };
 
 void OverworldState::stateRender()
