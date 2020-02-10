@@ -214,6 +214,7 @@ void OverworldState::stateUpdate()
 				case ( OWEvent::MessageBack::SHOW_NEXT_LEVEL ):
 				{
 					level_tile_graphics_.showTile( camera_.getBox(), Inventory::currentLevel() + 1 );
+					Audio::playSound( Audio::SoundType::SELECT );
 				}
 				break;
 
