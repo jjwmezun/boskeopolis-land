@@ -151,6 +151,10 @@ void OverworldMenuState::regenerateOptionsTextOnLanguageChange()
 		{
 			generateReplacementLevelNameTexture();
 		}
+		else if ( testOverworldShowsShopName() )
+		{
+			generateReplacementShopNameTexture();
+		}
 	}
 };
 
@@ -166,10 +170,15 @@ void OverworldMenuState::generateOptionsText()
 
 bool OverworldMenuState::testOverworldShowsLevelName() const
 {
-	return level_ != -1;
+	return level_ > -1;
 };
 
-void OverworldMenuState::generateReplacementLevelNameTexture()
+bool OverworldMenuState::testOverworldShowsShopName() const
+{
+	return level_ < -1;
+};
+
+void OverworldMenuState::generateReplacementNameTexture( const std::u32string& string, WTextCharacter::Color color )
 {
 	// Since we can’t directly access OverworldState data,
 	// we just create a texture with replacement text
@@ -177,7 +186,17 @@ void OverworldMenuState::generateReplacementLevelNameTexture()
 	// level name graphics.
 	level_name_replacement_.startDrawing();
 	Render::renderRect( { LEVEL_NAME_X, LEVEL_NAME_Y, LEVEL_NAME_W, LEVEL_NAME_H }, 1 );
-	WTextObj text{ Level::getLevelNames()[ level_ ], LEVEL_NAME_X, LEVEL_NAME_Y, ( WTextCharacter::Color )( level_color_ ), LEVEL_NAME_W };
+	WTextObj text{ string, LEVEL_NAME_X, LEVEL_NAME_Y, color, LEVEL_NAME_W };
 	text.render();
 	level_name_replacement_.endDrawing();
+};
+
+void OverworldMenuState::generateReplacementLevelNameTexture()
+{
+	generateReplacementNameTexture( Level::getLevelNames()[ level_ ], ( WTextCharacter::Color )( level_color_ ) );
+};
+
+void OverworldMenuState::generateReplacementShopNameTexture()
+{
+	generateReplacementNameTexture( Localization::getCurrentLanguage().getOverworldShopTitle(), WTextCharacter::Color::BLACK );
 };

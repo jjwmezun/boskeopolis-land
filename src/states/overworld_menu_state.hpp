@@ -33,6 +33,9 @@ class OverworldMenuState : public GameState
 		void generateOptionsText();
 		bool testOverworldShowsLevelName() const;
 		void generateReplacementLevelNameTexture();
+		bool testOverworldShowsShopName() const;
+		void generateReplacementShopNameTexture();
+		void generateReplacementNameTexture( const std::u32string& string, WTextCharacter::Color color );
 
 		int language_id_;
 		int level_;

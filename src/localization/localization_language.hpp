@@ -66,6 +66,7 @@ class LocalizationLanguage
         std::u32string getShopLeavingMessage() const;
         std::u32string getShopkeeperNotAvailableMessage() const;
         std::u32string getShopkeeperOutOfStockMessage() const;
+        std::u32string getOverworldShopTitle() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );

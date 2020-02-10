@@ -2,6 +2,8 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "mezun_helpers.hpp"
 #include "ow_inventory.hpp"
 #include "render.hpp"
@@ -76,7 +78,14 @@ void OWInventory::update( int level )
 	updateFlashColor();
 	if ( testOnDifferentLevel() )
 	{
-		regenerateLevelGraphics();
+		if ( testStandingOnLevel() )
+		{
+			regenerateLevelGraphics();
+		}
+		else if ( testStandingOnShop() )
+		{
+			regenerateShopGraphics();
+		}
 		prev_level_ = level_;
 	}
 };
@@ -87,6 +96,10 @@ void OWInventory::render()
 	if ( testStandingOnLevel() )
 	{
 		renderLevelInfo();
+	}
+	else if ( testStandingOnShop() )
+	{
+		level_name_textures_[ 0 ].render();
 	}
 	renderPts();
 };
@@ -162,7 +175,7 @@ void OWInventory::updateTextFlashColor()
 
 bool OWInventory::testOnDifferentLevel() const
 {
-	return prev_level_ != level_ && testStandingOnLevel();
+	return prev_level_ != level_;
 };
 
 void OWInventory::regenerateLevelGraphics()
@@ -232,15 +245,24 @@ void OWInventory::regenerateLevelGraphics()
 	updateTextFlashColor();
 };
 
+WTextObj OWInventory::generateName( std::u32string text ) const
+{
+	return { text, LEVEL_NAME_X, ROW_1, WTextCharacter::Color::BLACK, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 8 };
+};
+
 WTextObj OWInventory::generateLevelName() const
 {
-	return { Level::getLevelNames()[ level_ ], LEVEL_NAME_X, ROW_1, WTextCharacter::Color::BLACK, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 8 };
+	return generateName( Level::getLevelNames()[ level_ ] );
+};
+
+WTextObj OWInventory::generateShopName() const
+{
+	return generateName( Localization::getCurrentLanguage().getOverworldShopTitle() );
 };
 
 void OWInventory::regenerateLevelNameGraphics( WTextObj& level_name, int i )
 {
 	level_name.changeColor( Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
-	level_name_textures_[ i ].init();
 	level_name_textures_[ i ].startDrawing();
 	Render::clearScreenTransparency();
 	level_name.render();
@@ -299,11 +321,33 @@ bool OWInventory::testStandingOnLevel() const
 	return level_ > -1;
 };
 
+bool OWInventory::testStandingOnShop() const
+{
+	return level_ < -1;
+};
+
 void OWInventory::forceLevelNameRedraw()
 {
-	WTextObj level_name = generateLevelName();
-	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
+	std::cout << level_ << std::endl;
+	if ( testStandingOnShop() )
 	{
-		regenerateLevelNameGraphics( level_name, i );
+		regenerateShopGraphics();
 	}
+	else if ( testStandingOnLevel() )
+	{
+		WTextObj level_name = generateLevelName();
+		for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
+		{
+			regenerateLevelNameGraphics( level_name, i );
+		}
+	}
+};
+
+void OWInventory::regenerateShopGraphics()
+{
+	WTextObj shop_name = generateShopName();
+	level_name_textures_[ 0 ].startDrawing();
+	Render::clearScreenTransparency();
+	shop_name.render();
+	level_name_textures_[ 0 ].endDrawing();
 };

@@ -811,3 +811,8 @@ std::u32string LocalizationLanguage::getShopkeeperOutOfStockMessage() const
 {
     return mezun::charToChar32String( "Sorry, but we’er out o’ that product. Please try ’nother." );
 };
+
+std::u32string LocalizationLanguage::getOverworldShopTitle() const
+{
+    return mezun::charToChar32String( "FredMart" );
+};

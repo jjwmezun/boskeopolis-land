@@ -48,7 +48,11 @@ class OWInventory
 		bool testMoneyInTheRed() const;
 		bool testStandingOnLevel() const;
 		void regenerateLevelNameGraphics( WTextObj& level_name, int i );
+		WTextObj generateName( std::u32string text ) const;
 		WTextObj generateLevelName() const;
+		WTextObj generateShopName() const;
+		bool testStandingOnShop() const;
+		void regenerateShopGraphics();
 
 		bool show_challenges_;
 		bool show_challenges_lock_;

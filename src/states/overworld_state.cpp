@@ -128,6 +128,11 @@ void OverworldState::stateUpdate()
 						}
 					}
 					break;
+					case ( OWObject::Type::SHOP ):
+					{
+						current_level_ = -2;
+					}
+					break;
 				}
 			}
 			inventory_.update( current_level_ );
