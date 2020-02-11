@@ -50,6 +50,7 @@ class LocalizationLanguage
         const std::u32string& getLevelTilePlay() const;
         const std::u32string& getLevelTileHardMode() const;
         const std::u32string& getLevelTileCancel() const;
+
         std::u32string getShopItemHPUpgradeName() const;
         std::u32string getShopItemHPUpgradeDescription() const;
         std::u32string getShopItemOxygenUpgradeName() const;
@@ -67,6 +68,20 @@ class LocalizationLanguage
         std::u32string getShopkeeperNotAvailableMessage() const;
         std::u32string getShopkeeperOutOfStockMessage() const;
         std::u32string getOverworldShopTitle() const;
+
+        std::u32string getLevelGoalMessage() const;
+        std::u32string getCollectGoalMessage() const;
+        std::u32string getMcGuffinGoalMessage() const;
+        std::u32string getSurviveTimeGoalMessage() const;
+        std::u32string getPastRightEdgeGoalMessage() const;
+        std::u32string getWarpGoalMessage() const;
+        std::u32string getAvoidMoneyGoalMessage() const;
+        std::u32string getStarvingGoalMessage() const;
+        std::u32string getHeatGoalMessage() const;
+        std::u32string getDoNothingGoalMessage() const;
+        std::u32string getKillAllGoalMessage() const;
+        std::u32string getStopOnOffGoalMessage() const;
+        std::u32string getGenericGoalMessage() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );

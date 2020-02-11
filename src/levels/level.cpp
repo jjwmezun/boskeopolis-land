@@ -653,132 +653,127 @@ Level Level::getLevel( int id )
 
 	/* GOAL
 	==============================================================*/
-	std::unique_ptr<Goal> goal;
 
+	std::unique_ptr<Goal> goal;
+	std::u32string goal_message = Localization::getCurrentLanguage().getLevelGoalMessage( lvname );
 	if ( lvobj.HasMember( "goal" ) && lvobj[ "goal" ].IsObject() )
 	{
 		auto lvg = lvobj[ "goal" ].GetObject();
-
 		if ( lvg.HasMember( "type" ) && lvg[ "type" ].IsString() )
 		{
 			auto goaltype = lvg[ "type" ].GetString();
-
 			if ( mezun::areStringsEqual( goaltype, "collect" ) )
 			{
 				int amount = 10000;
-				std::string message = mezun::emptyString();
-
 				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
 				{
 					amount = lvg[ "amount" ].GetInt();
 				}
-
-				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				if ( goal_message == U"" )
 				{
-					message = lvg[ "message" ].GetString();
+					goal_message = Localization::getCurrentLanguage().getCollectGoalMessage();
 				}
-
-				goal = std::make_unique<CollectGoal> ( amount, message );
+				goal = std::make_unique<CollectGoal> ( amount, goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "mcguffin" ) )
 			{
 				int amount = 3;
-				std::string message = mezun::emptyString();
-
 				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
 				{
 					amount = lvg[ "amount" ].GetInt();
 				}
-
-				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				if ( goal_message == U"" )
 				{
-					message = lvg[ "message" ].GetString();
+					goal_message = Localization::getCurrentLanguage().getMcGuffinGoalMessage();
 				}
-
-				goal = std::make_unique<McGuffinGoal> ( amount, message );
+				goal = std::make_unique<McGuffinGoal> ( amount, goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "survive_time" ) )
 			{
 				int amount = 60;
-				std::string message = mezun::emptyString();
-
 				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
 				{
 					amount = lvg[ "amount" ].GetInt();
 				}
-
-				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				if ( goal_message == U"" )
 				{
-					message = lvg[ "message" ].GetString();
+					goal_message = Localization::getCurrentLanguage().getSurviveTimeGoalMessage();
 				}
-
-				goal = std::make_unique<SurviveTimeGoal> ( amount, message );
+				goal = std::make_unique<SurviveTimeGoal> ( amount, goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "past_right_edge" ) )
 			{
-				std::string message = mezun::emptyString();
-
-				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				if ( goal_message == U"" )
 				{
-					message = lvg[ "message" ].GetString();
+					goal_message = Localization::getCurrentLanguage().getPastRightEdgeGoalMessage();
 				}
-
-				goal = std::make_unique<PastRightEdgeGoal> ( message );
+				goal = std::make_unique<PastRightEdgeGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "warp" ) )
 			{
-				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				if ( goal_message == U"" )
 				{
-					const std::string message = lvg[ "message" ].GetString();
-					goal = std::make_unique<WarpGoal> ( message );
+					goal_message = Localization::getCurrentLanguage().getWarpGoalMessage();
 				}
-				else
-				{
-					goal = std::make_unique<WarpGoal> ();
-				}
+				goal = std::make_unique<WarpGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "avoid_money" ) )
 			{
-				goal = std::make_unique<AvoidMoneyGoal> ();
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getAvoidMoneyGoalMessage();
+				}
+				goal = std::make_unique<AvoidMoneyGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "starving" ) )
 			{
-				goal = std::make_unique<StarvingGoal> ();
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getStarvingGoalMessage();
+				}
+				goal = std::make_unique<StarvingGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "heat" ) )
 			{
-				goal = std::make_unique<HeatGoal> ();
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getHeatGoalMessage();
+				}
+				goal = std::make_unique<HeatGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "do_nothing" ) )
 			{
-				goal = std::make_unique<DoNothingGoal> ();
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getDoNothingGoalMessage();
+				}
+				goal = std::make_unique<DoNothingGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
 			{
-				if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
+				if ( goal_message == U"" )
 				{
-					const std::string message = lvg[ "message" ].GetString();
-					goal = std::make_unique<KillAllGoal> ( message );
+					goal_message = Localization::getCurrentLanguage().getKillAllGoalMessage();
 				}
-				else
-				{
-					goal = std::make_unique<KillAllGoal> ();
-				}
+				goal = std::make_unique<KillAllGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "stop_on_off" ) )
 			{
-				goal = std::make_unique<StopOnOffGoal> ();
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getStopOnOffGoalMessage();
+				}
+				goal = std::make_unique<StopOnOffGoal> ( goal_message );
 			}
-		}
-		else if ( lvg.HasMember( "message" ) && lvg[ "message" ].IsString() )
-		{
-			const std::string message = lvg[ "message" ].GetString();
-			goal = std::make_unique<Goal> ( message );
 		}
 	}
 	else
 	{
-		goal = std::make_unique<Goal> ();
+		if ( goal_message == U"" )
+		{
+			goal_message = Localization::getCurrentLanguage().getGenericGoalMessage();
+		}
+		goal = std::make_unique<Goal> ( goal_message );
 	}
 
 

@@ -816,3 +816,55 @@ std::u32string LocalizationLanguage::getOverworldShopTitle() const
 {
     return mezun::charToChar32String( "FredMart" );
 };
+
+std::u32string LocalizationLanguage::getLevelGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getCollectGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getMcGuffinGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getSurviveTimeGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getPastRightEdgeGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getWarpGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getAvoidMoneyGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getStarvingGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getHeatGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getDoNothingGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getKillAllGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getStopOnOffGoalMessage() const
+{
+};
+
+std::u32string LocalizationLanguage::getGenericGoalMessage() const
+{
+};
