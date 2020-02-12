@@ -4,7 +4,7 @@
 #include "level.hpp"
 #include "sprite_system.hpp"
 
-KillAllGoal::KillAllGoal( std::string message )
+KillAllGoal::KillAllGoal( std::u32string message )
 :
 	Goal( message ),
 	sprites_to_kill_ ( 99 ),

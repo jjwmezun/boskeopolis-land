@@ -4,11 +4,12 @@
 #include "inventory.hpp"
 #include "level.hpp"
 #include "level_message_state.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
-#include "message_state.hpp"
 #include "mezun_helpers.hpp"
 #include "overworld_state.hpp"
-#include "text.hpp"
+#include "wmessage_state.hpp"
 
 static constexpr int WATER_NULL = -1;
 static constexpr int SEWER_START_W = 64;
@@ -304,7 +305,16 @@ void EventSystem::failEvent( Level& level )
 	Inventory::fail();
 	Main::pushState
 	(
-		std::make_unique<MessageState> ( "Failure...", MessageState::Type::CHANGE, Palette( "Stop Red", 2 ), std::make_unique<OverworldState> ( Inventory::currentLevel() ), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "low", true, false ),
+		std::make_unique<WMessageState>
+		(
+			WTextObj::MessageData{ Localization::getCurrentLanguage().getFailureMessage(), WTextCharacter::Color::WHITE, WTextCharacter::Color::DARK_GRAY },
+			WMessageState::Type::CHANGE,
+			Palette( "Stop Red", 2 ),
+			std::make_unique<OverworldState> ( Inventory::currentLevel() ),
+			"low",
+			true,
+			false
+		),
 		true
 	);
 	playDeathSoundIfNotAlreadyPlaying();
@@ -313,13 +323,20 @@ void EventSystem::failEvent( Level& level )
 void EventSystem::winEvent( Level& level )
 {
 	const bool win_momento = Inventory::victory( Inventory::currentLevel() );
-	//std::cout << win_momento << std::endl;
 	Inventory::win();
-	//std::cout << Inventory::currentLevel() << std::endl;
 	const bool new_event = Inventory::victory( Inventory::currentLevel() ) != win_momento;
 	Main::pushState
 	(
-		std::make_unique<MessageState> ( "¡Success!", MessageState::Type::CHANGE, Palette( "Go Green", 2 ), std::make_unique<OverworldState> ( Inventory::currentLevel(), new_event ), Text::FontColor::WHITE, Text::FontColor::DARK_GRAY, "success", true, true ),
+		std::make_unique<WMessageState>
+		(
+			WTextObj::MessageData{ Localization::getCurrentLanguage().getSuccessMessage(), WTextCharacter::Color::WHITE, WTextCharacter::Color::DARK_GRAY },
+			WMessageState::Type::CHANGE,
+			Palette( "Go Green", 2 ),
+			std::make_unique<OverworldState> ( Inventory::currentLevel(), new_event ),
+			"success",
+			true,
+			true
+		),
 		true
 	);
 };

@@ -675,7 +675,7 @@ std::u32string LocalizationLanguage::getLevelGoalMessage( const std::string& cod
 {
     const auto& search = level_goal_messages_.find( code_name );
     return ( search == level_goal_messages_.end() )
-        ? U"MISSING GOAL MESSAGE"
+        ? U""
         : search->second;
 };
 
@@ -817,54 +817,72 @@ std::u32string LocalizationLanguage::getOverworldShopTitle() const
     return mezun::charToChar32String( "FredMart" );
 };
 
-std::u32string LocalizationLanguage::getLevelGoalMessage() const
-{
-};
-
 std::u32string LocalizationLanguage::getCollectGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getMcGuffinGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getSurviveTimeGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getPastRightEdgeGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getWarpGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getAvoidMoneyGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getStarvingGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getHeatGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getDoNothingGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getKillAllGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getStopOnOffGoalMessage() const
 {
+    return U"¡GOAL!";
 };
 
 std::u32string LocalizationLanguage::getGenericGoalMessage() const
 {
+    return U"¡GOAL!";
+};
+
+std::u32string LocalizationLanguage::getFailureMessage() const
+{
+    return U"I shit my pants";
+};
+
+std::u32string LocalizationLanguage::getSuccessMessage() const
+{
+    return U"I hope I win!!!";
 };

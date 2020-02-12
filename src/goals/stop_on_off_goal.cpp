@@ -13,13 +13,12 @@ static constexpr int NUM_O_BLINKS_BOTH_COLORS = NUM_O_BLINKS * 2;
 static constexpr int STOP_TIME = 30;
 static constexpr int TOTAL_ROUND_TIME = GO_TIME + ( NUM_O_BLINKS_BOTH_COLORS * BLINK_TIME ) + STOP_TIME;
 
-StopOnOffGoal::StopOnOffGoal() : Goal( "¡Don't move when the light's red!" ) {};
+StopOnOffGoal::StopOnOffGoal( std::u32string message ) : Goal( message ) {};
 StopOnOffGoal::~StopOnOffGoal() {};
 
 void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
 	const int round_time = state.frame() % TOTAL_ROUND_TIME;
-
 	switch ( round_time )
 	{
 		case ( 0 ):

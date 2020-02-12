@@ -3,9 +3,9 @@
 #include "sprite_system.hpp"
 #include "sprite.hpp"
 
-HeatGoal::HeatGoal()
+HeatGoal::HeatGoal( std::u32string message )
 :
-	Goal( "¡Don't touch the hot surface too long!" )
+	Goal( message )
 {};
 
 HeatGoal::~HeatGoal() {};

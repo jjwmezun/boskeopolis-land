@@ -5,9 +5,9 @@
 #include "mezun_helpers.hpp"
 #include "text.hpp"
 
-SurviveTimeGoal::SurviveTimeGoal( int wait_time, std::string message )
+SurviveTimeGoal::SurviveTimeGoal( std::u32string message, int wait_time )
 :
-	Goal( surviveMessage( wait_time, message ) ),
+	Goal( formatMessage( message, wait_time ) ),
 	wait_time_ ( wait_time )
 {};
 
@@ -24,17 +24,4 @@ void SurviveTimeGoal::update( SpriteSystem& sprites, const Map& lvmap, Inventory
 void SurviveTimeGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
-};
-
-const std::string SurviveTimeGoal::surviveMessage( int wait_time, std::string message ) const
-{
-	if ( mezun::isStringEmpty( message ) )
-	{
-		// Default message
-		return ( std::string )"¡Last " + Text::formatNumCommas( Text::stringifyNum( wait_time ) ) + (std::string)" seconds without dying!";
-	}
-	else
-	{
-		return message;
-	}
 };

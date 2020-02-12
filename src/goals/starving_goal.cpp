@@ -2,10 +2,10 @@
 #include "event_system.hpp"
 #include "inventory.hpp"
 
-StarvingGoal::StarvingGoal( int amount_lost_per_frame, int starting_amount )
+StarvingGoal::StarvingGoal( std::u32string message, int starting_amount, int amount_lost_per_frame )
 :
-	Goal( "¡Don't let your money run out!" ),
-	delay_ ( DELAY_LENGTH ),
+	Goal( message ),
+	timer_ (),
 	amount_lost_per_frame_ ( amount_lost_per_frame ),
 	starting_amount_ ( starting_amount )
 {};
@@ -14,17 +14,14 @@ StarvingGoal::~StarvingGoal() {};
 
 void StarvingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
-	if ( delay_.hit() )
+	if ( timer_.update() )
 	{
 		Inventory::loseFunds( amount_lost_per_frame_ );
-
 		if ( Inventory::funds() <= 0 )
 		{
 			events.fail();
 		}
 	}
-
-	delay_.update();
 };
 
 void StarvingGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )

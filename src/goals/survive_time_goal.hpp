@@ -1,13 +1,12 @@
-#ifndef SURVIVE_TIME_GOAL_H
-#define SURVIVE_TIME_GOAL_H
+#pragma once
 
 #include "goal.hpp"
 
 class SurviveTimeGoal : public Goal
 {
-
 	public:
-		SurviveTimeGoal( int wait_time = 30, std::string message = "" );
+		static constexpr int DEFAULT_WAIT_TIME = 60;
+		SurviveTimeGoal( std::u32string message, int wait_time = DEFAULT_WAIT_TIME );
 		~SurviveTimeGoal();
 
 		void customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
@@ -15,8 +14,4 @@ class SurviveTimeGoal : public Goal
 
 	private:
 		const int wait_time_;
-	
-		const std::string surviveMessage( int wait_time, std::string message ) const;
 };
-
-#endif // SURVIVE_TIME_GOAL_H

@@ -500,7 +500,22 @@
     ],
     "shop":
     {
-        "greeting": "Good evening, Madame. ¿How may I help you?",
+        "name": "FredMart",
+        "checkout": "Checkout",
+        "exit": "Leave",
+        "not_available": "Not Available",
+        "out_of_stock": "Out o’ Stock",
+        "shopkeeper":
+        {
+            "greeting": "Good evening, Madame. ¿How may I help you?",
+            "no_items": "You have nothing in your cart to check out.",
+            "not_enough_money": "¡You don’t have ’nough money to buy all that!",
+            "checkout_confirm": "¿Confirm checkout?\n Yes\n No",
+            "thanks": "¡Thank you for your purchase!",
+            "leaving": "¡Thank you! ¡Hope to see you ’gain soon!",
+            "not_available": "Sorry, but that product is not available yet. Please try ’nother.",
+            "out_of_stock": "Sorry, but we’er out o’ that product. Please try ’nother."
+        },
         "items":
         {
             "hp_upgrade":
@@ -514,5 +529,7 @@
                 "description": "Allows you to stay underwater for longer periods."
             }
         }
-    }
+    },
+    "level_success": "¡Success!",
+    "level_failure": "Failure…"
 }

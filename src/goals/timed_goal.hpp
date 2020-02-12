@@ -5,9 +5,9 @@
 class TimedGoal : public Goal
 {
 	public:
-		TimedGoal( int time_limit = 120 );
+		static constexpr int DEFAULT_TIME_LIMIT = 120;
+		TimedGoal( std::u32string message, int time_limit = DEFAULT_TIME_LIMIT );
 		~TimedGoal();
-
 		void update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state ) override;
 		
 	private:

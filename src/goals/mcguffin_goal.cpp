@@ -2,11 +2,11 @@
 #include "event_system.hpp"
 #include "inventory.hpp"
 #include "inventory_level.hpp"
-#include "text.hpp"
+#include "mezun_helpers.hpp"
 
-McGuffinGoal::McGuffinGoal( int amount_needed, std::string message )
+McGuffinGoal::McGuffinGoal( std::u32string message, int amount_needed )
 :
-	Goal( collectMessage( amount_needed, message ) ),
+	Goal( formatMessage( message, amount_needed ) ),
 	amount_needed_ ( amount_needed )
 {};
 
@@ -23,17 +23,4 @@ void McGuffinGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLev
 void McGuffinGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
 	inventory_screen.setShowMcGuffins();
-};
-
-const std::string McGuffinGoal::collectMessage( int amount_needed, std::string message ) const
-{
-	if ( mezun::isStringEmpty( message ) )
-	{
-		// Default message
-		return ( std::string )"¡Collect " + Text::formatNumCommas( Text::stringifyNum( amount_needed ) ) + (std::string)" McGuffins!";
-	}
-	else
-	{
-		return message;
-	}
 };

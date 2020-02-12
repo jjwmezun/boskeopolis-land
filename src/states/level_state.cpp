@@ -3,7 +3,6 @@
 #include "inventory.hpp"
 #include "main.hpp"
 #include "level_state.hpp"
-#include "message_state.hpp"
 #include "overworld_state.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"

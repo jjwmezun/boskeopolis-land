@@ -4,9 +4,9 @@
 #include "input.hpp"
 #include "inventory.hpp"
 
-DoNothingGoal::DoNothingGoal( int wait_time )
+DoNothingGoal::DoNothingGoal( std::u32string message, int wait_time )
 :
-	Goal( "¡Don't do anything @ all!" ),
+	Goal( message ),
 	wait_time_ ( wait_time )
 {};
 

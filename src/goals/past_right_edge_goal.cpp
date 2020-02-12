@@ -4,9 +4,9 @@
 #include "sprite.hpp"
 #include "sprite_system.hpp"
 
-PastRightEdgeGoal::PastRightEdgeGoal( std::string message )
+PastRightEdgeGoal::PastRightEdgeGoal( std::u32string message )
 :
-	Goal( testMessage( message ) )
+	Goal( message )
 {};
 
 PastRightEdgeGoal::~PastRightEdgeGoal() {};
@@ -16,18 +16,5 @@ void PastRightEdgeGoal::update( SpriteSystem& sprites, const Map& lvmap, Invento
 	if ( sprites.hero().xPixels() > lvmap.widthPixels() + sprites.hero().widthPixels() )
 	{
 		events.win();
-	}
-};
-
-const std::string PastRightEdgeGoal::testMessage( std::string message ) const
-{
-	if ( mezun::isStringEmpty( message ) )
-	{
-		// Default message
-		return "¡Go past the end!";
-	}
-	else
-	{
-		return message;
 	}
 };

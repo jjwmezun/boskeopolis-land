@@ -21,6 +21,7 @@
 #include "main.hpp"
 #include "level.hpp"
 #include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
 #include "rapidjson/istreamwrapper.h"
 #include "sprite.hpp"
 #include "sprite_system.hpp"
@@ -39,7 +40,6 @@
 #include "survive_time_goal.hpp"
 #include "timed_goal.hpp"
 #include "warp_goal.hpp"
-#include "windy_goal.hpp"
 
 #include <iostream>
 
@@ -664,42 +664,33 @@ Level Level::getLevel( int id )
 			auto goaltype = lvg[ "type" ].GetString();
 			if ( mezun::areStringsEqual( goaltype, "collect" ) )
 			{
-				int amount = 10000;
-				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
-				{
-					amount = lvg[ "amount" ].GetInt();
-				}
 				if ( goal_message == U"" )
 				{
 					goal_message = Localization::getCurrentLanguage().getCollectGoalMessage();
 				}
-				goal = std::make_unique<CollectGoal> ( amount, goal_message );
+				goal = ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+					? std::make_unique<CollectGoal> ( goal_message, lvg[ "amount" ].GetInt() )
+					: std::make_unique<CollectGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "mcguffin" ) )
 			{
-				int amount = 3;
-				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
-				{
-					amount = lvg[ "amount" ].GetInt();
-				}
 				if ( goal_message == U"" )
 				{
 					goal_message = Localization::getCurrentLanguage().getMcGuffinGoalMessage();
 				}
-				goal = std::make_unique<McGuffinGoal> ( amount, goal_message );
+				goal = ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+					? std::make_unique<McGuffinGoal> ( goal_message, lvg[ "amount" ].GetInt() )
+					: std::make_unique<McGuffinGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "survive_time" ) )
 			{
-				int amount = 60;
-				if ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
-				{
-					amount = lvg[ "amount" ].GetInt();
-				}
 				if ( goal_message == U"" )
 				{
 					goal_message = Localization::getCurrentLanguage().getSurviveTimeGoalMessage();
 				}
-				goal = std::make_unique<SurviveTimeGoal> ( amount, goal_message );
+				goal = ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+					? std::make_unique<SurviveTimeGoal> ( goal_message, lvg[ "amount" ].GetInt() )
+					: std::make_unique<SurviveTimeGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "past_right_edge" ) )
 			{
@@ -731,7 +722,13 @@ Level Level::getLevel( int id )
 				{
 					goal_message = Localization::getCurrentLanguage().getStarvingGoalMessage();
 				}
-				goal = std::make_unique<StarvingGoal> ( goal_message );
+				const int starting_amount = ( lvg.HasMember( "starting_amount" ) && lvg[ "starting_amount" ].IsInt() )
+					? lvg[ "starting_amount" ].GetInt()
+					: StarvingGoal::DEFAULT_STARTING_AMOUNT;
+				const int amount_lost_per_frame = ( lvg.HasMember( "amount_lost_per_frame" ) && lvg[ "amount_lost_per_frame" ].IsInt() )
+					? lvg[ "amount_lost_per_frame" ].GetInt()
+					: StarvingGoal::DEFAULT_AMOUNT_LOST_PER_FRAME;
+				goal = std::make_unique<StarvingGoal> ( goal_message, starting_amount, amount_lost_per_frame );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "heat" ) )
 			{
@@ -747,7 +744,9 @@ Level Level::getLevel( int id )
 				{
 					goal_message = Localization::getCurrentLanguage().getDoNothingGoalMessage();
 				}
-				goal = std::make_unique<DoNothingGoal> ( goal_message );
+				goal = ( lvg.HasMember( "amount" ) && lvg[ "amount" ].IsInt() )
+					? std::make_unique<DoNothingGoal> ( goal_message, lvg[ "amount" ].GetInt() )
+					: std::make_unique<DoNothingGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "kill_all" ) )
 			{
@@ -764,6 +763,16 @@ Level Level::getLevel( int id )
 					goal_message = Localization::getCurrentLanguage().getStopOnOffGoalMessage();
 				}
 				goal = std::make_unique<StopOnOffGoal> ( goal_message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "timed" ) )
+			{
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getStopOnOffGoalMessage();
+				}
+				goal = ( lvg.HasMember( "time_limit" ) && lvg[ "time_limit" ].IsInt() )
+					? std::make_unique<TimedGoal> ( goal_message, lvg[ "time_limit" ].GetInt() )
+					: std::make_unique<TimedGoal> ( goal_message );
 			}
 		}
 	}

@@ -1,9 +1,9 @@
 #include "warp_goal.hpp"
 #include "event_system.hpp"
 
-WarpGoal::WarpGoal( const std::string& msg )
+WarpGoal::WarpGoal( std::u32string message )
 :
-	Goal( msg )
+	Goal( message )
 {};
 
 WarpGoal::~WarpGoal() {};

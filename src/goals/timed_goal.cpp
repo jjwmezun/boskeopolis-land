@@ -2,11 +2,10 @@
 #include "timed_goal.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
-#include "text.hpp"
 
-TimedGoal::TimedGoal( int time_limit )
+TimedGoal::TimedGoal( std::u32string message, int time_limit )
 :
-	Goal( "¡Don't let time run out!" ),
+	Goal( message ),
 	time_limit_ ( time_limit )
 {};
 

@@ -2,9 +2,9 @@
 #include "event_system.hpp"
 #include "inventory.hpp"
 
-AvoidMoneyGoal::AvoidMoneyGoal()
+AvoidMoneyGoal::AvoidMoneyGoal( std::u32string message )
 :
-	Goal( "¡Don't touch any money!" )
+	Goal( message )
 {};
 
 AvoidMoneyGoal::~AvoidMoneyGoal() {};
