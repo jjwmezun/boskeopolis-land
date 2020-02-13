@@ -63,6 +63,9 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadNewsTickerText( data, path );
     loadPauseText( data, path );
     loadLevelTileMenuText( data, path );
+    loadGoalText( data, path );
+    loadSuccessAndFailureText( data, path );
+    loadShopText( data, path );
 };
 
 int LocalizationLanguage::getOrder() const
@@ -144,7 +147,6 @@ const std::u32string& LocalizationLanguage::getLanguageOptionsTitle() const
 {
     return language_options_title_;
 };
-
 
 const std::string& LocalizationLanguage::getCharsetImageSrc() const
 {
@@ -640,6 +642,175 @@ void LocalizationLanguage::loadLevelTileMenuText( const rapidjson::GenericObject
     level_tile_cancel_ = mezun::charToChar32String( level_tile_menu[ "cancel" ].GetString() );
 };
 
+void LocalizationLanguage::loadGoalText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "goals" ) || !data[ "goals" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    const auto& goals = data[ "goals" ].GetObject();
+
+    if
+    (
+        !goals.HasMember( "generic" )
+        || !goals[ "generic" ].IsString()
+        || !goals.HasMember( "avoid_money" )
+        || !goals[ "avoid_money" ].IsString()
+        || !goals.HasMember( "collect" )
+        || !goals[ "collect" ].IsString()
+        || !goals.HasMember( "do_nothing" )
+        || !goals[ "do_nothing" ].IsString()
+        || !goals.HasMember( "heat" )
+        || !goals[ "heat" ].IsString()
+        || !goals.HasMember( "mcguffins" )
+        || !goals[ "mcguffins" ].IsString()
+        || !goals.HasMember( "past_right_edge" )
+        || !goals[ "past_right_edge" ].IsString()
+        || !goals.HasMember( "starving" )
+        || !goals[ "starving" ].IsString()
+        || !goals.HasMember( "stop_on_off" )
+        || !goals[ "stop_on_off" ].IsString()
+        || !goals.HasMember( "survive_time" )
+        || !goals[ "survive_time" ].IsString()
+        || !goals.HasMember( "timed" )
+        || !goals[ "timed" ].IsString()
+        || !goals.HasMember( "warp" )
+        || !goals[ "warp" ].IsString()
+        || !goals.HasMember( "kill_all" )
+        || !goals[ "kill_all" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    generic_goal_message_ = mezun::charToChar32String( goals[ "generic" ].GetString() );
+    avoid_money_goal_message_ = mezun::charToChar32String( goals[ "avoid_money" ].GetString() );
+    collect_goal_message_ = mezun::charToChar32String( goals[ "collect" ].GetString() );
+    do_nothing_goal_message_ = mezun::charToChar32String( goals[ "do_nothing" ].GetString() );
+    heat_goal_message_ = mezun::charToChar32String( goals[ "heat" ].GetString() );
+    mcguffins_goal_message_ = mezun::charToChar32String( goals[ "mcguffins" ].GetString() );
+    past_right_edge_goal_message_ = mezun::charToChar32String( goals[ "past_right_edge" ].GetString() );
+    starving_goal_message_ = mezun::charToChar32String( goals[ "starving" ].GetString() );
+    stop_on_off_goal_message_ = mezun::charToChar32String( goals[ "stop_on_off" ].GetString() );
+    survive_time_goal_message_ = mezun::charToChar32String( goals[ "survive_time" ].GetString() );
+    timed_goal_message_ = mezun::charToChar32String( goals[ "timed" ].GetString() );
+    warp_goal_message_ = mezun::charToChar32String( goals[ "warp" ].GetString() );
+    kill_all_goal_message_ = mezun::charToChar32String( goals[ "kill_all" ].GetString() );
+};
+
+void LocalizationLanguage::loadSuccessAndFailureText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if
+    (
+        !data.HasMember( "level_success" )
+        || !data[ "level_success" ].IsString()
+        || !data.HasMember( "level_failure" )
+        || !data[ "level_failure" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    level_success_ = mezun::charToChar32String( data[ "level_success" ].GetString() );
+    level_failure_ = mezun::charToChar32String( data[ "level_failure" ].GetString() );
+};
+
+void LocalizationLanguage::loadShopText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "shop" ) || !data[ "shop" ].IsObject() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+    const auto& shop = data[ "shop" ].GetObject();
+
+    if
+    (
+        !shop.HasMember( "name" )
+        || !shop[ "name" ].IsString()
+        || !shop.HasMember( "checkout" )
+        || !shop[ "checkout" ].IsString()
+        || !shop.HasMember( "exit" )
+        || !shop[ "exit" ].IsString()
+        || !shop.HasMember( "not_available" )
+        || !shop[ "not_available" ].IsString()
+        || !shop.HasMember( "out_of_stock" )
+        || !shop[ "out_of_stock" ].IsString()
+        || !shop.HasMember( "shopkeeper" )
+        || !shop[ "shopkeeper" ].IsObject()
+        || !shop.HasMember( "items" )
+        || !shop[ "items" ].IsObject()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    const auto& shopkeeper = shop[ "shopkeeper" ].GetObject();
+    const auto& items = shop[ "items" ].GetObject();
+
+
+    if
+    (
+        !items.HasMember( "hp_upgrade" )
+        || !items[ "hp_upgrade" ].IsObject()
+        || !items.HasMember( "oxygen_upgrade" )
+        || !items[ "oxygen_upgrade" ].IsObject()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    const auto& hp_upgrade = items[ "hp_upgrade" ].GetObject();
+    const auto& oxygen_upgrade = items[ "oxygen_upgrade" ].GetObject();
+
+    if
+    (
+        !shopkeeper.HasMember( "greeting" )
+        || !shopkeeper[ "greeting" ].IsString()
+        || !shopkeeper.HasMember( "no_items" )
+        || !shopkeeper[ "no_items" ].IsString()
+        || !shopkeeper.HasMember( "not_enough_money" )
+        || !shopkeeper[ "not_enough_money" ].IsString()
+        || !shopkeeper.HasMember( "checkout_confirm" )
+        || !shopkeeper[ "checkout_confirm" ].IsString()
+        || !shopkeeper.HasMember( "thanks" )
+        || !shopkeeper[ "thanks" ].IsString()
+        || !shopkeeper.HasMember( "leaving" )
+        || !shopkeeper[ "leaving" ].IsString()
+        || !shopkeeper.HasMember( "not_available" )
+        || !shopkeeper[ "not_available" ].IsString()
+        || !shopkeeper.HasMember( "out_of_stock" )
+        || !shopkeeper[ "out_of_stock" ].IsString()
+        || !hp_upgrade.HasMember( "name" )
+        || !hp_upgrade[ "name" ].IsString()
+        || !hp_upgrade.HasMember( "description" )
+        || !hp_upgrade[ "description" ].IsString()
+        || !oxygen_upgrade.HasMember( "name" )
+        || !oxygen_upgrade[ "name" ].IsString()
+        || !oxygen_upgrade.HasMember( "description" )
+        || !oxygen_upgrade[ "description" ].IsString()
+    )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    shop_item_hp_upgrade_name_ = mezun::charToChar32String( hp_upgrade[ "name" ].GetString() );
+    shop_item_hp_upgrade_description_ = mezun::charToChar32String( hp_upgrade[ "description" ].GetString() );
+    shop_item_oxygen_upgrade_name_ = mezun::charToChar32String( oxygen_upgrade[ "name" ].GetString() );
+    shop_item_oxygen_upgrade_description_ = mezun::charToChar32String( oxygen_upgrade[ "description" ].GetString() );
+    shop_no_items_in_cart_message_ = mezun::charToChar32String( shopkeeper[ "no_items" ].GetString() );
+    shop_not_enough_funds_for_checkout_ = mezun::charToChar32String( shopkeeper[ "not_enough_money" ].GetString() );
+    shop_greeting_ = mezun::charToChar32String( shopkeeper[ "greeting" ].GetString() );
+    shop_checkout_confirm_prompt_ = mezun::charToChar32String( shopkeeper[ "checkout_confirm" ].GetString() );
+    shop_checkout_thanks_ = mezun::charToChar32String( shopkeeper[ "thanks" ].GetString() );
+    shop_not_available_ = mezun::charToChar32String( shopkeeper[ "not_available" ].GetString() );
+    shop_out_of_stock_ = mezun::charToChar32String( shopkeeper[ "out_of_stock" ].GetString() );
+    shop_leaving_ = mezun::charToChar32String( shopkeeper[ "leaving" ].GetString() );
+    shop_checkout_ = mezun::charToChar32String( shop[ "checkout" ].GetString() );
+    shop_exit_ = mezun::charToChar32String( shop[ "exit" ].GetString() );
+    shopkeeper_not_available_ = mezun::charToChar32String( shop[ "not_available" ].GetString() );
+    shopkeeper_out_of_stock_ = mezun::charToChar32String( shop[ "out_of_stock" ].GetString() );
+    overworld_shop_title_ = mezun::charToChar32String( shop[ "name" ].GetString() );
+};
+
 const std::u32string& LocalizationLanguage::getLevelSelectTitle() const
 {
     return level_select_title_;
@@ -734,155 +905,160 @@ const std::u32string& LocalizationLanguage::getLevelTileCancel() const
 
 std::u32string LocalizationLanguage::getShopItemHPUpgradeName() const
 {
-    return mezun::charToChar32String( "Extra Aorta" );
+    return shop_item_hp_upgrade_name_;
 };
 
 std::u32string LocalizationLanguage::getShopItemHPUpgradeDescription() const
 {
-    return mezun::charToChar32String( "Add an extra heart to your max health when you play on normal." );
+    return shop_item_hp_upgrade_description_;
 };
 
 std::u32string LocalizationLanguage::getShopItemOxygenUpgradeName() const
 {
-    return mezun::charToChar32String( "Iron Lung" );
+    return shop_item_oxygen_upgrade_name_;
 };
 
 std::u32string LocalizationLanguage::getShopItemOxygenUpgradeDescription() const
 {
-    return mezun::charToChar32String( "Allows you to stay underwater longer." );
+    return shop_item_oxygen_upgrade_description_;
 };
 
 std::u32string LocalizationLanguage::getShopCheckout() const
 {
-    return U"Checkout";
+    return shop_checkout_;
 };
 
 std::u32string LocalizationLanguage::getShopExit() const
 {
-    return U"Exit";
+    return shop_exit_;
 };
 
 std::u32string LocalizationLanguage::getNoItemsInCartMessage() const
 {
-    return mezun::charToChar32String( "You have nothing in your cart to check out." );
+    return shop_no_items_in_cart_message_;
 };
 
 std::u32string LocalizationLanguage::getNotEnoughFundsForCheckoutMessage() const
 {
-    return mezun::charToChar32String( "¡You don’t have ’nough money to buy all that!" );
+    return shop_not_enough_funds_for_checkout_;
 };
 
 std::u32string LocalizationLanguage::getShopGreeting() const
 {
-    return mezun::charToChar32String( "Good evening, Madame. ¿How ya doing?" );
+    return shop_greeting_;
 };
 
 std::u32string LocalizationLanguage::getCheckoutConfirmPrompt() const
 {
-    return mezun::charToChar32String( "¿Confirm checkout?\n Yes\n No" );
+    return shop_checkout_confirm_prompt_;
 };
 
 std::u32string LocalizationLanguage::getCheckoutThanks() const
 {
-    return mezun::charToChar32String( "¡Thank you for your purchase!" );
+    return shop_checkout_thanks_;
 };
 
 std::u32string LocalizationLanguage::getShopNotAvailableText() const
 {
-    return mezun::charToChar32String( "Not Available" );
+    return shop_not_available_;
 };
 
 std::u32string LocalizationLanguage::getShopOutOfStockText() const
 {
-    return mezun::charToChar32String( "Out o’ Stock" );
+    return shop_out_of_stock_;
 }
 
 std::u32string LocalizationLanguage::getShopLeavingMessage() const
 {
-    return mezun::charToChar32String( "¡Thank you! ¡Hope to see you ’gain soon!" );
+    return shop_leaving_;
 };
 
 std::u32string LocalizationLanguage::getShopkeeperNotAvailableMessage() const
 {
-    return mezun::charToChar32String( "Sorry, but that product is not available yet. Please try ’nother." );
+    return shopkeeper_not_available_;
 };
 
 std::u32string LocalizationLanguage::getShopkeeperOutOfStockMessage() const
 {
-    return mezun::charToChar32String( "Sorry, but we’er out o’ that product. Please try ’nother." );
+    return shopkeeper_out_of_stock_;
 };
 
 std::u32string LocalizationLanguage::getOverworldShopTitle() const
 {
-    return mezun::charToChar32String( "FredMart" );
+    return overworld_shop_title_;
 };
 
 std::u32string LocalizationLanguage::getCollectGoalMessage() const
 {
-    return U"¡GOAL!";
+    return collect_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getMcGuffinGoalMessage() const
 {
-    return U"¡GOAL!";
+    return mcguffins_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getSurviveTimeGoalMessage() const
 {
-    return U"¡GOAL!";
+    return survive_time_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getPastRightEdgeGoalMessage() const
 {
-    return U"¡GOAL!";
+    return past_right_edge_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getWarpGoalMessage() const
 {
-    return U"¡GOAL!";
+    return warp_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getAvoidMoneyGoalMessage() const
 {
-    return U"¡GOAL!";
+    return avoid_money_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getStarvingGoalMessage() const
 {
-    return U"¡GOAL!";
+    return starving_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getHeatGoalMessage() const
 {
-    return U"¡GOAL!";
+    return heat_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getDoNothingGoalMessage() const
 {
-    return U"¡GOAL!";
+    return do_nothing_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getKillAllGoalMessage() const
 {
-    return U"¡GOAL!";
+    return kill_all_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getStopOnOffGoalMessage() const
 {
-    return U"¡GOAL!";
+    return stop_on_off_goal_message_;
+};
+
+std::u32string LocalizationLanguage::getTimedMessage() const
+{
+    return timed_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getGenericGoalMessage() const
 {
-    return U"¡GOAL!";
+    return generic_goal_message_;
 };
 
 std::u32string LocalizationLanguage::getFailureMessage() const
 {
-    return U"I shit my pants";
+    return level_failure_;
 };
 
 std::u32string LocalizationLanguage::getSuccessMessage() const
 {
-    return U"I hope I win!!!";
+    return level_success_;
 };

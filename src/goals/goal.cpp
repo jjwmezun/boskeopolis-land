@@ -35,5 +35,5 @@ void Goal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_scr
 
 std::u32string Goal::formatMessage( std::u32string message, int amount_needed )
 {
-	return mezun::stringReplace( message, U"%a", mezun::intToChar32String( amount_needed ) );
+	return mezun::stringReplace( message, U"%n", mezun::intToChar32String( amount_needed ) );
 };

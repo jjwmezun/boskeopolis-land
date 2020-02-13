@@ -80,8 +80,8 @@ class LocalizationLanguage
         std::u32string getDoNothingGoalMessage() const;
         std::u32string getKillAllGoalMessage() const;
         std::u32string getStopOnOffGoalMessage() const;
+        std::u32string getTimedMessage() const;
         std::u32string getGenericGoalMessage() const;
-
         std::u32string getFailureMessage() const;
         std::u32string getSuccessMessage() const;
 
@@ -100,6 +100,9 @@ class LocalizationLanguage
         void loadNewsTickerText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadPauseText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadLevelTileMenuText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadGoalText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadSuccessAndFailureText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadShopText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
 
         int order_;
         int charset_height_;
@@ -128,6 +131,38 @@ class LocalizationLanguage
         std::u32string level_tile_play_;
         std::u32string level_tile_hard_mode_;
         std::u32string level_tile_cancel_;
+        std::u32string avoid_money_goal_message_;
+        std::u32string collect_goal_message_;
+        std::u32string do_nothing_goal_message_;
+        std::u32string heat_goal_message_;
+        std::u32string mcguffins_goal_message_;
+        std::u32string past_right_edge_goal_message_;
+        std::u32string starving_goal_message_;
+        std::u32string stop_on_off_goal_message_;
+        std::u32string survive_time_goal_message_;
+        std::u32string timed_goal_message_;
+        std::u32string warp_goal_message_;
+        std::u32string kill_all_goal_message_;
+        std::u32string generic_goal_message_;
+        std::u32string level_success_;
+        std::u32string level_failure_;
+        std::u32string shop_item_hp_upgrade_name_;
+        std::u32string shop_item_hp_upgrade_description_;
+        std::u32string shop_item_oxygen_upgrade_name_;
+        std::u32string shop_item_oxygen_upgrade_description_;
+        std::u32string shop_checkout_;
+        std::u32string shop_exit_;
+        std::u32string shop_no_items_in_cart_message_;
+        std::u32string shop_not_enough_funds_for_checkout_;
+        std::u32string shop_greeting_;
+        std::u32string shop_checkout_confirm_prompt_;
+        std::u32string shop_checkout_thanks_;
+        std::u32string shop_not_available_;
+        std::u32string shop_out_of_stock_;
+        std::u32string shop_leaving_;
+        std::u32string shopkeeper_not_available_;
+        std::u32string shopkeeper_out_of_stock_;
+        std::u32string overworld_shop_title_;
         std::string path_name_;
         std::string charset_image_src_;
         std::unordered_map<char32_t, std::vector<WTextCharacter>> charset_;

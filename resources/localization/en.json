@@ -240,18 +240,19 @@
     },
     "goals":
     {
+        "generic": "¡Get the Keycane!",
         "avoid_money": "¡Don’t touch any money!",
-        "collect": "¡Collect %p ₧!",
+        "collect": "¡Collect %n₧!",
         "do_nothing": "¡Don’t do anything @ all!",
         "heat": "¡Don’t touch the hot surface too long!",
-        "mcguffins": "¡Collect %m McGuffins!",
+        "mcguffins": "¡Collect %n McGuffins!",
         "past_right_edge": "¡Go past the end!",
         "starving": "¡Don’t let your money run out!",
         "stop_on_off": "¡Don’t move when the light’s red!",
-        "survive_time": "¡Last %t seconds without dying!",
+        "survive_time": "¡Last %n seconds without dying!",
         "timed": "¡Don’t let time run out!",
         "warp": "¡Get out o’ here!",
-        "windy": "O, fun: a lazy wind gimmick."
+        "kill_all": "¡Destroy all enemies!"
     },
     "dungeon_healer_text": "Pay 5,000 & you can heal.",
     "levels":

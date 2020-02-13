@@ -369,6 +369,7 @@
     },
     "goals":
     {
+        "generic": "¡Get the Keycane!",
         "avoid_money": "¡Don't touch any money!",
         "collect": "¡Collect %p ₧!",
         "do_nothing": "¡Don't do anything @ all!",
@@ -380,7 +381,7 @@
         "survive_time": "¡Last %t seconds without dying!",
         "timed": "¡Don't let time run out!",
         "warp": "¡Get out o' here!",
-        "windy": "O, fun: a lazy wind gimmick."
+        "kill_all": "¡Destroy all enemies!"
     },
     "dungeon_healer_text": "Pay 5,000 & you can heal.",
     "levels":
