@@ -2,7 +2,13 @@
 #include "map_layer_shade.hpp"
 #include "render.hpp"
 
-MapLayerShade::MapLayerShade( int shade, int alpha ) : shade_ ( shade ), alpha_ ( 0 ) {};
+MapLayerShade::MapLayerShade( int shade, int alpha )
+:
+	shade_ ( shade ),
+	alpha_ ( 0 ),
+	timer_ ( 0 )
+{};
+
 MapLayerShade::~MapLayerShade() {};
 
 void MapLayerShade::render( const Camera& camera )
@@ -15,9 +21,11 @@ void MapLayerShade::update( EventSystem& events, BlockSystem& blocks, const Came
 	if ( events.testLightSwitch() )
 	{
 		alpha_ = 0;
+		timer_ = 0;
 	}
-	else if ( alpha_ < 236 )
+	else if ( alpha_ < 200 )
 	{
-		++alpha_;
+		++timer_;
+		alpha_ = ( Uint8 )( ( double )( timer_ ) / 2.0 );
 	}
 };

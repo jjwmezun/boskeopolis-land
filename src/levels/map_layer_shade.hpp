@@ -14,4 +14,5 @@ class MapLayerShade : public MapLayer
 	private:
 		int shade_;
 		Uint8 alpha_;
+		int timer_;
 };

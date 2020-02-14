@@ -77,6 +77,7 @@
 #include "lifesaver_sprite.hpp"
 #include "lightning_sprite.hpp"
 #include "lil_pipe_monster_sprite.hpp"
+#include "light_switch_sprite.hpp"
 #include "locked_door_sprite.hpp"
 #include "mansion_door_sprite.hpp"
 #include "mansion_ghost_sprite.hpp"
@@ -761,6 +762,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 191 ):
 			return std::unique_ptr<Sprite> ( new WallCrawlerSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 192 ):
+			return std::unique_ptr<Sprite> ( new LightSwitchSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

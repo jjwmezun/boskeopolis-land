@@ -4,7 +4,7 @@
 	"maps":
 	[
 		{
-			"slug": "mines-1",
+			"slug": "mines-4",
 			"backgrounds":
 			[
 				{
@@ -15,13 +15,20 @@
 					"x_scroll": 0.5,
 					"y_scroll": 0.5
 				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "shade",
+					"color": 6
+				}
 			]
 		}
 	],
 
-	"entrance_x": 53,
-	"entrance_y": 13,
-	"camera_x": 47,
+	"entrance_x": 99,
+	"entrance_y": 17,
+	"camera_x": 90,
 
 	"gem_challenge": 24900,
 	"time_challenge": 33
