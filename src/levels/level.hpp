@@ -75,16 +75,16 @@ class Level
 		static void regenerateLevelNames();
 
 	private:
-		std::vector<Map> maps_;
-		const std::u32string message_;
-		std::unique_ptr<Goal> goal_;
-		unsigned int current_map_;
+		const bool start_on_;
 		const int id_;
 		const int camera_x_;
 		const int camera_y_;
 		int entrance_x_;
 		int entrance_y_;
-		const bool start_on_;
+		unsigned int current_map_;
+		std::unique_ptr<Goal> goal_;
+		std::vector<Map> maps_;
+		const std::u32string message_;
 
 		Level
 		(

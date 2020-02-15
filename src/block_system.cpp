@@ -32,14 +32,13 @@ static bool testBlockInTheWayExcept( const sdl2::SDLRect& rect, BlockComponent::
 		b.bottomSubPixels() > rect.y;
 };
 
-BlockSystem::BlockSystem( const Map& lvmap )
-:
-	blocks_work_offscreen_ ( lvmap.blocks_work_offscreen_ ),
-	map_width_ ( lvmap.widthBlocks() )
+void BlockSystem::init( const Map& lvmap )
 {
+	blocks_work_offscreen_ = lvmap.blocks_work_offscreen_;
+	map_width_ = lvmap.widthBlocks();
 	tilesets_.insert( std::make_pair( lvmap.tileset(), ( lvmap.tileset() ) ) );
 	current_tileset_ = lvmap.tileset();
-};
+}
 
 void BlockSystem::update( EventSystem& events )
 {

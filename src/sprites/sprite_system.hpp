@@ -37,7 +37,7 @@ class SpriteSystem
 			SPIKE_EGG
 		};
 
-		SpriteSystem( int entrance_x, int entrance_y );
+		SpriteSystem();
 		~SpriteSystem();
 		SpriteSystem( const SpriteSystem& ) = delete;
 		SpriteSystem& operator= ( const SpriteSystem& ) = delete;
@@ -70,13 +70,13 @@ class SpriteSystem
 		static constexpr int SPRITE_INDEX_START = 400;
 		static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
 
-		std::vector<std::unique_ptr<Sprite>> sprites_;
-		std::unique_ptr<Sprite> hero_;
-		int permanently_killed_enemies_;
-
 		void clearSprites();
 		void destroySprite( int n, Map& lvmap );
 		void spritesFromMap( const Map& lvmap, EventSystem& events );
 		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, const Map& lvmap, EventSystem& events );
 		void resetInternal( const Level& level, EventSystem& events, bool trainer );
+
+		int permanently_killed_enemies_;
+		std::unique_ptr<Sprite> hero_;
+		std::vector<std::unique_ptr<Sprite>> sprites_;
 };

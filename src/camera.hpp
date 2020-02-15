@@ -22,8 +22,6 @@ class Camera
 
 		constexpr Camera
 		(
-			int x = 0,
-			int y = 0,
 			int width = Unit::WINDOW_WIDTH_PIXELS,
 			int height = Unit::WINDOW_HEIGHT_PIXELS - 32,
 			int x_offset = 0,
@@ -35,8 +33,8 @@ class Camera
 			changed_ ( true ),
 			position_before_scroll_ ( -1 ),
 			scroll_dir_ ( Direction::Simple::__NULL ),
-			x_ ( x ),
-			y_ ( y ),
+			x_ ( -1 ),
+			y_ ( -1 ),
 			width_ ( width ),
 			height_ ( height ),
 			x_offset_ ( x_offset ),

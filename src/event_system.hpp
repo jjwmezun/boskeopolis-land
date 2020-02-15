@@ -109,8 +109,9 @@ class EventSystem
 	bool waterShouldMove() const;
 	bool waterShouldStop() const;
 
-	EventSystem( bool start_on = false );
+	EventSystem();
 	~EventSystem();
+	void init( const Level& level );
 	void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 	void updateTrainer( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
 	void reset();

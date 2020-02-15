@@ -50,7 +50,7 @@ EventSystem::EMisc::EMisc()
 	data_ ()
 {};
 
-EventSystem::EventSystem( bool start_on )
+EventSystem::EventSystem()
 :
 	won_ ( false ),
 	failed_ ( false ),
@@ -59,7 +59,7 @@ EventSystem::EventSystem( bool start_on )
 	message_ ( false ),
 	message_lock_ ( false ),
 	change_map_ ( 0 ),
-	switch_ ( start_on ),
+	switch_ ( false ),
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
 	new_palette_ ( mezun::emptyString(), 0 ),
@@ -79,6 +79,11 @@ EventSystem::EventSystem( bool start_on )
 	misc_ ()
 {
 	resetMisc();
+};
+
+void EventSystem::init( const Level& level )
+{
+	switch_ = level.startOn();
 };
 
 EventSystem::~EventSystem()

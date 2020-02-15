@@ -17,7 +17,7 @@ class SpriteSystem;
 class BlockSystem
 {
 	public:
-		BlockSystem( const Map& lvmap );
+		void init( const Map& lvmap );
 		void update( EventSystem& events );
 		void render( const Map& lvmap, const Camera& camera, bool priority = false );
 		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites );
@@ -30,11 +30,11 @@ class BlockSystem
 		const std::vector<const Block*> getSolidBlocksInField( const sdl2::SDLRect& rect, const Camera& camera, const Sprite& sprite, const EventSystem& events, const Health& health ) const;
 
 	private:
-		std::vector<Block> blocks_;
-		std::map<std::string, Tileset> tilesets_;
-		std::string current_tileset_;
-		int map_width_;
 		bool blocks_work_offscreen_;
+		int map_width_;
+		std::vector<Block> blocks_;
+		std::string current_tileset_;
+		std::map<std::string, Tileset> tilesets_;
 
 		Tileset& getTileset();
 		void addBlock( int x, int y, int i, int type );

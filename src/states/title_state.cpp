@@ -52,7 +52,6 @@ TitleState::TitleState()
     paused_ ( false ),
     screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ) ),
 	created_by_ (),
-	health_ (),
 	options_ ( OptionSystem::generateVerticalOptionSystem( Localization::getCurrentLanguage().getTitleOptions(), OPTIONS_TOP_Y ) ),
     screen_src_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ),
     screen_dest_ ( 0, 64, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ),
@@ -62,12 +61,7 @@ TitleState::TitleState()
 	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
 	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
-	level_ ( Level::getLevel( Level::getIDFromCodeName( getRandomTrainerLevel() ) ) ),
-	camera_ ( level_.cameraX(), level_.cameraY(), Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT, 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ),
-	blocks_ ( level_.currentMap() ),
-	sprites_ ( level_.entranceX(), level_.entranceY() ),
-	events_ ( level_.startOn() ),
-    inventory_screen_ ()
+    level_ ( Level::getIDFromCodeName( getRandomTrainerLevel() ), { Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT, 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT } )
 {};
 
 TitleState::~TitleState()
@@ -115,25 +109,7 @@ void TitleState::stateUpdate()
     }
     else
     {
-        blocks_.blocksFromMap( level_.currentMap(), camera_ );
-        blocks_.update( events_ );
-
-        if ( camera_.testPause() )
-        {
-            camera_.scroll( level_.currentMap() );
-        }
-        else
-        {
-            level_.currentMap().update( events_, sprites_, blocks_, camera_ );
-            camera_.update();
-            sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
-            sprites_.interact( blocks_, level_, events_, camera_, health_ );
-            sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
-            sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
-            health_.update();
-            events_.updateTrainer( level_, sprites_, camera_, blocks_ );
-        }
-
+        level_.updateForTrainer();
         if ( Input::held( Input::Action::CONFIRM ) )
         {
             paused_ = true;
@@ -173,12 +149,7 @@ void TitleState::generateLevelTexture()
     Render::setRenderTarget( screen_texture_ );
     Render::clearScreenTransparency();
     Render::colorCanvas( palette().bgN() );
-    level_.currentMap().renderBG( camera_ );
-    blocks_.render( level_.currentMap(), camera_, false );
-    sprites_.render( camera_, false );
-    blocks_.render( level_.currentMap(), camera_, true );
-    sprites_.render( camera_, true );
-    level_.currentMap().renderFG( camera_ );
+    level_.renderLevel();
     Render::releaseRenderTarget();
 };
 
@@ -189,7 +160,6 @@ void TitleState::renderHeader()
 	cloud_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
 	logo_.render();
 	skyline_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
-	//skyscrapers_bg_.render( sdl2::SDLRect{ 0, 0, Unit::WINDOW_WIDTH_PIXELS, 72 } );
 	created_by_.render();
 };
 
@@ -210,8 +180,7 @@ void TitleState::init()
 	newPalette( level_.currentMap().palette_ );
 	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextCharacter::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();
-	sprites_.resetTrainer( level_, events_ );
-	camera_.setPosition( level_.cameraX(), level_.cameraY() );
+    level_.initForTrainer();
 	Audio::changeSong( "title" );
     Audio::setTrainerModeOn();
 };

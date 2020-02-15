@@ -30,17 +30,17 @@ static constexpr int FLASHING_TIMER_SPEED = 8;
 
 InventoryLevel::InventoryLevel()
 :
-	health_gfx_ ( Y ),
-	oxygen_meter_ ( TOP_ROW_Y ),
-	ticker_ ( BOTTOM_ROW_Y ),
-	flashing_timer_ ( 0 ),
-	flashing_time_shade_ ( 0 ),
-	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
-	kill_count_ ( -1 ),
 	showing_key_ ( false ),
 	show_on_off_ ( false ),
 	on_off_state_ ( false ),
-	mcguffins_to_render_ ( -1 )
+	flashing_timer_ ( 0 ),
+	flashing_time_shade_ ( 0 ),
+	kill_count_ ( -1 ),
+	mcguffins_to_render_ ( -1 ),
+	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
+	health_gfx_ ( Y ),
+	ticker_ ( BOTTOM_ROW_Y ),
+	oxygen_meter_ ( TOP_ROW_Y )
 {};
 
 InventoryLevel::~InventoryLevel()

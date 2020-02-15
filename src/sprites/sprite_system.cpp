@@ -167,7 +167,7 @@
 #include "weight_platform_sprite.hpp"
 #include "window_monster_sprite.hpp"
 
-SpriteSystem::SpriteSystem( int entrance_x, int entrance_y )
+SpriteSystem::SpriteSystem()
 :
 	hero_ (),
 	permanently_killed_enemies_ ( 0 ),
