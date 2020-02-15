@@ -1,0 +1,26 @@
+{
+	"name": "Curse o' the Ladder-Splayed Caves",
+
+	"maps":
+	[
+		{
+			"slug": "mines-3",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "mines-bg-2.png",
+					"width": 114,
+					"height": 112,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				}
+			]
+		}
+	],
+
+	"entrance_x": 0,
+	"entrance_y": 29,
+	"gem_challenge": 19000,
+	"time_challenge": 25
+}

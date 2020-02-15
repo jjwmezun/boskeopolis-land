@@ -1,0 +1,44 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"off":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 3, "y": 5, "alpha": 128, "priority": true },
+				{ "x": 4, "y": 5, "alpha": 128, "priority": true },
+				{ "x": 5, "y": 5, "alpha": 128, "priority": true },
+				{ "x": 6, "y": 5, "alpha": 128, "priority": true }
+			],
+			"alpha": 128,
+			"priority": true
+		},
+		"on": { "type": "sprite", "x": 5, "y": 1 }
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "swim"
+			},
+			"conditions":
+			[
+				{ "type": "switch_off" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" }
+			]
+		}
+	]
+}

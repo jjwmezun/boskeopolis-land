@@ -1,0 +1,16 @@
+{
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "layer",
+				"layer": 2
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

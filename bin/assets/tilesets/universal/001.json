@@ -1,0 +1,52 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 0, "y": 5 },
+			{ "x": 1, "y": 5 },
+			{ "x": 2, "y": 5 },
+			{ "x": 3, "y": 5 },
+			{ "x": 4, "y": 5 },
+			{ "x": 5, "y": 5 }
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "money",
+				"amount": 250
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "rival" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

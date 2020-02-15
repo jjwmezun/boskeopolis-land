@@ -1,0 +1,9 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 7,
+		"y": 3,
+		"alpha": 128
+	}
+}

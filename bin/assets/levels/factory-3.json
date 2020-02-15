@@ -1,0 +1,50 @@
+{
+	"name": "Warm Up",
+
+	"maps":
+	[
+		{
+			"slug": "factory-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "fireglow.png",
+					"width": 16,
+					"height": 32,
+					"x_offset": 0,
+					"y_offset": 160,
+					"x_scroll": 1,
+					"y_scroll": 1,
+					"frames": 6,
+					"x_repeat": true,
+					"y_repeat": false,
+					"x_speed": 0,
+					"y_speed": 0,
+					"animation_speed": 8,
+					"animation_flip": true
+				},
+				{
+					"type": "image",
+					"img": "grill.png",
+					"width": 8,
+					"height": 8
+				}
+			]
+		}
+	],
+
+
+	"goal":
+	{
+		"type": "survive_time",
+		"amount": 30,
+		"message": "¡Last 30 seconds without being cooked!"
+	},
+
+	"entrance_x": 7,
+	"entrance_y": -2,
+
+	"gem_challenge": 3000,
+	"time_challenge": 30
+}

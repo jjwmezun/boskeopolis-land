@@ -1,0 +1,260 @@
+{
+	"name": "Playing Railroad",
+
+	"maps":
+	[
+		{
+			"slug": "train",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0,
+					"x_speed": -1600
+				},
+				{
+					"type": "image",
+					"img": "canyon_2.png",
+					"width": 256,
+					"height": 111,
+					"x_scroll": 0.5,
+					"y_scroll": 0.0,
+					"y_offset": 48,
+					"y_repeat": false,
+					"x_speed": -3200
+				},
+				{
+					"type": "image",
+					"img": "train-track.png",
+					"width": 32,
+					"height": 36,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_offset": 157,
+					"y_repeat": false,
+					"x_speed": -6400
+				},
+				{
+					"type": "image",
+					"img": "tunnel_overlay.png",
+					"width": 1080,
+					"height": 208,
+					"x_scroll": 0.75,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_speed": -4800,
+					"alpha": 224,
+					"x_repeat": false,
+					"x_offset": 4000
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 7,
+					"entrance_y": 6,
+					"location": [ 6, 10, 0, 4 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 55,
+					"entrance_y": 6,
+					"location": [ 68, 72, 0, 4 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 115,
+					"entrance_y": 6,
+					"location": [ 134, 138, 0, 4 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 134,
+					"entrance_y": 6,
+					"location": [ 151, 155, 0, 4 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 190,
+					"entrance_y": 6,
+					"location": [ 210, 214, 0, 4 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 217,
+					"entrance_y": 6,
+					"location": [ 258, 262, 0, 4 ]
+				}
+			]
+		},
+		{
+			"slug": "train-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0,
+					"x_speed": -1600
+				},
+				{
+					"type": "image",
+					"img": "canyon_2.png",
+					"width": 256,
+					"height": 111,
+					"x_scroll": 0.5,
+					"y_scroll": 0.0,
+					"y_offset": 64,
+					"y_repeat": false,
+					"x_speed": -3200
+				},
+				{
+					"type": "image",
+					"img": "tunnel_pipe.png",
+					"width": 360,
+					"height": 229,
+					"x_scroll": 0.75,
+					"y_scroll": 0.75,
+					"y_repeat": false,
+					"x_speed": -4800,
+					"x_repeat": 2,
+					"x_offset": 4000
+				},
+				{
+					"type": "image",
+					"img": "train-track.png",
+					"width": 32,
+					"height": 20,
+					"x_scroll": 0.0,
+					"y_scroll": 1.0,
+					"y_offset": 200,
+					"y_repeat": false,
+					"y_repeat": false,
+					"x_speed": -6400
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "tunnel_overlay.png",
+					"width": 1080,
+					"height": 208,
+					"x_scroll": 0.75,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_speed": -4800,
+					"alpha": 224,
+					"x_repeat": false,
+					"x_offset": 4000
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 7,
+					"entrance_y": 1,
+					"location": [ 4, 8, 6, 11 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 71,
+					"entrance_y": 1,
+					"location": [ 52, 56, 6, 11 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 136,
+					"entrance_y": 1,
+					"location": [ 112, 117, 6, 11 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 153,
+					"entrance_y": 1,
+					"location": [ 130, 138, 6, 11 ]
+				},
+				{
+					"map": 2,
+					"entrance_x": 3,
+					"entrance_y": 1,
+					"location": [ 188, 192, 6, 11 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 259,
+					"entrance_y": 1,
+					"location": [ 215, 220, 6, 11 ]
+				}
+			]
+		},
+		{
+			"slug": "train-3",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "sky_gradient.png",
+					"width": 32,
+					"height": 144,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0,
+					"x_speed": -1600
+				},
+				{
+					"type": "image",
+					"img": "canyon_2.png",
+					"width": 256,
+					"height": 111,
+					"x_scroll": 0.5,
+					"y_scroll": 0.0,
+					"y_offset": 48,
+					"y_repeat": false,
+					"x_speed": -3200
+				},
+				{
+					"type": "image",
+					"img": "train-track.png",
+					"width": 32,
+					"height": 20,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_offset": 125,
+					"y_repeat": false,
+					"x_speed": -6400
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 190,
+					"entrance_y": 6,
+					"location": [ 2, 6, 0, 4 ]
+				}
+			]
+		}
+	],
+
+	"entrance_x": 33,
+	"entrance_y": 10,
+	"camera_x": 480,
+
+	"goal":
+	{
+		"type": "kill_all",
+		"message": "¡Shoot out all the Cowpokers & sentry guns!"
+	},
+
+	"gem_challenge": 18000,
+	"time_challenge": 110
+}

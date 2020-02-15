@@ -1,0 +1,35 @@
+{
+    "controls": {
+        "keys": {
+            "confirm": 122,
+            "cancel": 120,
+            "menu": 99,
+            "jump": 122,
+            "run": 120,
+            "up": 1073741906,
+            "right": 1073741903,
+            "down": 1073741905,
+            "left": 1073741904,
+            "camera_left": 97,
+            "camera_right": 100,
+            "camera_up": 119,
+            "camera_down": 115
+        },
+        "buttons": {
+            "confirm": 255,
+            "cancel": 255,
+            "menu": 255,
+            "jump": 255,
+            "run": 255,
+            "up": 255,
+            "right": 255,
+            "down": 255,
+            "left": 255,
+            "camera_left": 255,
+            "camera_right": 255,
+            "camera_up": 255,
+            "camera_down": 255
+        }
+    },
+    "language": "en"
+}

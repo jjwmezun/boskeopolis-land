@@ -1,0 +1,58 @@
+{
+	"name": "Through the Sharp Hawthorn Blow the Winds",
+
+	"maps":
+	[
+		{
+			"slug": "woods-4",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "shady_firs.png",
+					"width": 461,
+					"height": 300,
+					"y_offset": -64,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1
+				},
+				{
+					"type": "image",
+					"img": "thin_boughs.png",
+					"width": 256,
+					"height": 256,
+					"x_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "thick_boughs.png",
+					"width": 640,
+					"height": 256,
+					"x_scroll": 0.5
+				}
+			],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "windy-leaves.png",
+					"width": 406,
+					"height": 196,
+					"x_scroll": 1,
+					"y_scroll": 1,
+					"x_speed": -3000,
+					"y_speed": 1500,
+					"frames": 6,
+					"animation_speed": 16
+				}
+			]
+		}
+	],
+
+	"entrance_x": 24,
+	"entrance_y": 26,
+	"camera_x": 13,
+
+	"gem_challenge": 20000,
+	"time_challenge": 35
+}

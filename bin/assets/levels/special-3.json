@@ -1,0 +1,49 @@
+{
+	"name": "Mart Cart Madness",
+	
+	"maps":
+	[
+		{
+			"slug": "shop-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "shop_2.png",
+					"width": 128,
+					"height": 392,
+					"y_repeat": false,
+					"x_speed": -200
+				},
+				{
+					"type": "image",
+					"img": "mountain.png",
+					"width": 256,
+					"height": 320,
+					"y_repeat": false,
+					"y_offset": 448,
+					"x_scroll": 0.25
+				},
+				{
+					"type": "image",
+					"img": "shop.png",
+					"width": 512,
+					"height": 1664,
+					"x_scroll": 0.5
+				}
+			]
+		}
+	],
+	
+	"goal":
+	{
+		"type": "past_right_edge",
+		"message": "¡Catch the sale on rare collectibles!"
+	},
+	
+	"entrance_x": -2,
+	"entrance_y": 68,
+	
+	"gem_challenge": 15000,
+	"time_challenge": 30
+}

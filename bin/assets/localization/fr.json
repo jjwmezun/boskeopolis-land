@@ -1,0 +1,407 @@
+{
+    "language": "Français",
+    "order": 4,
+    "charset":
+    {
+        "image": "latin.png",
+        "width": 16,
+        "height": 4,
+        "default_character": { "x": 30, "y": 3 },
+        "characters":
+        [
+            { "key": "0", "values": { "x": 0, "y": 0 } },
+            { "key": "1", "values": { "x": 1, "y": 0 } },
+            { "key": "2", "values": { "x": 2, "y": 0 } },
+            { "key": "3", "values": { "x": 3, "y": 0 } },
+            { "key": "4", "values": { "x": 4, "y": 0 } },
+            { "key": "5", "values": { "x": 5, "y": 0 } },
+            { "key": "6", "values": { "x": 6, "y": 0 } },
+            { "key": "7", "values": { "x": 7, "y": 0 } },
+            { "key": "8", "values": { "x": 8, "y": 0 } },
+            { "key": "9", "values": { "x": 9, "y": 0 } },
+            { "key": "a", "values": { "x": 10, "y": 0 } },
+            { "key": "b", "values": { "x": 11, "y": 0 } },
+            { "key": "c", "values": { "x": 12, "y": 0 } },
+            { "key": "d", "values": { "x": 13, "y": 0 } },
+            { "key": "e", "values": { "x": 14, "y": 0 } },
+            { "key": "f", "values": { "x": 15, "y": 0 } },
+            { "key": "g", "values": { "x": 16, "y": 0 } },
+            { "key": "h", "values": { "x": 17, "y": 0 } },
+            { "key": "i", "values": { "x": 18, "y": 0 } },
+            { "key": "j", "values": { "x": 19, "y": 0 } },
+            { "key": "k", "values": { "x": 20, "y": 0 } },
+            { "key": "l", "values": { "x": 21, "y": 0 } },
+            { "key": "m", "values": { "x": 22, "y": 0 } },
+            { "key": "n", "values": { "x": 23, "y": 0 } },
+            { "key": "o", "values": { "x": 24, "y": 0 } },
+            { "key": "p", "values": { "x": 25, "y": 0 } },
+            { "key": "q", "values": { "x": 26, "y": 0 } },
+            { "key": "r", "values": { "x": 27, "y": 0 } },
+            { "key": "s", "values": { "x": 28, "y": 0 } },
+            { "key": "t", "values": { "x": 29, "y": 0 } },
+            { "key": "u", "values": { "x": 30, "y": 0 } },
+            { "key": "v", "values": { "x": 31, "y": 0 } },
+            { "key": "w", "values": { "x": 0, "y": 1 } },
+            { "key": "x", "values": { "x": 1, "y": 1 } },
+            { "key": "y", "values": { "x": 2, "y": 1 } },
+            { "key": "z", "values": { "x": 3, "y": 1 } },
+            { "key": "A", "values": { "x": 10, "y": 0 } },
+            { "key": "B", "values": { "x": 11, "y": 0 } },
+            { "key": "C", "values": { "x": 12, "y": 0 } },
+            { "key": "D", "values": { "x": 13, "y": 0 } },
+            { "key": "E", "values": { "x": 14, "y": 0 } },
+            { "key": "F", "values": { "x": 15, "y": 0 } },
+            { "key": "G", "values": { "x": 16, "y": 0 } },
+            { "key": "H", "values": { "x": 17, "y": 0 } },
+            { "key": "I", "values": { "x": 18, "y": 0 } },
+            { "key": "J", "values": { "x": 19, "y": 0 } },
+            { "key": "K", "values": { "x": 20, "y": 0 } },
+            { "key": "L", "values": { "x": 21, "y": 0 } },
+            { "key": "M", "values": { "x": 22, "y": 0 } },
+            { "key": "N", "values": { "x": 23, "y": 0 } },
+            { "key": "O", "values": { "x": 24, "y": 0 } },
+            { "key": "P", "values": { "x": 25, "y": 0 } },
+            { "key": "Q", "values": { "x": 26, "y": 0 } },
+            { "key": "R", "values": { "x": 27, "y": 0 } },
+            { "key": "S", "values": { "x": 28, "y": 0 } },
+            { "key": "T", "values": { "x": 29, "y": 0 } },
+            { "key": "U", "values": { "x": 30, "y": 0 } },
+            { "key": "V", "values": { "x": 31, "y": 0 } },
+            { "key": "W", "values": { "x": 0, "y": 1 } },
+            { "key": "X", "values": { "x": 1, "y": 1 } },
+            { "key": "Y", "values": { "x": 2, "y": 1 } },
+            { "key": "Z", "values": { "x": 3, "y": 1 } },
+            { "key": "?", "values": { "x": 4, "y": 1 } },
+            { "key": "!", "values": { "x": 5, "y": 1 } },
+            { "key": "¡", "values": { "x": 6, "y": 1 } },
+            { "key": "¿", "values": { "x": 7, "y": 1 } },
+            { "key": "@", "values": { "x": 8, "y": 1 } },
+            { "key": "#", "values": { "x": 9, "y": 1 } },
+            { "key": "$", "values": { "x": 10, "y": 1 } },
+            { "key": "%", "values": { "x": 11, "y": 1 } },
+            { "key": "^", "values": { "x": 12, "y": 1 } },
+            { "key": "&", "values": { "x": 13, "y": 1 } },
+            { "key": "*", "values": { "x": 14, "y": 1 } },
+            { "key": "(", "values": { "x": 15, "y": 1 } },
+            { "key": ")", "values": { "x": 16, "y": 1 } },
+            { "key": "[", "values": { "x": 17, "y": 1 } },
+            { "key": "]", "values": { "x": 18, "y": 1 } },
+            { "key": ",", "values": { "x": 19, "y": 1 } },
+            { "key": ".", "values": { "x": 20, "y": 1 } },
+            { "key": "/", "values": { "x": 21, "y": 1 } },
+            { "key": "'", "values": { "x": 22, "y": 1 } },
+            { "key": "’", "values": { "x": 22, "y": 1 } },
+            { "key": ":", "values": { "x": 23, "y": 1 } },
+            { "key": ";", "values": { "x": 24, "y": 1 } },
+            { "key": "{", "values": { "x": 25, "y": 1 } },
+            { "key": "}", "values": { "x": 26, "y": 1 } },
+            { "key": "–", "values": { "x": 27, "y": 1 } },
+            { "key": "_", "values": { "x": 28, "y": 1 } },
+            { "key": "=", "values": { "x": 29, "y": 1 } },
+            { "key": "“", "values": { "x": 30, "y": 1 } },
+            { "key": "\\", "values": { "x": 31, "y": 1 } },
+            { "key": "ñ", "values": { "x": 0, "y": 2 } },
+            { "key": "Ñ", "values": { "x": 0, "y": 2 } },
+            { "key": "~", "values": { "x": 1, "y": 2 } },
+            { "key": "|", "values": { "x": 2, "y": 2 } },
+            { "key": "+", "values": { "x": 3, "y": 2 } },
+            { "key": "₧", "values": { "x": 4, "y": 2 } },
+            { "key": "♥", "values": { "x": 5, "y": 2 } },
+            { "key": "”", "values": { "x": 10, "y": 2 } },
+            { "key": "-", "values": { "x": 11, "y": 2 } },
+            { "key": "—", "values": { "x": 12, "y": 2 } },
+            { "key": "`", "values": { "x": 13, "y": 2 } },
+            { "key": "‘", "values": { "x": 13, "y": 2 } },
+            { "key": "á", "values": { "x": 14, "y": 2 } },
+            { "key": "Á", "values": { "x": 14, "y": 2 } },
+            { "key": "é", "values": { "x": 15, "y": 2 } },
+            { "key": "É", "values": { "x": 15, "y": 2 } },
+            { "key": "í", "values": { "x": 16, "y": 2 } },
+            { "key": "Í", "values": { "x": 16, "y": 2 } },
+            { "key": "ó", "values": { "x": 17, "y": 2 } },
+            { "key": "Ó", "values": { "x": 17, "y": 2 } },
+            { "key": "ú", "values": { "x": 18, "y": 2 } },
+            { "key": "Ú", "values": { "x": 18, "y": 2 } },
+            { "key": "à", "values": { "x": 19, "y": 2 } },
+            { "key": "À", "values": { "x": 19, "y": 2 } },
+            { "key": "è", "values": { "x": 20, "y": 2 } },
+            { "key": "È", "values": { "x": 20, "y": 2 } },
+            { "key": "ì", "values": { "x": 21, "y": 2 } },
+            { "key": "Ì", "values": { "x": 21, "y": 2 } },
+            { "key": "ò", "values": { "x": 22, "y": 2 } },
+            { "key": "Ò", "values": { "x": 22, "y": 2 } },
+            { "key": "ù", "values": { "x": 23, "y": 2 } },
+            { "key": "Ù", "values": { "x": 23, "y": 2 } },
+            { "key": "ä", "values": { "x": 24, "y": 2 } },
+            { "key": "Ä", "values": { "x": 24, "y": 2 } },
+            { "key": "ë", "values": { "x": 25, "y": 2 } },
+            { "key": "Ë", "values": { "x": 25, "y": 2 } },
+            { "key": "ï", "values": { "x": 26, "y": 2 } },
+            { "key": "Ï", "values": { "x": 26, "y": 2 } },
+            { "key": "ö", "values": { "x": 27, "y": 2 } },
+            { "key": "Ö", "values": { "x": 27, "y": 2 } },
+            { "key": "ü", "values": { "x": 28, "y": 2 } },
+            { "key": "Ü", "values": { "x": 28, "y": 2 } },
+            { "key": "<", "values": { "x": 29, "y": 2 } },
+            { "key": ">", "values": { "x": 30, "y": 2 } },
+            { "key": "♪", "values": { "x": 0, "y": 3 } },
+            { "key": "♫", "values": { "x": 1, "y": 3 } },
+            { "key": "ç", "values": { "x": 2, "y": 3 } },
+            { "key": "Ç", "values": { "x": 2, "y": 3 } },
+            { "key": "ß", "values": { "x": 3, "y": 3 } },
+            { "key": "…", "values": [ { "x": 20, "y": 1 }, { "x": 20, "y": 1 }, { "x": 20, "y": 1 } ] },
+            { "key": " ", "values": { "x": 31, "y": 3, "whitespace": true } },
+            { "key": "\n", "values": { "x": 31, "y": 3, "newline": true } }
+        ]
+    },
+    "game_title": "Boskeopolis Land",
+    "intro_text": "Learn Mo’ ’bout this project’s development @\nhttps://www.boskeopolis-land.com",
+    "input":
+    {
+        "quitting": "En quittant…",
+        "title": "Les contrôles",
+        "change": "Appuyez sur une touche",
+        "actions":
+        {
+            "confirm": "Confirmer",
+            "cancel": "Annuler",
+            "menu": "Menu",
+            "jump": "Sauter",
+			"run": "Courir",
+			"up": "En haut",
+			"right": "Droite",
+			"down": "En bas",
+			"left": "Gauche",
+			"camera_left": "Caméra à gauche",
+			"camera_right": "Caméra à droite",
+			"camera_up": "Caméra ascendant",
+			"camera_down": "Caméra vers le bas"
+        }
+    },
+    "title":
+    {
+        "attribution": "Créé par J.J.W. Mezun — 2016-%Y\nProgrammé par Nasrin",
+        "options":
+        {
+            "new_game": "Nouveau jeu",
+            "load_game": "Reprendre un jeu",
+            "options": "Les options",
+            "quit": "Quitter"
+        }
+    },
+    "options":
+    {
+        "title": "Les options",
+        "options":
+        {
+            "screen_resolution": "Les options d'écran",
+            "controls": "Les contrôles",
+            "language": "La langue"
+        }
+    },
+    "screen_options":
+    {
+        "title": "Les options d'écran",
+        "options":
+        {
+            "fullscreen": "Plein écran",
+            "window": "En fenêtre"
+        }
+    },
+    "pause":
+    {
+        "continue": "Reprendre",
+        "options": "Les options",
+        "quit_unbeaten": "Capituler",
+        "quit_beaten": "Retour à la carte"
+    },
+    "overworld":
+    {
+        "menu":
+        {
+            "continue": "Reprendre",
+            "level_list": "La liste des niveaux",
+            "camera_view": "La vue Caméra",
+            "options": "Les options",
+            "quit": "Quitter"
+        }
+    },
+    "level_tile_menu":
+    {
+        "play": "Play Level",
+        "hard_mode": "Hard Mode",
+        "cancel": "Cancel"
+    },
+    "level_select":
+    {
+        "title": "Level Select",
+        "cycle_name": "Cycle",
+        "percent_symbol": "%"
+    },
+    "goals":
+    {
+        "generic": "¡Get the Keycane!",
+        "avoid_money": "¡Don't touch any money!",
+        "collect": "¡Collect %p ₧!",
+        "do_nothing": "¡Don't do anything @ all!",
+        "heat": "¡Don't touch the hot surface too long!",
+        "mcguffins": "¡Collect %m McGuffins!",
+        "past_right_edge": "¡Go past the end!",
+        "starving": "¡Don't let your money run out!",
+        "stop_on_off": "¡Don't move when the light's red!",
+        "survive_time": "¡Last %t seconds without dying!",
+        "timed": "¡Don't let time run out!",
+        "warp": "¡Get out o' here!",
+        "kill_all": "¡Destroy all enemies!"
+    },
+    "dungeon_healer_text": "Pay 5,000 & you can heal.",
+    "levels":
+    {
+        "names":
+        {
+            "city-1": "Blueberry Burroughs",
+            "woods-1": "Wasabi Woods",
+            "mines-1": "Minty Mines",
+            "desert-1": "Dry, Drought Desert",
+            "mountain-1": "Foul Fowl Farm",
+            "sky-1": "Cotton Candy Clouds",
+            "space-1": "Lunacy",
+            "ice-1": "Ice Box Rock",
+            "pirate-1": "Fortune Beach",
+            "swamp-1": "Bayou Jupiter",
+            "sewer-1": "Porcelain Dreams",
+            "factory-1": "Conveyor Slayer",
+            "domestic-1": "Attic Addict",
+            "dungeon-1": "Gravity, Hypocrisy, & the Perils o' Being in 3D",
+            "special-1": "Play in the Background",
+            "city-2": "Storming Skyscrapers",
+            "woods-2": "Bough Down",
+            "mines-2": "Catahoneycombs",
+            "desert-2": "Peperoncini Pyramid",
+            "mountain-2": "Milky Mountain",
+            "sky-2": "Value Valhalla",
+            "space-2": "=BROKEN_LEVEL=",
+            "ice-2": "Chillblain Lake",
+            "pirate-2": "Tubboat Blues",
+            "swamp-2": "I Can Go with the Flow",
+            "sewer-2": "Soupy Sewers",
+            "factory-2": "The Amazon Jungle",
+            "domestic-2": "Welcome to the Brick Parade",
+            "dungeon-2": "Mind Your Manors",
+            "special-2": "Highway & Hellwater",
+            "city-3": "Sleet Streets",
+            "woods-3": "Freaky Forest",
+            "mines-3": "Curse o' the Ladder-Splayed Caves",
+            "desert-3": "Dark Sahara",
+            "mountain-3": "=BROKEN_LEVEL=",
+            "sky-3": "Crying Lightning",
+            "space-3": "Golden Gear Solid",
+            "ice-3": "Frigid Frigates",
+            "pirate-3": "Petrol Pond Place",
+            "swamp-3": "=BROKEN_LEVEL=",
+            "sewer-3": "=BROKEN_LEVEL=",
+            "factory-3": "Warm Up",
+            "domestic-3": "=BROKEN_LEVEL=",
+            "dungeon-3": "Donut Dungeon",
+            "special-3": "Mart Cart Madness",
+            "city-4": "Rooftop Rumble",
+            "woods-4": "Through the Sharp Hawthorn Blow the Winds",
+            "mines-4": "The Minus Touch",
+            "desert-4": "Playing Railroad",
+            "mountain-4": "Mt. Volcocoa",
+            "sky-4": "Brier Flier",
+            "space-4": "Stop & Go Space Station",
+            "ice-4": "Frostbite Mines",
+            "pirate-4": "Good Ship Lifestyle",
+            "swamp-4": "Broccoli Bridge",
+            "sewer-4": "=BROKEN_LEVEL=",
+            "factory-4": "=BROKEN_LEVEL=",
+            "domestic-4": "=BROKEN_LEVEL=",
+            "dungeon-4": "Castle Chamsby",
+            "special-4": "Maybe I'm a Maze"
+        },
+        "messages":
+        {
+            "city-1": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
+            "city-2": "Paper planes are o'erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o' their gluish grasp.",
+            "ice-1": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o' her jump a bit o'a boost.",
+            "pirate-3": "Warning: this oily water is e'en easier to drown in than normal water & sticks to you so you can't reoxygenate till you reach land.\n\nIn short: keep to land as much as possible.",
+            "space-3": "Guards can see 'bout 8 blocks 'head, 1 block 'bove if you're on the ground, & a li'l higher if you're in the air.\n\nBut they can't see you if part o' you is covered by a solid block."
+        },
+        "goals":
+        {
+            "city-3": "¡Collect 5 presents!",
+            "city-4": "¡Get to the Keycane before \"Dagny\"!",
+            "desert-2": "¡Get the silver moon & then 'scape 'fore time\nruns out!",
+            "desert-4": "¡Shoot out all the Cowpokers & sentry guns!",
+            "dungeon-2": "¡Make all the ghosts fade with your flashlight!",
+            "factory-3": "¡Last 30 seconds without being cooked!",
+            "mountain-1": "¡Knock out all the Noko no Pollos!",
+            "pirate-1": "¡Find the chest with the Keycane!",
+            "pirate-2": "¡Turn off the faucet!",
+            "sky-3": "¡Unlock the treasure!",
+            "sky-4": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane.",
+            "special-3": "¡Catch the sale on rare collectibles!",
+            "special-4": "¡Collect everything & dodge the eyes!"
+        }
+    },
+    "news_ticker":
+    [
+        "Kitties Want Answers In Possible Kitty Kibble Shortage",
+        "Thank you for reading this message. This message loves you.",
+        "Clean up on aisle Delfino.",
+        "Experts declare, SimCity 3000 Marquee + platformer = bad game - 9/10.",
+        "Experts declare, changing code through simple search & replace ne’er messes with in-Main:: text.",
+        "Experts declare, those who died are justified by wearing the badge, they’re your chosen whites. Details @ 11.",
+        "Experts declare, “Playing Railroad” taking way too long to finish.",
+        "...& that’s the news you can choose.",
+        "NEWSFLASH: Crazy woman running round grabbing floating gems everywhere she goes. Details @ 11.",
+        "¡AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!",
+        "WARNING: Playing games for too long can be dangerous. Take 15-minute breaks ’tween each session or we’ll come to smash your hand with a hammer-& yes, Jacob, we’ll find you @ 2456 Acorn Avenue. We know where you live.",
+        "NEWSFLASH: Despite all o’ my rage, I am still just a rat in a cage. Details @ 11.",
+        "Thou shalt not waste thine time reading these dumb newsflashes ’stead o’ playing the game - ¡Look out for that Bad Apple! ¡You fool!",
+        "If you don’t know ’bout the tavern, then it is time.",
+        "Achievement Unlocked: You read a pointless message.",
+        "You are dead. Details @ 11.",
+        "Reported sightings o’ Bigfoot believing in conspiracy theories surrounding aliens & the Boskeopoleon government.",
+        "Experts declare, when the people all stop & stare & say, “¿Why you gotta be like that?”, to just look them in the eyes & tell them you were raised by bats. Details @ 11.",
+        "NEWSFLASH: I just cut my fingers trying to chop onions. Ow.",
+        "Boo.",
+        "Citizens claim they find boring religious pamphletes hidden in Muertoween candy. Details @ 11.",
+        "25% off costumes this Muertoween @ FredMart: We possess everything."
+    ],
+    "shop":
+    {
+        "name": "FredMart",
+        "checkout": "Checkout",
+        "exit": "Leave",
+        "not_available": "Not Available",
+        "out_of_stock": "Out o’ Stock",
+        "shopkeeper":
+        {
+            "greeting": "Good evening, Madame. ¿How may I help you?",
+            "no_items": "You have nothing in your cart to check out.",
+            "not_enough_money": "¡You don’t have ’nough money to buy all that!",
+            "checkout_confirm": "¿Confirm checkout?\n Yes\n No",
+            "thanks": "¡Thank you for your purchase!",
+            "leaving": "¡Thank you! ¡Hope to see you ’gain soon!",
+            "not_available": "Sorry, but that product is not available yet. Please try ’nother.",
+            "out_of_stock": "Sorry, but we’er out o’ that product. Please try ’nother."
+        },
+        "items":
+        {
+            "hp_upgrade":
+            {
+                "name": "Extra Aorta",
+                "description": "Add 1 mo’ heart to your max HP."
+            },
+            "oxygen_upgrade":
+            {
+                "name": "Iron Lung",
+                "description": "Allows you to stay underwater for longer periods."
+            }
+        }
+    },
+    "level_success": "¡Success!",
+    "level_failure": "Failure…"
+}

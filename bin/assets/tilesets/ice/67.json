@@ -1,0 +1,21 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 0,
+		"y": 0
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "spawn_icicle"
+			},
+			"conditions":
+			[
+				{ "type": "hero" }
+			]
+		}
+	]
+}

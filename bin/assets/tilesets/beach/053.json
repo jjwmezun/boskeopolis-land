@@ -1,0 +1,43 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 0, "y": 5 },
+			{ "x": 1, "y": 5 },
+			{ "x": 2, "y": 5 },
+			{ "x": 3, "y": 5 },
+			{ "x": 4, "y": 5 },
+			{ "x": 5, "y": 5 }
+		],
+		"alpha": 128
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "money",
+				"amount": 100
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "change_block",
+				"value": 114
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		}
+	]
+}

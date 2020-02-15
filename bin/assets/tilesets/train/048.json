@@ -1,0 +1,22 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 3,
+		"y": 2
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "warp"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		}
+	]
+}

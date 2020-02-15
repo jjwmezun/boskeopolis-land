@@ -1,0 +1,21 @@
+{
+		"graphics":
+		{
+			"type": "sprite",
+			"x": 6,
+			"y": 2
+		},
+		"behavior":
+		[
+			{
+				"component":
+				{
+					"type": "solid"
+				},
+				"conditions":
+				[
+					{ "type": "switch_on" }
+				]
+			}
+		]
+	}

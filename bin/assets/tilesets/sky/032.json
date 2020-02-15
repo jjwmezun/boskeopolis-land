@@ -1,0 +1,54 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"off":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 1, "y": 3 },
+				{ "x": 2, "y": 3 },
+				{ "x": 1, "y": 3 },
+				{ "x": 3, "y": 3 }
+			]
+		},
+		"on":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 1, "y": 3 },
+				{ "x": 2, "y": 3 },
+				{ "x": 1, "y": 3 },
+				{ "x": 3, "y": 3 }
+			],
+			"priority": true
+		}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "switch_off" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "hurt"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" },
+				{ "type": "switch_off" }
+			]
+		}
+	]
+}

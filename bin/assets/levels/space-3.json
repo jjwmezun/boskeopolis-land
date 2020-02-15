@@ -1,0 +1,30 @@
+{
+	"name": "Golden Gear Solid",
+
+	"maps":
+	[
+		{
+			"slug": "space-5",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "rain.png",
+					"width": 480,
+					"height": 320,
+					"frames": 16,
+					"animation_speed": 4,
+					"alpha": 128
+				}
+			]
+		}
+	],
+
+	"entrance_x": 1,
+	"entrance_y": 26,
+
+	"message": "Guards can see 'bout 8 blocks 'head, 1 block 'bove if you're on the ground, & a li'l higher if you're in the air.\n\nBut they can't see you if part o' you is covered by a solid block.",
+
+	"gem_challenge": 9000,
+	"time_challenge": 50
+}

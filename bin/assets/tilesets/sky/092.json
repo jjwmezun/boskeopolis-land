@@ -1,0 +1,24 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 6,
+		"y": 1,
+		"flip_y": true,
+		"priority": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "climb"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		}
+	]
+}

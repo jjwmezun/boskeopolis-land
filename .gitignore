@@ -1,7 +1,5 @@
-bin/
+bin/main
 gmon.out
-mkdir/
 obj/
-resources/music/
 .~lock.lvs.ods#
-resources/saves/save.bin
+bin/assets/saves/save.bin

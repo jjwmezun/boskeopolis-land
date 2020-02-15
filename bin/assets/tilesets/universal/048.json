@@ -1,0 +1,31 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"on":
+		{
+			"type": "sprite",
+			"x": 2,
+			"y": 7
+		},
+		"off":
+		{
+			"type": "sprite",
+			"x": 3,
+			"y": 7
+		}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" }
+			]
+		}
+	]
+}

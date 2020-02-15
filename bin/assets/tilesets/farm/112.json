@@ -1,0 +1,17 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 15,
+		"y": 1
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "slope_very_steep_left_lower"
+			}
+		}
+	]
+}

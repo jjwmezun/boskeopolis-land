@@ -1,0 +1,28 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 5,
+		"y": 4
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		},
+		{
+			"component":
+			{
+				"type": "light_switch"
+			},
+			"conditions":
+			[
+				{ "type": "collide_top" },
+				{ "type": "hero" }
+			]
+		}
+	]
+}

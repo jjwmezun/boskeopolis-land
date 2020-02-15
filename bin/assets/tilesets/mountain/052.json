@@ -1,0 +1,13 @@
+{
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "change_palette",
+				"palette": "Grayscale",
+				"bg_color": 2
+			}
+		}
+	]
+}

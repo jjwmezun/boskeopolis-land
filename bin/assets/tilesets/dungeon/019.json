@@ -1,0 +1,26 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 4, "y": 1 },
+			{ "x": 5, "y": 1 },
+			{ "x": 6, "y": 1 },
+			{ "x": 7, "y": 1 }
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "swim"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

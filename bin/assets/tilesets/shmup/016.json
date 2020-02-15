@@ -1,0 +1,36 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 4,
+		"y": 1
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "not_full_health" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "heal",
+				"amount": 1
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "not_full_health" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

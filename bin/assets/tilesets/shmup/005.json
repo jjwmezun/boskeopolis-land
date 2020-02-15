@@ -1,0 +1,29 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 3,
+		"y": 0,
+		"rotation": 90
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		},
+		{
+			"component":
+			{
+				"type": "hurt"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

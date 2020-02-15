@@ -1,0 +1,17 @@
+{
+	"name": "BOSS: Lance Chamsby",
+
+	"maps":
+	[
+		{
+			"slug": "chamsby"
+		}
+	],
+
+	"entrance_x": 4,
+	"entrance_y": 8,
+	"goal":
+	{
+		"message": "¡Defeat Lance Chamsby!"
+	}
+}

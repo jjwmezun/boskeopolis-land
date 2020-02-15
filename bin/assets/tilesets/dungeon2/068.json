@@ -1,0 +1,17 @@
+{
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "layer",
+				"layer": 1
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

@@ -1,0 +1,23 @@
+{
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		},
+		{
+			"component":
+			{
+				"type": "hurt"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" },
+				{ "type": "switch_off" }
+			]
+		}
+	]
+}

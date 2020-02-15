@@ -1,0 +1,46 @@
+{
+	"name": "Tubboat Blues",
+	
+	"maps":
+	[
+		{
+			"slug": "pirate-1",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "tile.png",
+					"width": 32,
+					"height": 32
+				},
+				{
+					"type": "image",
+					"img": "bathtub.png",
+					"width": 64,
+					"height": 272,
+					"y_offset": 512,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "bathtub_stuff.png",
+					"width": 512,
+					"height": 192,
+					"y_offset": 320,
+					"y_repeat": false
+				}
+			]
+		}
+	],
+	
+	"goal":
+	{
+		"message": "¡Turn off the faucet!"
+	},
+	
+	"entrance_x": 1,
+	"entrance_y": 30,
+	
+	"gem_challenge": 15000,
+	"time_challenge": 18
+}

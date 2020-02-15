@@ -1,0 +1,119 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 0,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 0,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 1,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 1,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 2,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 2,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 3,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 3,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 4,
+				"y": 1,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 4,
+				"y": 1,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 3,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 3,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 2,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 2,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 1,
+				"priority": true
+			},
+			{
+				"type": "sprite",
+				"x": 7,
+				"y": 1,
+				"priority": true
+			}
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "collide_bottom" },
+				{ "type": "fade_cloud" }
+			]
+		}
+	]
+}

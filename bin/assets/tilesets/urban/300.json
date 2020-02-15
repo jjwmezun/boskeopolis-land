@@ -1,0 +1,18 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 1,
+		"y": 13,
+		"flip_x": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "slope_bottom_shallow_right_lower"
+			}
+		}
+	]
+}

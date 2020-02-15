@@ -1,0 +1,18 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"off":
+		{
+			"type": "sprite",
+			"x": 14,
+			"y": 2
+		},
+		"on":
+		{
+			"type": "sprite",
+			"x": 15,
+			"y": 2
+		}
+	}
+}

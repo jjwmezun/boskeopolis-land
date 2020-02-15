@@ -1,0 +1,23 @@
+{
+	"graphics":
+	{
+		"type": "fading",
+		"speed": 48,
+		"x": 7,
+		"y": 6
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "collide_bottom" },
+				{ "type": "fade_out", "threshold": 80 }
+			]
+		}
+	]
+}
