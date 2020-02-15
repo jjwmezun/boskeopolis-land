@@ -4,7 +4,7 @@
 
 LightSwitchSprite::LightSwitchSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/light-switch.png", 0, 0, false, false, 0.0, true, 0, 0, 0, 0, 255, SDL_BLENDMODE_ADD ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/light-switch.png", 0, 0, false, false, 0.0, true, 0, 0, 0, 0, 255 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
 {};
 
 LightSwitchSprite::~LightSwitchSprite() {};
@@ -21,4 +21,13 @@ void LightSwitchSprite::customInteract( Collision& my_collision, Collision& thei
 	{
         events.lightSwitchTurnOn();
 	}
+};
+
+void LightSwitchSprite::render( Camera& camera, bool priority )
+{
+};
+
+void LightSwitchSprite::renderSuperPriority( Camera& camera )
+{
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
 };

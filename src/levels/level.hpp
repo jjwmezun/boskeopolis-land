@@ -53,12 +53,13 @@ class Level
 		int entranceY() const;
 		int cameraX() const;
 		int cameraY() const;
-		void warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks );
+		void warp( LevelState& level_state );
 		void sewerWarp( SpriteSystem& sprites, EventSystem& events );
 		const std::u32string& message() const;
 		std::string getCodeName() const;
 		int allEnemiesToKill() const;
 		bool startOn() const;
+		int id() const;
 
 		static Level getLevel( int id );
 		static const std::string& NameOLevel( unsigned int n );

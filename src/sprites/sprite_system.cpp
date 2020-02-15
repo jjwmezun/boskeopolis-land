@@ -74,6 +74,7 @@
 #include <iostream>
 #include "level.hpp"
 #include "lava_platform_sprite.hpp"
+#include "level_state.hpp"
 #include "lifesaver_sprite.hpp"
 #include "lightning_sprite.hpp"
 #include "lil_pipe_monster_sprite.hpp"
@@ -180,7 +181,7 @@ SpriteSystem::SpriteSystem()
 
 SpriteSystem::~SpriteSystem() {};
 
-std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i, const Map& lvmap, EventSystem& events )
+std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i, LevelState& level_state )
 {
 	x = Unit::SubPixelsToPixels( x );
 	y = Unit::SubPixelsToPixels( y );
@@ -203,7 +204,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 5 ):
-			return std::unique_ptr<Sprite> ( new SpikyFruitSprite( x, y, lvmap ) );
+			return std::unique_ptr<Sprite> ( new SpikyFruitSprite( x, y, level_state.currentMap() ) );
 		break;
 		case ( SPRITE_INDEX_START + 6 ):
 			return std::unique_ptr<Sprite> ( new RacerSprite( x, y ) );
@@ -476,7 +477,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new TreasureChestSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 96 ):
-			return std::unique_ptr<Sprite> ( new RandomTreasureChestSprite( x, y, events ) );
+			return std::unique_ptr<Sprite> ( new RandomTreasureChestSprite( x, y, level_state.events() ) );
 		break;
 		case ( SPRITE_INDEX_START + 97 ):
 			return std::unique_ptr<Sprite> ( new PelicanSprite( x, y ) );
@@ -817,8 +818,9 @@ void SpriteSystem::heroOpenTreasureChest()
 	hero_.reset( new PlayerOpenChestSprite( hero_->xPixels(), hero_->yPixels(), hero_->direction_x_ ) );
 };
 
-void SpriteSystem::spritesFromMap( const Map& lvmap, EventSystem& events )
+void SpriteSystem::spritesFromMap( LevelState& level_state )
 {
+	const Map& lvmap = level_state.currentMap();
 	for ( int i = 0; i < lvmap.spritesSize(); ++i )
 	{
 		const int x = Unit::BlocksToSubPixels( lvmap.mapX( i ) );
@@ -827,7 +829,7 @@ void SpriteSystem::spritesFromMap( const Map& lvmap, EventSystem& events )
 
 		if ( type != -1 )
 		{
-			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, lvmap, events ) );
+			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, level_state ) );
 			sprites_.emplace_back( std::move( new_sprite ) );
 		}
 	}
@@ -859,21 +861,24 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 	}
 };
 
-void SpriteSystem::reset( const Level& level, EventSystem& events )
+void SpriteSystem::reset( LevelState& level_state )
 {
-	resetInternal( level, events, false );
+	resetInternal( level_state, false );
 };
 
-void SpriteSystem::resetTrainer( const Level& level, EventSystem& events )
+void SpriteSystem::resetTrainer( LevelState& level_state )
 {
-	resetInternal( level, events, true );
+	resetInternal( level_state, true );
 };
 
-void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool trainer )
+void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 {
-	Sprite::resistance_x_ = level.currentMap().wind_strength_;
+	const Map& lvmap = level_state.currentMap();
+	const Level& level = level_state.level();
 
-	if ( level.currentMap().moon_gravity_ )
+	Sprite::resistance_x_ = lvmap.wind_strength_;
+
+	if ( lvmap.moon_gravity_ )
 	{
 		Sprite::moonGravityOn();
 	}
@@ -882,7 +887,7 @@ void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool 
 		Sprite::moonGravityOff();
 	}
 
-	if ( level.currentMap().slippery_ )
+	if ( lvmap.slippery_ )
 	{
 		Sprite::traction_ = Sprite::TRACTION_ICY;
 	}
@@ -893,7 +898,7 @@ void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool 
 
 	if ( hero_ == nullptr )
 	{
-		switch( level.currentMap().hero_type_ )
+		switch( lvmap.hero_type_ )
 		{
 			case ( HeroType::NORMAL ):
 				hero_.reset
@@ -942,7 +947,7 @@ void SpriteSystem::resetInternal( const Level& level, EventSystem& events, bool 
 	}
 
 	clearSprites();
-	spritesFromMap( level.currentMap(), events );
+	spritesFromMap( level_state );
 };
 
 void SpriteSystem::clearSprites()
@@ -1087,6 +1092,17 @@ void SpriteSystem::render( Camera& camera, bool priority )
 	}
 
 	hero_->render( camera, priority );
+};
+
+void SpriteSystem::renderSuperPriority( Camera& camera )
+{
+	for ( auto i = 0; i < sprites_.size(); ++i )
+	{
+		if ( sprites_.at( i ) != nullptr )
+		{
+			sprites_.at( i )->renderSuperPriority( camera );
+		}
+	}
 };
 
 Sprite& SpriteSystem::hero()

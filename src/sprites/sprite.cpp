@@ -167,6 +167,11 @@ void Sprite::render( Camera& camera, bool priority )
 	}
 };
 
+void Sprite::renderSuperPriority( Camera& camera )
+{
+	// Do nothing.
+};
+
 void Sprite::renderWithHitbox( Camera& camera, bool priority )
 {
 	if ( graphics_ != nullptr )

@@ -12,6 +12,8 @@ class MapLayer;
 #include <unordered_map>
 #include <vector>
 
+class LevelState;
+
 class SpriteSystem
 {
 	public:
@@ -44,10 +46,11 @@ class SpriteSystem
 
 		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health );
 		void render( Camera& camera, bool priority = false );
+		void renderSuperPriority( Camera& camera );
 		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health );
 		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events );
-		void reset( const Level& level, EventSystem& events );
-		void resetTrainer( const Level& level, EventSystem& events );
+		void reset( LevelState& level_state );
+		void resetTrainer( LevelState& level_state );
 		void spawn( std::unique_ptr<Sprite>&& sprite );
 		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
 		void spawnWaterdrop( int x, int y );
@@ -72,9 +75,9 @@ class SpriteSystem
 
 		void clearSprites();
 		void destroySprite( int n, Map& lvmap );
-		void spritesFromMap( const Map& lvmap, EventSystem& events );
-		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, const Map& lvmap, EventSystem& events );
-		void resetInternal( const Level& level, EventSystem& events, bool trainer );
+		void spritesFromMap( LevelState& level_state );
+		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, LevelState& level_state );
+		void resetInternal( LevelState& level_state, bool trainer );
 
 		int permanently_killed_enemies_;
 		std::unique_ptr<Sprite> hero_;

@@ -14,13 +14,11 @@ LevelState::LevelState( int level_id, Camera camera )
 	health_ (),
 	camera_ ( camera ),
 	events_ (),
-	graphics_ (),
 	sprites_ (),
 	blocks_ (),
 	level_ ( Level::getLevel( level_id ) ),
 	inventory_screen_ ()
 {
-	Inventory::levelStart( level_id );
 	blocks_.init( level_.currentMap() );
 }
 
@@ -49,7 +47,7 @@ void LevelState::stateUpdate()
 		}
 		inventory_screen_.update( events_, health_ );
 		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
-		events_.update( level_, sprites_, camera_, blocks_ );
+		events_.update( *this );
 
 		if ( events_.paletteChanged() )
 		{
@@ -90,7 +88,7 @@ void LevelState::updateForTrainer()
 		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
 		health_.update();
-		events_.updateTrainer( level_, sprites_, camera_, blocks_ );
+		events_.updateTrainer( *this );
 	}
 };
 
@@ -106,16 +104,17 @@ void LevelState::renderLevel()
 	blocks_.render( level_.currentMap(), camera_, false );
 	sprites_.render( camera_, false );
 	blocks_.render( level_.currentMap(), camera_, true );
-	level_.currentMap().renderFG( camera_ );
 	sprites_.render( camera_, true );
-	graphics_.render( &camera_ );
+	level_.currentMap().renderFG( camera_ );
+	sprites_.renderSuperPriority( camera_ );
 }
 
 void LevelState::init()
 {
 	newPalette( level_.currentMap().palette_ );
+	Inventory::levelStart( level_.id() );
 	events_.init( level_ );
-	sprites_.reset( level_, events_ );
+	sprites_.reset( *this );
 	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 	inventory_screen_.init( level_.currentMap() );
@@ -145,13 +144,88 @@ void LevelState::backFromPop()
 	Audio::changeSong( level_.currentMap().music_ );
 };
 
+Health& LevelState::health()
+{
+	return health_;
+};
+
+const Health& LevelState::health() const
+{
+	return health_;
+};
+
+Camera& LevelState::camera()
+{
+	return camera_;
+};
+
+const Camera& LevelState::camera() const
+{
+	return camera_;
+};
+
+SpriteSystem& LevelState::sprites()
+{
+	return sprites_;
+};
+
+const SpriteSystem& LevelState::sprites() const
+{
+	return sprites_;
+};
+
+BlockSystem& LevelState::blocks()
+{
+	return blocks_;
+};
+
+const BlockSystem& LevelState::blocks() const
+{
+	return blocks_;
+};
+
+InventoryLevel& LevelState::inventory()
+{
+	return inventory_screen_;
+};
+
+const InventoryLevel& LevelState::inventory() const
+{
+	return inventory_screen_;
+};
+
 Map& LevelState::currentMap()
 {
 	return level_.currentMap();
 };
 
+const Map& LevelState::currentMap() const
+{
+	return level_.currentMap();
+};
+
+Level& LevelState::level()
+{
+	return level_;
+};
+
+const Level& LevelState::level() const
+{
+	return level_;
+};
+
+EventSystem& LevelState::events()
+{
+	return events_;
+};
+
+const EventSystem& LevelState::events() const
+{
+	return events_;
+};
+
 void LevelState::initForTrainer()
 {
-	sprites_.resetTrainer( level_, events_ );
+	sprites_.resetTrainer( *this );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };

@@ -4,6 +4,7 @@
 #include "inventory.hpp"
 #include "level.hpp"
 #include "level_message_state.hpp"
+#include "level_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -206,28 +207,21 @@ void EventSystem::flipSwitch()
 	switch_changed_ = true;
 };
 
-void EventSystem::updateTrainer( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::updateTrainer( LevelState& level_state )
 {
 	switch_changed_ = false;
 	if ( waterShouldStop() )
 	{
 		move_water_ = WATER_NULL;
 	}
-	testWarp( level, sprites, camera, blocks );
+	testWarp( level_state );
 };
 
-void EventSystem::update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::update( LevelState& level_state )
 {
-	switch_changed_ = false;
-
-	if ( waterShouldStop() )
-	{
-		move_water_ = WATER_NULL;
-	}
-
-	testMessage( level );
-	testWarp( level, sprites, camera, blocks );
-	testWinLoseOrQuit( level );
+	updateTrainer( level_state );
+	testMessage( level_state.level() );
+	testWinLoseOrQuit( level_state.level() );
 };
 
 void EventSystem::testMessage( Level& level )
@@ -246,7 +240,7 @@ void EventSystem::testMessage( Level& level )
 	message_ = false;
 };
 
-void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::testWarp( LevelState& level_state )
 {
 	switch ( change_map_ )
 	{
@@ -258,13 +252,14 @@ void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera,
 			}
 			else if ( Main::transitionState() == Main::TransitionState::FADE_IN )
 			{
-				doWarp( level, sprites, camera, blocks );
+				doWarp( level_state );
 			}
 		}
 		break;
 
 		case ( 2 ):
 		{
+			/*
 			sprites.hero().graphics_->current_frame_x_ = 128;
 			sprites.hero().graphics_->current_frame_y_ = 26;
 			if ( testSewerAnimationFinished() )
@@ -274,17 +269,17 @@ void EventSystem::testWarp( Level& level, SpriteSystem& sprites, Camera& camera,
 				in_front_of_door_ = 0;
 				sprites.hero().graphics_->priority_ = true;
 				misc_.data_.sewer_gfx_->fade_in_ = true;
-			}
+			}*/
 		}
 		break;
 	}
 
-	doSewerAnimation( sprites );
+	//doSewerAnimation( sprites );
 };
 
-void EventSystem::doWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks )
+void EventSystem::doWarp( LevelState& level_state )
 {
-	level.warp( sprites, camera, *this, blocks );
+	level_state.level().warp( level_state );
 	change_map_ = 0;
 	in_front_of_door_ = 0;
 };

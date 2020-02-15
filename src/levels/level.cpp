@@ -20,6 +20,7 @@
 #include <fstream>
 #include "main.hpp"
 #include "level.hpp"
+#include "level_state.hpp"
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
 #include "rapidjson/istreamwrapper.h"
@@ -135,18 +136,19 @@ int Level::cameraY() const
 	return camera_y_;
 };
 
-void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, BlockSystem& blocks )
+void Level::warp( LevelState& level_state )
 {
+	SpriteSystem& sprites = level_state.sprites();
 	const Warp* warp = currentMap().getWarp( sprites.hero().xSubPixels(), sprites.hero().ySubPixels() );
-
 	if ( warp != nullptr )
 	{
+		Camera& camera = level_state.camera();
+	
 		current_map_ = warp->mapNum();
-
 		entrance_x_ = warp->entranceX();
 		entrance_y_ = warp->entranceY();
 
-		sprites.reset( *this, events );
+		sprites.reset( level_state );
 		sprites.hero().hit_box_.x = Unit::PixelsToSubPixels( warp->entranceX() );
 		sprites.hero().hit_box_.y = Unit::PixelsToSubPixels( warp->entranceY() );
 
@@ -166,8 +168,8 @@ void Level::warp( SpriteSystem& sprites, Camera& camera, EventSystem& events, Bl
 		camera.setPosition( camera_x, camera_y );
 		camera.adjust( sprites.hero(), currentMap() );
 
-		events.changePalette( currentMap().palette_ );
-		blocks.reset( currentMap() );
+		level_state.events().changePalette( currentMap().palette_ );
+		level_state.blocks().reset( currentMap() );
 
 		Audio::changeSong( currentMap().music_ );
 
@@ -213,6 +215,11 @@ std::string Level::timeChallengeText( unsigned int n )
 const std::u32string& Level::message() const
 {
 	return message_;
+};
+
+int Level::id() const
+{
+	return id_;
 };
 
 std::string Level::getCodeName() const

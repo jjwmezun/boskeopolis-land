@@ -3,10 +3,9 @@
 #include "palette.hpp"
 #include <SDL2/SDL.h>
 
-class BlockSystem;
 class Camera;
 class Level;
-class Sprite;
+class LevelState;
 class SpriteSystem;
 class TextObj;
 
@@ -112,8 +111,8 @@ class EventSystem
 	EventSystem();
 	~EventSystem();
 	void init( const Level& level );
-	void update( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
-	void updateTrainer( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
+	void update( LevelState& level_state );
+	void updateTrainer( LevelState& level_state );
 	void reset();
 	Palette getPalette();
 	bool testLightSwitch();
@@ -128,8 +127,8 @@ class EventSystem
 	void lightSwitchTurnOn();
 	void resetPalette();
 	void testMessage( Level& level );
-	void testWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
-	void doWarp( Level& level, SpriteSystem& sprites, Camera& camera, BlockSystem& blocks );
+	void testWarp( LevelState& level_state );
+	void doWarp( LevelState& level_state );
 	void testWinLoseOrQuit( Level& level );
 	void failEvent( Level& level );
 	void winEvent( Level& level );

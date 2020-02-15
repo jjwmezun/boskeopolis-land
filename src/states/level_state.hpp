@@ -7,7 +7,6 @@
 #include "health.hpp"
 #include "inventory_level.hpp"
 #include "level.hpp"
-#include "level_graphics_system.hpp"
 #include "sprite.hpp"
 #include "player_graphics.hpp"
 #include "sprite_system.hpp"
@@ -25,14 +24,28 @@ class LevelState : public GameState
 		void updateForTrainer();
 		void initForTrainer();
 
+		Health& health();
+		const Health& health() const;
+		Camera& camera();
+		const Camera& camera() const;
+		SpriteSystem& sprites();
+		const SpriteSystem& sprites() const;
+		BlockSystem& blocks();
+		const BlockSystem& blocks() const;
+		EventSystem& events();
+		const EventSystem& events() const;
+		Level& level();
+		const Level& level() const;
 		Map& currentMap();
+		const Map& currentMap() const;
+		InventoryLevel& inventory();
+		const InventoryLevel& inventory() const;
 
 	private:
 		void testPause();
 
 		Health health_;
 		Camera camera_;
-		LevelGraphicsSystem graphics_;
 		SpriteSystem sprites_;
 		BlockSystem blocks_;
 		EventSystem events_;
