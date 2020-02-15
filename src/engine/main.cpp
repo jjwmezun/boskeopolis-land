@@ -425,14 +425,9 @@ namespace Main
 			path_divider_ = "\\";
 		#endif
 
-		const std::string BASE_DIR = "boskeopolis-land";
-		const std::string RES_SUB_DIR = pathDivider() + "resources/";
 		char* base_path = SDL_GetBasePath();
-		std::string path = base_path;
+		resource_path_ = std::string( base_path ) + pathDivider() + "assets/";
 		SDL_free( base_path );
-		size_t pos = path.find( BASE_DIR );
-		path.replace( pos + BASE_DIR.length(), path.length() - pos - BASE_DIR.length(), RES_SUB_DIR );
-		resource_path_ = path;
 	};
 
 	std::string resourcePath()
