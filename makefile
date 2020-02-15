@@ -24,7 +24,7 @@ OBJ_FOLDERS = $(EXE_DIR) $(OBJ_DIR) $(subst -I$(SRC_DIR),$(OBJ_DIR),$(LOCAL_INC)
 all: before out
 
 before:
-	$(foreach f,$(OBJ_FOLDERS),mkdir -p $(f))
+	$(foreach f,$(OBJ_FOLDERS),$(mkdir -p f))
 
 out: $(OBJ)
 	$(LINKER) -o $(EXE) $(OBJ) $(LDFLAGS)
