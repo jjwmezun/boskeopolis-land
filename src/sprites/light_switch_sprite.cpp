@@ -19,7 +19,7 @@ void LightSwitchSprite::customInteract( Collision& my_collision, Collision& thei
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
 	if ( hit )
 	{
-        events.lightSwitchTurnOn();
+        events.forceSwitchOn();
 	}
 };
 

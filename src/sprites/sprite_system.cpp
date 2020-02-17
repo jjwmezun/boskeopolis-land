@@ -43,6 +43,7 @@
 #include "enemy_cart_sprite.hpp"
 #include "event_system.hpp"
 #include "falling_snow_boulder_spawn_sprite.hpp"
+#include "falling_spike_sprite.hpp"
 #include "faucet_sprite.hpp"
 #include "falling_bough_sprite.hpp"
 #include "falling_fist_sprite.hpp"
@@ -766,6 +767,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 192 ):
 			return std::unique_ptr<Sprite> ( new LightSwitchSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 193 ):
+			return std::unique_ptr<Sprite> ( new FallingSpikeSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

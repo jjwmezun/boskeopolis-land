@@ -19,27 +19,26 @@ static std::vector<int> sprites_tiles_ = {};
 static int width_blocks_ = 0;
 static int height_blocks_ = 0;
 
-static constexpr int NUMBER_OF_PALETTES = 2;
+static constexpr int NUMBER_OF_PALETTES = 3;
 static constexpr int NUMBER_OF_SOLID_TILES = 32;
 static constexpr int SOLID_TILES[ NUMBER_OF_SOLID_TILES ] =
 {
 	-1, 21, 23, 24, 25, 26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 124, 125, 126, 127, 108, 109, 110, 111, 9, 10
 };
-static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 16 ] =
+static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
 	"Overworld Red",
-	"Overworld Green"
+	"Overworld Green",
+	"Overworld Yellow"
 };
 
 static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] = 
 {
-	0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
-
-static const char* getPaletteForLevel();
 
 static constexpr bool testIsSolid( int tile )
 {
@@ -53,10 +52,22 @@ static constexpr bool testIsSolid( int tile )
 	return false;
 };
 
-OverworldState::OverworldState( int previous_level, bool show_event, bool new_game )
+static constexpr OWState determineBeginningState( ShowEventType event_type )
+{
+	switch ( event_type )
+	{
+		case ( ShowEventType::NONE   ): return OWState::MOVE_PLAYER; break;
+		case ( ShowEventType::NORMAL ): return OWState::CAMERA_MOVES_TO_EVENT; break;
+		case ( ShowEventType::SECRET ): return OWState::CAMERA_MOVES_TO_SECRET_EVENT; break;
+	}
+};
+
+static const char* getPaletteForLevel();
+
+OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType show_event )
 :
 	GameState( StateID::OVERWORLD_STATE, { getPaletteForLevel(), 2 } ),
-	state_ ( ( show_event ) ? OWState::CAMERA_MOVES_TO_EVENT : OWState::MOVE_PLAYER ),
+	state_ ( determineBeginningState( show_event ) ),
 	background_animation_timer_ ( 0 ),
 	background_animation_frame_ ( 0 ),
 	current_level_ ( -1 ),
@@ -233,6 +244,7 @@ void OverworldState::stateUpdate()
 		break;
 
 		case ( OWState::CAMERA_MOVES_TO_EVENT ):
+		case ( OWState::CAMERA_MOVES_TO_SECRET_EVENT ):
 		{
 			hero_.updateGraphics( camera_.getBox() );
 			if ( camera_.moveAutomaticallyToTarget( event_.getTargetPosition(), 4 ) )
@@ -274,16 +286,6 @@ void OverworldState::stateRender()
 			camera_arrows_.render();
 		}
 		break;
-
-		case ( OWState::CAMERA_MOVES_AUTOMATICALLY_TO_PLAYER ):
-		{
-		}
-		break;
-
-		case ( OWState::EVENT ):
-		{
-		}
-		break;
 	}
 };
 
@@ -317,7 +319,11 @@ void OverworldState::init()
 
 	if ( state_ == OWState::CAMERA_MOVES_TO_EVENT )
 	{
-		event_.init( Inventory::currentLevel(), width_blocks_ );
+		event_.init( Inventory::currentLevel(), width_blocks_, false );
+	}
+	else if ( state_ == OWState::CAMERA_MOVES_TO_SECRET_EVENT )
+	{
+		event_.init( Inventory::currentLevel(), width_blocks_, true );
 	}
 
 	Audio::changeSong( "overworld" );
@@ -588,7 +594,13 @@ void OverworldState::generateMap()
 		if ( Inventory::victory( i ) )
 		{
 			OWEvent event;
-			event.init( i, width_blocks_ );
+			event.init( i, width_blocks_, false );
+			event.changeAllTiles( bg_tiles_, fg_tiles_ );
+		}
+		if ( Inventory::getSecretGoal( i ) )
+		{
+			OWEvent event;
+			event.init( i, width_blocks_, true );
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
 		}
 	}

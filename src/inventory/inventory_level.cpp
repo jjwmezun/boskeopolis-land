@@ -83,9 +83,9 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 		updateKeyGraphics();
 		showing_key_ = true;
 	}
-	if ( show_on_off_ && on_off_state_ != events.switch_ )
+	if ( show_on_off_ && on_off_state_ != events.isSwitchOn() )
 	{
-		on_off_state_ = events.switch_;
+		on_off_state_ = events.isSwitchOn();
 		updateSwitchGraphics();
 	}
 	if ( mcguffins_to_render_ != -1 && mcguffins_to_render_ != Inventory::McGuffins() )

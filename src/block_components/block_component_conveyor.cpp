@@ -14,7 +14,7 @@ BlockComponentConveyor::~BlockComponentConveyor() {};
 void BlockComponentConveyor::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
 	int x_effect = x_effect_;
-	if ( events.switchOn() )
+	if ( events.isSwitchOn() )
 	{
 		x_effect = -x_effect_;
 	}
@@ -32,6 +32,6 @@ void BlockComponentConveyor::interact( const Collision& collision, Sprite& sprit
 
 	if ( sprite.hasType( Sprite::SpriteType::HERO ) && collision.collideBottom() )
 	{
-		events.on_conveyor_belt_ = true;
+		events.setOnConveyorBelt();
 	}
 };

@@ -38,7 +38,7 @@ void ChangeLayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 {
 	if ( activated_ )
 	{
-		events.switch_ = ( direction_y_ == Direction::Vertical::DOWN );
+		events.forceSwitch( direction_y_ == Direction::Vertical::DOWN );
 
 		if ( flash_timer_ > 0 && flash_timer_ % FLASH_SPEED == 0 )
 		{
@@ -63,7 +63,7 @@ void ChangeLayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 
 void ChangeLayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( !activated_ && ( events.switch_ == ( direction_y_ == Direction::Vertical::UP ) ) && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	if ( !activated_ && ( events.isSwitchOn() == ( direction_y_ == Direction::Vertical::UP ) ) && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		activated_ = true;
 		Audio::playSound( Audio::SoundType::HEAL );

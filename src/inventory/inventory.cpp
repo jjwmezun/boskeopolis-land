@@ -39,6 +39,7 @@ namespace Inventory
 
 	bool testMultiples( int value );
 	void addFundsForMultiplier( int value );
+	void generalVictory();
 
 
 	// Private Variables
@@ -74,6 +75,7 @@ namespace Inventory
 
 	static bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
 	static bool victories_[ Level::NUMBER_OF_LEVELS ];
+	static bool secret_goals_[ Level::NUMBER_OF_LEVELS ];
 	static bool diamonds_[ Level::NUMBER_OF_LEVELS ];
 	static bool crowns_[ Level::NUMBER_OF_LEVELS ];
 	static bool suits_[ Level::NUMBER_OF_LEVELS ];
@@ -87,6 +89,8 @@ namespace Inventory
 
 	static Difficulty difficulty_ = Difficulty::NORMAL;
 	static bool health_upgrades_[ MAX_HEART_UPGRADES ] = { false, false, false };
+
+
 
 
 	// Function Implementations
@@ -244,6 +248,16 @@ namespace Inventory
 	bool victory( int level )
 	{
 		return victories_[ level ];
+	};
+
+	bool getSecretGoal()
+	{
+		return secret_goals_[ current_level_() ];
+	};
+
+	bool getSecretGoal( int level )
+	{
+		return secret_goals_[ level ];
 	};
 
 	bool beenToLevel( int level )
@@ -681,17 +695,7 @@ namespace Inventory
 	void win()
 	{
 		victories_[ current_level_() ] = true;
-		if ( isHardMode() )
-		{
-			crowns_[ current_level_() ] = true;
-		}
-		winGemScore();
-		winTimeScore();
-
-		total_funds_ += funds_;
-		funds_ = 0;
-
-		save();
+		generalVictory();
 	};
 
 	void fail()
@@ -707,6 +711,27 @@ namespace Inventory
 			fail();
 		}
 	};
+
+	void secretGoal()
+	{
+		secret_goals_[ current_level_() ] = true;
+		generalVictory();
+	};
+
+	void generalVictory()
+	{
+		if ( isHardMode() )
+		{
+			crowns_[ current_level_() ] = true;
+		}
+		winGemScore();
+		winTimeScore();
+
+		total_funds_ += funds_;
+		funds_ = 0;
+
+		save();
+	}
 
 	void addFunds( int n )
 	{

@@ -84,6 +84,7 @@ class LocalizationLanguage
         std::u32string getGenericGoalMessage() const;
         std::u32string getFailureMessage() const;
         std::u32string getSuccessMessage() const;
+        std::u32string getSecretGoalMessage() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );

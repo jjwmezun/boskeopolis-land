@@ -13,7 +13,7 @@ SwitchBlockSprite::~SwitchBlockSprite() {};
 void SwitchBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
 	bump_under_block_component.update( *this );
-	graphics_->current_frame_x_ = ( events.switchOn() ) ? 0 : 16;
+	graphics_->current_frame_x_ = ( events.isSwitchOn() ) ? 0 : 16;
 };
 
 void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )

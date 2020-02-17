@@ -35,7 +35,7 @@ void LevelState::stateUpdate()
 	}
 	else
 	{
-		if ( !events_.pause_state_movement_ )
+		if ( !events_.pauseStateMovement() )
 		{
 			level_.currentMap().update( events_, sprites_, blocks_, camera_ );
 			camera_.update();
@@ -122,7 +122,7 @@ void LevelState::init()
 
 void LevelState::testPause()
 {
-	if ( Input::pressed( Input::Action::MENU ) && !events_.disable_pause_ )
+	if ( Input::pressed( Input::Action::MENU ) && !events_.pauseIsDisabled() )
 	{
 		Main::pushState
 		(

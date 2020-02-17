@@ -7,5 +7,5 @@ BlockComponentClimbDown::~BlockComponentClimbDown() {};
 
 void BlockComponentClimbDown::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
 {
-	events.can_climb_down_ = true;
+	events.setCanClimbDown();
 };

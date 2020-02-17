@@ -21,13 +21,13 @@
 #include "block_component_kill.hpp"
 #include "block_component_kill_animated.hpp"
 #include "block_component_layer.hpp"
-#include "block_component_light_switch.hpp"
 #include "block_component_lock_box.hpp"
 #include "block_component_lose.hpp"
 #include "block_component_mcguffin.hpp"
 #include "block_component_message.hpp"
 #include "block_component_money.hpp"
 #include "block_component_push_down.hpp"
+#include "block_component_secret_goal.hpp"
 #include "block_component_sewer_door.hpp"
 #include "block_component_shmup_bullet.hpp"
 #include "block_component_single_use.hpp"
@@ -580,13 +580,13 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					{
 						components.emplace_back( std::make_unique<BlockComponentSwitchOff> () );
 					}
+					else if ( mezun::areStringsEqual( comp_type, "secret_goal" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentSecretGoal> () );
+					}
 					else if ( mezun::areStringsEqual( comp_type, "sticky" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSticky> () );
-					}
-					else if ( mezun::areStringsEqual( comp_type, "light_switch" ) )
-					{
-						components.emplace_back( std::make_unique<BlockComponentLightSwitch> () );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "shmup_bullet" ) )
 					{

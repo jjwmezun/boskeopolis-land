@@ -33,14 +33,14 @@ void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	{
 		case ( ChamsbyState::INTRO ):
 		{
-			events.pause_hero_ = true;
+			events.setPauseHeroOn();
 			if ( health_timer_ >= 4 )
 			{
 				Audio::playSound( Audio::SoundType::SELECT );
 				++health_;
 				if ( health_ == MAX_HP )
 				{
-					events.pause_hero_ = false;
+					events.setPauseHeroOff();
 					state_ = ChamsbyState::ATTACK;
 					Audio::changeSong( "boss" );
 				}
@@ -161,7 +161,7 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 
 		if ( health_ <= 0 && them.on_ground_ )
 		{
-			events.pause_hero_ = true;
+			events.setPauseHeroOn();
 		}
 	}
 };

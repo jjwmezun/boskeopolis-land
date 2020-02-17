@@ -107,14 +107,14 @@ void MapLayerWater::updateEventMovement( EventSystem& events )
 {
 	if ( events.waterShouldMove() )
 	{
-		if ( events.move_water_ < y_ )
+		if ( events.waterMovement() < y_ )
 		{
-			y_ = std::max( events.move_water_, y_ - MOVE_SPEED );
+			y_ = std::max( events.waterMovement(), y_ - MOVE_SPEED );
 		}
-		else if ( events.move_water_ > y_ )
+		else if ( events.waterMovement() > y_ )
 		{
-			y_ = std::min( events.move_water_, y_ + MOVE_SPEED );
+			y_ = std::min( events.waterMovement(), y_ + MOVE_SPEED );
 		}
 	}
-	events.current_water_ = y_;
+	events.setCurrentWater( y_ );
 };

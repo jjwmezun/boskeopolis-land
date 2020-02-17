@@ -70,7 +70,7 @@ PlayerSprite::~PlayerSprite() {};
 
 void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( !events.pause_hero_ )
+	if ( !events.testPauseHero() )
 	{
 		heroActions( camera, lvmap, events, sprites, blocks, health );
 		player_gfx_.update( *this, graphics_.get(), &events );
@@ -91,8 +91,6 @@ void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events,
 	invincibilityFlicker( health );
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
-	events.is_sliding_prev_ = events.is_sliding_;
-	events.is_sliding_ = false;
 };
 
 // Actions performed by all player sprites, including Dagny.
@@ -102,7 +100,6 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	handleWalking();
 	handleDuckingAndSliding( blocks, events );
 	handleJumpingAndFalling( blocks, events );
-	events.on_conveyor_belt_ = false;
 	handleLadderBehavior( events );
 	adjustJumpSpeed();
 	dontDuckWhileSwimming( blocks );
@@ -130,7 +127,7 @@ void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health
 				}
 				Audio::playSound( Audio::SoundType::BOP );
 			}
-			else if ( my_collision.collideAny() && events.is_sliding_prev_ )
+			else if ( my_collision.collideAny() && events.testIsSlidingPreviously() )
 			{
 				them.kill();
 				Audio::playSound( Audio::SoundType::BOP );
@@ -172,27 +169,26 @@ void PlayerSprite::handleCameraMovement( Camera& camera )
 
 void PlayerSprite::handleDoorBehavior( EventSystem& events )
 {
-	if ( events.in_front_of_door_ > 0 && input_->up() && !door_lock_ && on_ground_ )
+	if ( input_->up() && !door_lock_ && on_ground_ )
 	{
-		switch ( events.in_front_of_door_ )
+		if ( events.isInFrontOfRegularDoor() )
 		{
-			case ( 1 ):
-				events.changeMap();
-			break;
-			case ( 2 ):
-				events.changeMapSewer();
-				graphics_->priority_ = true;
-				vx_ = 0;
-				acceleration_x_ = 0;
-				Audio::playSound( Audio::SoundType::SEWER_HOLE );
-			break;
+			events.changeMap();
+		}
+		else if ( events.isInFrontOfSewerDoor() )
+		{
+			events.changeMapSewer();
+			graphics_->priority_ = true;
+			vx_ = 0;
+			acceleration_x_ = 0;
+			Audio::playSound( Audio::SoundType::SEWER_HOLE );
 		}
 	}
 	else if ( input_->up() )
 	{
 		door_lock_ = true;
 	}
-	events.in_front_of_door_ = 0;
+	events.resetInFrontOfDoor();
 
 	if ( door_lock_ )
 	{
@@ -267,7 +263,7 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 {
 	if ( input_->up() )
 	{
-		if ( events.touching_ladder_ )
+		if ( events.testTouchingLadder() )
 		{
 			grabLadder();
 		}
@@ -296,7 +292,7 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 		}
 	}
 
-	if ( !events.touching_ladder_ )
+	if ( !events.testTouchingLadder() )
 	{
 		releaseLadder();
 	}
@@ -305,8 +301,7 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 	{
 		vy_ = 0;
 	}
-	events.touching_ladder_prev_ = events.touching_ladder_;
-	events.touching_ladder_ = false;
+	events.resetTouchingLadder();
 };
 
 void PlayerSprite::handleLookingUp()
@@ -372,7 +367,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 		{
 			case ( Direction::Horizontal::__NULL ):
 			{
-				if ( events.can_climb_down_ )
+				if ( events.testCanClimbDown() )
 				{
 					if ( isDucking() )
 					{
@@ -411,7 +406,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 		tryUnduck( blocks );
 	}
 
-	if ( !events.is_sliding_ )
+	if ( !events.testIsSliding() )
 	{
 		if ( !input_->right() && !input_->left())
 		{
@@ -431,18 +426,19 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 		top_speed_ = top_speed_run_;
 	}
 
-	events.can_climb_down_ = false;
+	events.resetCanClimbDown();
+	events.resetIsSliding();
 };
 
-void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events )
+void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, EventSystem& events )
 {
-	if ( input_->action1() && !( events.on_conveyor_belt_ && isDucking() && blocksJustAbove( blocks ) ) )
+	if ( input_->action1() && !( events.testOnConveyorBelt() && isDucking() && blocksJustAbove( blocks ) ) )
 	{
 		jump();
 		if ( jump_start_ && !jump_end_ )
 		{
 			on_ladder_ = false;
-			if ( events.is_sliding_ )
+			if ( events.testIsSliding() )
 			{
 				slide_jump_ = true;
 				vx_ *= 5;
@@ -504,7 +500,7 @@ bool PlayerSprite::canJump() const
 
 void PlayerSprite::slideLeft( EventSystem& events )
 {
-	events.is_sliding_ = true;
+	events.setSlidingOn();
 	top_speed_ = top_speed_run_;
 	start_speed_ = start_speed_run_;
 	moveLeft();
@@ -512,7 +508,7 @@ void PlayerSprite::slideLeft( EventSystem& events )
 
 void PlayerSprite::slideRight( EventSystem& events )
 {
-	events.is_sliding_ = true;
+	events.setSlidingOn();
 	top_speed_ = top_speed_run_;
 	start_speed_ = start_speed_run_;
 	moveRight();

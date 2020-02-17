@@ -58,7 +58,7 @@ class PlayerSprite : public Sprite
 		void handleRunning();
 		void handleWalking();
 		void handleDuckingAndSliding( const BlockSystem& blocks, EventSystem& events );
-		void handleJumpingAndFalling( const BlockSystem& blocks, const EventSystem& events );
+		void handleJumpingAndFalling( const BlockSystem& blocks, EventSystem& events );
 		void handleLookingUp();
 		void slideLeft( EventSystem& events );
 		void slideRight( EventSystem& events );

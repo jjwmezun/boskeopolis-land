@@ -156,7 +156,7 @@ void PlayerOpenChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 
 	if ( Input::pressed( Input::Action::CONFIRM ) || Input::pressed( Input::Action::CANCEL ) || Input::pressed( Input::Action::MENU ) )
 	{
-		events.won_ = true;
+		events.win();
 	}
 };
 

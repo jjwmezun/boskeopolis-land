@@ -10,7 +10,7 @@ WarpGoal::~WarpGoal() {};
 
 void WarpGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
 {
-	if ( events.change_map_ )
+	if ( events.testChangeMap() )
 	{
 		events.win();
 	}

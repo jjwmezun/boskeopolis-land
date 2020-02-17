@@ -42,50 +42,44 @@ FlashlightPlayerSprite::~FlashlightPlayerSprite() {};
 
 void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( !events.pause_hero_ )
+	resetBopsOnLanding();
+	handleRunning();
+	handleWalking();
+	if ( !input_->right() && !input_->left())
 	{
-		resetBopsOnLanding();
-		handleRunning();
-		handleWalking();
-		if ( !input_->right() && !input_->left())
+		stopX();
+	}
+	handleJumpingAndFalling( blocks, events );
+	handleLadderBehavior( events );
+	adjustJumpSpeed();
+	dontDuckWhileSwimming( blocks );
+	input_->update();
+	handleLookingUp();
+	handleCameraMovement( camera );
+	handleWaterEnteringAndExiting( lvmap );
+	handleDoorBehavior( events );
+	handleChasmBehavior( lvmap, events );
+	handleDrowningBehavior( health );
+	invincibilityFlicker( health );
+	boundaries( camera, lvmap );
+	camera.adjust( *this, lvmap );
+	player_gfx_.update( *this, graphics_.get(), &events );
+	if ( !on_ladder_ )
+	{
+		if ( Input::held( Input::Action::MOVE_UP ) )
 		{
-			stopX();
-		}
-		handleJumpingAndFalling( blocks, events );
-		events.on_conveyor_belt_ = false;
-		handleLadderBehavior( events );
-		adjustJumpSpeed();
-		dontDuckWhileSwimming( blocks );
-		input_->update();
-		handleLookingUp();
-		handleCameraMovement( camera );
-		handleWaterEnteringAndExiting( lvmap );
-		handleDoorBehavior( events );
-		handleChasmBehavior( lvmap, events );
-		handleDrowningBehavior( health );
-		invincibilityFlicker( health );
-		boundaries( camera, lvmap );
-		camera.adjust( *this, lvmap );
-		events.is_sliding_prev_ = events.is_sliding_;
-		events.is_sliding_ = false;
-		player_gfx_.update( *this, graphics_.get(), &events );
-		if ( !on_ladder_ )
-		{
-			if ( Input::held( Input::Action::MOVE_UP ) )
+			angle_ -= FLASHLIGHT_SPEED;
+			if ( angle_ < -FLASHLIGHT_MOVEMENT_LIMIT )
 			{
-				angle_ -= FLASHLIGHT_SPEED;
-				if ( angle_ < -FLASHLIGHT_MOVEMENT_LIMIT )
-				{
-					angle_ = -FLASHLIGHT_MOVEMENT_LIMIT;
-				}
+				angle_ = -FLASHLIGHT_MOVEMENT_LIMIT;
 			}
-			else if ( Input::held( Input::Action::MOVE_DOWN ) )
+		}
+		else if ( Input::held( Input::Action::MOVE_DOWN ) )
+		{
+			angle_ += FLASHLIGHT_SPEED;
+			if ( angle_ > FLASHLIGHT_MOVEMENT_LIMIT )
 			{
-				angle_ += FLASHLIGHT_SPEED;
-				if ( angle_ > FLASHLIGHT_MOVEMENT_LIMIT )
-				{
-					angle_ = FLASHLIGHT_MOVEMENT_LIMIT;
-				}
+				angle_ = FLASHLIGHT_MOVEMENT_LIMIT;
 			}
 		}
 	}

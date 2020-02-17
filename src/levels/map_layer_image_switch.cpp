@@ -46,7 +46,7 @@ MapLayerImageSwitch::~MapLayerImageSwitch() {};
 
 void MapLayerImageSwitch::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
 {
-	if ( events.switchOn() )
+	if ( events.isSwitchOn() )
 	{
 		alpha_ = 255;
 	}

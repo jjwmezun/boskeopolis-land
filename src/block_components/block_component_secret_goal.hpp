@@ -2,10 +2,10 @@
 
 #include "block_component.hpp"
 
-class BlockComponentLightSwitch : public BlockComponent
+class BlockComponentSecretGoal : public BlockComponent
 {
 	public:
-		BlockComponentLightSwitch();
-		~BlockComponentLightSwitch();
+		BlockComponentSecretGoal();
+		~BlockComponentSecretGoal();
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const override;
 };

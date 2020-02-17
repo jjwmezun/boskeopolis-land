@@ -16,11 +16,11 @@ void MoveWaterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 {
 	if ( events.waterShouldMove() )
 	{
-		if ( events.move_water_ > events.current_water_ )
+		if ( events.isWaterMovingUpward() )
 		{
 			spin_direction_ = Direction::Clockwise::CLOCKWISE;
 		}
-		else if ( events.move_water_ < events.current_water_ )
+		else if ( events.isWaterMovingDownward() )
 		{
 			spin_direction_ = Direction::Clockwise::COUNTERCLOCKWISE;
 		}
@@ -36,7 +36,7 @@ void MoveWaterSprite::customInteract( Collision& my_collision, Collision& their_
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		events.move_water_ = bottomSubPixels();
+		events.setWaterMovement( bottomSubPixels() );
 	}
 };
 

@@ -13,7 +13,7 @@ IronWallSprite::~IronWallSprite() {};
 
 void IronWallSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-	if ( events.switch_ )
+	if ( events.isSwitchOn() )
 	{
 		moveDown();
 		Audio::playSound( Audio::SoundType::CANCEL );

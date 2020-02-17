@@ -11,6 +11,7 @@
 #include "ow_state.hpp"
 #include "ow_tilemap.hpp"
 #include "rapidjson/document.h"
+#include "show_event_type.hpp"
 #include "texture_box.hpp"
 #include <unordered_map>
 
@@ -19,7 +20,7 @@ class Collision;
 class OverworldState : public GameState
 {
 	public:
-		OverworldState( int previous_level, bool show_event = false, bool new_game = false );
+		OverworldState( int previous_level, bool new_game = false, ShowEventType show_event = ShowEventType::NONE );
 		~OverworldState();
 
 		void stateUpdate() override;

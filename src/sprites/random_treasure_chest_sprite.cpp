@@ -64,7 +64,7 @@ void RandomTreasureChestSprite::customInteract( Collision& my_collision, Collisi
 				const auto collision = them.testCollision( getKeyCanePosition() );
 				if ( collision.collideAny() )
 				{
-					events.won_ = true;
+					events.win();
 				}
 			}
 		break;

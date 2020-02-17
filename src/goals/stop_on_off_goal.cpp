@@ -22,7 +22,7 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 	switch ( round_time )
 	{
 		case ( 0 ):
-			events.switch_ = true;
+			events.forceSwitchOn();
 			Audio::resumeSong();
 			state.newPalette( "Go Green" );
 		break;
@@ -59,10 +59,10 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 
 	if ( round_time > GO_TIME + ( BLINK_TIME * 6 ) + 8 )
 	{
-		events.switch_ = false;
+		events.forceSwitchOff();
 	}
 
-	switch ( events.switch_ )
+	switch ( events.isSwitchOn() )
 	{
 		case ( false ):
 		{
@@ -82,5 +82,5 @@ void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLe
 
 void StopOnOffGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
 {
-	events.switch_ = true;
+	events.forceSwitchOn();
 };

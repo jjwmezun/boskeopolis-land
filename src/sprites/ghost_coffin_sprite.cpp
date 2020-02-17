@@ -15,7 +15,7 @@ GhostCoffinSprite::~GhostCoffinSprite() {};
 
 void GhostCoffinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
 {
-    if ( !done_ && events.switch_ )
+    if ( !done_ && events.isSwitchOn() )
     {
         if ( hit_box_.x == original_hit_box_.x )
         {

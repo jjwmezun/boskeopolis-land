@@ -117,7 +117,7 @@ void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Col
 				Inventory::bop();
 				Audio::playSound( Audio::SoundType::BOP );
 			}
-			else if ( events.is_sliding_prev_ )
+			else if ( events.testIsSlidingPreviously() )
 			{
 				me.kill();
 				Audio::playSound( Audio::SoundType::BOP );

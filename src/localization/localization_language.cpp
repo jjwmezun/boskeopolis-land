@@ -1062,3 +1062,8 @@ std::u32string LocalizationLanguage::getSuccessMessage() const
 {
     return level_success_;
 };
+
+std::u32string LocalizationLanguage::getSecretGoalMessage() const
+{
+    return mezun::charToChar32String( "¡Secret Goal!" );
+};

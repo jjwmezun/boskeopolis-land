@@ -7,17 +7,20 @@
 #include "rapidjson/istreamwrapper.h"
 #include "rapidjson/rapidjson.h"
 
+static constexpr int DEFAULT_TILE_SPEED = 16;
+
 OWEvent::OWEvent()
 :
+    event_tile_speed_ ( DEFAULT_TILE_SPEED ),
     timer_ ( 0 ),
     current_change_ ( 0 ),
     changes_ (),
     target_position_ ()
 {};
 
-void OWEvent::init( int level, int map_width )
+void OWEvent::init( int level, int map_width, bool is_secret )
 {
-    const std::string path = Main::resourcePath() + "events/" + Level::getCodeName( level ) + ".json";
+    const std::string path = Main::resourcePath() + "events/" + Level::getCodeName( level ) + ( ( is_secret ) ? "-secret.json" : ".json" );
 	std::ifstream ifs( path );
 	if( !ifs.is_open() )
 	{
@@ -105,6 +108,11 @@ void OWEvent::init( int level, int map_width )
         }
         changes_.push_back( change_list );
     }
+
+    if ( data.HasMember( "speed" ) && data[ "speed" ].IsInt() )
+    {
+        event_tile_speed_ = data[ "speed" ].GetInt();
+    }
 };
 
 OWEvent::MessageBack OWEvent::update( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles )
@@ -124,7 +132,7 @@ OWEvent::MessageBack OWEvent::update( std::vector<int>& bg_tiles, std::vector<in
     }
     else
     {
-        if ( timer_ == 16 )
+        if ( timer_ == event_tile_speed_ )
         {
             Audio::playSound( Audio::SoundType::CHEST_OPEN );
             message = changeTiles( bg_tiles, fg_tiles );

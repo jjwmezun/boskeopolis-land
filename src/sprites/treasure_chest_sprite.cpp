@@ -34,22 +34,26 @@ void TreasureChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	switch ( jump_start_speed_ )
 	{
 		case( 1 ):
+		{
 			animateChestOpening();
+		}
 		break;
 		case( 2 ):
+		{
 			raiseItem();
+		}
 		break;
 	}
 };
 
 void TreasureChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
 {
-	if ( them.on_ground_ && events.key_ && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	if ( them.on_ground_ && events.hasKey() && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		Inventory::clock().stop();
 		Audio::fadeMusic( 500 );
 		sprites.heroOpenTreasureChest();
-		events.disable_pause_ = true;
+		events.setPauseDisabled();
 	}
 };
 

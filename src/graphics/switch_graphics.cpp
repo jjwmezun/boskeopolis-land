@@ -15,7 +15,7 @@ SwitchGraphics::SwitchGraphics
 
 void SwitchGraphics::update( const EventSystem& events )
 {
-	switch ( events.switchOn() )
+	switch ( events.isSwitchOn() )
 	{
 		case ( true ):
 			current_gfx_ = gfx_on_.get();

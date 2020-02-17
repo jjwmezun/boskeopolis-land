@@ -41,7 +41,7 @@ void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphic
 		graphics->current_frame_x_ = ( climb_counter_.value() == 1 ) ? 128 : 96;
 		graphics->current_frame_y_ = 0;
 	}
-	else if ( events != nullptr && events->is_sliding_prev_ )
+	else if ( events != nullptr && events->testIsSlidingPreviously() )
 	{
 		graphics->current_frame_x_ = 48;
 		graphics->current_frame_y_ = 26;

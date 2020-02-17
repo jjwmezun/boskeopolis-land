@@ -53,9 +53,6 @@ EventSystem::EMisc::EMisc()
 
 EventSystem::EventSystem()
 :
-	won_ ( false ),
-	failed_ ( false ),
-	quit_level_ ( false ),
 	key_ ( false ),
 	message_ ( false ),
 	message_lock_ ( false ),
@@ -67,7 +64,7 @@ EventSystem::EventSystem()
 	disable_pause_ ( false ),
 	move_water_ ( WATER_NULL ),
 	current_water_ ( WATER_NULL ),
-	in_front_of_door_ ( 0 ),
+	in_front_of_door_ ( Door::NONE ),
 	on_conveyor_belt_ ( false ),
 	played_death_song_ ( false ),
 	pause_state_movement_ ( false ),
@@ -77,7 +74,8 @@ EventSystem::EventSystem()
 	is_sliding_ ( false ),
 	is_sliding_prev_ ( false ),
 	pause_hero_ ( false ),
-	misc_ ()
+	misc_ (),
+	level_complete_status_ ( LevelCompleteStatus::STILL_PLAYING )
 {
 	resetMisc();
 };
@@ -94,9 +92,6 @@ EventSystem::~EventSystem()
 
 void EventSystem::reset()
 {
-	won_ = false;
-	failed_ = false;
-	quit_level_ = false;
 	change_map_ = 0;
 	message_ = false;
 	message_lock_ = false;
@@ -105,7 +100,7 @@ void EventSystem::reset()
 	disable_pause_ = false;
 	move_water_ = -1;
 	current_water_ = -1;
-	in_front_of_door_ = 0;
+	in_front_of_door_ = Door::NONE;
 	on_conveyor_belt_ = false;
 	played_death_song_ = false;
 	pause_state_movement_ = false;
@@ -115,6 +110,7 @@ void EventSystem::reset()
 	is_sliding_ = false;
 	is_sliding_prev_ = false;
 	pause_hero_ = false;
+	level_complete_status_ = LevelCompleteStatus::STILL_PLAYING;
 	resetPalette();
 	resetMisc();
 };
@@ -134,17 +130,22 @@ void EventSystem::resetMisc()
 
 void EventSystem::win()
 {
-	won_ = true;
+	level_complete_status_ = LevelCompleteStatus::WON;
 };
 
 void EventSystem::fail()
 {
-	failed_ = true;
+	level_complete_status_ = LevelCompleteStatus::FAILED;
+};
+
+void EventSystem::secretGoal()
+{
+	level_complete_status_ = LevelCompleteStatus::SECRET_GOAL;
 };
 
 void EventSystem::quitLevel()
 {
-	quit_level_ = true;
+	level_complete_status_ = LevelCompleteStatus::QUIT;
 };
 
 void EventSystem::changeMap()
@@ -191,7 +192,7 @@ void EventSystem::resetPalette()
 	palette_changed_ = false;
 };
 
-bool EventSystem::switchOn() const
+bool EventSystem::isSwitchOn() const
 {
 	return switch_;
 };
@@ -221,7 +222,20 @@ void EventSystem::update( LevelState& level_state )
 {
 	updateTrainer( level_state );
 	testMessage( level_state.level() );
-	testWinLoseOrQuit( level_state.level() );
+	testLevelCompleteStatus();
+	resetOnConveyorBelt();
+};
+
+void EventSystem::resetIsSliding()
+{
+	is_sliding_prev_ = is_sliding_;
+	is_sliding_ = false;
+};
+
+void EventSystem::resetTouchingLadder()
+{
+	touching_ladder_prev_ = touching_ladder_;
+	touching_ladder_ = false;
 };
 
 void EventSystem::testMessage( Level& level )
@@ -281,26 +295,37 @@ void EventSystem::doWarp( LevelState& level_state )
 {
 	level_state.level().warp( level_state );
 	change_map_ = 0;
-	in_front_of_door_ = 0;
+	in_front_of_door_ = Door::NONE;
 };
 
-void EventSystem::testWinLoseOrQuit( Level& level )
+void EventSystem::testLevelCompleteStatus()
 {
-	if ( failed_ )
+	switch ( level_complete_status_ )
 	{
-		failEvent( level );
-	}
-	else if ( won_ )
-	{
-		winEvent( level );
-	}
-	else if ( quit_level_ )
-	{
-		quitEvent( level );
+		case ( LevelCompleteStatus::WON ):
+		{
+			winEvent();
+		}
+		break;
+		case ( LevelCompleteStatus::FAILED ):
+		{
+			failEvent();
+		}
+		break;
+		case ( LevelCompleteStatus::QUIT ):
+		{
+			quitEvent();
+		}
+		break;
+		case ( LevelCompleteStatus::SECRET_GOAL ):
+		{
+			secretGoalEvent();
+		}
+		break;
 	}
 };
 
-void EventSystem::failEvent( Level& level )
+void EventSystem::failEvent()
 {
 	Inventory::fail();
 	Main::pushState
@@ -320,11 +345,11 @@ void EventSystem::failEvent( Level& level )
 	playDeathSoundIfNotAlreadyPlaying();
 };
 
-void EventSystem::winEvent( Level& level )
+void EventSystem::winEvent()
 {
 	const bool win_momento = Inventory::victory( Inventory::currentLevel() );
 	Inventory::win();
-	const bool new_event = Inventory::victory( Inventory::currentLevel() ) != win_momento;
+	const ShowEventType new_event = ( !win_momento ) ? ShowEventType::NORMAL : ShowEventType::NONE;
 	Main::pushState
 	(
 		std::make_unique<WMessageState>
@@ -332,7 +357,7 @@ void EventSystem::winEvent( Level& level )
 			WTextObj::MessageData{ Localization::getCurrentLanguage().getSuccessMessage(), WTextCharacter::Color::WHITE, WTextCharacter::Color::DARK_GRAY },
 			WMessageState::Type::CHANGE,
 			Palette( "Go Green", 2 ),
-			std::make_unique<OverworldState> ( Inventory::currentLevel(), new_event ),
+			std::make_unique<OverworldState> ( Inventory::currentLevel(), false, new_event ),
 			"success",
 			true,
 			true
@@ -341,10 +366,31 @@ void EventSystem::winEvent( Level& level )
 	);
 };
 
-void EventSystem::quitEvent( Level& level )
+void EventSystem::quitEvent()
 {
 	Inventory::quit();
 	Main::changeState( std::make_unique<OverworldState> ( Inventory::currentLevel() ) );
+};
+
+void EventSystem::secretGoalEvent()
+{
+	const bool win_momento = Inventory::getSecretGoal( Inventory::currentLevel() );
+	Inventory::secretGoal();
+	const ShowEventType new_event = ( !win_momento ) ? ShowEventType::SECRET : ShowEventType::NONE;
+	Main::pushState
+	(
+		std::make_unique<WMessageState>
+		(
+			WTextObj::MessageData{ Localization::getCurrentLanguage().getSecretGoalMessage(), WTextCharacter::Color::WHITE, WTextCharacter::Color::DARK_GRAY },
+			WMessageState::Type::CHANGE,
+			Palette( "Triste Blue", 2 ),
+			std::make_unique<OverworldState> ( Inventory::currentLevel(), false, new_event ),
+			"success",
+			true,
+			true
+		),
+		true
+	);
 };
 
 bool EventSystem::waterShouldMove() const
@@ -355,11 +401,6 @@ bool EventSystem::waterShouldMove() const
 bool EventSystem::waterShouldStop() const
 {
 	return move_water_ == current_water_;
-};
-
-void EventSystem::lightSwitchTurnOn()
-{
-	switch_ = true;
 };
 
 bool EventSystem::testLightSwitch()
@@ -578,4 +619,159 @@ void EventSystem::changeBossUI( const TextObj& name, int health )
 			--health;
 		}
 	Render::releaseRenderTarget();
+};
+
+int EventSystem::waterMovement() const
+{
+	return move_water_;
+};
+
+void EventSystem::setWaterMovement( int value )
+{
+	move_water_ = value;
+};
+
+bool EventSystem::isWaterMovingUpward() const
+{
+	return move_water_ > current_water_;
+};
+
+bool EventSystem::isWaterMovingDownward() const
+{
+	return move_water_ < current_water_;
+};
+
+void EventSystem::setCurrentWater( int value )
+{
+	current_water_ = value;
+};
+
+bool EventSystem::pauseStateMovement() const
+{
+	return pause_state_movement_;
+};
+
+bool EventSystem::pauseIsDisabled() const
+{
+	return disable_pause_;
+};
+
+void EventSystem::setPauseDisabled()
+{
+	disable_pause_ = true;
+};
+
+void EventSystem::setTouchingLadder()
+{
+	touching_ladder_ = true;
+};
+
+bool EventSystem::testTouchingLadder() const
+{
+	return touching_ladder_;
+};
+
+void EventSystem::setInFrontOfDoor()
+{
+	in_front_of_door_ = Door::REGULAR;
+};
+
+void EventSystem::setInFrontOfSewerDoor()
+{
+	in_front_of_door_ = Door::SEWER;
+};
+
+void EventSystem::resetInFrontOfDoor()
+{
+	in_front_of_door_ = Door::NONE;
+};
+
+bool EventSystem::isInFrontOfRegularDoor() const
+{
+	return in_front_of_door_ == Door::REGULAR;
+};
+
+bool EventSystem::isInFrontOfSewerDoor() const
+{
+	return in_front_of_door_ == Door::SEWER;
+};
+
+void EventSystem::forceSwitch( bool value)
+{
+	switch_ = value;
+};
+
+void EventSystem::forceSwitchOn()
+{
+	switch_ = true;
+};
+
+void EventSystem::forceSwitchOff()
+{
+	switch_ = false;
+};
+
+void EventSystem::setCanClimbDown()
+{
+	can_climb_down_ = true;
+};
+
+void EventSystem::resetCanClimbDown()
+{
+	can_climb_down_ = false;
+};
+
+bool EventSystem::testCanClimbDown() const
+{
+	return can_climb_down_;
+};
+
+void EventSystem::setOnConveyorBelt()
+{
+	on_conveyor_belt_ = true;
+};
+
+void EventSystem::resetOnConveyorBelt()
+{
+	on_conveyor_belt_ = false;
+};
+
+bool EventSystem::testOnConveyorBelt() const
+{
+	return on_conveyor_belt_;
+};
+
+bool EventSystem::testIsSliding() const
+{
+	return is_sliding_;
+};
+
+void EventSystem::setSlidingOn()
+{
+	is_sliding_ = true;
+};
+
+bool EventSystem::testIsSlidingPreviously() const
+{
+	return is_sliding_prev_;
+};
+
+bool EventSystem::testChangeMap() const
+{
+	return change_map_;
+};
+
+bool EventSystem::testPauseHero() const
+{
+	return pause_hero_;
+};
+
+void EventSystem::setPauseHeroOn()
+{
+	pause_hero_ = true;
+};
+
+void EventSystem::setPauseHeroOff()
+{
+	pause_hero_ = false;
 };

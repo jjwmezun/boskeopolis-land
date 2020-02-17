@@ -31,8 +31,7 @@ void RopeSprite::customInteract( Collision& my_collision, Collision& their_colli
     {
         if ( their_collision.collideAny() )
         {
-            events.touching_ladder_ = true;
-
+            events.setTouchingLadder();
             if ( them.on_ladder_ )
             {
             	on_ = true;

@@ -25,6 +25,8 @@ namespace Inventory
 
 	bool victory();
 	bool victory( int level );
+	bool getSecretGoal();
+	bool getSecretGoal( int level );
 	bool levelUnlocked( int level );
 	bool beenToLevel( int level );
 	void levelStart( int level );
@@ -50,6 +52,7 @@ namespace Inventory
 	void win();
 	void fail();
 	void quit();
+	void secretGoal();
 
 	bool updateLevelFunds();
 	void updateForOverworld();

@@ -55,7 +55,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 		break;
 
 		case ( MoonState::BEFORE_FREEZE ):
-			events.switch_ = true;
+			events.forceSwitchOn();
 			graphics_->current_frame_x_ = Unit::BlocksToPixels( 5 );
 			moon_state_ = MoonState::FREEZE;
 		break;
