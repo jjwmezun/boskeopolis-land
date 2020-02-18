@@ -20,10 +20,10 @@ static int width_blocks_ = 0;
 static int height_blocks_ = 0;
 
 static constexpr int NUMBER_OF_PALETTES = 3;
-static constexpr int NUMBER_OF_SOLID_TILES = 32;
+static constexpr int NUMBER_OF_SOLID_TILES = 39;
 static constexpr int SOLID_TILES[ NUMBER_OF_SOLID_TILES ] =
 {
-	-1, 21, 23, 24, 25, 26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 124, 125, 126, 127, 108, 109, 110, 111, 9, 10
+	-1, 21, 23, 24, 25, 26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 124, 125, 126, 127, 108, 109, 110, 111, 9, 10, 144, 145, 146, 160, 162, 132, 148
 };
 static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
@@ -229,7 +229,7 @@ void OverworldState::stateUpdate()
 
 				case ( OWEvent::MessageBack::SHOW_NEXT_LEVEL ):
 				{
-					level_tile_graphics_.showTile( camera_.getBox(), Inventory::currentLevel() + 1 );
+					level_tile_graphics_.showTile( camera_.getBox(), event_.getNextLevel() );
 					Audio::playSound( Audio::SoundType::SELECT );
 				}
 				break;
@@ -596,12 +596,14 @@ void OverworldState::generateMap()
 			OWEvent event;
 			event.init( i, width_blocks_, false );
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
+			level_tile_graphics_.showTile( camera_.getBox(), event_.getNextLevel() );
 		}
 		if ( Inventory::getSecretGoal( i ) )
 		{
 			OWEvent event;
 			event.init( i, width_blocks_, true );
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
+			level_tile_graphics_.showTile( camera_.getBox(), event_.getNextLevel() );
 		}
 	}
 };

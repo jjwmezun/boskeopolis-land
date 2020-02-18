@@ -1,5 +1,6 @@
 #include "audio.hpp"
 #include <fstream>
+#include "inventory.hpp"
 #include "level.hpp"
 #include "main.hpp"
 #include "ow_event.hpp"
@@ -14,6 +15,7 @@ OWEvent::OWEvent()
     event_tile_speed_ ( DEFAULT_TILE_SPEED ),
     timer_ ( 0 ),
     current_change_ ( 0 ),
+    next_level_ ( 0 ),
     changes_ (),
     target_position_ ()
 {};
@@ -113,6 +115,16 @@ void OWEvent::init( int level, int map_width, bool is_secret )
     {
         event_tile_speed_ = data[ "speed" ].GetInt();
     }
+
+    if ( data.HasMember( "next_level" ) && data[ "next_level" ].IsString() )
+    {
+        const std::string key = data[ "next_level" ].GetString();
+        next_level_ = Level::getIDFromCodeName( key );
+    }
+    else
+    {
+        next_level_ = Inventory::currentLevel() + 1;
+    }
 };
 
 OWEvent::MessageBack OWEvent::update( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles )
@@ -192,4 +204,9 @@ void OWEvent::changeAllTiles( std::vector<int>& bg_tiles, std::vector<int>& fg_t
     {
         changeTiles( bg_tiles, fg_tiles );
     }
+};
+
+int OWEvent::getNextLevel() const
+{
+    return next_level_;
 };

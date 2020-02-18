@@ -23,6 +23,7 @@ class OWEvent
         MessageBack update( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles );
         const DPoint& getTargetPosition() const;
         void changeAllTiles( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles );
+        int getNextLevel() const;
 
     private:
         OWEvent::MessageBack changeTiles( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles );
@@ -30,6 +31,7 @@ class OWEvent
         int event_tile_speed_;
         int timer_;
         int current_change_;
+        int next_level_;
         std::vector<std::vector<OWEventTile>> changes_;
         DPoint target_position_;
 };
