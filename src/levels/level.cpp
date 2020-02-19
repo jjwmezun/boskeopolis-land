@@ -47,6 +47,7 @@
 static std::vector<std::string> level_list_;
 static std::vector<int> gem_challenge_list_;
 static std::vector<int> time_challenge_list_;
+static std::vector<bool> has_secret_goals_;
 static unsigned int real_level_num_ = 0;
 
 static std::string code_names_[ Level::NUMBER_OF_LEVELS ] =
@@ -205,6 +206,15 @@ int Level::timeChallenge( unsigned int n )
 {
 	assert( n < level_list_.size() );
 	return time_challenge_list_.at( n );
+};
+
+bool Level::hasSecretGoal( unsigned int n )
+{
+	if( n >= has_secret_goals_.size() )
+	{
+		return false;
+	}
+	return has_secret_goals_.at( n );
 };
 
 std::string Level::timeChallengeText( unsigned int n )
@@ -873,33 +883,45 @@ void Level::buildLevelList()
 				rapidjson::Document lv;
 				lv.ParseStream( ifs_wrap );
 
-				if ( lv.IsObject() && lv.HasMember( "name" ) && lv[ "name" ].IsString() )
+				if ( lv.IsObject() )
 				{
-					level_list_.emplace_back( lv[ "name" ].GetString() );
-					++real_level_num_;
-				}
-				else
-				{
-					level_list_.emplace_back( "" );
-				}
+					if ( lv.HasMember( "name" ) && lv[ "name" ].IsString() )
+					{
+						level_list_.emplace_back( lv[ "name" ].GetString() );
+						++real_level_num_;
+					}
+					else
+					{
+						level_list_.emplace_back( "" );
+					}
 
-				if ( lv.IsObject() && lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
-				{
-					gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
-				}
-				else
-				{
-					gem_challenge_list_.emplace_back( 0 );
-				}
+					if ( lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
+					{
+						gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
+					}
+					else
+					{
+						gem_challenge_list_.emplace_back( 0 );
+					}
 
-				if ( lv.IsObject() && lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
-				{
-					time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
-				}
-				else
-				{
-					time_challenge_list_.emplace_back( 0 );
-				}
+					if ( lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
+					{
+						time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
+					}
+					else
+					{
+						time_challenge_list_.emplace_back( 0 );
+					}
+
+					if ( lv.HasMember( "secret_goal" ) && lv[ "secret_goal" ].IsBool() )
+					{
+						has_secret_goals_.emplace_back( lv[ "secret_goal" ].GetBool() );
+					}
+					else
+					{
+						has_secret_goals_.emplace_back( false );
+					}
+				} 
 
 				ifs.close();
 			}

@@ -75,4 +75,5 @@ class OWInventory
 		ImageGraphics gem_score_icon_;
 		ImageGraphics time_score_icon_;
 		ImageGraphics crown_icon_;
+		ImageGraphics secret_goal_icon_;
 };

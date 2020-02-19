@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_state.hpp"
+#include <memory>
 #include "texture_box.hpp"
 #include "wtext_obj.hpp"
 
@@ -30,6 +31,8 @@ class WMessageState : public GameState
 		const WMessageState& operator=( WMessageState&& c ) = delete;
 		WMessageState( const WMessageState& c ) = delete;
 		const WMessageState& operator=( const WMessageState& c ) = delete;
+
+		static std::unique_ptr<WMessageState> generateErrorMessage( std::u32string message, Type type, std::unique_ptr<GameState> next_state );
 
         void init() override;
 		void stateUpdate() override;

@@ -30,6 +30,7 @@
 	"entrance_y": 17,
 	"camera_x": 90,
 
-	"gem_challenge": 24900,
-	"time_challenge": 33
+	"gem_challenge": 500,
+	"time_challenge": 2,
+	"secret_goal": true
 }

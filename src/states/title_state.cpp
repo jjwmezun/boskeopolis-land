@@ -62,7 +62,8 @@ TitleState::TitleState()
 	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
     level_ ( Level::getIDFromCodeName( getRandomTrainerLevel() ), { Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT, 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT } )
-{};
+{
+};
 
 TitleState::~TitleState()
 {
@@ -87,8 +88,11 @@ void TitleState::stateUpdate()
 
                 case ( Option::LOAD ):
                 {
-                    Inventory::load();
-                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), true ) ) );
+                    const bool load_success = Inventory::load();
+                    if ( load_success )
+                    {
+                        Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), true ) ) );
+                    }
                 }
                 break;
 

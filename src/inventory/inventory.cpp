@@ -4,42 +4,47 @@
 #include "inventory.hpp"
 #include <fstream>
 #include "level.hpp"
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "text.hpp"
+#include "title_state.hpp"
+#include "wmessage_state.hpp"
 
 namespace Inventory
 {
 	// Private Function Declarations
-	double percentPerLevel();
-	double percentPerVictory();
-	double percentPerDiamond();
-	double percentPerScore();
+	static double percentPerLevel();
+	static double percentPerVictory();
+	static double percentPerDiamond();
+	static double percentPerScore();
 
-	int levelsBeaten();
-	int diamondsGotten();
-	int gemChallengesWon();
-	int timeChallengesWon();
+	static int levelsBeaten();
+	static int diamondsGotten();
+	static int gemChallengesWon();
+	static int timeChallengesWon();
 
-	void setGemScore( int level, int value );
-	void setTimeScore( int level, int value );
-	void winGemScore();
-	void winTimeScore();
+	static void setGemScore( int level, int value );
+	static void setTimeScore( int level, int value );
+	static void winGemScore();
+	static void winTimeScore();
 
-	double totalVictoryPercents();
-	double totalDiamondPercents();
-	double totalGemChallengePercents();
-	double totalTimeChallengePercents();
+	static double totalVictoryPercents();
+	static double totalDiamondPercents();
+	static double totalGemChallengePercents();
+	static double totalTimeChallengePercents();
 
-	void saveBinary();
-	void loadBinary();
+	static void saveBinary();
 
-	bool testMultiples( int value );
-	void addFundsForMultiplier( int value );
-	void generalVictory();
+	static bool testMultiples( int value );
+	static void addFundsForMultiplier( int value );
+	static void generalVictory();
+
+	static void throwSaveCorruptionErrorMessage();
 
 
 	// Private Variables
@@ -102,7 +107,7 @@ namespace Inventory
 
 		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 		{
-			been_to_level_[ i ] = victories_[ i ] = diamonds_[ i ] = false;
+			been_to_level_[ i ] = victories_[ i ] = secret_goals_[ i ] = diamonds_[ i ] = false;
 			gem_scores_[ i ] = DEFAULT_GEM_SCORE;
 			time_scores_[ i ] = DEFAULT_TIME_SCORE;
 		}
@@ -154,6 +159,7 @@ namespace Inventory
 		return haveDiamond( level ) &&
 			victory( level ) &&
 			hasCrown( level ) &&
+			( !Level::hasSecretGoal( level ) || getSecretGoal( level ) ) &&
 			gemChallengeBeaten( level ) &&
 			timeChallengeBeaten( level );
 	};
@@ -465,7 +471,7 @@ namespace Inventory
 
 			// Save total gems as 1st 4 bytes.
 				int32_t total_funds_block = total_funds_();
-				binofs.write( (char*)&total_funds_block, sizeof( int32_t ) );
+				binofs.write( ( char* )( &total_funds_block ), sizeof( int32_t ) );
 
 			// Align level victories & diamonds in 1 straight list o' bools,
 			// victories followed straight after diamonds.
@@ -475,6 +481,11 @@ namespace Inventory
 				for ( int vi = 0; vi < Level::NUMBER_OF_LEVELS; ++vi )
 				{
 					bools.push_back( victories_[ vi ] );
+				}
+
+				for ( int si = 0; si < Level::NUMBER_OF_LEVELS; ++si )
+				{
+					bools.push_back( secret_goals_[ si ] );
 				}
 
 				for ( int li = 0; li < Level::NUMBER_OF_LEVELS; ++li )
@@ -512,7 +523,7 @@ namespace Inventory
 						}
 					}
 
-					binofs.write( (char*)&c, sizeof( unsigned char ) );
+					binofs.write( ( char* )( &c ), sizeof( unsigned char ) );
 				}
 
 			// Save gem scores as 4-byte ints each.
@@ -536,13 +547,7 @@ namespace Inventory
 		binofs.close();
 	};
 
-	void load()
-	{
-		loadBinary();
-	}
-
-
-	void loadBinary()
+	bool load()
 	{
 		// Sorry this code is messy: I'm still working on it.
 		// Also note that trying to load a save from a time when there were fewer levels than now will cause the program to crash due to the assertions.
@@ -565,6 +570,7 @@ namespace Inventory
 		// For each new clump, "current_block_start" is set to the previous "current_block_end",
 		// while "current_block_end" is set to where I calculate the new clump to end.
 
+		bool load_success = true;
 		std::ifstream binifs ( Main::savePath(), std::ios::in | std::ios::binary | std::ios::ate );
 
 			if ( binifs.is_open() )
@@ -593,7 +599,7 @@ namespace Inventory
 					// Space for 4x bools for levels (victories, been-tos, diamonds, & crowns).
 					// 8 bool (bits) fit in a byte--hence dividing by 8, rounding up to ensure there's always the minimum space needed.
 					// C++ oddly makes int / int output an auto-floored int rather than a double, so a val needs to be forced as a double.
-					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUMBER_OF_LEVELS * 4 ) ) ) / 8 );
+					int blocks_for_bools = ( int )ceil( ( ( double )( ( Level::NUMBER_OF_LEVELS * 5 ) ) ) / 8 );
 					current_block_end += blocks_for_bools;
 
 					assert( binsize >= current_block_end );
@@ -614,15 +620,19 @@ namespace Inventory
 							}
 							else if ( b < Level::NUMBER_OF_LEVELS * 2 )
 							{
-								been_to_level_[ b - Level::NUMBER_OF_LEVELS ] = val;
+								secret_goals_[ b - Level::NUMBER_OF_LEVELS ] = val;
 							}
 							else if ( b < Level::NUMBER_OF_LEVELS * 3 )
 							{
-								diamonds_[ b - ( Level::NUMBER_OF_LEVELS * 2 ) ] = val;
+								been_to_level_[ b - ( Level::NUMBER_OF_LEVELS * 2 ) ] = val;
 							}
 							else if ( b < Level::NUMBER_OF_LEVELS * 4 )
 							{
-								crowns_[ b - ( Level::NUMBER_OF_LEVELS * 3 ) ] = val;
+								diamonds_[ b - ( Level::NUMBER_OF_LEVELS * 3 ) ] = val;
+							}
+							else if ( b < Level::NUMBER_OF_LEVELS * 5 )
+							{
+								crowns_[ b - ( Level::NUMBER_OF_LEVELS * 4 ) ] = val;
 							}
 							else
 							{
@@ -637,7 +647,12 @@ namespace Inventory
 					const int NUM_O_GEM_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUMBER_OF_LEVELS;
 					current_block_end += NUM_O_GEM_SCORE_BLOCKS;
 
-					assert( binsize >= current_block_end );
+					if ( binsize < current_block_end )
+					{
+						throwSaveCorruptionErrorMessage();
+						load_success = false;
+						goto LOAD_CLEAN_UP;
+					}
 
 					for ( int gi = 0; gi < Level::NUMBER_OF_LEVELS; ++gi )
 					{
@@ -648,11 +663,17 @@ namespace Inventory
 
 
 				// TIME SCORE CLUMP
+				{
 					current_block_start = current_block_end;
 					const int NUM_O_TIME_SCORE_BLOCKS = sizeof( int32_t ) * Level::NUMBER_OF_LEVELS;
 					current_block_end += NUM_O_TIME_SCORE_BLOCKS;
 
-					assert( binsize >= current_block_end );
+					if ( binsize < current_block_end )
+					{
+						throwSaveCorruptionErrorMessage();
+						load_success = false;
+						goto LOAD_CLEAN_UP;
+					}
 
 					for ( int ti = 0; ti < Level::NUMBER_OF_LEVELS; ++ti )
 					{
@@ -660,12 +681,18 @@ namespace Inventory
 						std::memcpy( &tblock, &bindata[ current_block_start + ( ti * sizeof( int32_t ) ) ], sizeof( int32_t ) );
 						setTimeScore( ti, tblock );
 					}
+				}
 
 				// RECENT LEVEL
 					current_block_start = current_block_end;
 					current_block_end += sizeof( int32_t );
 
-					assert( binsize >= current_block_end );
+					if ( binsize < current_block_end )
+					{
+						throwSaveCorruptionErrorMessage();
+						load_success = false;
+						goto LOAD_CLEAN_UP;
+					}
 
 					int32_t recent_level;
 					std::memcpy( &recent_level, &bindata[ current_block_start ], sizeof( int32_t ) );
@@ -673,7 +700,7 @@ namespace Inventory
 					current_level_ = recent_level;
 
 
-				// Clean up time.
+				LOAD_CLEAN_UP:
 					delete[] bindata;
 					binifs.close();
 			}
@@ -683,6 +710,7 @@ namespace Inventory
 			}
 
 		binifs.close();
+		return load_success;
 	};
 
 	void addMcGuffin()
@@ -897,4 +925,17 @@ namespace Inventory
 	{
 		health_upgrades_[ number ] = true;
 	};
+
+	void throwSaveCorruptionErrorMessage()
+	{
+		Main::changeState
+		(
+			WMessageState::generateErrorMessage
+			(
+				Localization::getCurrentLanguage().getSaveCorruptionErrorMessage(),
+				WMessageState::Type::CHANGE,
+				std::unique_ptr<TitleState> ( new TitleState() )
+			)
+		);
+	}
 };

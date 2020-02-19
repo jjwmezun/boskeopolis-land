@@ -123,7 +123,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
     }
     else
     {
-        next_level_ = Inventory::currentLevel() + 1;
+        next_level_ = level + 1;
     }
 };
 

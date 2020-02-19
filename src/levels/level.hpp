@@ -66,6 +66,7 @@ class Level
 		static unsigned int realLevelNum();
 		static int gemChallenge( unsigned int n );
 		static int timeChallenge( unsigned int n );
+		static bool hasSecretGoal( unsigned int n );
 		static std::string gemChallengeText( unsigned int n );
 		static std::string timeChallengeText( unsigned int n );
 		static void buildLevelList();

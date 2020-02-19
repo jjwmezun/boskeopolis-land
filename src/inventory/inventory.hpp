@@ -58,7 +58,7 @@ namespace Inventory
 	void updateForOverworld();
 	void updateForShop();
 	void save();
-	void load();
+	bool load();
 	
 	int heartUpgrades();
 	bool haveOxygenUpgrade();

@@ -5,6 +5,20 @@
 #include "render.hpp"
 #include "text_component_flashing.hpp"
 
+std::unique_ptr<WMessageState> WMessageState::generateErrorMessage( std::u32string message, Type type, std::unique_ptr<GameState> next_state )
+{
+	return std::unique_ptr<WMessageState>
+	(
+		new WMessageState
+		(
+			WTextObj::MessageData{ message, WTextCharacter::Color::WHITE, WTextCharacter::Color::__NULL },
+			type,
+			{ "Grayscale", 6 },
+			std::move( next_state )
+		)
+	);
+};
+
 WMessageState::WMessageState
 (
 	WTextObj::MessageData message,

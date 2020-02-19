@@ -58,8 +58,11 @@ static void renderTimeTargetScore( int level, int y );
 static void renderPtTargetSymbol( int y );
 static void renderClockTargetSymbol( int y );
 static void renderCrownIconOfColorOffset( int color_offset, int y );
+static void renderSecretGoalIconOfColor( int color_offset, int y );
 static void renderCrownWinIcon( int y );
 static void renderEmptyCrownIcon( int y );
+static void renderSecretGoalIcon( int y );
+static void renderEmptySecretGoalIcon( int y );
 
 LevelSelectState::LevelSelectState( int current_level )
 :
@@ -342,6 +345,17 @@ void LevelSelectState::generateMovingPageTextures()
 			{
 				renderCrownWinIcon( y );
 			}
+			if ( Level::hasSecretGoal( level ) )
+			{
+				if ( Inventory::getSecretGoal( level ) )
+				{
+					renderSecretGoalIcon( y );
+				}
+				else
+				{
+					renderEmptySecretGoalIcon( y );
+				}
+			}
 			renderGemScore( level, y );
 			renderTimeScore( level, y );
 
@@ -401,6 +415,18 @@ void LevelSelectState::redrawStaticPageTexture()
 			else
 			{
 				renderEmptyCrownIcon( y );
+			}
+
+			if ( Level::hasSecretGoal( level ) )
+			{
+				if ( Inventory::getSecretGoal( level ) )
+				{
+					renderSecretGoalIcon( y );
+				}
+				else
+				{
+					renderEmptySecretGoalIcon( y );
+				}
 			}
 		}
 
@@ -630,6 +656,11 @@ void LevelSelectState::renderFlashingTimeScore( int level, int y ) const
 	renderTimeScoreOfColor( ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] ), level, y );
 };
 
+void LevelSelectState::renderFlashingSecretGoalIcon( int y ) const
+{
+	renderSecretGoalIconOfColor( FLASH_FRAMES[ flash_frame_ ], y );
+};
+
 void LevelSelectState::renderFlashingArrows() const
 {
 	if ( flash_frame_ % ( int )( ( double )( NUMBER_OF_FLASH_FRAMES ) / 2.0 ) > 2 )
@@ -657,6 +688,10 @@ void LevelSelectState::renderFlashFrame()
 			renderFlashingVictoryCheck( y );
 			renderFlashingDiamondWinIcon( y );
 			renderFlashingCrownWinIcon( y );
+			if ( Level::hasSecretGoal( level ) )
+			{
+				renderFlashingSecretGoalIcon( y );
+			}
 		}
 
 		if ( !show_target_scores_ || entry != selection_ )
@@ -783,7 +818,12 @@ static void renderEmptyDiamondIcon( int y )
 static void renderCrownIconOfColorOffset( int color_offset, int y )
 {
 	Render::renderObject( "bg/level-select-characters.png", { color_offset * 8, 192, 8, 8 }, { 16, y + 4, 8, 8 } );
-}
+};
+
+static void renderSecretGoalIconOfColor( int color_offset, int y )
+{
+	Render::renderObject( "bg/level-select-characters.png", { color_offset * 8, 200, 8, 8 }, { 16, y + 12, 8, 8 } );
+};
 
 static void renderCrownWinIcon( int y )
 {
@@ -793,6 +833,16 @@ static void renderCrownWinIcon( int y )
 static void renderEmptyCrownIcon( int y )
 {
 	renderCrownIconOfColorOffset( 1, y );
+};
+
+static void renderSecretGoalIcon( int y )
+{
+	renderSecretGoalIconOfColor( 3, y );
+};
+
+static void renderEmptySecretGoalIcon( int y )
+{
+	renderSecretGoalIconOfColor( 1, y );
 };
 
 static void renderPtSymbolOfColorOffset( int color_offset, int y )

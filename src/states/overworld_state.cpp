@@ -291,9 +291,11 @@ void OverworldState::stateRender()
 
 void OverworldState::init()
 {
+	bool start = false;
 	if ( bg_tiles_.size() == 0 )
 	{
 		generateMap();
+		start = true;
 	}
 
 	tilemap_.map_width = width_blocks_;
@@ -310,11 +312,49 @@ void OverworldState::init()
 	tilemap_.tiles.reserve( width * height );
 
 	generateSprites();
+	if ( start )
+	{
+		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+		{
+			if ( Inventory::victory( i ) )
+			{
+				OWEvent event;
+				event.init( i, width_blocks_, false );
+				event.changeAllTiles( bg_tiles_, fg_tiles_ );
+				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+			}
+			if ( Inventory::getSecretGoal( i ) )
+			{
+				OWEvent event;
+				event.init( i, width_blocks_, true );
+				event.changeAllTiles( bg_tiles_, fg_tiles_ );
+				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+			}
+		}
+	}
+	else
+	{
+		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+		{
+			if ( Inventory::victory( i ) )
+			{
+				OWEvent event;
+				event.init( i, width_blocks_, false );
+				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+			}
+			if ( Inventory::getSecretGoal( i ) )
+			{
+				OWEvent event;
+				event.init( i, width_blocks_, true );
+				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+			}
+		}
+	}
+
 	generateMapTextures();
 
 	camera_.center( hero_.getPosition() );
 	hero_.updateGraphics( camera_.getBox() );
-
 	inventory_.init();
 
 	if ( state_ == OWState::CAMERA_MOVES_TO_EVENT )
@@ -417,7 +457,7 @@ void OverworldState::generateSprites()
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( level_id ) ) );
-				bool reveal = ( state_ != OWState::CAMERA_MOVES_TO_EVENT || level_id != ( Inventory::currentLevel() + 1 ) ) && Inventory::levelUnlocked( level_id );
+				bool reveal = level_id == 0;
 				level_tile_graphics_.add( dest, level_id, reveal );
 			}
 			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
@@ -501,7 +541,7 @@ void OverworldState::generateMap()
 	std::ifstream ifs( path );
 	if( !ifs.is_open() )
 	{
-		throw std::runtime_error( "The o’erworld map data is missing. Please redownload this game & try ’gain." );
+		throw std::runtime_error( "The o’erworld map data @ “" + path + "” is missing. Please redownload this game & try ’gain." );
 	}
 	rapidjson::IStreamWrapper ifs_wrap( ifs );
     rapidjson::Document document;
@@ -587,24 +627,6 @@ void OverworldState::generateMap()
 	else if ( sprites_tiles_.size() == 0 )
 	{
 		throw std::runtime_error( "Missing sprite layer for o’erworld map." );
-	}
-
-	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
-	{
-		if ( Inventory::victory( i ) )
-		{
-			OWEvent event;
-			event.init( i, width_blocks_, false );
-			event.changeAllTiles( bg_tiles_, fg_tiles_ );
-			level_tile_graphics_.showTile( camera_.getBox(), event_.getNextLevel() );
-		}
-		if ( Inventory::getSecretGoal( i ) )
-		{
-			OWEvent event;
-			event.init( i, width_blocks_, true );
-			event.changeAllTiles( bg_tiles_, fg_tiles_ );
-			level_tile_graphics_.showTile( camera_.getBox(), event_.getNextLevel() );
-		}
 	}
 };
 

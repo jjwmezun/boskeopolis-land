@@ -68,7 +68,6 @@ class LocalizationLanguage
         std::u32string getShopkeeperNotAvailableMessage() const;
         std::u32string getShopkeeperOutOfStockMessage() const;
         std::u32string getOverworldShopTitle() const;
-
         std::u32string getCollectGoalMessage() const;
         std::u32string getMcGuffinGoalMessage() const;
         std::u32string getSurviveTimeGoalMessage() const;
@@ -85,6 +84,7 @@ class LocalizationLanguage
         std::u32string getFailureMessage() const;
         std::u32string getSuccessMessage() const;
         std::u32string getSecretGoalMessage() const;
+        std::u32string getSaveCorruptionErrorMessage() const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
