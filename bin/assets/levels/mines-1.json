@@ -26,11 +26,11 @@
 		}
 	],
 
-	"entrance_x": 99,
+	"entrance_x": 85,
 	"entrance_y": 17,
 	"camera_x": 90,
 
-	"gem_challenge": 500,
-	"time_challenge": 2,
+	"gem_challenge": 23500,
+	"time_challenge": 25,
 	"secret_goal": true
 }
