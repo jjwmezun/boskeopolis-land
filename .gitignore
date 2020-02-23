@@ -1,5 +1,5 @@
-bin/main
+bin/Boskeopolis\ Land
 gmon.out
 obj/
 .~lock.lvs.ods#
-bin/assets/saves/save.bin
+bin/saves
