@@ -7,7 +7,7 @@ BlockComponentSludgeWater::BlockComponentSludgeWater() {};
 
 BlockComponentSludgeWater::~BlockComponentSludgeWater() {};
 
-void BlockComponentSludgeWater::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+void BlockComponentSludgeWater::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
 	health.submerge();
 	sprite.in_water_ = true;

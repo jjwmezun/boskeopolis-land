@@ -9,7 +9,7 @@
 BlockComponentDiamond::BlockComponentDiamond( int replacement_block ) : replacement_block_ ( replacement_block ) {};
 BlockComponentDiamond::~BlockComponentDiamond() {};
 
-void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
 	if ( Inventory::haveDiamond() )
 	{
@@ -26,7 +26,7 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 	}
 };
 
-void BlockComponentDiamond::init( Block& block, Map& lvmap ) const
+void BlockComponentDiamond::init( Block& block, LevelState& level_state ) const
 {
 	if ( Inventory::haveDiamond() )
 	{
@@ -34,7 +34,7 @@ void BlockComponentDiamond::init( Block& block, Map& lvmap ) const
 	}
 };
 
-void BlockComponentDiamond::removeDiamond( Block& block, Map& lvmap ) const
+void BlockComponentDiamond::removeDiamond( Block& block, LevelState& level_state ) const
 {
 	lvmap.deleteBlock( block.location() );
 

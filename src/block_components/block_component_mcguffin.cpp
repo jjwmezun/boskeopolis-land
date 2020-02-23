@@ -5,7 +5,7 @@
 BlockComponentMcGuffin::BlockComponentMcGuffin() {};
 BlockComponentMcGuffin::~BlockComponentMcGuffin() {};
 
-void BlockComponentMcGuffin::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+void BlockComponentMcGuffin::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
 	Inventory::addMcGuffin();
 	Audio::playSound( Audio::SoundType::ITEM );

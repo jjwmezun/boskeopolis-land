@@ -62,7 +62,7 @@ class BlockComponentSlope : public BlockComponent
 	public:
 		BlockComponentSlope() {};
 		~BlockComponentSlope() {};
-		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const override
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const override
 		{
 			if ( collision.collideAny() )
 			{
@@ -156,7 +156,7 @@ class BlockComponentCeilingSlope : public BlockComponent
 		BlockComponentCeilingSlope() {};
 		~BlockComponentCeilingSlope() {};
 
-		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 		{
 			if ( collision.collideAny() )
 			{

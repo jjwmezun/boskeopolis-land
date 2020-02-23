@@ -18,7 +18,7 @@ class Block : public Object
 		~Block();
 		void render( const Camera& camera, bool priority = false ) const;
 		void renderAnyPriority( const Camera& camera ) const;
-		void interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites );
+		void interact( Sprite& sprite, LevelState& level );
 		void destroy();
 		int location() const;
 		int typeID() const;
@@ -26,8 +26,8 @@ class Block : public Object
 		const BlockType* type() const;
 		bool isDestroyed() const;
 		bool hasComponentType( BlockComponent::Type type ) const;
-		bool testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const;
-		void init( Map& lvmap );
+		bool testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const;
+		void init( LevelState& level_state );
 
 	private:
 		BlockType* type_; // COPY; owned by other object.

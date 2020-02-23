@@ -5,7 +5,7 @@
 BlockComponentSewerDoor::BlockComponentSewerDoor() {};
 BlockComponentSewerDoor::~BlockComponentSewerDoor() {};
 
-void BlockComponentSewerDoor::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+void BlockComponentSewerDoor::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
 	events.setInFrontOfSewerDoor();
 	events.setSewerPosition( block.hit_box_.x - 16000, block.hit_box_.y - 32000 );

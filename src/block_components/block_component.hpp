@@ -1,17 +1,11 @@
 #pragma once
 
 class Block;
-class BlockSystem;
 class BlockType;
-class Camera;
 class Collision;
-class EventSystem;
-class Health;
 class GameState;
-class Level;
-class Map;
+class LevelState;
 class Sprite;
-class SpriteSystem;
 
 class BlockComponent
 {
@@ -25,8 +19,8 @@ class BlockComponent
 
 		BlockComponent( Type type = Type::NOTYPE );
 		virtual ~BlockComponent();
-		virtual void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const = 0;
-		virtual void init( Block& block, Map& lvmap ) const;
+		virtual void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const = 0;
+		virtual void init( Block& block, LevelState& level_state ) const;
 		Type type() const;
 
 	protected:

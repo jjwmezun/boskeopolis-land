@@ -45,12 +45,12 @@ int Block::location() const
 	return location_;
 };
 
-void Block::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void Block::interact( Sprite& sprite, LevelState& level_state )
 {
 	if ( hasType() )
 	{
 		Collision collision = sprite.testCollision( *this );
-		type_->interact( collision, sprite, *this, level, events, camera, health, blocks, sprites );
+		type_->interact( collision, sprite, *this, level_state );
 	}
 };
 
@@ -68,11 +68,11 @@ bool Block::hasComponentType( BlockComponent::Type type ) const
 	return false;
 };
 
-bool Block::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+bool Block::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
 {
 	if ( hasType() )
 	{
-		return type_->testForComponentTypeNow( type, collision, sprite, block, events, health );
+		return type_->testForComponentTypeNow( type, collision, sprite, block, level_state );
 	}
 	return false;
 }
@@ -92,10 +92,10 @@ bool Block::isDestroyed() const
 	return !hasType();
 }
 
-void Block::init( Map& lvmap )
+void Block::init( LevelState& level_state )
 {
 	if ( type_ != nullptr )
 	{
-		type_->init( *this, lvmap );
+		type_->init( *this, level_state );
 	}
 };

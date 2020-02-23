@@ -2,6 +2,7 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "level.hpp"
+#include "level_state.hpp"
 #include "render.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
@@ -88,8 +89,9 @@ void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority 
 	}
 };
 
-void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, Camera& camera, Health& health, SpriteSystem& sprites )
+void BlockSystem::interact( Sprite& sprite, LevelState& level_state )
 {
+	const Camera& camera = level_state.camera();
 	if ( !blocks_work_offscreen_ )
 	{
 		// Only test sprite interaction with blocks round it.
@@ -105,7 +107,7 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 				if ( n < blocks_.size() )
 				{
 					Block& block = blocks_[ n ];
-					block.interact( sprite, level, events, camera, health, *this, sprites );
+					block.interact( sprite, level_state );
 				}
 			}
 		}
@@ -121,19 +123,21 @@ void BlockSystem::interact( Sprite& sprite, Level& level, EventSystem& events, C
 		{
 			for ( int x = first_x; x < last_x; ++x )
 			{
-				const int n = y * level.currentMap().widthBlocks() + x;
+				const int n = y * level_state.currentMap().widthBlocks() + x;
 				if ( n < blocks_.size() )
 				{
 					Block& block = blocks_[ n ];
-					block.interact( sprite, level, events, camera, health, *this, sprites );
+					block.interact( sprite, level_state );
 				}
 			}
 		}
 	}
 };
 
-void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
+void BlockSystem::blocksFromMap( LevelState& level_state )
 {
+	Map& lvmap = level_state.currentMap();
+	const Camera& camera = level_state.camera();
 	if ( !blocks_work_offscreen_ )
 	{
 		if ( camera.changed() || lvmap.changed_ )
@@ -170,7 +174,7 @@ void BlockSystem::blocksFromMap( Map& lvmap, const Camera& camera )
 				const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 				const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
 				addBlock( x, y, i, type );
-				blocks_[ i ].init( lvmap );
+				blocks_[ i ].init( level_state );
 			}
 		}
 	}
@@ -288,7 +292,7 @@ const std::vector<Block>& BlockSystem::getBlocksList() const
 	return blocks_;
 }
 
-const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::SDLRect& rect, const Camera& camera, const Sprite& sprite, const EventSystem& events, const Health& health ) const
+const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::SDLRect& rect, const Camera& camera, const Sprite& sprite, LevelState& level_state ) const
 {
 	std::vector<const Block*> block_sublist = {};
 	const sdl2::SDLRect relative_box = camera.relativeRect( Unit::SubPixelsToPixels( rect ) );
@@ -307,7 +311,7 @@ const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::
 			{
 				const Block& block = blocks_[ n ];
 				Collision collision = { 1, 1, 1, 1 };
-				if ( block.testForComponentTypeNow( BlockComponent::Type::SOLID, collision, sprite, block, events, health ) )
+				if ( block.testForComponentTypeNow( BlockComponent::Type::SOLID, collision, sprite, block, level_state ) )
 				{
 					block_sublist.push_back( &block );
 				}

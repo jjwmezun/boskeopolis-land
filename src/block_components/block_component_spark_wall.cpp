@@ -6,7 +6,7 @@
 BlockComponentSparkWall::BlockComponentSparkWall() {};
 BlockComponentSparkWall::~BlockComponentSparkWall() {};
 
-void BlockComponentSparkWall::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+void BlockComponentSparkWall::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
 	if ( sprite.hasType( Sprite::SpriteType::SPARK ) )
 	{

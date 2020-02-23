@@ -25,15 +25,15 @@ BlockType::BlockType
 
 BlockType::~BlockType() {};
 
-void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites )
+void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, LevelState& level_state )
 {
 	for ( int i = 0; i < components_.size(); ++i )
 	{
-		if ( testCanInteract( i, collision, sprite, block, events, health ) )
+		if ( testCanInteract( i, collision, sprite, block, level_state ) )
 		{
 			if ( components_.at( i ) )
 			{
-				components_.at( i )->interact( collision, sprite, block, *this, level, events, camera, health, blocks, sprites );
+				components_.at( i )->interact( collision, sprite, block, *this, level_state );
 			}
 		}
 	}
@@ -75,11 +75,11 @@ bool BlockType::hasComponentType( BlockComponent::Type type ) const
 	return false;
 };
 
-bool BlockType::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+bool BlockType::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
 {
 	for ( int i = 0; i < components_.size(); ++i )
 	{
-		if ( testCanInteract( i, collision, sprite, block, events, health ) )
+		if ( testCanInteract( i, collision, sprite, block, level_state ) )
 		{
 			if ( components_.at( i ) )
 			{
@@ -98,15 +98,15 @@ const SpriteGraphics* BlockType::graphics() const
 	return graphics_.get();
 };
 
-void BlockType::init( Block& block, Map& lvmap ) const
+void BlockType::init( Block& block, LevelState& level_state ) const
 {
 	for ( const auto& component : components_ )
 	{
-		component->init( block, lvmap );
+		component->init( block, level_state );
 	}
 };
 
-bool BlockType::testCanInteract( int i, const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+bool BlockType::testCanInteract( int i, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
 {
 	if ( i < conditions_.size() )
 	{
@@ -114,7 +114,7 @@ bool BlockType::testCanInteract( int i, const Collision& collision, const Sprite
 		{
 			if ( conditions_.at( i ).at( j ) )
 			{
-				if ( !conditions_.at( i ).at( j )->condition( collision, sprite, block, events, health ) )
+				if ( !conditions_.at( i ).at( j )->condition( collision, sprite, block, level_state ) )
 				{
 					return false;
 				}

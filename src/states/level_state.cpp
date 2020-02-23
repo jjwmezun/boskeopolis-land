@@ -26,8 +26,8 @@ LevelState::~LevelState() {};
 
 void LevelState::stateUpdate()
 {
-	blocks_.blocksFromMap( level_.currentMap(), camera_ );
-	blocks_.update( events_ );
+	blocks_.blocksFromMap( level_state_ );
+	blocks_.update( *this );
 
 	if ( camera_.testPause() )
 	{

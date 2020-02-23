@@ -2,8 +2,7 @@
 
 class Block;
 class Collision;
-class EventSystem;
-class Health;
+class LevelState;
 class Sprite;
 
 class BlockCondition
@@ -11,5 +10,5 @@ class BlockCondition
 	public:
 		BlockCondition();
 		virtual ~BlockCondition();
-		virtual bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const = 0;
+		virtual bool condition( const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const = 0;
 };

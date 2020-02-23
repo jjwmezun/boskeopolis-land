@@ -7,7 +7,7 @@ BlockComponentChangeBlock::BlockComponentChangeBlock( int new_block ) : new_bloc
 
 BlockComponentChangeBlock::~BlockComponentChangeBlock() {};
 
-void BlockComponentChangeBlock::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, Level& level, EventSystem& events, Camera& camera, Health& health, BlockSystem& blocks, SpriteSystem& sprites ) const
+void BlockComponentChangeBlock::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
 	level.currentMap().changeBlock( block.location(), new_block_ );
 };

@@ -7,7 +7,7 @@ BlockConditionCollideRight::BlockConditionCollideRight() {};
 
 BlockConditionCollideRight::~BlockConditionCollideRight() {};
 
-bool BlockConditionCollideRight::condition( const Collision& collision, const Sprite& sprite, const Block& block, const EventSystem& events, const Health& health ) const
+bool BlockConditionCollideRight::condition( const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
 {
 	return collision.collideRight();
 };
