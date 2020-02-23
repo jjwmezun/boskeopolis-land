@@ -7,7 +7,7 @@ BlockConditionCollideBottom::BlockConditionCollideBottom() {};
 
 BlockConditionCollideBottom::~BlockConditionCollideBottom() {};
 
-bool BlockConditionCollideBottom::condition( const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
+bool BlockConditionCollideBottom::condition( const Collision& collision, const Sprite& sprite, const Block& block, const LevelState& level_state ) const
 {
 	return sprite.collideBottomOnly( collision, block );
 };

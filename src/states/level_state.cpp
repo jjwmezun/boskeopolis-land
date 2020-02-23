@@ -26,8 +26,8 @@ LevelState::~LevelState() {};
 
 void LevelState::stateUpdate()
 {
-	blocks_.blocksFromMap( level_state_ );
-	blocks_.update( *this );
+	blocks_.blocksFromMap( *this );
+	blocks_.update( events_ );
 
 	if ( camera_.testPause() )
 	{
@@ -37,11 +37,11 @@ void LevelState::stateUpdate()
 	{
 		if ( !events_.pauseStateMovement() )
 		{
-			level_.currentMap().update( events_, sprites_, blocks_, camera_ );
+			level_.currentMap().update( *this );
 			camera_.update();
 			sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
-			sprites_.interact( blocks_, level_, events_, camera_, health_ );
-			sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+			sprites_.interact( *this );
+			sprites_.interactWithMap( *this );
 			sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
 			health_.update();
 		}
@@ -72,7 +72,7 @@ void LevelState::stateUpdate()
 
 void LevelState::updateForTrainer()
 {
-	blocks_.blocksFromMap( level_.currentMap(), camera_ );
+	blocks_.blocksFromMap( *this );
 	blocks_.update( events_ );
 
 	if ( camera_.testPause() )
@@ -81,11 +81,11 @@ void LevelState::updateForTrainer()
 	}
 	else
 	{
-		level_.currentMap().update( events_, sprites_, blocks_, camera_ );
+		level_.currentMap().update( *this );
 		camera_.update();
 		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
-		sprites_.interact( blocks_, level_, events_, camera_, health_ );
-		sprites_.interactWithMap( level_.currentMap(), camera_, health_ );
+		sprites_.interact( *this );
+		sprites_.interactWithMap( *this );
 		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
 		health_.update();
 		events_.updateTrainer( *this );

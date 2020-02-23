@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include <cassert>
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "map_layer_water.hpp"
 #include "water_layer_component_rising.hpp"
 #include "water_layer_component_sludge.hpp"
@@ -47,11 +48,11 @@ MapLayerWater::~MapLayerWater()
 	}
 };
 
-void MapLayerWater::interact( Sprite& sprite, Health& health )
+void MapLayerWater::interact( Sprite& sprite, LevelState& level_state )
 {
 	for ( auto* c : components_ )
 	{
-		c->interact( *this, sprite, health );
+		c->interact( *this, sprite, level_state.health() );
 	}
 };
 
@@ -64,11 +65,11 @@ void MapLayerWater::render( const Camera& camera )
 	}
 };
 
-void MapLayerWater::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerWater::update( LevelState& level_state )
 {
-	updateGFX( camera );
+	updateGFX( level_state.camera() );
 	updateComponents();
-	updateEventMovement( events );
+	updateEventMovement( level_state.events() );
 };
 
 void MapLayerWater::updateGFX( const Camera& camera )

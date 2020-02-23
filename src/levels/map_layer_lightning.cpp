@@ -19,7 +19,7 @@ MapLayerLightning::MapLayerLightning()
 
 MapLayerLightning::~MapLayerLightning() {};
 
-void MapLayerLightning::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerLightning::update( LevelState& level_state )
 {
     switch ( state_ )
     {

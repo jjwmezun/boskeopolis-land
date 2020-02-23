@@ -2,6 +2,7 @@
 
 #include "block_component.hpp"
 #include "block_system.hpp"
+#include "level_state.hpp"
 
 template<Direction::Simple direction>
 class BlockComponentCurrent : public BlockComponent
@@ -18,7 +19,7 @@ class BlockComponentCurrent : public BlockComponent
 				case( Direction::Simple::RIGHT ):
 				{
 					const int LEFT_TEST = ( direction == Direction::Simple::LEFT ) ? sprite.hit_box_.x - HIT_BOX_PADDING : sprite.rightSubPixels() + HIT_BOX_PADDING;
-					if ( !blocks.blocksInTheWay( { LEFT_TEST, sprite.hit_box_.y + 2000, 2000, sprite.hit_box_.h - 4000 }, BlockComponent::Type::SOLID ) )
+					if ( !level_state.blocks().blocksInTheWay( { LEFT_TEST, sprite.hit_box_.y + 2000, 2000, sprite.hit_box_.h - 4000 }, BlockComponent::Type::SOLID ) )
 					{
 						sprite.hit_box_.x -= ( direction == Direction::Simple::LEFT ) ? NORMAL_MOVEMENT : -NORMAL_MOVEMENT;
 
@@ -43,7 +44,7 @@ class BlockComponentCurrent : public BlockComponent
 				case( Direction::Simple::DOWN ):
 				{
 					const int TOP_TEST = ( direction == Direction::Simple::UP ) ? sprite.hit_box_.y - HIT_BOX_PADDING : sprite.bottomSubPixels() + HIT_BOX_PADDING;
-					if ( !blocks.blocksInTheWay( { sprite.hit_box_.x + 2000, TOP_TEST, sprite.hit_box_.w - 4000, 2000 }, BlockComponent::Type::SOLID ) )
+					if ( !level_state.blocks().blocksInTheWay( { sprite.hit_box_.x + 2000, TOP_TEST, sprite.hit_box_.w - 4000, 2000 }, BlockComponent::Type::SOLID ) )
 					{
 						sprite.hit_box_.y -= ( direction == Direction::Simple::UP ) ? NORMAL_MOVEMENT : -NORMAL_MOVEMENT;
 						sprite.vy_ = 0;

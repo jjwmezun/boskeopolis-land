@@ -15,7 +15,7 @@ class MapLayerTilemapImage : public MapLayer
 	public:
 		MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height );
 		~MapLayerTilemapImage();
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
+		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;
 
 	private:

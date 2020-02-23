@@ -22,7 +22,7 @@ class MapLayerLightning : public MapLayer
         };
         MapLayerLightning();
 		~MapLayerLightning();
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
+		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;
 
     private:

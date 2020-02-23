@@ -1,6 +1,7 @@
 #include "block_system.hpp"
 #include "camera.hpp"
 #include <cassert>
+#include "level_state.hpp"
 #include "map_layer_tilemap_image.hpp"
 #include "render.hpp"
 
@@ -18,7 +19,7 @@ MapLayerTilemapImage::MapLayerTilemapImage( const std::vector<int>& tiles, int w
 
 MapLayerTilemapImage::~MapLayerTilemapImage() {};
 
-void MapLayerTilemapImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerTilemapImage::update( LevelState& level_state )
 {
 	if ( texture_ == nullptr )
 	{
@@ -33,7 +34,7 @@ void MapLayerTilemapImage::update( EventSystem& events, BlockSystem& blocks, con
 			for ( int x = 0; x < width_; ++x )
 			{
 				const int i = mezun::nOfXY( x, y, width_ );
-				const BlockType* type = blocks.getBlockType( tiles_[ i ] - 1 );
+				const BlockType* type = level_state.blocks().getBlockType( tiles_[ i ] - 1 );
 				if ( type != nullptr && type->graphics() != nullptr )
 				{
 					block_dest.x = Unit::BlocksToPixels( x );

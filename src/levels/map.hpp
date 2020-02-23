@@ -78,7 +78,7 @@ class Map
 		Map( const Map& c );
 		Map& operator= ( const Map& c ) = delete;
 
-		void update( EventSystem& events, const SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera );
+		void update( LevelState& level_state );
 		void renderBG( const Camera& camera );
 		void renderFG( const Camera& camera );
 
@@ -103,7 +103,7 @@ class Map
 		void deleteBlock( int where );
 		void deleteSprite( int where );
 
-		void interact( Sprite& sprite, Camera& camera, Health& health );
+		void interact( Sprite& sprite, LevelState& level_state );
 
 		bool scrollLoop() const;
 		int scrollLoopWidthPixels() const;
@@ -143,7 +143,7 @@ class Map
 			bool hide
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
-		void updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera, const SpriteSystem& sprites );
+		void updateLayers( LevelState& level_state );
 		void updateLoop( const SpriteSystem& sprites );
 		void updateBGColor();
 		void renderBGColor() const;

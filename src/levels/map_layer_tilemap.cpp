@@ -4,6 +4,7 @@
 #include "block_type.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "map_layer_tilemap.hpp"
 #include "mezun_math.hpp"
 #include "sprite.hpp"
@@ -23,8 +24,9 @@ MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, 
 
 MapLayerTilemap::~MapLayerTilemap() {};
 
-void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerTilemap::update( LevelState& level_state )
 {
+	const Camera& camera = level_state.camera();
 	if ( camera.changed() )
 	{
 		blocks_.clear();
@@ -45,7 +47,7 @@ void MapLayerTilemap::update( EventSystem& events, BlockSystem& blocks, const Ca
 				{
 					const int xp = Unit::BlocksToPixels( x );
 					const int type = tiles_.at( i ) - 1;
-					BlockType* block_type = blocks.getBlockType( type );
+					BlockType* block_type = level_state.blocks().getBlockType( type );
 					if ( block_type != nullptr )
 					{
 						blocks_.emplace_back( xp, yp, block_type, i, type );
@@ -94,7 +96,7 @@ void MapLayerTilemap::render( const Camera& camera )
 	}
 };
 
-void MapLayerTilemap::interact( Sprite& sprite, Health& health )
+void MapLayerTilemap::interact( Sprite& sprite, LevelState& level_state )
 {
 	if ( fade_type_ != FadeType::DONT_FADE && sprite.hasType( Sprite::SpriteType::HERO ) )
 	{

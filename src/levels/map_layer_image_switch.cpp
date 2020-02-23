@@ -1,4 +1,5 @@
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "map_layer_image_switch.hpp"
 
 MapLayerImageSwitch::MapLayerImageSwitch
@@ -44,9 +45,9 @@ MapLayerImageSwitch::MapLayerImageSwitch
 
 MapLayerImageSwitch::~MapLayerImageSwitch() {};
 
-void MapLayerImageSwitch::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerImageSwitch::update( LevelState& level_state )
 {
-	if ( events.isSwitchOn() )
+	if ( level_state.events().isSwitchOn() )
 	{
 		alpha_ = 255;
 	}

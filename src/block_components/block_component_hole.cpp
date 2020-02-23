@@ -2,6 +2,7 @@
 #include "block_component_hole.hpp"
 #include "block_type.hpp"
 #include "level.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -26,7 +27,7 @@ void BlockComponentHole::interact( const Collision& collision, Sprite& sprite, B
 			sprite.hit_box_.x = block.hit_box_.x;
 			sprite.graphics_->current_frame_x_ = 16;
 			sprite.top_speed_ = 1;
-			level.currentMap().changeBlock( block.location(), 75 + 65 );
+			level_state.level().currentMap().changeBlock( block.location(), 75 + 65 );
 		}
 	}
 };

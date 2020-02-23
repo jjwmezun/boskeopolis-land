@@ -47,7 +47,7 @@ class SpriteSystem
 		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health );
 		void render( Camera& camera, bool priority = false );
 		void renderSuperPriority( Camera& camera );
-		void interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health );
+		void interact( LevelState& level_state );
 		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events );
 		void reset( LevelState& level_state );
 		void resetTrainer( LevelState& level_state );
@@ -62,7 +62,7 @@ class SpriteSystem
 		void heroOpenTreasureChest();
 		Sprite& hero();
 		const Sprite& hero() const;
-		void interactWithMap( Map& lvmap, Camera& camera, Health& health );
+		void interactWithMap( LevelState& level_state );
 		int permanentlyKilledEnemies() const;
 		int numberOfSprites() const;
 		bool spritesOnScreen( const Camera& camera, const Sprite::SpriteType type ) const;

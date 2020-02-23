@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "block_system.hpp"
 #include <cassert>
+#include "level_state.hpp"
 #include "main.hpp"
 #include "map.hpp"
 #include "map_layer_doom.hpp"
@@ -129,8 +130,11 @@ void MapLayerDoom::render( const Camera& camera )
 	Render::renderRenderBox( map_, map_src_, map_dest_ );
 };
 
-void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerDoom::update( LevelState& level_state )
 {
+	const auto& sprites = level_state.sprites();
+	const auto& lvmap = level_state.currentMap();
+	const Camera& camera = level_state.camera();
 	// 43 is not a valid color in our palette.
 	if ( testFloorAndCeilingNotSetup() )
 	{
@@ -430,7 +434,7 @@ void MapLayerDoom::update( EventSystem& events, BlockSystem& blocks, const Camer
 		Render::setRenderTarget( map_ );
 			Render::renderRect( { 0, 0, MAP_WIDTH, MAP_HEIGHT }, 1 );
 
-			const std::vector<Block>& block_obj_list = blocks.getBlocksList();
+			const std::vector<Block>& block_obj_list = level_state.blocks().getBlocksList();
 			for ( const Block& b : block_obj_list )
 			{
 				if ( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 )

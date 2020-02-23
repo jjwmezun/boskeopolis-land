@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cassert>
 #include <fstream>
+#include "level_state.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "map.hpp"
@@ -822,23 +823,23 @@ bool Map::inBounds( int n ) const
 	return n < blocks_.size();
 };
 
-void Map::update( EventSystem& events, const SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera )
+void Map::update( LevelState& level_state )
 {
-	updateLayers( events, blocks, camera, sprites );
-	updateLoop( sprites );
+	updateLayers( level_state );
+	updateLoop( level_state.sprites() );
 	updateBGColor();
 	changed_ = false;
 };
 
-void Map::updateLayers( EventSystem& events, BlockSystem& blocks, const Camera& camera, const SpriteSystem& sprites )
+void Map::updateLayers( LevelState& level_state )
 {
 	for ( auto b : backgrounds_ )
 	{
-		b->update( events, blocks, camera, *this, sprites );
+		b->update( level_state );
 	}
 	for ( auto f : foregrounds_ )
 	{
-		f->update( events, blocks, camera, *this, sprites );
+		f->update( level_state );
 	}
 };
 
@@ -941,18 +942,18 @@ const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
 	return nullptr;
 };
 
-void Map::interact( Sprite& sprite, Camera& camera, Health& health )
+void Map::interact( Sprite& sprite, LevelState& level_state )
 {
 	if ( !sprite.is_dead_ )
 	{
 		for ( auto b : backgrounds_ )
 		{
-			b->interact( sprite, health );
+			b->interact( sprite, level_state );
 		}
 
 		for ( auto f : foregrounds_ )
 		{
-			f->interact( sprite, health );
+			f->interact( sprite, level_state );
 		}
 	}
 

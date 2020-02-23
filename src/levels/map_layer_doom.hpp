@@ -18,7 +18,7 @@ class MapLayerDoom : public MapLayer
 		MapLayerDoom& operator=( const MapLayerDoom& ) = delete;
 		MapLayerDoom& operator=( MapLayerDoom&& ) = delete;
 		void render( const Camera& camera ) override;
-		void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
+		void update( LevelState& level_state ) override;
 
 	private:
 		static constexpr int NUMBER_OF_COLOR_CHANNELS = 4;

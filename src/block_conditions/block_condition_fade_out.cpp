@@ -5,7 +5,7 @@
 BlockConditionFadeOut::BlockConditionFadeOut( int threshold ) : threshold_ ( threshold ) {};
 BlockConditionFadeOut::~BlockConditionFadeOut() {};
 
-bool BlockConditionFadeOut::condition( const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
+bool BlockConditionFadeOut::condition( const Collision& collision, const Sprite& sprite, const Block& block, const LevelState& level_state ) const
 {
 	if ( block.type() != nullptr && block.type()->graphics() != nullptr )
 	{

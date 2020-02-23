@@ -7,5 +7,5 @@ class BlockConditionCollideRight : public BlockCondition
 	public:
 		BlockConditionCollideRight();
 		~BlockConditionCollideRight();
-		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const override;
+		bool condition( const Collision& collision, const Sprite& sprite, const Block& block, const LevelState& level_state ) const override;
 };

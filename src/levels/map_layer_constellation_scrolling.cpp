@@ -1,10 +1,10 @@
 #include "camera.hpp"
+#include "level_state.hpp"
 #include "map_layer_constellation.hpp"
 #include "map_layer_constellation_scrolling.hpp"
 #include "render.hpp"
 #include "unit.hpp"
 
-#include <iostream>
 
 // CONSTANTS
 //=============================================================
@@ -40,8 +40,9 @@ MapLayerConstellationScrolling::~MapLayerConstellationScrolling()
 	SDL_DestroyTexture( texture_ );
 };
 
-void MapLayerConstellationScrolling::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerConstellationScrolling::update( LevelState& level_state )
 {
+	const Camera& camera = level_state.camera();
 	if ( texture_ == nullptr )
 	{
 		texture_ = MapLayerConstellation::formTexture( src_ );

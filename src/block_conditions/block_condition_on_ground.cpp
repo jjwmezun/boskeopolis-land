@@ -5,7 +5,7 @@ BlockConditionOnGround::BlockConditionOnGround() {};
 
 BlockConditionOnGround::~BlockConditionOnGround() {};
 
-bool BlockConditionOnGround::condition( const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
+bool BlockConditionOnGround::condition( const Collision& collision, const Sprite& sprite, const Block& block, const LevelState& level_state ) const
 {
 	return sprite.onGround();
 };

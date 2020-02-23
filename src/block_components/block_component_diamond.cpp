@@ -4,7 +4,7 @@
 #include "collision.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
-#include <iostream>
+#include "level_state.hpp"
 
 BlockComponentDiamond::BlockComponentDiamond( int replacement_block ) : replacement_block_ ( replacement_block ) {};
 BlockComponentDiamond::~BlockComponentDiamond() {};
@@ -13,7 +13,7 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 {
 	if ( Inventory::haveDiamond() )
 	{
-		removeDiamond( block, level.currentMap() );
+		removeDiamond( block, level_state );
 	}
 	else
 	{
@@ -21,7 +21,7 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 		{
 			Inventory::getDiamond();
 			Audio::playSound( Audio::SoundType::DIAMOND );
-			removeDiamond( block, level.currentMap() );
+			removeDiamond( block, level_state );
 		}
 	}
 };
@@ -30,13 +30,13 @@ void BlockComponentDiamond::init( Block& block, LevelState& level_state ) const
 {
 	if ( Inventory::haveDiamond() )
 	{
-		removeDiamond( block, lvmap );
+		removeDiamond( block, level_state );
 	}
 };
 
 void BlockComponentDiamond::removeDiamond( Block& block, LevelState& level_state ) const
 {
-	lvmap.deleteBlock( block.location() );
+	level_state.currentMap().deleteBlock( block.location() );
 
 	if ( replacement_block_ == -1 )
 	{
@@ -44,6 +44,6 @@ void BlockComponentDiamond::removeDiamond( Block& block, LevelState& level_state
 	}
 	else
 	{
-		lvmap.changeBlock( block.location(), replacement_block_ );
+		level_state.currentMap().changeBlock( block.location(), replacement_block_ );
 	}
 };

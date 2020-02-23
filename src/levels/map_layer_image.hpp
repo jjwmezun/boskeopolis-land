@@ -32,7 +32,7 @@ class MapLayerImage : public MapLayer
 			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
 		);
 		~MapLayerImage();
-		virtual void update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites ) override;
+		virtual void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;
 		void move( int width, const sdl2::SDLRect& container );
 		void render( const sdl2::SDLRect& container );

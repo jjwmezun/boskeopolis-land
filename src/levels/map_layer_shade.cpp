@@ -1,4 +1,5 @@
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "map_layer_shade.hpp"
 #include "render.hpp"
 
@@ -16,9 +17,9 @@ void MapLayerShade::render( const Camera& camera )
 	Render::colorCanvas( shade_, alpha_ );
 };
 
-void MapLayerShade::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerShade::update( LevelState& level_state )
 {
-	if ( events.testLightSwitch() )
+	if ( level_state.events().testLightSwitch() )
 	{
 		alpha_ = 0;
 		timer_ = 0;

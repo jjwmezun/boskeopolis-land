@@ -21,7 +21,7 @@ MapLayerConstellationMoving::~MapLayerConstellationMoving()
 	SDL_DestroyTexture( texture_ );
 };
 
-void MapLayerConstellationMoving::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerConstellationMoving::update( LevelState& level_state )
 {
 	if ( texture_ == nullptr )
 	{

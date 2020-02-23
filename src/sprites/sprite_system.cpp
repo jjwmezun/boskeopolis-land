@@ -74,6 +74,7 @@
 #include "iron_wall_sprite.hpp"
 #include <iostream>
 #include "level.hpp"
+#include "level_state.hpp"
 #include "lava_platform_sprite.hpp"
 #include "level_state.hpp"
 #include "lifesaver_sprite.hpp"
@@ -839,8 +840,9 @@ void SpriteSystem::spritesFromMap( LevelState& level_state )
 	}
 };
 
-void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& events, Camera& camera, Health& health )
+void SpriteSystem::interact( LevelState& level_state )
 {
+	BlockSystem& blocks = level_state.blocks();
 	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i ) != nullptr )
@@ -849,11 +851,11 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 			{
 				if
 				(
-					camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) ||
+					level_state.camera().onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) ||
 					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
 				)
 				{
-					blocks.interact( *sprites_.at( i ), level, events, camera, health, *this );
+					blocks.interact( *sprites_.at( i ), level_state );
 				}
 			}
 		}
@@ -861,7 +863,7 @@ void SpriteSystem::interact( BlockSystem& blocks, Level& level, EventSystem& eve
 
 	if ( hero_->interactsWithBlocks() )
 	{
-		blocks.interact( *hero_, level, events, camera, health, *this );
+		blocks.interact( *hero_, level_state );
 	}
 };
 
@@ -1165,9 +1167,10 @@ SpriteSystem::HeroType SpriteSystem::heroType( const std::string& property )
 	return HeroType::NORMAL;
 };
 
-void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera, Health& health )
+void SpriteSystem::interactWithMap( LevelState& level_state )
 {
-	lvmap.interact( *hero_, camera, health );
+	Map& lvmap = level_state.currentMap();
+	lvmap.interact( *hero_, level_state );
 
 	for ( auto& s : sprites_ )
 	{
@@ -1177,11 +1180,11 @@ void SpriteSystem::interactWithMap( Map& lvmap, Camera& camera, Health& health )
 			{
 				if
 				(
-					camera.onscreen( s->hitBox(), OFFSCREEN_PADDING ) ||
+					level_state.camera().onscreen( s->hitBox(), OFFSCREEN_PADDING ) ||
 					s->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
 				)
 				{
-					lvmap.interact( *s, camera, health );
+					lvmap.interact( *s, level_state );
 				}
 			}
 		}

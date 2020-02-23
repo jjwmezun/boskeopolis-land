@@ -1,5 +1,6 @@
 #include "map_layer_image.hpp"
 #include "camera.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "map.hpp"
 #include "render.hpp"
@@ -48,9 +49,9 @@ MapLayerImage::MapLayerImage
 
 MapLayerImage::~MapLayerImage() {};
 
-void MapLayerImage::update( EventSystem& events, BlockSystem& blocks, const Camera& camera, Map& lvmap, const SpriteSystem& sprites )
+void MapLayerImage::update( LevelState& level_state )
 {
-	move( lvmap.widthPixels(), camera.rect() );
+	move( level_state.currentMap().widthPixels(), level_state.camera().rect() );
 };
 
 void MapLayerImage::move( int width, const sdl2::SDLRect& container )

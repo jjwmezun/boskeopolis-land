@@ -1,11 +1,10 @@
 #include "audio.hpp"
 #include "block.hpp"
 #include "block_component_shmup_bullet.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "mezun_math.hpp"
 #include "sprite_system.hpp"
-
-#include <iostream>
 
 BlockComponentShmupBullet::BlockComponentShmupBullet() {};
 
@@ -17,6 +16,6 @@ void BlockComponentShmupBullet::interact( const Collision& collision, Sprite& sp
 	{
 		const double dx = ( double )( sprite.centerXSubPixels() - block.centerXSubPixels() );
 		const double dy = ( double )( sprite.centerYSubPixels() - block.centerYSubPixels() );
-		sprites.spawnShmupBullet( block.centerXPixels(), block.centerYPixels(), dy, dx );
+		level_state.sprites().spawnShmupBullet( block.centerXPixels(), block.centerYPixels(), dy, dx );
 	}
 };

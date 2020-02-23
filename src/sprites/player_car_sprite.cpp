@@ -6,8 +6,6 @@
 #include "sprite_graphics.hpp"
 #include "test_line_and_box_collision.hpp"
 
-#include <iostream>
-
 #define MAX_SPEED 8000.0
 #define MIN_SPEED -2000.0
 #define START_SPEED 100.0
@@ -136,6 +134,7 @@ void PlayerCarSprite::render( Camera& camera, bool priority )
 
 bool PlayerCarSprite::testForCollisions( int x, int y, const Camera& camera, const BlockSystem& blocks, const EventSystem& events, const Health& health )
 {
+	/*
 	const sdl2::SDLRect new_hit_box = { x, y, hit_box_.w, hit_box_.h, };
 	const auto block_list = blocks.getSolidBlocksInField( new_hit_box, camera, *this, events, health );
 	block_list_ = block_list;
@@ -150,6 +149,7 @@ bool PlayerCarSprite::testForCollisions( int x, int y, const Camera& camera, con
 			}
 		}
 	}
+	*/
 	return false;
 };
 
