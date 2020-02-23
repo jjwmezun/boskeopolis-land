@@ -15,7 +15,7 @@ SOURCES = $(wildcard $(SRC_DIR)*.$(EXT)) $(wildcard $(SRC_DIR)**/*.$(EXT))
 OBJ = $(subst $(SRC_DIR),$(OBJ_DIR),$(subst .$(EXT),.o,$(SOURCES)))
 
 EXE_DIR = bin/
-EXE = $(EXE_DIR)main
+EXE = $(EXE_DIR)Boskeopolis\ Land
 
 OBJ_FOLDERS = $(EXE_DIR) $(OBJ_DIR) $(subst -I$(SRC_DIR),$(OBJ_DIR),$(LOCAL_INC))
 

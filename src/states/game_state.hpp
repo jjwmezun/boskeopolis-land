@@ -19,7 +19,8 @@ class GameState
 			TIME_START_STATE,
 			OPTIONS_STATE,
 			LEVEL_TILE_MENU,
-			SHOP_STATE
+			SHOP_STATE,
+			LOAD_GAME_STATE
 		};
 
 		GameState

@@ -95,6 +95,8 @@ namespace Inventory
 	static Difficulty difficulty_ = Difficulty::NORMAL;
 	static bool health_upgrades_[ MAX_HEART_UPGRADES ] = { false, false, false };
 
+	static int current_save_ = 0;
+
 
 
 
@@ -124,6 +126,7 @@ namespace Inventory
 		bops_ = 0;
 		ghost_kills_ = 0;
 		difficulty_ = Difficulty::NORMAL;
+		current_save_ = 0;
 	};
 
 	std::string levelName( int level )
@@ -467,7 +470,7 @@ namespace Inventory
 
 	void saveBinary()
 	{
-		std::ofstream binofs( Main::savePath(), std::ios::out | std::ios::binary );
+		std::ofstream binofs( Main::savePath( current_save_ ), std::ios::out | std::ios::binary );
 
 			// Save total gems as 1st 4 bytes.
 				int32_t total_funds_block = total_funds_();
@@ -571,7 +574,7 @@ namespace Inventory
 		// while "current_block_end" is set to where I calculate the new clump to end.
 
 		bool load_success = true;
-		std::ifstream binifs ( Main::savePath(), std::ios::in | std::ios::binary | std::ios::ate );
+		std::ifstream binifs ( Main::savePath( current_save_ ), std::ios::in | std::ios::binary | std::ios::ate );
 
 			if ( binifs.is_open() )
 			{

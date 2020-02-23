@@ -32,7 +32,6 @@ class TitleState : public GameState
 		void generateLevelTexture();
 		void renderHeader();
 
-		bool can_load_;
         bool paused_;
         SDL_Texture* screen_texture_;
 		TextureBox created_by_;

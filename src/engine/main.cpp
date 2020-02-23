@@ -4,6 +4,7 @@
 #include <ctime>
 #include "console_arguments.hpp"
 #include <deque>
+#include <filesystem>
 #include "input.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
@@ -46,6 +47,7 @@ namespace Main
 	int updates_per_frame_ = 0;
 	int frames_ = 0;
 	std::string resource_path_ = "";
+	std::string save_path_ = "";
 	std::string path_divider_ = "/";
 	bool NOSAVE = false;
 	bool NOHARM = false;
@@ -63,7 +65,7 @@ namespace Main
 	void end();
 	int fpsMilliseconds();
 	void initSDL();
-	void setResourcePath();
+	void setResourcePaths();
 	void render();
 	void firstState();
 
@@ -112,7 +114,7 @@ namespace Main
 	void init( int argc, char** argv )
 	{
 		initSDL();
-		setResourcePath();
+		setResourcePaths();
 		Localization::init();
 		const ConsoleArguments args( argc, argv );
 		NOSAVE = args.nosave();
@@ -419,15 +421,17 @@ namespace Main
 		return states_.back()->frame();
 	};
 
-	void setResourcePath()
+	void setResourcePaths()
 	{
 		#ifdef _WIN32
 			path_divider_ = "\\";
 		#endif
 
-		char* base_path = SDL_GetBasePath();
-		resource_path_ = std::string( base_path ) + pathDivider() + "assets/";
-		SDL_free( base_path );
+		char* base_path_c = SDL_GetBasePath();
+		std::string base_path = std::string( base_path_c );
+		SDL_free( base_path_c );
+		resource_path_ = base_path + pathDivider() + "assets/";
+		save_path_ = base_path + pathDivider() + "saves/";
 	};
 
 	std::string resourcePath()
@@ -450,9 +454,15 @@ namespace Main
 		return NOHARM;
 	};
 
-	std::string savePath()
+	std::string savePath( int n )
 	{
-		return resourcePath() + "saves" + pathDivider() + "save.bin";
+		return save_path_ + pathDivider() + "save-" + std::to_string( n ) + ".bin";
+	};
+
+	bool testHaveSaves()
+	{
+		std::filesystem::path directory{ save_path_ };
+		return !std::filesystem::is_empty( directory );
 	};
 
 	const Palette& getPalette()

@@ -2,6 +2,7 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
+#include "load_game_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include <fstream>
@@ -48,7 +49,6 @@ static const std::string& getRandomTrainerLevel()
 TitleState::TitleState()
 :
 	GameState ( StateID::TITLE_STATE ),
-	can_load_ ( false ),
     paused_ ( false ),
     screen_texture_ ( Render::createRenderBox( Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT ) ),
 	created_by_ (),
@@ -88,11 +88,7 @@ void TitleState::stateUpdate()
 
                 case ( Option::LOAD ):
                 {
-                    const bool load_success = Inventory::load();
-                    if ( load_success )
-                    {
-                        Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), true ) ) );
-                    }
+                    Main::changeState( std::unique_ptr<GameState> ( new LoadGameState() ) );
                 }
                 break;
 
@@ -169,21 +165,14 @@ void TitleState::renderHeader()
 
 void TitleState::init()
 {
-	std::ifstream ifs( Main::savePath() );
-	if ( ifs.is_open() )
-	{
-		can_load_ = true;
-	}
-	else
-	{
-		can_load_ = false;
-	}
-	ifs.close();
 	Inventory::reset();
-
 	newPalette( level_.currentMap().palette_ );
 	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextCharacter::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();
+    if ( !Main::testHaveSaves() )
+    {
+        options_.setPressedDown( ( int )( Option::LOAD ) );
+    }
     level_.initForTrainer();
 	Audio::changeSong( "title" );
     Audio::setTrainerModeOn();
