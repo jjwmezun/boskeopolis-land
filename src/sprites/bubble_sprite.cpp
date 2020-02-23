@@ -1,6 +1,7 @@
 #include "bubble_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 BubbleSprite::BubbleSprite( int x, int y )
@@ -10,13 +11,13 @@ BubbleSprite::BubbleSprite( int x, int y )
 
 BubbleSprite::~BubbleSprite() {};
 
-void BubbleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BubbleSprite::customUpdate( LevelState& level_state )
 {};
 
-void BubbleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BubbleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		health.refillOxygen();
+		level_state.health().refillOxygen();
 	}
 };

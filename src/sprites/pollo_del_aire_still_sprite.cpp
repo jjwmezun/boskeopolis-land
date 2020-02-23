@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "pollo_del_aire_sprite.hpp"
 #include "pollo_del_aire_still_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -22,7 +23,7 @@ void PolloDelAireStillSprite::reset()
 	PolloDelAireSprite::polloReset( *this );
 };
 
-void PolloDelAireStillSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PolloDelAireStillSprite::customUpdate( LevelState& level_state )
 {
 
 	if ( direction_y_ == Direction::Vertical::UP )
@@ -48,7 +49,7 @@ void PolloDelAireStillSprite::customUpdate( Camera& camera, Map& lvmap, EventSys
 	graphics_->current_frame_x_ = 24 * floor(animation_counter_ / 8 );
 };
 
-void PolloDelAireStillSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PolloDelAireStillSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, health, events, *this );
+	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), *this );
 };

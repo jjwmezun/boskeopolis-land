@@ -2,6 +2,7 @@
 #include "camera.hpp"
 #include <cmath>
 #include "input.hpp"
+#include "level_state.hpp"
 #include "player_car_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "test_line_and_box_collision.hpp"
@@ -26,7 +27,7 @@ PlayerCarSprite::PlayerCarSprite( int x, int y )
 
 PlayerCarSprite::~PlayerCarSprite() {};
 
-void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerCarSprite::customUpdate( LevelState& level_state )
 {
 	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
@@ -67,6 +68,10 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	int x = hit_box_.x + ( int )( speed * std::cos( angle_radians ) );
 	int y = hit_box_.y + ( int )( speed * std::sin( angle_radians ) );
 
+	Camera& camera = level_state.camera();
+	BlockSystem& blocks = level_state.blocks();
+	EventSystem& events = level_state.events();
+	Health& health = level_state.health();
 	bool collisions = testForCollisions( x, y, camera, blocks, events, health );
 
 	if ( collisions )
@@ -107,11 +112,12 @@ void PlayerCarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	speed_ /= 1.005;
 	graphics_->rotation_ = angle_;
 
+	Map& lvmap = level_state.currentMap();
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
 };
 
-void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };
 

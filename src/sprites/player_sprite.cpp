@@ -13,6 +13,7 @@
 #include "inventory_level.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "player_sprite.hpp"
 
@@ -68,20 +69,24 @@ PlayerSprite::PlayerSprite
 
 PlayerSprite::~PlayerSprite() {};
 
-void PlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerSprite::customUpdate( LevelState& level_state )
 {
-	if ( !events.testPauseHero() )
+	if ( !level_state.events().testPauseHero() )
 	{
-		heroActions( camera, lvmap, events, sprites, blocks, health );
-		player_gfx_.update( *this, graphics_.get(), &events );
+		heroActions( level_state );
+		player_gfx_.update( *this, graphics_.get(), &level_state.events() );
 	}
 };
 
 // Actions only performed by hero version.
-void PlayerSprite::heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerSprite::heroActions( LevelState& level_state )
 {
+	Camera& camera = level_state.camera();
+	Map& lvmap = level_state.currentMap();
+	Health& health = level_state.health();
+	EventSystem& events = level_state.events();
 	resetBopsOnLanding();
-	actions( blocks, events );
+	actions( level_state.blocks(), events );
 	handleLookingUp();
 	handleCameraMovement( camera );
 	handleWaterEnteringAndExiting( lvmap );
@@ -106,9 +111,9 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 	input_->update();
 };
 
-void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	playerInteract( my_collision, them, health, events );
+	playerInteract( my_collision, them, level_state.health(), level_state.events() );
 };
 
 void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events )

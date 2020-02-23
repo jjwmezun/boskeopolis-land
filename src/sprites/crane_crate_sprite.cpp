@@ -13,7 +13,7 @@ CraneCrateSprite::CraneCrateSprite( int x, int y )
 
 CraneCrateSprite::~CraneCrateSprite() {};
 
-void CraneCrateSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CraneCrateSprite::customUpdate( LevelState& level_state )
 {
 	prev_x_ = hit_box_.x;
 	prev_y_ = hit_box_.y;
@@ -38,7 +38,7 @@ void CraneCrateSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	hit_box_ = circle_.getPosition();
 };
 
-void CraneCrateSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CraneCrateSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

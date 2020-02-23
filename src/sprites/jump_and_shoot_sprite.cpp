@@ -1,5 +1,6 @@
 #include "block_system.hpp"
 #include "jump_and_shoot_sprite.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -19,17 +20,17 @@ JumpAndShootSprite::JumpAndShootSprite( int x, int y, int w, int h, std::unique_
 
 JumpAndShootSprite::~JumpAndShootSprite() {};
 
-void JumpAndShootSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void JumpAndShootSprite::customUpdate( LevelState& level_state )
 {
 	flipGraphicsOnRight();
 	if ( !handleJumping() )
 	{
-		handleMovement( blocks );
+		handleMovement( level_state.blocks() );
 	}
-	handleThrowing( sprites );
+	handleThrowing( level_state.sprites() );
 };
 
-void JumpAndShootSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void JumpAndShootSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

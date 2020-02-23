@@ -8,7 +8,7 @@ FallingFistSprite::FallingFistSprite( int x, int y )
 
 FallingFistSprite::~FallingFistSprite() {};
 
-void FallingFistSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FallingFistSprite::customUpdate( LevelState& level_state )
 {
 	if ( collide_bottom_ ) direction_y_ = Direction::Vertical::DOWN;
 	else if ( collide_top_ ) direction_y_ = Direction::Vertical::UP;
@@ -33,7 +33,7 @@ void FallingFistSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	hit_box_.x = original_hit_box_.x;
 };
 
-void FallingFistSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FallingFistSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void FallingFistSprite::render( Camera& camera, bool priority )

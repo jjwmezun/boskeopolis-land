@@ -1,6 +1,7 @@
 #include "falling_snow_boulder_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "unit.hpp"
 
@@ -14,9 +15,9 @@ FallingSnowBoulderSprite::FallingSnowBoulderSprite( int x, int y )
 
 FallingSnowBoulderSprite::~FallingSnowBoulderSprite() {};
 
-void FallingSnowBoulderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FallingSnowBoulderSprite::customUpdate( LevelState& level_state )
 {
-	if ( fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( level_state.currentMap() ) )
 	{
 		killNoAnimation();
 	}
@@ -29,11 +30,11 @@ void FallingSnowBoulderSprite::customUpdate( Camera& camera, Map& lvmap, EventSy
 	}
 };
 
-void FallingSnowBoulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FallingSnowBoulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		health.hurt();
+		level_state.health().hurt();
 	}
 };
 

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "collision.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "locked_door_sprite.hpp"
 #include "render.hpp"
 #include "sprite_graphics.hpp"
@@ -14,8 +15,9 @@ LockedDoorSprite::LockedDoorSprite( int x, int y, int map_id )
 
 LockedDoorSprite::~LockedDoorSprite() {};
 
-void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void LockedDoorSprite::customUpdate( LevelState& level_state )
 {
+	EventSystem& events = level_state.events();
 	has_key_ = events.hasKey();
 
 	if ( events.trainDoorPartlyOpen() && hit_box_.h >= ( 16000 * 6 ) )
@@ -36,13 +38,13 @@ void LockedDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		block_interact_ = false;
 	}
 
-	if ( fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( level_state.currentMap() ) )
 	{
 		events.setOpen();
 	}
 };
 
-void LockedDoorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void LockedDoorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{

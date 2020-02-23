@@ -2,6 +2,7 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "gorilla_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -21,8 +22,9 @@ BarrelOGorillasSprite::BarrelOGorillasSprite( int x, int y )
 
 BarrelOGorillasSprite::~BarrelOGorillasSprite() {};
 
-void BarrelOGorillasSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BarrelOGorillasSprite::customUpdate( LevelState& level_state )
 {
+	SpriteSystem& sprites = level_state.sprites();
 	if ( spawn_timer_ >= spawn_limit_ )
 	{
 		if ( sprites.numberOfSprites() < 30 )
@@ -38,7 +40,7 @@ void BarrelOGorillasSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 	}
 };
 
-void BarrelOGorillasSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BarrelOGorillasSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( !them.hasType( SpriteType::PHASE_THROUGH ) )
 	{

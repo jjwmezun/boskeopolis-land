@@ -1,7 +1,8 @@
 #include "audio.hpp"
-#include "health.hpp"
-#include "sprite_graphics.hpp"
 #include "full_heal_block_sprite.hpp"
+#include "health.hpp"
+#include "level_state.hpp"
+#include "sprite_graphics.hpp"
 
 FullHealBlockSprite::FullHealBlockSprite( int x, int y )
 :
@@ -10,17 +11,18 @@ FullHealBlockSprite::FullHealBlockSprite( int x, int y )
 
 FullHealBlockSprite::~FullHealBlockSprite() {};
 
-void FullHealBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FullHealBlockSprite::customUpdate( LevelState& level_state )
 {
 	hit_box_.x = original_hit_box_.x; // Undo wind.
 	bump_under_block_component.update( *this );
 };
 
-void FullHealBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FullHealBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
 	if ( hit )
 	{
+		Health& health = level_state.health();
 		if ( health.hasFullHealth() )
 		{
 			Audio::playSound( Audio::SoundType::BUMP );

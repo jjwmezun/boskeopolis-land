@@ -12,7 +12,7 @@ PenguinSprite::PenguinSprite( int x, int y )
 {};
 PenguinSprite::~PenguinSprite() {};
 
-void PenguinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PenguinSprite::customUpdate( LevelState& level_state )
 {
     if ( turning_ )
     {
@@ -61,7 +61,7 @@ void PenguinSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
     updateGraphics();
 };
 
-void PenguinSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+void PenguinSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};
 
 void PenguinSprite::updateGraphics()
 {

@@ -12,7 +12,7 @@ MansionDoorSprite::MansionDoorSprite( int x, int y )
 
 MansionDoorSprite::~MansionDoorSprite() {};
 
-void MansionDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MansionDoorSprite::customUpdate( LevelState& level_state )
 {
     switch ( state_ )
     {
@@ -33,7 +33,7 @@ void MansionDoorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
     }
 };
 
-void MansionDoorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MansionDoorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
     {

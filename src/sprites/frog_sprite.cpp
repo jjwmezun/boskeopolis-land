@@ -1,6 +1,7 @@
 #include "frog_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 
@@ -16,7 +17,7 @@ FrogSprite::FrogSprite( int x, int y )
 
 FrogSprite::~FrogSprite() {};
 
-void FrogSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FrogSprite::customUpdate( LevelState& level_state )
 {
     switch ( state_ )
     {
@@ -78,7 +79,7 @@ void FrogSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
     flipGraphicsOnRight();
 };
 
-void FrogSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FrogSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) )
     {
@@ -103,7 +104,7 @@ void FrogSprite::customInteract( Collision& my_collision, Collision& their_colli
                 const Collision tongue_collision = movement_->testCollision( them, tongue_ );
                 if ( tongue_collision.collideAny() )
                 {
-                    health.hurt();
+                    level_state.health().hurt();
                 }
             }
             break;

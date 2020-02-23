@@ -3,6 +3,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int NUMBER_OF_ANIMATION_FRAMES = 4;
@@ -19,7 +20,7 @@ RugMonsterSprite::RugMonsterSprite( int x, int y )
 
 RugMonsterSprite::~RugMonsterSprite() {};
 
-void RugMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void RugMonsterSprite::customUpdate( LevelState& level_state )
 {
     switch ( state_ )
     {
@@ -100,7 +101,7 @@ void RugMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
     }
 };
 
-void RugMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void RugMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( !is_dead_ && them.hasType( SpriteType::HERO ) )
     {
@@ -135,7 +136,7 @@ void RugMonsterSprite::customInteract( Collision& my_collision, Collision& their
                 }
                 else if ( their_collision.collideAny() )
                 {
-                    health.hurt();
+                    level_state.health().hurt();
                 }
 
                 if ( reached_end_ )

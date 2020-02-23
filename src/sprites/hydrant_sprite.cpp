@@ -3,6 +3,7 @@
 #include "health.hpp"
 #include "hydrant_sprite.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 HydrantSprite::HydrantSprite( int x, int y )
@@ -14,7 +15,7 @@ HydrantSprite::HydrantSprite( int x, int y )
 
 HydrantSprite::~HydrantSprite() {};
 
-void HydrantSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void HydrantSprite::customUpdate( LevelState& level_state )
 {
 	if ( isDead() )
 	{
@@ -47,7 +48,7 @@ void HydrantSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	}
 };
 
-void HydrantSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void HydrantSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( Sprite::SpriteType::HERO ) )
 	{
@@ -69,7 +70,7 @@ void HydrantSprite::customInteract( Collision& my_collision, Collision& their_co
 				}
 				else if ( their_collision.collideAny() && !isDead() )
 				{
-					health.hurt();
+					level_state.health().hurt();
 				}
 			}
 			else

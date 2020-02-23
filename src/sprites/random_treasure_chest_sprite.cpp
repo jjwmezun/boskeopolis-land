@@ -3,9 +3,9 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "random_treasure_chest_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 RandomTreasureChestSprite::RandomTreasureChestSprite( int x, int y, EventSystem& events )
 :
@@ -17,32 +17,39 @@ RandomTreasureChestSprite::RandomTreasureChestSprite( int x, int y, EventSystem&
 
 RandomTreasureChestSprite::~RandomTreasureChestSprite() {};
 
-void RandomTreasureChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void RandomTreasureChestSprite::customUpdate( LevelState& level_state )
 {
 	switch ( state_ )
 	{
 		case ( State::INIT ):
-			setRandomItemType( events );
+		{
+			setRandomItemType( level_state.events() );
 			state_ = State::DORMANT;
+		}
 		break;
 		case ( State::OPENING ):
+		{
 			animateChestOpening();
 			if ( jump_start_speed_ == 2 )
 			{
 				state_ = State::ITEM_RISING;
 			}
+		}
 		break;
 		case( State::ITEM_RISING ):
+		{
 			raiseItem();
+		}
 		break;
 	}
 };
 
-void RandomTreasureChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void RandomTreasureChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	switch ( state_ )
 	{
 		case ( State::DORMANT ):
+		{
 			if
 			(
 				Input::pressed( Input::Action::MOVE_UP ) &&
@@ -52,8 +59,10 @@ void RandomTreasureChestSprite::customInteract( Collision& my_collision, Collisi
 			{
 				state_ = State::OPENING;
 			}
+		}
 		break;
 		case( State::ITEM_RISING ):
+		{
 			if
 			(
 				item_type_ == ItemType::RANDOM_KEYCANE &&
@@ -64,9 +73,10 @@ void RandomTreasureChestSprite::customInteract( Collision& my_collision, Collisi
 				const auto collision = them.testCollision( getKeyCanePosition() );
 				if ( collision.collideAny() )
 				{
-					events.win();
+					level_state.events().win();
 				}
 			}
+		}
 		break;
 	}
 };

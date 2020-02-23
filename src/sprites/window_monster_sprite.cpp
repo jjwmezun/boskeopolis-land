@@ -2,6 +2,7 @@
 #include "window_monster_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int FRAME_SIZE = 38;
@@ -16,7 +17,7 @@ WindowMonsterSprite::WindowMonsterSprite( int x, int y )
 
 WindowMonsterSprite::~WindowMonsterSprite() {};
 
-void WindowMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void WindowMonsterSprite::customUpdate( LevelState& level_state )
 {
 	if ( activated_ )
 	{
@@ -61,7 +62,7 @@ void WindowMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void WindowMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void WindowMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( animationIsDone() && them.hasType( SpriteType::HERO ) )
 	{
@@ -76,7 +77,7 @@ void WindowMonsterSprite::customInteract( Collision& my_collision, Collision& th
 
 		if ( their_collision.collideAny() )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 	}
 	else if ( !activated_ && them.hasType( SpriteType::HERO ) )

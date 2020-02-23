@@ -13,7 +13,7 @@ PiBlockSprite::PiBlockSprite( int x, int y )
 
 PiBlockSprite::~PiBlockSprite() {};
 
-void PiBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PiBlockSprite::customUpdate( LevelState& level_state )
 {
 	if ( hero_still_on_block_ )
 	{
@@ -42,7 +42,7 @@ void PiBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	hero_still_on_block_ = false;
 };
 
-void PiBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PiBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.collideBottomOnly( their_collision, *this ) )
 	{

@@ -3,6 +3,7 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "guard_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static const int DISTANCE_LIMIT_X = 8 * 16000 - 4000;
@@ -19,7 +20,7 @@ GuardSprite::GuardSprite( int x, int y )
 {};
 GuardSprite::~GuardSprite() {};
 
-void GuardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void GuardSprite::customUpdate( LevelState& level_state )
 {
     moveInDirectionX();
 
@@ -49,7 +50,7 @@ void GuardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
     updateGraphics();
 };
 
-void GuardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void GuardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) && !stunned_ )
     {
@@ -65,6 +66,7 @@ void GuardSprite::customInteract( Collision& my_collision, Collision& their_coll
             : DISTANCE_LIMIT_Y;
 
         // If guard can see hero, die.
+        BlockSystem& blocks = level_state.blocks();
         if ( direction_x_ == Direction::Horizontal::RIGHT )
         {
             if

@@ -1,7 +1,8 @@
 #include "audio.hpp"
+#include "collision.hpp"
 #include "harpoon_sprite.hpp"
 #include "health.hpp"
-#include "collision.hpp"
+#include "level_state.hpp"
 
 HarpoonSprite::HarpoonSprite( int x, int y )
 :
@@ -20,7 +21,7 @@ HarpoonSprite::HarpoonSprite( int x, int y )
 
 HarpoonSprite::~HarpoonSprite() {};
 
-void HarpoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void HarpoonSprite::customUpdate( LevelState& level_state )
 {
 	switch ( state_ )
 	{
@@ -95,10 +96,11 @@ void HarpoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	}
 };
 
-void HarpoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void HarpoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
+		Health& health = level_state.health();
 		if ( their_collision.collideAny() )
 		{
 			them.collideStopAny( their_collision );

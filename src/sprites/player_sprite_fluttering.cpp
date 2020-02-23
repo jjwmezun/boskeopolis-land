@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "player_sprite_fluttering.hpp"
 #include "sprite_graphics.hpp"
 
@@ -10,7 +11,7 @@ PlayerSpriteFluttering::PlayerSpriteFluttering( int x, int y )
 
 PlayerSpriteFluttering::~PlayerSpriteFluttering() {};
 
-void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerSpriteFluttering::customUpdate( LevelState& level_state )
 {
 
 	switch ( direction_x_ )
@@ -23,7 +24,7 @@ void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSyst
 			graphics_->flip_x_ = true;
 		break;
 	}
-	invincibilityFlicker( health );
+	invincibilityFlicker( level_state.health() );
 
 	if ( Input::held( Input::Action::RUN ) )
 	{
@@ -79,10 +80,12 @@ void PlayerSpriteFluttering::customUpdate( Camera& camera, Map& lvmap, EventSyst
 		gravity_top_speed_ = gravity_top_speed_;
 	}
 
+	Camera& camera = level_state.camera();
+	Map& lvmap = level_state.currentMap();
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
 };
 
-void PlayerSpriteFluttering::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerSpriteFluttering::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

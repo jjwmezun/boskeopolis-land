@@ -2,6 +2,7 @@
 #include "doom_enemy_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 DoomEnemySprite::DoomEnemySprite( int x, int y )
@@ -14,10 +15,10 @@ DoomEnemySprite::DoomEnemySprite( int x, int y )
 
 DoomEnemySprite::~DoomEnemySprite() {};
 
-void DoomEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DoomEnemySprite::customUpdate( LevelState& level_state )
 {};
 
-void DoomEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DoomEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( !is_dead_ && them.hasType( SpriteType::HERO ) )
 	{
@@ -41,7 +42,7 @@ void DoomEnemySprite::customInteract( Collision& my_collision, Collision& their_
 
 		if ( their_collision.collideAny() )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 	}
 };

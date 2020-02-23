@@ -3,6 +3,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "text_component_gradual.hpp"
 #include <memory>
 
@@ -19,7 +20,7 @@ DungeonHealerSprite::DungeonHealerSprite( int x, int y )
 
 DungeonHealerSprite::~DungeonHealerSprite() {};
 
-void DungeonHealerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DungeonHealerSprite::customUpdate( LevelState& level_state )
 {
     text_.update();
     if ( timer_ >= 0 && timer_ < 48 )
@@ -29,7 +30,7 @@ void DungeonHealerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
     graphics_->visible_ = !invincibilityFlickerOff();
 };
 
-void DungeonHealerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DungeonHealerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) )
     {
@@ -38,6 +39,7 @@ void DungeonHealerSprite::customInteract( Collision& my_collision, Collision& th
             them.collideStopAny( their_collision );
         }
         const auto collision = them.testCollision( heart_box_ );
+        Health& health = level_state.health();
         if ( Inventory::funds() >= 5000 && health.hp() < health.maxHP() && collision.collideAny() )
         {
             Inventory::loseFunds( 5000 );

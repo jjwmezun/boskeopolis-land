@@ -9,7 +9,7 @@ class ShooterPlayerSprite : public PlayerSprite
 	public:
 		ShooterPlayerSprite( int x, int y );
 		~ShooterPlayerSprite();
-		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
+		void customUpdate( LevelState& level_state ) override;
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
 	private:

@@ -12,7 +12,7 @@ TopDownBulletSprite::TopDownBulletSprite( int x, int y, Direction::Simple direct
 
 TopDownBulletSprite::~TopDownBulletSprite() {};
 
-void TopDownBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void TopDownBulletSprite::customUpdate( LevelState& level_state )
 {
 	switch ( direction_ )
 	{
@@ -39,6 +39,6 @@ void TopDownBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void TopDownBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void TopDownBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

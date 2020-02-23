@@ -7,7 +7,7 @@ SimpleProjectileSprite::SimpleProjectileSprite( int x, int y, int w, int h, Dire
 
 SimpleProjectileSprite::~SimpleProjectileSprite() {};
 
-void SimpleProjectileSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SimpleProjectileSprite::customUpdate( LevelState& level_state )
 {
 	moveInDirectionX();
 	if ( collidedAny() )
@@ -16,6 +16,6 @@ void SimpleProjectileSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	}
 };
 
-void SimpleProjectileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SimpleProjectileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

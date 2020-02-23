@@ -12,10 +12,10 @@ SpringEnemySprite::SpringEnemySprite( int x, int y )
 
 SpringEnemySprite::~SpringEnemySprite() {};
 
-void SpringEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SpringEnemySprite::customUpdate( LevelState& level_state )
 {};
 
-void SpringEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SpringEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

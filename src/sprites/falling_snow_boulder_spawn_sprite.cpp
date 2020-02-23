@@ -1,5 +1,6 @@
 #include "falling_snow_boulder_spawn_sprite.hpp"
 #include "falling_snow_boulder_sprite.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "sprite_system.hpp"
 
@@ -11,7 +12,7 @@ FallingSnowBoulderSpawnSprite::FallingSnowBoulderSpawnSprite( int x, int y )
 
 FallingSnowBoulderSpawnSprite::~FallingSnowBoulderSpawnSprite() {};
 
-void FallingSnowBoulderSpawnSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FallingSnowBoulderSpawnSprite::customUpdate( LevelState& level_state )
 {
 	if ( timer_ >= 0 )
 	{
@@ -19,7 +20,7 @@ void FallingSnowBoulderSpawnSprite::customUpdate( Camera& camera, Map& lvmap, Ev
 		{
 			if ( graphics_->current_frame_x_ <= 32 )
 			{
-				sprites.spawn( std::make_unique<FallingSnowBoulderSprite>( xPixels(), yPixels() ) );
+				level_state.sprites().spawn( std::make_unique<FallingSnowBoulderSprite>( xPixels(), yPixels() ) );
 				graphics_->current_frame_x_ = 128;
 				timer_ = -1;
 				return;
@@ -38,4 +39,4 @@ void FallingSnowBoulderSpawnSprite::customUpdate( Camera& camera, Map& lvmap, Ev
 	}
 };
 
-void FallingSnowBoulderSpawnSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+void FallingSnowBoulderSpawnSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};

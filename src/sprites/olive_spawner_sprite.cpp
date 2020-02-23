@@ -1,3 +1,4 @@
+#include "level_state.hpp"
 #include "main.hpp"
 #include "olive_spawner_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -12,13 +13,13 @@ OliveSpawnerSprite::OliveSpawnerSprite( int x, int y, Direction::Horizontal star
 
 OliveSpawnerSprite::~OliveSpawnerSprite() {};
 
-void OliveSpawnerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void OliveSpawnerSprite::customUpdate( LevelState& level_state )
 {
 	if ( Main::stateFrame() % SPAWN_SPEED == 0 )
 	{
-		sprites.spawnOlive( xPixels() + 4, yPixels(), direction_x_ );
+		level_state.sprites().spawnOlive( xPixels() + 4, yPixels(), direction_x_ );
 	}
 };
 
-void OliveSpawnerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void OliveSpawnerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};

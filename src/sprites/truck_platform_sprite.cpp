@@ -12,7 +12,7 @@ TruckPlatformSprite::TruckPlatformSprite( int x, int y )
 
 TruckPlatformSprite::~TruckPlatformSprite() {};
 
-void TruckPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void TruckPlatformSprite::customUpdate( LevelState& level_state )
 {
 	if ( hit_box_.y <= original_hit_box_.y - 176000 )
 	{
@@ -24,7 +24,7 @@ void TruckPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void TruckPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void TruckPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{

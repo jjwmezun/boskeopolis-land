@@ -5,6 +5,7 @@
 #include "render.hpp"
 #include "health.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "player_cart_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -23,8 +24,9 @@ PlayerCartSprite::PlayerCartSprite( int x, int y )
 
 PlayerCartSprite::~PlayerCartSprite() {};
 
-void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerCartSprite::customUpdate( LevelState& level_state )
 {
+	Health& health = level_state.health();
 	if ( direction_x_ == Direction::Horizontal::RIGHT )
 	{
 		if ( collide_right_ )
@@ -133,18 +135,20 @@ void PlayerCartSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		unduck( unduck_data_ );
 	}
 
+	Map& lvmap = level_state.currentMap();
 	if ( fellInBottomlessPit( lvmap ) )
 	{
 		kill();
 	}
 
 	invincibilityFlicker( health );
-	camera.adjustCart( *this, lvmap );
+	level_state.camera().adjustCart( *this, lvmap );
 	updateGraphics();
 };
 
-void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
+	Health& health = level_state.health();
 	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
 	{
 		if ( them.hasType( SpriteType::BOPPABLE ) )

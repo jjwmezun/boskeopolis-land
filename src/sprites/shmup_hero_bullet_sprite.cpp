@@ -9,7 +9,7 @@ ShmupHeroBulletSprite::ShmupHeroBulletSprite( int x, int y, Direction::Simple di
 
 ShmupHeroBulletSprite::~ShmupHeroBulletSprite() {};
 
-void ShmupHeroBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ShmupHeroBulletSprite::customUpdate( LevelState& level_state )
 {
 	switch ( direction_ )
 	{
@@ -36,5 +36,5 @@ void ShmupHeroBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 	}
 };
 
-void ShmupHeroBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ShmupHeroBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};

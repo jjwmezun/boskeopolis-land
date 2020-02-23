@@ -12,11 +12,11 @@ BridgeMonsterProjectileSprite::BridgeMonsterProjectileSprite( int x, int y, doub
 
 BridgeMonsterProjectileSprite::~BridgeMonsterProjectileSprite() {};
 
-void BridgeMonsterProjectileSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BridgeMonsterProjectileSprite::customUpdate( LevelState& level_state )
 {
 	hit_box_.x += ( int )( SPEED * std::cos( angle_ ) );
 	hit_box_.y += ( int )( SPEED * std::sin( angle_ ) );
 };
 
-void BridgeMonsterProjectileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BridgeMonsterProjectileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};

@@ -1,6 +1,7 @@
 #include "collision.hpp"
 #include "handgun_sprite.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 
@@ -11,7 +12,7 @@ HandgunSprite::HandgunSprite( int x, int y )
 
 HandgunSprite::~HandgunSprite() {};
 
-void HandgunSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void HandgunSprite::customUpdate( LevelState& level_state )
 {
 	if ( shooting_ )
 	{
@@ -28,7 +29,7 @@ void HandgunSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	can_shoot_ = true;
 };
 
-void HandgunSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void HandgunSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -42,7 +43,7 @@ void HandgunSprite::customInteract( Collision& my_collision, Collision& their_co
 			}
 			else if ( their_collision.collideAny() )
 			{
-				health.hurt();
+				level_state.health().hurt();
 			}
 		}
 		else if

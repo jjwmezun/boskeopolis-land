@@ -13,7 +13,7 @@ CapnClearbeardSprite::CapnClearbeardSprite( int x, int y )
 
 CapnClearbeardSprite::~CapnClearbeardSprite() {};
 
-void CapnClearbeardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CapnClearbeardSprite::customUpdate( LevelState& level_state )
 {
 	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
 
@@ -36,5 +36,5 @@ void CapnClearbeardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	}
 };
 
-void CapnClearbeardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CapnClearbeardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};

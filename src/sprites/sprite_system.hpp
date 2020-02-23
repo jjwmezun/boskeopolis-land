@@ -44,11 +44,11 @@ class SpriteSystem
 		SpriteSystem( const SpriteSystem& ) = delete;
 		SpriteSystem& operator= ( const SpriteSystem& ) = delete;
 
-		void update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health );
+		void update( LevelState& level_state );
 		void render( Camera& camera, bool priority = false );
 		void renderSuperPriority( Camera& camera );
 		void interact( LevelState& level_state );
-		void spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events );
+		void spriteInteraction( LevelState& level_state );
 		void reset( LevelState& level_state );
 		void resetTrainer( LevelState& level_state );
 		void spawn( std::unique_ptr<Sprite>&& sprite );

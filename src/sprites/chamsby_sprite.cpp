@@ -4,6 +4,7 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -26,8 +27,9 @@ ChamsbySprite::ChamsbySprite( int x, int y )
 
 ChamsbySprite::~ChamsbySprite() {};
 
-void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ChamsbySprite::customUpdate( LevelState& level_state )
 {
+	EventSystem& events = level_state.events();
 	events.createBossUI();
 	switch ( state_ )
 	{
@@ -118,10 +120,11 @@ void ChamsbySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	flipGraphicsOnRight();
 };
 
-void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
+		EventSystem& events = level_state.events();
 		switch ( state_ )
 		{
 			case ( ChamsbyState::ATTACK ):
@@ -136,7 +139,7 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 				}
 				if ( shoot_timer_.update() && them.hit_box_.y < bottomSubPixels() && them.bottomSubPixels() > hit_box_.y )
 				{
-					sprites.spawn( std::make_unique<BulletSprite> ( centerXPixels(), centerYPixels(), Direction::horizontalToSimple( direction_x_ ), false ) );
+					level_state.sprites().spawn( std::make_unique<BulletSprite> ( centerXPixels(), centerYPixels(), Direction::horizontalToSimple( direction_x_ ), false ) );
 				}
 
 				if ( invincibility_ == 0 )
@@ -152,7 +155,7 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 					}
 					else if ( their_collision.collideAny() )
 					{
-						health.hurt();
+						level_state.health().hurt();
 					}
 				}
 			}

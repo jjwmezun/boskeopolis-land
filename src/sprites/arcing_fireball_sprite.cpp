@@ -14,12 +14,12 @@ ArcingFireballSprite::ArcingFireballSprite( int x, int y, int start_speed, int t
 
 ArcingFireballSprite::~ArcingFireballSprite() {};
 
-void ArcingFireballSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ArcingFireballSprite::customUpdate( LevelState& level_state )
 {
 	moveInDirectionX();
 	jump();
 };
 
-void ArcingFireballSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ArcingFireballSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

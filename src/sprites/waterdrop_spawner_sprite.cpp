@@ -1,9 +1,9 @@
 #include "collision.hpp"
 #include "health.hpp"
-#include "waterdrop_spawner_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
-#include <iostream>
+#include "waterdrop_spawner_sprite.hpp"
 
 WaterdropSpawnerSprite::WaterdropSpawnerSprite( int x, int y )
 :
@@ -14,16 +14,16 @@ WaterdropSpawnerSprite::WaterdropSpawnerSprite( int x, int y )
 
 WaterdropSpawnerSprite::~WaterdropSpawnerSprite() {};
 
-void WaterdropSpawnerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void WaterdropSpawnerSprite::customUpdate( LevelState& level_state )
 {
 	if ( timer_ % 120 == 0 )
 	{
-		sprites.spawnWaterdrop( xPixels(), yPixels() );
+		level_state.sprites().spawnWaterdrop( xPixels(), yPixels() );
 	}
 	
 	++timer_;
 };
 
-void WaterdropSpawnerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void WaterdropSpawnerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

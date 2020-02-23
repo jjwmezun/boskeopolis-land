@@ -1,7 +1,7 @@
+#include "level_state.hpp"
+#include "main.hpp"
 #include "olive_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
-#include "main.hpp"
 
 static constexpr int SPEED = 800;
 
@@ -12,7 +12,7 @@ OliveSprite::OliveSprite( int x, int y, Direction::Horizontal start_dir )
 
 OliveSprite::~OliveSprite() {};
 
-void OliveSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void OliveSprite::customUpdate( LevelState& level_state )
 {
 	turnOnCollide();
 	moveInDirectionX();
@@ -27,12 +27,12 @@ void OliveSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 		break;
 	}
 	
-	if ( fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( level_state.currentMap() ) )
 	{
 		kill();
 	}
 };
 
-void OliveSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void OliveSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

@@ -1,4 +1,5 @@
 #include "arcing_fireball_sprite.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -19,13 +20,13 @@ VolcanoMonsterSprite::VolcanoMonsterSprite( int x, int y )
 
 VolcanoMonsterSprite::~VolcanoMonsterSprite() {};
 
-void VolcanoMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void VolcanoMonsterSprite::customUpdate( LevelState& level_state )
 {
 	if ( timer_ >= next_spit_ )
 	{
 		timer_ = 0;
 		next_spit_ = randFireball();
-		spawn( sprites );
+		spawn( level_state.sprites() );
 	}
 	else
 	{
@@ -43,7 +44,7 @@ void VolcanoMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	}
 };
 
-void VolcanoMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void VolcanoMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

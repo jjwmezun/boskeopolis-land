@@ -1,5 +1,6 @@
 #include "dungeon_enemy_walls_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -26,9 +27,9 @@ DungeonEnemyWallsSprite::DungeonEnemyWallsSprite( int x, int y, Direction::Simpl
 
 DungeonEnemyWallsSprite::~DungeonEnemyWallsSprite() {};
 
-void DungeonEnemyWallsSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DungeonEnemyWallsSprite::customUpdate( LevelState& level_state )
 {
-	if ( !sprites.spritesOnScreen( camera, SpriteType::ENEMY ) )
+	if ( !level_state.sprites().spritesOnScreen( level_state.camera(), SpriteType::ENEMY ) )
 	{
 		switch ( direction_ )
 		{
@@ -53,7 +54,7 @@ void DungeonEnemyWallsSprite::customUpdate( Camera& camera, Map& lvmap, EventSys
 	}
 };
 
-void DungeonEnemyWallsSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DungeonEnemyWallsSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

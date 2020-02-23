@@ -12,7 +12,7 @@ IceCubeSprite::IceCubeSprite( int x, int y, Direction::Horizontal direction, boo
 
 IceCubeSprite::~IceCubeSprite() {};
 
-void IceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void IceCubeSprite::customUpdate( LevelState& level_state )
 {
 	if ( in_water_ )
 	{
@@ -41,7 +41,7 @@ void IceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	}
 };
 
-void IceCubeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void IceCubeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

@@ -12,7 +12,7 @@ SparkSprite::SparkSprite( int x, int y )
 
 SparkSprite::~SparkSprite() {};
 
-void SparkSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SparkSprite::customUpdate( LevelState& level_state )
 {
 	moveLeft();
 	if ( hit_box_.x > original_hit_box_.x - 64000 )
@@ -37,7 +37,7 @@ void SparkSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 	}
 };
 
-void SparkSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SparkSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };
 

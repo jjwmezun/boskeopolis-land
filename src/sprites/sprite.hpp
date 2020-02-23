@@ -5,7 +5,7 @@ class BlockSystem;
 class Camera;
 class Collision;
 class EventSystem;
-class GameState;
+class LevelState;
 class Health;
 class Level;
 class Map;
@@ -129,15 +129,15 @@ class Sprite : public Object
 		static void moonGravityOn();
 		static void moonGravityOff();
 
-		void update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
+		void update( LevelState& level_state );
 		virtual void render( Camera& camera, bool priority = false );
 		virtual void renderSuperPriority( Camera& camera );
 		void drawHitBox( const Camera& camera );
 		void renderWithHitbox( Camera& camera, bool priority );
-		void interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
+		void interact( Sprite& them, LevelState& level_state );
 
-		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) = 0;
-		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) = 0;
+		virtual void customUpdate( LevelState& level_state ) = 0;
+		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) = 0;
 		virtual void reset();
 
 		bool onGround() const;

@@ -21,13 +21,13 @@ void CloudMonsterSprite::render( Camera& camera, bool priority )
 	lightning_.render( camera, priority );
 };
 
-void CloudMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CloudMonsterSprite::customUpdate( LevelState& level_state )
 {
 	lightning_.changeX( lightningPosition() );
 	lightningUpdate();
 };
 
-void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	lightning_.changeX( lightningPosition() );
 
@@ -50,7 +50,7 @@ void CloudMonsterSprite::customInteract( Collision& my_collision, Collision& the
 		
 		if ( lightning_is_on_ )
 		{
-			lightning_.interact( them, blocks, sprites, lvmap, health, events );
+			lightning_.interact( them, level_state );
 			graphics_->current_frame_x_ = 80;
 		}
 		else

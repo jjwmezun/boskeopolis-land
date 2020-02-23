@@ -33,14 +33,14 @@ class PlayerSprite : public Sprite
 		);
 		~PlayerSprite();
 
-		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
-		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
+		virtual void customUpdate( LevelState& level_state ) override;
+		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 		virtual void tryUnduck( const BlockSystem& blocks );
 		virtual bool canJump() const override;
 
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
-		void heroActions( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
+		void heroActions( LevelState& level_state );
 		bool isLookingUp() const;
 
 	protected:

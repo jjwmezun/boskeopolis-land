@@ -39,7 +39,6 @@
 #include "dungeon_enemy_walls_sprite.hpp"
 #include "dungeon_healer_sprite.hpp"
 #include "dungeon_switch_sprite.hpp"
-#include "eggnon_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
 #include "event_system.hpp"
 #include "falling_snow_boulder_spawn_sprite.hpp"
@@ -72,7 +71,6 @@
 #include "icicle_sprite.hpp"
 #include "input_component_sequence.hpp"
 #include "iron_wall_sprite.hpp"
-#include <iostream>
 #include "level.hpp"
 #include "level_state.hpp"
 #include "lava_platform_sprite.hpp"
@@ -266,7 +264,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new SillyfishSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 25 ):
-			return std::unique_ptr<Sprite> ( new EggnonSprite( x, y ) );
+			return nullptr;
 		break;
 		case ( SPRITE_INDEX_START + 26 ):
 			return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::SHADOW ) );
@@ -980,8 +978,10 @@ void SpriteSystem::destroySprite( int n, Map& lvmap )
 	}
 };
 
-void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, BlockSystem& blocks, Health& health )
+void SpriteSystem::update( LevelState& level_state )
 {
+	const Camera& camera = level_state.camera();
+	Map& lvmap = level_state.currentMap();
 	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i )->despawnWhenDead() )
@@ -998,18 +998,18 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			case ( Sprite::CameraMovement::PAUSE_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
+					sprites_.at( i )->update( level_state );
 				}
 			break;
 
 			case ( Sprite::CameraMovement::PERMANENT ):
-				sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
+				sprites_.at( i )->update( level_state );
 			break;
 
 			case ( Sprite::CameraMovement::RESET_INSTANTLY_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
+					sprites_.at( i )->update( level_state );
 				}
 				else
 				{
@@ -1023,7 +1023,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			case ( Sprite::CameraMovement::RESET_OFFSCREEN_AND_AWAY ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
+					sprites_.at( i )->update( level_state );
 				}
 				else
 				{
@@ -1037,7 +1037,7 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 			case ( Sprite::CameraMovement::DESPAWN_OFFSCREEN ):
 				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( camera, lvmap, events, *this, blocks, health );
+					sprites_.at( i )->update( level_state );
 				}
 				else
 				{
@@ -1047,21 +1047,22 @@ void SpriteSystem::update( Camera& camera, Map& lvmap, EventSystem& events, Bloc
 		}
 	}
 
-	if ( health.hp() <= 0 )
+	if ( level_state.health().hp() <= 0 )
 	{
 		hero_->kill();
 	}
 
-	hero_->update( camera, lvmap, events, *this, blocks, health );
+	hero_->update( level_state );
 
 	if ( hero_->deathFinished() )
 	{
-		events.fail();
+		level_state.events().fail();
 	}
 };
 
-void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& lvmap, Health& health, EventSystem& events )
+void SpriteSystem::spriteInteraction( LevelState& level_state )
 {
+	const Camera& camera = level_state.camera();
 	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
 		if ( sprites_.at( i ) != nullptr )
@@ -1070,8 +1071,8 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 			{
 				if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
 				{
-					sprites_.at( i )->interact( *hero_, blocks, *this, lvmap, health, events );
-					hero_->interact( *sprites_.at( i ), blocks, *this, lvmap, health, events );
+					sprites_.at( i )->interact( *hero_, level_state );
+					hero_->interact( *sprites_.at( i ), level_state );
 				}
 
 				for ( auto j = 0; j < sprites_.size(); ++j )
@@ -1080,7 +1081,7 @@ void SpriteSystem::spriteInteraction( Camera& camera, BlockSystem& blocks, Map& 
 						if ( i != j )
 							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) || sprites_[ j ]->cameraMovement() == Sprite::CameraMovement::PERMANENT )
 								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
-									sprites_.at( i )->interact( *sprites_[ j ], blocks, *this, lvmap, health, events );
+									sprites_.at( i )->interact( *sprites_[ j ], level_state );
 				}
 			}
 		}

@@ -20,10 +20,10 @@ BouncingSpikeFruitSprite::BouncingSpikeFruitSprite( int x, int y )
 
 BouncingSpikeFruitSprite::~BouncingSpikeFruitSprite() {};
 
-void BouncingSpikeFruitSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BouncingSpikeFruitSprite::customUpdate( LevelState& level_state )
 {
 	moveLeft();
 	jump();
 };
 
-void BouncingSpikeFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+void BouncingSpikeFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};

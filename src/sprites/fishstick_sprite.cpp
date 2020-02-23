@@ -12,7 +12,7 @@ FishstickSprite::FishstickSprite( int x, int y )
 
 FishstickSprite::~FishstickSprite() {};
 
-void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FishstickSprite::customUpdate( LevelState& level_state )
 {
 	if ( move_timer_.hit() )
 	{
@@ -53,4 +53,4 @@ void FishstickSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+void FishstickSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};

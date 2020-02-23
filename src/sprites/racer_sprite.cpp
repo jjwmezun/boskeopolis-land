@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "input_component_sequence.hpp"
+#include "level_state.hpp"
 #include "racer_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -22,9 +23,9 @@ RacerSprite::RacerSprite( int x, int y )
 
 RacerSprite::~RacerSprite() {};
 
-void RacerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void RacerSprite::customUpdate( LevelState& level_state )
 {
-	actions( blocks, events );
+	actions( level_state.blocks(), level_state.events() );
 	if ( !on_ground_ )
 	{
 		vx_ *= .2;
@@ -32,6 +33,6 @@ void RacerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 	player_gfx_.update( *this, graphics_.get() );
 };
 
-void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

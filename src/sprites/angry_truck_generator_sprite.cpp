@@ -1,6 +1,7 @@
 #include "angry_truck_sprite.hpp"
 #include "angry_truck_generator_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sprite_system.hpp"
 
 static constexpr int TIMER_LIMIT = 60;
@@ -13,16 +14,16 @@ AngryTruckGeneratorSprite::AngryTruckGeneratorSprite( int x, int y )
 
 AngryTruckGeneratorSprite::~AngryTruckGeneratorSprite() {};
 
-void AngryTruckGeneratorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void AngryTruckGeneratorSprite::customUpdate( LevelState& level_state )
 {
 	if ( timer_ >= TIMER_LIMIT )
 	{
-		sprites.spawn( std::make_unique<AngryTruckSprite> ( xPixels(), yPixels(), true ) );
+		level_state.sprites().spawn( std::make_unique<AngryTruckSprite> ( xPixels(), yPixels(), true ) );
 		timer_ = 0;
 	}
 	++timer_;
 };
 
-void AngryTruckGeneratorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void AngryTruckGeneratorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

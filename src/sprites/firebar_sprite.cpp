@@ -1,6 +1,7 @@
 #include "firebar_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 
@@ -33,7 +34,7 @@ FirebarSprite::FirebarSprite( int x, int y )
 
 FirebarSprite::~FirebarSprite() {};
 
-void FirebarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FirebarSprite::customUpdate( LevelState& level_state )
 {
 	for ( auto& circle : circles_ )
 	{
@@ -44,7 +45,7 @@ void FirebarSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& event
 	graphics_->rotation_ = 360 * angle_percent;
 };
 
-void FirebarSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FirebarSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -58,7 +59,7 @@ void FirebarSprite::customInteract( Collision& my_collision, Collision& their_co
 				them.bottomSubPixels() > fireball.y + HIT_BOX_PADDING;
 			if ( touching )
 			{
-				health.hurt();
+				level_state.health().hurt();
 				return;
 			}
 		}

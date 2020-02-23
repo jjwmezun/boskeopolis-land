@@ -10,7 +10,7 @@ AnchorMissileSprite::AnchorMissileSprite( int x, int y, Direction::Simple direct
 
 AnchorMissileSprite::~AnchorMissileSprite() {};
 
-void AnchorMissileSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void AnchorMissileSprite::customUpdate( LevelState& level_state )
 {
 	moveInDirection();
 	if ( collide_top_ || collide_left_ || collide_right_ || collide_bottom_ )
@@ -19,4 +19,4 @@ void AnchorMissileSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void AnchorMissileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+void AnchorMissileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};

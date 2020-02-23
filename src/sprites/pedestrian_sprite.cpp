@@ -1,6 +1,7 @@
 #include <cassert>
 #include "collision.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "pedestrian_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -54,8 +55,9 @@ PedestrianSprite::PedestrianSprite( int x, int y )
 
 PedestrianSprite::~PedestrianSprite() {};
 
-void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PedestrianSprite::customUpdate( LevelState& level_state )
 {
+	Map& lvmap = level_state.currentMap();
 	moveInDirection();
 	if ( isAtTransitionPoint() )
 	{
@@ -118,11 +120,11 @@ void PedestrianSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	graphics_->current_frame_x_ = animation_.get() * 4;
 };
 
-void PedestrianSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PedestrianSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.layer_ == layer_ && them.hasType( SpriteType::HERO ) && my_collision.collideAny() )
 	{
-		events.fail();
+		level_state.events().fail();
 	}
 };
 

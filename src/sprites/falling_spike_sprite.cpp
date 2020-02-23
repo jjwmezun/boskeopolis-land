@@ -12,7 +12,7 @@ FallingSpikeSprite::FallingSpikeSprite( int x, int y )
 
 FallingSpikeSprite::~FallingSpikeSprite() {};
 
-void FallingSpikeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FallingSpikeSprite::customUpdate( LevelState& level_state )
 {
     switch ( state_ )
     {
@@ -33,7 +33,7 @@ void FallingSpikeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
     }
 };
 
-void FallingSpikeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FallingSpikeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( state_ == State::STATIC && them.hasType( SpriteType::HERO ) )
 	{

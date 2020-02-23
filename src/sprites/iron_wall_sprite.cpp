@@ -2,6 +2,7 @@
 #include "iron_wall_sprite.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 IronWallSprite::IronWallSprite( int x, int y )
@@ -11,20 +12,20 @@ IronWallSprite::IronWallSprite( int x, int y )
 
 IronWallSprite::~IronWallSprite() {};
 
-void IronWallSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void IronWallSprite::customUpdate( LevelState& level_state )
 {
-	if ( events.isSwitchOn() )
+	if ( level_state.events().isSwitchOn() )
 	{
 		moveDown();
 		Audio::playSound( Audio::SoundType::CANCEL );
-		if ( fellInBottomlessPit( lvmap ) )
+		if ( fellInBottomlessPit( level_state.currentMap() ) )
 		{
 			kill();
 		}
 	}
 };
 
-void IronWallSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void IronWallSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

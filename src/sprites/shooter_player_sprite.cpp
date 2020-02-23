@@ -1,5 +1,6 @@
 #include "event_system.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "shooter_player_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -32,9 +33,9 @@ ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
 
 ShooterPlayerSprite::~ShooterPlayerSprite() {};
 
-void ShooterPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ShooterPlayerSprite::customUpdate( LevelState& level_state )
 {
-	heroActions( camera, lvmap, events, sprites, blocks, health );
+	heroActions( level_state );
 
 	if ( is_shooting_ )
 	{
@@ -57,6 +58,7 @@ void ShooterPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 
 	if ( shoot_delay_count_ == 0 && Input::pressed( Input::Action::RUN ) )
 	{
+		SpriteSystem& sprites = level_state.sprites();
 		if ( isLookingUp() )
 		{
 			sprites.spawnHeroBullet( centerXPixels(), yPixels() + 2, Direction::Simple::UP );

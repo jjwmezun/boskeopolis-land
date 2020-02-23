@@ -11,7 +11,7 @@ RisingPlatformSprite::RisingPlatformSprite( int x, int y )
 
 RisingPlatformSprite::~RisingPlatformSprite() {};
 
-void RisingPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void RisingPlatformSprite::customUpdate( LevelState& level_state )
 {
 	switch ( direction_y_ )
 	{
@@ -37,7 +37,7 @@ void RisingPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	}
 };
 
-void RisingPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void RisingPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

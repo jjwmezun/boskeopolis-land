@@ -1,6 +1,7 @@
-#include "gorilla_sprite.hpp"
-#include "collision.hpp"
 #include "animated_graphics.hpp"
+#include "collision.hpp"
+#include "gorilla_sprite.hpp"
+#include "level_state.hpp"
 
 GorillaSprite::GorillaSprite( int x, int y )
 :
@@ -9,16 +10,16 @@ GorillaSprite::GorillaSprite( int x, int y )
 
 GorillaSprite::~GorillaSprite() {};
 
-void GorillaSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void GorillaSprite::customUpdate( LevelState& level_state )
 {
 	turnOnCollide();
 	moveInDirectionX();
 	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
-	if ( fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( level_state.currentMap() ) )
 	{
 		kill();
 	}
 };
 
-void GorillaSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void GorillaSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};

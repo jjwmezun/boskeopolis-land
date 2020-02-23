@@ -1,8 +1,8 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "waterdrop_sprite.hpp"
 #include "waterdrop_graphics.hpp"
-#include <iostream>
 
 WaterdropSprite::WaterdropSprite( int x, int y )
 :
@@ -11,18 +11,18 @@ WaterdropSprite::WaterdropSprite( int x, int y )
 
 WaterdropSprite::~WaterdropSprite() {};
 
-void WaterdropSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void WaterdropSprite::customUpdate( LevelState& level_state )
 {
 	moveDown();
 };
 
-void WaterdropSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void WaterdropSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{
 		if ( them.hasType( SpriteType::HERO ) && !is_dead_ )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 
 		kill();

@@ -1,5 +1,6 @@
 #include "ant_sprite.hpp"
 #include "block_system.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int MOVE_SPEED = 1000;
@@ -16,8 +17,9 @@ AntSprite::AntSprite( int x, int y )
 
 AntSprite::~AntSprite() {};
 
-void AntSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void AntSprite::customUpdate( LevelState& level_state )
 {
+	BlockSystem& blocks = level_state.blocks();
 	switch ( direction_ )
 	{
 		case ( Direction::Rotation::UP ):
@@ -119,6 +121,6 @@ void AntSprite::testSlopeChange( Direction::Rotation next_direction )
 	graphics_->rotation_ += floor( 90.0 / 16.0 );
 };
 
-void AntSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void AntSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

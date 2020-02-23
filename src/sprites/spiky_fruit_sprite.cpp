@@ -18,7 +18,7 @@ SpikyFruitSprite::SpikyFruitSprite( int x, int y, const Map& lvmap )
 
 SpikyFruitSprite::~SpikyFruitSprite() {};
 
-void SpikyFruitSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SpikyFruitSprite::customUpdate( LevelState& level_state )
 {
 	if ( movement_->hasType( SpriteMovement::Type::GROUNDED ) )
 	{
@@ -36,7 +36,7 @@ void SpikyFruitSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 };
 
-void SpikyFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SpikyFruitSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 
 	// Find falling bough.

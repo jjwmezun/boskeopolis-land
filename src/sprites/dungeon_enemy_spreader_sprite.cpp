@@ -1,9 +1,8 @@
 #include "dungeon_enemy_spreader_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
-
 #include "input.hpp"
-#include <iostream>
+#include "level_state.hpp"
 
 static constexpr double BASE_RADIANS = 0.7853982;
 static constexpr double SPIKE_SPREAD_ACCELERATION = 125.0;
@@ -46,7 +45,7 @@ DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 
 DungeonEnemySpreaderSprite::~DungeonEnemySpreaderSprite() {};
 
-void DungeonEnemySpreaderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DungeonEnemySpreaderSprite::customUpdate( LevelState& level_state )
 {
 	if ( hp_ <= 0 )
 	{
@@ -114,7 +113,7 @@ void DungeonEnemySpreaderSprite::customUpdate( Camera& camera, Map& lvmap, Event
 	}
 };
 
-void DungeonEnemySpreaderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DungeonEnemySpreaderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -141,7 +140,7 @@ void DungeonEnemySpreaderSprite::customInteract( Collision& my_collision, Collis
 			const auto collision = them.testCollision( spikes_[ i ] );
 			if ( collision.collideAny() )
 			{
-				health.hurt();
+				level_state.health().hurt();
 				return;
 			}
 		}

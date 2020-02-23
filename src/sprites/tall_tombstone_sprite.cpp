@@ -9,10 +9,10 @@ TallTombstoneSprite::TallTombstoneSprite( int x, int y )
 
 TallTombstoneSprite::~TallTombstoneSprite() {};
 
-void TallTombstoneSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void TallTombstoneSprite::customUpdate( LevelState& level_state )
 {};
 
-void TallTombstoneSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void TallTombstoneSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

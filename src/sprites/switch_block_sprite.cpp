@@ -1,5 +1,6 @@
 #include "audio.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "switch_block_sprite.hpp"
 
@@ -10,18 +11,18 @@ SwitchBlockSprite::SwitchBlockSprite( int x, int y )
 
 SwitchBlockSprite::~SwitchBlockSprite() {};
 
-void SwitchBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SwitchBlockSprite::customUpdate( LevelState& level_state )
 {
 	bump_under_block_component.update( *this );
-	graphics_->current_frame_x_ = ( events.isSwitchOn() ) ? 0 : 16;
+	graphics_->current_frame_x_ = ( level_state.events().isSwitchOn() ) ? 0 : 16;
 };
 
-void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
 	if ( hit )
 	{
-		events.flipSwitch();
+		level_state.events().flipSwitch();
 		Audio::playSound( Audio::SoundType::SWITCH );
 	}
 };

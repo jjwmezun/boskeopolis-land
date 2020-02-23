@@ -1,4 +1,5 @@
 #include "guard_spike_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int FAST_MOVEMENT = 2000;
@@ -11,14 +12,14 @@ GuardSpikeSprite::GuardSpikeSprite( int x, int y )
 
 GuardSpikeSprite::~GuardSpikeSprite() {};
 
-void GuardSpikeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void GuardSpikeSprite::customUpdate( LevelState& level_state )
 {
-	turnOnEdge( blocks );
+	turnOnEdge( level_state.blocks() );
 	turnOnCollide();
 	moveInDirectionX();
 };
 
-void GuardSpikeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void GuardSpikeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) )
     {

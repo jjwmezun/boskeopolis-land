@@ -4,6 +4,7 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -29,7 +30,7 @@ TreasureChestSprite::TreasureChestSprite( int x, int y, ItemType item_type )
 
 TreasureChestSprite::~TreasureChestSprite() {};
 
-void TreasureChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void TreasureChestSprite::customUpdate( LevelState& level_state )
 {
 	switch ( jump_start_speed_ )
 	{
@@ -46,13 +47,14 @@ void TreasureChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void TreasureChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void TreasureChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
+	EventSystem& events = level_state.events();
 	if ( them.on_ground_ && events.hasKey() && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		Inventory::clock().stop();
 		Audio::fadeMusic( 500 );
-		sprites.heroOpenTreasureChest();
+		level_state.sprites().heroOpenTreasureChest();
 		events.setPauseDisabled();
 	}
 };

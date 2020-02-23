@@ -1,6 +1,7 @@
 #include "block_system.hpp"
 #include "top_down_moveable_block_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -13,14 +14,16 @@ TopDownMoveableBlockSprite::TopDownMoveableBlockSprite( int x, int y )
 
 TopDownMoveableBlockSprite::~TopDownMoveableBlockSprite() {};
 
-void TopDownMoveableBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void TopDownMoveableBlockSprite::customUpdate( LevelState& level_state )
 {};
 
-void TopDownMoveableBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void TopDownMoveableBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( top_speed_ == 0 && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		const bool going_right = them.vx_ > 0;
+		BlockSystem& blocks = level_state.blocks();
+		SpriteSystem& sprites = level_state.sprites();
 		const bool x_condition =
 			( them.hit_box_.y < bottomSubPixels() - 4000 && them.bottomSubPixels() > hit_box_.y + 4000 )
 			&&

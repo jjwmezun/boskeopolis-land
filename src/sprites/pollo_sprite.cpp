@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "pollo_sprite.hpp"
 #include "pollo_del_aire_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -14,7 +15,7 @@ PolloSprite::PolloSprite( int x, int y, Direction::Horizontal dir_x, int map_id,
 
 PolloSprite::~PolloSprite() {};
 
-void PolloSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PolloSprite::customUpdate( LevelState& level_state )
 {
 	jump();
 
@@ -51,7 +52,7 @@ void PolloSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 	}
 };
 
-void PolloSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PolloSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, health, events, *this );
+	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), *this );
 };

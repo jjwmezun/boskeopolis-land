@@ -1,8 +1,7 @@
 #include "collision.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
-
-#include <iostream>
 
 HieroglyphPusherSprite::HieroglyphPusherSprite( int x, int y )
 :
@@ -11,9 +10,9 @@ HieroglyphPusherSprite::HieroglyphPusherSprite( int x, int y )
 
 HieroglyphPusherSprite::~HieroglyphPusherSprite() {};
 
-void HieroglyphPusherSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void HieroglyphPusherSprite::customUpdate( LevelState& level_state )
 {
-	turnOnEdge( blocks );
+	turnOnEdge( level_state.blocks() );
 	turnOnCollide();
 	moveInDirectionX();
 
@@ -28,7 +27,7 @@ void HieroglyphPusherSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	}
 };
 
-void HieroglyphPusherSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void HieroglyphPusherSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{

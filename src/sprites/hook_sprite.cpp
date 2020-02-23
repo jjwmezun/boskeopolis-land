@@ -10,7 +10,7 @@ HookSprite::HookSprite( int x, int y )
 
 HookSprite::~HookSprite() {};
 
-void HookSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void HookSprite::customUpdate( LevelState& level_state )
 {
 	if ( direction_y_ == Direction::Vertical::UP )
 	{
@@ -39,7 +39,7 @@ void HookSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 
 };
 
-void HookSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void HookSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };
 

@@ -13,8 +13,8 @@ class TreasureChestSprite : public Sprite
 		};
 		TreasureChestSprite( int x, int y, ItemType item_type = ItemType::KEY_KEYCANE );
 		~TreasureChestSprite();
-		virtual void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) override;
-		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) override;
+		virtual void customUpdate( LevelState& level_state ) override;
+		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 		void render( Camera& camera, bool priority = false ) override;
 
 	protected:

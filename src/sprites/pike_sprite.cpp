@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "pike_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -30,7 +31,7 @@ PikeSprite::PikeSprite( int x, int y )
 
 PikeSprite::~PikeSprite() {};
 
-void PikeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PikeSprite::customUpdate( LevelState& level_state )
 {
 	switch ( state_ )
 	{
@@ -132,14 +133,14 @@ int PikeSprite::getOriginY() const
 };
 */
 
-void PikeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PikeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
 		const Collision horizontal_collision = them.testCollision( horizontal_pike_ );
 		if ( horizontal_collision.collideAny() )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 	}
 };

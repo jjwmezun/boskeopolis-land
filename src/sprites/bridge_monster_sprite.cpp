@@ -1,5 +1,6 @@
 #include "bridge_monster_projectile_sprite.hpp"
 #include "bridge_monster_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 #include <memory>
@@ -16,7 +17,7 @@ BridgeMonsterSprite::BridgeMonsterSprite( int x, int y )
 
 BridgeMonsterSprite::~BridgeMonsterSprite() {};
 
-void BridgeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BridgeMonsterSprite::customUpdate( LevelState& level_state )
 {
     if ( jump_lock_ )
     {
@@ -35,7 +36,7 @@ void BridgeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
             jump_lock_ = true;
             const double dx = ( double )( Unit::BlocksToSubPixels( -2 ) );
             const double dy = ( double )( Unit::BlocksToSubPixels( 1 ) );
-            sprites.spawn( std::make_unique<BridgeMonsterProjectileSprite> ( centerXPixels(), centerYPixels(), dy, dx ) );
+            level_state.sprites().spawn( std::make_unique<BridgeMonsterProjectileSprite> ( centerXPixels(), centerYPixels(), dy, dx ) );
         }       
     }
     if ( walk_timer_.update() )
@@ -45,6 +46,6 @@ void BridgeMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
     moveInDirectionX();
 };
 
-void BridgeMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BridgeMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

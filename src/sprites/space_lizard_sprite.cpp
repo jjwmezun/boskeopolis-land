@@ -1,3 +1,4 @@
+#include "level_state.hpp"
 #include "space_lizard_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -10,15 +11,15 @@ SpaceLizardSprite::SpaceLizardSprite( int x, int y )
 
 SpaceLizardSprite::~SpaceLizardSprite() {};
 
-void SpaceLizardSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SpaceLizardSprite::customUpdate( LevelState& level_state )
 {
-	turnOnEdge( blocks );
+	turnOnEdge( level_state.blocks() );
 	turnOnCollide();
 	moveInDirectionX();
 	updateGraphics();
 };
 
-void SpaceLizardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SpaceLizardSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void SpaceLizardSprite::updateGraphics()

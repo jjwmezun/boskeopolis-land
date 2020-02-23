@@ -1,6 +1,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static inline TimerSwitch timerType( const HeatBeamSprite::Type& type )
@@ -40,7 +41,7 @@ HeatBeamSprite::HeatBeamSprite( int x, int y, HeatBeamSprite::Type type )
 
 HeatBeamSprite::~HeatBeamSprite() {};
 
-void HeatBeamSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void HeatBeamSprite::customUpdate( LevelState& level_state )
 {
 	if ( state_timer_.inTrans() )
 	{
@@ -111,7 +112,7 @@ void HeatBeamSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& even
 	}
 };
 
-void HeatBeamSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void HeatBeamSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -119,7 +120,7 @@ void HeatBeamSprite::customInteract( Collision& my_collision, Collision& their_c
 		{
 			if ( their_collision.collideAny() )
 			{
-				health.hurt();
+				level_state.health().hurt();
 			}
 		}
 	}

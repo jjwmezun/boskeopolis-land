@@ -1,9 +1,9 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "pollo_del_aire_sprite.hpp"
 #include "pollo_del_aire_circle_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 PolloDelAireCircleSprite::PolloDelAireCircleSprite( int x, int y, bool clockwise, int map_id, bool despawn_when_dead )
 :
@@ -24,7 +24,7 @@ void PolloDelAireCircleSprite::reset()
 	PolloDelAireSprite::polloReset( *this );
 };
 
-void PolloDelAireCircleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PolloDelAireCircleSprite::customUpdate( LevelState& level_state )
 {
 	hit_box_.x = original_hit_box_.x + ( hit_box_.w / 2 ) + ( std::cos( angle() ) * 50000 );
 	hit_box_.y = original_hit_box_.y + ( hit_box_.h / 2 ) + ( std::sin( angle() ) * 50000 );
@@ -43,7 +43,7 @@ void PolloDelAireCircleSprite::customUpdate( Camera& camera, Map& lvmap, EventSy
 	graphics_->current_frame_x_ = 24 * floor(animation_counter_ / 8 );
 };
 
-void PolloDelAireCircleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PolloDelAireCircleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, health, events, *this );
+	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), *this );
 };

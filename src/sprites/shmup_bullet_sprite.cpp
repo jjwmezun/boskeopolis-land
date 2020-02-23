@@ -12,11 +12,11 @@ ShmupBulletSprite::ShmupBulletSprite( int x, int y, double dy, double dx )
 
 ShmupBulletSprite::~ShmupBulletSprite() {};
 
-void ShmupBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ShmupBulletSprite::customUpdate( LevelState& level_state )
 {
 	hit_box_.x += ( int )( SPEED * std::cos( angle_ ) );
 	hit_box_.y += ( int )( SPEED * std::sin( angle_ ) );
 };
 
-void ShmupBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ShmupBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};

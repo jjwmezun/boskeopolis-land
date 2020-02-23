@@ -20,7 +20,7 @@ BirdSprite::BirdSprite( int x, int y, Direction::Horizontal dir )
 
 BirdSprite::~BirdSprite() {};
 
-void BirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BirdSprite::customUpdate( LevelState& level_state )
 {
 	// GRAPHICS
 	switch ( direction_x_ )
@@ -85,7 +85,7 @@ void BirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 	propeller_animation_timer_++;
 };
 
-void BirdSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BirdSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( wait_limit_counter_ <= WAIT_LIMIT && them.hasType( SpriteType::HERO ) )
 	{

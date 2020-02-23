@@ -12,7 +12,7 @@ CrabSprite::CrabSprite( int x, int y )
 
 CrabSprite::~CrabSprite() {};
 
-void CrabSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CrabSprite::customUpdate( LevelState& level_state )
 {
 	moveInDirectionX();
 
@@ -38,7 +38,7 @@ void CrabSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 	}
 };
 
-void CrabSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CrabSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

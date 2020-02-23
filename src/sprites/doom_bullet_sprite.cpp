@@ -12,7 +12,7 @@ DoomBulletSprite::DoomBulletSprite( int x, int y, double dx, double dy )
 
 DoomBulletSprite::~DoomBulletSprite() {};
 
-void DoomBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DoomBulletSprite::customUpdate( LevelState& level_state )
 {
 	vx_ = 2500.0 * dx_;
 	vy_ = 2500.0 * dy_;
@@ -22,7 +22,7 @@ void DoomBulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 };
 
-void DoomBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DoomBulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::ENEMY ) && their_collision.collideAny() )
 	{

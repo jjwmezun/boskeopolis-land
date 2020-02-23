@@ -1,3 +1,4 @@
+#include "level_state.hpp"
 #include "sillyfish_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -10,15 +11,15 @@ SillyfishSprite::SillyfishSprite( int x, int y )
 
 SillyfishSprite::~SillyfishSprite() {};
 
-void SillyfishSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SillyfishSprite::customUpdate( LevelState& level_state )
 {
-	turnOnEdge( blocks );
+	turnOnEdge( level_state.blocks() );
 	turnOnCollide();
 	moveInDirectionX();
 	updateGraphics();
 };
 
-void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SillyfishSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void SillyfishSprite::updateGraphics()

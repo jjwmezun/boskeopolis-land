@@ -2,6 +2,7 @@
 #include "collision.hpp"
 #include "desert_hawk_sprite.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int FRAME_SPEED = 16;
@@ -34,7 +35,7 @@ DesertHawkSprite::DesertHawkSprite( int x, int y, Direction::Horizontal directio
 
 DesertHawkSprite::~DesertHawkSprite() {};
 
-void DesertHawkSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DesertHawkSprite::customUpdate( LevelState& level_state )
 {
 	moveInDirectionX();
 
@@ -55,12 +56,13 @@ void DesertHawkSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 };
 
-void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
 		if ( their_collision.collideBottom() )
 		{
+			BlockSystem& blocks = level_state.blocks();
 			if
 			(
 				!blocks.blocksInTheWay
@@ -91,7 +93,7 @@ void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their
 		}
 		else if ( their_collision.collideAny() )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 	}
 };

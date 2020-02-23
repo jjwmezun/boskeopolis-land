@@ -1,4 +1,5 @@
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "light_switch_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -9,17 +10,17 @@ LightSwitchSprite::LightSwitchSprite( int x, int y )
 
 LightSwitchSprite::~LightSwitchSprite() {};
 
-void LightSwitchSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void LightSwitchSprite::customUpdate( LevelState& level_state )
 {
 	bump_under_block_component.update( *this );
 };
 
-void LightSwitchSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void LightSwitchSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
 	if ( hit )
 	{
-        events.forceSwitchOn();
+        level_state.events().forceSwitchOn();
 	}
 };
 

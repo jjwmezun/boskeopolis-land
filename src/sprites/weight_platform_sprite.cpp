@@ -35,7 +35,7 @@ WeightPlatformSprite::WeightPlatformSprite( int x, int y, Direction::Horizontal 
 
 WeightPlatformSprite::~WeightPlatformSprite() {};
 
-void WeightPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void WeightPlatformSprite::customUpdate( LevelState& level_state )
 {
 	if ( isBroken() )
 	{
@@ -75,7 +75,7 @@ void WeightPlatformSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem
 	hit_box_.y = original_hit_box_.y;
 };
 
-void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( !them.hasType( SpriteType::PHASE_THROUGH ) )
 	{

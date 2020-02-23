@@ -31,7 +31,7 @@ MansionGhostSprite::MansionGhostSprite( int x, int y )
 
 MansionGhostSprite::~MansionGhostSprite() {};
 
-void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MansionGhostSprite::customUpdate( LevelState& level_state )
 {
 	being_flashed_ = collide_left_;
 	if ( being_flashed_ )
@@ -90,7 +90,7 @@ void MansionGhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	flipGraphicsOnRight();
 };
 
-void MansionGhostSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MansionGhostSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

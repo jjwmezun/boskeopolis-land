@@ -22,7 +22,7 @@ SwampMonsterSprite::SwampMonsterSprite( int x, int y )
 
 SwampMonsterSprite::~SwampMonsterSprite() {};
 
-void SwampMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SwampMonsterSprite::customUpdate( LevelState& level_state )
 {
 	if ( !jump_lock_ )
 	{
@@ -36,7 +36,7 @@ void SwampMonsterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& 
 	}
 };
 
-void SwampMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SwampMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::RAFT ) )
 	{

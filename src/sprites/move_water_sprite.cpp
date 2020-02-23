@@ -1,5 +1,6 @@
 #include "event_system.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "move_water_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -12,8 +13,9 @@ MoveWaterSprite::MoveWaterSprite( int x, int y )
 
 MoveWaterSprite::~MoveWaterSprite() {};
 
-void MoveWaterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MoveWaterSprite::customUpdate( LevelState& level_state )
 {
+	EventSystem& events = level_state.events();
 	if ( events.waterShouldMove() )
 	{
 		if ( events.isWaterMovingUpward() )
@@ -32,11 +34,11 @@ void MoveWaterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void MoveWaterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MoveWaterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		events.setWaterMovement( bottomSubPixels() );
+		level_state.events().setWaterMovement( bottomSubPixels() );
 	}
 };
 

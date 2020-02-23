@@ -14,7 +14,7 @@ LifesaverSprite::LifesaverSprite( int x, int y, bool crate )
 
 LifesaverSprite::~LifesaverSprite() {};
 
-void LifesaverSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void LifesaverSprite::customUpdate( LevelState& level_state )
 {
 	if ( in_water_ )
 	{
@@ -37,7 +37,7 @@ void LifesaverSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	can_push_down_ = !collide_bottom_;
 };
 
-void LifesaverSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void LifesaverSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{

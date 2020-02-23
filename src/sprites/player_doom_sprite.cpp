@@ -4,6 +4,7 @@
 #include "doom_bullet_sprite.hpp"
 #include "health.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "player_doom_sprite.hpp"
 #include "sprite_system.hpp"
 
@@ -41,7 +42,7 @@ PlayerDoomSprite::PlayerDoomSprite( int x, int y )
 
 PlayerDoomSprite::~PlayerDoomSprite() {};
 
-void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerDoomSprite::customUpdate( LevelState& level_state )
 {
 	const bool is_running = Input::held( Input::Action::RUN );
 	start_speed_ = ( is_running ) ? 2000 : 1000;
@@ -102,7 +103,7 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 			const int movement_y = ( int )( 32000.0 * ddiry_ );
 			const int x = Unit::SubPixelsToPixels( hit_box_.x + movement_x );
 			const int y = Unit::SubPixelsToPixels( hit_box_.y + movement_y );
-			sprites.spawn( std::unique_ptr<Sprite> ( new DoomBulletSprite( x, y, ddirx_, ddiry_ ) ) );
+			level_state.sprites().spawn( std::unique_ptr<Sprite> ( new DoomBulletSprite( x, y, ddirx_, ddiry_ ) ) );
 		}
 	}
 
@@ -112,8 +113,8 @@ void PlayerDoomSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	prevposx_ = hit_box_.x;
 	prevposy_ = hit_box_.y;
 
-	updateHurtAnimation( health );
-	camera.adjustCart( *this, lvmap );
+	updateHurtAnimation( level_state.health() );
+	level_state.camera().adjustCart( *this, level_state.currentMap() );
 };
 
 void PlayerDoomSprite::rotate( double rotation_speed )
@@ -127,7 +128,7 @@ void PlayerDoomSprite::rotate( double rotation_speed )
 	angle_ += rotation_speed * 60.0;
 }
 
-void PlayerDoomSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerDoomSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void PlayerDoomSprite::render( Camera& camera, bool priority )

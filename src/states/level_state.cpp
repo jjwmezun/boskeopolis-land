@@ -39,10 +39,10 @@ void LevelState::stateUpdate()
 		{
 			level_.currentMap().update( *this );
 			camera_.update();
-			sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+			sprites_.update( *this );
 			sprites_.interact( *this );
 			sprites_.interactWithMap( *this );
-			sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
+			sprites_.spriteInteraction( *this );
 			health_.update();
 		}
 		inventory_screen_.update( events_, health_ );
@@ -83,10 +83,10 @@ void LevelState::updateForTrainer()
 	{
 		level_.currentMap().update( *this );
 		camera_.update();
-		sprites_.update( camera_, level_.currentMap(), events_, blocks_, health_ );
+		sprites_.update( *this );
 		sprites_.interact( *this );
 		sprites_.interactWithMap( *this );
-		sprites_.spriteInteraction( camera_, blocks_, level_.currentMap(), health_, events_ );
+		sprites_.spriteInteraction( *this );
 		health_.update();
 		events_.updateTrainer( *this );
 	}

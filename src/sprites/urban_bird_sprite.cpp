@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
@@ -28,11 +29,12 @@ UrbanBirdSprite::UrbanBirdSprite( int x, int y, Sprite* hero_address )
 
 UrbanBirdSprite::~UrbanBirdSprite() {};
 
-void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void UrbanBirdSprite::customUpdate( LevelState& level_state )
 {
+	const Camera& camera = level_state.camera();
 	if ( reset_timer_ >= reset_delay_ )
 	{
-		setNewPosition( camera, lvmap );
+		setNewPosition( camera, level_state.currentMap() );
 	}
 	else if ( camera.offscreen( hit_box_ ) )
 	{
@@ -84,7 +86,7 @@ void UrbanBirdSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 	}
 };
 
-void UrbanBirdSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void UrbanBirdSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

@@ -10,8 +10,8 @@ class JumpAndShootSprite : public Sprite
 	public:
 		JumpAndShootSprite( int x, int y, int w, int h, std::unique_ptr<SpriteGraphics>&& gfx, void ( *throw_function )( const Sprite& me, SpriteSystem& sprites ) );
 		~JumpAndShootSprite();
-		void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
+		void customUpdate( LevelState& level_state );
+		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state );
 
 	private:
 		void handleMovement( const BlockSystem& blocks );

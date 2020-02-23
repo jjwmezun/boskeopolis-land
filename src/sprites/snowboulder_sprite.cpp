@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "snowboulder_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -10,7 +11,7 @@ SnowboulderSprite::SnowboulderSprite( int x, int y )
 
 SnowboulderSprite::~SnowboulderSprite() {};
 
-void SnowboulderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SnowboulderSprite::customUpdate( LevelState& level_state )
 {
 	if ( vx_ < 0 )
 	{
@@ -18,7 +19,7 @@ void SnowboulderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	}
 };
 
-void SnowboulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SnowboulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideBottom() )
 	{
@@ -27,6 +28,6 @@ void SnowboulderSprite::customInteract( Collision& my_collision, Collision& thei
 	else if ( their_collision.collideAny() )
 	{
 		them.collideStopAny( their_collision );
-		health.hurt();
+		level_state.health().hurt();
 	}
 };

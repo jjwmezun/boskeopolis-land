@@ -1,6 +1,7 @@
 #include "audio.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "bullet_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -14,7 +15,7 @@ BulletSprite::BulletSprite( int x, int y, Direction::Simple dir, bool heros )
 
 BulletSprite::~BulletSprite() {};
 
-void BulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BulletSprite::customUpdate( LevelState& level_state )
 {
 	switch ( direction_y_ )
 	{
@@ -50,7 +51,7 @@ void BulletSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	}
 };
 
-void BulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BulletSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{
@@ -68,7 +69,7 @@ void BulletSprite::customInteract( Collision& my_collision, Collision& their_col
 			default:
 				if ( them.hasType( SpriteType::HERO ) )
 				{
-					health.hurt();
+					level_state.health().hurt();
 					kill();
 				}
 			break;

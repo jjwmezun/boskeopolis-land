@@ -32,7 +32,7 @@ BouncyCloudBlockSprite::BouncyCloudBlockSprite( int x, int y )
 
 BouncyCloudBlockSprite::~BouncyCloudBlockSprite() {};
 
-void BouncyCloudBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BouncyCloudBlockSprite::customUpdate( LevelState& level_state )
 {
 	if ( hit_box_.y < original_hit_box_.y + 99 || hit_box_.y > original_hit_box_.y - 99 )
 	{
@@ -52,7 +52,7 @@ void BouncyCloudBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	hit_box_.x = original_hit_box_.x;
 };
 
-void BouncyCloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BouncyCloudBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

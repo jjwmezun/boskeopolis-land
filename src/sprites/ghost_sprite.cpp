@@ -17,7 +17,7 @@ GhostSprite::GhostSprite( int x, int y )
 
 GhostSprite::~GhostSprite() {};
 
-void GhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void GhostSprite::customUpdate( LevelState& level_state )
 {
 	/*
 	switch ( direction_x_ )
@@ -115,6 +115,6 @@ void GhostSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 	}
 };
 
-void GhostSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void GhostSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

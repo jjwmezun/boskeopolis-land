@@ -1,5 +1,6 @@
 #include "dungeon_enemy_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -38,14 +39,14 @@ DungeonEnemySprite::DungeonEnemySprite( int x, int y, int layer, bool stationary
 
 DungeonEnemySprite::~DungeonEnemySprite() {};
 
-void DungeonEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DungeonEnemySprite::customUpdate( LevelState& level_state )
 {
 	updateInvincibility();
-	updateActions( sprites );
+	updateActions( level_state.sprites() );
 	updateGraphics();
 };
 
-void DungeonEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DungeonEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.layer_ == layer_ && them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
 	{

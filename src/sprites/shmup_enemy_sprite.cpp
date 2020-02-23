@@ -2,12 +2,11 @@
 #include "collision.hpp"
 #include "shmup_enemy_sprite.hpp"
 #include "shmup_hero_bullet_sprite.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
-
-#include <iostream>
 
 static int getShootTargetTime()
 {
@@ -24,8 +23,9 @@ ShmupEnemySprite::ShmupEnemySprite()
 
 ShmupEnemySprite::~ShmupEnemySprite() {};
 
-void ShmupEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ShmupEnemySprite::customUpdate( LevelState& level_state )
 {
+	Camera& camera = level_state.camera();
 	if ( reset_ || xPixels() < camera.x() )
 	{
 		doReset( camera );
@@ -35,7 +35,7 @@ void ShmupEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		moveLeft();
 		if ( shoot_timer_ >= shoot_timer_target_ )
 		{
-			sprites.spawn( std::make_unique<ShmupHeroBulletSprite> ( xPixels(), centerYPixels(), Direction::Simple::LEFT, SpriteType::ENEMY ) );
+			level_state.sprites().spawn( std::make_unique<ShmupHeroBulletSprite> ( xPixels(), centerYPixels(), Direction::Simple::LEFT, SpriteType::ENEMY ) );
 			shoot_timer_ = 0;
 			shoot_timer_target_ = getShootTargetTime();
 		}
@@ -46,7 +46,7 @@ void ShmupEnemySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 };
 
-void ShmupEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ShmupEnemySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
 	{

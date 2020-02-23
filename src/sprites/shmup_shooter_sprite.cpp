@@ -1,5 +1,6 @@
 #include "shmup_shooter_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
@@ -12,9 +13,9 @@ ShmupShooterSprite::ShmupShooterSprite( int x, int y )
 
 ShmupShooterSprite::~ShmupShooterSprite() {};
 
-void ShmupShooterSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health ) {};
+void ShmupShooterSprite::customUpdate( LevelState& level_state ) {};
 
-void ShmupShooterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ShmupShooterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
 	{
@@ -26,7 +27,7 @@ void ShmupShooterSprite::customInteract( Collision& my_collision, Collision& the
 		{
 			const double dx = ( double )( them.centerXSubPixels() - centerXSubPixels() );
 			const double dy = ( double )( them.centerYSubPixels() - centerYSubPixels() );
-			sprites.spawnShmupBullet( centerXPixels(), centerYPixels(), dy, dx );
+			level_state.sprites().spawnShmupBullet( centerXPixels(), centerYPixels(), dy, dx );
 		}
 	}
 };

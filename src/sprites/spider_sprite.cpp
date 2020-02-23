@@ -11,7 +11,7 @@ SpiderSprite::SpiderSprite( int x, int y )
 
 SpiderSprite::~SpiderSprite() {};
 
-void SpiderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SpiderSprite::customUpdate( LevelState& level_state )
 {
 	hit_box_.x -= 800;
 
@@ -85,7 +85,7 @@ void SpiderSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	debugCollision();
 };
 
-void SpiderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SpiderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };
 

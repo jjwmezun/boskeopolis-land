@@ -1,3 +1,4 @@
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "spawn_icicle_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -18,13 +19,13 @@ SpawnIcicleSprite::SpawnIcicleSprite( int x, int y )
 
 SpawnIcicleSprite::~SpawnIcicleSprite() {};
 
-void SpawnIcicleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SpawnIcicleSprite::customUpdate( LevelState& level_state )
 {
 	if ( go_ )
 	{
 		if ( timer_ == SPAWN_SPEED )
 		{
-			sprites.spawnIcicle( xPixels(), yPixels() );
+			level_state.sprites().spawnIcicle( xPixels(), yPixels() );
 			timer_ = 0;
 		}
 		else
@@ -39,7 +40,7 @@ bool SpawnIcicleTestGo( sdl2::SDLRect& r )
 	return r.x > LEFT_EDGE || ( r.x > TOP_LEFT_EDGE && r.y < TOP_EDGE );
 };
 
-void SpawnIcicleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SpawnIcicleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

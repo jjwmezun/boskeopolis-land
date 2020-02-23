@@ -1,6 +1,7 @@
 #include "mezun_math.hpp"
 #include "bullet_sprite.hpp"
 #include "cowpoker_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -25,13 +26,13 @@ CowpokerSprite::CowpokerSprite( int x, int y, int w, int h, CowpokerType type, s
 
 CowpokerSprite::~CowpokerSprite() {};
 
-void CowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CowpokerSprite::customUpdate( LevelState& level_state )
 {
 	handleGraphics();
-	handleThrowing( sprites );
+	handleThrowing( level_state.sprites() );
 };
 
-void CowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

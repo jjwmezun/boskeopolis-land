@@ -16,7 +16,7 @@ BatSprite::BatSprite( int x, int y )
 
 BatSprite::~BatSprite() {};
 
-void BatSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BatSprite::customUpdate( LevelState& level_state )
 {
 	if ( awake_ )
 	{
@@ -42,7 +42,7 @@ void BatSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, S
 	}
 };
 
-void BatSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BatSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if
 	(

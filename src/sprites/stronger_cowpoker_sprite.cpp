@@ -2,6 +2,7 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "stronger_cowpoker_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -29,7 +30,7 @@ StrongerCowpokerSprite::StrongerCowpokerSprite( int x, int y, int map_id )
 
 StrongerCowpokerSprite::~StrongerCowpokerSprite() {};
 
-void StrongerCowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void StrongerCowpokerSprite::customUpdate( LevelState& level_state )
 {
 	if ( awake_ )
 	{
@@ -77,7 +78,7 @@ void StrongerCowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 
 		handleMovement();
 		handleJumping();
-		handleThrowing( sprites );
+		handleThrowing( level_state.sprites() );
 
 		if ( invincibility_ > 0 )
 		{
@@ -86,14 +87,14 @@ void StrongerCowpokerSprite::customUpdate( Camera& camera, Map& lvmap, EventSyst
 	}
 	else
 	{
-		if ( events.trainDoorPartlyOpen() )
+		if ( level_state.events().trainDoorPartlyOpen() )
 		{
 			awake_ = true;
 		}
 	}
 };
 
-void StrongerCowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void StrongerCowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( awake_ )
 	{
@@ -115,7 +116,7 @@ void StrongerCowpokerSprite::customInteract( Collision& my_collision, Collision&
 			}
 			else if ( their_collision.collideAny() && !isDead() )
 			{
-				health.hurt();
+				level_state.health().hurt();
 			}
 		}
 		else if ( them.hasType( SpriteType::HEROS_BULLET ) )

@@ -3,6 +3,7 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "render.hpp"
 #include "sprite.hpp"
@@ -109,7 +110,7 @@ bool Sprite::fellInBottomlessPit( const Map& lvmap ) const
 	return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
 };
 
-void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void Sprite::update( LevelState& level_state )
 {
 	if ( !isDead() )
 	{
@@ -117,13 +118,13 @@ void Sprite::update( Camera& camera, Map& lvmap, EventSystem& events, SpriteSyst
 		{
 			component_->update( *this, *graphics_ );
 		}
-		customUpdate( camera, lvmap, events, sprites, blocks, health );
+		customUpdate( level_state );
 	}
 	else
 	{
 		if ( !dead_no_animation_ )
 		{
-			deathAction( camera, events, lvmap );
+			deathAction( level_state.camera(), level_state.events(), level_state.currentMap() );
 		}
 		else
 		{
@@ -412,11 +413,11 @@ void Sprite::stopRunning()
 	start_speed_ = start_speed_walk_;
 };
 
-void Sprite::interact( Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void Sprite::interact( Sprite& them, LevelState& level_state )
 {
 	Collision my_collision = testCollision( them );
 	Collision their_collision = them.testCollision( *this );
-	customInteract( my_collision, their_collision, them, blocks, sprites, lvmap, health, events );
+	customInteract( my_collision, their_collision, them, level_state );
 };
 
 bool Sprite::canJump() const

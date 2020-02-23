@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 #include "swamp_pole_sprite.hpp"
@@ -14,7 +15,7 @@ SwampPoleSprite::SwampPoleSprite( int x, int y, int id )
 
 SwampPoleSprite::~SwampPoleSprite() {};
 
-void SwampPoleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SwampPoleSprite::customUpdate( LevelState& level_state )
 {
     if ( !collide_bottom_ )
     {
@@ -29,7 +30,7 @@ void SwampPoleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
 
     if ( pair_ == nullptr )
     {
-        for ( const std::unique_ptr<Sprite>& sprite : sprites.getSpritesList() )
+        for ( const std::unique_ptr<Sprite>& sprite : level_state.sprites().getSpritesList() )
         {
             if ( sprite->hasType( SpriteType::SWAMP_POLE ) && sprite->misc_.id == misc_.id && sprite.get() != this )
             {
@@ -38,6 +39,7 @@ void SwampPoleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
             }
         }
 
+        const Camera& camera = level_state.camera();
         if ( camera.offscreen( hit_box_ ) && camera.offscreen( pair_->hit_box_ ) )
         {
             reset();
@@ -46,7 +48,7 @@ void SwampPoleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& eve
     }
 };
 
-void SwampPoleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SwampPoleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( pair_ != nullptr && them.hasType( SpriteType::HERO ) && their_collision.overlapYBottom() > 0 && their_collision.overlapYBottom() < 8000 )
 	{

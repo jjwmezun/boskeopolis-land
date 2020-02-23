@@ -10,13 +10,13 @@ DownhillGemSprite::DownhillGemSprite( int x, int y )
 
 DownhillGemSprite::~DownhillGemSprite() {};
 
-void DownhillGemSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DownhillGemSprite::customUpdate( LevelState& level_state )
 {
 	moveLeft();
 	graphics_->rotation_ -= 3;
 };
 
-void DownhillGemSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DownhillGemSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

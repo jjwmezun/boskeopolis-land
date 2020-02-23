@@ -34,7 +34,7 @@ ChoqueSprite::ChoqueSprite( int x, int y )
 
 ChoqueSprite::~ChoqueSprite() {};
 
-void ChoqueSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ChoqueSprite::customUpdate( LevelState& level_state )
 {
 	if ( collide_top_ )
 	{
@@ -52,7 +52,7 @@ void ChoqueSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	}
 };
 
-void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

@@ -2,6 +2,7 @@
 #include "change_layer_sprite.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "sprite_graphics.hpp"
 
@@ -34,11 +35,11 @@ ChangeLayerSprite::ChangeLayerSprite( int x, int y, int w, int h, int frame_size
 
 ChangeLayerSprite::~ChangeLayerSprite() {};
 
-void ChangeLayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ChangeLayerSprite::customUpdate( LevelState& level_state )
 {
 	if ( activated_ )
 	{
-		events.forceSwitch( direction_y_ == Direction::Vertical::DOWN );
+		level_state.events().forceSwitch( direction_y_ == Direction::Vertical::DOWN );
 
 		if ( flash_timer_ > 0 && flash_timer_ % FLASH_SPEED == 0 )
 		{
@@ -61,9 +62,9 @@ void ChangeLayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	}
 };
 
-void ChangeLayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ChangeLayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( !activated_ && ( events.isSwitchOn() == ( direction_y_ == Direction::Vertical::UP ) ) && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	if ( !activated_ && ( level_state.events().isSwitchOn() == ( direction_y_ == Direction::Vertical::UP ) ) && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
 		activated_ = true;
 		Audio::playSound( Audio::SoundType::HEAL );

@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "underground_subway_sprite.hpp"
 
@@ -13,7 +14,7 @@ UndergroundSubwaySprite::UndergroundSubwaySprite( int x, int y )
 
 UndergroundSubwaySprite::~UndergroundSubwaySprite() {};
 
-void UndergroundSubwaySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void UndergroundSubwaySprite::customUpdate( LevelState& level_state )
 {
 	if ( activated_ )
 	{
@@ -26,7 +27,7 @@ void UndergroundSubwaySprite::customUpdate( Camera& camera, Map& lvmap, EventSys
 	}	
 };
 
-void UndergroundSubwaySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void UndergroundSubwaySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -37,7 +38,7 @@ void UndergroundSubwaySprite::customInteract( Collision& my_collision, Collision
 		
 		if ( their_collision.collideAny() )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 	}
 };

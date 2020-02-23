@@ -1,11 +1,12 @@
 #include "audio.hpp"
-#include "player_graphics.hpp"
-#include "player_open_chest_sprite.hpp"
-#include "unit.hpp"
 #include "event_system.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
+#include "player_graphics.hpp"
+#include "player_open_chest_sprite.hpp"
 #include "sprite_graphics.hpp"
+#include "unit.hpp"
 
 static constexpr int TIMER_LIMIT = 30;
 static constexpr int CHEST_OPENING_SPEED = 2;
@@ -77,7 +78,7 @@ void PlayerOpenChestSprite::walkAnimation()
 	++timer_;
 };
 
-void PlayerOpenChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerOpenChestSprite::customUpdate( LevelState& level_state )
 {
 	switch ( state_ )
 	{
@@ -156,11 +157,11 @@ void PlayerOpenChestSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 
 	if ( Input::pressed( Input::Action::CONFIRM ) || Input::pressed( Input::Action::CANCEL ) || Input::pressed( Input::Action::MENU ) )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };
 
-void PlayerOpenChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerOpenChestSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::TREASURE_CHEST ) )
 	{

@@ -4,6 +4,7 @@
 #include "input_component_player.hpp"
 #include "inventory.hpp"
 #include "flashlight_player_sprite.hpp"
+#include "level_state.hpp"
 #include "line.hpp"
 #include "main.hpp"
 #include "mansion_ghost_sprite.hpp"
@@ -40,8 +41,13 @@ FlashlightPlayerSprite::FlashlightPlayerSprite( int x, int y )
 
 FlashlightPlayerSprite::~FlashlightPlayerSprite() {};
 
-void FlashlightPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FlashlightPlayerSprite::customUpdate( LevelState& level_state )
 {
+	Camera& camera = level_state.camera();
+	BlockSystem& blocks = level_state.blocks();
+	EventSystem& events = level_state.events();
+	Map& lvmap = level_state.currentMap();
+	Health& health = level_state.health();
 	resetBopsOnLanding();
 	handleRunning();
 	handleWalking();
@@ -123,13 +129,13 @@ double FlashlightPlayerSprite::angle() const
 	return ( direction_x_ == Direction::Horizontal::LEFT ) ? angle_ - amountToChange( angle_ ) : angle_;
 }
 
-void FlashlightPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FlashlightPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::MANSION_GHOST ) )
 	{
 		them.collide_left_ = collideWithFlashLight( them, their_collision );
 	}
-	playerInteract( my_collision, them, health, events );
+	playerInteract( my_collision, them, level_state.health(), level_state.events() );
 }
 
 bool FlashlightPlayerSprite::collideWithFlashLight( const Sprite& them, const Collision& their_collision ) const

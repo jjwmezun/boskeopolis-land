@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "change_camera_autoscroll_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 ChangeCameraAutoscrollSprite::ChangeCameraAutoscrollSprite( int x, int y, Direction::Simple direction )
@@ -10,9 +11,10 @@ ChangeCameraAutoscrollSprite::ChangeCameraAutoscrollSprite( int x, int y, Direct
 
 ChangeCameraAutoscrollSprite::~ChangeCameraAutoscrollSprite() {};
 
-void ChangeCameraAutoscrollSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void ChangeCameraAutoscrollSprite::customUpdate( LevelState& level_state )
 {
 	const Direction::Simple movement_speed = ( Direction::Simple )( top_speed_ );
+	Camera& camera = level_state.camera();
 	switch ( direction_ )
 	{
 		case ( Direction::Simple::UP ):
@@ -41,6 +43,6 @@ void ChangeCameraAutoscrollSprite::customUpdate( Camera& camera, Map& lvmap, Eve
 	}
 };
 
-void ChangeCameraAutoscrollSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void ChangeCameraAutoscrollSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 };

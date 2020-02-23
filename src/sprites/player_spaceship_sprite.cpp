@@ -3,12 +3,11 @@
 #include "health.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "player_spaceship_sprite.hpp"
 #include "shmup_hero_bullet_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
-
-#include <iostream>
 
 PlayerSpaceshipSprite::PlayerSpaceshipSprite( int x, int y )
 :
@@ -19,8 +18,10 @@ PlayerSpaceshipSprite::PlayerSpaceshipSprite( int x, int y )
 
 PlayerSpaceshipSprite::~PlayerSpaceshipSprite() {};
 
-void PlayerSpaceshipSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerSpaceshipSprite::customUpdate( LevelState& level_state )
 {
+	BlockSystem& blocks = level_state.blocks();
+	Camera& camera = level_state.camera();
 	inputMoveAllDirections();
 	switch ( camera_direction_ )
 	{
@@ -148,10 +149,10 @@ void PlayerSpaceshipSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 			break;
 		}
 
-		sprites.spawn( std::make_unique<ShmupHeroBulletSprite> ( x, y, direction_, SpriteType::HEROS_BULLET ) );
+		level_state.sprites().spawn( std::make_unique<ShmupHeroBulletSprite> ( x, y, direction_, SpriteType::HEROS_BULLET ) );
 		Inventory::loseFunds( 100 );
 	}
-	invincibilityFlicker( health );
+	invincibilityFlicker( level_state.health() );
 
 	if ( Input::pressed( Input::Action::CAMERA_UP ) )
 	{
@@ -195,11 +196,11 @@ void PlayerSpaceshipSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 	}
 };
 
-void PlayerSpaceshipSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerSpaceshipSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
 	{
-		health.hurt();
+		level_state.health().hurt();
 	}
 	else if ( them.hasType( SpriteType::CAMERA_MOVE ) )
 	{

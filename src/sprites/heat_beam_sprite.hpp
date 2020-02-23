@@ -17,8 +17,8 @@ class HeatBeamSprite : public Sprite
 
         HeatBeamSprite( int x, int y, Type type );
         ~HeatBeamSprite();
-        void customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health );
-        void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events );
+        void customUpdate( LevelState& level_state );
+        void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state );
 
         static constexpr int STATE_DURATION = 64;
         static constexpr int TRANS_DURATION = 32;

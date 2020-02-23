@@ -11,14 +11,14 @@ BadAppleSprite::BadAppleSprite( int x, int y, Direction::Horizontal dir_x )
 
 BadAppleSprite::~BadAppleSprite() {};
 
-void BadAppleSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void BadAppleSprite::customUpdate( LevelState& level_state )
 {
 	moveInDirectionX();
 	turnOnCollide();
 	updateGraphics();
 };
 
-void BadAppleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void BadAppleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void BadAppleSprite::updateGraphics()

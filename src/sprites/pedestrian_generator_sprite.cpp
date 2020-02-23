@@ -1,5 +1,6 @@
 #include "map.hpp"
 #include <memory>
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "pedestrian_sprite.hpp"
 #include "pedestrian_generator_sprite.hpp"
@@ -13,8 +14,9 @@ PedestrianGeneratorSprite::PedestrianGeneratorSprite( int x, int y )
 
 PedestrianGeneratorSprite::~PedestrianGeneratorSprite() {};
 
-void PedestrianGeneratorSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PedestrianGeneratorSprite::customUpdate( LevelState& level_state )
 {
+    Map& lvmap = level_state.currentMap();
     for ( int y = 0; y < lvmap.heightBlocks(); ++y )
     {
         for ( int x = 0; x < lvmap.widthBlocks(); ++x )
@@ -25,11 +27,11 @@ void PedestrianGeneratorSprite::customUpdate( Camera& camera, Map& lvmap, EventS
             {
                 const int xpixels = Unit::BlocksToPixels( x );
                 const int ypixels = Unit::BlocksToPixels( y );
-                sprites.spawn( std::make_unique<PedestrianSprite> ( xpixels, ypixels ) );
+                level_state.sprites().spawn( std::make_unique<PedestrianSprite> ( xpixels, ypixels ) );
             }
         }
     }
     killNoAnimation();
 };
 
-void PedestrianGeneratorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events ) {};
+void PedestrianGeneratorSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};

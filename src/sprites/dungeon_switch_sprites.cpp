@@ -1,6 +1,7 @@
 #include "collision.hpp"
 #include "dungeon_switch_sprite.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 DungeonSwitchSprite::DungeonSwitchSprite( int x, int y )
@@ -11,18 +12,18 @@ DungeonSwitchSprite::DungeonSwitchSprite( int x, int y )
 
 DungeonSwitchSprite::~DungeonSwitchSprite() {};
 
-void DungeonSwitchSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void DungeonSwitchSprite::customUpdate( LevelState& level_state )
 {
 	graphics_->flip_x_ = on_;
 };
 
-void DungeonSwitchSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void DungeonSwitchSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( !on_ )
 	{
 		if ( them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
 		{
-			events.flipSwitch();
+			level_state.events().flipSwitch();
 			on_ = true;
 		}
 	}

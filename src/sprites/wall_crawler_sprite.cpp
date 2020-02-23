@@ -1,8 +1,9 @@
 #include "block_system.hpp"
 #include "camera.hpp"
-#include "wall_crawler_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
+#include "wall_crawler_sprite.hpp"
 
 static constexpr int MOVE_SPEED = 1000;
 
@@ -16,8 +17,9 @@ WallCrawlerSprite::WallCrawlerSprite( int x, int y )
 
 WallCrawlerSprite::~WallCrawlerSprite() {};
 
-void WallCrawlerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void WallCrawlerSprite::customUpdate( LevelState& level_state )
 {
+    BlockSystem& blocks = level_state.blocks();
     switch ( direction_ )
     {
         case ( Direction::Simple::__NULL ):
@@ -150,7 +152,7 @@ void WallCrawlerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
     }
 };
 
-void WallCrawlerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void WallCrawlerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if 
     (

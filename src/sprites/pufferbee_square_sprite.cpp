@@ -1,4 +1,5 @@
 #include "block_system.hpp"
+#include "level_state.hpp"
 #include "pufferbee_square_sprite.hpp"
 #include "pufferbee_graphics.hpp"
 
@@ -35,8 +36,9 @@ PufferbeeSquareSprite::PufferbeeSquareSprite
 
 PufferbeeSquareSprite::~PufferbeeSquareSprite() {};
 
-void PufferbeeSquareSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PufferbeeSquareSprite::customUpdate( LevelState& level_state )
 {
+	BlockSystem& blocks = level_state.blocks();
 	switch ( direction_ )
 	{
 		case ( Direction::Simple::UP ):
@@ -78,7 +80,7 @@ void PufferbeeSquareSprite::customUpdate( Camera& camera, Map& lvmap, EventSyste
 	}
 };
 
-void PufferbeeSquareSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PufferbeeSquareSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void PufferbeeSquareSprite::reset()

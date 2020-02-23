@@ -1,9 +1,10 @@
+#include "animated_graphics.hpp"
 #include "audio.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
 #include "falling_gem_sprite.hpp"
 #include "inventory.hpp"
-#include "animated_graphics.hpp"
+#include "level_state.hpp"
 
 FallingGemSprite::FallingGemSprite( int x, int y )
 :
@@ -13,7 +14,7 @@ FallingGemSprite::FallingGemSprite( int x, int y )
 
 FallingGemSprite::~FallingGemSprite() {};
 
-void FallingGemSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FallingGemSprite::customUpdate( LevelState& level_state )
 {
 	if ( active_ )
 	{
@@ -29,6 +30,7 @@ void FallingGemSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 			break;
 		}
 
+		Camera& camera = level_state.camera();
 		if ( camera.offscreenBottom( hit_box_ ) )
 		{
 			respawn( camera );
@@ -42,7 +44,7 @@ void FallingGemSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 	}
 };
 
-void FallingGemSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FallingGemSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

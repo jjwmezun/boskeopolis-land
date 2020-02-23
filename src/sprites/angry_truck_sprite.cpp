@@ -2,6 +2,7 @@
 #include "block_system.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 AngryTruckSprite::AngryTruckSprite( int x, int y, bool permanent )
@@ -12,7 +13,7 @@ AngryTruckSprite::AngryTruckSprite( int x, int y, bool permanent )
 
 AngryTruckSprite::~AngryTruckSprite() {};
 
-void AngryTruckSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void AngryTruckSprite::customUpdate( LevelState& level_state )
 {
 	if ( parked_ )
 	{
@@ -25,13 +26,13 @@ void AngryTruckSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& ev
 		graphics_->flip_x_ = direction_x_ == Direction::Horizontal::RIGHT;
 	}
 
-	if ( fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( level_state.currentMap() ) )
 	{
 		killNoAnimation();
 	}
 };
 
-void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::TRUCK_PLATFORM ) && their_collision.collideAny() )
 	{
@@ -49,7 +50,7 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 			{
 				if
 				(
-					!blocks.blocksInTheWay
+					!level_state.blocks().blocksInTheWay
 					(
 						{
 							them.rightSubPixels(),
@@ -68,7 +69,7 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 
 			if ( them.hasType( SpriteType::HERO ) && !their_collision.collideBottom() )
 			{
-				health.hurt();
+				level_state.health().hurt();
 			}
 		}
 	}

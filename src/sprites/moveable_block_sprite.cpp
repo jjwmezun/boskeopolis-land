@@ -1,5 +1,6 @@
 #include "block_system.hpp"
 #include "camera.hpp"
+#include "level_state.hpp"
 #include "moveable_block_sprite.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
@@ -12,7 +13,7 @@ MoveableBlockSprite::MoveableBlockSprite( int x, int y )
 
 MoveableBlockSprite::~MoveableBlockSprite() {};
 
-void MoveableBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MoveableBlockSprite::customUpdate( LevelState& level_state )
 {
     if ( current_vx_ )
     {
@@ -25,12 +26,13 @@ void MoveableBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
     }
 };
 
-void MoveableBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MoveableBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{
         if ( them.hasType( SpriteType::HERO ) )
         {
+            BlockSystem& blocks = level_state.blocks();
             const bool x_condition = them.hit_box_.y < bottomSubPixels() - 4000 && them.bottomSubPixels() > hit_box_.y + 4000 &&
                 (
                     ( them.rightSubPixels() <= hit_box_.x + 4000 && them.vx_ > 0 && !blocks.blocksInTheWay( getLeftSide(), BlockComponent::Type::SOLID ) ) ||

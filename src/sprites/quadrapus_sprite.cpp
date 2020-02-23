@@ -9,11 +9,11 @@ QuadrapusSprite::QuadrapusSprite( int x, int y )
 
 QuadrapusSprite::~QuadrapusSprite() {};
 
-void QuadrapusSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void QuadrapusSprite::customUpdate( LevelState& level_state )
 {
 };
 
-void QuadrapusSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void QuadrapusSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

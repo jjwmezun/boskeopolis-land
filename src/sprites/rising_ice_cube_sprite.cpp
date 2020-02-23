@@ -16,7 +16,7 @@ RisingIceCubeSprite::RisingIceCubeSprite( int x, int y, int height_limit )
 
 RisingIceCubeSprite::~RisingIceCubeSprite() {};
 
-void RisingIceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void RisingIceCubeSprite::customUpdate( LevelState& level_state )
 {
 	switch ( state_ )
 	{
@@ -65,7 +65,7 @@ void RisingIceCubeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem&
 	}
 };
 
-void RisingIceCubeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void RisingIceCubeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{

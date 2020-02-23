@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "cloud_platform_sprite.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "sprite_graphics.hpp"
 
@@ -43,15 +44,7 @@ CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal di
 
 CloudPlatformSprite::~CloudPlatformSprite() {};
 
-void CloudPlatformSprite::customUpdate
-(
-	Camera& camera,
-	Map& lvmap,
-	EventSystem& events,
-	SpriteSystem& sprites,
-	BlockSystem& blocks,
-	Health& health
-)
+void CloudPlatformSprite::customUpdate( LevelState& level_state )
 {
 	switch( direction_x_ )
 	{
@@ -72,11 +65,7 @@ void CloudPlatformSprite::customInteract
 	Collision& my_collision,
 	Collision& their_collision,
 	Sprite& them,
-	BlockSystem& blocks,
-	SpriteSystem& sprites,
-	Map& lvmap,
-	Health& health,
-	EventSystem& events
+	LevelState& level_state
 )
 {
 	if ( them.hasType( SpriteType::HERO ) )
@@ -91,6 +80,7 @@ void CloudPlatformSprite::customInteract
 
 		
 		// Ensure cloud platform comes back if it leaves you 'hind on a different platform.
+		Map& lvmap = level_state.currentMap();
 		switch ( direction_x_ )
 		{
 			case ( Direction::Horizontal::LEFT ):

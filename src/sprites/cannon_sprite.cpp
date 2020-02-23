@@ -3,6 +3,7 @@
 #include "cannon_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -36,7 +37,7 @@ int CannonSprite::typeGFX( Direction::Vertical dir )
 	}
 };
 
-void CannonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CannonSprite::customUpdate( LevelState& level_state )
 {
 	if ( deactivated_ )
 	{
@@ -60,13 +61,13 @@ void CannonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 		}
 	}
 
-	if ( fellInBottomlessPit( lvmap ) )
+	if ( fellInBottomlessPit( level_state.currentMap() ) )
 	{
 		kill();
 	}
 };
 
-void CannonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CannonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -74,11 +75,12 @@ void CannonSprite::customInteract( Collision& my_collision, Collision& their_col
 		{
 			if ( their_collision.collideTop() && vy_ > 0 )
 			{
-				health.hurt();
+				level_state.health().hurt();
 			}
 		}
 		else
 		{
+			SpriteSystem& sprites = level_state.sprites();
 			switch ( direction_y_ )
 			{
 				case ( Direction::Vertical::DOWN ):

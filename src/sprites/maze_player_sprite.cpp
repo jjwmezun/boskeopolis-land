@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "maze_player_sprite.hpp"
 #include "animated_graphics.hpp"
 
@@ -34,14 +35,14 @@ MazePlayerSprite::MazePlayerSprite( int x, int y )
 
 MazePlayerSprite::~MazePlayerSprite() {};
 
-void MazePlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MazePlayerSprite::customUpdate( LevelState& level_state )
 {
 	inputMoveAllDirections();
-	invincibilityFlicker( health );
-	camera.adjustCart( *this, lvmap );
+	invincibilityFlicker( level_state.health() );
+	level_state.camera().adjustCart( *this, level_state.currentMap() );
 };
 
-void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
 void MazePlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )

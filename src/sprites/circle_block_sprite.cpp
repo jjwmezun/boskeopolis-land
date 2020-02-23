@@ -2,6 +2,7 @@
 #include "block_system.hpp"
 #include "circle_block_sprite.hpp"
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 CircleBlockSprite::CircleBlockSprite( int x, int y )
@@ -14,7 +15,7 @@ CircleBlockSprite::CircleBlockSprite( int x, int y )
 
 CircleBlockSprite::~CircleBlockSprite() {};
 
-void CircleBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void CircleBlockSprite::customUpdate( LevelState& level_state )
 {
 	switch ( direction_ )
 	{
@@ -28,7 +29,7 @@ void CircleBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 		break;
 		case ( Direction::Simple::RIGHT ):
 			moveRight();
-			if ( blocks.blocksInTheWay( { rightSubPixels() + 1000, hit_box_.y, 4000, 4000 }, BlockComponent::Type::SOLID ) )
+			if ( level_state.blocks().blocksInTheWay( { rightSubPixels() + 1000, hit_box_.y, 4000, 4000 }, BlockComponent::Type::SOLID ) )
 			{
 				fullStopX();
 				direction_ = Direction::Simple::UP;
@@ -63,7 +64,7 @@ void CircleBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	++animation_timer_;
 };
 
-void CircleBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void CircleBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

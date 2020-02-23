@@ -4,6 +4,7 @@
 #include "clock.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "moon_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -26,8 +27,9 @@ MoonSprite::MoonSprite( int x, int y )
 
 MoonSprite::~MoonSprite() {};
 
-void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MoonSprite::customUpdate( LevelState& level_state )
 {
+	EventSystem& events = level_state.events();
 	switch ( moon_state_ )
 	{
 		case ( MoonState::UNUSED ):
@@ -67,7 +69,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 		break;
 
 		case ( MoonState::AFTER_FREEZE ):
-			camera.startShaking();
+			level_state.camera().startShaking();
 			timer_ = 0; // Reuse for last-frame-timer.
 			moon_state_ = MoonState::RUNNING;
 		break;
@@ -91,7 +93,7 @@ void MoonSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
 	}
 };
 
-void MoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MoonSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( moon_state_ == MoonState::UNUSED && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
@@ -107,7 +109,7 @@ void MoonSprite::customInteract( Collision& my_collision, Collision& their_colli
 				hit_box_.x = them.hit_box_.right() - 4000;
 			break;
 		}
-		lvmap.music_ = "countdown";
+		level_state.currentMap().music_ = "countdown";
 		Audio::changeSong( "countdown", false );
 	}
 };

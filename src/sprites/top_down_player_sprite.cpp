@@ -2,6 +2,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 #include "top_down_bullet_sprite.hpp"
@@ -81,13 +82,13 @@ TopDownPlayerSprite::TopDownPlayerSprite( int x, int y )
 
 TopDownPlayerSprite::~TopDownPlayerSprite() {};
 
-void TopDownPlayerSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void TopDownPlayerSprite::customUpdate( LevelState& level_state )
 {
 	handleMovement();
-	handleShooting( sprites );
-	camera.adjust( *this, lvmap );
+	handleShooting( level_state.sprites() );
+	level_state.camera().adjust( *this, level_state.currentMap() );
 	updateGraphics();
-	invincibilityFlicker( health );
+	invincibilityFlicker( level_state.health() );
 };
 
 void TopDownPlayerSprite::handleMovement()
@@ -173,13 +174,13 @@ void TopDownPlayerSprite::shoot( SpriteSystem& sprites, Direction::Simple direct
 	is_shooting_ = true;
 };
 
-void TopDownPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void TopDownPlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( layer_ == them.layer_ && them.hasType( SpriteType::ENEMY ) )
 	{
 		if ( my_collision.collideAny() && !them.isDead() )
 		{
-			health.hurt();
+			level_state.health().hurt();
 		}
 	}
 };

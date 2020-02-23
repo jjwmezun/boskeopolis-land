@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "rope_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -12,7 +13,7 @@ RopeSprite::RopeSprite( int x, int y, int height, int distance, int speed )
 
 RopeSprite::~RopeSprite() {};
 
-void RopeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void RopeSprite::customUpdate( LevelState& level_state )
 {
     if ( on_ )
     {
@@ -25,13 +26,13 @@ void RopeSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, 
     }
 };
 
-void RopeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void RopeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) )
     {
         if ( their_collision.collideAny() )
         {
-            events.setTouchingLadder();
+            level_state.events().setTouchingLadder();
             if ( them.on_ladder_ )
             {
             	on_ = true;

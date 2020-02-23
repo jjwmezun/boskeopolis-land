@@ -1,6 +1,7 @@
 #include "anchor_missile_sprite.hpp"
 #include "collision.hpp"
 #include "direction.hpp"
+#include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "spawn_anchor_missile_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -23,8 +24,9 @@ SpawnAnchorMissileSprite::SpawnAnchorMissileSprite( int x, int y, SpawnAnchorMis
 
 SpawnAnchorMissileSprite::~SpawnAnchorMissileSprite() {};
 
-void SpawnAnchorMissileSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void SpawnAnchorMissileSprite::customUpdate( LevelState& level_state )
 {
+	SpriteSystem& sprites = level_state.sprites();
 	if ( timer_ == target_time_ )
 	{
 		if ( ( int )( type_ ) > 0 )
@@ -45,7 +47,7 @@ void SpawnAnchorMissileSprite::customUpdate( Camera& camera, Map& lvmap, EventSy
 	}
 };
 
-void SpawnAnchorMissileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void SpawnAnchorMissileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

@@ -1,5 +1,6 @@
 #include "audio.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "message_block_sprite.hpp"
 
@@ -11,20 +12,20 @@ MessageBlockSprite::MessageBlockSprite( int x, int y )
 
 MessageBlockSprite::~MessageBlockSprite() {};
 
-void MessageBlockSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void MessageBlockSprite::customUpdate( LevelState& level_state )
 {
 	bump_under_block_component.update( *this );
 	if ( is_being_bumped_ )
 	{
 		if ( isBackInPlace() )
 		{
-			events.showMessage();
+			level_state.events().showMessage();
 			is_being_bumped_ = false;
 		}
 	}
 };
 
-void MessageBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void MessageBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
 	if ( hit )

@@ -1,6 +1,7 @@
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "faucet_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 static constexpr int NUM_O_HITS = 3;
@@ -19,11 +20,11 @@ FaucetSprite::FaucetSprite( int x, int y )
 
 FaucetSprite::~FaucetSprite() {};
 
-void FaucetSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void FaucetSprite::customUpdate( LevelState& level_state )
 {
 	if ( hits_ >= NUM_O_HITS && invincibility_ <= 0 )
 	{
-		events.win();
+		level_state.events().win();
 	}
 	else if ( invincibility_ > 0 )
 	{
@@ -43,7 +44,7 @@ void FaucetSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events
 	gfx_component_.update( *this, graphics_.get() );
 };
 
-void FaucetSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void FaucetSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( their_collision.collideAny() )
 	{
@@ -51,7 +52,7 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 
 		if ( them.hasType( SpriteType::HERO ) )
 		{
-			if ( events.testIsSlidingPreviously() )
+			if ( level_state.events().testIsSlidingPreviously() )
 			{
 				if ( slide_lock_ <= 0 && invincibility_ <= 0 )
 				{

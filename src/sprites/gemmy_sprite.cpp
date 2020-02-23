@@ -17,7 +17,7 @@ GemmySprite::GemmySprite( int x, int y )
 
 GemmySprite::~GemmySprite() {};
 
-void GemmySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void GemmySprite::customUpdate( LevelState& level_state )
 {
 	switch ( direction_x_ )
 	{
@@ -55,7 +55,7 @@ void GemmySprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events,
 	}
 };
 
-void GemmySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void GemmySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{

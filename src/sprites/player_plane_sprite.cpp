@@ -3,6 +3,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "input.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
 #define MAX_SPEED 3000.0
@@ -19,7 +20,7 @@ PlayerPlaneSprite::PlayerPlaneSprite( int x, int y )
 
 PlayerPlaneSprite::~PlayerPlaneSprite() {};
 
-void PlayerPlaneSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, Health& health )
+void PlayerPlaneSprite::customUpdate( LevelState& level_state )
 {
 	if ( Input::held( Input::Action::MOVE_RIGHT ) || Input::held( Input::Action::RUN ) || Input::held( Input::Action::MOVE_DOWN ) )
 	{
@@ -45,15 +46,17 @@ void PlayerPlaneSprite::customUpdate( Camera& camera, Map& lvmap, EventSystem& e
 	{
 		vy_ = ( int )( speed_ * std::sin( radians ) );
 	}
+	Map& lvmap = level_state.currentMap();
+	Camera& camera = level_state.camera();
 	boundaries( camera, lvmap );
 	camera.adjustCart( *this, lvmap );
-	invincibilityFlicker( health );
+	invincibilityFlicker( level_state.health() );
 };
 
-void PlayerPlaneSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, BlockSystem& blocks, SpriteSystem& sprites, Map& lvmap, Health& health, EventSystem& events )
+void PlayerPlaneSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	if ( them.hasType( SpriteType::ENEMY ) && my_collision.collideAny() )
 	{
-		health.hurt();
+		level_state.health().hurt();
 	}
 };
