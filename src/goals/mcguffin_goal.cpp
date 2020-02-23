@@ -2,6 +2,7 @@
 #include "event_system.hpp"
 #include "inventory.hpp"
 #include "inventory_level.hpp"
+#include "level_state.hpp"
 #include "mezun_helpers.hpp"
 
 McGuffinGoal::McGuffinGoal( std::u32string message, int amount_needed )
@@ -12,15 +13,15 @@ McGuffinGoal::McGuffinGoal( std::u32string message, int amount_needed )
 
 McGuffinGoal::~McGuffinGoal() {};
 
-void McGuffinGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void McGuffinGoal::update( LevelState& level_state )
 {
 	if ( Inventory::McGuffins() >= amount_needed_ )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };
 
-void McGuffinGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void McGuffinGoal::customInit( LevelState& level_state )
 {
-	inventory_screen.setShowMcGuffins();
+	level_state.inventory().setShowMcGuffins();
 };

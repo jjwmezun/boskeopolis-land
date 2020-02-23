@@ -8,8 +8,8 @@ class McGuffinGoal : public Goal
 		static constexpr int DEFAULT_AMOUNT_NEEDED = 3;
 		McGuffinGoal( std::u32string message, int amount_needed = DEFAULT_AMOUNT_NEEDED );
 		~McGuffinGoal();
-		void update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state ) override;
-		void customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
+		void update( LevelState& level_state ) override;
+		void customInit( LevelState& level_state ) override;
 
 	private:
 		const int amount_needed_;

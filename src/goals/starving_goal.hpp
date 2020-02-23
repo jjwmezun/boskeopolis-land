@@ -10,8 +10,8 @@ class StarvingGoal : public Goal
 		static constexpr int DEFAULT_AMOUNT_LOST_PER_FRAME = 50;
 		StarvingGoal( std::u32string message, int starting_amount = DEFAULT_STARTING_AMOUNT, int amount_lost_per_frame = DEFAULT_AMOUNT_LOST_PER_FRAME );
 		~StarvingGoal();
-		void customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) override;
-		void update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state ) override;
+		void customInit( LevelState& level_state ) override;
+		void update( LevelState& level_state ) override;
 
 	private:
 		static constexpr int DELAY_LENGTH = 16;

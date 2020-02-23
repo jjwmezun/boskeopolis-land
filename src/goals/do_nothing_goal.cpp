@@ -3,6 +3,7 @@
 #include "event_system.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 
 DoNothingGoal::DoNothingGoal( std::u32string message, int wait_time )
 :
@@ -12,20 +13,20 @@ DoNothingGoal::DoNothingGoal( std::u32string message, int wait_time )
 
 DoNothingGoal::~DoNothingGoal() {};
 
-void DoNothingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void DoNothingGoal::update( LevelState& level_state )
 {
 	if ( Input::movingCharacter() )
 	{
-		events.fail();
+		level_state.events().fail();
 	}
 
 	if ( Inventory::clock().totalSeconds() >= wait_time_ )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };
 
-void DoNothingGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void DoNothingGoal::customInit( LevelState& level_state )
 {
 	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
 };

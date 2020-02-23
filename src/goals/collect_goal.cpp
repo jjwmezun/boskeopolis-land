@@ -1,7 +1,7 @@
 #include "collect_goal.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
-#include "mezun_helpers.hpp"
+#include "level_state.hpp"
 
 CollectGoal::CollectGoal( std::u32string message, int amount_needed )
 :
@@ -11,10 +11,10 @@ CollectGoal::CollectGoal( std::u32string message, int amount_needed )
 
 CollectGoal::~CollectGoal() {};
 
-void CollectGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void CollectGoal::update( LevelState& level_state )
 {
 	if ( Inventory::funds() >= amount_needed_ )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };

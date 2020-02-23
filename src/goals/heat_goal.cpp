@@ -1,5 +1,6 @@
 #include "heat_goal.hpp"
 #include "health.hpp"
+#include "level_state.hpp"
 #include "sprite_system.hpp"
 #include "sprite.hpp"
 
@@ -10,10 +11,10 @@ HeatGoal::HeatGoal( std::u32string message )
 
 HeatGoal::~HeatGoal() {};
 
-void HeatGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void HeatGoal::update( LevelState& level_state )
 {
-	if ( sprites.hero().collidedAny() )
+	if ( level_state.sprites().hero().collidedAny() )
 	{
-		health.heatUp();
+		level_state.health().heatUp();
 	}
 };

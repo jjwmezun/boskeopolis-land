@@ -45,8 +45,8 @@ class Level
 		Level&& operator=( Level&& ) = delete;
 		const Level& operator=( const Level& ) = delete;
 
-		void init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health );
-		void updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health, LevelState& state );
+		void init( LevelState& level_state );
+		void updateGoal( LevelState& level_state );
 		Map& currentMap();
 		const Map& currentMap() const;
 		int entranceX() const;

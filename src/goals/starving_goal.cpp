@@ -1,6 +1,7 @@
 #include "starving_goal.hpp"
 #include "event_system.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 
 StarvingGoal::StarvingGoal( std::u32string message, int starting_amount, int amount_lost_per_frame )
 :
@@ -12,19 +13,19 @@ StarvingGoal::StarvingGoal( std::u32string message, int starting_amount, int amo
 
 StarvingGoal::~StarvingGoal() {};
 
-void StarvingGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void StarvingGoal::update( LevelState& level_state )
 {
 	if ( timer_.update() )
 	{
 		Inventory::loseFunds( amount_lost_per_frame_ );
 		if ( Inventory::funds() <= 0 )
 		{
-			events.fail();
+			level_state.events().fail();
 		}
 	}
 };
 
-void StarvingGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void StarvingGoal::customInit( LevelState& level_state )
 {
 	Inventory::setFunds( starting_amount_ );
 };

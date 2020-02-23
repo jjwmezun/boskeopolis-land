@@ -1,5 +1,6 @@
 #include "past_right_edge_goal.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 #include "map.hpp"
 #include "sprite.hpp"
 #include "sprite_system.hpp"
@@ -11,10 +12,10 @@ PastRightEdgeGoal::PastRightEdgeGoal( std::u32string message )
 
 PastRightEdgeGoal::~PastRightEdgeGoal() {};
 
-void PastRightEdgeGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void PastRightEdgeGoal::update( LevelState& level_state )
 {
-	if ( sprites.hero().xPixels() > lvmap.widthPixels() + sprites.hero().widthPixels() )
+	if ( level_state.sprites().hero().xPixels() > level_state.currentMap().widthPixels() + level_state.sprites().hero().widthPixels() )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };

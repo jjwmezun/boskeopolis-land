@@ -16,71 +16,87 @@ static constexpr int TOTAL_ROUND_TIME = GO_TIME + ( NUM_O_BLINKS_BOTH_COLORS * B
 StopOnOffGoal::StopOnOffGoal( std::u32string message ) : Goal( message ) {};
 StopOnOffGoal::~StopOnOffGoal() {};
 
-void StopOnOffGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void StopOnOffGoal::update( LevelState& level_state )
 {
-	const int round_time = state.frame() % TOTAL_ROUND_TIME;
+	const int round_time = level_state.frame() % TOTAL_ROUND_TIME;
 	switch ( round_time )
 	{
 		case ( 0 ):
-			events.forceSwitchOn();
+		{
+			level_state.events().forceSwitchOn();
 			Audio::resumeSong();
-			state.newPalette( "Go Green" );
+			level_state.newPalette( "Go Green" );
+		}
 		break;
 
 		case ( GO_TIME ):
-			state.newPalette( "Stop Red" );
+		{
+			level_state.newPalette( "Stop Red" );
+		}
 		break;
 
 		case ( GO_TIME + BLINK_TIME ):
-			state.newPalette( "Go Green" );
+		{
+			level_state.newPalette( "Go Green" );
+		}
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 2 ) ):
-			state.newPalette( "Stop Red" );
+		{
+			level_state.newPalette( "Stop Red" );
+		}
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 3 ) ):
-			state.newPalette( "Go Green" );
+		{
+			level_state.newPalette( "Go Green" );
+		}
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 4 ) ):
-			state.newPalette( "Stop Red" );
+		{
+			level_state.newPalette( "Stop Red" );
+		}
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 5 ) ):
-			state.newPalette( "Go Green" );
+		{
+			level_state.newPalette( "Go Green" );
+		}
 		break;
 
 		case ( GO_TIME + ( BLINK_TIME * 6 ) ):
+		{
 			Audio::pauseSong();
-			state.newPalette( "Stop Red" );
+			level_state.newPalette( "Stop Red" );
+		}
 		break;
 	}
 
 	if ( round_time > GO_TIME + ( BLINK_TIME * 6 ) + 8 )
 	{
-		events.forceSwitchOff();
+		level_state.events().forceSwitchOff();
 	}
 
-	switch ( events.isSwitchOn() )
+	switch ( level_state.events().isSwitchOn() )
 	{
 		case ( false ):
 		{
 			if
 			(
-				abs( sprites.hero().vx_ ) > 500 ||
-				abs( sprites.hero().acceleration_x_ > 0 ) ||
-				abs( sprites.hero().acceleration_y_ > 0 )
+				abs( level_state.sprites().hero().vx_ ) > 500 ||
+				abs( level_state.sprites().hero().acceleration_x_ > 0 ) ||
+				abs( level_state.sprites().hero().acceleration_y_ > 0 )
 			)
 			{
-				events.fail();
+				level_state.events().fail();
 			}
 		}
 		break;
 	}
 };
 
-void StopOnOffGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void StopOnOffGoal::customInit( LevelState& level_state )
 {
-	events.forceSwitchOn();
+	level_state.events().forceSwitchOn();
 };

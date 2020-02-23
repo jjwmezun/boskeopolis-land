@@ -237,14 +237,14 @@ std::string Level::getCodeName() const
 	return Level::getCodeNameByID( id_ );
 };
 
-void Level::init( Sprite& hero, InventoryLevel& inventory, EventSystem& events, Health& health )
+void Level::init( LevelState& level_state )
 {
-	goal_->init( hero, *this, inventory, events, health );
+	goal_->init( level_state );
 };
 
-void Level::updateGoal( InventoryLevel& inventory_screen, EventSystem& events, SpriteSystem& sprites, BlockSystem& blocks, const Camera& camera, Health& health, LevelState& state )
+void Level::updateGoal( LevelState& level_state )
 {
-	goal_->update( sprites, currentMap(), inventory_screen, events, health, state );
+	goal_->update( level_state );
 };
 
 unsigned int Level::realLevelNum()

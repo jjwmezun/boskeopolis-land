@@ -6,9 +6,9 @@
 Goal::Goal( std::u32string message ) : message_ ( message ) {};
 Goal::~Goal() {};
 
-void Goal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state ) {};
+void Goal::update( LevelState& level_state ) {};
 
-void Goal::init( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void Goal::init( LevelState& level_state )
 {
 	Main::pushState
 	(
@@ -28,10 +28,10 @@ void Goal::init( Sprite& hero, Level& level, InventoryLevel& inventory_screen, E
 			false
 		)
 	);
-	customInit( hero, level, inventory_screen, events, health );
+	customInit( level_state );
 };
 
-void Goal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health ) {};
+void Goal::customInit( LevelState& level_state ) {};
 
 std::u32string Goal::formatMessage( std::u32string message, int amount_needed )
 {

@@ -1,5 +1,6 @@
 #include "warp_goal.hpp"
 #include "event_system.hpp"
+#include "level_state.hpp"
 
 WarpGoal::WarpGoal( std::u32string message )
 :
@@ -8,10 +9,10 @@ WarpGoal::WarpGoal( std::u32string message )
 
 WarpGoal::~WarpGoal() {};
 
-void WarpGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void WarpGoal::update( LevelState& level_state )
 {
-	if ( events.testChangeMap() )
+	if ( level_state.events().testChangeMap() )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };

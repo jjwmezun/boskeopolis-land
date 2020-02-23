@@ -46,7 +46,7 @@ void LevelState::stateUpdate()
 			health_.update();
 		}
 		inventory_screen_.update( events_, health_ );
-		level_.updateGoal( inventory_screen_, events_, sprites_, blocks_, camera_, health_, *this );
+		level_.updateGoal( *this );
 		events_.update( *this );
 
 		if ( events_.paletteChanged() )
@@ -115,7 +115,7 @@ void LevelState::init()
 	Inventory::levelStart( level_.id() );
 	events_.init( level_ );
 	sprites_.reset( *this );
-	level_.init( sprites_.hero(), inventory_screen_, events_, health_ );
+	level_.init( *this );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 	inventory_screen_.init( level_.currentMap() );
 };

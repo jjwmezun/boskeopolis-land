@@ -2,6 +2,7 @@
 #include "event_system.hpp"
 #include "inventory_level.hpp"
 #include "level.hpp"
+#include "level_state.hpp"
 #include "sprite_system.hpp"
 
 KillAllGoal::KillAllGoal( std::u32string message )
@@ -13,23 +14,23 @@ KillAllGoal::KillAllGoal( std::u32string message )
 
 KillAllGoal::~KillAllGoal() {};
 
-void KillAllGoal::update( SpriteSystem& sprites, const Map& lvmap, InventoryLevel& inventory_screen, EventSystem& events, Health& health, LevelState& state )
+void KillAllGoal::update( LevelState& level_state )
 {
 	const int sprites_left_momento = sprites_left_;
-	sprites_left_ = sprites_to_kill_ - sprites.permanentlyKilledEnemies();
+	sprites_left_ = sprites_to_kill_ - level_state.sprites().permanentlyKilledEnemies();
 
 	if ( sprites_left_ != sprites_left_momento )
 	{
-		inventory_screen.changeKillCounter( sprites_left_ );
+		level_state.inventory().changeKillCounter( sprites_left_ );
 	}
 
 	if ( sprites_left_ <= 0 )
 	{
-		events.win();
+		level_state.events().win();
 	}
 };
 
-void KillAllGoal::customInit( Sprite& hero, Level& level, InventoryLevel& inventory_screen, EventSystem& events, Health& health )
+void KillAllGoal::customInit( LevelState& level_state )
 {
-	sprites_to_kill_ = level.allEnemiesToKill();
+	sprites_to_kill_ = level_state.level().allEnemiesToKill();
 };
