@@ -9,9 +9,9 @@
 			[
 				{
 					"type": "image",
-					"img": "mines-bg-2.png",
-					"width": 114,
-					"height": 112,
+					"img": "mines-bg.png",
+					"width": 128,
+					"height": 128,
 					"x_scroll": 0.5,
 					"y_scroll": 0.5
 				}
