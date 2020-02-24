@@ -24,6 +24,7 @@ namespace Input
 		CAMERA_DOWN
 	};
 	static constexpr int NUM_O_ACTIONS = ( int )( Action::CAMERA_DOWN + 1 );
+	static constexpr int NUMBER_OF_LETTERS = 28;
 
 	bool pressed( Action action );
 	bool pressedMain();
@@ -53,6 +54,9 @@ namespace Input
 	void axis( const SDL_JoyAxisEvent& axis_event );
 	bool exitButtonHeldLongEnough();
 	void changeQuittingText();
+
+	const bool* getLetters();
+	char32_t getLetterCharacter( int i );
 
 	constexpr char TAGS[ NUM_O_ACTIONS ][ 13 ]
 	{

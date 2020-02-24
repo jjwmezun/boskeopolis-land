@@ -1,6 +1,8 @@
 #pragma once
 
 #include "game_state.hpp"
+#include "save.hpp"
+#include <vector>
 
 class LoadGameState : public GameState
 {
@@ -17,5 +19,6 @@ class LoadGameState : public GameState
 		void init() override;
 
 	protected:
+		std::vector<Save> saves_;
         char scratch_[ 3000 ];
 };

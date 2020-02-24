@@ -90,7 +90,70 @@ namespace Input
 		static int escape_timer_ = 0;
 		static WTextObj quitting_text;
 
-
+		static bool letters_[ NUMBER_OF_LETTERS ];
+		static bool letters_lock_[ NUMBER_OF_LETTERS ];
+		static SDL_Keycode letter_keys_[ NUMBER_OF_LETTERS ] =
+		{
+			SDLK_a,
+			SDLK_b,
+			SDLK_c,
+			SDLK_d,
+			SDLK_e,
+			SDLK_f,
+			SDLK_g,
+			SDLK_h,
+			SDLK_i,
+			SDLK_j,
+			SDLK_k,
+			SDLK_l,
+			SDLK_m,
+			SDLK_n,
+			SDLK_o,
+			SDLK_p,
+			SDLK_q,
+			SDLK_r,
+			SDLK_s,
+			SDLK_t,
+			SDLK_u,
+			SDLK_v,
+			SDLK_w,
+			SDLK_x,
+			SDLK_y,
+			SDLK_z,
+			SDLK_SPACE,
+			SDLK_MINUS
+		};
+		static char32_t letter_characters_[ NUMBER_OF_LETTERS ] =
+		{
+			u'A',
+			u'B',
+			u'C',
+			u'D',
+			u'E',
+			u'F',
+			u'G',
+			u'H',
+			u'I',
+			u'J',
+			u'K',
+			u'L',
+			u'M',
+			u'N',
+			u'O',
+			u'P',
+			u'Q',
+			u'R',
+			u'S',
+			u'T',
+			u'U',
+			u'V',
+			u'W',
+			u'X',
+			u'Y',
+			u'Z',
+			u' ',
+			u'-'
+		};
 
 	//
 	//  PRIVATE FUNCTION DECLARATIONS
@@ -115,6 +178,7 @@ namespace Input
 		static void setButtonChangeFinish( Uint8 button );
 		static void setPreferedButtonConfig();
 		static std::string getButtonName( Uint8 button );
+		static void resetLetters();
 
 
 	//
@@ -264,6 +328,7 @@ namespace Input
 			resetList( actions_pressed_ );
 			resetList( actions_released_ );
 			resetList( actions_held_ );
+			resetLetters();
 		};
 
 		void renderQuitText()
@@ -279,6 +344,11 @@ namespace Input
 			updateEscape();
 			resetList( actions_pressed_ );
 			resetList( actions_released_ );
+			for ( int i = 0; i < NUMBER_OF_LETTERS; ++i )
+			{
+				const SDL_Keycode k = letter_keys_[ i ];
+				letters_[ i ] = false;
+			}
 		};
 
 		void updateEscape()
@@ -475,6 +545,15 @@ namespace Input
 			else
 			{
 				eachKey( key, key_map_, registerKeyPress );
+				for ( int i = 0; i < NUMBER_OF_LETTERS; ++i )
+				{
+					const SDL_Keycode k = letter_keys_[ i ];
+					if ( k == key && !letters_lock_[ i ] )
+					{
+						letters_[ i ] = true;
+						letters_lock_[ i ] = true;
+					}
+				}
 			}
 		};
 
@@ -494,6 +573,15 @@ namespace Input
 			else
 			{
 				eachKey( key, key_map_, registerKeyRelease );
+				for ( int i = 0; i < NUMBER_OF_LETTERS; ++i )
+				{
+					const SDL_Keycode k = letter_keys_[ i ];
+					if ( k == key )
+					{
+						letters_[ i ] = false;
+						letters_lock_[ i ] = false;
+					}
+				}
 			}
 		};
 
@@ -661,5 +749,25 @@ namespace Input
 				WTextObj::Align::LEFT,
 				WTextCharacter::Color::BLACK
 			);
+		}
+
+		const bool* getLetters()
+		{
+			return &letters_[ 0 ];
+		};
+
+		void resetLetters()
+		{
+			for ( int i = 0; i < NUMBER_OF_LETTERS; ++i )
+			{
+				const SDL_Keycode k = letter_keys_[ i ];
+				letters_[ i ] = false;
+				letters_lock_[ i ] = false;
+			}
+		}
+
+		char32_t getLetterCharacter( int i )
+		{
+			return letter_characters_[ i ];
 		}
 };

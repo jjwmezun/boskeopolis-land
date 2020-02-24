@@ -1068,7 +1068,7 @@ std::u32string LocalizationLanguage::getSecretGoalMessage() const
     return mezun::charToChar32String( "¡Secret Goal!" );
 };
 
-std::u32string LocalizationLanguage::getSaveCorruptionErrorMessage() const
+std::u32string LocalizationLanguage::getSaveCorruptionErrorMessage( const std::string& filename ) const
 {
-    return mezun::charToChar32String( "Your save file has become corrupted & can’t be loaded." );
+    return mezun::stringReplace( mezun::charToChar32String( "Save file “%f” has been corrupted." ), U"%f", mezun::charToChar32String( filename.c_str() ) );
 };

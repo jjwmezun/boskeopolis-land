@@ -20,6 +20,7 @@ class GameState
 			OPTIONS_STATE,
 			LEVEL_TILE_MENU,
 			SHOP_STATE,
+			NEW_GAME_STATE,
 			LOAD_GAME_STATE
 		};
 

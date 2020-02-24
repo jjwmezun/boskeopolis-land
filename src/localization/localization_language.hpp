@@ -84,7 +84,7 @@ class LocalizationLanguage
         std::u32string getFailureMessage() const;
         std::u32string getSuccessMessage() const;
         std::u32string getSecretGoalMessage() const;
-        std::u32string getSaveCorruptionErrorMessage() const;
+        std::u32string getSaveCorruptionErrorMessage( const std::string& filename ) const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );

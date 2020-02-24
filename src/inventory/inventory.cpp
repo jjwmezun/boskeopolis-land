@@ -764,7 +764,7 @@ namespace Inventory
 		(
 			WMessageState::generateErrorMessage
 			(
-				Localization::getCurrentLanguage().getSaveCorruptionErrorMessage(),
+				Localization::getCurrentLanguage().getSaveCorruptionErrorMessage( "save0" ),
 				WMessageState::Type::CHANGE,
 				std::unique_ptr<TitleState> ( new TitleState() )
 			)

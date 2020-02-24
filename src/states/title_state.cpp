@@ -10,9 +10,8 @@
 #include "title_state.hpp"
 #include "message_state.hpp"
 #include "mezun_exceptions.hpp"
+#include "new_game_state.hpp"
 #include "options_state.hpp"
-#include "overworld_state.hpp"
-#include "overworld_state.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
 #include "render.hpp"
@@ -82,7 +81,8 @@ void TitleState::stateUpdate()
             {
                 case ( Option::NEW ):
                 {
-                    Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), true ) ) );
+                    //Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), true ) ) );
+                    Main::changeState( std::unique_ptr<GameState> ( new NewGameState() ) );
                 }
                 break;
 

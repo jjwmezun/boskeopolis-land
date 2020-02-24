@@ -30,6 +30,7 @@ namespace Main
 	std::string resourcePath();
 	std::string pathDivider();
 	std::string savePath( int n );
+	std::string saveDirectory();
 	bool testHaveSaves();
 
 	bool nosave();

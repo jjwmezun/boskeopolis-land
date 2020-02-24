@@ -70,7 +70,7 @@ namespace mezun
 			text += combineCharactersByCharsize( charsize, source );
 			source += charsize;
 		}
-		text += ( char32_t )( '\0' );
+		//text += ( char32_t )( '\0' );
 		return text;
 	};
 
