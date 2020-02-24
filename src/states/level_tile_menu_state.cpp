@@ -53,16 +53,14 @@ void LevelTileMenuState::stateUpdate()
 		{
 			case ( Option::PLAY ):
 			{
-				Inventory::setDifficultyNormal();
 		        Audio::playSound( Audio::SoundType::CONFIRM );
-				Main::changeState( std::make_unique<LevelState> ( level_ ) );
+				Main::changeState( std::make_unique<LevelState> ( level_, Difficulty::NORMAL, Inventory::heartUpgrades(), Inventory::haveOxygenUpgrade() ) );
 			}
 			break;
 			case ( Option::HARD_MODE ):
 			{
-				Inventory::setDifficultyHard();
 		        Audio::playSound( Audio::SoundType::CONFIRM );
-				Main::changeState( std::make_unique<LevelState> ( level_ ) );
+				Main::changeState( std::make_unique<LevelState> ( level_, Difficulty::HARD, Inventory::heartUpgrades(), Inventory::haveOxygenUpgrade() ) );
 			}
 			break;
 			case ( Option::CANCEL ):

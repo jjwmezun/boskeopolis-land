@@ -6,6 +6,7 @@
 class Camera;
 class Level;
 class LevelState;
+class InventoryLevel;
 class SpriteSystem;
 class TextObj;
 
@@ -169,11 +170,11 @@ class EventSystem
 		};
 
 		void doWarp( LevelState& level_state );
-		void testLevelCompleteStatus();
+		void testLevelCompleteStatus( const InventoryLevel& inventory );
 		void failEvent();
-		void winEvent();
+		void winEvent( const InventoryLevel& inventory );
 		void quitEvent();
-		void secretGoalEvent();
+		void secretGoalEvent( const InventoryLevel& inventory );
 		bool testFlag( MiscFlagType type ) const;
 		void setFlag( MiscFlagType type );
 		void assertFlag() const;

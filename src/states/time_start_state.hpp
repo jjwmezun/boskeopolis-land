@@ -1,12 +1,13 @@
 #pragma once
 
 #include "game_state.hpp"
+#include <string>
 #include "texture_box.hpp"
 
 class TimeStartState : public GameState
 {
 	public:
-		TimeStartState( const Palette& palette );
+		TimeStartState( const Palette& palette, std::u32string text );
 		~TimeStartState();
 		TimeStartState( const TimeStartState& ) = delete;
 		TimeStartState( TimeStartState&& ) = delete;
@@ -38,4 +39,5 @@ class TimeStartState : public GameState
 		SDL_Texture* textures_[ NUMBER_OF_COLORS ];
 		sdl2::SDLRect src_;
 		sdl2::SDLRect dest_;
+		std::u32string text_;
 };

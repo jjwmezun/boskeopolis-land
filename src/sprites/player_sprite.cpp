@@ -85,7 +85,7 @@ void PlayerSprite::heroActions( LevelState& level_state )
 	Map& lvmap = level_state.currentMap();
 	Health& health = level_state.health();
 	EventSystem& events = level_state.events();
-	resetBopsOnLanding();
+	resetBopsOnLanding( level_state.inventory() );
 	actions( level_state.blocks(), events );
 	handleLookingUp();
 	handleCameraMovement( camera );
@@ -113,10 +113,10 @@ void PlayerSprite::actions( const BlockSystem& blocks, EventSystem& events )
 
 void PlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	playerInteract( my_collision, them, level_state.health(), level_state.events() );
+	playerInteract( my_collision, them, level_state.health(), level_state.events(), level_state.inventory() );
 };
 
-void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events )
+void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events, InventoryLevel& inventory )
 {
 	if ( them.hasType( SpriteType::ENEMY ) )
 	{
@@ -128,7 +128,7 @@ void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health
 				bounce();
 				if ( movementType() != SpriteMovement::Type::SWIMMING )
 				{
-					Inventory::bop();
+					inventory.bop();
 				}
 				Audio::playSound( Audio::SoundType::BOP );
 			}
@@ -256,11 +256,11 @@ void PlayerSprite::handleWaterEnteringAndExiting( const Map& lvmap )
 	}
 };
 
-void PlayerSprite::resetBopsOnLanding() const
+void PlayerSprite::resetBopsOnLanding( InventoryLevel& inventory ) const
 {
 	if ( on_ground_ )
 	{
-		Inventory::clearBops();
+		inventory.clearBops();
 	}
 }
 

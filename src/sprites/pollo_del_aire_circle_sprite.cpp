@@ -45,5 +45,5 @@ void PolloDelAireCircleSprite::customUpdate( LevelState& level_state )
 
 void PolloDelAireCircleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), *this );
+	PolloDelAireSprite::polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), level_state.inventory(), *this );
 };

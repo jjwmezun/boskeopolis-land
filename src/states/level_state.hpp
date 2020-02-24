@@ -14,7 +14,7 @@
 class LevelState : public GameState
 {
 	public:
-		LevelState( int level_id, Camera camera = { Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 32, 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS} );
+		LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera = { Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 32, 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS} );
 		~LevelState();
 		void stateUpdate() override;
 		void stateRender() override;

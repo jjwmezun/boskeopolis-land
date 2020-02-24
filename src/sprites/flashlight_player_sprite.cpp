@@ -2,7 +2,7 @@
 #include "event_system.hpp"
 #include "input.hpp"
 #include "input_component_player.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "flashlight_player_sprite.hpp"
 #include "level_state.hpp"
 #include "line.hpp"
@@ -48,7 +48,7 @@ void FlashlightPlayerSprite::customUpdate( LevelState& level_state )
 	EventSystem& events = level_state.events();
 	Map& lvmap = level_state.currentMap();
 	Health& health = level_state.health();
-	resetBopsOnLanding();
+	resetBopsOnLanding( level_state.inventory() );
 	handleRunning();
 	handleWalking();
 	if ( !input_->right() && !input_->left())
@@ -92,7 +92,7 @@ void FlashlightPlayerSprite::customUpdate( LevelState& level_state )
 
 	if ( MansionGhostSprite::last_ghost_death_frame_ != -1 && Main::stateFrame() - MansionGhostSprite::last_ghost_death_frame_ > 30 )
 	{
-		Inventory::clearGhostKills();
+		level_state.inventory().clearGhostKills();
 		MansionGhostSprite::last_ghost_death_frame_ = -1;
 	}
 };
@@ -135,7 +135,7 @@ void FlashlightPlayerSprite::customInteract( Collision& my_collision, Collision&
 	{
 		them.collide_left_ = collideWithFlashLight( them, their_collision );
 	}
-	playerInteract( my_collision, them, level_state.health(), level_state.events() );
+	playerInteract( my_collision, them, level_state.health(), level_state.events(), level_state.inventory() );
 }
 
 bool FlashlightPlayerSprite::collideWithFlashLight( const Sprite& them, const Collision& their_collision ) const

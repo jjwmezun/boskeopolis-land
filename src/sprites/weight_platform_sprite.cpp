@@ -1,5 +1,6 @@
 #include "collision.hpp"
 #include "inventory.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
 #include "text.hpp"
 #include "weight_platform_sprite.hpp"
@@ -60,7 +61,7 @@ void WeightPlatformSprite::customUpdate( LevelState& level_state )
 		if ( break_timer_ == BREAK_LIMIT )
 		{
 			broken_higher_bar_ = ( left_.y < right_.y ) ? &left_ : &right_;
-			Inventory::addFunds( 500 );
+			level_state.inventory().addFunds( 500 );
 		}
 	}
 

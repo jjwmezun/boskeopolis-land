@@ -1,7 +1,8 @@
+#include "animated_graphics.hpp"
 #include "collision.hpp"
 #include "downhill_gem_sprite.hpp"
-#include "inventory.hpp"
-#include "animated_graphics.hpp"
+#include "inventory_level.hpp"
+#include "level_state.hpp"
 
 DownhillGemSprite::DownhillGemSprite( int x, int y )
 :
@@ -20,6 +21,6 @@ void DownhillGemSprite::customInteract( Collision& my_collision, Collision& thei
 {
 	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		Inventory::addFunds( 100 );
+		level_state.inventory().addFunds( 100 );
 	}
 };

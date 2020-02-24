@@ -8,16 +8,16 @@
 #include "level_select_state.hpp"
 #include "time_start_state.hpp"
 
-LevelState::LevelState( int level_id, Camera camera )
+LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera )
 :
 	GameState ( StateID::LEVEL_STATE ),
-	health_ (),
+	health_ ( difficulty, heart_upgrades, has_oxygen_upgrade ),
 	camera_ ( camera ),
 	events_ (),
 	sprites_ (),
 	blocks_ (),
 	level_ ( Level::getLevel( level_id ) ),
-	inventory_screen_ ()
+	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade )
 {
 	blocks_.init( level_.currentMap() );
 }
@@ -61,7 +61,7 @@ void LevelState::stateUpdate()
 			(
 				std::unique_ptr<GameState>
 				(
-					new TimeStartState( palette() )
+					new TimeStartState( palette(), inventory_screen_.clock().getTimeString() )
 				)
 			);
 		}

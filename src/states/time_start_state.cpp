@@ -1,6 +1,7 @@
 #include "clock.hpp"
 #include "inventory.hpp"
 #include "inventory_level.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "render.hpp"
 #include "time_start_state.hpp"
@@ -17,18 +18,17 @@ static constexpr int SRC_HEIGHT = WTextCharacter::SIZE_PIXELS;
 static constexpr int DEST_WIDTH = START_SIZE * SRC_WIDTH;
 static constexpr int DEST_HEIGHT = START_SIZE * SRC_HEIGHT;
 static constexpr int DEST_X = ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - DEST_WIDTH ) / 2.0 );
-static constexpr int DEST_Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevel::HEIGHT - DEST_HEIGHT ) / 2.0 );
+static constexpr int DEST_Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevelGraphics::HEIGHT - DEST_HEIGHT ) / 2.0 );
 static constexpr int TIMER_WIDTH = START_SIZE * Unit::PIXELS_PER_MINIBLOCK * NUM_O_CHAR;
-static constexpr int STOPPING_POINT = ( ( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevel::HEIGHT ) / 2 ) - ( TIMER_HEIGHT / 2 );
+static constexpr int STOPPING_POINT = ( ( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevelGraphics::HEIGHT ) / 2 ) - ( TIMER_HEIGHT / 2 );
 static constexpr int BUMP_LENGTH = 4;
 static constexpr int MOVEMENT_FRAMES = SIZE_SPEED * START_SIZE;
-static constexpr int MOVEMENT_PER_FRAME_Y = ( int )( ceil( ( ( double )( InventoryLevel::Y ) - ( double )( STOPPING_POINT ) ) / ( double )( MOVEMENT_FRAMES ) ) );
-static constexpr int MOVEMENT_PER_FRAME_X = ( int )( ceil( ( ( double )( InventoryLevel::CLOCK_X ) - ( double )( DEST_X ) ) / ( double )( MOVEMENT_FRAMES ) ) );
+static constexpr int MOVEMENT_PER_FRAME_Y = ( int )( ceil( ( ( double )( InventoryLevelGraphics::Y ) - ( double )( STOPPING_POINT ) ) / ( double )( MOVEMENT_FRAMES ) ) );
+static constexpr int MOVEMENT_PER_FRAME_X = ( int )( ceil( ( ( double )( InventoryLevelGraphics::CLOCK_X ) - ( double )( DEST_X ) ) / ( double )( MOVEMENT_FRAMES ) ) );
 static constexpr int BLINK_SPEED = 8;
 static constexpr int NUM_O_BLINKS = 3;
 
-
-TimeStartState::TimeStartState( const Palette& palette )
+TimeStartState::TimeStartState( const Palette& palette, std::u32string text )
 :
 	GameState( StateID::TIME_START_STATE, palette ),
 	y_ ( DEST_Y ),
@@ -39,7 +39,8 @@ TimeStartState::TimeStartState( const Palette& palette )
 	state_ ( State::GOING_DOWN ),
 	textures_ (),
 	src_ ( 0, 0, SRC_WIDTH, SRC_HEIGHT ),
-	dest_ ( DEST_X, DEST_Y, DEST_WIDTH, DEST_HEIGHT )
+	dest_ ( DEST_X, DEST_Y, DEST_WIDTH, DEST_HEIGHT ),
+	text_ ( text )
 {};
 
 TimeStartState::~TimeStartState()
@@ -105,15 +106,15 @@ void TimeStartState::stateUpdate()
 			++timer_;
 
 			y_ += MOVEMENT_PER_FRAME_Y;
-			if ( y_ > InventoryLevel::TOP_ROW_Y )
+			if ( y_ > InventoryLevelGraphics::TOP_ROW_Y )
 			{
-				y_ = InventoryLevel::TOP_ROW_Y;
+				y_ = InventoryLevelGraphics::TOP_ROW_Y;
 			}
 
 			x_ -= MOVEMENT_PER_FRAME_X;
-			if ( x_ < InventoryLevel::CLOCK_X )
+			if ( x_ < InventoryLevelGraphics::CLOCK_X )
 			{
-				x_ = InventoryLevel::CLOCK_X;
+				x_ = InventoryLevelGraphics::CLOCK_X;
 			}
 
 			dest_.x = x_;
@@ -163,7 +164,7 @@ void TimeStartState::init()
 		const WTextCharacter::Color shadow = ( i == 2 ) ? WTextCharacter::Color::__NULL : WTextCharacter::Color::BLACK;
 		textures_[ i ] = Render::createRenderBox( src_.w, src_.h );
 		Render::setRenderTarget( textures_[ i ] );
-		WTextObj text( Inventory::clock().getTimeString(), 0, 0, colors[ i ], src_.w, WTextObj::Align::LEFT, shadow );
+		WTextObj text( text_, 0, 0, colors[ i ], src_.w, WTextObj::Align::LEFT, shadow );
 		text.render();
 		Render::releaseRenderTarget();
 	}

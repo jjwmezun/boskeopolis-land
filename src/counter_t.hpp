@@ -115,12 +115,3 @@ class CounterT
 				: n;
 		};
 };
-
-template<int upper_limit_, int lower_limit_, int init_value_>
-class CounterT<upper_limit_, lower_limit_, init_value_, false> {};
-
-template<int upper_limit_, int lower_limit_>
-class CounterT<upper_limit_, lower_limit_, 0, false> {};
-
-template<int upper_limit_>
-class CounterT<upper_limit_, 0, 0, false> {};

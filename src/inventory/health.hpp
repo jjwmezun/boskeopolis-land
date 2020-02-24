@@ -1,11 +1,14 @@
 #pragma once
 
+#include "difficulty.hpp"
 #include "timers/timer_simple_t.hpp"
 
 class Health
 {
 	public:
-		Health();
+		static constexpr int START_MAX_HP = 2;
+
+		Health( Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade );
 		void update();
 		bool flickerOff() const;
 
@@ -23,8 +26,7 @@ class Health
 		double oxygenPercent() const;
 		bool hasFullHealth() const;
 		int getInvincibilityCounter() const;
-
-		static int maxHP();
+		int maxHP() const;
 
 
 	private:
@@ -33,7 +35,9 @@ class Health
 		int losePoint() const;
 
 		bool heater_;
+		bool has_oxygen_upgrade_;
 		int hp_;
+		int max_hp_;
 		int meter_;
 		int lose_meter_amount_;
 		TimerSimpleT<48, false> invincibility_timer_;

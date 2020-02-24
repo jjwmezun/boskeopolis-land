@@ -2,7 +2,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "input.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "player_spaceship_sprite.hpp"
 #include "shmup_hero_bullet_sprite.hpp"
@@ -122,7 +122,7 @@ void PlayerSpaceshipSprite::customUpdate( LevelState& level_state )
 
 	containCameraY( camera );
 
-	if ( Input::pressed( Input::Action::RUN ) && Inventory::funds() >= 100 )
+	if ( Input::pressed( Input::Action::RUN ) && level_state.inventory().funds() >= 100 )
 	{
 		int x = rightPixels();
 		int y = centerYPixels();
@@ -150,7 +150,7 @@ void PlayerSpaceshipSprite::customUpdate( LevelState& level_state )
 		}
 
 		level_state.sprites().spawn( std::make_unique<ShmupHeroBulletSprite> ( x, y, direction_, SpriteType::HEROS_BULLET ) );
-		Inventory::loseFunds( 100 );
+		level_state.inventory().loseFunds( 100 );
 	}
 	invincibilityFlicker( level_state.health() );
 

@@ -1,5 +1,6 @@
 #include "audio.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
+#include "level_state.hpp"
 #include "main.hpp"
 #include "mansion_ghost_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -40,7 +41,7 @@ void MansionGhostSprite::customUpdate( LevelState& level_state )
 		if ( !is_dead_ && light_timer_ > LIGHT_LIMIT )
 		{
 			kill();
-			Inventory::addGhostKill();
+			level_state.inventory().addGhostKill();
 			last_ghost_death_frame_ = Main::stateFrame();
 			Audio::playSound( Audio::SoundType::GHOST );
 		}

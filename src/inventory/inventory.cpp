@@ -2,6 +2,7 @@
 #include "clock.hpp"
 #include "counter.hpp"
 #include "inventory.hpp"
+#include "inventory_level.hpp"
 #include <fstream>
 #include "level.hpp"
 #include "localization.hpp"
@@ -30,8 +31,8 @@ namespace Inventory
 
 	static void setGemScore( int level, int value );
 	static void setTimeScore( int level, int value );
-	static void winGemScore();
-	static void winTimeScore();
+	static void winGemScore( int funds );
+	static void winTimeScore( const Clock& clock );
 
 	static double totalVictoryPercents();
 	static double totalDiamondPercents();
@@ -40,19 +41,9 @@ namespace Inventory
 
 	static void saveBinary();
 
-	static bool testMultiples( int value );
-	static void addFundsForMultiplier( int value );
-	static void generalVictory();
+	static void generalVictory( const InventoryLevel& level_inventory );
 
 	static void throwSaveCorruptionErrorMessage();
-
-
-	// Private Variables
-	enum class Difficulty
-	{
-		NORMAL,
-		HARD
-	};
 
 	static constexpr bool DEFAULT_VICTORY        = false;
 	static constexpr bool DEFAULT_DIAMOND        = false;
@@ -70,14 +61,12 @@ namespace Inventory
 	static constexpr int  MAX_HEART_UPGRADES     = 3;
 	static constexpr int  MAX_BOPS               = 8;
 
-	static int mcguffins_ = 0;
 	static bool oxygen_upgrade_ = false;
-	static Counter funds_ = Counter( 0, FUNDS_MAX, 0 );
+	static int current_save_ = 0;
 	static Counter total_funds_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
-	static Counter funds_shown_ = Counter( 0, FUNDS_MAX, 0 );
 	static Counter total_funds_shown_ = Counter( 0, TOTAL_FUNDS_MAX, TOTAL_FUNDS_MIN );
 	static Counter current_level_ = Counter( -1, Level::NUMBER_OF_LEVELS, -1 );
-
+	static bool health_upgrades_[ MAX_HEART_UPGRADES ] = { false, false, false };
 	static bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
 	static bool victories_[ Level::NUMBER_OF_LEVELS ];
 	static bool secret_goals_[ Level::NUMBER_OF_LEVELS ];
@@ -87,45 +76,24 @@ namespace Inventory
 	static int gem_scores_[ Level::NUMBER_OF_LEVELS ];
 	static int time_scores_[ Level::NUMBER_OF_LEVELS ];
 
-	static Clock clock_ = Clock();
-
-	static int bops_ = 0;
-	static int ghost_kills_ = 0;
-
-	static Difficulty difficulty_ = Difficulty::NORMAL;
-	static bool health_upgrades_[ MAX_HEART_UPGRADES ] = { false, false, false };
-
-	static int current_save_ = 0;
-
-
-
 
 	// Function Implementations
 	void reset()
 	{
-		funds_ = 0;
 		total_funds_ = 0;
-		clock_.reset();
-
 		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 		{
 			been_to_level_[ i ] = victories_[ i ] = secret_goals_[ i ] = diamonds_[ i ] = false;
 			gem_scores_[ i ] = DEFAULT_GEM_SCORE;
 			time_scores_[ i ] = DEFAULT_TIME_SCORE;
 		}
-
-		funds_shown_ = 0;
 		total_funds_shown_ = 0;
 		current_level_ = -1;
-		mcguffins_ = 0;
 		oxygen_upgrade_ = false;
 		for ( int i = 0; i < MAX_HEART_UPGRADES; ++i )
 		{
 			health_upgrades_[ i ] = false;
 		}
-		bops_ = 0;
-		ghost_kills_ = 0;
-		difficulty_ = Difficulty::NORMAL;
 		current_save_ = 0;
 	};
 
@@ -203,11 +171,11 @@ namespace Inventory
 		}
 	};
 
-	void winGemScore()
+	void winGemScore( int funds )
 	{
-		if ( funds_ >= gem_scores_[ current_level_() ] )
+		if ( funds >= gem_scores_[ current_level_() ] )
 		{
-			setGemScore( current_level_(), funds_() );
+			setGemScore( current_level_(), funds );
 		}
 	};
 
@@ -236,11 +204,11 @@ namespace Inventory
 		}
 	};
 
-	void winTimeScore()
+	void winTimeScore( const Clock& clock )
 	{
-		if ( time_scores_[ current_level_() ] < 0 || clock_.totalSeconds() <= time_scores_[ current_level_() ] )
+		if ( time_scores_[ current_level_() ] < 0 || clock.totalSeconds() <= time_scores_[ current_level_() ] )
 		{
-			setTimeScore( current_level_(), clock_.totalSeconds() );
+			setTimeScore( current_level_(), clock.totalSeconds() );
 		}
 	};
 
@@ -277,23 +245,13 @@ namespace Inventory
 	void levelStart( int level )
 	{
 		been_to_level_[ level ] = true;
-		setCurrentLevel( level );
-		mcguffins_ = 0;
-		funds_ = 0;
-		funds_shown_ = 0;
-		bops_ = 0;
-		clock_.reset();
+		current_level_ = level;
 		save();
 	};
 
 	void setCurrentLevel( int level )
 	{
 		current_level_ = level;
-	};
-
-	int fundsShown()
-	{
-		return funds_shown_();
 	};
 
 	int totalFundsShown()
@@ -388,7 +346,7 @@ namespace Inventory
 
 	double totalVictoryPercents()
 	{
-		return levelsBeaten() * percentPerLevel();
+		return levelsBeaten() * percentPerVictory();
 	};
 
 	double totalDiamondPercents()
@@ -418,9 +376,9 @@ namespace Inventory
 		return totalVictoryPercents() + totalDiamondPercents() + totalGemChallengePercents() + totalTimeChallengePercents();
 	};
 
-	std::string percentShown()
+	std::u32string percentShown()
 	{
-		return std::to_string( ( int )( std::floor( percent() ) ) ) + "%";
+		return mezun::merge32Strings( mezun::intToChar32String( ( int )( std::floor( percent() ) ) ), U"%" );
 	};
 
 	void updateForOverworld()
@@ -444,20 +402,6 @@ namespace Inventory
 	void updateForShop()
 	{
 		updateForOverworld();
-	};
-
-	bool updateLevelFunds()
-	{
-		const int funds_shown_momento = funds_shown_();
-		if ( funds_shown_ < funds_ )
-		{
-			funds_shown_ += FUNDS_SPEED;
-		}
-		else if ( funds_shown_ > funds_ )
-		{
-			funds_shown_ -= FUNDS_SPEED;
-		}
-		return funds_shown_momento != funds_shown_();
 	};
 
 	void save()
@@ -716,17 +660,10 @@ namespace Inventory
 		return load_success;
 	};
 
-	void addMcGuffin()
-	{
-		++mcguffins_;
-	};
-
-	int McGuffins() { return mcguffins_; };
-
-	void win()
+	void win( const InventoryLevel& level_inventory )
 	{
 		victories_[ current_level_() ] = true;
-		generalVictory();
+		generalVictory( level_inventory );
 	};
 
 	void fail()
@@ -743,51 +680,23 @@ namespace Inventory
 		}
 	};
 
-	void secretGoal()
+	void secretGoal( const InventoryLevel& level_inventory )
 	{
 		secret_goals_[ current_level_() ] = true;
-		generalVictory();
+		generalVictory( level_inventory );
 	};
 
-	void generalVictory()
+	void generalVictory( const InventoryLevel& level_inventory )
 	{
-		if ( isHardMode() )
+		if ( level_inventory.isHardMode() )
 		{
 			crowns_[ current_level_() ] = true;
 		}
-		winGemScore();
-		winTimeScore();
-
-		total_funds_ += funds_;
-		funds_ = 0;
-
+		winGemScore( level_inventory.funds() );
+		winTimeScore( level_inventory.clock() );
+		total_funds_ += level_inventory.funds();
 		save();
 	}
-
-	void addFunds( int n )
-	{
-		funds_ += n;
-	};
-
-	void loseFunds( int n )
-	{
-		funds_ -= n;
-	};
-
-	int funds()
-	{
-		return funds_();
-	};
-
-	void setFunds( int n )
-	{
-		funds_ = n;
-	};
-
-	Clock& clock()
-	{
-		return clock_;
-	};
 
 	int heartUpgrades()
 	{
@@ -807,91 +716,11 @@ namespace Inventory
 		return oxygen_upgrade_;
 	};
 
-	void bop()
-	{
-		++bops_;
-		if ( bopsMultiplier() )
-		{
-			addFundsForMultiplier( bops_ );
-		}
-	};
-
-	bool bopsMultiplier()
-	{
-		return testMultiples( bops_ );
-	};
-
-	void clearBops()
-	{
-		bops_ = 0;
-	};
-
-	int howManyBops()
-	{
-		return bops_;
-	};
-
-	void addGhostKill()
-	{
-		++ghost_kills_;
-		if ( multipleGhostKills() )
-		{
-			addFundsForMultiplier( ghost_kills_ );
-		}
-	};
-
-	void clearGhostKills()
-	{
-		ghost_kills_ = 0;
-	};
-
-	int howManyGhostKills()
-	{
-		return ghost_kills_;
-	};
-
-	bool multipleGhostKills()
-	{
-		return testMultiples( ghost_kills_ );
-	};
-
-	bool testMultiples( int value )
-	{
-		return value > 1 && value <= MAX_BOPS;
-	};
-
-	void addFundsForMultiplier( int value )
-	{
-		//  2    3    4    5     6      7      8
-		// 100, 200, 400, 800, 1,600, 3,200, 6,400
-		addFunds( ( int )( 100 * pow( 2, value - 2 ) ) );
-	}
-
-	std::u32string fundsString()
-	{
-		return mezun::intToChar32StringWithPadding( funds_shown_(), FUNDS_MAX_DIGITS );
-	};
-
 	std::u32string totalFundsString()
 	{
 		return ( total_funds_shown_ < 0 )
 			? mezun::intToChar32StringWithPadding( total_funds_shown_(), TOTAL_FUNDS_MAX_DIGITS )
 			: mezun::merge32Strings( U" ", mezun::intToChar32StringWithPadding( total_funds_shown_(), TOTAL_FUNDS_MAX_DIGITS ) );
-	};
-
-	bool isHardMode()
-	{
-		return difficulty_ == Difficulty::HARD;
-	};
-
-	void setDifficultyNormal()
-	{
-		difficulty_ = Difficulty::NORMAL;
-	};
-
-	void setDifficultyHard()
-	{
-		difficulty_ = Difficulty::HARD;
 	};
 
 	bool hasCrown( int level )

@@ -12,7 +12,7 @@
 static constexpr int WIDTH = 368;
 static constexpr int HEIGHT = 128;
 static constexpr int X = ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - WIDTH ) / 2.0 );
-static constexpr int Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevel::HEIGHT - HEIGHT ) / 2.0 );
+static constexpr int Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevelGraphics::HEIGHT - HEIGHT ) / 2.0 );
 static constexpr int PADDING = 16;
 
 static constexpr int MESSAGE_BOX_HEIGHT_MINIBLOCKS = 12;
@@ -20,7 +20,7 @@ static constexpr int MESSAGE_BOX_WIDTH_PIXELS = Unit::MiniBlocksToPixels( LevelM
 static constexpr int MESSAGE_BOX_HEIGHT_PIXELS = Unit::MiniBlocksToPixels( MESSAGE_BOX_HEIGHT_MINIBLOCKS );
 static constexpr int MESSAGE_BOX_PADDING_PIXELS = Unit::MiniBlocksToPixels( LevelMessageState::MESSAGE_BOX_PADDING_MINIBLOCKS );
 static constexpr int MESSAGE_BOX_X = ( Unit::WINDOW_WIDTH_PIXELS / 2 ) - ( MESSAGE_BOX_WIDTH_PIXELS / 2 );
-static constexpr int MESSAGE_BOX_Y = ( ( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevel::HEIGHT ) / 2 ) - ( MESSAGE_BOX_HEIGHT_PIXELS / 2 );
+static constexpr int MESSAGE_BOX_Y = ( ( Unit::WINDOW_HEIGHT_PIXELS - InventoryLevelGraphics::HEIGHT ) / 2 ) - ( MESSAGE_BOX_HEIGHT_PIXELS / 2 );
 static constexpr int TEXT_X = MESSAGE_BOX_X + MESSAGE_BOX_PADDING_PIXELS;
 static constexpr int TEXT_Y = MESSAGE_BOX_Y + MESSAGE_BOX_PADDING_PIXELS;
 static constexpr int BORDER_WIDTH = 8;

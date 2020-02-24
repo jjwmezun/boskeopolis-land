@@ -1,6 +1,5 @@
 #include "mcguffin_goal.hpp"
 #include "event_system.hpp"
-#include "inventory.hpp"
 #include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "mezun_helpers.hpp"
@@ -15,7 +14,7 @@ McGuffinGoal::~McGuffinGoal() {};
 
 void McGuffinGoal::update( LevelState& level_state )
 {
-	if ( Inventory::McGuffins() >= amount_needed_ )
+	if ( level_state.inventory().mcguffins() >= amount_needed_ )
 	{
 		level_state.events().win();
 	}

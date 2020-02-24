@@ -6,26 +6,15 @@ class Health;
 class Map;
 class Sprite;
 
-#include "inventory_level_health.hpp"
-#include "mezun_sdl2.hpp"
-#include "news_ticker.hpp"
-#include "oxygen_meter.hpp"
-#include "sprite_graphics.hpp"
-#include "text_obj.hpp"
-#include "texture_box.hpp"
+#include "clock.hpp"
+#include "counter_t.hpp"
+#include "difficulty.hpp"
+#include "inventory_level_graphics.hpp"
 
 class InventoryLevel
 {
 	public:
-		static constexpr int HEIGHT = 40;
-		static constexpr int Y = Unit::WINDOW_HEIGHT_PIXELS - HEIGHT;
-		static constexpr int TOP_ROW_Y_RELATIVE = 10;
-		static constexpr int TOP_ROW_Y = Y + TOP_ROW_Y_RELATIVE;
-		static constexpr int BOTTOM_ROW_Y = Y + 23;
-		static constexpr int CLOCK_ICON_X = Unit::MiniBlocksToPixels( 17 );
-		static constexpr int CLOCK_X = 146;
-
-		InventoryLevel();
+		InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade );
 		~InventoryLevel();
 		InventoryLevel( const InventoryLevel& ) = delete;
 		InventoryLevel( InventoryLevel&& ) = delete;
@@ -38,30 +27,44 @@ class InventoryLevel
 		void changeKillCounter( int count );
 		void forceRerender();
 
+		int funds() const;
+		const Clock& clock() const;
+		int mcguffins() const;
+		std::u32string fundsString() const;
+		int howManyBops() const;
+		bool bopsMultiplier() const;
+		int howManyGhostKills() const;
+		bool multipleGhostKills() const;
+		bool isHardMode() const;
+	
+		void addFunds( int n );
+		void loseFunds( int n );
+		void setFunds( int n );
+		void addMcGuffin();
+		void bop();
+		void clearBops();
+		void addGhostKill();
+		void clearGhostKills();
+		Clock& clock();
+
+		static constexpr int  FUNDS_MAX              = 99999;
+		static constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;
+		static constexpr int  FUNDS_MAX_DIGITS       = 5;
+		static constexpr int  FUNDS_SPEED            = 25;
+		static constexpr int  MAX_HEART_UPGRADES     = 3;
+		static constexpr int  MAX_BOPS               = 8;
+
 	private:
-		void updateHealthGraphics();
-		void updatePtsGraphics();
-		void renderPtsGraphics();
-		void updateTimerGraphics();
-		void renderTimerGraphics();
-		void updateKillCountGraphics();
-		void renderKillCountGraphics();
-		void updateKeyGraphics();
-		void renderKeyGraphics();
-		void updateSwitchGraphics();
-		void renderSwitchGraphics();
-		void updateMcGuffinGraphics();
-		void renderMcGuffinGraphics();
-		
-		bool showing_key_;
-		bool show_on_off_;
-		bool on_off_state_;
-		int flashing_timer_;
-		int flashing_time_shade_;
-		int kill_count_;
-		int mcguffins_to_render_;
-		TextureBox main_texture_;
-		InventoryLevelHealth health_gfx_;
-		NewsTicker ticker_;
-		OxygenMeter oxygen_meter_;
+		bool updateFunds();
+		void addFundsForMultiplier( int value );
+
+		bool oxygen_upgrade_;
+		Difficulty difficulty_;
+		int mcguffins_;
+		int bops_;
+		int ghost_kills_;
+		CounterT<FUNDS_MAX> funds_;
+		CounterT<FUNDS_MAX> funds_shown_;
+		Clock clock_ = Clock();
+		InventoryLevelGraphics graphics_;
 };

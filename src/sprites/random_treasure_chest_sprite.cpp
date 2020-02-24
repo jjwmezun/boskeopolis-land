@@ -38,7 +38,7 @@ void RandomTreasureChestSprite::customUpdate( LevelState& level_state )
 		break;
 		case( State::ITEM_RISING ):
 		{
-			raiseItem();
+			raiseItem( level_state.inventory() );
 		}
 		break;
 	}

@@ -3,7 +3,7 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "falling_gem_sprite.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 
 FallingGemSprite::FallingGemSprite( int x, int y )
@@ -52,7 +52,7 @@ void FallingGemSprite::customInteract( Collision& my_collision, Collision& their
 
 		if ( active_ && their_collision.collideAny() )
 		{
-			Inventory::addFunds( 100 );
+			level_state.inventory().addFunds( 100 );
 			Audio::playSound( Audio::SoundType::GEM );
 		}
 	}

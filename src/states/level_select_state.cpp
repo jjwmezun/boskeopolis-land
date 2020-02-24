@@ -302,7 +302,7 @@ void LevelSelectState::generatePageTextures()
 // Since these textures ne’er change, they can be generated once @ the start & then just drawn directly during moving states.
 void LevelSelectState::generateMovingPageTextures()
 {
-	const WTextObj completion_text{ mezun::charToChar32String( Inventory::percentShown().c_str() ), 0, 8, WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextCharacter::Color::__NULL, 8, 4 };
+	const WTextObj completion_text{ Inventory::percentShown(), 0, 8, WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextCharacter::Color::__NULL, 8, 4 };
 	const std::u32string& cycle_name = Localization::getCurrentLanguage().getLevelSelectCycleName();
 	WTextObj cycle_text;
 	int cycle = 1;

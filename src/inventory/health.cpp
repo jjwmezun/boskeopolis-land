@@ -9,11 +9,19 @@ static constexpr int GAINING_OXYGEN = -2;
 static constexpr int NORMAL_OXYGEN_LIMIT = 720;
 static constexpr int STRONGER_OXYGEN_LIMIT = 720 + 360;
 static constexpr int HEAT_LIMIT = 500;
-static constexpr int START_MAX_HP = 2;
 
-Health::Health()
+static constexpr int calculateMaxHP( Difficulty difficulty, int heart_upgrades )
+{
+	return ( difficulty == Difficulty::HARD )
+		? 1
+		: Health::START_MAX_HP + heart_upgrades;
+};
+
+Health::Health( Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade )
 :
-	hp_ ( maxHP() ),
+	hp_ ( calculateMaxHP( difficulty, heart_upgrades ) ),
+	has_oxygen_upgrade_ ( has_oxygen_upgrade ),
+	max_hp_ ( calculateMaxHP( difficulty, heart_upgrades ) ),
 	heater_ ( false ),
 	meter_ ( maxOxygen() ),
 	lose_meter_amount_ ( NORMAL_OXYGEN_STATUS ),
@@ -132,17 +140,16 @@ double Health::oxygenPercent() const
 	return double( ( double )( meter_ ) / ( double )( maxOxygen() ) );
 };
 
-int Health::maxHP()
+int Health::maxHP() const
 {
-	//std::cout << Inventory::heartUpgrades() << std::endl;
-	return ( Inventory::isHardMode() ) ? 1 : START_MAX_HP + Inventory::heartUpgrades();
+	return max_hp_;
 };
 
 int Health::maxOxygen() const
 {
 	return ( heater_ )
 		? HEAT_LIMIT
-		: ( Inventory::haveOxygenUpgrade() )
+		: ( has_oxygen_upgrade_ )
 			? STRONGER_OXYGEN_LIMIT
 			: NORMAL_OXYGEN_LIMIT;
 };

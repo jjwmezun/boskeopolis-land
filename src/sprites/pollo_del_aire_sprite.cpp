@@ -101,11 +101,11 @@ void PolloDelAireSprite::customUpdate( LevelState& level_state )
 
 void PolloDelAireSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), *this );
+	polloInteract( my_collision, their_collision, them, level_state.health(), level_state.events(), level_state.inventory(), *this );
 };
 
 
-void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Collision& their_collision, Sprite& them, Health& health, const EventSystem& events, Sprite& me )
+void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Collision& their_collision, Sprite& them, Health& health, const EventSystem& events, InventoryLevel& inventory, Sprite& me )
 {
 	if ( !me.isDead() )
 	{
@@ -115,7 +115,7 @@ void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Col
 			{
 				me.kill();
 				them.bounce();
-				Inventory::bop();
+				inventory.bop();
 				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else if ( events.testIsSlidingPreviously() )

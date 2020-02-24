@@ -2,7 +2,7 @@
 #include "rug_monster_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
@@ -131,7 +131,7 @@ void RugMonsterSprite::customInteract( Collision& my_collision, Collision& their
                 {
                     kill();
                     them.bounce();
-                    Inventory::bop();
+                    level_state.inventory().bop();
                     Audio::playSound( Audio::SoundType::BOP );
                 }
                 else if ( their_collision.collideAny() )

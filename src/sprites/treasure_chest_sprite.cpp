@@ -41,7 +41,7 @@ void TreasureChestSprite::customUpdate( LevelState& level_state )
 		break;
 		case( 2 ):
 		{
-			raiseItem();
+			raiseItem( level_state.inventory() );
 		}
 		break;
 	}
@@ -52,7 +52,7 @@ void TreasureChestSprite::customInteract( Collision& my_collision, Collision& th
 	EventSystem& events = level_state.events();
 	if ( them.on_ground_ && events.hasKey() && them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 	{
-		Inventory::clock().stop();
+		level_state.inventory().clock().stop();
 		Audio::fadeMusic( 500 );
 		level_state.sprites().heroOpenTreasureChest();
 		events.setPauseDisabled();
@@ -107,7 +107,7 @@ void TreasureChestSprite::animateChestOpening()
 	++timer_;
 }
 
-void TreasureChestSprite::raiseItem()
+void TreasureChestSprite::raiseItem( InventoryLevel& inventory )
 {
 	switch ( item_type_ )
 	{
@@ -127,7 +127,7 @@ void TreasureChestSprite::raiseItem()
 			{
 				if ( gem_count_ < 3 )
 				{
-					Inventory::addFunds( 250 );
+					inventory.addFunds( 250 );
 				}
 				++gem_count_;
 				key_cane_y_ = yPixels() + 20;

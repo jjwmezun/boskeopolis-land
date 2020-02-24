@@ -3,7 +3,7 @@
 #include "collision.hpp"
 #include "clock.hpp"
 #include "event_system.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "map.hpp"
 #include "moon_sprite.hpp"
@@ -63,7 +63,7 @@ void MoonSprite::customUpdate( LevelState& level_state )
 		break;
 
 		case ( MoonState::FREEZE ):
-			Inventory::clock().reset( Direction::Vertical::DOWN, TIME_LIMIT );
+			level_state.inventory().clock().reset( Direction::Vertical::DOWN, TIME_LIMIT );
 			events.startTimer();
 			moon_state_ = MoonState::AFTER_FREEZE;
 		break;
@@ -79,7 +79,7 @@ void MoonSprite::customUpdate( LevelState& level_state )
 			{
 				pebbles_[ i ].update();
 			}
-			if ( Inventory::clock().countdownHit0() )
+			if ( level_state.inventory().clock().countdownHit0() )
 			{
 				// 'Cause it's awkward if you lose before you get a chance to see 0,
 				// wait 1 mo' second after it reaches 0 to fail.

@@ -1,7 +1,7 @@
 #include "clock.hpp"
 #include "survive_time_goal.hpp"
 #include "event_system.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "mezun_helpers.hpp"
 #include "text.hpp"
@@ -16,7 +16,7 @@ SurviveTimeGoal::~SurviveTimeGoal() {};
 
 void SurviveTimeGoal::update( LevelState& level_state )
 {
-	if ( Inventory::clock().totalSeconds() >= wait_time_ )
+	if ( level_state.inventory().clock().totalSeconds() >= wait_time_ )
 	{
 		level_state.events().win();
 	}
@@ -24,5 +24,5 @@ void SurviveTimeGoal::update( LevelState& level_state )
 
 void SurviveTimeGoal::customInit( LevelState& level_state )
 {
-	Inventory::clock().reset( Direction::Vertical::DOWN, wait_time_ );
+	level_state.inventory().clock().reset( Direction::Vertical::DOWN, wait_time_ );
 };

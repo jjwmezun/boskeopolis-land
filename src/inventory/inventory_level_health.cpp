@@ -10,14 +10,14 @@ static constexpr int calculateGraphicsWidth( int number_of_hearts )
 	return 9 * number_of_hearts - 1;
 };
 
-InventoryLevelHealth::InventoryLevelHealth( int y )
+InventoryLevelHealth::InventoryLevelHealth( int y, int max )
 :
 	hearts_shown_ ( 0 ),
 	image_ ( "bg/level-select-characters.png" ),
-	empty_heart_src_ ( 0, 168, calculateGraphicsWidth( Health::maxHP() ), 8 ),
-	empty_heart_dest_ ( X, Y, calculateGraphicsWidth( Health::maxHP() ), 8 ),
-	full_heart_src_ ( 0, 176, calculateGraphicsWidth( Health::maxHP() ), 8 ),
-	full_heart_dest_ ( X, Y, calculateGraphicsWidth( Health::maxHP() ), 8 )
+	empty_heart_src_ ( 0, 168, calculateGraphicsWidth( max ), 8 ),
+	empty_heart_dest_ ( X, Y, calculateGraphicsWidth( max ), 8 ),
+	full_heart_src_ ( 0, 176, calculateGraphicsWidth( max ), 8 ),
+	full_heart_dest_ ( X, Y, calculateGraphicsWidth( max ), 8 )
 {};
 
 bool InventoryLevelHealth::update( const Health& health )

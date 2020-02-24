@@ -8,7 +8,7 @@ class Health;
 class InventoryLevelHealth
 {
 	public:
-		InventoryLevelHealth( int y );
+		InventoryLevelHealth( int y, int max );
 		bool update( const Health& health );
 		void render();
 

@@ -2,7 +2,7 @@
 #include "camera.hpp"
 #include "collision.hpp"
 #include "health.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "text_component_gradual.hpp"
 #include <memory>
@@ -40,9 +40,9 @@ void DungeonHealerSprite::customInteract( Collision& my_collision, Collision& th
         }
         const auto collision = them.testCollision( heart_box_ );
         Health& health = level_state.health();
-        if ( Inventory::funds() >= 5000 && health.hp() < health.maxHP() && collision.collideAny() )
+        if ( level_state.inventory().funds() >= 5000 && health.hp() < health.maxHP() && collision.collideAny() )
         {
-            Inventory::loseFunds( 5000 );
+            level_state.inventory().loseFunds( 5000 );
             health.heal();
             heart_box_.x = heart_box_.y = Unit::BlocksToPixels( -1 );
         }

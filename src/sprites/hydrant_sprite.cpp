@@ -2,7 +2,7 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "hydrant_sprite.hpp"
-#include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
@@ -65,7 +65,7 @@ void HydrantSprite::customInteract( Collision& my_collision, Collision& their_co
 				{
 					kill();
 					them.bounce();
-					Inventory::bop();
+					level_state.inventory().bop();
 					Audio::playSound( Audio::SoundType::BOP );
 				}
 				else if ( their_collision.collideAny() && !isDead() )

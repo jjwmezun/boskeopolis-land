@@ -12,7 +12,7 @@ class PolloDelAireSprite : public Sprite
 		void reset() override;
 		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
 
-		static void polloInteract( const Collision& my_collision, const Collision& their_collision, Sprite& them, Health& health, const EventSystem& events, Sprite& me );
+		static void polloInteract( const Collision& my_collision, const Collision& their_collision, Sprite& them, Health& health, const EventSystem& events, InventoryLevel& inventory, Sprite& me );
 		static void polloDeath( const Camera& camera, Sprite& me, const Map& lvmap );
 		static void polloReset( Sprite& me );
 

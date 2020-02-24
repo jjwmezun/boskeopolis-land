@@ -9,268 +9,173 @@
 #include "sprite.hpp"
 #include "wtext_obj.hpp"
 
-static constexpr int MISC_X = 185;
-static constexpr int FLASHING_TIMER_SHADES_NUM = 12;
-static constexpr WTextCharacter::Color FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHADES_NUM ] =
+constexpr bool testMultiples( int value )
 {
-	WTextCharacter::Color::BLACK,
-	WTextCharacter::Color::DARK_GRAY,
-	WTextCharacter::Color::DARK_MID_GRAY,
-	WTextCharacter::Color::LIGHT_MID_GRAY,
-	WTextCharacter::Color::LIGHT_GRAY,
-	WTextCharacter::Color::WHITE,
-	WTextCharacter::Color::WHITE,
-	WTextCharacter::Color::LIGHT_GRAY,
-	WTextCharacter::Color::LIGHT_MID_GRAY,
-	WTextCharacter::Color::DARK_MID_GRAY,
-	WTextCharacter::Color::DARK_GRAY,
-	WTextCharacter::Color::BLACK
+	return value > 1 && value <= InventoryLevel::MAX_BOPS;
 };
-static constexpr int FLASHING_TIMER_SPEED = 8;
 
-InventoryLevel::InventoryLevel()
+InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade )
 :
-	showing_key_ ( false ),
-	show_on_off_ ( false ),
-	on_off_state_ ( false ),
-	flashing_timer_ ( 0 ),
-	flashing_time_shade_ ( 0 ),
-	kill_count_ ( -1 ),
-	mcguffins_to_render_ ( -1 ),
-	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
-	health_gfx_ ( Y ),
-	ticker_ ( BOTTOM_ROW_Y ),
-	oxygen_meter_ ( TOP_ROW_Y )
+	oxygen_upgrade_ ( oxygen_upgrade ),
+	difficulty_ ( difficulty ),
+	mcguffins_ ( 0 ),
+	bops_ ( 0 ),
+	ghost_kills_ ( 0 ),
+	funds_ (),
+	funds_shown_ (),
+	clock_ (),
+	graphics_ ( max_hp )
 {};
 
-InventoryLevel::~InventoryLevel()
-{
-	main_texture_.destroy();
-};
+InventoryLevel::~InventoryLevel() {};
 
 void InventoryLevel::update( EventSystem& events, const Health& health )
 {
-	oxygen_meter_.update( health );
-	if ( Inventory::updateLevelFunds() )
-	{
-		updatePtsGraphics();
-	}
-	if ( Inventory::clock().update() )
-	{
-		updateTimerGraphics();
-	}
-	if ( health_gfx_.update( health ) )
-	{
-		updateHealthGraphics();
-	}
-	ticker_.update();
-	if ( Inventory::clock().lowOnTime() )
-	{
-		++flashing_timer_;
-		if ( flashing_timer_ >= Inventory::clock().timeRemaining() )
-		{
-			flashing_timer_ = 0;
-			++flashing_time_shade_;
-			if ( flashing_time_shade_ == FLASHING_TIMER_SHADES_NUM )
-			{
-				flashing_time_shade_ = 0;
-			}
-			updateTimerGraphics();
-		}
-	}
-	if ( !showing_key_ && events.hasKey() )
-	{
-		updateKeyGraphics();
-		showing_key_ = true;
-	}
-	if ( show_on_off_ && on_off_state_ != events.isSwitchOn() )
-	{
-		on_off_state_ = events.isSwitchOn();
-		updateSwitchGraphics();
-	}
-	if ( mcguffins_to_render_ != -1 && mcguffins_to_render_ != Inventory::McGuffins() )
-	{
-		mcguffins_to_render_ = Inventory::McGuffins();
-		updateMcGuffinGraphics();
-	}
+	const bool funds_changed = updateFunds();
+	const bool time_changed = clock_.update();
+	graphics_.update( events, health, *this, funds_changed, time_changed );
 };
 
 void InventoryLevel::init( const Map& lvmap )
 {
-	show_on_off_ = lvmap.show_on_off_;
-	main_texture_.init();
-	forceRerender();
+	graphics_.init( lvmap, *this );
 };
 
 void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera )
 {
-	main_texture_.render();
-
-	// OXYGEN
-	oxygen_meter_.render();
-
-	// TICKER
-	if ( events.showBossUI() )
-	{
-		events.renderBossUI();
-	}
-	else
-	{
-		ticker_.render();
-	}
-
-	// BOPS
-	if ( Inventory::bopsMultiplier() )
-	{
-		WTextObj text( mezun::intToChar32String( Inventory::howManyBops() ), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), WTextCharacter::Color::DARK_GRAY );
-		text.render();
-	}
-	else if ( Inventory::multipleGhostKills() )
-	{
-		WTextObj text( mezun::intToChar32String( Inventory::howManyGhostKills() ), camera.relativeX( hero.centerXPixels() - 4 ), camera.relativeY( hero.yPixels() - 12 ), WTextCharacter::Color::DARK_GRAY );
-		text.render();
-	}
+	graphics_.render( events, hero, camera, *this );
 };
 
 void InventoryLevel::setShowMcGuffins()
 {
-	if ( mcguffins_to_render_ == -1 )
-	{
-		mcguffins_to_render_ = 0;
-	}
+	graphics_.setShowMcGuffins();
 };
 
 void InventoryLevel::changeKillCounter( int count )
 {
-	kill_count_ = count;
-	updateKillCountGraphics();
-};
-
-void InventoryLevel::updateHealthGraphics()
-{
-	main_texture_.startDrawing();
-	health_gfx_.render();
-	main_texture_.endDrawing();
+	graphics_.changeKillCounter( count );
 };
 
 void InventoryLevel::forceRerender()
 {
-	main_texture_.startDrawing();
-	Render::clearScreenTransparency();
-	Render::renderObject( "bg/level-inventory-frame.png", { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT }, { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT } );
-	if ( Inventory::victory() )
+	graphics_.forceRerender( *this );
+};
+
+bool InventoryLevel::updateFunds()
+{
+	const int funds_shown_momento = funds_shown_.value();
+	if ( funds_shown_ < funds_.value() )
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 16, 40, 8, 8 }, { 10, TOP_ROW_Y_RELATIVE, 8, 8 } );
+		funds_shown_ += FUNDS_SPEED;
 	}
-	if ( Inventory::haveDiamond() )
+	else if ( funds_shown_ > funds_.value() )
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
+		funds_shown_ -= FUNDS_SPEED;
 	}
-	health_gfx_.render();
-	renderPtsGraphics();
-	renderTimerGraphics();
-	if ( kill_count_ != -1 )
+	return funds_shown_momento != funds_shown_.value();
+}
+
+int InventoryLevel::funds() const
+{
+	return funds_.value();
+};
+
+const Clock& InventoryLevel::clock() const
+{
+	return clock_;
+};
+
+int InventoryLevel::mcguffins() const
+{
+	return mcguffins_;
+};
+
+std::u32string InventoryLevel::fundsString() const
+{
+	return mezun::intToChar32StringWithPadding( funds_shown_(), FUNDS_MAX_DIGITS );
+};
+
+bool InventoryLevel::bopsMultiplier() const
+{
+	return testMultiples( bops_ );
+};
+
+int InventoryLevel::howManyBops() const
+{
+	return bops_;
+};
+
+int InventoryLevel::howManyGhostKills() const
+{
+	return ghost_kills_;
+};
+
+bool InventoryLevel::multipleGhostKills() const
+{
+	return testMultiples( ghost_kills_ );
+};
+
+bool InventoryLevel::isHardMode() const
+{
+	return difficulty_ == Difficulty::HARD;
+};
+
+void InventoryLevel::addFunds( int n )
+{
+	funds_ += n;
+};
+
+void InventoryLevel::loseFunds( int n )
+{
+	funds_ -= n;
+};
+
+void InventoryLevel::setFunds( int n )
+{
+	funds_ = n;
+};
+
+void InventoryLevel::addMcGuffin()
+{
+	++mcguffins_;
+};
+
+void InventoryLevel::bop()
+{
+	++bops_;
+	if ( bopsMultiplier() )
 	{
-		renderKillCountGraphics();
+		addFundsForMultiplier( bops_ );
 	}
-	if ( showing_key_ )
+};
+
+void InventoryLevel::clearBops()
+{
+	bops_ = 0;
+};
+
+void InventoryLevel::addGhostKill()
+{
+	++ghost_kills_;
+	if ( multipleGhostKills() )
 	{
-		renderKeyGraphics();
+		addFundsForMultiplier( ghost_kills_ );
 	}
-	if ( show_on_off_ )
-	{
-		renderSwitchGraphics();
-	}
-	if ( mcguffins_to_render_ != -1 )
-	{
-		renderMcGuffinGraphics();
-	}
-	main_texture_.endDrawing();
-	ticker_.forceRedraw();
 };
 
-void InventoryLevel::updatePtsGraphics()
+void InventoryLevel::clearGhostKills()
 {
-	main_texture_.startDrawing();
-	Render::renderRect( { 42, TOP_ROW_Y_RELATIVE, 8 * 5, 8 }, 1 );
-	renderPtsGraphics();
-	main_texture_.endDrawing();
+	ghost_kills_ = 0;
 };
 
-void InventoryLevel::renderPtsGraphics()
+void InventoryLevel::addFundsForMultiplier( int value )
 {
-	WTextObj text{ Inventory::fundsString(), 42, TOP_ROW_Y_RELATIVE };
-	text.render();
-};
+	//  2    3    4    5     6      7      8
+	// 100, 200, 400, 800, 1,600, 3,200, 6,400
+	funds_ += ( int )( 100 * pow( 2, value - 2 ) );
+}
 
-void InventoryLevel::updateTimerGraphics()
+Clock& InventoryLevel::clock()
 {
-	main_texture_.startDrawing();
-	Render::renderRect( { CLOCK_X, TOP_ROW_Y_RELATIVE, 8 * 4, 8 }, 1 );
-	renderTimerGraphics();
-	main_texture_.endDrawing();
-};
-
-void InventoryLevel::renderTimerGraphics()
-{
-	WTextObj text{ Inventory::clock().getTimeString(), CLOCK_X, TOP_ROW_Y_RELATIVE, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] };
-	text.render();
-};
-
-void InventoryLevel::updateKillCountGraphics()
-{
-	main_texture_.startDrawing();
-	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8 * 4, 8 }, 1 );
-	renderKillCountGraphics();
-	main_texture_.endDrawing();
-};
-
-void InventoryLevel::renderKillCountGraphics()
-{
-	Render::renderObject( "bg/level-select-characters.png", { 0, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
-	WTextObj text{ U"x" + mezun::intToChar32StringWithPadding( kill_count_, 2 ), MISC_X + 8, TOP_ROW_Y_RELATIVE };
-	text.render();
-};
-
-void InventoryLevel::updateKeyGraphics()
-{
-	main_texture_.startDrawing();
-	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
-	renderKeyGraphics();
-	main_texture_.endDrawing();
-};
-
-void InventoryLevel::renderKeyGraphics()
-{
-	Render::renderObject( "bg/level-select-characters.png", { 8, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
-};
-
-void InventoryLevel::updateSwitchGraphics()
-{
-	main_texture_.startDrawing();
-	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8 * 3, 8 }, 1 );
-	renderSwitchGraphics();
-	main_texture_.endDrawing();
-};
-
-void InventoryLevel::renderSwitchGraphics()
-{
-	const std::u32string string = ( on_off_state_ ) ? U"ON" : U"OFF";
-	WTextObj text( string, MISC_X, TOP_ROW_Y_RELATIVE );
-	text.render();
-};
-
-void InventoryLevel::updateMcGuffinGraphics()
-{
-	main_texture_.startDrawing();
-	Render::renderRect( { MISC_X, TOP_ROW_Y_RELATIVE, 8 * 3, 8 }, 1 );
-	renderMcGuffinGraphics();
-	main_texture_.endDrawing();
-};
-
-void InventoryLevel::renderMcGuffinGraphics()
-{
-	Render::renderObject( "bg/level-select-characters.png", { 16, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
-	WTextObj text{ U"x" + mezun::intToChar32String( mcguffins_to_render_ ), MISC_X + 8, TOP_ROW_Y_RELATIVE };
-	text.render();
+	return clock_;
 };

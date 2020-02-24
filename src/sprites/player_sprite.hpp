@@ -2,6 +2,7 @@
 
 class Block;
 class EventSystem;
+class InventoryLevel;
 class Sprite;
 
 #include "input_component_player.hpp"
@@ -44,13 +45,13 @@ class PlayerSprite : public Sprite
 		bool isLookingUp() const;
 
 	protected:
-		void playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events );
+		void playerInteract( Collision& my_collision, Sprite& them, Health& health, EventSystem& events, InventoryLevel& inventory );
 		void handleCameraMovement( Camera& camera );
 		void handleDoorBehavior( EventSystem& events );
 		void handleChasmBehavior( const Map& lvmap, EventSystem& events );
 		void handleDrowningBehavior( const Health& health );
 		void handleWaterEnteringAndExiting( const Map& lvmap );
-		void resetBopsOnLanding() const;
+		void resetBopsOnLanding( InventoryLevel& inventory ) const;
 		void handleLadderBehavior( EventSystem& events );
 		void handleDucking( const BlockSystem& blocks );
 		void adjustJumpSpeed();

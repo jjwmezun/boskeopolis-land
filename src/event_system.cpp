@@ -2,6 +2,7 @@
 #include <cstring>
 #include "event_system.hpp"
 #include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level.hpp"
 #include "level_message_state.hpp"
 #include "level_state.hpp"
@@ -222,7 +223,7 @@ void EventSystem::update( LevelState& level_state )
 {
 	updateTrainer( level_state );
 	testMessage( level_state.level() );
-	testLevelCompleteStatus();
+	testLevelCompleteStatus( level_state.inventory() );
 	resetOnConveyorBelt();
 };
 
@@ -298,13 +299,13 @@ void EventSystem::doWarp( LevelState& level_state )
 	in_front_of_door_ = Door::NONE;
 };
 
-void EventSystem::testLevelCompleteStatus()
+void EventSystem::testLevelCompleteStatus( const InventoryLevel& inventory )
 {
 	switch ( level_complete_status_ )
 	{
 		case ( LevelCompleteStatus::WON ):
 		{
-			winEvent();
+			winEvent( inventory );
 		}
 		break;
 		case ( LevelCompleteStatus::FAILED ):
@@ -319,7 +320,7 @@ void EventSystem::testLevelCompleteStatus()
 		break;
 		case ( LevelCompleteStatus::SECRET_GOAL ):
 		{
-			secretGoalEvent();
+			secretGoalEvent( inventory );
 		}
 		break;
 	}
@@ -345,10 +346,10 @@ void EventSystem::failEvent()
 	playDeathSoundIfNotAlreadyPlaying();
 };
 
-void EventSystem::winEvent()
+void EventSystem::winEvent( const InventoryLevel& inventory )
 {
 	const bool win_momento = Inventory::victory( Inventory::currentLevel() );
-	Inventory::win();
+	Inventory::win( inventory );
 	const ShowEventType new_event = ( !win_momento ) ? ShowEventType::NORMAL : ShowEventType::NONE;
 	Main::pushState
 	(
@@ -372,10 +373,10 @@ void EventSystem::quitEvent()
 	Main::changeState( std::make_unique<OverworldState> ( Inventory::currentLevel() ) );
 };
 
-void EventSystem::secretGoalEvent()
+void EventSystem::secretGoalEvent( const InventoryLevel& inventory )
 {
 	const bool win_momento = Inventory::getSecretGoal( Inventory::currentLevel() );
-	Inventory::secretGoal();
+	Inventory::secretGoal( inventory );
 	const ShowEventType new_event = ( !win_momento ) ? ShowEventType::SECRET : ShowEventType::NONE;
 	Main::pushState
 	(

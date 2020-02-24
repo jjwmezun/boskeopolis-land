@@ -1,5 +1,7 @@
 #pragma once
 
+class InventoryLevel;
+
 #include "sprite.hpp"
 
 class TreasureChestSprite : public Sprite
@@ -30,7 +32,7 @@ class TreasureChestSprite : public Sprite
 		void renderChestBottomHalf( const Camera& camera );
 		void renderChestTopHalf( const Camera& camera );
 		void animateChestOpening();
-		void raiseItem();
+		void raiseItem( InventoryLevel& inventory );
 		int getAnimationFrame( int speed ) const;
 		void setKeyCanePosition();
 		void setKeyCaneFlash();
