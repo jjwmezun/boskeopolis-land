@@ -154,6 +154,8 @@ namespace Input
 			u' ',
 			u'-'
 		};
+		static bool backspace_pressed_;
+		static bool backspace_lock_;
 
 	//
 	//  PRIVATE FUNCTION DECLARATIONS
@@ -554,6 +556,11 @@ namespace Input
 						letters_lock_[ i ] = true;
 					}
 				}
+				if ( key == SDLK_BACKSPACE && !backspace_lock_ )
+				{
+					backspace_pressed_ = true;
+					backspace_lock_ = true;
+				}
 			}
 		};
 
@@ -581,6 +588,11 @@ namespace Input
 						letters_[ i ] = false;
 						letters_lock_[ i ] = false;
 					}
+				}
+				if ( key == SDLK_BACKSPACE )
+				{
+					backspace_pressed_ = false;
+					backspace_lock_ = false;
 				}
 			}
 		};
@@ -764,10 +776,17 @@ namespace Input
 				letters_[ i ] = false;
 				letters_lock_[ i ] = false;
 			}
+			backspace_pressed_ = false;
+			backspace_lock_ = false;
 		}
 
 		char32_t getLetterCharacter( int i )
 		{
 			return letter_characters_[ i ];
 		}
+
+		bool pressedBackspace()
+		{
+			return backspace_pressed_;
+		};
 };

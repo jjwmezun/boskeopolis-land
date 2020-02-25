@@ -18,7 +18,20 @@ class LoadGameState : public GameState
 		void stateRender() override;
 		void init() override;
 
-	protected:
+	private:
+		int maxSelection() const;
+		bool nameLessThanLimit() const;
+
+		enum class State
+		{
+			SELECT,
+			NAMING
+		};
+
 		std::vector<Save> saves_;
+		int selection_;
+		State state_;
+		std::u32string name_;
+		int timer_;
         char scratch_[ 3000 ];
 };

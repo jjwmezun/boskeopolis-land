@@ -57,6 +57,7 @@ namespace Input
 
 	const bool* getLetters();
 	char32_t getLetterCharacter( int i );
+	bool pressedBackspace();
 
 	constexpr char TAGS[ NUM_O_ACTIONS ][ 13 ]
 	{
