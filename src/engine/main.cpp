@@ -430,8 +430,8 @@ namespace Main
 		char* base_path_c = SDL_GetBasePath();
 		std::string base_path = std::string( base_path_c );
 		SDL_free( base_path_c );
-		resource_path_ = base_path + pathDivider() + "assets" + pathDivider();
-		save_path_ = base_path + pathDivider() + "saves" + pathDivider();
+		resource_path_ = base_path + "assets" + pathDivider();
+		save_path_ = base_path + "saves" + pathDivider();
 	};
 
 	std::string resourcePath()

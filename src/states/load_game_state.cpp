@@ -1,9 +1,12 @@
+#include "audio.hpp"
 #include <filesystem>
+#include "frame.hpp"
 #include "load_game_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
+#include "new_game_confirm_prompt_state.hpp"
 #include "overworld_state.hpp"
 #include "render.hpp"
 #include "title_state.hpp"
@@ -34,9 +37,11 @@ void LoadGameState::stateUpdate()
             }
             else if ( Input::pressed( Input::Action::CONFIRM ) )
             {
+                Audio::playSound( Audio::SoundType::CONFIRM );
                 if ( selection_ == maxSelection() )
                 {
                     state_ = State::NAMING;
+                    selection_ = 0;
                 }
                 else
                 {
@@ -45,14 +50,16 @@ void LoadGameState::stateUpdate()
             }
             else if ( Input::pressed( Input::Action::MOVE_DOWN ) )
             {
+                Audio::playSound( Audio::SoundType::SELECT );
                 ++selection_;
                 if ( selection_ > maxSelection() )
                 {
                     selection_ = 0;
                 }
             }
-            else if ( Input::pressed( Input::Action::MOVE_DOWN ) )
+            else if ( Input::pressed( Input::Action::MOVE_UP ) )
             {
+                Audio::playSound( Audio::SoundType::SELECT );
                 --selection_;
                 if ( selection_ < 0 )
                 {
@@ -63,21 +70,72 @@ void LoadGameState::stateUpdate()
         break;
         case ( State::NAMING ):
         {
-            if ( nameLessThanLimit() )
+            if ( Input::pressed( Input::Action::MOVE_DOWN ) || Input::pressed( Input::Action::MOVE_UP ) )
             {
-                const bool* letters = Input::getLetters();
-                for ( int i = 0; i < Input::NUMBER_OF_LETTERS; ++i )
-                {
-                    if ( letters[ i ] )
-                    {
-                        name_ += Input::getLetterCharacter( i );
-                    }
-                }
+                Audio::playSound( Audio::SoundType::SELECT );
+                selection_ = ( selection_ == 0 ) ? 1 : 0;
+            }
+            else if ( selection_ > 0 && ( Input::pressed( Input::Action::MOVE_LEFT ) || Input::pressed( Input::Action::MOVE_RIGHT ) ) )
+            {
+                Audio::playSound( Audio::SoundType::SELECT );
+                selection_ = ( selection_ == 1 ) ? 2 : 1;
             }
 
-            if ( Input::pressedBackspace() && !name_.empty() )
+            switch ( selection_ )
             {
-                name_.pop_back();
+                case ( 0 ):
+                {
+                    if ( nameLessThanLimit() )
+                    {
+                        const bool* letters = Input::getLetters();
+                        for ( int i = 0; i < Input::NUMBER_OF_LETTERS; ++i )
+                        {
+                            if ( letters[ i ] )
+                            {
+                                name_ += Input::getLetterCharacter( i );
+                            }
+                        }
+                    }
+                    if ( Input::pressedBackspace() && !name_.empty() )
+                    {
+                        name_.pop_back();
+                    }
+                    ++timer_;
+                    if ( timer_ > 15 )
+                    {
+                        timer_ = 0;
+                    }
+                }
+                break;
+
+                case ( 1 ):
+                {
+                    if ( Input::pressed( Input::Action::CONFIRM ) )
+                    {
+                        if ( !name_.empty() )
+                        {
+                            Main::pushState( std::unique_ptr<NewGameConfirmPromptState> ( new NewGameConfirmPromptState( name_ ) ) );
+                            Audio::playSound( Audio::SoundType::CONFIRM );
+                        }
+                        else
+                        {
+                            Audio::playSound( Audio::SoundType::CANCEL );
+                        }
+                    }
+                }
+                break;
+
+                case ( 2 ):
+                {
+                    if ( Input::pressed( Input::Action::CONFIRM ) )
+                    {
+                        Audio::playSound( Audio::SoundType::CANCEL );
+                        name_ = U"";
+                        state_ = State::SELECT;
+                        selection_ = maxSelection();
+                    }
+                }
+                break;
             }
         }
         break;
@@ -87,39 +145,62 @@ void LoadGameState::stateUpdate()
 void LoadGameState::stateRender()
 {
     Render::colorCanvas( 4 );
-    int i = 0;
-    while ( i < saves_.size() )
-    {
-        const int y = 24 + ( 32 * i );
-        const std::string texture = ( selection_ == i ) ? "bg/load-game-frame.png" : "bg/load-game-frame-unselected.png";
-        Render::renderObject( texture, { 0, 0, 384, 32 }, { 8, y, 384, 32 } );
-        ++i;
-    }
-    const int y = 24 + ( 32 * i );
-    const std::string texture = ( selection_ == i ) ? "bg/load-game-frame.png" : "bg/load-game-frame-unselected.png";
-    Render::renderObject( texture, { 0, 0, 384, 32 }, { 8, y, 384, 32 } );
 
-    WTextObj text;
+
     switch ( state_ )
     {
         case ( State::SELECT ):
         {
-            text = { U"New Game", 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+            int i = 0;
+            int y = 0;
+            while ( i < saves_.size() + 1 )
+            {
+                y = 24 + ( 32 * i );
+                const int color = ( selection_ == i ) ? 1 : 3;
+                Frame frame { 8, y, 384, 32, color };
+                frame.render();
+                ++i;
+            }
+            WTextObj new_game { U"New Game", 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+            new_game.render();
         }
         break;
         case ( State::NAMING ):
         {
-            const std::u32string end = ( timer_ > 7 && nameLessThanLimit() ) ? U"_" : U"";
-            text = { mezun::merge32Strings( name_, end ), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
-            ++timer_;
-            if ( timer_ > 15 )
+            int i = 0;
+            while ( i < saves_.size() )
             {
-                timer_ = 0;
+                const int y = 24 + ( 32 * i );
+                Frame frame { 8, y, 384, 32, 3 };
+                frame.render();
+                ++i;
             }
+            const int y = 24 + ( 32 * i );
+            const int new_game_frame_color = ( selection_ == 0 ) ? 1 : 3;
+            Frame new_game_frame { 8, y, 384, 32, new_game_frame_color };
+            new_game_frame.render();
+            const std::u32string end = ( timer_ > 7 && nameLessThanLimit() ) ? U"_" : U"";
+            WTextObj new_game = { mezun::merge32Strings( name_, end ), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+            new_game.render();
+
+            const int confirm_frame_color = ( selection_ == 1 ) ? 1 : 3;
+            std::u32string confirm_string { U"Confirm" };
+            Frame confirm_frame { 8, 184, confirm_string.size() * WTextCharacter::SIZE_PIXELS + 24, 32, confirm_frame_color };
+            confirm_frame.render();
+            WTextObj confirm { confirm_string, 0, 184, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 20, 12 };
+            confirm.render();
+
+            const int cancel_frame_color = ( selection_ == 2 ) ? 1 : 3;
+            std::u32string cancel_string { U"Cancel" };
+            int cancel_frame_w = cancel_string.size() * WTextCharacter::SIZE_PIXELS + 24;
+            Frame cancel_frame { Unit::WINDOW_WIDTH_PIXELS - cancel_frame_w - 8, 184, cancel_frame_w, 32, cancel_frame_color };
+            cancel_frame.render();
+            WTextObj cancel { cancel_string, 0, 184, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::RIGHT, WTextCharacter::Color::__NULL, 20, 12 };
+            cancel.render();
+
         }
         break;
     }
-    text.render();
 };
 
 void LoadGameState::init()
