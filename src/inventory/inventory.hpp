@@ -6,6 +6,9 @@ class InventoryLevel;
 
 namespace Inventory
 {
+	static constexpr int DEFAULT_GEM_SCORE  = -1;
+	static constexpr int DEFAULT_TIME_SCORE = -1;
+
 	void reset();
 	std::string levelName( int level );
 	int currentLevel();

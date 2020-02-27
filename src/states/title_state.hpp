@@ -15,7 +15,7 @@
 class TitleState : public GameState
 {
 	public:
-		static constexpr int OPTIONS_SIZE = 4;
+		static constexpr int OPTIONS_SIZE = 3;
 
 		TitleState();
 		~TitleState();

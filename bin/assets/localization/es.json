@@ -183,8 +183,7 @@
         "attribution": "Creado por J.J.W. Mezun — 2016-%Y\nProgramado por Nasrin",
         "options":
         {
-            "new_game": "Nuevo Juego",
-            "load_game": "Recoga Juego",
+            "play": "Start Game",
             "options": "Las Opciones",
             "quit": "Cerra"
         }

@@ -312,8 +312,7 @@
         "attribution": "JJWメズンがさくせい — 2016-%Y\nProgrammed by Nasrin",
         "options":
         {
-            "new_game": "あたらしいゲーム",
-            "load_game": "ゲームおぞくける",
+            "play": "Start Game",
             "options": "せつていをかえる",
             "quit": "ゲームおしゅうりょうします"
         }

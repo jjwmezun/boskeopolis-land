@@ -29,8 +29,8 @@ namespace Main
 
 	std::string resourcePath();
 	std::string pathDivider();
-	std::string savePath( int n );
-	std::string saveDirectory();
+	std::string savePath( std::string filename );
+	const std::string& saveDirectory();
 	bool testHaveSaves();
 
 	bool nosave();

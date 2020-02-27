@@ -4,15 +4,15 @@
 #include "save.hpp"
 #include <vector>
 
-class LoadGameState : public GameState
+class ChooseSaveState : public GameState
 {
 	public:
-		LoadGameState();
-		~LoadGameState();
-        LoadGameState( const LoadGameState& ) = delete;
-        LoadGameState( LoadGameState&& ) = delete;
-        LoadGameState& operator=( const LoadGameState& ) = delete;
-        LoadGameState& operator=( LoadGameState&& ) = delete;
+		ChooseSaveState();
+		~ChooseSaveState();
+        ChooseSaveState( const ChooseSaveState& ) = delete;
+        ChooseSaveState( ChooseSaveState&& ) = delete;
+        ChooseSaveState& operator=( const ChooseSaveState& ) = delete;
+        ChooseSaveState& operator=( ChooseSaveState&& ) = delete;
 
 		void stateUpdate() override;
 		void stateRender() override;

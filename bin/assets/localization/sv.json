@@ -197,8 +197,7 @@
         "attribution": "Skapad av J.J.W. Mezun — 2016-%Y\nProgrammerad av Nasrin",
         "options":
         {
-            "new_game": "Nytt Spel",
-            "load_game": "Återupptag spelet",
+            "play": "Start Game",
             "options": "Alternativ",
             "quit": "Slutar"
         }

@@ -1,7 +1,7 @@
 #include "audio.hpp"
 #include <filesystem>
 #include "frame.hpp"
-#include "load_game_state.hpp"
+#include "choose_save_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -14,18 +14,19 @@
 
 static constexpr int NAME_LIMIT = 45;
 
-LoadGameState::LoadGameState()
+ChooseSaveState::ChooseSaveState()
 :
     GameState( StateID::LOAD_GAME_STATE ),
+    saves_ (),
     selection_ ( 0 ),
     state_ ( State::SELECT ),
     name_ (),
     timer_ ( 0 )
 {};
 
-LoadGameState::~LoadGameState() {};
+ChooseSaveState::~ChooseSaveState() {};
 
-void LoadGameState::stateUpdate()
+void ChooseSaveState::stateUpdate()
 {
     switch ( state_ )
     {
@@ -142,7 +143,7 @@ void LoadGameState::stateUpdate()
     }
 };
 
-void LoadGameState::stateRender()
+void ChooseSaveState::stateRender()
 {
     Render::colorCanvas( 4 );
 
@@ -152,15 +153,20 @@ void LoadGameState::stateRender()
         case ( State::SELECT ):
         {
             int i = 0;
-            int y = 0;
-            while ( i < saves_.size() + 1 )
+            while ( i < saves_.size() )
             {
-                y = 24 + ( 32 * i );
+                const int y = 24 + ( 32 * i );
                 const int color = ( selection_ == i ) ? 1 : 3;
                 Frame frame { 8, y, 384, 32, color };
                 frame.render();
+                WTextObj save_name { saves_[ i ].name(), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+                save_name.render();
                 ++i;
             }
+            const int y = 24 + ( 32 * i );
+            const int color = ( selection_ == i ) ? 1 : 3;
+            Frame frame { 8, y, 384, 32, color };
+            frame.render();
             WTextObj new_game { U"New Game", 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
             new_game.render();
         }
@@ -203,8 +209,9 @@ void LoadGameState::stateRender()
     }
 };
 
-void LoadGameState::init()
+void ChooseSaveState::init()
 {
+    std::cout << sizeof( SaveData ) << std::endl;
     for ( auto& file : std::filesystem::directory_iterator( Main::saveDirectory() ) )
     {
         Save save = Save::loadFromFile( file.path() );
@@ -227,12 +234,12 @@ void LoadGameState::init()
     }
 };
 
-int LoadGameState::maxSelection() const
+int ChooseSaveState::maxSelection() const
 {
     return saves_.size();
 };
 
-bool LoadGameState::nameLessThanLimit() const
+bool ChooseSaveState::nameLessThanLimit() const
 {
     return name_.size() < NAME_LIMIT;
 };

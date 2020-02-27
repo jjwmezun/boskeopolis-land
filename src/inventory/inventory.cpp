@@ -47,8 +47,6 @@ namespace Inventory
 
 	static constexpr bool DEFAULT_VICTORY        = false;
 	static constexpr bool DEFAULT_DIAMOND        = false;
-	static constexpr int  DEFAULT_GEM_SCORE      = -1;
-	static constexpr int  DEFAULT_TIME_SCORE     = -1;
 	static constexpr int  PRICE_OF_DEATH         = 2500;
 	static constexpr int  FUNDS_MAX              = 99999;
 	static constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;
@@ -414,7 +412,7 @@ namespace Inventory
 
 	void saveBinary()
 	{
-		std::ofstream binofs( Main::savePath( current_save_ ), std::ios::out | std::ios::binary );
+		std::ofstream binofs( Main::savePath( "0" ), std::ios::out | std::ios::binary );
 
 			// Save total gems as 1st 4 bytes.
 				int32_t total_funds_block = total_funds_();
@@ -518,7 +516,7 @@ namespace Inventory
 		// while "current_block_end" is set to where I calculate the new clump to end.
 
 		bool load_success = true;
-		std::ifstream binifs ( Main::savePath( current_save_ ), std::ios::in | std::ios::binary | std::ios::ate );
+		std::ifstream binifs ( Main::savePath( "0" ), std::ios::in | std::ios::binary | std::ios::ate );
 
 			if ( binifs.is_open() )
 			{

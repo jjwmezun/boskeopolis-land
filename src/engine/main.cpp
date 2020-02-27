@@ -429,9 +429,9 @@ namespace Main
 
 		char* base_path_c = SDL_GetBasePath();
 		std::string base_path = std::string( base_path_c );
-		SDL_free( base_path_c );
 		resource_path_ = base_path + "assets" + pathDivider();
 		save_path_ = base_path + "saves" + pathDivider();
+		SDL_free( base_path_c );
 	};
 
 	std::string resourcePath()
@@ -454,12 +454,12 @@ namespace Main
 		return NOHARM;
 	};
 
-	std::string savePath( int n )
+	std::string savePath( std::string filename )
 	{
-		return save_path_ + "save-" + std::to_string( n ) + ".bin";
+		return save_path_ + filename + ".sav";
 	};
 
-	std::string saveDirectory()
+	const std::string& saveDirectory()
 	{
 		return save_path_;
 	}

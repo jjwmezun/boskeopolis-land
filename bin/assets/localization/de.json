@@ -183,8 +183,7 @@
         "attribution": "Erstellt von J.J.W. Mezun — 2016-%Y\nProgrammiert von Nasrin",
         "options":
         {
-            "new_game": "Neues Spiel",
-            "load_game": "Spiel laden",
+            "play": "Start Game",
             "options": "Optionen",
             "quit": "Verlassen"
         }

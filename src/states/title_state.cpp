@@ -1,8 +1,8 @@
 #include "audio.hpp"
+#include "choose_save_state.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
-#include "load_game_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include <fstream>
@@ -10,7 +10,6 @@
 #include "title_state.hpp"
 #include "message_state.hpp"
 #include "mezun_exceptions.hpp"
-#include "new_game_state.hpp"
 #include "options_state.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
@@ -25,13 +24,12 @@ static constexpr int LOGO_Y = 8;
 static constexpr int CREATED_BY_Y = LOGO_HEIGHT + LOGO_Y + 8;
 static constexpr int CREATED_BY_HEIGHT = 8;
 static constexpr int OPTIONS_TOP_PADDING = 16;
-static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_TOP_PADDING + 20;
+static constexpr int OPTIONS_TOP_Y = CREATED_BY_Y + CREATED_BY_HEIGHT + OPTIONS_TOP_PADDING + 32;
 static constexpr int OPTION_WIDTH_MINIBLOCKS = 12;
 static constexpr int OPTION_WIDTH_MINIBLOCKS_PIXELS = Unit::MiniBlocksToPixels( OPTION_WIDTH_MINIBLOCKS );
 enum class Option
 {
-	NEW,
-	LOAD,
+	PLAY,
 	OPTIONS,
 	QUIT
 };
@@ -79,16 +77,9 @@ void TitleState::stateUpdate()
         {
             switch( ( Option )( options_.selection() ) )
             {
-                case ( Option::NEW ):
+                case ( Option::PLAY ):
                 {
-                    //Main::changeState( std::unique_ptr<GameState> ( new OverworldState( Inventory::currentLevel(), true ) ) );
-                    Main::changeState( std::unique_ptr<GameState> ( new NewGameState() ) );
-                }
-                break;
-
-                case ( Option::LOAD ):
-                {
-                    Main::changeState( std::unique_ptr<GameState> ( new LoadGameState() ) );
+                    Main::changeState( std::unique_ptr<GameState> ( new ChooseSaveState() ) );
                 }
                 break;
 
@@ -169,10 +160,6 @@ void TitleState::init()
 	newPalette( level_.currentMap().palette_ );
 	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextCharacter::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();
-    if ( !Main::testHaveSaves() )
-    {
-        options_.setPressedDown( ( int )( Option::LOAD ) );
-    }
     level_.initForTrainer();
 	Audio::changeSong( "title" );
     Audio::setTrainerModeOn();

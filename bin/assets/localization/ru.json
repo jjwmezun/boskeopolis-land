@@ -205,8 +205,7 @@
         "attribution": "Создано J.J.W. Mezun — 2016-%Y\nПрограммируется Насрин",
         "options":
         {
-            "new_game": "Новая игра",
-            "load_game": "Продолжить игру",
+            "play": "Start Game",
             "options": "Опции",
             "quit": "Уволиться"
         }

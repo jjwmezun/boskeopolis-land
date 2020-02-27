@@ -383,10 +383,8 @@ void LocalizationLanguage::loadTitleText( const rapidjson::GenericObject<false, 
     const auto& options = input[ "options" ].GetObject();
     if
     (
-        !options.HasMember( "new_game" ) ||
-        !options[ "new_game" ].IsString() ||
-        !options.HasMember( "load_game" ) ||
-        !options[ "load_game" ].IsString() ||
+        !options.HasMember( "play" ) ||
+        !options[ "play" ].IsString() ||
         !options.HasMember( "options" ) ||
         !options[ "options" ].IsString() ||
         !options.HasMember( "quit" ) ||
@@ -396,8 +394,7 @@ void LocalizationLanguage::loadTitleText( const rapidjson::GenericObject<false, 
         throw InvalidLocalizationLanguageException( path );
     }
 
-    title_options_.emplace_back( mezun::charToChar32String( options[ "new_game" ].GetString() ) );
-    title_options_.emplace_back( mezun::charToChar32String( options[ "load_game" ].GetString() ) );
+    title_options_.emplace_back( mezun::charToChar32String( options[ "play" ].GetString() ) );
     title_options_.emplace_back( mezun::charToChar32String( options[ "options" ].GetString() ) );
     title_options_.emplace_back( mezun::charToChar32String( options[ "quit" ].GetString() ) );
 };

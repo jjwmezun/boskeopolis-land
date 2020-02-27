@@ -70,7 +70,7 @@ WTextObj::WTextObj
             {
                 look_ahead = false;
             }
-            else if ( xb > line_end )
+            else if ( xb >= line_end )
             {
                 x = start_x;
                 y += WTextCharacter::SIZE_PIXELS;

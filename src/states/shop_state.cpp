@@ -372,7 +372,7 @@ void ShopState::stateRender()
 
         if ( state_ == State::CONFIRM )
         {
-            Render::renderObject( "bg/shop-arrow.png", { 0, 0, 8, 8 }, { 304, 128 + ( confirm_selection_() * 8 ), 8, 8 } );
+            Render::renderObject( "bg/arrow-icon.png", { 0, 0, 8, 8 }, { 304, 128 + ( confirm_selection_() * 8 ), 8, 8 } );
         }
     }
 };
