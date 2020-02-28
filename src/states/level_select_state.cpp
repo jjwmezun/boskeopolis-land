@@ -765,13 +765,13 @@ int LevelSelectState::getSelectedLevel() const
 
 static void renderGemScoreOfColor( WTextCharacter::Color color, int level, int y )
 {
-	WTextObj gem_score{ mezun::charToChar32String( Inventory::gemScore( level ).c_str() ), 352, y, color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
+	WTextObj gem_score{ Inventory::gemScore( level ), 352, y, color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 	gem_score.render();
 };
 
 static void renderTimeScoreOfColor( WTextCharacter::Color color, int level, int y )
 {
-	WTextObj time_score{ mezun::charToChar32String( Inventory::timeScore( level ).c_str() ), 360, y + 8, color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
+	WTextObj time_score{ Inventory::timeScore( level ), 360, y + 8, color, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 	time_score.render();
 };
 
@@ -882,13 +882,13 @@ static int getThemeFromLevel( int level )
 
 static void renderGemTargetScore( int level, int y )
 {
-	WTextObj gem_score{ mezun::charToChar32String( Level::gemChallengeText( level ).c_str() ), 352, y, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
+	WTextObj gem_score{ Level::gemChallengeText( level ), 352, y, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 	gem_score.render();
 };
 
 static void renderTimeTargetScore( int level, int y )
 {
-	WTextObj time_score{ mezun::charToChar32String( Level::timeChallengeText( level ).c_str() ), 360, y + 8, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
+	WTextObj time_score{ Level::timeChallengeText( level ), 360, y + 8, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 	time_score.render();
 };
 

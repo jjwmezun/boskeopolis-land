@@ -2,7 +2,6 @@
 
 #include "direction.hpp"
 #include <string>
-#include "text.hpp"
 
 class Clock
 {
@@ -26,7 +25,7 @@ class Clock
 		void startMoonCountdown( int start_time );
 		void stop();
 		std::u32string getTimeString() const;
-		static std::string timeToString2( int total_seconds );
+		static std::u32string timeToString( int total_seconds );
 
 		constexpr int secondsFromTotal() const
 		{

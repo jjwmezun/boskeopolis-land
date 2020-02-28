@@ -1,12 +1,14 @@
 #include "frame.hpp"
+#include "input.hpp"
+#include "inventory.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "new_game_confirm_prompt_state.hpp"
-#include "wtext_obj.hpp"
+#include "overworld_state.hpp"
 #include "render.hpp"
 #include "save.hpp"
 #include "unit.hpp"
-#include "input.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int WIDTH_CHARACTERS = WTextCharacter::SIZE_PIXELS * 16;
 static constexpr int FRAME_PADDING = 9;
@@ -43,6 +45,11 @@ void NewGameConfirmPromptState::stateUpdate()
                 if ( save_status == Save::Status::FAILED_TO_LOAD_MAIN_SAVE )
                 {
                     error_ = true;
+                }
+                else
+                {
+                    Inventory::load( save );
+                    Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( 0, true ) ) );
                 }
             }
             else

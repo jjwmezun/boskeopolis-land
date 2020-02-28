@@ -1,15 +1,19 @@
 #include <fstream>
-#include "inventory.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "save.hpp"
-
-#include <iostream>
+#include "unit.hpp"
 
 Save Save::loadFromFile( const std::string& path )
 {
     Save save;
     save.name_ = mezun::stringReplace( mezun::stringReplace( mezun::charToChar32String( path.c_str() ), mezun::charToChar32String( Main::saveDirectory().c_str() ), U"" ), U".sav", U"" );
+    std::ifstream file( path );
+    if ( file.is_open() )
+    {
+        file.read( ( char* )( &save.data_ ), sizeof( data_ ) );
+        file.close();
+    }
     return save;
 };
 
@@ -19,8 +23,10 @@ Save Save::createNew( std::u32string name )
     save.name_ = name;
     save.data_.oxygen_upgrade_ = false;
     save.data_.total_funds_ = 0;
-    save.data_.current_level_ = -1;
-    save.data_.number_of_health_upgrades_ = 0;
+    save.data_.current_level_ = 0;
+    save.data_.health_upgrades_[ 0 ] = false;
+    save.data_.health_upgrades_[ 1 ] = false;
+    save.data_.health_upgrades_[ 2 ] = false;
     for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
     {
         save.data_.been_to_level_[ i ] =
@@ -29,8 +35,8 @@ Save Save::createNew( std::u32string name )
             save.data_.diamonds_[ i ] =
             save.data_.crowns_[ i ] =
             save.data_.suits_[ i ] = false;
-        save.data_.gem_scores_[ i ] = Inventory::DEFAULT_GEM_SCORE;
-        save.data_.time_scores_[ i ] = Inventory::DEFAULT_TIME_SCORE;
+        save.data_.gem_scores_[ i ] = Unit::DEFAULT_GEM_SCORE;
+        save.data_.time_scores_[ i ] = Unit::DEFAULT_TIME_SCORE;
     }
     return save;
 };

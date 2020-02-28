@@ -215,8 +215,8 @@ void OWInventory::regenerateLevelGraphics()
 		secret_goal_icon_.src_.w = secret_goal_icon_.src_.h = 0;
 	}
 
-	WTextObj gem_score = { mezun::charToChar32String( Inventory::gemScore( level_ ).c_str() ), SCORE_X, ROW_1 };
-	WTextObj time_score = { mezun::charToChar32String( Inventory::timeScore( level_ ).c_str() ), SCORE_X + 8, ROW_2 };
+	WTextObj gem_score = { Inventory::gemScore( level_ ).c_str(), SCORE_X, ROW_1 };
+	WTextObj time_score = { Inventory::timeScore( level_ ), SCORE_X + 8, ROW_2 };
 	WTextObj level_name = generateLevelName();
 
 	// Generate texture for each color o’ flashing text.
@@ -238,8 +238,8 @@ void OWInventory::regenerateLevelGraphics()
 		time_score.render();
 		time_score_textures_[ i ].endDrawing();
 	}
-	const WTextObj gem_score_target = { mezun::charToChar32String( Level::gemChallengeText( level_ ).c_str() ), SCORE_X, ROW_1, WTextCharacter::Color::DARK_GRAY };
-	const WTextObj time_score_target = { mezun::charToChar32String( Level::timeChallengeText( level_ ).c_str() ), SCORE_X + 8, ROW_2, WTextCharacter::Color::DARK_GRAY };
+	const WTextObj gem_score_target = { Level::gemChallengeText( level_ ), SCORE_X, ROW_1, WTextCharacter::Color::DARK_GRAY };
+	const WTextObj time_score_target = { Level::timeChallengeText( level_ ), SCORE_X + 8, ROW_2, WTextCharacter::Color::DARK_GRAY };
 	gem_score_target_texture_.startDrawing();
 		Render::clearScreenTransparency();
 	gem_score_target.render();

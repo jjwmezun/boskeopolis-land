@@ -156,7 +156,7 @@ void TitleState::renderHeader()
 
 void TitleState::init()
 {
-	Inventory::reset();
+    Inventory::load( Save::createNew( U"" ) );
 	newPalette( level_.currentMap().palette_ );
 	WTextObj::generateTexture( created_by_, Localization::getCurrentLanguage().getTitleCreatedBy(), 0, CREATED_BY_Y, WTextCharacter::Color::WHITE, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, Unit::PIXELS_PER_MINIBLOCK );
 	options_.init();

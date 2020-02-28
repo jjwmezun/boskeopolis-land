@@ -67,8 +67,8 @@ class Level
 		static int gemChallenge( unsigned int n );
 		static int timeChallenge( unsigned int n );
 		static bool hasSecretGoal( unsigned int n );
-		static std::string gemChallengeText( unsigned int n );
-		static std::string timeChallengeText( unsigned int n );
+		static std::u32string gemChallengeText( unsigned int n );
+		static std::u32string timeChallengeText( unsigned int n );
 		static void buildLevelList();
 		static std::string getCodeNameByID( int id );
 		static int getIDFromCodeName( std::string code_name );

@@ -21,11 +21,13 @@ class ChooseSaveState : public GameState
 	private:
 		int maxSelection() const;
 		bool nameLessThanLimit() const;
+		void exitNaming();
 
 		enum class State
 		{
 			SELECT,
-			NAMING
+			NAMING,
+			LOADING
 		};
 
 		std::vector<Save> saves_;

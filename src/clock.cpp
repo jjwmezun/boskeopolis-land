@@ -21,9 +21,11 @@ bool Clock::update()
 	return false;
 };
 
-std::string Clock::timeToString2( int total_seconds )
+std::u32string Clock::timeToString( int total_seconds )
 {
-	return Text::timeToString( secondsFromTotal( total_seconds ), minutesFromTotalSeconds( total_seconds ) );
+	return mezun::intToChar32String( minutesFromTotalSeconds( total_seconds ) ) +
+		U":" +
+		mezun::intToChar32StringWithPadding( secondsFromTotal( total_seconds ), 2 );
 };
 
 void Clock::reset( Direction::Vertical direction, int limit )
@@ -50,5 +52,5 @@ std::u32string Clock::getTimeString() const
 {
 	return ( direction_ == Direction::Vertical::DOWN ) 
 		? mezun::intToChar32String( minutesFromTotalSeconds( timeRemaining() ) ) + U":" + mezun::intToChar32StringWithPadding( timeRemaining(), 2 )
-		: mezun::intToChar32String( minutesFromTotalSeconds() ) + U":" + mezun::intToChar32StringWithPadding( secondsFromTotal(), 2 );
+		: timeToString( total_seconds_ );
 };

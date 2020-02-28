@@ -2,6 +2,8 @@
 #include <filesystem>
 #include "frame.hpp"
 #include "choose_save_state.hpp"
+#include "counter_t.hpp"
+#include "inventory.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -46,6 +48,7 @@ void ChooseSaveState::stateUpdate()
                 }
                 else
                 {
+                    Inventory::load( saves_[ selection_ ] );
                     Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( 0 ) ) );
                 }
             }
@@ -123,6 +126,10 @@ void ChooseSaveState::stateUpdate()
                             Audio::playSound( Audio::SoundType::CANCEL );
                         }
                     }
+                    else if ( Input::pressed( Input::Action::CANCEL ) )
+                    {
+                        exitNaming();
+                    }
                 }
                 break;
 
@@ -130,10 +137,7 @@ void ChooseSaveState::stateUpdate()
                 {
                     if ( Input::pressed( Input::Action::CONFIRM ) )
                     {
-                        Audio::playSound( Audio::SoundType::CANCEL );
-                        name_ = U"";
-                        state_ = State::SELECT;
-                        selection_ = maxSelection();
+                        exitNaming();
                     }
                 }
                 break;
@@ -146,8 +150,6 @@ void ChooseSaveState::stateUpdate()
 void ChooseSaveState::stateRender()
 {
     Render::colorCanvas( 4 );
-
-
     switch ( state_ )
     {
         case ( State::SELECT ):
@@ -211,7 +213,6 @@ void ChooseSaveState::stateRender()
 
 void ChooseSaveState::init()
 {
-    std::cout << sizeof( SaveData ) << std::endl;
     for ( auto& file : std::filesystem::directory_iterator( Main::saveDirectory() ) )
     {
         Save save = Save::loadFromFile( file.path() );
@@ -242,4 +243,12 @@ int ChooseSaveState::maxSelection() const
 bool ChooseSaveState::nameLessThanLimit() const
 {
     return name_.size() < NAME_LIMIT;
+};
+
+void ChooseSaveState::exitNaming()
+{
+    Audio::playSound( Audio::SoundType::CANCEL );
+    name_ = U"";
+    state_ = State::SELECT;
+    selection_ = maxSelection();
 };

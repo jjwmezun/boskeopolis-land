@@ -2,10 +2,15 @@
 
 #include "save_data.hpp"
 #include <string>
+#include <vector>
+
+class Inventory;
 
 class Save
 {
     public:
+        friend class Inventory;
+
         enum class Status
         {
             OK,

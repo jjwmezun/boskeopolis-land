@@ -8,27 +8,33 @@
 
 namespace Unit
 {
-	constexpr int FPS                      = 60;
-	constexpr int PIXELS_PER_BLOCK         = 16;
-	constexpr int PIXELS_PER_MINIBLOCK     = 8;
-	constexpr int MINIBLOCKS_PER_BLOCK     = 2;
-	constexpr int BLOCKS_PER_SCREEN        = 25;//20;//16;
-	constexpr int MINIBLOCKS_PER_SCREEN    = BLOCKS_PER_SCREEN * 2;
-	constexpr int PIXELS_PER_SCREEN        = BLOCKS_PER_SCREEN * PIXELS_PER_BLOCK;
-	constexpr int SUBPIXELS_PER_PIXEL      = 1000;
-	constexpr int SUBPIXELS_PER_SCREEN     = PIXELS_PER_SCREEN * SUBPIXELS_PER_PIXEL;
-	constexpr int SUBPIXELS_PER_BLOCK      = PIXELS_PER_BLOCK  * SUBPIXELS_PER_PIXEL;
+	static constexpr int FPS                      = 60;
+	static constexpr int PIXELS_PER_BLOCK         = 16;
+	static constexpr int PIXELS_PER_MINIBLOCK     = 8;
+	static constexpr int MINIBLOCKS_PER_BLOCK     = 2;
+	static constexpr int BLOCKS_PER_SCREEN        = 25;//20;//16;
+	static constexpr int MINIBLOCKS_PER_SCREEN    = BLOCKS_PER_SCREEN * 2;
+	static constexpr int PIXELS_PER_SCREEN        = BLOCKS_PER_SCREEN * PIXELS_PER_BLOCK;
+	static constexpr int SUBPIXELS_PER_PIXEL      = 1000;
+	static constexpr int SUBPIXELS_PER_SCREEN     = PIXELS_PER_SCREEN * SUBPIXELS_PER_PIXEL;
+	static constexpr int SUBPIXELS_PER_BLOCK      = PIXELS_PER_BLOCK  * SUBPIXELS_PER_PIXEL;
 
-	constexpr int WINDOW_WIDTH_BLOCKS      = BLOCKS_PER_SCREEN;
-	constexpr int WINDOW_WIDTH_MINIBLOCKS  = MINIBLOCKS_PER_SCREEN;
-	constexpr int WINDOW_WIDTH_PIXELS      = PIXELS_PER_SCREEN;
-	constexpr int WINDOW_WIDTH_SUBPIXELS   = SUBPIXELS_PER_SCREEN;
-	constexpr int WINDOW_HEIGHT_BLOCKS     = 14;//11;//12;
-	constexpr int WINDOW_HEIGHT_MINIBLOCKS = WINDOW_HEIGHT_BLOCKS * 2;
-	constexpr int WINDOW_HEIGHT_PIXELS     = WINDOW_HEIGHT_BLOCKS * PIXELS_PER_BLOCK;
-	constexpr int WINDOW_HEIGHT_SUBPIXELS  = WINDOW_HEIGHT_PIXELS * SUBPIXELS_PER_PIXEL;
+	static constexpr int WINDOW_WIDTH_BLOCKS      = BLOCKS_PER_SCREEN;
+	static constexpr int WINDOW_WIDTH_MINIBLOCKS  = MINIBLOCKS_PER_SCREEN;
+	static constexpr int WINDOW_WIDTH_PIXELS      = PIXELS_PER_SCREEN;
+	static constexpr int WINDOW_WIDTH_SUBPIXELS   = SUBPIXELS_PER_SCREEN;
+	static constexpr int WINDOW_HEIGHT_BLOCKS     = 14;//11;//12;
+	static constexpr int WINDOW_HEIGHT_MINIBLOCKS = WINDOW_HEIGHT_BLOCKS * 2;
+	static constexpr int WINDOW_HEIGHT_PIXELS     = WINDOW_HEIGHT_BLOCKS * PIXELS_PER_BLOCK;
+	static constexpr int WINDOW_HEIGHT_SUBPIXELS  = WINDOW_HEIGHT_PIXELS * SUBPIXELS_PER_PIXEL;
 
-	constexpr int DEFAULT_ANIMATION_SPEED = 8;
+	static constexpr int DEFAULT_ANIMATION_SPEED = 8;
+
+	static constexpr int DEFAULT_GEM_SCORE  = -1;
+	static constexpr int DEFAULT_TIME_SCORE = -1;
+	static constexpr int TOTAL_FUNDS_MAX    = 999999999;
+	static constexpr int TOTAL_FUNDS_MIN    = -99999999;
+	static constexpr int MAX_HEART_UPGRADES = 3;
 
 	inline constexpr int PixelsToBlocks( int p )
 	{

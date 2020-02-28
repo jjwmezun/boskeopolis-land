@@ -26,7 +26,6 @@
 #include "rapidjson/istreamwrapper.h"
 #include "sprite.hpp"
 #include "sprite_system.hpp"
-#include "text.hpp"
 
 //GOALS
 #include "avoid_money_goal.hpp"
@@ -197,9 +196,9 @@ int Level::gemChallenge( unsigned int n )
 	return gem_challenge_list_.at( n );
 };
 
-std::string Level::gemChallengeText( unsigned int n )
+std::u32string Level::gemChallengeText( unsigned int n )
 {
-	return Text::formatNumDigitPadding( gemChallenge( n ), 5 );
+	return mezun::intToChar32StringWithPadding( gemChallenge( n ), 5 );
 };
 
 int Level::timeChallenge( unsigned int n )
@@ -217,9 +216,9 @@ bool Level::hasSecretGoal( unsigned int n )
 	return has_secret_goals_.at( n );
 };
 
-std::string Level::timeChallengeText( unsigned int n )
+std::u32string Level::timeChallengeText( unsigned int n )
 {
-	return Clock::timeToString2( timeChallenge( n ) );
+	return Clock::timeToString( timeChallenge( n ) );
 };
 
 const std::u32string& Level::message() const
