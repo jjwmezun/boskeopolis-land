@@ -43,7 +43,7 @@ void InventoryLevel::init( const Map& lvmap )
 
 void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera )
 {
-	graphics_.render( events, hero, camera, *this );
+	//graphics_.render( events, hero, camera, *this );
 };
 
 void InventoryLevel::setShowMcGuffins()

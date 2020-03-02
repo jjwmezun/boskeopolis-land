@@ -1,8 +1,10 @@
 #pragma once
 
+#include "checkered_background.hpp"
 #include "game_state.hpp"
 #include "save.hpp"
 #include <vector>
+#include "wtext_highlight.hpp"
 
 class ChooseSaveState : public GameState
 {
@@ -35,5 +37,8 @@ class ChooseSaveState : public GameState
 		State state_;
 		std::u32string name_;
 		int timer_;
+		WTextHighlight<> title_;
+		CheckeredBackground bg_;
+		int bottom_selection_;
         char scratch_[ 3000 ];
 };

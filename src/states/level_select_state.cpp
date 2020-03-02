@@ -16,11 +16,6 @@ static constexpr int FLASH_FRAMES[ NUMBER_OF_FLASH_FRAMES ] =
 	0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0
 };
 
-static constexpr int NO_CHARACTER_HIGHLIGHTED = -1;
-static constexpr int TITLE_HIGHLIGHT_SPEED = 4;
-static constexpr int TITLE_HIGHLIGHT_DELAY = 60;
-static constexpr int BACKGROUND_SPEED = 4;
-static constexpr int BACKGROUND_TILE_SIZE = 32;
 static constexpr int INPUT_DELAY = 8;
 static constexpr int PAGE_MOVE_SPEED = 8;
 static constexpr int FLASH_SPEED = 8;
@@ -69,21 +64,18 @@ LevelSelectState::LevelSelectState( int current_level )
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Pale Green", 1 } ),
 	level_names_ (),
 	moving_page_textures_ (),
-	title_ (),
+	title_ ({ Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8, 8 }),
 	screen_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
-	background_position_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
+	background_ (),
 	static_page_texture_ (),
 	final_table_texture_ (),
 	current_page_texture_ ( &moving_page_textures_[ 0 ] ),
 	next_page_texture_ ( &moving_page_textures_[ 1 ] ),
-	background_position_timer_ ( 0 ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
 	page_ ( 0 ),
 	flash_timer_ ( 0 ),
 	flash_frame_ ( 0 ),
-	title_character_ ( -1 ),
-	title_highlight_timer_ ( 0 ),
 	next_page_ ( 1 ),
 	first_level_of_page_ ( 0 ),
 	number_of_pages_ ( 2 ),
@@ -127,8 +119,8 @@ void LevelSelectState::stateUpdate()
 	}
 	else
 	{
-		updateBackgroundAnimation();
-		animateTitleHighlight();
+		background_.update();
+		title_.update();
 		switch ( page_change_direction_ )
 		{
 			// Move both pages rightward ( so the left page is where the current is — its right )
@@ -221,19 +213,13 @@ void LevelSelectState::stateUpdate()
 
 void LevelSelectState::stateRender()
 {
-	renderBackground();
+	background_.render();
 	final_table_texture_.render();
 	title_.render();
 };
 
-void LevelSelectState::renderBackground() const
-{
-	Render::renderObject( "bg/level-select-back.png", background_position_, screen_ );
-};
-
 void LevelSelectState::init()
 {
-	title_ = { Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8, 8 };
 	generateLevelNames();
 	generatePageTextures();
 };
@@ -494,86 +480,7 @@ WTextCharacter::Color LevelSelectState::flashOnCondition( bool condition ) const
 	return ( condition )
 		? ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] )
 		: WTextCharacter::Color::DARK_GRAY;
-}
-
-// “Animates” background by just moving it up & left relative to the screen.
-// When the position reaches the size o’ the tile, move it back to the beginning,
-// so it can go back & forth, giving the illusion o’ infinite movement.
-void LevelSelectState::updateBackgroundAnimation()
-{
-	if ( background_position_timer_ == BACKGROUND_SPEED )
-	{
-		background_position_timer_ = 0;
-		++background_position_.x;
-		if ( background_position_.x == BACKGROUND_TILE_SIZE )
-		{
-			background_position_.x = 0;
-		}
-		// Since vertical & horizontal movement are the same, y can always be the same as x.
-		background_position_.y = background_position_.x;
-	}
-	else
-	{
-		++background_position_timer_;
-	}
 };
-
-// NOTE: As yet only works for 1st line.
-// Could potentially break game if for some reason there is no 1st line.
-void LevelSelectState::animateTitleHighlight()
-{
-	if ( title_character_ == NO_CHARACTER_HIGHLIGHTED )
-	{
-		if ( title_highlight_timer_ == TITLE_HIGHLIGHT_DELAY )
-		{
-			++title_character_;
-			title_highlight_timer_ = 0;
-			updateTitleHighlightGraphics();
-		}
-		else
-		{
-			++title_highlight_timer_;
-		}
-	}
-	else
-	{
-		if ( title_highlight_timer_ == TITLE_HIGHLIGHT_SPEED )
-		{
-			++title_character_;
-			title_highlight_timer_ = 0;
-			const int number_of_characters = ( int )( title_.lines_[ 0 ].frames_.size() );
-			if ( title_character_ == number_of_characters )
-			{
-				title_character_ = NO_CHARACTER_HIGHLIGHTED;
-			}
-			updateTitleHighlightGraphics();
-		}
-		else
-		{
-			++title_highlight_timer_;
-		}
-	}
-};
-
-void LevelSelectState::updateTitleHighlightGraphics()
-{
-	// If 1st character, we only need to highlight the 1st character.
-	if ( title_character_ == 0 )
-	{
-		title_.lines_[ 0 ].frames_[ 0 ].changeColor( WTextCharacter::Color::WHITE );
-	}
-	// If last character, we only need to unhighlight last character.
-	else if ( title_character_ == NO_CHARACTER_HIGHLIGHTED )
-	{
-		title_.lines_[ 0 ].frames_[ title_.lines_[ 0 ].frames_.size() - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
-	}
-	// Any other character, highlight current character & unhighlight previous.
-	else
-	{
-		title_.lines_[ 0 ].frames_[ title_character_ ].changeColor( WTextCharacter::Color::WHITE );
-		title_.lines_[ 0 ].frames_[ title_character_ - 1 ].changeColor( WTextCharacter::Color::LIGHT_GRAY );
-	}
-}
 
 void LevelSelectState::animateTextFlashColor()
 {

@@ -1,9 +1,11 @@
 #pragma once
 
+#include "checkered_background.hpp"
 #include "direction.hpp"
 #include "game_state.hpp"
 #include "level.hpp"
 #include "mezun_math.hpp"
+#include "wtext_highlight.hpp"
 #include "wtext_obj.hpp"
 
 class LevelSelectState : public GameState
@@ -20,7 +22,6 @@ class LevelSelectState : public GameState
 		void init() override;
 
 	private:
-		void renderBackground() const;
 		void flipPage( Direction::Horizontal direction, int next_page, int position );
 		void flipPageLeft();
 		void flipPageRight();
@@ -30,9 +31,6 @@ class LevelSelectState : public GameState
 		void redrawStaticPageTexture();
 		void drawFlippedTexture();
 		void animateTextFlashColor();
-		void updateBackgroundAnimation();
-		void animateTitleHighlight();
-		void updateTitleHighlightGraphics();
 		void generatePageTextures();
 		void generateMovingPageTextures();
 		void turnOffAndResetAnimations();
@@ -63,18 +61,16 @@ class LevelSelectState : public GameState
 		int page_;
 		int flash_timer_;
 		int flash_frame_;
-		int title_character_;
-		int title_highlight_timer_;
 		int next_page_;
 		int first_level_of_page_;
 		int number_of_pages_;
 		TextureBox* current_page_texture_;
 		TextureBox* next_page_texture_;
 		sdl2::SDLRect screen_;
-		sdl2::SDLRect background_position_;
+		CheckeredBackground background_;
 		TextureBox moving_page_textures_[ NUMBER_OF_PAGES ];
 		TextureBox static_page_texture_;
 		TextureBox final_table_texture_;
-		WTextObj title_;
+		WTextHighlight<> title_;
 		WTextObj level_names_[ Level::NUMBER_OF_LEVELS ];
 };
