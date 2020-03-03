@@ -30,6 +30,7 @@ namespace Main
 	std::string resourcePath();
 	std::string pathDivider();
 	std::string savePath( std::string filename );
+	std::string backupSavePath( std::string filename );
 	const std::string& saveDirectory();
 	bool testHaveSaves();
 

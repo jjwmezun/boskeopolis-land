@@ -55,7 +55,6 @@ class LevelSelectState : public GameState
 
 		bool show_target_scores_;
 		Direction::Horizontal page_change_direction_;
-		int background_position_timer_;
 		int selection_timer_;
 		int selection_;
 		int page_;

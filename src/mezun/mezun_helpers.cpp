@@ -225,4 +225,11 @@ namespace mezun
 		target.replace( start_position, from.length(), to );
 		return target;
 	};
+
+	bool stringEndsWith( const std::string& haystack, const std::string& needle )
+	{
+	    return ( haystack.length() >= needle.length() )
+			? ( 0 == haystack.compare( haystack.length() - needle.length(), needle.length(), needle ) )
+			: false;
+	};
 }

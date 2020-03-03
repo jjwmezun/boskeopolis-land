@@ -406,16 +406,3 @@ void Inventory::giveHPUpgrade( int number )
 {
 	save_.data_.health_upgrades_[ number ] = true;
 };
-
-void Inventory::throwSaveCorruptionErrorMessage()
-{
-	Main::changeState
-	(
-		WMessageState::generateErrorMessage
-		(
-			Localization::getCurrentLanguage().getSaveCorruptionErrorMessage( "save0" ),
-			WMessageState::Type::CHANGE,
-			std::unique_ptr<TitleState> ( new TitleState() )
-		)
-	);
-}

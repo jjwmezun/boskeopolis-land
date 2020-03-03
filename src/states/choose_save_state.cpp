@@ -3,6 +3,7 @@
 #include "frame.hpp"
 #include "choose_save_state.hpp"
 #include "counter_t.hpp"
+#include "delete_save_prompt_state.hpp"
 #include "inventory.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
@@ -30,7 +31,8 @@ ChooseSaveState::ChooseSaveState()
     timer_ ( 0 ),
     title_ ( { U"Choose a Save", 0, 8, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8 } ),
     bg_ (),
-    bottom_selection_ ( 0 )
+    bottom_selection_ ( 0 ),
+    temp_save_ ( Save::createEmpty() )
 {};
 
 ChooseSaveState::~ChooseSaveState() {};
@@ -51,7 +53,8 @@ void ChooseSaveState::stateUpdate()
                 if ( selection_ == maxSelection() )
                 {
                     state_ = State::NAMING;
-                    selection_ = 0;
+                    bottom_selection_ = 0;
+                    name_ = U"";
                 }
                 else
                 {
@@ -81,19 +84,20 @@ void ChooseSaveState::stateUpdate()
         }
         break;
         case ( State::NAMING ):
+        case ( State::COPY ):
         {
             if ( Input::pressed( Input::Action::MOVE_DOWN ) || Input::pressed( Input::Action::MOVE_UP ) )
             {
                 Audio::playSound( Audio::SoundType::SELECT );
-                selection_ = ( selection_ == 0 ) ? 1 : 0;
+                bottom_selection_ = ( bottom_selection_ == 0 ) ? 1 : 0;
             }
-            else if ( selection_ > 0 && ( Input::pressed( Input::Action::MOVE_LEFT ) || Input::pressed( Input::Action::MOVE_RIGHT ) ) )
+            else if ( bottom_selection_ > 0 && ( Input::pressed( Input::Action::MOVE_LEFT ) || Input::pressed( Input::Action::MOVE_RIGHT ) ) )
             {
                 Audio::playSound( Audio::SoundType::SELECT );
-                selection_ = ( selection_ == 1 ) ? 2 : 1;
+                bottom_selection_ = ( bottom_selection_ == 1 ) ? 2 : 1;
             }
 
-            switch ( selection_ )
+            switch ( bottom_selection_ )
             {
                 case ( 0 ):
                 {
@@ -124,14 +128,25 @@ void ChooseSaveState::stateUpdate()
                 {
                     if ( Input::pressed( Input::Action::CONFIRM ) )
                     {
-                        if ( !name_.empty() )
+                        if ( name_.empty() )
                         {
-                            Main::pushState( std::unique_ptr<NewGameConfirmPromptState> ( new NewGameConfirmPromptState( name_ ) ) );
-                            Audio::playSound( Audio::SoundType::CONFIRM );
+                            Audio::playSound( Audio::SoundType::CANCEL );
                         }
                         else
                         {
-                            Audio::playSound( Audio::SoundType::CANCEL );
+                            if ( testNameAlreadyInUse( name_ ) )
+                            {
+                                Main::pushState( std::unique_ptr<PromptState> ( new PromptState( mezun::stringReplace( mezun::charToChar32String( "Filename “%n” already in use. Please pick a different name." ), U"%n", name_ ) ) ) );
+                                Audio::playSound( Audio::SoundType::CANCEL );
+                            }
+                            else
+                            {
+                                temp_save_ = ( state_ == State::NAMING ) ? Save::createNew( name_ ) : saves_[ selection_ ].copy( name_ );
+                                std::u32string question = ( state_ == State::NAMING ) ? mezun::charToChar32String( "¿Name new save “%fn”?" ) : mezun::stringReplace( mezun::charToChar32String( "¿Name copy o’ “%ofn” as “%fn”?" ), U"%ofn", saves_[ selection_ ].name() );
+                                Main::pushState( std::unique_ptr<NewGameConfirmPromptState> ( new NewGameConfirmPromptState( temp_save_, question ) ) );
+                                Audio::playSound( Audio::SoundType::CONFIRM );
+                                state_ = State::CREATING_SAVE;
+                            }
                         }
                     }
                     else if ( Input::pressed( Input::Action::CANCEL ) )
@@ -186,10 +201,15 @@ void ChooseSaveState::stateUpdate()
                     break;
                     case ( 1 ):
                     {
+                        bottom_selection_ = 0;
+                        name_ = mezun::merge32Strings( saves_[ selection_ ].name(), U" COPY" );
+                        state_ = State::COPY;
                     }
                     break;
                     case ( 2 ):
                     {
+                        Main::pushState( std::unique_ptr<DeleteSavePromptState> ( new DeleteSavePromptState( saves_[ selection_ ] ) ) );
+                        state_ = State::DELETING;
                     }
                     break;
                     case ( 3 ):
@@ -235,6 +255,8 @@ void ChooseSaveState::stateRender()
         }
         break;
         case ( State::NAMING ):
+        case ( State::COPY ):
+        case ( State::CREATING_SAVE ):
         {
             int i = 0;
             while ( i < saves_.size() )
@@ -247,21 +269,21 @@ void ChooseSaveState::stateRender()
                 ++i;
             }
             const int y = 24 + ( 32 * i );
-            const int new_game_frame_color = ( selection_ == 0 ) ? 1 : 3;
+            const int new_game_frame_color = ( bottom_selection_ == 0 ) ? 1 : 3;
             Frame new_game_frame { 8, y, 384, 32, new_game_frame_color };
             new_game_frame.render();
             const std::u32string end = ( timer_ > 7 && nameLessThanLimit() ) ? U"_" : U"";
             WTextObj new_game = { mezun::merge32Strings( name_, end ), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
             new_game.render();
 
-            const int confirm_frame_color = ( selection_ == 1 ) ? 1 : 3;
+            const int confirm_frame_color = ( bottom_selection_ == 1 ) ? 1 : 3;
             std::u32string confirm_string { U"Confirm" };
             Frame confirm_frame { 8, 184, confirm_string.size() * WTextCharacter::SIZE_PIXELS + 24, 32, confirm_frame_color };
             confirm_frame.render();
             WTextObj confirm { confirm_string, 0, 184, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 20, 12 };
             confirm.render();
 
-            const int cancel_frame_color = ( selection_ == 2 ) ? 1 : 3;
+            const int cancel_frame_color = ( bottom_selection_ == 2 ) ? 1 : 3;
             std::u32string cancel_string { U"Cancel" };
             int cancel_frame_w = cancel_string.size() * WTextCharacter::SIZE_PIXELS + 24;
             Frame cancel_frame { Unit::WINDOW_WIDTH_PIXELS - cancel_frame_w - 8, 184, cancel_frame_w, 32, cancel_frame_color };
@@ -272,12 +294,14 @@ void ChooseSaveState::stateRender()
         }
         break;
         case ( State::LOADING ):
+        case ( State::DELETING ):
         {
             int i = 0;
             while ( i < saves_.size() )
             {
                 const int y = 24 + ( 32 * i );
-                Frame frame { 8, y, 384, 32, 3 };
+                const int color = ( selection_ == i ) ? 1 : 3;
+                Frame frame { 8, y, 384, 32, color };
                 frame.render();
                 WTextObj save_name { saves_[ i ].name(), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
                 save_name.render();
@@ -339,6 +363,12 @@ void ChooseSaveState::init()
 {
     for ( auto& file : std::filesystem::directory_iterator( Main::saveDirectory() ) )
     {
+        // Skip backup saves.
+        if ( mezun::stringEndsWith( file.path(), ".bak" ) )
+        {
+            continue;
+        }
+
         Save save = Save::loadFromFile( file.path() );
         if ( save.hasError() )
         {
@@ -346,16 +376,45 @@ void ChooseSaveState::init()
             (
                 WMessageState::generateErrorMessage
                 (
-                    Localization::getCurrentLanguage().getSaveCorruptionErrorMessage( file.path() ),
+                    mezun::implode( save.getErrors(), mezun::charToChar32String( "\n\n" ) ),
                     WMessageState::Type::POP,
                     nullptr
                 )
             );
         }
-        else
+
+        if ( !save.isDeleted() )
         {
             saves_.push_back( save );
         }
+    }
+};
+
+void ChooseSaveState::backFromPop()
+{
+    switch ( state_ )
+    {
+        case ( State::DELETING ):
+        {
+            if ( saves_[ selection_ ].isDeleted() )
+            {
+                saves_.erase( saves_.begin() + selection_ );
+                selection_ = 0;
+            }
+            state_ = State::SELECT;
+        }
+        break;
+        case ( State::CREATING_SAVE ):
+        {
+            if ( !temp_save_.isDeleted() )
+            {
+                saves_.push_back( temp_save_ );
+                temp_save_ = Save::createEmpty();
+                selection_ = saves_.size() - 1;
+            }
+            state_ = State::SELECT;
+        }
+        break;
     }
 };
 
@@ -375,4 +434,16 @@ void ChooseSaveState::exitNaming()
     name_ = U"";
     state_ = State::SELECT;
     selection_ = maxSelection();
+};
+
+bool ChooseSaveState::testNameAlreadyInUse( const std::u32string& name ) const
+{
+    for ( const Save& save : saves_ )
+    {
+        if ( name == save.name() )
+        {
+            return true;
+        }
+    }
+    return false;
 };

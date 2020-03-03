@@ -1,11 +1,11 @@
 #pragma once
 
-#include "game_state.hpp"
+#include "prompt_state.hpp"
 
-class NewGameConfirmPromptState : public GameState
+class NewGameConfirmPromptState : public PromptState
 {
 	public:
-		NewGameConfirmPromptState( std::u32string save_name );
+		NewGameConfirmPromptState( Save& save, std::u32string question );
 		~NewGameConfirmPromptState();
         NewGameConfirmPromptState( const NewGameConfirmPromptState& ) = delete;
         NewGameConfirmPromptState( NewGameConfirmPromptState&& ) = delete;
@@ -13,12 +13,10 @@ class NewGameConfirmPromptState : public GameState
         NewGameConfirmPromptState& operator=( NewGameConfirmPromptState&& ) = delete;
 
 		void stateUpdate() override;
-		void stateRender() override;
-		void init() override;
 
 	protected:
-        std::u32string save_name_;
-		bool confirm_;
 		bool error_;
+		Save& save_;
+		std::u32string question_;
         char scratch_[ 3000 ];
 };

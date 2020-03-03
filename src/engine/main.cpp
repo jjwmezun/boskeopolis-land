@@ -459,6 +459,11 @@ namespace Main
 		return save_path_ + filename + ".sav";
 	};
 
+	std::string backupSavePath( std::string filename )
+	{
+		return save_path_ + filename + ".bak";
+	};
+
 	const std::string& saveDirectory()
 	{
 		return save_path_;

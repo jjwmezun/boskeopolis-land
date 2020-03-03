@@ -68,7 +68,6 @@ class Inventory
 		static double totalGemChallengePercents();
 		static double totalTimeChallengePercents();
 		static void generalVictory( const InventoryLevel& level_inventory );
-		static void throwSaveCorruptionErrorMessage();
 
 		static constexpr bool DEFAULT_VICTORY        = false;
 		static constexpr bool DEFAULT_DIAMOND        = false;

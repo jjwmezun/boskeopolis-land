@@ -72,4 +72,20 @@ namespace mezun
 	std::u32string removeEndingZeroFrom32String( const std::u32string& string );
 	std::u32string merge32Strings( const std::u32string& first, const std::u32string& second );
 	std::u32string stringReplace( std::u32string target, const std::u32string& from, const std::u32string& to );
+	bool stringEndsWith( const std::string& haystack, const std::string& needle );
+	
+	template<typename T>
+	T implode( const std::vector<T>& list, const T& replace )
+	{
+		T out;
+		if ( !list.empty() )
+		{
+			out = list[ 0 ];
+			for ( int i = 1; i < list.size(); ++i )
+			{
+				out += replace + list[ i ];
+			}
+		}
+		return out;
+	};
 };

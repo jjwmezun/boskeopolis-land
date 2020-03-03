@@ -19,17 +19,22 @@ class ChooseSaveState : public GameState
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
+		void backFromPop() override;
 
 	private:
 		int maxSelection() const;
 		bool nameLessThanLimit() const;
 		void exitNaming();
+		bool testNameAlreadyInUse( const std::u32string& name ) const;
 
 		enum class State
 		{
 			SELECT,
 			NAMING,
-			LOADING
+			COPY,
+			CREATING_SAVE,
+			LOADING,
+			DELETING
 		};
 
 		std::vector<Save> saves_;
@@ -40,5 +45,6 @@ class ChooseSaveState : public GameState
 		WTextHighlight<> title_;
 		CheckeredBackground bg_;
 		int bottom_selection_;
+		Save temp_save_;
         char scratch_[ 3000 ];
 };
