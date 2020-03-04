@@ -263,3 +263,8 @@ Save Save::createEmpty()
     save.removed_ = true;
     return save;
 };
+
+void Save::setAsDeleted()
+{
+    removed_ = true;
+};

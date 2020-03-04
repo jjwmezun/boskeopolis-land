@@ -35,6 +35,7 @@ class Save
         Save copy( const std::u32string& name ) const;
         const std::u32string& name() const;
         bool isDeleted() const;
+        void setAsDeleted();
 
         static bool testAnyDeleteFailStatus( Status status );
         static bool testAnyBackupSaveFailStatus( Status status );

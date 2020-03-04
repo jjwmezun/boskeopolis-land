@@ -32,13 +32,15 @@ ChooseSaveState::ChooseSaveState()
     title_ ( { U"Choose a Save", 0, 8, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8 } ),
     bg_ (),
     bottom_selection_ ( 0 ),
-    temp_save_ ( Save::createEmpty() )
+    temp_save_ ( Save::createEmpty() ),
+    topmost_save_ ( 0 )
 {};
 
 ChooseSaveState::~ChooseSaveState() {};
 
 void ChooseSaveState::stateUpdate()
 {
+    std::cout << selection_ << std::endl;
     switch ( state_ )
     {
         case ( State::SELECT ):
@@ -70,6 +72,11 @@ void ChooseSaveState::stateUpdate()
                 if ( selection_ > maxSelection() )
                 {
                     selection_ = 0;
+                    topmost_save_ = 0;
+                }
+                else if ( topmost_save_ + selection_ >= topmost_save_ + 5 )
+                {
+                    ++topmost_save_;
                 }
             }
             else if ( Input::pressed( Input::Action::MOVE_UP ) )
@@ -79,6 +86,11 @@ void ChooseSaveState::stateUpdate()
                 if ( selection_ < 0 )
                 {
                     selection_ = maxSelection();
+                    topmost_save_ = std::max( 0, maxSelection() - 5 );
+                }
+                else if ( selection_ < topmost_save_ )
+                {
+                    --topmost_save_;
                 }
             }
         }
@@ -235,46 +247,34 @@ void ChooseSaveState::stateRender()
     {
         case ( State::SELECT ):
         {
-            int i = 0;
-            while ( i < saves_.size() )
+            int i = renderSaveNamesWithHighlight();
+            if ( i < 5 )
             {
+                const int name_index = topmost_save_ + i;
                 const int y = 24 + ( 32 * i );
-                const int color = ( selection_ == i ) ? 1 : 3;
+                const int color = ( selection_ == name_index ) ? 1 : 3;
                 Frame frame { 8, y, 384, 32, color };
                 frame.render();
-                WTextObj save_name { saves_[ i ].name(), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
-                save_name.render();
-                ++i;
+                WTextObj new_game { U"New Game", 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+                new_game.render();
             }
-            const int y = 24 + ( 32 * i );
-            const int color = ( selection_ == i ) ? 1 : 3;
-            Frame frame { 8, y, 384, 32, color };
-            frame.render();
-            WTextObj new_game { U"New Game", 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
-            new_game.render();
         }
         break;
         case ( State::NAMING ):
         case ( State::COPY ):
         case ( State::CREATING_SAVE ):
         {
-            int i = 0;
-            while ( i < saves_.size() )
+            int i = renderSaveNamesWithoutHighlight();
+            if ( i < 5 )
             {
                 const int y = 24 + ( 32 * i );
-                Frame frame { 8, y, 384, 32, 3 };
-                frame.render();
-                WTextObj save_name { saves_[ i ].name(), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
-                save_name.render();
-                ++i;
+                const int new_game_frame_color = ( bottom_selection_ == 0 ) ? 1 : 3;
+                Frame new_game_frame { 8, y, 384, 32, new_game_frame_color };
+                new_game_frame.render();
+                const std::u32string end = ( timer_ > 7 && nameLessThanLimit() ) ? U"_" : U"";
+                WTextObj new_game = { mezun::merge32Strings( name_, end ), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+                new_game.render();
             }
-            const int y = 24 + ( 32 * i );
-            const int new_game_frame_color = ( bottom_selection_ == 0 ) ? 1 : 3;
-            Frame new_game_frame { 8, y, 384, 32, new_game_frame_color };
-            new_game_frame.render();
-            const std::u32string end = ( timer_ > 7 && nameLessThanLimit() ) ? U"_" : U"";
-            WTextObj new_game = { mezun::merge32Strings( name_, end ), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
-            new_game.render();
 
             const int confirm_frame_color = ( bottom_selection_ == 1 ) ? 1 : 3;
             std::u32string confirm_string { U"Confirm" };
@@ -296,17 +296,7 @@ void ChooseSaveState::stateRender()
         case ( State::LOADING ):
         case ( State::DELETING ):
         {
-            int i = 0;
-            while ( i < saves_.size() )
-            {
-                const int y = 24 + ( 32 * i );
-                const int color = ( selection_ == i ) ? 1 : 3;
-                Frame frame { 8, y, 384, 32, color };
-                frame.render();
-                WTextObj save_name { saves_[ i ].name(), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
-                save_name.render();
-                ++i;
-            }
+            int i = renderSaveNamesWithHighlight();
             const int y = 24 + ( 32 * i );
             Frame frame { 8, y, 384, 32, 3 };
             frame.render();
@@ -446,4 +436,35 @@ bool ChooseSaveState::testNameAlreadyInUse( const std::u32string& name ) const
         }
     }
     return false;
+};
+
+int ChooseSaveState::renderSaveNamesWithHighlight()
+{
+    return renderSaveNames( selection_ );
+};
+
+int ChooseSaveState::renderSaveNamesWithoutHighlight()
+{
+    return renderSaveNames( -1 );
+};
+
+int ChooseSaveState::renderSaveNames( int comparison )
+{
+    int i = 0;
+    while ( i < 5 )
+    {
+        const int name_index = topmost_save_ + i;
+        if ( name_index >= saves_.size() - 1 )
+        {
+            return i;
+        }
+        const int color = ( name_index == comparison ) ? 1 : 3;
+        const int y = 24 + ( 32 * i );
+        Frame frame { 8, y, 384, 32, color };
+        frame.render();
+        WTextObj save_name { saves_[ name_index ].name(), 0, y, WTextCharacter::Color::BLACK, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16, 8 };
+        save_name.render();
+        ++i;
+    }
+    return i;
 };

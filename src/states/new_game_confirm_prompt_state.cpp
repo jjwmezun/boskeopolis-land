@@ -12,7 +12,20 @@
 
 NewGameConfirmPromptState::NewGameConfirmPromptState( Save& save, std::u32string question )
 :
-    PromptState( mezun::stringReplace( mezun::merge32Strings( question, mezun::charToChar32String( "\n\n Confirm\n Cancel" ) ), U"%fn", save.name() ), 1 ),
+    PromptState
+    (
+        mezun::merge32Strings
+        (
+            mezun::stringReplace
+            (
+                question,
+                U"%fn",
+                save.name()
+            ),
+            mezun::charToChar32String( "\n\n Confirm\n Cancel" )
+        ),
+        1
+    ),
     save_ ( save ),
     error_ ( false )
 {};
@@ -49,6 +62,7 @@ void NewGameConfirmPromptState::stateUpdate()
             }
             else
             {
+                save_.setAsDeleted();
                 Main::popState();
             }
         }

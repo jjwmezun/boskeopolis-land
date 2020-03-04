@@ -17,6 +17,5 @@ class NewGameConfirmPromptState : public PromptState
 	protected:
 		bool error_;
 		Save& save_;
-		std::u32string question_;
         char scratch_[ 3000 ];
 };

@@ -26,6 +26,9 @@ class ChooseSaveState : public GameState
 		bool nameLessThanLimit() const;
 		void exitNaming();
 		bool testNameAlreadyInUse( const std::u32string& name ) const;
+		int renderSaveNamesWithHighlight();
+		int renderSaveNamesWithoutHighlight();
+		int renderSaveNames( int comparison );
 
 		enum class State
 		{
@@ -46,5 +49,6 @@ class ChooseSaveState : public GameState
 		CheckeredBackground bg_;
 		int bottom_selection_;
 		Save temp_save_;
+		int topmost_save_;
         char scratch_[ 3000 ];
 };
