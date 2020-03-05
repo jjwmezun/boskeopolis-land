@@ -102,7 +102,7 @@ void LevelTileMenuState::init()
 	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
 	{
 		const int y = ( i + 1 ) * ROW_HEIGHT;
-		WTextObj text{ getOptionName( ( Option )( i ) ), 0, y, WTextCharacter::Color::BLACK, WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, X_PADDING };
+		WTextObj text{ getOptionName( ( Option )( i ) ), 0, y, WTextCharacter::Color::BLACK, WIDTH + ( X_PADDING * 2 ), WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, X_PADDING };
 		text.render();
 	}
 	bg_.endDrawing();
