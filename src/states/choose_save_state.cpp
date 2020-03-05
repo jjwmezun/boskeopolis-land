@@ -58,7 +58,6 @@ void ChooseSaveState::stateUpdate()
                 }
                 else
                 {
-                    Inventory::load( saves_[ selection_ ] );
                     bottom_selection_ = 0;
                     state_ = State::LOADING;
                 }
@@ -196,7 +195,8 @@ void ChooseSaveState::stateUpdate()
                 {
                     case ( 0 ):
                     {
-                        Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( 0 ) ) );
+                        Inventory::load( saves_[ selection_ ] );
+                        Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( Inventory::currentLevel() ) ) );
                     }
                     break;
                     case ( 1 ):

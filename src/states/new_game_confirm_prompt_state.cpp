@@ -4,7 +4,6 @@
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "new_game_confirm_prompt_state.hpp"
-#include "overworld_state.hpp"
 #include "render.hpp"
 #include "save.hpp"
 #include "unit.hpp"
@@ -43,8 +42,6 @@ void NewGameConfirmPromptState::stateUpdate()
                 else
                 {
                     Main::popState();
-                    //Inventory::load( save_ );
-                    //Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( 0, true ) ) );
                 }
             }
             else
