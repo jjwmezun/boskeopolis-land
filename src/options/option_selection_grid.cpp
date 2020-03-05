@@ -2,8 +2,6 @@
 #include "mezun_math.hpp"
 #include "option_selection_grid.hpp"
 
-#include <iostream>
-
 OptionSelectionGrid::OptionSelectionGrid( int rows, int cols, int max )
 :
 	OptionSelection( 0 ),

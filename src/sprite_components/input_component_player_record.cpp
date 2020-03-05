@@ -4,8 +4,6 @@
 #include "main.hpp"
 #include <vector>
 
-#include <iostream>
-
 InputComponentPlayerRecord::InputComponentPlayerRecord()
 :
     counter_ ( 0 )

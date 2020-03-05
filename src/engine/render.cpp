@@ -3,7 +3,6 @@
 #include <cstdio>
 #include "main.hpp"
 #include "render.hpp"
-#include <iostream>
 #include "localization.hpp"
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"

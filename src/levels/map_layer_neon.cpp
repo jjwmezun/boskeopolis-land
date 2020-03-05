@@ -2,8 +2,6 @@
 #include "map_layer_neon.hpp"
 #include "render.hpp"
 
-#include <iostream>
-
 MapLayerNeon::MapLayerNeon() : hue_ ( 0 ), color_ ( { 255, 0, 0, 255 } ) {};
 MapLayerNeon::~MapLayerNeon() {};
 

@@ -215,6 +215,13 @@ namespace mezun
 		return out;
 	};
 
+	bool stringEndsWith( const std::string& haystack, const std::string& needle )
+	{
+	    return ( haystack.length() >= needle.length() )
+			? ( 0 == haystack.compare( haystack.length() - needle.length(), needle.length(), needle ) )
+			: false;
+	};
+
 	std::u32string stringReplace( std::u32string target, const std::u32string& from, const std::u32string& to )
 	{
 		const size_t start_position = target.find( from );
@@ -224,12 +231,5 @@ namespace mezun
 		}
 		target.replace( start_position, from.length(), to );
 		return target;
-	};
-
-	bool stringEndsWith( const std::string& haystack, const std::string& needle )
-	{
-	    return ( haystack.length() >= needle.length() )
-			? ( 0 == haystack.compare( haystack.length() - needle.length(), needle.length(), needle ) )
-			: false;
 	};
 }

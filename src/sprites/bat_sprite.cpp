@@ -3,8 +3,6 @@
 #include "health.hpp"
 #include "sprite_graphics.hpp"
 
-#include <iostream>
-
 BatSprite::BatSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bat.png" ), x, y, 16, 16, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 400, 1600, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),

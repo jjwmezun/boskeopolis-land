@@ -1,122 +1,103 @@
+#include "timer.hpp"
 
-// Name
-//===================================
-//
-// Timer
-//
+Timer::Timer( int limit, bool starts_on, int start_count, Direction::Vertical direction )
+:
+    limit_ ( ( limit != NULL ) ? limit : NORMAL_FRAMES ), // Treat NULL as default.
+    on_ ( starts_on ),
+    starts_on_ ( starts_on ),
+    counter_ ( start_count ),
+    direction_ ( direction )
+{};
 
+Timer::~Timer() {};
 
-// DEPENDENCIES
-//===================================
+void Timer::pause() { on_ = false; };
 
-    #include "timer.hpp"
-    #include <iostream>
+void Timer::resume() { on_ = true; };
 
+void Timer::restart() { start(); };
 
-// STATIC PROPERTIES
-//===================================
+void Timer::start()
+{
+    on_ = true;
+    restartCounter();
+};
 
-// METHODS
-//===================================
+void Timer::stop()
+{
+    on_ = false;
+    restartCounter();
+};
 
-    Timer::Timer( int limit, bool starts_on, int start_count, Direction::Vertical direction )
-    :
-        limit_ ( ( limit != NULL ) ? limit : NORMAL_FRAMES ), // Treat NULL as default.
-        on_ ( starts_on ),
-        starts_on_ ( starts_on ),
-        counter_ ( start_count ),
-        direction_ ( direction )
-    {};
+void Timer::forceUpdate()
+{
+    on_ = true;
+    update();
+};
 
-    Timer::~Timer() {};
+void Timer::update()
+{
+    bool hit = false;
 
-    void Timer::pause() { on_ = false; };
-
-    void Timer::resume() { on_ = true; };
-
-	void Timer::restart() { start(); };
-
-    void Timer::start()
+    if ( on() )
     {
-        on_ = true;
-        restartCounter();
-    };
-
-    void Timer::stop()
-    {
-        on_ = false;
-        restartCounter();
-    };
-
-    void Timer::forceUpdate()
-	{
-		on_ = true;
-		update();
-	};
-
-    void Timer::update()
-    {
-        bool hit = false;
-
-        if ( on() )
+        if ( countsDown() )
         {
-            if ( countsDown() )
+            if ( counter_ <= limit_ )
             {
-                if ( counter_ <= limit_ )
-                {
-                    hit = true;
-                }
-                else
-                {
-                    hit = false;
-                }
+                hit = true;
             }
             else
             {
-                if ( counter_ >= limit_ )
-                {
-                    hit = true;
-                }
-                else
-                {
-                    hit = false;
-                }
+                hit = false;
             }
         }
-
-        event( hit );
-        tick();
-    };
-
-    bool Timer::on()      const { return on_; };
-    int  Timer::counter() const { return counter_; };
-
-    void Timer::tick()
-    {
-        if ( on() )
+        else
         {
-            if ( countsDown() )
+            if ( counter_ >= limit_ )
             {
-                --counter_;
+                hit = true;
             }
             else
             {
-                ++counter_;
+                hit = false;
             }
         }
-    };
+    }
 
-    void Timer::restartCounter()
+    event( hit );
+    tick();
+};
+
+bool Timer::on()      const { return on_; };
+int  Timer::counter() const { return counter_; };
+
+void Timer::tick()
+{
+    if ( on() )
     {
-        counter_ = starts_on_;
-    };
+        if ( countsDown() )
+        {
+            --counter_;
+        }
+        else
+        {
+            ++counter_;
+        }
+    }
+};
 
-    bool Timer::countsDown()
-    {
-        return direction_ == Direction::Vertical::DOWN;
-    };
+void Timer::restartCounter()
+{
+    counter_ = starts_on_;
+};
 
-	double Timer::countPercent() const
-	{
-		return ( ( double ) counter_ / ( double ) limit_ );
-	};
+bool Timer::countsDown()
+{
+    return direction_ == Direction::Vertical::DOWN;
+};
+
+double Timer::countPercent() const
+{
+    return ( ( double ) counter_ / ( double ) limit_ );
+};

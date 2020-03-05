@@ -1,7 +1,6 @@
 #include "collision.hpp"
 #include "rotating_block_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 RotatingBlockSprite::RotatingBlockSprite( int x, int y )
 :
@@ -14,7 +13,6 @@ void RotatingBlockSprite::customUpdate( LevelState& level_state )
 {
 	graphics_->rotation_ -= 1;
 	while ( graphics_->rotation_ <= -90 ) graphics_->rotation_ += 90;
-	std::cout<<graphics_->rotation_<<std::endl;
 };
 
 void RotatingBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )

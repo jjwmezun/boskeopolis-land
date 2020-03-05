@@ -1,4 +1,3 @@
-#include <iostream>
 #include "text_obj.hpp"
 
 void TextObj::render( const Camera* camera ) const

@@ -2,7 +2,6 @@
 
 #include <dirent.h>
 #include "mezun_math.hpp"
-#include <iostream>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -71,9 +70,22 @@ namespace mezun
 	std::string stringReplace( const std::string& in, std::string from, std::string to );
 	std::u32string removeEndingZeroFrom32String( const std::u32string& string );
 	std::u32string merge32Strings( const std::u32string& first, const std::u32string& second );
-	std::u32string stringReplace( std::u32string target, const std::u32string& from, const std::u32string& to );
 	bool stringEndsWith( const std::string& haystack, const std::string& needle );
 	
+	template<typename T>
+	T stringReplace( T target, const T& from, const T& to )
+	{
+		const size_t start_position = target.find( from );
+		if ( start_position == T::npos )
+		{
+			return target;
+		}
+		target.replace( start_position, from.length(), to );
+		return target;
+	};
+
+	std::u32string stringReplace( std::u32string target, const std::u32string& from, const std::u32string& to );
+
 	template<typename T>
 	T implode( const std::vector<T>& list, const T& replace )
 	{

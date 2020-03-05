@@ -1,7 +1,6 @@
 #include "faucet_sprite.hpp"
 #include "faucet_graphics.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 FaucetGraphics::FaucetGraphics()
 :

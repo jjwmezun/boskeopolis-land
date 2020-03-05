@@ -7,7 +7,6 @@ class EventSystem;
 #include "fading_graphics.hpp"
 #include "rapidjson/document.h"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 class Tileset
 {

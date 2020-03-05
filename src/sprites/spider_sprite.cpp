@@ -1,7 +1,6 @@
 #include "spider_sprite.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 SpiderSprite::SpiderSprite( int x, int y )
 :
@@ -90,7 +89,7 @@ void SpiderSprite::customInteract( Collision& my_collision, Collision& their_col
 };
 
 void SpiderSprite::debugCollision()
-{
+{/*
 	std::cout<<"================="<<std::endl;
 	std::cout<<"TOP: "<<collide_bottom_<<std::endl;
 	std::cout<<"RIT: "<<collide_right_<<std::endl;
@@ -101,5 +100,5 @@ void SpiderSprite::debugCollision()
 	std::cout<<"PREV_BOT: "<<collide_top_prev_<<std::endl;
 	std::cout<<"PREV_LEF: "<<collide_left_prev_<<std::endl;
 	std::cout<<"DIRECTION: "<<Direction::simpleString( direction_ )<<std::endl;
-	std::cout<<"================="<<std::endl;
+	std::cout<<"================="<<std::endl;*/
 }

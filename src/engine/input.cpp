@@ -3,7 +3,6 @@
 #include "config.hpp"
 #include <fstream>
 #include "input.hpp"
-#include <iostream>
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"

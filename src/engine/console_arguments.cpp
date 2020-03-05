@@ -1,6 +1,6 @@
 #include "console_arguments.hpp"
 #include <cstdlib>
-#include <iostream>
+#include <cstdio>
 #include "mezun_helpers.hpp"
 
 ConsoleArguments::ConsoleArguments( int argc, char** argv )
@@ -35,7 +35,7 @@ ConsoleArguments::ConsoleArguments( int argc, char** argv )
 			const bool is_last_arg = i == argc - 1;
 			if ( is_last_arg )
 			{
-				std::cout<<"Magnification argument needs a value.";
+				printf( "Magnification argument needs a value.\n" );
 			}
 			else
 			{
@@ -44,14 +44,14 @@ ConsoleArguments::ConsoleArguments( int argc, char** argv )
 				const char* magnification_arg = argv[ i ];
 				if ( !mezun::isCStringOnlyNumeric( magnification_arg ) )
 				{
-					std::cout<<"Invalid magnification value for arguments: "<<magnification_arg;
+					printf( "Invalid magnification value for arguments: %s\n", magnification_arg );
 				}
 				else
 				{
 					const long int magnification_num = strtol( magnification_arg, nullptr, 10 );
 					if ( magnification_num <= 0 || magnification_num >= 127 )
 					{
-						std::cout<<"Invalid magnification value for arguments."<<magnification_arg;
+						printf( "Invalid magnification value for arguments: %s\n", magnification_arg );
 					}
 					else
 					{

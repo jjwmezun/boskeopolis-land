@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <fstream>
 #include <ios>
-#include <iostream>
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "save.hpp"
@@ -14,7 +13,15 @@ Save Save::loadFromFile( const std::string& path )
     Status status = Status::OK;
     Save save;
     save.removed_ = false;
-    save.name_ = mezun::stringReplace( mezun::stringReplace( mezun::charToChar32String( path.c_str() ), mezun::charToChar32String( Main::saveDirectory().c_str() ), U"" ), U".sav", U"" );
+    save.name_ = mezun::charToChar32String
+    (
+        mezun::stringReplace
+        (
+            mezun::stringReplace( path, Main::saveDirectory(), "" ),
+            ".sav",
+            ""
+        ).c_str()
+    );
     std::ifstream file( path );
     if ( file.is_open() )
     {
@@ -44,19 +51,19 @@ Save Save::loadFromFile( const std::string& path )
             backup_file.read( ( char* )( &save.data_ ), sizeof( SaveData ) );
             if ( !backup_file )
             {
-                save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Failed to read save file “%n” or its backup." ), U"%n", save.name_ ) );
+                save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Failed to read save file “%n” or its backup." ), std::u32string( U"%n" ), save.name_ ) );
             }
             else if ( !validateSaveData( save.data_ ) )
             {
-                save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Save file “%n” & its backup have been corrupted & can’t be fixed." ), U"%n", save.name_ ) );
+                save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Save file “%n” & its backup have been corrupted & can’t be fixed." ), std::u32string( U"%n" ), save.name_ ) );
             }
             else if ( status == Status::INVALID_DATA_IN_LOADED_MAIN_SAVE )
             {
-                save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Save file “%n” has been corrupted & has been replaced by backup." ), U"%n", save.name_ ) );
+                save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Save file “%n” has been corrupted & has been replaced by backup." ), std::u32string( U"%n" ), save.name_ ) );
                 Status save_status = save.save();
                 if ( save_status != Status::OK )
                 {
-                    save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Failed to save file “%n”." ), U"%n", save.name_ ) );
+                    save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Failed to save file “%n”." ), std::u32string( U"%n" ), save.name_ ) );
                 }
                 else
                 {
@@ -66,7 +73,7 @@ Save Save::loadFromFile( const std::string& path )
         }
         else
         {
-            save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Failed to open save file “%n” & its backup." ), U"%n", save.name_ ) );
+            save.errors_.push_back( mezun::stringReplace( mezun::charToChar32String( "Failed to open save file “%n” & its backup." ), std::u32string( U"%n" ), save.name_ ) );
         }
 
     }

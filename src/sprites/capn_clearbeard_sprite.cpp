@@ -1,6 +1,5 @@
 #include "capn_clearbeard_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 CapnClearbeardSprite::CapnClearbeardSprite( int x, int y )
 :

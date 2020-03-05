@@ -1,7 +1,6 @@
 #include "collision.hpp"
 #include "rolling_ball_sprite.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 RollingBallSprite::RollingBallSprite( int x, int y )
 :

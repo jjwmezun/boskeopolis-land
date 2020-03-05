@@ -138,9 +138,6 @@ void ChoqueSprite::render( Camera& camera, bool priority )
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
 	Render::renderObject( graphics_->texture_, src_, dest_eye_left_, SDL_FLIP_NONE, 0.0, 255, &camera );
 	Render::renderObject( graphics_->texture_, src_, dest_eye_right_, SDL_FLIP_NONE, 0.0, 255, &camera );
-	
-	// Debug
-	//std::cout<<Direction::rotationString( eye_placement_ )<<std::endl;
 };
 
 EyePosition getEyePosition( Direction::Rotation r )

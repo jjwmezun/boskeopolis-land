@@ -6,8 +6,10 @@
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
+#include "mezun_helpers.hpp"
 #include <string>
 #include <vector>
+#include "wmessage_state.hpp"
 
 namespace Localization
 {
@@ -30,7 +32,8 @@ namespace Localization
             }
             catch ( const InvalidLocalizationLanguageException& e )
             {
-                std::cerr << e.what() << std::endl;
+                const std::string localization_name = mezun::stringReplace( file.path(), localization_directory, "" );
+                Main::pushState( std::unique_ptr<WMessageState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( mezun::stringReplace( "Localization file “%f” has been corrupted. Please redownload game. Hold ESC for a few seconds to close.", "%f", localization_name ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
             }       
         }
 

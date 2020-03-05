@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 #include "block_system.hpp"
 #include "block_type.hpp"
 #include "camera.hpp"

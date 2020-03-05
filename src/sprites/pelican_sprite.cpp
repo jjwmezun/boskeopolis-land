@@ -1,7 +1,6 @@
 #include "pelican_sprite.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 static constexpr int NUMBER_OF_FRAMES = 9;
 static constexpr int FRAME_WIDTH = 64;

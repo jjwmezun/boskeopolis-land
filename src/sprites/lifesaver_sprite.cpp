@@ -1,9 +1,7 @@
 #include "collision.hpp"
 #include "lifesaver_sprite.hpp"
 #include "sprite_graphics.hpp"
-
 #include "main.hpp"
-#include <iostream>
 
 LifesaverSprite::LifesaverSprite( int x, int y, bool crate )
 :

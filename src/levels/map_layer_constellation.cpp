@@ -4,8 +4,6 @@
 #include "render.hpp"
 #include "unit.hpp"
 
-#include <iostream>
-
 namespace MapLayerConstellation
 {
 	static constexpr int BRIGHT_STAR_MODIFIER = 3;

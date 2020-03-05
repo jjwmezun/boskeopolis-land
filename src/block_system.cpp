@@ -8,8 +8,6 @@
 #include "sprite.hpp"
 #include <utility>
 
-#include <iostream>
-
 static constexpr int CAMERA_PADDING = 8;
 static constexpr int GRID_WIDTH = Unit::WINDOW_WIDTH_BLOCKS + CAMERA_PADDING * 2;
 static constexpr int INTERACT_PADDING = 3 + CAMERA_PADDING;

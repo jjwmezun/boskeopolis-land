@@ -1,7 +1,6 @@
 #pragma once
 
 #include <fstream>
-#include <iostream>
 #include "main.hpp"
 #include "message_state.hpp"
 #include "mezun_json.hpp"
@@ -34,7 +33,6 @@ namespace mezun
 			{
 				if ( json_load_error_message != nullptr )
 				{
-					std::cout<<json_load_error_message<<std::endl;
 					Main::pushState( std::unique_ptr<MessageState> ( MessageState::errorMessage( json_load_error_message ) ) );
 					if ( json_load_error_function != nullptr )
 					{
@@ -48,7 +46,6 @@ namespace mezun
 		{
 			if ( file_load_error_message != nullptr )
 			{
-				std::cout<<file_load_error_message<<std::endl;
 				Main::pushState( std::unique_ptr<MessageState> ( MessageState::errorMessage( file_load_error_message ) ) );
 				if ( file_load_error_function != nullptr )
 				{
@@ -81,7 +78,6 @@ namespace mezun
 			{
 				if ( json_load_error_message != nullptr )
 				{
-					std::cout<<json_load_error_message<<std::endl;
 					Main::changeState( std::unique_ptr<MessageState> ( MessageState::errorMessage( json_load_error_message ) ) );
 					if ( json_load_error_function != nullptr )
 					{
@@ -95,7 +91,6 @@ namespace mezun
 		{
 			if ( file_load_error_message != nullptr )
 			{
-				std::cout<<file_load_error_message<<std::endl;
 				Main::changeState( std::unique_ptr<MessageState> ( MessageState::errorMessage( file_load_error_message ) ) );
 				if ( file_load_error_function != nullptr )
 				{

@@ -2,8 +2,6 @@
 #include "falling_bough_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-#include <iostream>
-
 FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal direction, bool fall )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/woods.png", 104, 32, ( direction == Direction::Horizontal::RIGHT ) ), ( direction == Direction::Horizontal::RIGHT ) ? x : x - 8, y, 24, 8, { SpriteType::FALLING_BOUGH }, 10, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),

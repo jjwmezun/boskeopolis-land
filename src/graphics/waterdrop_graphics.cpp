@@ -1,6 +1,5 @@
 #include "waterdrop_graphics.hpp"
 #include "sprite.hpp"
-#include <iostream>
 
 WaterdropGraphics::WaterdropGraphics()
 :

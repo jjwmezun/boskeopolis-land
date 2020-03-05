@@ -20,8 +20,3 @@ struct Line
     };
     static std::array<Line, 4> getLinesFromBox( const sdl2::SDLRect& box );
 };
-
-inline std::ostream &operator<<( std::ostream &os, const Line& l )
-{
-    return os << "{ " << l.p1 << ", " << l.p2 << " }";
-}

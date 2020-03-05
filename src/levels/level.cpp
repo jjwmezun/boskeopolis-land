@@ -41,8 +41,6 @@
 #include "timed_goal.hpp"
 #include "warp_goal.hpp"
 
-#include <iostream>
-
 static std::vector<std::string> level_list_;
 static std::vector<int> gem_challenge_list_;
 static std::vector<int> time_challenge_list_;

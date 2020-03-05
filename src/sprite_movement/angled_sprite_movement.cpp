@@ -3,8 +3,6 @@
 #include "sprite_graphics.hpp"
 #include "angled_sprite_movement.hpp"
 #include "test_line_and_box_collision.hpp"
-#include <iostream>
-
 
 static double findAngleThroughLawOSines( double composite_side, double opposite_side, double known_angle );
 static double findSideLengthThroughPythagoreanTheorem( double a, double b );

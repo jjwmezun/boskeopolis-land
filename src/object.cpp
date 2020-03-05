@@ -1,7 +1,6 @@
 #include "collision.hpp"
 #include "object.hpp"
 #include "unit.hpp"
-#include <iostream>
 
 Object::Object
 (

@@ -1,7 +1,6 @@
 #include "rising_ice_cube_sprite.hpp"
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
-#include <iostream>
 
 static constexpr int MAX_SPEED = 3000;
 

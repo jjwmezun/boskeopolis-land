@@ -1,7 +1,6 @@
 #include "block_component_force_rightward.hpp"
 #include "collision.hpp"
 #include "sprite.hpp"
-#include <iostream>
 
 BlockComponentForceRightward::BlockComponentForceRightward()
 :

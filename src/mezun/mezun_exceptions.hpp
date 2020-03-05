@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <stdexcept>
 #include <SDL2/SDL.h>
 #include "text.hpp"
@@ -51,10 +50,6 @@ namespace mezun
 
 			void print()
 			{
-				std::cout<<id_<<std::endl;
-				std::cout<<"\t"<<tileset_<<std::endl;
-				std::cout<<"\t"<<x_<<std::endl;
-				std::cout<<"\t"<<y_<<std::endl;
 			};
 
 		private:
