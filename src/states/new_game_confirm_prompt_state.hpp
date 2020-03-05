@@ -5,7 +5,7 @@
 class NewGameConfirmPromptState : public PromptState
 {
 	public:
-		NewGameConfirmPromptState( Save& save, std::u32string question );
+		NewGameConfirmPromptState( Save& save, std::u32string question, bool& confirm );
 		~NewGameConfirmPromptState();
         NewGameConfirmPromptState( const NewGameConfirmPromptState& ) = delete;
         NewGameConfirmPromptState( NewGameConfirmPromptState&& ) = delete;
@@ -18,5 +18,6 @@ class NewGameConfirmPromptState : public PromptState
 		bool error_;
 		Save& save_;
 		std::u32string question_;
+		bool& confirm_;
         char scratch_[ 3000 ];
 };

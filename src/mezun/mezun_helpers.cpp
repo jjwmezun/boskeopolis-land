@@ -211,7 +211,7 @@ namespace mezun
 			}
 			out += c;
 		}
-		out += ( char32_t )( 0 );
+		//out += ( char32_t )( 0 );
 		return out;
 	};
 

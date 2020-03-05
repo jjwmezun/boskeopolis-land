@@ -87,12 +87,9 @@ OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType
 	level_tile_graphics_ (),
 	inventory_ ()
 {
-	if ( new_game )
-	{
-		bg_tiles_.clear();
-		fg_tiles_.clear();
-		sprites_tiles_.clear();
-	}
+	bg_tiles_.clear();
+	fg_tiles_.clear();
+	sprites_tiles_.clear();
 };
 
 OverworldState::~OverworldState()
@@ -292,13 +289,7 @@ void OverworldState::stateRender()
 void OverworldState::init()
 {
 	newPalette( PALETTES[ current_palette_ ] );
-	bool start = false;
-	if ( bg_tiles_.size() == 0 )
-	{
-		generateMap();
-		start = true;
-	}
-
+	generateMap();
 	tilemap_.map_width = width_blocks_;
 	const int width = Unit::BlocksToPixels( width_blocks_ );
 	const int height = Unit::BlocksToPixels( height_blocks_ );
@@ -313,47 +304,41 @@ void OverworldState::init()
 	tilemap_.tiles.reserve( width * height );
 
 	generateSprites();
-	if ( start )
+	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 	{
-		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+		if ( Inventory::victory( i ) && ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ ) )
 		{
-			if ( Inventory::victory( i ) )
+			OWEvent event;
+			event.init( i, width_blocks_, false );
+			event.changeAllTiles( bg_tiles_, fg_tiles_ );
+			level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+		}
+		if ( Inventory::getSecretGoal( i ) && ( state_ != OWState::CAMERA_MOVES_TO_SECRET_EVENT || i != current_level_ ) )
+		{
+			OWEvent event;
+			event.init( i, width_blocks_, true );
+			event.changeAllTiles( bg_tiles_, fg_tiles_ );
+			level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+		}
+	}
+	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+	{
+		if ( Inventory::victory( i ) )
+		{
+			OWEvent event;
+			event.init( i, width_blocks_, false );
+			if ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ )
 			{
-				OWEvent event;
-				event.init( i, width_blocks_, false );
-				event.changeAllTiles( bg_tiles_, fg_tiles_ );
-				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
-			}
-			if ( Inventory::getSecretGoal( i ) )
-			{
-				OWEvent event;
-				event.init( i, width_blocks_, true );
-				event.changeAllTiles( bg_tiles_, fg_tiles_ );
 				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
 			}
 		}
-	}
-	else
-	{
-		for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+		if ( Inventory::getSecretGoal( i ) )
 		{
-			if ( Inventory::victory( i ) )
+			OWEvent event;
+			event.init( i, width_blocks_, true );
+			if ( state_ != OWState::CAMERA_MOVES_TO_SECRET_EVENT || i != current_level_ )
 			{
-				OWEvent event;
-				event.init( i, width_blocks_, false );
-				if ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ )
-				{
-					level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
-				}
-			}
-			if ( Inventory::getSecretGoal( i ) )
-			{
-				OWEvent event;
-				event.init( i, width_blocks_, true );
-				if ( state_ != OWState::CAMERA_MOVES_TO_SECRET_EVENT || i != current_level_ )
-				{
-					level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
-				}
+				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
 			}
 		}
 	}

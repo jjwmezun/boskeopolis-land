@@ -9,11 +9,12 @@
 #include "unit.hpp"
 #include "wtext_obj.hpp"
 
-NewGameConfirmPromptState::NewGameConfirmPromptState( Save& save, std::u32string question )
+NewGameConfirmPromptState::NewGameConfirmPromptState( Save& save, std::u32string question, bool& confirm )
 :
     PromptState( mezun::stringReplace( mezun::merge32Strings( question, mezun::charToChar32String( "\n\n Confirm\n Cancel" ) ), U"%fn", save.name() ), 1 ),
     save_ ( save ),
-    error_ ( false )
+    error_ ( false ),
+    confirm_ ( confirm )
 {};
 
 NewGameConfirmPromptState::~NewGameConfirmPromptState() {};
@@ -24,6 +25,7 @@ void NewGameConfirmPromptState::stateUpdate()
     {
         if ( Input::pressed( Input::Action::CONFIRM ) )
         {
+            confirm_ = false;
             Main::popState();
         }
     }
@@ -41,11 +43,13 @@ void NewGameConfirmPromptState::stateUpdate()
                 }
                 else
                 {
+                    confirm_ = true;
                     Main::popState();
                 }
             }
             else
             {
+                confirm_ = false;
                 Main::popState();
             }
         }

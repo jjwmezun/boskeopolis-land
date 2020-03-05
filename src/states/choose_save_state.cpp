@@ -32,7 +32,8 @@ ChooseSaveState::ChooseSaveState()
     title_ ( { U"Choose a Save", 0, 8, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8 } ),
     bg_ (),
     bottom_selection_ ( 0 ),
-    temp_save_ ( Save::createEmpty() )
+    temp_save_ ( Save::createEmpty() ),
+    new_save_confirm_ ( false )
 {};
 
 ChooseSaveState::~ChooseSaveState() {};
@@ -113,6 +114,7 @@ void ChooseSaveState::stateUpdate()
                     }
                     if ( Input::pressedBackspace() && !name_.empty() )
                     {
+                        printf( "GO\n" );
                         name_.pop_back();
                     }
                     ++timer_;
@@ -142,9 +144,9 @@ void ChooseSaveState::stateUpdate()
                             {
                                 temp_save_ = ( state_ == State::NAMING ) ? Save::createNew( name_ ) : saves_[ selection_ ].copy( name_ );
                                 std::u32string question = ( state_ == State::NAMING ) ? mezun::charToChar32String( "¿Name new save “%fn”?" ) : mezun::stringReplace( mezun::charToChar32String( "¿Name copy o’ “%ofn” as “%fn”?" ), U"%ofn", saves_[ selection_ ].name() );
-                                Main::pushState( std::unique_ptr<NewGameConfirmPromptState> ( new NewGameConfirmPromptState( temp_save_, question ) ) );
+                                Main::pushState( std::unique_ptr<NewGameConfirmPromptState> ( new NewGameConfirmPromptState( temp_save_, question, new_save_confirm_ ) ) );
                                 Audio::playSound( Audio::SoundType::CONFIRM );
-                                state_ = State::CREATING_SAVE;
+                                state_ = ( state_ == State::NAMING ) ? State::CREATING_NEW_SAVE : State::CREATING_COPY_SAVE;
                             }
                         }
                     }
@@ -256,7 +258,8 @@ void ChooseSaveState::stateRender()
         break;
         case ( State::NAMING ):
         case ( State::COPY ):
-        case ( State::CREATING_SAVE ):
+        case ( State::CREATING_NEW_SAVE ):
+        case ( State::CREATING_COPY_SAVE ):
         {
             int i = 0;
             while ( i < saves_.size() )
@@ -404,15 +407,23 @@ void ChooseSaveState::backFromPop()
             state_ = State::SELECT;
         }
         break;
-        case ( State::CREATING_SAVE ):
+        case ( State::CREATING_NEW_SAVE ):
+        case ( State::CREATING_COPY_SAVE ):
         {
-            if ( !temp_save_.isDeleted() )
+            if ( new_save_confirm_ )
             {
-                saves_.push_back( temp_save_ );
-                temp_save_ = Save::createEmpty();
-                selection_ = saves_.size() - 1;
+                if ( !temp_save_.isDeleted() )
+                {
+                    saves_.push_back( temp_save_ );
+                    temp_save_ = Save::createEmpty();
+                    selection_ = saves_.size() - 1;
+                }
+                state_ = State::SELECT;
             }
-            state_ = State::SELECT;
+            else
+            {
+                state_ = ( state_ == State::CREATING_NEW_SAVE ) ? State::NAMING : State::COPY;
+            }
         }
         break;
     }

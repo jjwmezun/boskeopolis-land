@@ -93,7 +93,7 @@ Save Save::createNew( std::u32string name )
     save.name_ = name;
     save.data_.oxygen_upgrade_ = false;
     save.data_.total_funds_ = 0;
-    save.data_.current_level_ = 0;
+    save.data_.current_level_ = -1;
     save.data_.health_upgrades_[ 0 ] = false;
     save.data_.health_upgrades_[ 1 ] = false;
     save.data_.health_upgrades_[ 2 ] = false;
@@ -222,7 +222,7 @@ bool Save::validateSaveData( const SaveData& data )
     return
         data.total_funds_ >= Unit::TOTAL_FUNDS_MIN &&
         data.total_funds_ <= Unit::TOTAL_FUNDS_MAX &&
-        data.current_level_ > -1 &&
+        data.current_level_ >= -1 &&
         data.current_level_ < Level::NUMBER_OF_LEVELS;
 };
 

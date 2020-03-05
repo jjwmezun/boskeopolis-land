@@ -32,7 +32,8 @@ class ChooseSaveState : public GameState
 			SELECT,
 			NAMING,
 			COPY,
-			CREATING_SAVE,
+			CREATING_NEW_SAVE,
+			CREATING_COPY_SAVE,
 			LOADING,
 			DELETING
 		};
@@ -46,5 +47,6 @@ class ChooseSaveState : public GameState
 		CheckeredBackground bg_;
 		int bottom_selection_;
 		Save temp_save_;
+		bool new_save_confirm_;
         char scratch_[ 3000 ];
 };
