@@ -475,11 +475,12 @@ namespace Render
 		}
 	};
 
-	void setColor( int color, Uint8 alpha )
+	void setColor( int c, Uint8 alpha )
 	{
-		const Uint8 r = palette_->color( color ).r;
-		const Uint8 g = palette_->color( color ).g;
-		const Uint8 b = palette_->color( color ).b;
+		const sdl2::SDLColor color = palette_->color( c );
+		const Uint8 r = color.r;
+		const Uint8 g = color.g;
+		const Uint8 b = color.b;
 		SDL_SetRenderDrawColor( renderer_, r, g, b, alpha );
 	};
 

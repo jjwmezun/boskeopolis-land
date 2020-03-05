@@ -122,6 +122,7 @@ namespace Main
 		mezun::initRand();
 		Render::init( args.windowed(), args.magnification() );
 		Audio::init( args.noaudio() );
+		Palette::init();
 		try
 		{
 			Level::buildLevelList();

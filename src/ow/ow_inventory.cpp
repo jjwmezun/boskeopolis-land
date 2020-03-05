@@ -334,7 +334,6 @@ bool OWInventory::testStandingOnShop() const
 
 void OWInventory::forceLevelNameRedraw()
 {
-	std::cout << level_ << std::endl;
 	if ( testStandingOnShop() )
 	{
 		regenerateShopGraphics();

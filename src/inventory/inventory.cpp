@@ -17,7 +17,7 @@
 CounterT<Unit::TOTAL_FUNDS_MAX, Unit::TOTAL_FUNDS_MIN> Inventory::total_funds_shown_{};
 Save Inventory::save_{};
 
-int Inventory::currentLevel() { std::cout << save_.data_.current_level_() << std::endl; return save_.data_.current_level_(); };
+int Inventory::currentLevel() { return save_.data_.current_level_(); };
 
 bool Inventory::levelComplete( int level )
 {

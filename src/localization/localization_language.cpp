@@ -1064,3 +1064,8 @@ std::u32string LocalizationLanguage::getSecretGoalMessage() const
 {
     return mezun::charToChar32String( "¡Secret Goal!" );
 };
+
+std::u32string LocalizationLanguage::getMissingPaletteErrorMessage( const std::string& palette_name ) const
+{
+    return mezun::stringReplace( mezun::charToChar32String( "Palette “%p” is missing. Please redownload game. Hold ESC for a few seconds to exit game." ), U"%p", mezun::charToChar32String( palette_name.c_str() ) );
+};

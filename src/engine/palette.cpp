@@ -1,24 +1,21 @@
 #include <fstream>
+#include "localization.hpp"
+#include "localization_language.hpp"
 #include "main.hpp"
-#include <iostream>
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
 #include "palette.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
+#include "wmessage_state.hpp"
 
-std::unordered_map<std::string, std::array<sdl2::SDLColor, Palette::COLOR_LIMIT>> Palette::palettes_;
+static std::unordered_map<std::string, std::array<sdl2::SDLColor, Palette::COLOR_LIMIT>> palettes_;
 
 Palette::Palette( std::string type, int bg )
 :
 	type_ ( type ),
 	bg_ ( bg )
-{
-	if ( palettes_.empty() )
-	{
-		loadPalettes();
-	}
-};
+{};
 
 bool Palette::operator!= ( const Palette& p ) const
 {
@@ -58,18 +55,18 @@ void Palette::applyPalette( SDL_Surface* s ) const
 	}
 };
 
-const sdl2::SDLColor& Palette::color( unsigned int n ) const
+sdl2::SDLColor Palette::color( unsigned int n ) const
 {
 	auto p = palettes_.find( type_ );
 	if ( p == palettes_.end() )
 	{
-		std::cout<<"\""<<type_<<"\" is an invalid palette."<<std::endl;
+		Main::pushState( std::unique_ptr<WMessageState> ( WMessageState::generateErrorMessage( Localization::getCurrentLanguage().getMissingPaletteErrorMessage( type_ ), WMessageState::Type::POP, nullptr ) ) );
 		return { 0, 0, 0, 0 };
 	}
 	return p->second.at( n );
 };
 
-const sdl2::SDLColor& Palette::bg() const
+sdl2::SDLColor Palette::bg() const
 {
 	return color( bgN() );
 };
@@ -84,7 +81,7 @@ unsigned int Palette::testColor( unsigned int n ) const
 	return ( n > 0 && n < COLOR_LIMIT ) ? n : 1;
 };
 
-void Palette::loadPalettes() const
+void Palette::init()
 {
 	const std::string file_path = Main::resourcePath() + "palettes" + Main::pathDivider() + "palettes.json";
 
