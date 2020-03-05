@@ -73,7 +73,7 @@ OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType
 	current_level_ ( -1 ),
 	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
-	current_palette_ ( 0 ),
+	current_palette_ ( LEVEL_PALETTES[ previous_level ] ),
 	object_on_ ( nullptr ),
 	objects_ (),
 	tilemap_ (),
@@ -291,6 +291,7 @@ void OverworldState::stateRender()
 
 void OverworldState::init()
 {
+	newPalette( PALETTES[ current_palette_ ] );
 	bool start = false;
 	if ( bg_tiles_.size() == 0 )
 	{
