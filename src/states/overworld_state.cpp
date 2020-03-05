@@ -70,7 +70,7 @@ OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType
 	state_ ( determineBeginningState( show_event ) ),
 	background_animation_timer_ ( 0 ),
 	background_animation_frame_ ( 0 ),
-	current_level_ ( -1 ),
+	current_level_ ( previous_level ),
 	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
 	current_palette_ ( LEVEL_PALETTES[ previous_level ] ),
@@ -341,13 +341,19 @@ void OverworldState::init()
 			{
 				OWEvent event;
 				event.init( i, width_blocks_, false );
-				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+				if ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ )
+				{
+					level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+				}
 			}
 			if ( Inventory::getSecretGoal( i ) )
 			{
 				OWEvent event;
 				event.init( i, width_blocks_, true );
-				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+				if ( state_ != OWState::CAMERA_MOVES_TO_SECRET_EVENT || i != current_level_ )
+				{
+					level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+				}
 			}
 		}
 	}
