@@ -23,7 +23,7 @@ static constexpr int getBoxSizeFromStringSize( int string_size )
 
 ChooseSaveState::ChooseSaveState()
 :
-    GameState( StateID::LOAD_GAME_STATE ),
+    GameState( StateID::LOAD_GAME_STATE, { "Cement Gray", 1 } ),
     saves_ (),
     selection_ ( 0 ),
     state_ ( State::SELECT ),
