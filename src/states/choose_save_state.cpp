@@ -161,6 +161,7 @@ void ChooseSaveState::stateUpdate()
                 {
                     if ( Input::pressed( Input::Action::CONFIRM ) )
                     {
+                        Audio::playSound( Audio::SoundType::CANCEL );
                         exitNaming();
                     }
                 }
@@ -198,6 +199,7 @@ void ChooseSaveState::stateUpdate()
                     case ( 0 ):
                     {
                         Inventory::load( saves_[ selection_ ] );
+                        Audio::playSound( Audio::SoundType::CONFIRM );
                         Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( Inventory::currentLevel() ) ) );
                     }
                     break;
@@ -205,18 +207,21 @@ void ChooseSaveState::stateUpdate()
                     {
                         bottom_selection_ = 0;
                         name_ = mezun::merge32Strings( saves_[ selection_ ].name(), U" COPY" );
+                        Audio::playSound( Audio::SoundType::CONFIRM );
                         state_ = State::COPY;
                     }
                     break;
                     case ( 2 ):
                     {
                         Main::pushState( std::unique_ptr<DeleteSavePromptState> ( new DeleteSavePromptState( saves_[ selection_ ] ) ) );
+                        Audio::playSound( Audio::SoundType::CONFIRM );
                         state_ = State::DELETING;
                     }
                     break;
                     case ( 3 ):
                     {
                         bottom_selection_ = 0;
+                        Audio::playSound( Audio::SoundType::CANCEL );
                         state_ = State::SELECT;
                     }
                     break;

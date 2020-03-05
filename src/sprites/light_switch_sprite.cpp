@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "event_system.hpp"
 #include "level_state.hpp"
 #include "light_switch_sprite.hpp"
@@ -20,6 +21,7 @@ void LightSwitchSprite::customInteract( Collision& my_collision, Collision& thei
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
 	if ( hit )
 	{
+		Audio::playSound( Audio::SoundType::SWITCH );
         level_state.events().forceSwitchOn();
 	}
 };

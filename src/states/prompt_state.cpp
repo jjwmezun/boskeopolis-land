@@ -13,7 +13,7 @@ static constexpr int FRAME_X = ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - 
 
 PromptState::PromptState( std::u32string text, int selection )
 :
-    GameState( StateID::NEW_GAME_STATE ),
+    GameState( StateID::NEW_GAME_STATE, { "Cement Gray", 1 } ),
     selection_ ( selection ),
     text_ ( text )
 {};

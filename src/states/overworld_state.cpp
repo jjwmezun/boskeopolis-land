@@ -153,6 +153,7 @@ void OverworldState::stateUpdate()
 					{
 						case ( OWObject::Type::LEVEL ):
 						{
+							Audio::playSound( Audio::SoundType::CONFIRM );
 							Main::pushState( std::make_unique<LevelTileMenuState> ( palette_, object_on_->getLevelValue() ) );
 						}
 						break;
