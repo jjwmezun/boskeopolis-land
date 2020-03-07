@@ -12,6 +12,7 @@
 #include "overworld_menu_state.hpp"
 #include "shop_state.hpp"
 #include "unit.hpp"
+#include <unordered_map>
 
 static std::vector<int> bg_tiles_[ OverworldState::NUMBER_OF_LAYERS ] = {};
 static std::vector<int> fg_tiles_[ OverworldState::NUMBER_OF_LAYERS ] = {};
@@ -36,6 +37,18 @@ static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+static const std::unordered_map<int, std::array<int, 2>> animated_frames_
+{
+	{ 134, { 134, 137 }},
+	{ 135, { 135, 138 }},
+	{ 136, { 136, 139 }},
+	{ 150, { 150, 153 }},
+	{ 152, { 152, 155 }},
+	{ 166, { 166, 169 }},
+	{ 167, { 167, 170 }},
+	{ 168, { 168, 171 }}
+};
+
 static constexpr OWState determineBeginningState( ShowEventType event_type )
 {
 	switch ( event_type )
@@ -58,6 +71,8 @@ OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType
 	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
 	current_palette_ ( LEVEL_PALETTES[ previous_level ] ),
+	current_animation_frame_ ( 0 ),
+	animation_timer_ (),
 	object_on_ ( nullptr ),
 	objects_ (),
 	tilemap_ (),
@@ -83,8 +98,11 @@ OverworldState::~OverworldState()
 {
 	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
 	{
-		bg_textures_[ i ].destroy();
-		fg_textures_[ i ].destroy();
+		for ( int j = 0; j < MAX_ANIMATION_FRAMES; ++j )
+		{
+			bg_textures_[ i ][ j ].destroy();
+			fg_textures_[ i ][ j ].destroy();
+		}
 	}
 };
 
@@ -256,15 +274,23 @@ void OverworldState::stateUpdate()
 
 	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
 	{
-		bg_textures_[ i ].setX( -camera_.x() );
-		bg_textures_[ i ].setY( -camera_.y() );
-		fg_textures_[ i ].setX( -camera_.x() );
-		fg_textures_[ i ].setY( -camera_.y() );
+		for ( int j = 0; j < MAX_ANIMATION_FRAMES; ++j )
+		{
+			bg_textures_[ i ][ j ].setX( -camera_.x() );
+			bg_textures_[ i ][ j ].setY( -camera_.y() );
+			fg_textures_[ i ][ j ].setX( -camera_.x() );
+			fg_textures_[ i ][ j ].setY( -camera_.y() );
+		}
 	}
 	updateBackgroundAnimation();
 	updateBackgroundPosition();
 	level_tile_graphics_.update( camera_.getBox() );
 	hero_.updateAnimation();
+
+	if ( animation_timer_.update() )
+	{
+		++current_animation_frame_;
+	}
 };
 
 void OverworldState::stateRender()
@@ -273,13 +299,13 @@ void OverworldState::stateRender()
 	water_background_.render();
 	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
 	{
-		bg_textures_[ i ].render();
+		bg_textures_[ i ][ current_animation_frame_.value() ].render();
 	}
 	level_tile_graphics_.render();
 	hero_.render( camera_ );
 	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
 	{
-		fg_textures_[ i ].render();
+		fg_textures_[ i ][ current_animation_frame_.value() ].render();
 	}
 	switch ( state_ )
 	{
@@ -307,12 +333,15 @@ void OverworldState::init()
 
 	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
 	{
-		bg_textures_[ i ].changeSize( width, height );
-		fg_textures_[ i ].changeSize( width, height );
+		for ( int j = 0; j < MAX_ANIMATION_FRAMES; ++j )
+		{
+			bg_textures_[ i ][ j ].changeSize( width, height );
+			fg_textures_[ i ][ j ].changeSize( width, height );
+			bg_textures_[ i ][ j ].init();
+			fg_textures_[ i ][ j ].init();
+		}
 		bg_tiles_[ i ].reserve( width * height );
 		fg_tiles_[ i ].reserve( width * height );
-		bg_textures_[ i ].init();
-		fg_textures_[ i ].init();
 	}
 	camera_.setBounds( width, height );
 
@@ -494,46 +523,57 @@ void OverworldState::generateMapTextures()
 
 void OverworldState::generateBGMapTexture( int n )
 {
-	sdl2::SDLRect src = { 0, 0, 16, 16 };
-	sdl2::SDLRect dest = { 0, 0, 16, 16 };
-	bg_textures_[ n ].startDrawing();
-	Render::clearScreenTransparency();
-	for ( int i = 0; i < bg_tiles_[ n ].size(); ++i )
+	for ( int j = 0; j < MAX_ANIMATION_FRAMES; ++j )
 	{
-		const int bg_tile = bg_tiles_[ n ][ i ] - 1;
-		const int x = i % width_blocks_;
-		const int y = ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) );
-		dest.x = Unit::BlocksToPixels( x );
-		dest.y = Unit::BlocksToPixels( y );
-		if ( bg_tile > -1 )
+		sdl2::SDLRect src = { 0, 0, 16, 16 };
+		sdl2::SDLRect dest = { 0, 0, 16, 16 };
+		bg_textures_[ n ][ j ].startDrawing();
+		Render::clearScreenTransparency();
+		for ( int i = 0; i < bg_tiles_[ n ].size(); ++i )
 		{
-			src.x = Unit::BlocksToPixels( bg_tile % 16 );
-			src.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( bg_tile ) / 16.0 ) ) );
-			Render::renderObject( "tilesets/ow.png", src, dest );
+			int bg_tile = bg_tiles_[ n ][ i ] - 1;
+			const int x = i % width_blocks_;
+			const int y = ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) );
+			dest.x = Unit::BlocksToPixels( x );
+			dest.y = Unit::BlocksToPixels( y );
+			if ( bg_tile > -1 )
+			{
+				const auto& animated_frame = animated_frames_.find( bg_tile );
+				if ( animated_frame != animated_frames_.end() )
+				{
+					bg_tile = animated_frame->second[ j ];
+				}
+				src.x = Unit::BlocksToPixels( bg_tile % 16 );
+				src.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( bg_tile ) / 16.0 ) ) );
+				Render::renderObject( "tilesets/ow.png", src, dest );
+			}
 		}
+		bg_textures_[ n ][ j ].endDrawing();
 	}
-	bg_textures_[ n ].endDrawing();
 };
 
 void OverworldState::generateFGMapTexture( int n )
 {
-	sdl2::SDLRect src = { 0, 0, 16, 16 };
-	sdl2::SDLRect dest = { 0, 0, 16, 16 };
-	fg_textures_[ n ].startDrawing();
-	Render::clearScreenTransparency();
-	for ( int i = 0; i < fg_tiles_[ n ].size(); ++i )
+	for ( int j = 0; j < MAX_ANIMATION_FRAMES; ++j )
 	{
-		const int fg_tile = fg_tiles_[ n ][ i ] - 1;
-		dest.x = Unit::BlocksToPixels( i % width_blocks_ );
-		dest.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) ) );
-		if ( fg_tile > -1 )
+		sdl2::SDLRect src = { 0, 0, 16, 16 };
+		sdl2::SDLRect dest = { 0, 0, 16, 16 };
+		fg_textures_[ n ][ j ].startDrawing();
+		Render::clearScreenTransparency();
+		for ( int i = 0; i < fg_tiles_[ n ].size(); ++i )
 		{
-			src.x = Unit::BlocksToPixels( fg_tile % 16 );
-			src.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( fg_tile ) / 16.0 ) ) );
-			Render::renderObject( "tilesets/ow.png", src, dest );
+			const int fg_tile = fg_tiles_[ n ][ i ] - 1;
+			dest.x = Unit::BlocksToPixels( i % width_blocks_ );
+			dest.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) ) );
+			if ( fg_tile > -1 )
+			{
+				src.x = Unit::BlocksToPixels( fg_tile % 16 );
+				src.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( fg_tile ) / 16.0 ) ) );
+				Render::renderObject( "tilesets/ow.png", src, dest );
+			}
 		}
+		fg_textures_[ n ][ j ].endDrawing();
 	}
-	fg_textures_[ n ].endDrawing();
 };
 
 void OverworldState::generateMap()

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "counter_flip.hpp"
 #include "game_state.hpp"
 #include "ow_camera.hpp"
 #include "ow_camera_arrows.hpp"
@@ -13,6 +14,7 @@
 #include "rapidjson/document.h"
 #include "show_event_type.hpp"
 #include "texture_box.hpp"
+#include "timer_repeat_t2.hpp"
 #include <unordered_map>
 
 class Collision;
@@ -43,6 +45,8 @@ class OverworldState : public GameState
 		bool testLanguageHasChanged() const;
 		void updateSolids( int tile, int i );
 
+		static constexpr int MAX_ANIMATION_FRAMES = 2;
+
 		OWState state_;
 		int background_animation_timer_;
 		int background_animation_frame_;
@@ -50,11 +54,13 @@ class OverworldState : public GameState
 		int previous_level_;
 		int language_id_;
 		int current_palette_;
+		CounterFlip<MAX_ANIMATION_FRAMES - 1> current_animation_frame_;
+		TimerRepeatT2<32> animation_timer_;
 		OWObject* object_on_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;
-		TextureBox bg_textures_[ NUMBER_OF_LAYERS ];
-		TextureBox fg_textures_[ NUMBER_OF_LAYERS ];
+		TextureBox bg_textures_[ NUMBER_OF_LAYERS ][ MAX_ANIMATION_FRAMES ];
+		TextureBox fg_textures_[ NUMBER_OF_LAYERS ][ MAX_ANIMATION_FRAMES ];
 		ImageGraphics water_background_;
 		OWCamera camera_;
 		OWEvent event_;
