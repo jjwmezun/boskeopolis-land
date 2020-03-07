@@ -5,8 +5,10 @@ class OWEventTile
     public:
         enum class Layer
         {
-            BG,
-            FG,
+            BG1,
+            BG2,
+            FG1,
+            FG2,
             SPRITE
         };
 

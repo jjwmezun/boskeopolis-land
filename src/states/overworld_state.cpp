@@ -13,18 +13,13 @@
 #include "shop_state.hpp"
 #include "unit.hpp"
 
-static std::vector<int> bg_tiles_ = {};
-static std::vector<int> fg_tiles_ = {};
+static std::vector<int> bg_tiles_[ OverworldState::NUMBER_OF_LAYERS ] = {};
+static std::vector<int> fg_tiles_[ OverworldState::NUMBER_OF_LAYERS ] = {};
 static std::vector<int> sprites_tiles_ = {};
 static int width_blocks_ = 0;
 static int height_blocks_ = 0;
 
 static constexpr int NUMBER_OF_PALETTES = 4;
-static constexpr int NUMBER_OF_SOLID_TILES = 40;
-static constexpr int SOLID_TILES[ NUMBER_OF_SOLID_TILES ] =
-{
-	-1, 21, 23, 24, 25, 26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 124, 125, 126, 127, 108, 109, 110, 111, 9, 10, 144, 145, 146, 160, 162, 132, 148, 59
-};
 static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
 	"Overworld Red",
@@ -39,18 +34,6 @@ static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
-
-static constexpr bool testIsSolid( int tile )
-{
-	for ( int i = 0; i < NUMBER_OF_SOLID_TILES; ++i )
-	{
-		if ( tile == SOLID_TILES[ i ] )
-		{
-			return true;
-		}
-	}
-	return false;
 };
 
 static constexpr OWState determineBeginningState( ShowEventType event_type )
@@ -78,8 +61,8 @@ OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType
 	object_on_ ( nullptr ),
 	objects_ (),
 	tilemap_ (),
-	bg_texture_ (),
-	fg_texture_ (),
+	bg_textures_ (),
+	fg_textures_ (),
 	water_background_ ( "bg/overworld-water.png", { 0, 0, 400, 224 } ),
 	camera_ ( 800, 448 ),
 	event_ (),
@@ -88,15 +71,21 @@ OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType
 	level_tile_graphics_ (),
 	inventory_ ()
 {
-	bg_tiles_.clear();
-	fg_tiles_.clear();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		bg_tiles_[ i ].clear();
+		fg_tiles_[ i ].clear();
+	}
 	sprites_tiles_.clear();
 };
 
 OverworldState::~OverworldState()
 {
-	bg_texture_.destroy();
-	fg_texture_.destroy();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		bg_textures_[ i ].destroy();
+		fg_textures_[ i ].destroy();
+	}
 };
 
 void OverworldState::stateUpdate()
@@ -114,7 +103,7 @@ void OverworldState::stateUpdate()
 			const DPoint& hero_position = hero_.getPosition();
 			const int tile_x = ( int )( std::floor( ( hero_position.x ) / 16.0 ) );
 			const int tile_y = ( int )( std::floor( ( hero_position.y ) / 16.0 ) );
-			const int tile = tile_y * tilemap_.map_width + tile_x;
+			const int tile = tile_y * width_blocks_ + tile_x;
 			const auto& seek = objects_.find( tile );
 			object_on_ = nullptr;
 			if ( seek != objects_.end() )
@@ -207,25 +196,6 @@ void OverworldState::stateUpdate()
 			const OWEvent::MessageBack message = event_.update( bg_tiles_, fg_tiles_ );
 			switch ( message )
 			{
-				case ( OWEvent::MessageBack::BOTH_TILES_CHANGED ):
-				{
-					generateMapTextures();
-				}
-				break;
-
-				case ( OWEvent::MessageBack::BG_TILES_CHANGED ):
-				{
-					generateBGMapTexture();
-				}
-				break;
-
-				case ( OWEvent::MessageBack::FG_TILES_CHANGED ):
-				{
-					generateBGMapTexture();
-					generateFGMapTexture();
-				}
-				break;
-
 				case ( OWEvent::MessageBack::SHOW_NEXT_LEVEL ):
 				{
 					level_tile_graphics_.showTile( camera_.getBox(), event_.getNextLevel() );
@@ -235,7 +205,37 @@ void OverworldState::stateUpdate()
 
 				case ( OWEvent::MessageBack::EVENT_OVER ):
 				{
+					tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 					state_ = OWState::CAMERA_MOVES_AUTOMATICALLY_TO_PLAYER;
+				}
+				break;
+
+				case ( OWEvent::MessageBack::__NULL ):
+				{
+					// Do nothing.
+				}
+				break;
+
+				default:
+				{
+					/*
+					if ( OWEvent::testBG1Change( message ) )
+					{
+						generateBGMapTexture( 0 );
+					}
+					if ( OWEvent::testBG2Change( message ) )
+					{
+						generateBGMapTexture( 1 );
+					}
+					if ( OWEvent::testFG1Change( message ) )
+					{
+						generateFGMapTexture( 0 );
+					}
+					if ( OWEvent::testFG2Change( message ) )
+					{
+						generateFGMapTexture( 1 );
+					}*/
+					generateMapTextures();
 				}
 				break;
 			}
@@ -254,10 +254,13 @@ void OverworldState::stateUpdate()
 		break;
 	}
 
-	bg_texture_.setX( -camera_.x() );
-	bg_texture_.setY( -camera_.y() );
-	fg_texture_.setX( -camera_.x() );
-	fg_texture_.setY( -camera_.y() );
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		bg_textures_[ i ].setX( -camera_.x() );
+		bg_textures_[ i ].setY( -camera_.y() );
+		fg_textures_[ i ].setX( -camera_.x() );
+		fg_textures_[ i ].setY( -camera_.y() );
+	}
 	updateBackgroundAnimation();
 	updateBackgroundPosition();
 	level_tile_graphics_.update( camera_.getBox() );
@@ -268,10 +271,16 @@ void OverworldState::stateRender()
 {
 	Render::colorCanvas( 2 );
 	water_background_.render();
-	bg_texture_.render();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		bg_textures_[ i ].render();
+	}
 	level_tile_graphics_.render();
 	hero_.render( camera_ );
-	fg_texture_.render();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		fg_textures_[ i ].render();
+	}
 	switch ( state_ )
 	{
 		case ( OWState::MOVE_PLAYER ):
@@ -292,18 +301,20 @@ void OverworldState::init()
 {
 	newPalette( PALETTES[ current_palette_ ] );
 	generateMap();
-	tilemap_.map_width = width_blocks_;
+	tilemap_.init( width_blocks_, height_blocks_ );
 	const int width = Unit::BlocksToPixels( width_blocks_ );
 	const int height = Unit::BlocksToPixels( height_blocks_ );
-	bg_texture_.changeSize( width, height );
-	fg_texture_.changeSize( width, height );
-	bg_tiles_.reserve( width * height );
-	fg_tiles_.reserve( width * height );
 
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		bg_textures_[ i ].changeSize( width, height );
+		fg_textures_[ i ].changeSize( width, height );
+		bg_tiles_[ i ].reserve( width * height );
+		fg_tiles_[ i ].reserve( width * height );
+		bg_textures_[ i ].init();
+		fg_textures_[ i ].init();
+	}
 	camera_.setBounds( width, height );
-	bg_texture_.init();
-	fg_texture_.init();
-	tilemap_.tiles.reserve( width * height );
 
 	generateSprites();
 	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
@@ -321,6 +332,10 @@ void OverworldState::init()
 			event.init( i, width_blocks_, true );
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
 			level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+		}
+		if ( state_ == OWState::MOVE_PLAYER )
+		{
+			tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 		}
 	}
 	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
@@ -470,19 +485,22 @@ void OverworldState::generateSprites()
 
 void OverworldState::generateMapTextures()
 {
-	generateBGMapTexture();
-	generateFGMapTexture();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		generateBGMapTexture( i );
+		generateFGMapTexture( i );
+	}
 };
 
-void OverworldState::generateBGMapTexture()
+void OverworldState::generateBGMapTexture( int n )
 {
 	sdl2::SDLRect src = { 0, 0, 16, 16 };
 	sdl2::SDLRect dest = { 0, 0, 16, 16 };
-	bg_texture_.startDrawing();
+	bg_textures_[ n ].startDrawing();
 	Render::clearScreenTransparency();
-	for ( int i = 0; i < bg_tiles_.size(); ++i )
+	for ( int i = 0; i < bg_tiles_[ n ].size(); ++i )
 	{
-		const int bg_tile = bg_tiles_[ i ] - 1;
+		const int bg_tile = bg_tiles_[ n ][ i ] - 1;
 		const int x = i % width_blocks_;
 		const int y = ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) );
 		dest.x = Unit::BlocksToPixels( x );
@@ -493,21 +511,19 @@ void OverworldState::generateBGMapTexture()
 			src.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( bg_tile ) / 16.0 ) ) );
 			Render::renderObject( "tilesets/ow.png", src, dest );
 		}
-		const bool is_solid = testIsSolid( bg_tile );
-		tilemap_.tiles[ i ] = is_solid;
 	}
-	bg_texture_.endDrawing();
+	bg_textures_[ n ].endDrawing();
 };
 
-void OverworldState::generateFGMapTexture()
+void OverworldState::generateFGMapTexture( int n )
 {
 	sdl2::SDLRect src = { 0, 0, 16, 16 };
 	sdl2::SDLRect dest = { 0, 0, 16, 16 };
-	fg_texture_.startDrawing();
+	fg_textures_[ n ].startDrawing();
 	Render::clearScreenTransparency();
-	for ( int i = 0; i < fg_tiles_.size(); ++i )
+	for ( int i = 0; i < fg_tiles_[ n ].size(); ++i )
 	{
-		const int fg_tile = fg_tiles_[ i ] - 1;
+		const int fg_tile = fg_tiles_[ n ][ i ] - 1;
 		dest.x = Unit::BlocksToPixels( i % width_blocks_ );
 		dest.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) ) );
 		if ( fg_tile > -1 )
@@ -516,17 +532,8 @@ void OverworldState::generateFGMapTexture()
 			src.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( fg_tile ) / 16.0 ) ) );
 			Render::renderObject( "tilesets/ow.png", src, dest );
 		}
-		const bool is_solid = testIsSolid( fg_tile );
-		if ( !is_solid )
-		{
-			tilemap_.tiles[ i ] = false;
-		}
-		else if ( fg_tile != -1 )
-		{
-			tilemap_.tiles[ i ] = true;
-		}
 	}
-	fg_texture_.endDrawing();
+	fg_textures_[ n ].endDrawing();
 };
 
 void OverworldState::generateMap()
@@ -575,24 +582,43 @@ void OverworldState::generateMap()
 
 			if ( has_name && name_is_string && has_data && data_is_array )
 			{
-				const int name_is_bg = strcmp( item[ "name" ].GetString(), "BG" );
-				if ( name_is_bg == 0 )
+				if ( strcmp( item[ "name" ].GetString(), "BG1" ) == 0 )
 				{
 					for ( const auto& bg_tile : item[ "data" ].GetArray() )
 					{
 						if ( bg_tile.IsInt() )
 						{
-							bg_tiles_.emplace_back( bg_tile.GetInt() );
+							bg_tiles_[ 0 ].emplace_back( bg_tile.GetInt() );
 						}
 					}
 				}
-				else if ( strcmp( item[ "name" ].GetString(), "Blocks" ) == 0 )
+				else if ( strcmp( item[ "name" ].GetString(), "BG2" ) == 0 )
+				{
+					for ( const auto& bg_tile : item[ "data" ].GetArray() )
+					{
+						if ( bg_tile.IsInt() )
+						{
+							bg_tiles_[ 1 ].emplace_back( bg_tile.GetInt() );
+						}
+					}
+				}
+				else if ( strcmp( item[ "name" ].GetString(), "FG1" ) == 0 )
 				{
 					for ( const auto& fg_tile : item[ "data" ].GetArray() )
 					{
 						if ( fg_tile.IsInt() )
 						{
-							fg_tiles_.emplace_back( fg_tile.GetInt() );
+							fg_tiles_[ 0 ].emplace_back( fg_tile.GetInt() );
+						}
+					}
+				}
+				else if ( strcmp( item[ "name" ].GetString(), "FG2" ) == 0 )
+				{
+					for ( const auto& fg_tile : item[ "data" ].GetArray() )
+					{
+						if ( fg_tile.IsInt() )
+						{
+							fg_tiles_[ 1 ].emplace_back( fg_tile.GetInt() );
 						}
 					}
 				}
@@ -610,11 +636,11 @@ void OverworldState::generateMap()
 		}
 	}
 
-	if ( bg_tiles_.size() == 0 )
+	if ( bg_tiles_[ 0 ].size() == 0 || bg_tiles_[ 1 ].size() == 0 )
 	{
 		throw std::runtime_error( "Missing background layer for o’erworld map." );
 	}
-	else if ( fg_tiles_.size() == 0 )
+	else if ( fg_tiles_[ 0 ].size() == 0 || fg_tiles_[ 1 ].size() == 0 )
 	{
 		throw std::runtime_error( "Missing blocks layer for o’erworld map." );
 	}
@@ -622,6 +648,8 @@ void OverworldState::generateMap()
 	{
 		throw std::runtime_error( "Missing sprite layer for o’erworld map." );
 	}
+
+	tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 };
 
 bool OverworldState::testLanguageHasChanged() const

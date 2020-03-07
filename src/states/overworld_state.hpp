@@ -20,6 +20,7 @@ class Collision;
 class OverworldState : public GameState
 {
 	public:
+		static constexpr int NUMBER_OF_LAYERS = 2;
 		OverworldState( int previous_level, bool new_game = false, ShowEventType show_event = ShowEventType::NONE );
 		~OverworldState();
 
@@ -36,10 +37,11 @@ class OverworldState : public GameState
 		void loadMap( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data );
 		void generateSprites();
 		void generateMapTextures();
-		void generateBGMapTexture();
-		void generateFGMapTexture();
+		void generateBGMapTexture( int n );
+		void generateFGMapTexture( int n );
 		void generateMap();
 		bool testLanguageHasChanged() const;
+		void updateSolids( int tile, int i );
 
 		OWState state_;
 		int background_animation_timer_;
@@ -51,8 +53,8 @@ class OverworldState : public GameState
 		OWObject* object_on_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;
-		TextureBox bg_texture_;
-		TextureBox fg_texture_;
+		TextureBox bg_textures_[ NUMBER_OF_LAYERS ];
+		TextureBox fg_textures_[ NUMBER_OF_LAYERS ];
 		ImageGraphics water_background_;
 		OWCamera camera_;
 		OWEvent event_;

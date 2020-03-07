@@ -91,16 +91,25 @@ void OWEvent::init( int level, int map_width, bool is_secret )
 
             OWEventTile::Layer layer;
             const std::string layer_string = tile[ "layer" ].GetString();
-            if ( layer_string == "BG" )
+            if ( layer_string == "BG1" )
             {
-                layer = OWEventTile::Layer::BG;
+                layer = OWEventTile::Layer::BG1;
             }
-            else if ( layer_string == "FG" )
+            else if ( layer_string == "BG2" )
             {
-                layer = OWEventTile::Layer::FG;
+                layer = OWEventTile::Layer::BG2;
+            }
+            else if ( layer_string == "FG1" )
+            {
+                layer = OWEventTile::Layer::FG1;
+            }
+            else if ( layer_string == "FG2" )
+            {
+                layer = OWEventTile::Layer::FG2;
             }
             else
             {
+                printf( "%s\n", layer_string.c_str() );
 		        throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " has been corrupted. Please redownload game." );
             }
 
@@ -127,7 +136,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
     }
 };
 
-OWEvent::MessageBack OWEvent::update( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles )
+OWEvent::MessageBack OWEvent::update( std::vector<int>* bg_tiles, std::vector<int>* fg_tiles )
 {
     MessageBack message = MessageBack::__NULL;
     if ( current_change_ == changes_.size() )
@@ -163,26 +172,39 @@ const DPoint& OWEvent::getTargetPosition() const
     return target_position_;
 };
 
-OWEvent::MessageBack OWEvent::changeTiles( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles )
+OWEvent::MessageBack OWEvent::changeTiles( std::vector<int>* bg_tiles, std::vector<int>* fg_tiles )
 {
-    bool fg_change = false;
-    bool bg_change = false;
+    MessageBack message = MessageBack::__NULL;
     for ( const OWEventTile& tile : changes_[ current_change_ ] )
     {
         int* tilemap = nullptr;
         switch ( tile.layer_ )
         {
-            case( OWEventTile::Layer::BG ):
+            case( OWEventTile::Layer::BG1 ):
             {
-                bg_change = true;
-                tilemap = &bg_tiles[ 0 ];
+                message = message | MessageBack::BG_TILES_1_CHANGED;
+                tilemap = &bg_tiles[ 0 ][ 0 ];
             }
             break;
 
-            case( OWEventTile::Layer::FG ):
+            case( OWEventTile::Layer::BG2 ):
             {
-                fg_change = true;
-                tilemap = &fg_tiles[ 0 ];
+                message = message | MessageBack::BG_TILES_2_CHANGED;
+                tilemap = &bg_tiles[ 1 ][ 0 ];
+            }
+            break;
+
+            case( OWEventTile::Layer::FG1 ):
+            {
+                message = message | MessageBack::FG_TILES_1_CHANGED;
+                tilemap = &fg_tiles[ 0 ][ 0 ];
+            }
+            break;
+
+            case( OWEventTile::Layer::FG2 ):
+            {
+                message = message | MessageBack::FG_TILES_2_CHANGED;
+                tilemap = &fg_tiles[ 1 ][ 0 ];
             }
             break;
         }
@@ -191,14 +213,10 @@ OWEvent::MessageBack OWEvent::changeTiles( std::vector<int>& bg_tiles, std::vect
     }
     ++current_change_;
 
-    return ( bg_change && fg_change )
-        ? MessageBack::BOTH_TILES_CHANGED
-        : ( bg_change )
-            ? MessageBack::BG_TILES_CHANGED
-            : MessageBack::FG_TILES_CHANGED;
+    return message;
 };
 
-void OWEvent::changeAllTiles( std::vector<int>& bg_tiles, std::vector<int>& fg_tiles )
+void OWEvent::changeAllTiles( std::vector<int>* bg_tiles, std::vector<int>* fg_tiles )
 {
     while ( current_change_ < changes_.size() )
     {

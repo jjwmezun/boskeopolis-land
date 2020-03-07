@@ -92,9 +92,8 @@ void OWHero::update( const OWTileMap& tilemap, const sdl2::SDLRect& bounds )
 
 	const int v_tile_x = ( int )( std::floor( ( position_.x ) / 16.0 ) );
 	const int v_tile_y = ( int )( std::floor( ( position_.y + y_speed_ ) / 16.0 ) );
-	const int v_tile = v_tile_y * tilemap.map_width + v_tile_x;
-	const bool v_on_solid_tile = tilemap.tiles[ v_tile ];
-	if ( !v_on_solid_tile )
+	const int v_tile = v_tile_y * tilemap.width() + v_tile_x;
+	if ( !tilemap.isSolid( v_tile ) )
 	{
 		position_.y += y_speed_;
 	}
@@ -105,9 +104,8 @@ void OWHero::update( const OWTileMap& tilemap, const sdl2::SDLRect& bounds )
 
 	const int h_tile_x = ( int )( std::floor( ( position_.x + x_speed_ ) / 16.0 ) );
 	const int h_tile_y = ( int )( std::floor( ( position_.y ) / 16.0 ) );
-	const int h_tile = h_tile_y * tilemap.map_width + h_tile_x;
-	const bool h_on_solid_tile = tilemap.tiles[ h_tile ];
-	if ( !h_on_solid_tile )
+	const int h_tile = h_tile_y * tilemap.width() + h_tile_x;
+	if ( !tilemap.isSolid( h_tile ) )
 	{
 		position_.x += x_speed_;
 	}

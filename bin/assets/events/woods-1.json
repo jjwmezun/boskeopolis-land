@@ -5,19 +5,19 @@
     [
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 139,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 139,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 48,
                 "y": 139,
                 "tile": -1
@@ -25,49 +25,49 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 48,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 140,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 140,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 48,
                 "y": 140,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 139,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 49,
                 "y": 139,
                 "tile": -1
@@ -75,109 +75,109 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 48,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 49,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 49,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 140,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 49,
                 "y": 140,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 141,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 141,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 141,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 139,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 140,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 50,
                 "y": 138,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 50,
                 "y": 139,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 50,
                 "y": 140,
                 "tile": -1
@@ -185,19 +185,19 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 43,
                 "y": 135,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 135,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 135,
                 "tile": -1
@@ -205,49 +205,49 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 43,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 43,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 135,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 135,
                 "tile": -1
@@ -255,109 +255,109 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 135,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 135,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 47,
                 "y": 136,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 43,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 45,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 46,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 43,
                 "y": 137,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 44,
                 "y": 137,
                 "tile": -1
@@ -365,19 +365,19 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 38,
                 "y": 132,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 39,
                 "y": 132,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 40,
                 "y": 132,
                 "tile": -1
@@ -385,49 +385,49 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 38,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 39,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 40,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 38,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 39,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 40,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 37,
                 "y": 132,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 132,
                 "tile": -1
@@ -435,115 +435,115 @@
         ],
         [
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 37,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 37,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 37,
                 "y": 130,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 38,
                 "y": 130,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 39,
                 "y": 130,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 40,
                 "y": 130,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 130,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 37,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 38,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 39,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 40,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 41,
                 "y": 134,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 36,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 36,
                 "y": 132,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 36,
                 "y": 133,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 131,
                 "tile": -1
             },
             {
-                "layer": "FG",
+                "layer": "BG2",
                 "x": 42,
                 "y": 132,
                 "tile": -1
