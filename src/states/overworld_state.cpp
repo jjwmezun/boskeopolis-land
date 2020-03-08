@@ -20,18 +20,19 @@ static std::vector<int> sprites_tiles_ = {};
 static int width_blocks_ = 0;
 static int height_blocks_ = 0;
 
-static constexpr int NUMBER_OF_PALETTES = 4;
+static constexpr int NUMBER_OF_PALETTES = 5;
 static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
 	"Overworld Red",
 	"Overworld Green",
 	"Overworld Yellow",
-	"Overworld Brown"
+	"Overworld Brown",
+	"Overworld Purple"
 };
 
 static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] = 
 {
-	0, 1, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 1, 3, 2, 2, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
