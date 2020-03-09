@@ -127,6 +127,7 @@ void EventSystem::resetMisc()
 		delete misc_.data_.boss_ui_;
 	}
 	memset( &misc_, 0, sizeof( EMisc ) ); // Just 0-out data.*/
+	memset( &misc_, 0, sizeof( EMisc ) ); // Just 0-out data.
 };
 
 void EventSystem::win()

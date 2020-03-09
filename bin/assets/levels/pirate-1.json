@@ -35,10 +35,5 @@
 	"entrance_y": 32,
 
 	"gem_challenge": 18000,
-	"time_challenge": 5,
-
-	"goal":
-	{
-		"message": "¡Find the chest with the Keycane!"
-	}
+	"time_challenge": 5
 }
