@@ -1,0 +1,16 @@
+{
+    "camera_target_x": 123,
+    "camera_target_y": 128,
+    "speed": 4,
+    "changes":
+    [
+        [
+            {
+                "layer": "BG1",
+                "x": 123,
+                "y": 128,
+                "tile": 2
+            }
+        ]
+    ]
+}

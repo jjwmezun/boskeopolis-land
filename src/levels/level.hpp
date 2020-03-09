@@ -23,6 +23,7 @@ class Level
 		static constexpr char THEMES[ Level::NUMBER_OF_THEMES ][ 9 ] =
 		{
 			"city",
+			"domestic",
 			"woods",
 			"mines",
 			"desert",
@@ -34,7 +35,6 @@ class Level
 			"swamp",
 			"sewer",
 			"factory",
-			"domestic",
 			"dungeon",
 			"special"
 		};
