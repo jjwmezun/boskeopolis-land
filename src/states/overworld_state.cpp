@@ -35,7 +35,7 @@ static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 
 static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] = 
 {
-	0, 1, 3, 2, 2, 2, 4, 5, 6, 7, 3, 0, 0, 0, 0,
+	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 3, 3, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
