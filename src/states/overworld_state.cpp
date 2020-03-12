@@ -20,7 +20,7 @@ static std::vector<int> sprites_tiles_ = {};
 static int width_blocks_ = 0;
 static int height_blocks_ = 0;
 
-static constexpr int NUMBER_OF_PALETTES = 8;
+static constexpr int NUMBER_OF_PALETTES = 9;
 static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
 	"Overworld Red",
@@ -30,13 +30,14 @@ static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 	"Overworld Purple",
 	"Overworld Cyan",
 	"Overworld Orange",
-	"Overworld Olive"
+	"Overworld Olive",
+	"Overworld Black"
 };
 
 static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] = 
 {
-	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 3, 3, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 3, 3, 8, 0,
+	8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
@@ -371,28 +372,6 @@ void OverworldState::init()
 			tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 		}
 	}
-	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
-	{
-		if ( Inventory::victory( i ) )
-		{
-			OWEvent event;
-			event.init( i, width_blocks_, false );
-			if ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ )
-			{
-				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
-			}
-		}
-		if ( Inventory::getSecretGoal( i ) )
-		{
-			OWEvent event;
-			event.init( i, width_blocks_, true );
-			if ( state_ != OWState::CAMERA_MOVES_TO_SECRET_EVENT || i != current_level_ )
-			{
-				level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
-			}
-		}
-	}
-
 	generateMapTextures();
 
 	camera_.center( hero_.getPosition() );

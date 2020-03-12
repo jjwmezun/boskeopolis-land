@@ -1,0 +1,23 @@
+{
+    "camera_target_x": 102,
+    "camera_target_y": 128,
+    "speed": 4,
+    "next_level": "special-1",
+    "changes":
+    [
+        [
+            {
+                "layer": "BG1",
+                "x": 111,
+                "y": 128,
+                "tile": 46
+            },
+            {
+                "layer": "BG1",
+                "x": 111,
+                "y": 127,
+                "tile": 47
+            }
+        ]
+    ]
+}
