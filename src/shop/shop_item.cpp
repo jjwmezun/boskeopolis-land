@@ -12,6 +12,7 @@ ShopItem::ShopItem
     int price
 )
 :
+    purchased_ ( false ),
     type_ ( type ),
     price_ ( price ),
     state_ ( getStateByType( type ) ),
@@ -49,8 +50,15 @@ void ShopItem::purchase()
             Inventory::giveOxygenUpgrade();
         }
         break;
+
+        case ( Type::SPECIAL_LEVEL_1 ):
+        {
+            Inventory::unlockSpecialLevel( 1 );
+        }
+        break;
     }
     state_ = getStateByType( type_ );
+    purchased_ = true;
 };
 
 ShopItem::State ShopItem::getState() const
@@ -88,6 +96,12 @@ int ShopItem::getMainIconSrc() const
             return 16;
         }
         break;
+
+        case ( Type::SPECIAL_LEVEL_1 ):
+        {
+            return 32;
+        }
+        break;
     }
 };
 
@@ -104,6 +118,12 @@ int ShopItem::getSmallIconSrc() const
         case ( Type::OXYGEN_UPGRADE ):
         {
             return 8;
+        }
+        break;
+
+        case ( Type::SPECIAL_LEVEL_1 ):
+        {
+            return 16;
         }
         break;
     }
@@ -123,5 +143,15 @@ static ShopItem::State getStateByType( ShopItem::Type type )
             return ( Inventory::haveOxygenUpgrade() ) ? ShopItem::State::OUT_OF_STOCK : ShopItem::State::AVAILABLE;
         }
         break;
+        case ( ShopItem::Type::SPECIAL_LEVEL_1 ):
+        {
+            return ( Inventory::specialLevelUnlocked( 1 ) ) ? ShopItem::State::OUT_OF_STOCK : ShopItem::State::AVAILABLE;
+        }
+        break;
     }
+};
+
+bool ShopItem::hasBeenPurchased() const
+{
+    return purchased_;
 };

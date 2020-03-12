@@ -75,6 +75,7 @@ class Level
 		static const std::u32string* getLevelNames();
 		static const std::string& getCodeName( int level_id );
 		static void regenerateLevelNames();
+		static const std::u32string& getSpecialLevelName( int number );
 
 	private:
 		const bool start_on_;

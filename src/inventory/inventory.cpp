@@ -406,3 +406,13 @@ void Inventory::giveHPUpgrade( int number )
 {
 	save_.data_.health_upgrades_[ number ] = true;
 };
+
+void Inventory::unlockSpecialLevel( int number )
+{
+	save_.data_.special_levels_[ number ] = true;
+};
+
+bool Inventory::specialLevelUnlocked( int number )
+{
+	return save_.data_.special_levels_[ number ];
+};

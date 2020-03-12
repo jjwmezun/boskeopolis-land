@@ -1069,3 +1069,13 @@ std::u32string LocalizationLanguage::getMissingPaletteErrorMessage( const std::s
 {
     return mezun::stringReplace( mezun::charToChar32String( "Palette “%p” is missing. Please redownload game. Hold ESC for a few seconds to exit game." ), U"%p", mezun::charToChar32String( palette_name.c_str() ) );
 };
+
+std::u32string LocalizationLanguage::getUnlockSpecialLevelDescription() const
+{
+    return mezun::charToChar32String( "Unlock new bonus level." );
+};
+
+std::u32string LocalizationLanguage::getUnlockSpecialLevelName( const std::u32string& level_name ) const
+{
+    return mezun::stringReplace( mezun::charToChar32String( "Unlock “%l”" ), U"%l", level_name );
+};

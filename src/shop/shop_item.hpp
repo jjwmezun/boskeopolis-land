@@ -8,7 +8,8 @@ class ShopItem
         enum class Type
         {
             HP_UPGRADE,
-            OXYGEN_UPGRADE
+            OXYGEN_UPGRADE,
+            SPECIAL_LEVEL_1
         };
 
         enum class State
@@ -32,6 +33,7 @@ class ShopItem
         void purchase();
         State getState() const;
         bool isAvailable() const;
+        bool hasBeenPurchased() const;
         void renderMainIcon( int x, int y ) const;
         void renderSmallIcon( int x, int y ) const;
 
@@ -39,6 +41,7 @@ class ShopItem
         int getMainIconSrc() const;
         int getSmallIconSrc() const;
 
+        bool purchased_;
         Type type_;
         int price_;
         State state_;

@@ -10,6 +10,7 @@ struct SaveData
     CounterT<Unit::TOTAL_FUNDS_MAX, Unit::TOTAL_FUNDS_MIN> total_funds_;
     CounterT<Level::NUMBER_OF_LEVELS, -1> current_level_;
 	bool health_upgrades_[ Unit::MAX_HEART_UPGRADES ];
+    bool special_levels_[ Level::NUMBER_OF_CYCLES ];
     bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
     bool victories_[ Level::NUMBER_OF_LEVELS ];
     bool secret_goals_[ Level::NUMBER_OF_LEVELS ];

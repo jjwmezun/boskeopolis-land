@@ -17,20 +17,21 @@ static WTextObj generateDialogue( const std::u32string& text );
 ShopState::ShopState( int shop_number )
 :
     GameState( StateID::SHOP_STATE, { "Store Brown", 1 } ),
-    player_ (),
     state_ ( State::WALKING_IN ),
+    input_delay_ ( 0 ),
+    cart_total_shown_ ( 0 ),
     item_selection_ ( 0 ),
+    confirm_selection_ ( 0 ),
+    cart_ ( { false, false } ),
+    player_ (),
+    dialogue_ ( generateDialogue( Localization::getCurrentLanguage().getShopGreeting() ) ),
+    item_description_ ( {} ),
     items_
     ({
         { ShopItem::Type::HP_UPGRADE, Localization::getCurrentLanguage().getShopItemHPUpgradeName(), Localization::getCurrentLanguage().getShopItemHPUpgradeDescription(), 1000 },
-        { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 1000 }
-    }),
-    input_delay_ ( 0 ),
-    cart_ ( { false, false } ),
-    dialogue_ ( generateDialogue( Localization::getCurrentLanguage().getShopGreeting() ) ),
-    cart_total_shown_ ( 0 ),
-    confirm_selection_ ( 0 ),
-    item_description_ ( {} )
+        { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 1000 },
+        { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Level::getSpecialLevelName( 1 ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 1000 }
+    })
 {};
 
 ShopState::~ShopState() {};

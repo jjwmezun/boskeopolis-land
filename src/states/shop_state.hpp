@@ -28,7 +28,7 @@ class ShopState : public GameState
 			WAITING_FOR_LEAVING_TEXT_TO_FINISH,
 			LEAVING
 		};
-		static constexpr int NUMBER_OF_ITEMS = 2;
+		static constexpr int NUMBER_OF_ITEMS = 3;
 
 		bool testCartIsEmpty() const;
 		bool testSelectingCheckout() const;
@@ -38,15 +38,14 @@ class ShopState : public GameState
 		void renderDialogueBox();
 		void setItemDescriptionText();
 
-        ShopPlayer player_;
 		State state_;
-        CounterFlip<NUMBER_OF_ITEMS-1, -2> item_selection_;
-		ShopItem items_[ NUMBER_OF_ITEMS ];
 		int input_delay_;
-		bool cart_[ NUMBER_OF_ITEMS ];
-		WTextGradual<true> dialogue_;
 		int cart_total_shown_;
 		CounterFlip<1> confirm_selection_;
+        CounterFlip<NUMBER_OF_ITEMS-1, -2> item_selection_;
+		bool cart_[ NUMBER_OF_ITEMS ];
+		ShopItem items_[ NUMBER_OF_ITEMS ];
+        ShopPlayer player_;
+		WTextGradual<true> dialogue_;
 		WTextGradual<false> item_description_;
-        char scratch_[3000];
 };

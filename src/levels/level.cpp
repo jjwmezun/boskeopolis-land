@@ -996,3 +996,8 @@ const std::string& Level::getCodeName( int level_id )
 	assert( level_id >= 0 && level_id < Level::NUMBER_OF_LEVELS );
 	return code_names_[ level_id ];
 };
+
+const std::u32string& Level::getSpecialLevelName( int number )
+{
+	return getLevelNames()[ NUMBER_OF_THEMES * number - 1 ];
+};

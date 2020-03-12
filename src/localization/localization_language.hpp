@@ -85,6 +85,8 @@ class LocalizationLanguage
         std::u32string getSuccessMessage() const;
         std::u32string getSecretGoalMessage() const;
         std::u32string getMissingPaletteErrorMessage( const std::string& palette_name ) const;
+        std::u32string getUnlockSpecialLevelDescription() const;
+        std::u32string getUnlockSpecialLevelName( const std::u32string& level_name ) const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );

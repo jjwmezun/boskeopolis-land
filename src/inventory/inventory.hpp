@@ -47,6 +47,8 @@ class Inventory
 		static bool hasHPUpgrade( int number );
 		static void giveOxygenUpgrade();
 		static void giveHPUpgrade( int number );
+		static void unlockSpecialLevel( int number );
+		static bool specialLevelUnlocked( int number );
 		static bool hasCrown( int level );
 		static std::string getPlayerCostume();
 
