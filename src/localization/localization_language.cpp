@@ -799,12 +799,12 @@ void LocalizationLanguage::loadShopText( const rapidjson::GenericObject<false, r
     shop_checkout_confirm_prompt_ = mezun::charToChar32String( shopkeeper[ "checkout_confirm" ].GetString() );
     shop_checkout_thanks_ = mezun::charToChar32String( shopkeeper[ "thanks" ].GetString() );
     shop_not_available_ = mezun::charToChar32String( shopkeeper[ "not_available" ].GetString() );
-    shop_out_of_stock_ = mezun::charToChar32String( shopkeeper[ "out_of_stock" ].GetString() );
+    shop_out_of_stock_ = mezun::charToChar32String( shop[ "out_of_stock" ].GetString() );
     shop_leaving_ = mezun::charToChar32String( shopkeeper[ "leaving" ].GetString() );
     shop_checkout_ = mezun::charToChar32String( shop[ "checkout" ].GetString() );
     shop_exit_ = mezun::charToChar32String( shop[ "exit" ].GetString() );
     shopkeeper_not_available_ = mezun::charToChar32String( shop[ "not_available" ].GetString() );
-    shopkeeper_out_of_stock_ = mezun::charToChar32String( shop[ "out_of_stock" ].GetString() );
+    shopkeeper_out_of_stock_ = mezun::charToChar32String( shopkeeper[ "out_of_stock" ].GetString() );
     overworld_shop_title_ = mezun::charToChar32String( shop[ "name" ].GetString() );
 };
 

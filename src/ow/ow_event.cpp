@@ -22,11 +22,19 @@ OWEvent::OWEvent()
 
 void OWEvent::init( int level, int map_width, bool is_secret )
 {
-    const std::string path = Main::resourcePath() + "events/" + Level::getCodeName( level ) + ( ( is_secret ) ? "-secret.json" : ".json" );
+    std::string path;
+    if ( level == -2 )
+    {
+        path = Main::resourcePath() + "events/shop-1.json";
+    }
+    else
+    {
+        path = Main::resourcePath() + "events/" + Level::getCodeName( level ) + ( ( is_secret ) ? "-secret.json" : ".json" );
+    }
 	std::ifstream ifs( path );
 	if( !ifs.is_open() )
 	{
-		throw std::runtime_error( "The o’erworld map data is missing. Please redownload this game & try ’gain." );
+		throw std::runtime_error( "The o’erworld map data is missing for file “" + path + "”. Please redownload this game & try ’gain." );
 	}
 	rapidjson::IStreamWrapper ifs_wrap( ifs );
     rapidjson::Document document;

@@ -5,6 +5,7 @@
 #include "localization_language.hpp"
 #include "main.hpp"
 #include "mezun_helpers.hpp"
+#include "overworld_state.hpp"
 #include "render.hpp"
 #include "shop_state.hpp"
 #include "wtext_obj.hpp"
@@ -32,7 +33,10 @@ ShopState::ShopState( int shop_number )
         { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 1000 },
         { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Level::getSpecialLevelName( 1 ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 1000 }
     })
-{};
+{
+    Inventory::setCurrentLevel( -2 );
+    Inventory::save();
+};
 
 ShopState::~ShopState() {};
 
@@ -249,7 +253,15 @@ void ShopState::stateUpdate()
             if ( player_.hasLeftStore() )
             {
                 Audio::playSound( Audio::SoundType::PAGE );
-                Main::popState( true );
+                ShowEventType event_type = ShowEventType::NONE;
+                for ( int i = 0; i < NUMBER_OF_ITEMS; ++i )
+                {
+                    if ( items_[ i ].type() == ShopItem::Type::SPECIAL_LEVEL_1 && items_[ i ].wasPurchased() )
+                    {
+                        event_type = ShowEventType::NORMAL;
+                    }
+                }
+                Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( -2, event_type ) ) );
             }
         }
         break;
@@ -301,7 +313,7 @@ void ShopState::stateRender()
             {
                 if ( item_selection_() == i )
                 {
-                    Render::renderObject( "bg/shop-frame-highlight-2.png", { 0, 0, 268, 19 }, { 14, 55, 268, 19 } );
+                    Render::renderObject( "bg/shop-frame-highlight-2.png", { 0, 0, 268, 19 }, { 14, ( 31 + ( i * 24 ) ), 268, 19 } );
                 }
                 else if ( items_[ i ].isAvailable() )
                 {
@@ -316,7 +328,7 @@ void ShopState::stateRender()
                 }
             }
 
-            const int y = ( i == 0 ) ? 30 : 55;
+            const int y = ( i == 0 ) ? 30 : ( 31 + ( i * 24 ) );
             items_[ i ].renderMainIcon( 20, y + 2 );
             WTextObj name{ items_[ i ].getName(), 38, y, WTextCharacter::Color::BLACK, 188, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 6, 6 };
             name.render();

@@ -155,3 +155,13 @@ bool ShopItem::hasBeenPurchased() const
 {
     return purchased_;
 };
+
+ShopItem::Type ShopItem::type() const
+{
+    return type_;
+};
+
+bool ShopItem::wasPurchased() const
+{
+    return purchased_;
+};

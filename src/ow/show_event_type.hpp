@@ -4,5 +4,6 @@ enum class ShowEventType
 {
     NONE,
     NORMAL,
-    SECRET
+    SECRET,
+    SPECIAL
 };

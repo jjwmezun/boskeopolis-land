@@ -23,7 +23,7 @@ class OverworldState : public GameState
 {
 	public:
 		static constexpr int NUMBER_OF_LAYERS = 2;
-		OverworldState( int previous_level, bool new_game = false, ShowEventType show_event = ShowEventType::NONE );
+		OverworldState( int previous_level, ShowEventType show_event = ShowEventType::NONE );
 		~OverworldState();
 
 		void stateUpdate() override;

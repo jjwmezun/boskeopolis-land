@@ -359,7 +359,7 @@ void EventSystem::winEvent( const InventoryLevel& inventory )
 			WTextObj::MessageData{ Localization::getCurrentLanguage().getSuccessMessage(), WTextCharacter::Color::WHITE, WTextCharacter::Color::DARK_GRAY },
 			WMessageState::Type::CHANGE,
 			Palette( "Go Green", 2 ),
-			std::make_unique<OverworldState> ( Inventory::currentLevel(), false, new_event ),
+			std::make_unique<OverworldState> ( Inventory::currentLevel(), new_event ),
 			"success",
 			true,
 			true
@@ -386,7 +386,7 @@ void EventSystem::secretGoalEvent( const InventoryLevel& inventory )
 			WTextObj::MessageData{ Localization::getCurrentLanguage().getSecretGoalMessage(), WTextCharacter::Color::WHITE, WTextCharacter::Color::DARK_GRAY },
 			WMessageState::Type::CHANGE,
 			Palette( "Triste Blue", 2 ),
-			std::make_unique<OverworldState> ( Inventory::currentLevel(), false, new_event ),
+			std::make_unique<OverworldState> ( Inventory::currentLevel(), new_event ),
 			"success",
 			true,
 			true

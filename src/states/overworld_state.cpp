@@ -66,7 +66,7 @@ static constexpr OWState determineBeginningState( ShowEventType event_type )
 
 static const char* getPaletteForLevel();
 
-OverworldState::OverworldState( int previous_level, bool new_game, ShowEventType show_event )
+OverworldState::OverworldState( int previous_level, ShowEventType show_event )
 :
 	GameState( StateID::OVERWORLD_STATE, { getPaletteForLevel(), 2 } ),
 	state_ ( determineBeginningState( show_event ) ),
@@ -173,7 +173,7 @@ void OverworldState::stateUpdate()
 						case ( OWObject::Type::SHOP ):
 						{
 							Audio::playSound( Audio::SoundType::CONFIRM );
-							Main::pushState( std::make_unique<ShopState> ( object_on_->getShopNumber() ), true );
+							Main::changeState( std::make_unique<ShopState> ( object_on_->getShopNumber() ) );
 						}
 						break;
 					}
@@ -351,6 +351,13 @@ void OverworldState::init()
 	camera_.setBounds( width, height );
 
 	generateSprites();
+	if ( Inventory::specialLevelUnlocked( 1 ) && ( state_ != OWState::CAMERA_MOVES_TO_EVENT || -2 != current_level_ ) )
+	{
+		OWEvent event;
+		event.init( -2, width_blocks_, false );
+		event.changeAllTiles( bg_tiles_, fg_tiles_ );
+		level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
+	}
 	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 	{
 		if ( Inventory::victory( i ) && ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ ) )
@@ -484,6 +491,10 @@ void OverworldState::generateSprites()
 			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
 			{
 				const int shop_number = sprite_tile - 2160 + 1;
+				if ( previous_level_ == -2 )
+				{
+					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
+				}
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createShop( shop_number ) ) );
 			}
 			else if ( sprite_tile >= 2176 && sprite_tile < 2176 + NUMBER_OF_PALETTES )

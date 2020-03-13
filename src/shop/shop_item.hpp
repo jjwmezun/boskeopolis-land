@@ -36,6 +36,8 @@ class ShopItem
         bool hasBeenPurchased() const;
         void renderMainIcon( int x, int y ) const;
         void renderSmallIcon( int x, int y ) const;
+        Type type() const;
+        bool wasPurchased() const;
 
     private:
         int getMainIconSrc() const;

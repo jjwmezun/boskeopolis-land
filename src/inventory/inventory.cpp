@@ -17,7 +17,7 @@
 CounterT<Unit::TOTAL_FUNDS_MAX, Unit::TOTAL_FUNDS_MIN> Inventory::total_funds_shown_{};
 Save Inventory::save_{};
 
-int Inventory::currentLevel() { return save_.data_.current_level_(); };
+int Inventory::currentLevel() { return save_.data_.current_level_; };
 
 bool Inventory::levelComplete( int level )
 {
@@ -31,7 +31,7 @@ bool Inventory::levelComplete( int level )
 
 bool Inventory::haveDiamond()
 {
-	return save_.data_.diamonds_[ save_.data_.current_level_() ];
+	return save_.data_.diamonds_[ save_.data_.current_level_ ];
 };
 
 bool Inventory::haveDiamond( int level )
@@ -41,7 +41,7 @@ bool Inventory::haveDiamond( int level )
 
 void Inventory::getDiamond()
 {
-	save_.data_.diamonds_[ save_.data_.current_level_() ] = true;
+	save_.data_.diamonds_[ save_.data_.current_level_ ] = true;
 	save();
 };
 
@@ -62,9 +62,9 @@ void Inventory::setGemScore( int level, int value )
 
 void Inventory::winGemScore( int funds )
 {
-	if ( funds >= save_.data_.gem_scores_[ save_.data_.current_level_() ] )
+	if ( funds >= save_.data_.gem_scores_[ save_.data_.current_level_ ] )
 	{
-		setGemScore( save_.data_.current_level_(), funds );
+		setGemScore( save_.data_.current_level_, funds );
 	}
 };
 
@@ -90,9 +90,9 @@ void Inventory::setTimeScore( int level, int value )
 
 void Inventory::winTimeScore( const Clock& clock )
 {
-	if ( save_.data_.time_scores_[ save_.data_.current_level_() ] < 0 || clock.totalSeconds() <= save_.data_.time_scores_[ save_.data_.current_level_() ] )
+	if ( save_.data_.time_scores_[ save_.data_.current_level_ ] < 0 || clock.totalSeconds() <= save_.data_.time_scores_[ save_.data_.current_level_ ] )
 	{
-		setTimeScore( save_.data_.current_level_(), clock.totalSeconds() );
+		setTimeScore( save_.data_.current_level_, clock.totalSeconds() );
 	}
 };
 
@@ -103,7 +103,7 @@ bool Inventory::timeChallengeBeaten( int level )
 
 bool Inventory::victory()
 {
-	return save_.data_.victories_[ save_.data_.current_level_() ];
+	return save_.data_.victories_[ save_.data_.current_level_ ];
 };
 
 bool Inventory::victory( int level )
@@ -113,7 +113,7 @@ bool Inventory::victory( int level )
 
 bool Inventory::getSecretGoal()
 {
-	return save_.data_.secret_goals_[ save_.data_.current_level_() ];
+	return save_.data_.secret_goals_[ save_.data_.current_level_ ];
 };
 
 bool Inventory::getSecretGoal( int level )
@@ -311,7 +311,7 @@ void Inventory::load( Save save )
 
 void Inventory::win( const InventoryLevel& level_inventory )
 {
-	save_.data_.victories_[ save_.data_.current_level_() ] = true;
+	save_.data_.victories_[ save_.data_.current_level_ ] = true;
 	generalVictory( level_inventory );
 };
 
@@ -331,7 +331,7 @@ void Inventory::quit()
 
 void Inventory::secretGoal( const InventoryLevel& level_inventory )
 {
-	save_.data_.secret_goals_[ save_.data_.current_level_() ] = true;
+	save_.data_.secret_goals_[ save_.data_.current_level_ ] = true;
 	generalVictory( level_inventory );
 };
 
@@ -339,7 +339,7 @@ void Inventory::generalVictory( const InventoryLevel& level_inventory )
 {
 	if ( level_inventory.isHardMode() )
 	{
-		save_.data_.crowns_[ save_.data_.current_level_() ] = true;
+		save_.data_.crowns_[ save_.data_.current_level_ ] = true;
 	}
 	winGemScore( level_inventory.funds() );
 	winTimeScore( level_inventory.clock() );

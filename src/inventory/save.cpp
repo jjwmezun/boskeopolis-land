@@ -222,7 +222,7 @@ bool Save::validateSaveData( const SaveData& data )
     return
         data.total_funds_ >= Unit::TOTAL_FUNDS_MIN &&
         data.total_funds_ <= Unit::TOTAL_FUNDS_MAX &&
-        data.current_level_ >= -1 &&
+        data.current_level_ >= -2 &&
         data.current_level_ < Level::NUMBER_OF_LEVELS;
 };
 

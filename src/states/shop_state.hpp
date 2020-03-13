@@ -44,8 +44,8 @@ class ShopState : public GameState
 		CounterFlip<1> confirm_selection_;
         CounterFlip<NUMBER_OF_ITEMS-1, -2> item_selection_;
 		bool cart_[ NUMBER_OF_ITEMS ];
-		ShopItem items_[ NUMBER_OF_ITEMS ];
         ShopPlayer player_;
 		WTextGradual<true> dialogue_;
 		WTextGradual<false> item_description_;
+		ShopItem items_[ NUMBER_OF_ITEMS ];
 };
