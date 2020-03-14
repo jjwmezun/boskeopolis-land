@@ -289,13 +289,14 @@ void OWInventory::regenerateLevelNameGraphics( WTextObj& level_name, WTextObj& l
 {
 	const WTextCharacter::Color color = Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK;
 	const int theme = level_ % Level::NUMBER_OF_THEMES;
-	level_icon_.src_.x = 48 + ( 8 * theme );
 	level_name.changeColor( color );
 	level_name_textures_[ i ].startDrawing();
 	Render::clearScreenTransparency();
-	level_icon_.render();
 	if ( !isShop() )
 	{
+		level_icon_.src_.y = 48 + ( 8 * theme );
+		level_icon_.src_.x = 8 * ( int )( color );
+		level_icon_.render();
 		level_name_header.changeColor( color );
 		level_name_header.render();
 	}
