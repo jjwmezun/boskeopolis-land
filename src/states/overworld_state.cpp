@@ -34,8 +34,9 @@ static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 	"Overworld Black"
 };
 
-static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ] = 
+static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS + 2 ] = 
 {
+	1, 0,
 	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 3, 3, 8, 0,
 	8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -75,7 +76,7 @@ OverworldState::OverworldState( int previous_level, ShowEventType show_event )
 	current_level_ ( previous_level ),
 	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
-	current_palette_ ( LEVEL_PALETTES[ previous_level ] ),
+	current_palette_ ( LEVEL_PALETTES[ previous_level + 2 ] ),
 	current_animation_frame_ ( 0 ),
 	animation_timer_ (),
 	object_on_ ( nullptr ),
@@ -496,6 +497,7 @@ void OverworldState::generateSprites()
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createShop( shop_number ) ) );
+				level_tile_graphics_.add( dest, -2, true );
 			}
 			else if ( sprite_tile >= 2176 && sprite_tile < 2176 + NUMBER_OF_PALETTES )
 			{

@@ -13,7 +13,7 @@ OWLevelTileGraphics::OWLevelTileGraphics()
     positions_ (),
     reveal_ ()
 {
-    for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+    for ( int i = 0; i < NUMBER_OF_TILES; ++i )
     {
         reveal_[ i ] = false;
         positions_[ i ] = { 0, 0, 8, 8 };
@@ -22,8 +22,8 @@ OWLevelTileGraphics::OWLevelTileGraphics()
 
 void OWLevelTileGraphics::add( sdl2::SDLRect dest, int level, bool reveal )
 {
-    reveal_[ level ] = reveal;
-    positions_[ level ] = dest;
+    reveal_[ level + 2 ] = reveal;
+    positions_[ level + 2 ] = dest;
 };
 
 void OWLevelTileGraphics::update( const sdl2::SDLRect& camera )
@@ -61,14 +61,14 @@ bool OWLevelTileGraphics::testOnCamera( const sdl2::SDLRect& position, const sdl
 
 void OWLevelTileGraphics::showTile( const sdl2::SDLRect& camera, int level )
 {
-    reveal_[ level ] = true;
+    reveal_[ level + 2 ] = true;
     refreshGraphics( camera );
 };
 
 void OWLevelTileGraphics::refreshGraphics( const sdl2::SDLRect& camera )
 {
     destinations_.clear();
-    for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+    for ( int i = 0; i < NUMBER_OF_TILES; ++i )
     {
         const auto& position = positions_[ i ];
         if ( reveal_[ i ] && testOnCamera( position, camera ) )
