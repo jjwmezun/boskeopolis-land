@@ -62,15 +62,8 @@ static void renderEmptySecretGoalIcon( int y );
 LevelSelectState::LevelSelectState( int current_level )
 :
 	GameState ( StateID::LEVEL_SELECT_STATE, { "Pale Green", 1 } ),
-	level_names_ (),
-	moving_page_textures_ (),
-	title_ ({ Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8, 8 }),
-	screen_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
-	background_ (),
-	static_page_texture_ (),
-	final_table_texture_ (),
-	current_page_texture_ ( &moving_page_textures_[ 0 ] ),
-	next_page_texture_ ( &moving_page_textures_[ 1 ] ),
+	show_target_scores_ ( false ),
+	page_change_direction_ ( Direction::Horizontal::__NULL ),
 	selection_timer_ ( 0 ),
 	selection_ ( 0 ),
 	page_ ( 0 ),
@@ -79,8 +72,16 @@ LevelSelectState::LevelSelectState( int current_level )
 	next_page_ ( 1 ),
 	first_level_of_page_ ( 0 ),
 	number_of_pages_ ( 2 ),
-	page_change_direction_ ( Direction::Horizontal::__NULL ),
-	show_target_scores_ ( false )
+	current_page_texture_ ( &moving_page_textures_[ 0 ] ),
+	next_page_texture_ ( &moving_page_textures_[ 1 ] ),
+	screen_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
+	background_ (),
+	moving_page_textures_ (),
+	static_page_texture_ (),
+	final_table_texture_ (),
+	title_ ({ Localization::getCurrentLanguage().getLevelSelectTitle(), 0, 0, WTextCharacter::Color::LIGHT_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::CENTER, WTextCharacter::Color::BLACK, 8, 8 }),
+	level_names_ (),
+	level_name_headers_ ()
 {
 	Audio::changeSong( "level-select" );
 };
@@ -519,6 +520,8 @@ void LevelSelectState::renderFlashingClockSymbol( int y ) const
 
 void LevelSelectState::renderLevelNameOfColor( WTextCharacter::Color color, int level )
 {
+	level_name_headers_[ level ].changeColor( color );
+	level_name_headers_[ level ].render();
 	level_names_[ level ].changeColor( color );
 	level_names_[ level ].render();
 };
@@ -641,10 +644,10 @@ void LevelSelectState::generateLevelNames()
 		const int cycle = ( int )( std::floor( ( double )( level ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
 		const int theme = level % Level::NUMBER_OF_THEMES;
 		const std::u32string& level_name = Level::getLevelNames()[ level ];
-		std::u32string level_name_string = U" " + mezun::intToChar32String( cycle ) + U": ";
+		std::u32string level_name_string = U"";
 		if ( Inventory::beenToLevel( level ) )
 		{
-			level_name_string += level_name;
+			level_name_string = level_name;
 		}
 		else
 		{
@@ -661,7 +664,8 @@ void LevelSelectState::generateLevelNames()
 				}
 			}
 		}
-		level_names_[ level ] = { level_name_string, 24, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
+		level_name_headers_[ level ] = { mezun::intToChar32String( cycle ) + U": ", 32, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 24, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
+		level_names_[ level ] = { level_name_string, 48, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 288, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 	}
 };
 

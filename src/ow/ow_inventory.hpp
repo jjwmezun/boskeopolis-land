@@ -47,12 +47,14 @@ class OWInventory
 		bool testOnDifferentLevel() const;
 		bool testMoneyInTheRed() const;
 		bool testStandingOnLevel() const;
-		void regenerateLevelNameGraphics( WTextObj& level_name, int i );
-		WTextObj generateName( std::u32string text ) const;
+		void regenerateLevelNameGraphics( WTextObj& level_name, WTextObj& level_name_header, int i );
+		WTextObj generateName( std::u32string text, int offset ) const;
 		WTextObj generateLevelName() const;
 		WTextObj generateShopName() const;
 		bool testStandingOnShop() const;
 		void regenerateShopGraphics();
+		WTextObj generateLevelNameHeader() const;
+		bool isShop() const;
 
 		bool show_challenges_;
 		bool show_challenges_lock_;
@@ -76,4 +78,5 @@ class OWInventory
 		ImageGraphics time_score_icon_;
 		ImageGraphics crown_icon_;
 		ImageGraphics secret_goal_icon_;
+		ImageGraphics level_icon_;
 };

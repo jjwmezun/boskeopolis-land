@@ -44,7 +44,8 @@ OWInventory::OWInventory()
 	gem_score_icon_ ( "bg/level-select-characters.png", { 0, 0, 8, 8 }, { SCORE_X - 8, ROW_1, 8, 8 } ),
 	time_score_icon_ ( "bg/level-select-characters.png", { 0, 8, 8, 8 }, { SCORE_X, ROW_2, 8, 8 } ),
 	crown_icon_ ( "bg/level-select-characters.png", { 0, 192, 8, 8 }, { LEFT_EDGE + 8, ROW_1, 8, 8 } ),
-	secret_goal_icon_ ( "bg/level-select-characters.png", { 0, 200, 8, 8 }, { LEFT_EDGE + 8, ROW_2, 8, 8 } )
+	secret_goal_icon_ ( "bg/level-select-characters.png", { 0, 200, 8, 8 }, { LEFT_EDGE + 8, ROW_2, 8, 8 } ),
+	level_icon_ ( "bg/level-select-characters.png", { 0, 48, 8, 8 }, { LEVEL_NAME_X + 8, ROW_1, 8, 8 } )
 {};
 
 OWInventory::~OWInventory()
@@ -218,11 +219,12 @@ void OWInventory::regenerateLevelGraphics()
 	WTextObj gem_score = { Inventory::gemScore( level_ ).c_str(), SCORE_X, ROW_1 };
 	WTextObj time_score = { Inventory::timeScore( level_ ), SCORE_X + 8, ROW_2 };
 	WTextObj level_name = generateLevelName();
+	WTextObj level_name_header = generateLevelNameHeader();
 
 	// Generate texture for each color o’ flashing text.
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
-		regenerateLevelNameGraphics( level_name, i );
+		regenerateLevelNameGraphics( level_name, level_name_header, i );
 
 		gem_score.changeColor( Inventory::gemChallengeBeaten( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
 		gem_score_textures_[ i ].init();
@@ -251,26 +253,52 @@ void OWInventory::regenerateLevelGraphics()
 	updateTextFlashColor();
 };
 
-WTextObj OWInventory::generateName( std::u32string text ) const
+WTextObj OWInventory::generateName( std::u32string name, int offset ) const
 {
-	return { text, LEVEL_NAME_X, ROW_1, WTextCharacter::Color::BLACK, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 8 };
+	return
+	{
+		name,
+		LEVEL_NAME_X + offset,
+		ROW_1,
+		WTextCharacter::Color::BLACK,
+		312 - offset,
+		WTextObj::Align::LEFT,
+		WTextCharacter::Color::__NULL,
+		8
+	};
 };
 
 WTextObj OWInventory::generateLevelName() const
 {
-	return generateName( Level::getLevelNames()[ level_ ] );
+	return generateName( Level::getLevelNames()[ level_ ], 24 );
 };
 
 WTextObj OWInventory::generateShopName() const
 {
-	return generateName( Localization::getCurrentLanguage().getOverworldShopTitle() );
+	return generateName( Localization::getCurrentLanguage().getOverworldShopTitle(), 0 );
 };
 
-void OWInventory::regenerateLevelNameGraphics( WTextObj& level_name, int i )
+WTextObj OWInventory::generateLevelNameHeader() const
 {
-	level_name.changeColor( Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
+	const int cycle_number = ( int )( std::floor( ( double )( level_ ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
+	const std::u32string header = mezun::charToChar32String( mezun::stringReplace( "%n: ", "%n", std::to_string( cycle_number ) ).c_str() );
+	return { header, LEVEL_NAME_X + 16, ROW_1 };
+};
+
+void OWInventory::regenerateLevelNameGraphics( WTextObj& level_name, WTextObj& level_name_header, int i )
+{
+	const WTextCharacter::Color color = Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK;
+	const int theme = level_ % Level::NUMBER_OF_THEMES;
+	level_icon_.src_.x = 48 + ( 8 * theme );
+	level_name.changeColor( color );
 	level_name_textures_[ i ].startDrawing();
 	Render::clearScreenTransparency();
+	level_icon_.render();
+	if ( !isShop() )
+	{
+		level_name_header.changeColor( color );
+		level_name_header.render();
+	}
 	level_name.render();
 	level_name_textures_[ i ].endDrawing();
 };
@@ -341,9 +369,10 @@ void OWInventory::forceLevelNameRedraw()
 	else if ( testStandingOnLevel() )
 	{
 		WTextObj level_name = generateLevelName();
+		WTextObj level_name_header = generateLevelNameHeader();
 		for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 		{
-			regenerateLevelNameGraphics( level_name, i );
+			regenerateLevelNameGraphics( level_name, level_name_header, i );
 		}
 	}
 };
@@ -355,4 +384,9 @@ void OWInventory::regenerateShopGraphics()
 	Render::clearScreenTransparency();
 	shop_name.render();
 	level_name_textures_[ 0 ].endDrawing();
+};
+
+bool OWInventory::isShop() const
+{
+	return level_ < 0;
 };

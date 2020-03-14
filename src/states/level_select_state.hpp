@@ -72,4 +72,5 @@ class LevelSelectState : public GameState
 		TextureBox final_table_texture_;
 		WTextHighlight<> title_;
 		WTextObj level_names_[ Level::NUMBER_OF_LEVELS ];
+		WTextObj level_name_headers_[ Level::NUMBER_OF_LEVELS ];
 };
