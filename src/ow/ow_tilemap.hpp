@@ -13,6 +13,7 @@ class OWTileMap final
 
     private:
         static constexpr int NUMBER_OF_LAYERS = 4;
+
         int width_;
         std::vector<bool> solids_;
 };

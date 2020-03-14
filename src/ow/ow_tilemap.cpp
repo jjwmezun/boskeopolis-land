@@ -28,26 +28,8 @@ void OWTileMap::init( int width, int height )
 
 void OWTileMap::updateSolids( const std::vector<int>* bg_tiles, const std::vector<int>* fg_tiles )
 {
-    /*
-    const int min_length = std::min
-    (
-        bg_tiles[ 0 ].size(),
-        std::min
-        (
-            bg_tiles[ 1 ].size(),
-            std::min
-            (
-                fg_tiles[ 0 ].size(),
-                std::min
-                (
-                    fg_tiles[ 1 ].size(),
-                    solids_.size()
-                )
-            )
-        )
-    );*/
-
-    for ( int i = 0; i < solids_.size(); ++i )
+    const int size = ( int )( solids_.size() );
+    for ( int i = 0; i < size; ++i )
     {
         solids_[ i ] = 
         (

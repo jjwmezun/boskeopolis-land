@@ -375,10 +375,6 @@ void OverworldState::init()
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
 			level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
 		}
-		if ( state_ == OWState::MOVE_PLAYER )
-		{
-			tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
-		}
 	}
 	generateMapTextures();
 
@@ -393,6 +389,10 @@ void OverworldState::init()
 	else if ( state_ == OWState::CAMERA_MOVES_TO_SECRET_EVENT )
 	{
 		event_.init( Inventory::currentLevel(), width_blocks_, true );
+	}
+	else if ( state_ == OWState::MOVE_PLAYER )
+	{
+		tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 	}
 
 	Audio::changeSong( "overworld" );
@@ -684,8 +684,6 @@ void OverworldState::generateMap()
 	{
 		throw std::runtime_error( "Missing sprite layer for o’erworld map." );
 	}
-
-	tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 };
 
 bool OverworldState::testLanguageHasChanged() const
