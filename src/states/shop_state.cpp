@@ -291,6 +291,7 @@ void ShopState::stateRender()
 
         for ( int i = 0; i < NUMBER_OF_ITEMS; ++i )
         {
+            const int y = ( i == 0 ) ? 30 : ( 31 + ( i * 24 ) );
             if ( i == 0 )
             {
                 if ( item_selection_() == i )
@@ -313,24 +314,23 @@ void ShopState::stateRender()
             {
                 if ( item_selection_() == i )
                 {
-                    Render::renderObject( "bg/shop-frame-highlight-2.png", { 0, 0, 268, 19 }, { 14, ( 31 + ( i * 24 ) ), 268, 19 } );
+                    Render::renderObject( "bg/shop-frame-highlight-2.png", { 0, 0, 268, 19 }, { 14, y, 268, 19 } );
                 }
                 else if ( items_[ i ].isAvailable() )
                 {
                     if ( cart_[ i ] )
                     {
-                        Render::renderObject( "bg/shop-frame-selected-2.png", { 0, 0, 268, 19 }, { 14, 55, 268, 19 } );
+                        Render::renderObject( "bg/shop-frame-selected-2.png", { 0, 0, 268, 19 }, { 14, y, 268, 19 } );
                     }
                     else
                     {
-                        Render::renderObject( "bg/shop-frame-regular-2.png", { 0, 0, 268, 19 }, { 14, 55, 268, 19 } );
+                        Render::renderObject( "bg/shop-frame-regular-2.png", { 0, 0, 268, 19 }, { 14, y, 268, 19 } );
                     }
                 }
             }
 
-            const int y = ( i == 0 ) ? 30 : ( 31 + ( i * 24 ) );
             items_[ i ].renderMainIcon( 20, y + 2 );
-            WTextObj name{ items_[ i ].getName(), 38, y, WTextCharacter::Color::BLACK, 188, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 6, 6 };
+            WTextObj name{ items_[ i ].getName(), 38, y, WTextCharacter::Color::BLACK, 188, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 6, 6, WTextObj::VAlign::CENTER, 20 };
             name.render();
 
             std::u32string price_text = U"";
