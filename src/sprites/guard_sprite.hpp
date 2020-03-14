@@ -7,7 +7,7 @@ class Block;
 #include "timer_repeat_t.hpp"
 #include "timer_simple_t.hpp"
 
-class GuardSprite : public Sprite
+class GuardSprite final : public Sprite
 {
     public:
         GuardSprite( int x, int y );

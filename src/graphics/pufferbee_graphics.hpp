@@ -6,7 +6,7 @@ class Sprite;
 #include "sprite_graphics.hpp"
 #include "timer_repeat.hpp"
 
-class PufferbeeGraphics : public SpriteGraphics
+class PufferbeeGraphics final : public SpriteGraphics
 {
 	public:
 		PufferbeeGraphics();

@@ -4,7 +4,7 @@
 #include "sprite.hpp"
 #include "timer_repeat_t.hpp"
 
-class GuardSpikeSprite : public Sprite
+class GuardSpikeSprite final : public Sprite
 {
 	public:
 		GuardSpikeSprite( int x, int y );

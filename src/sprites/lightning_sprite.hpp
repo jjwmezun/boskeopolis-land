@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class LightningSprite : public Sprite
+class LightningSprite final : public Sprite
 {
 	public:
 		LightningSprite( int x, int y );

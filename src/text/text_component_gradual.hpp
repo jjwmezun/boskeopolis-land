@@ -3,7 +3,7 @@
 #include "text_component.hpp"
 #include "unit.hpp"
 
-class TextComponentGradual : public TextComponent
+class TextComponentGradual final : public TextComponent
 {
 	public:
 		TextComponentGradual( int speed = Unit::DEFAULT_ANIMATION_SPEED );

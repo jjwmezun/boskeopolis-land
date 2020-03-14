@@ -6,7 +6,7 @@ class SpriteGraphics;
 
 #include "timer_repeat.hpp"
 
-class FaucetGraphics
+class FaucetGraphics final
 {
 	public:
 		FaucetGraphics();

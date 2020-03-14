@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentMoney : public BlockComponent
+class BlockComponentMoney final : public BlockComponent
 {
 	public:
 		BlockComponentMoney( int amount = 100 );

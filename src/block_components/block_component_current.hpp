@@ -5,7 +5,7 @@
 #include "level_state.hpp"
 
 template<Direction::Simple direction>
-class BlockComponentCurrent : public BlockComponent
+class BlockComponentCurrent final : public BlockComponent
 {
 	public:
 		BlockComponentCurrent() {};

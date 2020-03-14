@@ -27,7 +27,7 @@
 // CLASS
 //===================================
 
-    class SpriteComponentRightAndLeft : public SpriteComponent
+    class SpriteComponentRightAndLeft final : public SpriteComponent
     {
 
         public:

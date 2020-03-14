@@ -2,7 +2,7 @@
 
 #include "map_layer_image.hpp"
 
-class OptionsBG
+class OptionsBG final
 {
 	public:
 		OptionsBG();

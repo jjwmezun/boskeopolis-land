@@ -2,7 +2,7 @@
 
 #include "sprite_graphics.hpp"
 
-class SwitchGraphics : public SpriteGraphics
+class SwitchGraphics final : public SpriteGraphics
 {
 	public:
 		SwitchGraphics

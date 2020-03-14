@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "timer_repeat_t.hpp"
 
-class MazeChaserSprite : public Sprite
+class MazeChaserSprite final : public Sprite
 {
 	public:
 		enum class Type

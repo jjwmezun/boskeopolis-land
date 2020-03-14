@@ -5,7 +5,7 @@ class Block;
 #include "sprite.hpp"
 #include "timer_simple_t.hpp"
 
-class FallingBoughSprite : public Sprite
+class FallingBoughSprite final : public Sprite
 {
 	public:
 		FallingBoughSprite( int x, int y, Direction::Horizontal direction, bool fall = true );

@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class TimedGoal : public Goal
+class TimedGoal final : public Goal
 {
 	public:
 		static constexpr int DEFAULT_TIME_LIMIT = 120;

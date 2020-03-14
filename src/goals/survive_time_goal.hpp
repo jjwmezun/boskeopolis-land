@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class SurviveTimeGoal : public Goal
+class SurviveTimeGoal final : public Goal
 {
 	public:
 		static constexpr int DEFAULT_WAIT_TIME = 60;

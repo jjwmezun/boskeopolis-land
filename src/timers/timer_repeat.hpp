@@ -2,7 +2,7 @@
 
 #include "timer.hpp"
 
-class TimerRepeat : public Timer
+class TimerRepeat final : public Timer
 {
     public:
         TimerRepeat

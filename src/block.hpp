@@ -11,7 +11,7 @@ class SpriteSystem;
 #include "block_type.hpp"
 #include "object.hpp"
 
-class Block : public Object
+class Block final : public Object
 {
 	public:
 		Block( int x, int y, BlockType* type, int location, int type_id );

@@ -4,7 +4,7 @@
 #include "sprite.hpp"
 #include "timer_repeat_t2.hpp"
 
-class MansionGhostSprite : public Sprite
+class MansionGhostSprite final : public Sprite
 {
 	public:
 		static constexpr int NUMBER_OF_ANIMATION_FRAMES = 8;

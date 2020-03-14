@@ -6,7 +6,7 @@
 
 class DPoint;
 
-class OWCamera
+class OWCamera final
 {
 	public:
 		static constexpr int WIDTH = Unit::WINDOW_WIDTH_PIXELS;

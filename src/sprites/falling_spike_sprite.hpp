@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "timer_repeat_t2.hpp"
 
-class FallingSpikeSprite : public Sprite
+class FallingSpikeSprite final : public Sprite
 {
 	public:
 		FallingSpikeSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentShmupBullet : public BlockComponent
+class BlockComponentShmupBullet final : public BlockComponent
 {
 	public:
 		BlockComponentShmupBullet();

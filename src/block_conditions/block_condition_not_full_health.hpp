@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionNotFullHealth : public BlockCondition
+class BlockConditionNotFullHealth final : public BlockCondition
 {
 	public:
 		BlockConditionNotFullHealth();

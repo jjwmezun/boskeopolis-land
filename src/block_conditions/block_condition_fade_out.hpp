@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionFadeOut : public BlockCondition
+class BlockConditionFadeOut final : public BlockCondition
 {
 	public:
 		BlockConditionFadeOut( int threshold = 0 );

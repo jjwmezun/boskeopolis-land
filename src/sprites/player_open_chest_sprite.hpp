@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PlayerOpenChestSprite : public Sprite
+class PlayerOpenChestSprite final : public Sprite
 {
 	public:
 		PlayerOpenChestSprite( int x, int y, Direction::Horizontal dir );

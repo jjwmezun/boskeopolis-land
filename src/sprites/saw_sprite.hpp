@@ -5,7 +5,7 @@ class Block;
 #include "sprite.hpp"
 #include "timers/timer_simple.hpp"
 
-class SawSprite : public Sprite
+class SawSprite final : public Sprite
 {
     public:
         SawSprite( int x, int y );

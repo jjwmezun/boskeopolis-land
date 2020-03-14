@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class SpringEnemySprite : public Sprite
+class SpringEnemySprite final : public Sprite
 {
 	public:
 		SpringEnemySprite( int x, int y );

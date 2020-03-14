@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentWarp : public BlockComponent
+class BlockComponentWarp final : public BlockComponent
 {
 	public:
 		BlockComponentWarp();

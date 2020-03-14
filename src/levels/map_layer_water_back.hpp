@@ -4,7 +4,7 @@
 
 class MapLayerWater;
 
-class MapLayerWaterBack : public MapLayer
+class MapLayerWaterBack final : public MapLayer
 {
 	public:
 		MapLayerWaterBack( MapLayerWater* water_ptr );

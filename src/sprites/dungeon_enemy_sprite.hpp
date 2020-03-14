@@ -5,7 +5,7 @@
 
 class SpriteSystem;
 
-class DungeonEnemySprite : public Sprite
+class DungeonEnemySprite final : public Sprite
 {
 	public:
 		DungeonEnemySprite( int x, int y, int layer, bool stationary = false );

@@ -3,7 +3,7 @@
 #include "bump_under_block_sprite.hpp"
 #include "sprite.hpp"
 
-class LightSwitchSprite : public Sprite
+class LightSwitchSprite final : public Sprite
 {
 	public:
 		LightSwitchSprite( int x, int y );

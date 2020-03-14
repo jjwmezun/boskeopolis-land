@@ -3,7 +3,7 @@
 #include "bump_under_block_sprite.hpp"
 #include "sprite.hpp"
 
-class FullHealBlockSprite : public Sprite
+class FullHealBlockSprite final : public Sprite
 {
 	public:
 		FullHealBlockSprite( int x, int y );

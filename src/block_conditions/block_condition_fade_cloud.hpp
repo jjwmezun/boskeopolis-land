@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionFadeCloud : public BlockCondition
+class BlockConditionFadeCloud final : public BlockCondition
 {
 	public:
 		BlockConditionFadeCloud();

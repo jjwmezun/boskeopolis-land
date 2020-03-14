@@ -4,7 +4,7 @@
 #include <string>
 #include "texture_box.hpp"
 
-class TimeStartState : public GameState
+class TimeStartState final : public GameState
 {
 	public:
 		TimeStartState( const Palette& palette, std::u32string text );

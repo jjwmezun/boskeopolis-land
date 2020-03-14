@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class LockedDoorSprite : public Sprite
+class LockedDoorSprite final : public Sprite
 {
 	public:
 		LockedDoorSprite( int x, int y, int map_id );

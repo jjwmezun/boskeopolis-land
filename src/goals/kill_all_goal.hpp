@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class KillAllGoal : public Goal
+class KillAllGoal final : public Goal
 {
 	public:
 		KillAllGoal( std::u32string message );

@@ -5,7 +5,7 @@
 
 class SpriteSystem;
 
-class JumpAndShootSprite : public Sprite
+class JumpAndShootSprite final : public Sprite
 {
 	public:
 		JumpAndShootSprite( int x, int y, int w, int h, std::unique_ptr<SpriteGraphics>&& gfx, void ( *throw_function )( const Sprite& me, SpriteSystem& sprites ) );

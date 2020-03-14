@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
 
-class SimpleProjectileSprite : public Sprite
+class SimpleProjectileSprite final : public Sprite
 {
 	public:
 		SimpleProjectileSprite( int x, int y, int w, int h, Direction::Horizontal dir, std::unique_ptr<SpriteGraphics>&& gfx );

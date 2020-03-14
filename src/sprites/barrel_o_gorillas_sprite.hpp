@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class BarrelOGorillasSprite : public Sprite
+class BarrelOGorillasSprite final : public Sprite
 {
 	public:
 		BarrelOGorillasSprite( int x, int y );

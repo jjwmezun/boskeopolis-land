@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include <memory>
 
-class CannonSprite : public Sprite
+class CannonSprite final : public Sprite
 {
 	public:
 		CannonSprite( int x, int y, Direction::Vertical dir, int map_id );

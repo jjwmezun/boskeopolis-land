@@ -9,7 +9,7 @@ OWLevelTileGraphics::OWLevelTileGraphics()
     animation_frame_ (),
     tileset_ ( "tilesets/ow.png" ),
     destinations_ (),
-    source_ ( 0, 240, 16, 16 ),
+    source_ ( 0, 496, 16, 16 ),
     positions_ (),
     reveal_ ()
 {

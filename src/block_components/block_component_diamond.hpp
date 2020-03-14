@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentDiamond : public BlockComponent
+class BlockComponentDiamond final : public BlockComponent
 {
 	public:
 		BlockComponentDiamond( int replacement_block = -1 );

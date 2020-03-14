@@ -4,7 +4,7 @@
 #include "sprite.hpp"
 #include "timer_repeat_t.hpp"
 
-class SillyfishSprite : public Sprite
+class SillyfishSprite final : public Sprite
 {
 	public:
 		SillyfishSprite( int x, int y );

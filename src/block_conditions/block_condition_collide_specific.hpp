@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionCollideSpecific : public BlockCondition
+class BlockConditionCollideSpecific final : public BlockCondition
 {
 	public:
 		BlockConditionCollideSpecific( int left = 0, int right = 0, int top = 0, int bottom = 0 );

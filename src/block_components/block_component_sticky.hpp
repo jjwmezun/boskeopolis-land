@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSticky : public BlockComponent
+class BlockComponentSticky final : public BlockComponent
 {
 	public:
 		BlockComponentSticky();

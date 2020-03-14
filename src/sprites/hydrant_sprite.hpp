@@ -29,7 +29,7 @@
 // CLASS
 //===================================
 
-    class HydrantSprite : public Sprite
+    class HydrantSprite final : public Sprite
     {
         public:
             HydrantSprite( int x, int y );

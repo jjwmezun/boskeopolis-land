@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class McGuffinGoal : public Goal
+class McGuffinGoal final : public Goal
 {
 	public:
 		static constexpr int DEFAULT_AMOUNT_NEEDED = 3;

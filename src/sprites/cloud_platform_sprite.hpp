@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class CloudPlatformSprite : public Sprite
+class CloudPlatformSprite final : public Sprite
 {
 	public:
 		CloudPlatformSprite( int x, int y, Direction::Horizontal direction );

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class BridgeMonsterProjectileSprite : public Sprite
+class BridgeMonsterProjectileSprite final : public Sprite
 {
 	public:
 		BridgeMonsterProjectileSprite( int x, int y, double dy, double dx );

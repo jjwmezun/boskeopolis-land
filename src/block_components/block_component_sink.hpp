@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSink : public BlockComponent
+class BlockComponentSink final : public BlockComponent
 {
 	public:
 		BlockComponentSink();

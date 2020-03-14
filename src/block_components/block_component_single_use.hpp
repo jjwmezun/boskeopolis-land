@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSingleUse : public BlockComponent
+class BlockComponentSingleUse final : public BlockComponent
 {
 	public:
 		BlockComponentSingleUse( int width = 1, int height = 1, int corner = 0 );

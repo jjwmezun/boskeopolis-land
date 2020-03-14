@@ -3,7 +3,7 @@
 #include "direction.hpp"
 #include <string>
 
-class Clock
+class Clock final
 {
 	public:	
 		constexpr Clock

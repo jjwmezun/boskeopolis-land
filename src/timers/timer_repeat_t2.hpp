@@ -1,7 +1,7 @@
 #pragma once
 
 template<int max_T, int min_T = 0>
-class TimerRepeatT2
+class TimerRepeatT2 final
 {
 	public:
 		constexpr TimerRepeatT2()

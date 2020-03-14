@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class ChangeCameraAutoscrollSprite : public Sprite
+class ChangeCameraAutoscrollSprite final : public Sprite
 {
 	public:
 		ChangeCameraAutoscrollSprite( int x, int y, Direction::Simple direction );

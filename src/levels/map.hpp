@@ -12,7 +12,7 @@ class SpriteSystem;
 #include <vector>
 #include "warp.hpp"
 
-class Map
+class Map final
 {
 	public:
 		enum class LayerType

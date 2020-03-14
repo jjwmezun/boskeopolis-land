@@ -2,7 +2,7 @@
 
 #include "sprite_graphics.hpp"
 
-class FadingGraphics : public SpriteGraphics
+class FadingGraphics final : public SpriteGraphics
 {
 	public:
 		FadingGraphics

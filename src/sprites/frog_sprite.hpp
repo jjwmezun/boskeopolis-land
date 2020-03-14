@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "timer_random.hpp"
 
-class FrogSprite : public Sprite
+class FrogSprite final : public Sprite
 {
 	public:
 		FrogSprite( int x, int y );

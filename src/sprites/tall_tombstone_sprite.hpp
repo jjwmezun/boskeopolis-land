@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class TallTombstoneSprite : public Sprite
+class TallTombstoneSprite final : public Sprite
 {
 	public:
 		TallTombstoneSprite( int x, int y );

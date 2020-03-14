@@ -8,7 +8,7 @@
 #include <vector>
 #include <unordered_map>
 
-class LocalizationLanguage
+class LocalizationLanguage final
 {
     public:
         LocalizationLanguage( const std::filesystem::directory_entry& file );

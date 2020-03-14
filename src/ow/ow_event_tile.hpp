@@ -1,6 +1,6 @@
 #pragma once
 
-class OWEventTile
+class OWEventTile final
 {
     public:
         enum class Layer

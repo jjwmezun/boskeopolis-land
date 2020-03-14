@@ -3,7 +3,7 @@
 #include "wtext_character.hpp"
 #include <vector>
 
-class WTextLine
+class WTextLine final
 {
     public:
         inline WTextLine( int x, int y, std::vector<WTextCharacter> frames, std::vector<WTextCharacter> shadow_frames )

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class ShmupShooterSprite : public Sprite
+class ShmupShooterSprite final : public Sprite
 {
 	public:
 		ShmupShooterSprite( int x, int y );

@@ -10,7 +10,7 @@ class InventoryLevel;
 class SpriteSystem;
 class TextObj;
 
-class EventSystem
+class EventSystem final
 {
 	public:
 		EventSystem();

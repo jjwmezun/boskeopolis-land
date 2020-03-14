@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class WindowMonsterSprite : public Sprite
+class WindowMonsterSprite final : public Sprite
 {
 	public:
 		WindowMonsterSprite( int x, int y );

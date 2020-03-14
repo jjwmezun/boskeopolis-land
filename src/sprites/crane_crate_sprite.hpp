@@ -3,7 +3,7 @@
 #include "circle_movement.hpp"
 #include "sprite.hpp"
 
-class CraneCrateSprite : public Sprite
+class CraneCrateSprite final : public Sprite
 {
 	public:
 		CraneCrateSprite( int x, int y );

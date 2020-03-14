@@ -57,7 +57,7 @@ inline int getSlopeYChangeFromX( const Sprite& sprite, const Block& block )
 };
 
 template <Direction::Horizontal direction, int slope_width, int extra_push, int relative_height, int resistance_percentage, bool steep>
-class BlockComponentSlope : public BlockComponent
+class BlockComponentSlope final : public BlockComponent
 {
 	public:
 		BlockComponentSlope() {};

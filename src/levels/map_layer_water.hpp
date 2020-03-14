@@ -12,7 +12,7 @@ class Sprite;
 
 using ComponentGroup = std::vector<WaterLayerComponent*>;
 
-class MapLayerWater : public MapLayer
+class MapLayerWater final : public MapLayer
 {
 	public:
 	sdl2::SDLRect src_;

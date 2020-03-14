@@ -2,7 +2,7 @@
 
 #include "water_layer_component.hpp"
 
-class WaterLayerComponentSwim : public WaterLayerComponent
+class WaterLayerComponentSwim final : public WaterLayerComponent
 {
 	public:
 		WaterLayerComponentSwim();

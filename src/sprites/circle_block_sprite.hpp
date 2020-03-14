@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class CircleBlockSprite : public Sprite
+class CircleBlockSprite final : public Sprite
 {
 	public:
 		CircleBlockSprite( int x, int y );

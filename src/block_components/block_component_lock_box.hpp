@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentLockBox : public BlockComponent
+class BlockComponentLockBox final : public BlockComponent
 {
 	public:
 		BlockComponentLockBox();

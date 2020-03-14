@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-class InvalidLocalizationLanguageException : public std::runtime_error
+class InvalidLocalizationLanguageException final : public std::runtime_error
 {
     public:
         InvalidLocalizationLanguageException( const std::string& path ) :

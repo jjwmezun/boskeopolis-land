@@ -3,7 +3,7 @@
 #include "game_state.hpp"
 #include "text_obj.hpp"
 
-class MessageState : public GameState
+class MessageState final : public GameState
 {
 	public:
 		enum class Type

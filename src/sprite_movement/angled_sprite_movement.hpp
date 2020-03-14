@@ -3,7 +3,7 @@
 #include <array>
 #include "sprite_movement.hpp"
 
-class AngledSpriteMovement : public SpriteMovement
+class AngledSpriteMovement final : public SpriteMovement
 {
 	public:
 		AngledSpriteMovement();

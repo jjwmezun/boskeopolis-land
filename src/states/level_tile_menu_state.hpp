@@ -4,7 +4,7 @@
 #include "game_state.hpp"
 #include "texture_box.hpp"
 
-class LevelTileMenuState : public GameState
+class LevelTileMenuState final : public GameState
 {
 	public:
 		LevelTileMenuState( const Palette& palette, int level );

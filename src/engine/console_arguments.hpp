@@ -1,6 +1,6 @@
 #pragma once
 
-class ConsoleArguments
+class ConsoleArguments final
 {
 	public:
 		ConsoleArguments( int argc, char** argv );

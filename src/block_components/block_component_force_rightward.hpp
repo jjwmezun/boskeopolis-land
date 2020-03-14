@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentForceRightward : public BlockComponent
+class BlockComponentForceRightward final : public BlockComponent
 {
 	public:
 		BlockComponentForceRightward();

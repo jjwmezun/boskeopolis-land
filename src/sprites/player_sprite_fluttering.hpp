@@ -28,7 +28,7 @@
 // CLASS
 //===================================
 
-    class PlayerSpriteFluttering : public Sprite
+    class PlayerSpriteFluttering final : public Sprite
     {
         public:
             PlayerSpriteFluttering( int x, int y );

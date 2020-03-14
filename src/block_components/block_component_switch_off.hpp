@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSwitchOff : public BlockComponent
+class BlockComponentSwitchOff final : public BlockComponent
 {
 	public:
 		BlockComponentSwitchOff();

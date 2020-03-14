@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class HookSprite : public Sprite
+class HookSprite final : public Sprite
 {
 	public:
 		HookSprite( int x, int y );

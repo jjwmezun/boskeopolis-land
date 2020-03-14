@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class SwampMonsterSprite : public Sprite
+class SwampMonsterSprite final : public Sprite
 {
 	public:
 		SwampMonsterSprite( int x, int y );

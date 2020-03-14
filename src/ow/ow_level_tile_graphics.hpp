@@ -8,7 +8,7 @@
 #include "unit.hpp"
 #include <vector>
 
-class OWLevelTileGraphics
+class OWLevelTileGraphics final
 {
     public:
         OWLevelTileGraphics();

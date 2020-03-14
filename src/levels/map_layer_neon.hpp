@@ -3,7 +3,7 @@
 #include "map_layer.hpp"
 #include <SDL2/SDL.h>
 
-class MapLayerNeon : public MapLayer
+class MapLayerNeon final : public MapLayer
 {
 	public:
 		MapLayerNeon();

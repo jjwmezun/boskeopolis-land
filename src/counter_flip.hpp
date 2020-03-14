@@ -1,7 +1,7 @@
 #pragma once
 
 template<int upper_limit_, int lower_limit_ = 0>
-class CounterFlip
+class CounterFlip final
 {
 	public:
 		constexpr CounterFlip( int init_value = 0 )

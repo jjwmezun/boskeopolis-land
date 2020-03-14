@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class GemmySprite : public Sprite
+class GemmySprite final : public Sprite
 {
 	public:
 		GemmySprite( int x, int y );

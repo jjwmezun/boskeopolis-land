@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSecretGoal : public BlockComponent
+class BlockComponentSecretGoal final : public BlockComponent
 {
 	public:
 		BlockComponentSecretGoal();

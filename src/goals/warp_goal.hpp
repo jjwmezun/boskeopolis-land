@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class WarpGoal : public Goal
+class WarpGoal final : public Goal
 {
 	public:
 		WarpGoal( std::u32string message );

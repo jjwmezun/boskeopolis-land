@@ -6,7 +6,7 @@
 #include "input_component.hpp"
 #include <vector>
 
-class InputComponentSequence : public InputComponent
+class InputComponentSequence final : public InputComponent
 {
 	public:
         static constexpr int MAX_INPUTS = 60 * 60 * 60 * 10;

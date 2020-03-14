@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class QuadrapusSprite : public Sprite
+class QuadrapusSprite final : public Sprite
 {
 	public:
 		QuadrapusSprite( int x, int y );

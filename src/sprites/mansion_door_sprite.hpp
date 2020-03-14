@@ -3,7 +3,7 @@
 #include "animation_counter_no_repeat.hpp"
 #include "sprite.hpp"
 
-class MansionDoorSprite : public Sprite
+class MansionDoorSprite final : public Sprite
 {
 	public:
 		MansionDoorSprite( int x, int y );

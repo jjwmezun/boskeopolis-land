@@ -6,7 +6,7 @@ class Sprite;
 #include "sprite_graphics.hpp"
 #include "timer_repeat.hpp"
 
-class WaterdropGraphics : public SpriteGraphics
+class WaterdropGraphics final : public SpriteGraphics
 {
 	public:
 		WaterdropGraphics();

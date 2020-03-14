@@ -5,7 +5,7 @@
 #include "wtext_obj.hpp"
 
 template<bool play_sound_ = true>
-class WTextGradual
+class WTextGradual final
 {
     public:
         WTextGradual( WTextObj text )

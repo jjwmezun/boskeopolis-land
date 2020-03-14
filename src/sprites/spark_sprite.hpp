@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class SparkSprite : public Sprite
+class SparkSprite final : public Sprite
 {
 	public:
 		SparkSprite( int x, int y );

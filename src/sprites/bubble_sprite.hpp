@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class BubbleSprite : public Sprite
+class BubbleSprite final : public Sprite
 {
 	public:
 		BubbleSprite( int x, int y );

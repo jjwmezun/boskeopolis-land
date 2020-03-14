@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionNotDucking : public BlockCondition
+class BlockConditionNotDucking final : public BlockCondition
 {
 	public:
 		BlockConditionNotDucking();

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class OWTileMap
+class OWTileMap final
 {
     public:
         OWTileMap();

@@ -3,7 +3,7 @@
 #include "map_layer.hpp"
 #include "mezun_sdl2.hpp"
 
-class MapLayerConstellationMoving : public MapLayer
+class MapLayerConstellationMoving final : public MapLayer
 {
 	public:
 		MapLayerConstellationMoving( int width, int height, double move_speed );

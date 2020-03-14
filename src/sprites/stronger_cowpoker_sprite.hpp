@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class StrongerCowpokerSprite : public Sprite
+class StrongerCowpokerSprite final : public Sprite
 {
 	public:
 		StrongerCowpokerSprite( int x, int y, int map_id );

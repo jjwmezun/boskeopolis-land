@@ -5,7 +5,7 @@ class Camera;
 
 #include "sprite.hpp"
 
-class FallingGemSprite : public Sprite
+class FallingGemSprite final : public Sprite
 {
 	public:
 		FallingGemSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "mezun_sdl2.hpp"
 
-class CheckeredBackground
+class CheckeredBackground final
 {
     public:
         CheckeredBackground();

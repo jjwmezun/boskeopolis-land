@@ -7,7 +7,7 @@
 #include "unit.hpp"
 #include "wtext_obj.hpp"
 
-class OWInventory
+class OWInventory final
 {
 	public:
 		// From dark to light, delaying a li’l @ either end.

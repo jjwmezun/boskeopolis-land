@@ -31,7 +31,7 @@
 // CLASS
 //===================================
 
-    class PlatformSprite : public Sprite
+    class PlatformSprite final : public Sprite
     {
         public:
             PlatformSprite( int x, int y, Direction::Simple direction, int move_space_before_change = 128000 );

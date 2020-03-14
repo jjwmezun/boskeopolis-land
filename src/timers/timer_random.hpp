@@ -1,7 +1,7 @@
 #pragma once
 
 template<int rand_max, int rand_min = 0>
-class TimerRandom
+class TimerRandom final
 {
 	public:
 		TimerRandom()

@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentLayer : public BlockComponent
+class BlockComponentLayer final : public BlockComponent
 {
 	public:
 		BlockComponentLayer( int layer );

@@ -3,7 +3,7 @@
 #include "difficulty.hpp"
 #include "timers/timer_simple_t.hpp"
 
-class Health
+class Health final
 {
 	public:
 		static constexpr int START_MAX_HP = 2;

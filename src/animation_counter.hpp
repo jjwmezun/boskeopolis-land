@@ -4,7 +4,7 @@
 #include "unit.hpp"
 
 template <int max_T, int min_T = 0>
-class AnimationCounter
+class AnimationCounter final
 {
     public:
         AnimationCounter()

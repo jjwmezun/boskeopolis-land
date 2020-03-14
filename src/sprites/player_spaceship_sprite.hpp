@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class PlayerSpaceshipSprite : public Sprite
+class PlayerSpaceshipSprite final : public Sprite
 {
 	public:
 		PlayerSpaceshipSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentLose : public BlockComponent
+class BlockComponentLose final : public BlockComponent
 {
 	public:
 		BlockComponentLose();

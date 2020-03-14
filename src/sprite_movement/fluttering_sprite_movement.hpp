@@ -2,7 +2,7 @@
 
 #include "grounded_sprite_movement.hpp"
 
-class FlutteringSpriteMovement : public GroundedSpriteMovement
+class FlutteringSpriteMovement final : public GroundedSpriteMovement
 {
 	public:
 		FlutteringSpriteMovement();

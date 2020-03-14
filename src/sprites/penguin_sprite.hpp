@@ -7,7 +7,7 @@
 
 class Block;
 
-class PenguinSprite : public Sprite
+class PenguinSprite final : public Sprite
 {
     public:
         PenguinSprite( int x, int y );

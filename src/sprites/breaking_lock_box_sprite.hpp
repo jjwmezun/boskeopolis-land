@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class BreakingLockBoxSprite : public Sprite
+class BreakingLockBoxSprite final : public Sprite
 {
 	public:
 		BreakingLockBoxSprite( int x, int y, int type );

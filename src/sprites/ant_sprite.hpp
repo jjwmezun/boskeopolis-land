@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class AntSprite : public Sprite
+class AntSprite final : public Sprite
 {
 	public:
 		AntSprite( int x, int y );

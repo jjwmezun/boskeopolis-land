@@ -4,7 +4,7 @@
 #include "map_layer.hpp"
 #include <vector>
 
-class MapLayerTilemap : public MapLayer
+class MapLayerTilemap final : public MapLayer
 {
 	public:
 		enum class FadeType

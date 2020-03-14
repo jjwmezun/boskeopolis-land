@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class AngryTruckGeneratorSprite : public Sprite
+class AngryTruckGeneratorSprite final : public Sprite
 {
 	public:
 		AngryTruckGeneratorSprite( int x, int y );

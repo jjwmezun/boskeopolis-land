@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionNotHero : public BlockCondition
+class BlockConditionNotHero final : public BlockCondition
 {
 	public:
 		BlockConditionNotHero();

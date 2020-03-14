@@ -3,7 +3,7 @@
 #include "direction.hpp"
 #include "text_component.hpp"
 
-class TextComponentMarquee : public TextComponent
+class TextComponentMarquee final : public TextComponent
 {
 	public:
 		TextComponentMarquee

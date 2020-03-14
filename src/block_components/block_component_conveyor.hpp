@@ -4,7 +4,7 @@
 #include "block_component.hpp"
 #include "direction.hpp"
 
-class BlockComponentConveyor : public BlockComponent
+class BlockComponentConveyor final : public BlockComponent
 {
 	public:
 		BlockComponentConveyor( Direction::Horizontal direction, int speed = 1000 );

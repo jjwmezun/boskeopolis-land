@@ -3,7 +3,7 @@
 #include "assert.hpp"
 #include "mezun_sdl2.hpp"
 
-class OWObject
+class OWObject final
 {
     public:
         enum class Type

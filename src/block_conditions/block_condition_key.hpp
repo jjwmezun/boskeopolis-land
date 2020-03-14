@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionKey : public BlockCondition
+class BlockConditionKey final : public BlockCondition
 {
 	public:
 		BlockConditionKey();

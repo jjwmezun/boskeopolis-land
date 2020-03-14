@@ -6,7 +6,7 @@
 #include "option_selection_vertical.hpp"
 #include "texture_box.hpp"
 
-class ControlsOptionState : public GameState
+class ControlsOptionState final : public GameState
 {
 	public:
 		ControlsOptionState();

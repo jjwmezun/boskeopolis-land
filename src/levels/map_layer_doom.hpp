@@ -8,7 +8,7 @@
 #include "unit.hpp"
 #include <vector>
 
-class MapLayerDoom : public MapLayer
+class MapLayerDoom final : public MapLayer
 {
 	public:
 		MapLayerDoom();

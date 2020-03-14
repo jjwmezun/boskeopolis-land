@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-class OptionSystem
+class OptionSystem final
 {
 	public:
 		static OptionSystem generateVerticalOptionSystem( const std::vector<std::u32string>& option_strings, int y = 32, int start_selection = 0 );

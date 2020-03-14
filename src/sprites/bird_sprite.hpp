@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class BirdSprite : public Sprite
+class BirdSprite final : public Sprite
 {
 	public:
 		BirdSprite( int x, int y, Direction::Horizontal dir );

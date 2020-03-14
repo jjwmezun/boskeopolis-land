@@ -2,7 +2,7 @@
 
 #include <string>
 
-class ShopItem
+class ShopItem final
 {
     public:
         enum class Type

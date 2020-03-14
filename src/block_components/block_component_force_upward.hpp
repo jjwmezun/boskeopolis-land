@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentForceUpward : public BlockComponent
+class BlockComponentForceUpward final : public BlockComponent
 {
 	public:
 		BlockComponentForceUpward();

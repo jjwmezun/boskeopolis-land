@@ -1,6 +1,6 @@
 #pragma once
 
-struct DPoint
+struct DPoint final
 {
 	double x;
 	double y;

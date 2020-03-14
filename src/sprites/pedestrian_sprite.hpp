@@ -3,7 +3,7 @@
 #include "animation_counter.hpp"
 #include "sprite.hpp"
 
-class PedestrianSprite : public Sprite
+class PedestrianSprite final : public Sprite
 {
 	public:
 		PedestrianSprite( int x, int y );

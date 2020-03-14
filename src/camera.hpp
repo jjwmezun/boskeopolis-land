@@ -8,7 +8,7 @@ class Sprite;
 #include "unit.hpp"
 #include <SDL2/SDL.h>
 
-class Camera
+class Camera final
 {
 	public:
 		enum class Type

@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionSwitchOff : public BlockCondition
+class BlockConditionSwitchOff final : public BlockCondition
 {
 	public:
 		BlockConditionSwitchOff();

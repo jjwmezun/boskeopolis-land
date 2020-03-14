@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentHoney : public BlockComponent
+class BlockComponentHoney final : public BlockComponent
 {
 	public:
 		BlockComponentHoney();

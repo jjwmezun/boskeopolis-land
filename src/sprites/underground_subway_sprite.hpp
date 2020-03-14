@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class UndergroundSubwaySprite : public Sprite
+class UndergroundSubwaySprite final : public Sprite
 {
 	public:
 		UndergroundSubwaySprite( int x, int y );

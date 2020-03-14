@@ -4,7 +4,7 @@
 #include "input_component.hpp"
 #include "input_component_sequence.hpp"
 
-class InputComponentPlayerRecord : public InputComponent
+class InputComponentPlayerRecord final : public InputComponent
 {
 	public:
         InputComponentPlayerRecord();

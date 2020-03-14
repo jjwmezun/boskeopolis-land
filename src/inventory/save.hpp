@@ -6,7 +6,7 @@
 
 class Inventory;
 
-class Save
+class Save final
 {
     public:
         friend class Inventory;

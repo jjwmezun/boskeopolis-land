@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class IcicleSprite : public Sprite
+class IcicleSprite final : public Sprite
 {
 	public:
 		IcicleSprite( int x, int y );

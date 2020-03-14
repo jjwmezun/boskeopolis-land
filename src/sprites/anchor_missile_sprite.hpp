@@ -3,7 +3,7 @@
 #include "direction.hpp"
 #include "sprite.hpp"
 
-class AnchorMissileSprite : public Sprite
+class AnchorMissileSprite final : public Sprite
 {
 	public:
 		AnchorMissileSprite( int x, int y, Direction::Simple direction );

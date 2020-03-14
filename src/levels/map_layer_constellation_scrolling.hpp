@@ -3,7 +3,7 @@
 #include "map_layer.hpp"
 #include "mezun_sdl2.hpp"
 
-class MapLayerConstellationScrolling : public MapLayer
+class MapLayerConstellationScrolling final : public MapLayer
 {
 	public:
 		MapLayerConstellationScrolling

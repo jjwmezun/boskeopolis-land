@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionOnGround : public BlockCondition
+class BlockConditionOnGround final : public BlockCondition
 {
 	public:
 		BlockConditionOnGround();

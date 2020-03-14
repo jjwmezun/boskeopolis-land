@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class SpawnAnchorMissileSprite : public Sprite
+class SpawnAnchorMissileSprite final : public Sprite
 {
 	public:
 		enum class AMType

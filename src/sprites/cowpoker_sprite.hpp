@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "timer_random.hpp"
 
-class CowpokerSprite : public Sprite
+class CowpokerSprite final : public Sprite
 {
 	public:
 		static std::unique_ptr<Sprite> TallCowpokerSprite( int x, int y, int map_id );

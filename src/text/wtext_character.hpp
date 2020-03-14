@@ -1,6 +1,6 @@
 #pragma once
 
-class WTextCharacter
+class WTextCharacter final
 {
     public:
 		enum class Color

@@ -6,21 +6,21 @@
 
 namespace mezun
 {
-	class SDLWindowFailure : public std::runtime_error
+	class SDLWindowFailure final : public std::runtime_error
 	{
 		public:
 			SDLWindowFailure() :
 				std::runtime_error( "SDL_Window failed to load: " + std::string( SDL_GetError() ) ) {};
 	};
 
-	class SDLRendererFailure : public std::runtime_error
+	class SDLRendererFailure final : public std::runtime_error
 	{
 		public:
 			SDLRendererFailure() :
 				std::runtime_error( "SDL_Renderer failed to load: " + std::string( SDL_GetError() ) ) {};
 	};
 
-	class InvalidSaveSizeException : public std::runtime_error
+	class InvalidSaveSizeException final : public std::runtime_error
 	{
 		public:
 			InvalidSaveSizeException() : std::runtime_error( "Save file is corrupt:\nfile size doesn't match expected size.\nPlease try making a new save." ) {};
@@ -31,7 +31,7 @@ namespace mezun
 		if ( save_size < size_needed ) throw InvalidSaveSizeException();
 	};
 
-	class InvalidBlockType : public std::runtime_error
+	class InvalidBlockType final : public std::runtime_error
 	{
 		public:
 			InvalidBlockType( int id, const std::string& tileset, int x, int y ) :
@@ -59,67 +59,67 @@ namespace mezun
 			const std::string y_;
 	};
 
-	class CantLoadMap : public std::runtime_error
+	class CantLoadMap final : public std::runtime_error
 	{
 		public:
 			CantLoadMap( std::string map_tag ) :
 				std::runtime_error( "Map file \"" + map_tag + "\" is missing." ) {};
 	};
 
-	class CantLoadTileset : public std::runtime_error
+	class CantLoadTileset final : public std::runtime_error
 	{
 		public:
 			CantLoadTileset( std::string tileset_tag ) :
 				std::runtime_error( "Tileset file \"" + tileset_tag + "\" is missing." ) {};
 	};
 
-	class MissingTileset : public std::runtime_error
+	class MissingTileset final : public std::runtime_error
 	{
 		public:
 			MissingTileset( std::string tileset_tag ) :
 				std::runtime_error( "Missing Tileset \"" + tileset_tag + "\"" ) {};
 	};
 
-	class MissingLevel : public std::runtime_error
+	class MissingLevel final : public std::runtime_error
 	{
 		public:
 			MissingLevel( const std::string& lvname );
 	};
 
-	class BrokenLevelFile : public std::runtime_error
+	class BrokenLevelFile final : public std::runtime_error
 	{
 		public:
 			BrokenLevelFile( const std::string& lvname );
 	};
 
-	class CantLoadLevelNames : public std::runtime_error
+	class CantLoadLevelNames final : public std::runtime_error
 	{
 		public:
 			CantLoadLevelNames();
 	};
 
-	class CantLoadPalettes : public std::runtime_error
+	class CantLoadPalettes final : public std::runtime_error
 	{
 		public:
 			CantLoadPalettes() :
 				std::runtime_error( "Can't load palettes." ) {};
 	};
 
-	class MissingPalette : public std::runtime_error
+	class MissingPalette final : public std::runtime_error
 	{
 		public:
 			MissingPalette( std::string type ) :
 				std::runtime_error( "Missing palette \"" + type + "\"" ) {};
 	};
 
-	class InvalidColor : public std::runtime_error
+	class InvalidColor final : public std::runtime_error
 	{
 		public:
 			InvalidColor( int n, std::string type ) :
 				std::runtime_error( "Invalid Color #" + Text::stringifyNum( n ) + " for type \"" + type + "\"" ) {};
 	};
 
-	class InvalidSprite : public std::runtime_error
+	class InvalidSprite final : public std::runtime_error
 	{
 		public:
 			InvalidSprite( int n ) :

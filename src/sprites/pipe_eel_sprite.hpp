@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class PipeEelSprite : public Sprite
+class PipeEelSprite final : public Sprite
 {
 	public:
 		PipeEelSprite( int x, int y, Direction::Vertical dir_y );

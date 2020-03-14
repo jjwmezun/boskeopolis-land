@@ -27,7 +27,7 @@
 // CLASS
 //===================================
 
-    class RopeSprite : public Sprite
+    class RopeSprite final : public Sprite
     {
         public:
             RopeSprite( int x, int y, int height = 18, int distance = 14, int speed = 1200 );

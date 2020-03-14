@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class ChoqueSprite : public Sprite
+class ChoqueSprite final : public Sprite
 {
 	public:
 		ChoqueSprite( int x, int y );

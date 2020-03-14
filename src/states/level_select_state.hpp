@@ -8,7 +8,7 @@
 #include "wtext_highlight.hpp"
 #include "wtext_obj.hpp"
 
-class LevelSelectState : public GameState
+class LevelSelectState final : public GameState
 {
 	public:
 		static constexpr int LEVELS_PER_PAGE = 8;

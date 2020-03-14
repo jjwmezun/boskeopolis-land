@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PiBlockSprite : public Sprite
+class PiBlockSprite final : public Sprite
 {
 	public:
 		PiBlockSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class FallingSnowBoulderSpawnSprite : public Sprite
+class FallingSnowBoulderSpawnSprite final : public Sprite
 {
 	public:
 		FallingSnowBoulderSpawnSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class StopOnOffGoal : public Goal
+class StopOnOffGoal final : public Goal
 {
 	public:
 		StopOnOffGoal( std::u32string message );

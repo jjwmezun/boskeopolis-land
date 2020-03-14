@@ -3,7 +3,7 @@
 #include "input.hpp"
 #include "sprite.hpp"
 
-class UrbanBirdSprite : public Sprite
+class UrbanBirdSprite final : public Sprite
 {
 	public:
 		UrbanBirdSprite( int x, int y, Sprite* hero_address );

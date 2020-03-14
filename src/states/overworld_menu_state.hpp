@@ -7,7 +7,7 @@
 #include "ow_state.hpp"
 #include "wtext_obj.hpp"
 
-class OverworldMenuState : public GameState
+class OverworldMenuState final : public GameState
 {
 	public:
 		OverworldMenuState( const Palette& pal, OWState* camera_state, int level, int level_color );

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class CapnClearbeardSprite : public Sprite
+class CapnClearbeardSprite final : public Sprite
 {
 	public:
 		CapnClearbeardSprite( int x, int y );

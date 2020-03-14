@@ -14,7 +14,7 @@ class SpriteSystem;
 #include "unit.hpp"
 #include <vector>
 
-class BlockSystem
+class BlockSystem final
 {
 	public:
 		void init( const Map& lvmap );

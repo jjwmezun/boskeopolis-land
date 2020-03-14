@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PikeSprite : public Sprite
+class PikeSprite final : public Sprite
 {
 	public:
 		PikeSprite( int x, int y );

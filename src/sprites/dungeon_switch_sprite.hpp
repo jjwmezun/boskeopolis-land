@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class DungeonSwitchSprite : public Sprite
+class DungeonSwitchSprite final : public Sprite
 {
 	public:
 		DungeonSwitchSprite( int x, int y );

@@ -4,7 +4,7 @@
 class Collision;
 class Sprite;
 
-class BumpUnderBlockSprite
+class BumpUnderBlockSprite final
 {
 	public:
 		BumpUnderBlockSprite();

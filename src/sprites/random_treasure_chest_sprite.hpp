@@ -4,7 +4,7 @@
 
 class EventSystem;
 
-class RandomTreasureChestSprite : public TreasureChestSprite
+class RandomTreasureChestSprite final : public TreasureChestSprite
 {
 	public:
 		RandomTreasureChestSprite( int x, int y, EventSystem& events );

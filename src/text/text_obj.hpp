@@ -6,7 +6,7 @@
 
 class Camera;
 
-struct TextObj
+struct TextObj final
 {
 	std::string words_;
 	std::unique_ptr<TextComponent> component_;

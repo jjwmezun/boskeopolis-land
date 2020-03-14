@@ -4,7 +4,7 @@ class Health;
 
 #include "sprite_graphics.hpp"
 
-class OxygenMeter
+class OxygenMeter final
 {
 	public:
 		OxygenMeter( int y );

@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSwimmable : public BlockComponent
+class BlockComponentSwimmable final : public BlockComponent
 {
 	public:
 		BlockComponentSwimmable();

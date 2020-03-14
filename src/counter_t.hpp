@@ -1,7 +1,7 @@
 #pragma once
 
 template<int upper_limit_, int lower_limit_ = 0, int init_value_ = 0, bool reset_ = false>
-class CounterT
+class CounterT final
 {
 	public:
 		constexpr CounterT()

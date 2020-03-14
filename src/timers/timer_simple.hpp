@@ -3,7 +3,7 @@
 
 #include "timer.hpp"
 
-class TimerSimple : public Timer
+class TimerSimple final : public Timer
 {
 	public:
 		TimerSimple

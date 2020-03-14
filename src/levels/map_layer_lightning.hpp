@@ -11,7 +11,7 @@ class Map;
 class Sprite;
 class SpriteSystem;
 
-class MapLayerLightning : public MapLayer
+class MapLayerLightning final : public MapLayer
 {
 	public:
         enum class State

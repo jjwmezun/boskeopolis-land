@@ -15,7 +15,7 @@ class Sprite;
 #include "text_obj.hpp"
 #include "texture_box.hpp"
 
-class InventoryLevelGraphics
+class InventoryLevelGraphics final
 {
 	public:
 		static constexpr int HEIGHT = 40;

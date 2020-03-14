@@ -6,7 +6,7 @@
 #include <vector>
 #include "wtext_line.hpp"
 
-class WTextObj
+class WTextObj final
 {
 	public:
 		enum class Align

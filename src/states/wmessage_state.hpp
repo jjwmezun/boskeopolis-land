@@ -5,7 +5,7 @@
 #include "texture_box.hpp"
 #include "wtext_obj.hpp"
 
-class WMessageState : public GameState
+class WMessageState final : public GameState
 {
 	public:
 		enum class Type

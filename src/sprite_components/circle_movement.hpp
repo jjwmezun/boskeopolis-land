@@ -3,7 +3,7 @@
 #include "direction.hpp"
 #include "mezun_sdl2.hpp"
 
-class CircleMovement
+class CircleMovement final
 {
     public:
         constexpr CircleMovement( sdl2::SDLRect position, int start_x, int start_y, int radius, double speed, double starting_angle = 0.0 )

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PlayerCarSprite : public Sprite
+class PlayerCarSprite final : public Sprite
 {
 	public:
 		PlayerCarSprite( int x, int y );

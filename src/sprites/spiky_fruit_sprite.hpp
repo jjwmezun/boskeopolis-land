@@ -4,7 +4,7 @@
 
 class Block;
 
-class SpikyFruitSprite : public Sprite
+class SpikyFruitSprite final : public Sprite
 {
 	public:
 		SpikyFruitSprite( int x, int y, const Map& lvmap );

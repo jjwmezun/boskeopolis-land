@@ -2,7 +2,7 @@
 
 #include "sprite_movement.hpp"
 
-class StuckSpriteMovement : public SpriteMovement
+class StuckSpriteMovement final : public SpriteMovement
 {
 	public:
 		StuckSpriteMovement();

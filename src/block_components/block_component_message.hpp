@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentMessage : public BlockComponent
+class BlockComponentMessage final : public BlockComponent
 {
 	public:
 		BlockComponentMessage();

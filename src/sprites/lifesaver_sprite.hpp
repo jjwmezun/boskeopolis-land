@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class LifesaverSprite : public Sprite
+class LifesaverSprite final : public Sprite
 {
 	public:
 		LifesaverSprite( int x, int y, bool crate = false );

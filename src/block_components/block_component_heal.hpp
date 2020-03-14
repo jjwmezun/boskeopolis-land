@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentHeal : public BlockComponent
+class BlockComponentHeal final : public BlockComponent
 {
 	public:
 		BlockComponentHeal();

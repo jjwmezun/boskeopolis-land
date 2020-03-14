@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentKillAnimated : public BlockComponent
+class BlockComponentKillAnimated final : public BlockComponent
 {
 	public:
 		BlockComponentKillAnimated();

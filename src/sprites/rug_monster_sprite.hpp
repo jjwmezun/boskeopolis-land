@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class RugMonsterSprite : public Sprite
+class RugMonsterSprite final : public Sprite
 {
 	public:
 		RugMonsterSprite( int x, int y );

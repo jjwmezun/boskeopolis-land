@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include <vector>
 
-class TopDownPlayerSprite : public Sprite
+class TopDownPlayerSprite final : public Sprite
 {
 	public:
 		TopDownPlayerSprite( int x, int y );

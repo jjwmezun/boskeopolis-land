@@ -2,7 +2,7 @@
 
 #include "option_selection.hpp"
 
-class OptionSelectionGrid : public OptionSelection
+class OptionSelectionGrid final : public OptionSelection
 {
 	public:
 		OptionSelectionGrid( int rows, int cols, int max );

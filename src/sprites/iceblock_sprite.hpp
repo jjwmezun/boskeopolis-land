@@ -5,7 +5,7 @@
 
 class Block;
 
-class IceBlockSprite : public Sprite
+class IceBlockSprite final : public Sprite
 {
     public:
         IceBlockSprite( int x, int y );

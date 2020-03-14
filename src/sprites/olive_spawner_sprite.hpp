@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class OliveSpawnerSprite : public Sprite
+class OliveSpawnerSprite final : public Sprite
 {
 	public:
 		OliveSpawnerSprite( int x, int y, Direction::Horizontal start_dir );

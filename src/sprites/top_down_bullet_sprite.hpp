@@ -3,7 +3,7 @@
 #include "direction.hpp"
 #include "sprite.hpp"
 
-class TopDownBulletSprite : public Sprite
+class TopDownBulletSprite final : public Sprite
 {
 	public:
 		TopDownBulletSprite( int x, int y, Direction::Simple direction, SpriteType type, int layer );

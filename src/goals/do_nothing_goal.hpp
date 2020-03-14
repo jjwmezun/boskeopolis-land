@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class DoNothingGoal : public Goal
+class DoNothingGoal final : public Goal
 {
 	public:
 		DoNothingGoal( std::u32string message, int wait_time = 60 );

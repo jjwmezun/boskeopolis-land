@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class BouncingSpikeFruitSprite : public Sprite
+class BouncingSpikeFruitSprite final : public Sprite
 {
 	public:
 		BouncingSpikeFruitSprite( int x, int y );

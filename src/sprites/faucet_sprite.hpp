@@ -3,7 +3,7 @@
 #include "faucet_graphics.hpp"
 #include "sprite.hpp"
 
-class FaucetSprite : public Sprite
+class FaucetSprite final : public Sprite
 {
 	public:
 		FaucetSprite( int x, int y );

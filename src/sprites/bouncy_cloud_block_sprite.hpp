@@ -6,7 +6,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class BouncyCloudBlockSprite : public Sprite
+class BouncyCloudBlockSprite final : public Sprite
 {
 	public:
 		BouncyCloudBlockSprite( int x, int y );

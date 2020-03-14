@@ -24,7 +24,7 @@
 // CLASS
 //===================================
 
-    class Warp
+    class Warp final
     {
         public:
             constexpr Warp

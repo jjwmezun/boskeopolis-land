@@ -6,7 +6,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class LilPipeMonsterSprite : public Sprite
+class LilPipeMonsterSprite final : public Sprite
 {
 	public:
 		LilPipeMonsterSprite( int x, int y, Direction::Vertical direction );

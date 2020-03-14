@@ -5,7 +5,7 @@
 #include "shop_player.hpp"
 #include "wtext_gradual.hpp"
 
-class ShopState : public GameState
+class ShopState final : public GameState
 {
 	public:
 		ShopState( int shop_number );

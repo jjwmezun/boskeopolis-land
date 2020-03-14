@@ -27,7 +27,7 @@
 // CLASS
 //===================================
 
-    class HandgunSprite : public Sprite
+    class HandgunSprite final : public Sprite
     {
         public:
             HandgunSprite( int x, int y );

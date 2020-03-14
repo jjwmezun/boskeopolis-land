@@ -19,7 +19,7 @@
 
 class Collision;
 
-class OverworldState : public GameState
+class OverworldState final : public GameState
 {
 	public:
 		static constexpr int NUMBER_OF_LAYERS = 2;

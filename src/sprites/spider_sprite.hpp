@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class SpiderSprite : public Sprite
+class SpiderSprite final : public Sprite
 {
 	public:
 		SpiderSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class WeightPlatformSprite : public Sprite
+class WeightPlatformSprite final : public Sprite
 {
 	public:
 		WeightPlatformSprite( int x, int y, Direction::Horizontal direction );

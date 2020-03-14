@@ -6,7 +6,7 @@
 #include <vector>
 #include "wtext_highlight.hpp"
 
-class ChooseSaveState : public GameState
+class ChooseSaveState final : public GameState
 {
 	public:
 		ChooseSaveState();

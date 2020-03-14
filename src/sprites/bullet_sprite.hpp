@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class BulletSprite : public Sprite
+class BulletSprite final : public Sprite
 {
 	public:
 		BulletSprite( int x, int y, Direction::Simple dir, bool heros );

@@ -6,7 +6,7 @@ class Block;
 #include "lightning_sprite.hpp"
 #include "sprite.hpp"
 
-class CloudMonsterSprite : public Sprite
+class CloudMonsterSprite final : public Sprite
 {
 	public:
 		CloudMonsterSprite( int x, int y );

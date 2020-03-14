@@ -4,7 +4,7 @@
 
 class SpriteSystem;
 
-class VolcanoMonsterSprite : public Sprite
+class VolcanoMonsterSprite final : public Sprite
 {
 	public:
 		VolcanoMonsterSprite( int x, int y );

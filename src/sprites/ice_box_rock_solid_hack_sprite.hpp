@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class IceBoxRockSolidHackSprite : public Sprite
+class IceBoxRockSolidHackSprite final : public Sprite
 {
 	public:
 		IceBoxRockSolidHackSprite( int x, int y );

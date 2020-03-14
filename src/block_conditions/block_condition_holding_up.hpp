@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionHoldingUp : public BlockCondition
+class BlockConditionHoldingUp final : public BlockCondition
 {
 	public:
 		BlockConditionHoldingUp();

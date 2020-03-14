@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentMcGuffin : public BlockComponent
+class BlockComponentMcGuffin final : public BlockComponent
 {
 	public:
 		BlockComponentMcGuffin();

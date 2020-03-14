@@ -2,7 +2,7 @@
 
 #include <string>
 
-class HexString
+class HexString final
 {
 	public:
 		HexString( int n, int min_digits = 1 );

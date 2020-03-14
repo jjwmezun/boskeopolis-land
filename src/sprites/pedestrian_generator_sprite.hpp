@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PedestrianGeneratorSprite : public Sprite
+class PedestrianGeneratorSprite final : public Sprite
 {
 	public:
 		PedestrianGeneratorSprite( int x, int y );

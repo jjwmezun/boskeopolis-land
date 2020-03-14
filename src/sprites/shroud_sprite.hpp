@@ -7,7 +7,7 @@ class Block;
 #include "counter.hpp"
 #include "sprite.hpp"
 
-class ShroudSprite : public Sprite
+class ShroudSprite final : public Sprite
 {
 	public:
 		ShroudSprite( int x, int y );

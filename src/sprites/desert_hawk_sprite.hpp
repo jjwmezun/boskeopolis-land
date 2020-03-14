@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class DesertHawkSprite : public Sprite
+class DesertHawkSprite final : public Sprite
 {
 	public:
 		DesertHawkSprite( int x, int y, Direction::Horizontal direction );

@@ -12,7 +12,7 @@
 #include "texture_box.hpp"
 #include "player_graphics.hpp"
 
-class TitleState : public GameState
+class TitleState final : public GameState
 {
 	public:
 		static constexpr int OPTIONS_SIZE = 3;

@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class SwampPoleSprite : public Sprite
+class SwampPoleSprite final : public Sprite
 {
 	public:
 		SwampPoleSprite( int x, int y, int id );

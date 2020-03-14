@@ -6,7 +6,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class CactooieSpineSprite : public Sprite
+class CactooieSpineSprite final : public Sprite
 {
 	public:
 		CactooieSpineSprite( int x, int y, Direction::Horizontal direction );

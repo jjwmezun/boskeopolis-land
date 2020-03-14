@@ -8,7 +8,7 @@ class InventoryLevel;
 #include <string>
 #include "unit.hpp"
 
-class Inventory
+class Inventory final
 {
 	public:
 		static int currentLevel();

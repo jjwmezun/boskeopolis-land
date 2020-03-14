@@ -4,7 +4,7 @@ class Block;
 
 #include "player_sprite.hpp"
 
-class RacerSprite : public PlayerSprite
+class RacerSprite final : public PlayerSprite
 {
 	public:
 		RacerSprite( int x, int y );

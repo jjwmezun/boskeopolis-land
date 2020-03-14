@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentClimbDown : public BlockComponent
+class BlockComponentClimbDown final : public BlockComponent
 {
 	public:
 		BlockComponentClimbDown();

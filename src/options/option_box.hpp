@@ -6,7 +6,7 @@
 #include "wtext_character.hpp"
 #include <vector>
 
-class OptionBox
+class OptionBox final
 {
 	public:
 		static constexpr int VERTICAL_PADDING_MINIBLOCKS = 1;

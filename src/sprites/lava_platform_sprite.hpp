@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class LavaPlatformSprite : public Sprite
+class LavaPlatformSprite final : public Sprite
 {
 	public:
 		LavaPlatformSprite( int x, int y );

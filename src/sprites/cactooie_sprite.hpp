@@ -7,7 +7,7 @@ class Block;
 #include "sprite.hpp"
 #include "timer_simple.hpp"
 
-class CactooieSprite : public Sprite
+class CactooieSprite final : public Sprite
 {
 	public:
 		CactooieSprite( int x, int y );

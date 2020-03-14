@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionCollideTop : public BlockCondition
+class BlockConditionCollideTop final : public BlockCondition
 {
 	public:
 		BlockConditionCollideTop();

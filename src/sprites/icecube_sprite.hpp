@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class IceCubeSprite : public Sprite
+class IceCubeSprite final : public Sprite
 {
 	public:
 		IceCubeSprite( int x, int y, Direction::Horizontal direction = Direction::Horizontal::RIGHT, bool start_moving = false );

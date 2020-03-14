@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSparkWall : public BlockComponent
+class BlockComponentSparkWall final : public BlockComponent
 {
 	public:
 		BlockComponentSparkWall();

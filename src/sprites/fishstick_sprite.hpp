@@ -5,7 +5,7 @@ class Block;
 #include "sprite.hpp"
 #include "timer_simple_t.hpp"
 
-class FishstickSprite : public Sprite
+class FishstickSprite final : public Sprite
 {
 	public:
 		FishstickSprite( int x, int y );

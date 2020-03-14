@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class IronWallSprite : public Sprite
+class IronWallSprite final : public Sprite
 {
 	public:
 		IronWallSprite( int x, int y );

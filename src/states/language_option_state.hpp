@@ -5,7 +5,7 @@
 #include "option_system.hpp"
 #include "texture_box.hpp"
 
-class LanguageOptionState : public GameState
+class LanguageOptionState final : public GameState
 {
 	public:
 		LanguageOptionState();

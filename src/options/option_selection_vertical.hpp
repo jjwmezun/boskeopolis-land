@@ -2,7 +2,7 @@
 
 #include "option_selection.hpp"
 
-class OptionSelectionVertical : public OptionSelection
+class OptionSelectionVertical final : public OptionSelection
 {
 	public:
 		OptionSelectionVertical( int max, int not_allowed = -1, int current = 0 );

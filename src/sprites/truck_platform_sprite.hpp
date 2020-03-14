@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class TruckPlatformSprite : public Sprite
+class TruckPlatformSprite final : public Sprite
 {
 	public:
 		TruckPlatformSprite( int x, int y );

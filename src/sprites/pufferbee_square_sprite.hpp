@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class PufferbeeSquareSprite : public Sprite
+class PufferbeeSquareSprite final : public Sprite
 {
     public:
         PufferbeeSquareSprite

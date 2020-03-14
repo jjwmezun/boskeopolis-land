@@ -3,7 +3,7 @@
 #include "timer_t.hpp"
 
 template <int limit_T = TIMER_T_DEFAULT_FRAMES, bool starts_on_T = true, int start_count_T = 0, Direction::Vertical direction_T = Direction::Vertical::UP>
-class TimerRepeatT : public TimerT<limit_T, starts_on_T, start_count_T, direction_T>
+class TimerRepeatT final : public TimerT<limit_T, starts_on_T, start_count_T, direction_T>
 {
     public:
         constexpr TimerRepeatT()

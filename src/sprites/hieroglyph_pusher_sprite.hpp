@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class HieroglyphPusherSprite : public Sprite
+class HieroglyphPusherSprite final : public Sprite
 {
 	public:
 		HieroglyphPusherSprite( int x, int y );

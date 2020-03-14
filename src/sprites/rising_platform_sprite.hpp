@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class RisingPlatformSprite : public Sprite
+class RisingPlatformSprite final : public Sprite
 {
 	public:
 		RisingPlatformSprite( int x, int y );

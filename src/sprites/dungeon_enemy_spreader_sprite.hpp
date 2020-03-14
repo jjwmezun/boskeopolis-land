@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
 
-class DungeonEnemySpreaderSprite : public Sprite
+class DungeonEnemySpreaderSprite final : public Sprite
 {
 	public:
 		DungeonEnemySpreaderSprite( int x, int y );

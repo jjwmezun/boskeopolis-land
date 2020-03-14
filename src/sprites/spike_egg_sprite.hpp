@@ -28,7 +28,7 @@
 // CLASS
 //===================================
 
-    class SpikeEggSprite : public Sprite
+    class SpikeEggSprite final : public Sprite
     {
         public:
             SpikeEggSprite( int x, int y );

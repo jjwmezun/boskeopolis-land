@@ -5,7 +5,7 @@
 #include "option_system.hpp"
 #include "texture_box.hpp"
 
-class OptionsState : public GameState
+class OptionsState final : public GameState
 {
 	public:
 		OptionsState( bool from_title = false );

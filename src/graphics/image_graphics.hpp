@@ -3,7 +3,7 @@
 #include "mezun_sdl2.hpp"
 #include <string>
 
-class ImageGraphics
+class ImageGraphics final
 {
     public:
         ImageGraphics( std::string image, sdl2::SDLRect src, sdl2::SDLRect dest );

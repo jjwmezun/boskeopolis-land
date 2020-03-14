@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class RotatingBlockSprite : public Sprite
+class RotatingBlockSprite final : public Sprite
 {
 	public:
 		RotatingBlockSprite( int x, int y );

@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class PastRightEdgeGoal : public Goal
+class PastRightEdgeGoal final : public Goal
 {
 	public:
 		PastRightEdgeGoal( std::u32string message );

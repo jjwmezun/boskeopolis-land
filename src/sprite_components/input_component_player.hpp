@@ -2,7 +2,7 @@
 
 #include "input_component.hpp"
 
-class InputComponentPlayer : public InputComponent
+class InputComponentPlayer final : public InputComponent
 {
 	public:
 		~InputComponentPlayer();

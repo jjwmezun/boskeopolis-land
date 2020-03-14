@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class GhostSprite : public Sprite
+class GhostSprite final : public Sprite
 {
 	public:
 		GhostSprite( int x, int y );

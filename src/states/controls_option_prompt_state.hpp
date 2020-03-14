@@ -4,7 +4,7 @@
 #include "input.hpp"
 #include "text_obj_basic.hpp"
 
-class ControlsOptionPromptState : public GameState
+class ControlsOptionPromptState final : public GameState
 {
 	public:
 		ControlsOptionPromptState( Input::Action action );

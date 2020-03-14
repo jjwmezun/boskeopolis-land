@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class RisingIceCubeSprite : public Sprite
+class RisingIceCubeSprite final : public Sprite
 {
 	public:
 		RisingIceCubeSprite( int x, int y, int height_limit = 8 );

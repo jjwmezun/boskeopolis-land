@@ -6,7 +6,7 @@ class Block;
 #include "timer_simple_t.hpp"
 #include "timer_switch.hpp"
 
-class HeatBeamSprite : public Sprite
+class HeatBeamSprite final : public Sprite
 {
     public:
 		enum class Type

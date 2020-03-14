@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class CollectGoal : public Goal
+class CollectGoal final : public Goal
 {
 	public:
 		static constexpr int DEFAULT_AMOUNT = 10000;

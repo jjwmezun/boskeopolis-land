@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class WallCrawlerSprite : public Sprite
+class WallCrawlerSprite final : public Sprite
 {
 	public:
 		WallCrawlerSprite( int x, int y );

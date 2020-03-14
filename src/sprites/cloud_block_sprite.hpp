@@ -28,7 +28,7 @@ class Block;
 // CLASS
 //===================================
 
-class CloudBlockSprite : public Sprite
+class CloudBlockSprite final : public Sprite
 {
 	public:
 		CloudBlockSprite( int x, int y );

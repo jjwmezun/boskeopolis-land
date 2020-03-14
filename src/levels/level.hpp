@@ -14,7 +14,7 @@ class SpriteSystem;
 #include <string>
 #include <vector>
 
-class Level
+class Level final
 {
 	public:
 		static constexpr int NUMBER_OF_THEMES = 15;

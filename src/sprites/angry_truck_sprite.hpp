@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class AngryTruckSprite : public Sprite
+class AngryTruckSprite final : public Sprite
 {
 	public:
 		AngryTruckSprite( int x, int y, bool permanent );

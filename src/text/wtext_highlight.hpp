@@ -5,7 +5,7 @@
 static constexpr int NO_CHARACTER_HIGHLIGHTED = -1;
 
 template<int speed = 4, int delay = 60>
-class WTextHighlight
+class WTextHighlight final
 {
     public:
         WTextHighlight( WTextObj text )

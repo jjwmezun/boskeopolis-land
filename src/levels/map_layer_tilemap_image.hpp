@@ -10,7 +10,7 @@
 // cutting down # o' RenderCopy calls.
 // Downside: can't use animated tiles with this.
 
-class MapLayerTilemapImage : public MapLayer
+class MapLayerTilemapImage final : public MapLayer
 {
 	public:
 		MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height );

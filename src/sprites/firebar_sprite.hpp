@@ -4,7 +4,7 @@
 #include "circle_movement.hpp"
 #include "sprite.hpp"
 
-class FirebarSprite : public Sprite
+class FirebarSprite final : public Sprite
 {
 	public:
 		FirebarSprite( int x, int y );

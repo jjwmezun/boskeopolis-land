@@ -5,7 +5,7 @@
 #include "timer_repeat_t2.hpp"
 #include <vector>
 
-class OWEvent
+class OWEvent final
 {
     public:
         enum class MessageBack

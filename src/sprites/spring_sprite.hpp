@@ -4,7 +4,7 @@ class Block;
 
 #include "sprite.hpp"
 
-class SpringSprite : public Sprite
+class SpringSprite final : public Sprite
 {
 	public:
 		SpringSprite( int x, int y );

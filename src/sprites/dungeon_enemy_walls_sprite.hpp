@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class DungeonEnemyWallsSprite : public Sprite
+class DungeonEnemyWallsSprite final : public Sprite
 {
 	public:
 		DungeonEnemyWallsSprite( int x, int y, Direction::Simple direction );

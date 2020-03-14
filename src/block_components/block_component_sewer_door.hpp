@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSewerDoor : public BlockComponent
+class BlockComponentSewerDoor final : public BlockComponent
 {
 	public:
 		BlockComponentSewerDoor();

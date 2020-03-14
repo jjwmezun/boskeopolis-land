@@ -2,7 +2,7 @@
 
 #include "texture_box.hpp"
 
-class NewsTicker
+class NewsTicker final
 {
 	public:
 		NewsTicker( int y );

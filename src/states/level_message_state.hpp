@@ -4,7 +4,7 @@
 #include "image_graphics.hpp"
 #include "wtext_gradual.hpp"
 
-class LevelMessageState : public GameState
+class LevelMessageState final : public GameState
 {
 	public:
 		LevelMessageState( const Palette& palette, std::u32string message );

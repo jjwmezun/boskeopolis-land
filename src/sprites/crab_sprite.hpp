@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class CrabSprite : public Sprite
+class CrabSprite final : public Sprite
 {
 	public:
 		CrabSprite( int x, int y );

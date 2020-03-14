@@ -5,7 +5,7 @@
 #include "game_state.hpp"
 #include "inventory_level.hpp"
 
-class PauseState : public GameState
+class PauseState final : public GameState
 {
 	public:
 		PauseState( const Palette& palette, EventSystem& events, InventoryLevel& inventory_box );

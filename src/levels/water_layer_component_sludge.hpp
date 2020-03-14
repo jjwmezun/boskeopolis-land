@@ -2,7 +2,7 @@
 
 #include "water_layer_component.hpp"
 
-class WaterLayerComponentSludge : public WaterLayerComponent
+class WaterLayerComponentSludge final : public WaterLayerComponent
 {
 	public:
 		WaterLayerComponentSludge();

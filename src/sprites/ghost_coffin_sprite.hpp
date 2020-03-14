@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class GhostCoffinSprite : public Sprite
+class GhostCoffinSprite final : public Sprite
 {
 	public:
 		GhostCoffinSprite( int x, int y );

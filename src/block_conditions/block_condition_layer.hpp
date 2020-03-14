@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionLayer : public BlockCondition
+class BlockConditionLayer final : public BlockCondition
 {
 	public:
 		BlockConditionLayer( int layer );

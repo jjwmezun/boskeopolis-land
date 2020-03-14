@@ -27,7 +27,7 @@
 // CLASS
 //===================================
 
-    class BuzzSawSprite : public Sprite
+    class BuzzSawSprite final : public Sprite
     {
         public:
             BuzzSawSprite( int x, int y );

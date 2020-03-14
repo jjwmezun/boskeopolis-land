@@ -29,7 +29,7 @@
 // CLASS
 //===================================
 
-    class EnemyCartSprite : public Sprite
+    class EnemyCartSprite final : public Sprite
     {
         public:
             EnemyCartSprite( int x, int y );

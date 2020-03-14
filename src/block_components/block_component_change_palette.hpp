@@ -1,10 +1,9 @@
-#ifndef BLOCK_COMPONENT_CHANGE_PALETTE_H
-#define BLOCK_COMPONENT_CHANGE_PALETTE_H
+#pragma once
 
 #include "block_component.hpp"
 #include "palette.hpp"
 
-class BlockComponentChangePalette : public BlockComponent
+class BlockComponentChangePalette final : public BlockComponent
 {
 	public:
 		BlockComponentChangePalette( const Palette& palette );
@@ -14,6 +13,3 @@ class BlockComponentChangePalette : public BlockComponent
 	private:
 		const Palette palette_;
 };
-
-#endif // BLOCK_COMPONENT_CHANGE_PALETTE_H
-

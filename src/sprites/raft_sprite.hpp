@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class RaftSprite : public Sprite
+class RaftSprite final : public Sprite
 {
 	public:
 		RaftSprite( int x, int y );

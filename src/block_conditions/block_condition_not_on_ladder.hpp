@@ -2,7 +2,7 @@
 
 #include "block_condition.hpp"
 
-class BlockConditionNotOnLadder : public BlockCondition
+class BlockConditionNotOnLadder final : public BlockCondition
 {
 	public:
 		BlockConditionNotOnLadder();

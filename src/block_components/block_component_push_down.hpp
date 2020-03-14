@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentPushDown : public BlockComponent
+class BlockComponentPushDown final : public BlockComponent
 {
 	public:
 		BlockComponentPushDown( int force );

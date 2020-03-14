@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class GorillaSprite : public Sprite
+class GorillaSprite final : public Sprite
 {
 	public:
 		GorillaSprite( int x, int y );

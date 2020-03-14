@@ -6,7 +6,7 @@ class Block;
 #include "sprite.hpp"
 #include "timer_repeat_t.hpp"
 
-class BadAppleSprite : public Sprite
+class BadAppleSprite final : public Sprite
 {
 	public:
 		BadAppleSprite( int x, int y, Direction::Horizontal dir_x );

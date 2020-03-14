@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PelicanSprite : public Sprite
+class PelicanSprite final : public Sprite
 {
 	public:
 		PelicanSprite( int x, int y );

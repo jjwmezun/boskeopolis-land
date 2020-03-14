@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class WaterdropSpawnerSprite : public Sprite
+class WaterdropSpawnerSprite final : public Sprite
 {
 	public:
 		WaterdropSpawnerSprite( int x, int y );

@@ -1,9 +1,8 @@
-#ifndef BLOCK_COMPONENT_CHANGE_BLOCK_H
-#define BLOCK_COMPONENT_CHANGE_BLOCK_H
+#pragma once
 
 #include "block_component.hpp"
 
-class BlockComponentChangeBlock : public BlockComponent
+class BlockComponentChangeBlock final : public BlockComponent
 {
 	public:
 		BlockComponentChangeBlock( int new_block );
@@ -13,5 +12,3 @@ class BlockComponentChangeBlock : public BlockComponent
 	private:
 		const int new_block_;
 };
-
-#endif // BLOCK_COMPONENT_CHANGE_BLOCK_H

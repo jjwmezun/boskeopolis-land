@@ -11,7 +11,7 @@ class Sprite;
 #include "difficulty.hpp"
 #include "inventory_level_graphics.hpp"
 
-class InventoryLevel
+class InventoryLevel final
 {
 	public:
 		InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade );

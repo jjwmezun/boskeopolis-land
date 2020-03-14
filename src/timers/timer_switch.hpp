@@ -23,7 +23,7 @@
 // CLASS
 //===================================
 
-    class TimerSwitch
+    class TimerSwitch final
     {
         public:
             TimerSwitch

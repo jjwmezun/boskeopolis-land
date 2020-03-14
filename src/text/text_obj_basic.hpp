@@ -5,7 +5,7 @@
 
 class Camera;
 
-struct TextObjBasic
+struct TextObjBasic final
 {
 	std::string words_;
 	Text::FontColor color_;

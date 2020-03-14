@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class DownhillGemSprite : public Sprite
+class DownhillGemSprite final : public Sprite
 {
 	public:
 		DownhillGemSprite( int x, int y );

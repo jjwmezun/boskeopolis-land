@@ -10,7 +10,7 @@ class OWCamera;
 class OWLevel;
 class OWTileMap;
 
-class OWHero
+class OWHero final
 {
 	public:
 		OWHero( int x = 0, int y = 0 );

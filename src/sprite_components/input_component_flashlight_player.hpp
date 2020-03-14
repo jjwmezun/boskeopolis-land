@@ -2,7 +2,7 @@
 
 #include "input_component.hpp"
 
-class InputComponentFlashlightPlayer : public InputComponent
+class InputComponentFlashlightPlayer final : public InputComponent
 {
 	public:
 		~InputComponentFlashlightPlayer();

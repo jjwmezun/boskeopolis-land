@@ -6,7 +6,7 @@
 #include <SDL2/SDL_image.h>
 #include "timers/timer_repeat.hpp"
 
-class Palette
+class Palette final
 {
 	public:
 		static constexpr int COLOR_LIMIT = 7;

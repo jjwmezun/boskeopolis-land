@@ -4,7 +4,7 @@
 #include "sprite_graphics.hpp"
 #include <memory>
 
-class PlayerDoomSprite : public Sprite
+class PlayerDoomSprite final : public Sprite
 {
 	public:
 		static constexpr int CONVERSION_PRECISION = 1000000;

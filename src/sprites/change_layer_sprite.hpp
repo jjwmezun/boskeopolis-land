@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class ChangeLayerSprite : public Sprite
+class ChangeLayerSprite final : public Sprite
 {
 	public:
 		~ChangeLayerSprite();

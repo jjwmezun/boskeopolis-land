@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class TopDownMoveableBlockSprite : public Sprite
+class TopDownMoveableBlockSprite final : public Sprite
 {
 	public:
 		TopDownMoveableBlockSprite( int x, int y );

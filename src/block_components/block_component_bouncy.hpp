@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentBouncy : public BlockComponent
+class BlockComponentBouncy final : public BlockComponent
 {
 	public:
 		BlockComponentBouncy( int strength = 24 );

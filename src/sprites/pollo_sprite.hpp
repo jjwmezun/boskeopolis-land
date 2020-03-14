@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PolloSprite : public Sprite
+class PolloSprite final : public Sprite
 {
 	public:
 		PolloSprite( int x, int y, Direction::Horizontal dir_x, int map_id, bool despawn_when_dead = false );

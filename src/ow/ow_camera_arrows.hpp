@@ -3,7 +3,7 @@
 #include "image_graphics.hpp"
 #include "timer_repeat_t2.hpp"
 
-class OWCameraArrows
+class OWCameraArrows final
 {
     public:
         OWCameraArrows();

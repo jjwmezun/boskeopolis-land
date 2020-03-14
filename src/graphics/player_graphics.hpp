@@ -8,7 +8,7 @@ class SpriteGraphics;
 #include "timer_repeat.hpp"
 #include "timer_simple_t.hpp"
 
-class PlayerGraphics
+class PlayerGraphics final
 {
 	public:
 		PlayerGraphics();

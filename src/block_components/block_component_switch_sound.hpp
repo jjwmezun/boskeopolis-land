@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSwitchSound : public BlockComponent
+class BlockComponentSwitchSound final : public BlockComponent
 {
 	public:
 		BlockComponentSwitchSound();

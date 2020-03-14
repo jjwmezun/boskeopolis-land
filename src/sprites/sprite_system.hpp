@@ -14,7 +14,7 @@ class MapLayer;
 
 class LevelState;
 
-class SpriteSystem
+class SpriteSystem final
 {
 	public:
 		enum class HeroType

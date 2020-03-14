@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class DoomDoorSprite : public Sprite
+class DoomDoorSprite final : public Sprite
 {
 	public:
 		DoomDoorSprite( int x, int y );

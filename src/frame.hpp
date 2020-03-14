@@ -2,7 +2,7 @@
 
 #include "mezun_sdl2.hpp"
 
-class Frame
+class Frame final
 {
     public:
         Frame( int x, int y, int w, int h, int color = 1 );

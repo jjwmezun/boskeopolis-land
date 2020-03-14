@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PolloDelAireCircleSprite : public Sprite
+class PolloDelAireCircleSprite final : public Sprite
 {
 	public:
 		friend class PolloDelAireSprite;

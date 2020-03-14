@@ -3,7 +3,7 @@
 #include "text_component.hpp"
 #include "unit.hpp"
 
-class TextComponentFlashing : public TextComponent
+class TextComponentFlashing final : public TextComponent
 {
 	public:
 		TextComponentFlashing( int speed = Unit::DEFAULT_ANIMATION_SPEED );

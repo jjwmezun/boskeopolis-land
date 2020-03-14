@@ -1,10 +1,9 @@
-#ifndef BLOCK_COMPONENT_CHANGE_DIRECTION_H
-#define BLOCK_COMPONENT_CHANGE_DIRECTION_H
+#pragma once
 
 #include "block_component.hpp"
 #include "direction.hpp"
 
-class BlockComponentChangeDirection : public BlockComponent
+class BlockComponentChangeDirection final : public BlockComponent
 {
 	public:
 		BlockComponentChangeDirection( Direction::Simple direction );
@@ -14,5 +13,3 @@ class BlockComponentChangeDirection : public BlockComponent
 	private:
 		const Direction::Simple direction_;
 };
-
-#endif // BLOCK_COMPONENT_CHANGE_DIRECTION_H

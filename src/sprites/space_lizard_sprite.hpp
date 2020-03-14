@@ -4,7 +4,7 @@
 #include "sprite.hpp"
 #include "timer_repeat_t.hpp"
 
-class SpaceLizardSprite : public Sprite
+class SpaceLizardSprite final : public Sprite
 {
 	public:
 		SpaceLizardSprite( int x, int y );

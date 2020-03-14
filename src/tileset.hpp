@@ -8,7 +8,7 @@ class EventSystem;
 #include "rapidjson/document.h"
 #include "sprite_graphics.hpp"
 
-class Tileset
+class Tileset final
 {
 	public:
 		Tileset( std::string tileset = "urban" );

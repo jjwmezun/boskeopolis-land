@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class HeatGoal : public Goal
+class HeatGoal final : public Goal
 {
 	public:
 		HeatGoal( std::u32string message );

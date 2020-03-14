@@ -4,7 +4,7 @@
 #include "mezun_sdl2.hpp"
 #include "unit.hpp"
 
-class TextureBox
+class TextureBox final
 {
     public:
         TextureBox( int width = Unit::WINDOW_WIDTH_PIXELS, int height = Unit::WINDOW_HEIGHT_PIXELS, int x = 0, int y = 0 );

@@ -1,6 +1,6 @@
 #pragma once
 
-class Counter
+class Counter final
 {
 	public:
 		constexpr Counter

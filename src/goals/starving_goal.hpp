@@ -3,7 +3,7 @@
 #include "goal.hpp"
 #include "timers/timer_repeat_t2.hpp"
 
-class StarvingGoal : public Goal
+class StarvingGoal final : public Goal
 {
 	public:
 		static constexpr int DEFAULT_STARTING_AMOUNT = 500;

@@ -4,7 +4,7 @@
 #include "text_obj.hpp"
 #include "timer_random.hpp"
 
-class ChamsbySprite : public Sprite
+class ChamsbySprite final : public Sprite
 {
 	public:
 		ChamsbySprite( int x, int y );

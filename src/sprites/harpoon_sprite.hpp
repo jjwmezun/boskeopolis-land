@@ -3,7 +3,7 @@
 #include "sprite.hpp"
 #include "sprite_graphics.hpp"
 
-class HarpoonSprite : public Sprite
+class HarpoonSprite final : public Sprite
 {
 	public:
 		HarpoonSprite( int x, int y );

@@ -7,7 +7,7 @@
 #include "unit.hpp"
 #include <utility>
 
-class AnimatedGraphics : public SpriteGraphics
+class AnimatedGraphics final : public SpriteGraphics
 {
 	public:
 		AnimatedGraphics

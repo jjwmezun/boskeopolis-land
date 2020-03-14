@@ -2,7 +2,7 @@
 
 #include "block_component.hpp"
 
-class BlockComponentSludgeWater : public BlockComponent
+class BlockComponentSludgeWater final : public BlockComponent
 {
 	public:
 		BlockComponentSludgeWater();

@@ -4,7 +4,7 @@
 
 class Camera;
 
-class ShmupEnemySprite : public Sprite
+class ShmupEnemySprite final : public Sprite
 {
 	public:
 		ShmupEnemySprite();

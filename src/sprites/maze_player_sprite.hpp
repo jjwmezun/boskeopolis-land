@@ -5,7 +5,7 @@ class Sprite;
 
 #include "sprite.hpp"
 
-class MazePlayerSprite : public Sprite
+class MazePlayerSprite final : public Sprite
 {
 	public:
 		MazePlayerSprite( int x, int y );

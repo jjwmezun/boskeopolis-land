@@ -6,7 +6,7 @@
 #include "option_system.hpp"
 #include "texture_box.hpp"
 
-class ScreenOptionState : public GameState
+class ScreenOptionState final : public GameState
 {
 	public:
 		ScreenOptionState();

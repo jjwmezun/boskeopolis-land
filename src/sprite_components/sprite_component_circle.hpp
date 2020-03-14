@@ -24,7 +24,7 @@
 // CLASS
 //===================================
 
-    class SpriteComponentCircle : public SpriteComponent
+    class SpriteComponentCircle final : public SpriteComponent
     {
 
         public:

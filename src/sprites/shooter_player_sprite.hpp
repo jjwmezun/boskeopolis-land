@@ -4,7 +4,7 @@
 #include "player_sprite.hpp"
 #include "timer_repeat.hpp"
 
-class ShooterPlayerSprite : public PlayerSprite
+class ShooterPlayerSprite final : public PlayerSprite
 {
 	public:
 		ShooterPlayerSprite( int x, int y );

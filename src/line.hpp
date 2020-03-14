@@ -4,7 +4,7 @@
 #include "mezun_sdl2.hpp"
 #include <array>
 
-struct Line
+struct Line final
 {
     Point p1;
     Point p2;

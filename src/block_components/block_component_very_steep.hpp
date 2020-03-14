@@ -3,7 +3,7 @@
 #include "block_component.hpp"
 #include "direction.hpp"
 
-class BlockComponentVerySteep : public BlockComponent
+class BlockComponentVerySteep final : public BlockComponent
 {
 	public:
 		BlockComponentVerySteep( Direction::Horizontal direction, int height, int relative, int resistance, int extra_push );

@@ -4,7 +4,7 @@
 #include "sprite_graphics.hpp"
 #include "text_obj.hpp"
 
-class DungeonHealerSprite : public Sprite
+class DungeonHealerSprite final : public Sprite
 {
 	public:
 		DungeonHealerSprite( int x, int y );

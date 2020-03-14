@@ -2,7 +2,7 @@
 
 #include "goal.hpp"
 
-class AvoidMoneyGoal : public Goal
+class AvoidMoneyGoal final : public Goal
 {
 	public:
 		AvoidMoneyGoal( std::u32string message );

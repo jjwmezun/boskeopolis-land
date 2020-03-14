@@ -2,7 +2,7 @@
 
 #include "sprite.hpp"
 
-class PlayerPlaneSprite : public Sprite
+class PlayerPlaneSprite final : public Sprite
 {
 	public:
 		PlayerPlaneSprite( int x, int y );

@@ -5,7 +5,7 @@ class Health;
 #include "mezun_sdl2.hpp"
 #include <string>
 
-class InventoryLevelHealth
+class InventoryLevelHealth final
 {
 	public:
 		InventoryLevelHealth( int y, int max );

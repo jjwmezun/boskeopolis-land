@@ -26,7 +26,7 @@
 // CLASS
 //===================================
 
-    class SpriteComponentUpAndDown : public SpriteComponent
+    class SpriteComponentUpAndDown final : public SpriteComponent
     {
 
         public:

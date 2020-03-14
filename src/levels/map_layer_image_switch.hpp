@@ -2,7 +2,7 @@
 
 #include "map_layer_image.hpp"
 
-class MapLayerImageSwitch : public MapLayerImage
+class MapLayerImageSwitch final : public MapLayerImage
 {
 	public:
 		static constexpr int REPEAT_INFINITE = 255;

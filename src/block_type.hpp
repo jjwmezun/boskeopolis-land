@@ -17,7 +17,7 @@ class SpriteSystem;
 #include "object.hpp"
 #include <vector>
 
-class BlockType
+class BlockType final
 {
 	public:
 		friend class BlockComponentSwitch;
