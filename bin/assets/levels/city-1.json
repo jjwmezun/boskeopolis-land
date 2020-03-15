@@ -26,7 +26,10 @@
 					"width": 264,
 					"height": 224,
 					"x_scroll": 0.5,
-					"y_scroll": 0.25
+					"y_scroll": 0.25,
+					"frames": 5,
+					"animation_speed": 32,
+					"animation_flip": true
 				},
 				{
 					"type": "image",
