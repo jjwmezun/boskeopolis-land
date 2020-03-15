@@ -21,7 +21,8 @@ WTextObj::WTextObj
     int height
 )
 :
-    shadow_ ( shadow != WTextCharacter::Color::__NULL )
+    shadow_ ( shadow != WTextCharacter::Color::__NULL ),
+    words_ ( text )
 {
     // Apply x_padding to width ( pushes in from both sides, so x2 ).
     width -= ( x_padding * 2 );

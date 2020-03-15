@@ -36,7 +36,7 @@ enum class Option
 static constexpr int OPTIONS_SIZE = 4;
 
 static constexpr int NUMBER_OF_TRAINER_LEVELS = 4;
-static const std::string TRAINER_LEVELS[ NUMBER_OF_TRAINER_LEVELS ] = { "woods-1", "woods-1", "woods-1", "woods-1" };
+static const std::string TRAINER_LEVELS[ NUMBER_OF_TRAINER_LEVELS ] = { "city-1", "woods-1", "factory-2", "city-4" };
 
 static const std::string& getRandomTrainerLevel()
 {

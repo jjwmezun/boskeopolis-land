@@ -78,4 +78,5 @@ class WTextObj final
 
 		bool shadow_;
 		std::vector<WTextLine> lines_;
+		std::u32string words_;
 };
