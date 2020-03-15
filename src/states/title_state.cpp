@@ -101,7 +101,7 @@ void TitleState::stateUpdate()
     else
     {
         level_.updateForTrainer();
-        if ( Input::held( Input::Action::CONFIRM ) )
+        if ( Input::pressed( Input::Action::CONFIRM ) )
         {
             paused_ = true;
             Audio::setTrainerModeOff();
