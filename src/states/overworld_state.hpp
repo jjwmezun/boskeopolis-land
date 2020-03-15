@@ -1,6 +1,7 @@
 #pragma once
 
 #include "counter_flip.hpp"
+#include "frame.hpp"
 #include "game_state.hpp"
 #include "ow_camera.hpp"
 #include "ow_camera_arrows.hpp"
@@ -12,10 +13,12 @@
 #include "ow_state.hpp"
 #include "ow_tilemap.hpp"
 #include "rapidjson/document.h"
+#include "scrolling_background.hpp"
 #include "show_event_type.hpp"
 #include "texture_box.hpp"
 #include "timer_repeat_t2.hpp"
 #include <unordered_map>
+#include <vector>
 
 class Collision;
 
@@ -48,6 +51,8 @@ class OverworldState final : public GameState
 		static constexpr int MAX_ANIMATION_FRAMES = 2;
 
 		OWState state_;
+		int width_blocks_;
+		int height_blocks_;
 		int background_animation_timer_;
 		int background_animation_frame_;
 		int current_level_;
@@ -57,15 +62,22 @@ class OverworldState final : public GameState
 		CounterFlip<MAX_ANIMATION_FRAMES - 1> current_animation_frame_;
 		TimerRepeatT2<32> animation_timer_;
 		OWObject* object_on_;
+		std::vector<int> sprites_tiles_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;
+		std::vector<int> bg_tiles_[ NUMBER_OF_LAYERS ];
+		std::vector<int> fg_tiles_[ NUMBER_OF_LAYERS ];
+		TextureBox screen_;
 		TextureBox bg_textures_[ NUMBER_OF_LAYERS ][ MAX_ANIMATION_FRAMES ];
 		TextureBox fg_textures_[ NUMBER_OF_LAYERS ][ MAX_ANIMATION_FRAMES ];
+		Frame main_frame_;
 		ImageGraphics water_background_;
+		ScrollingBackground background_;
 		OWCamera camera_;
 		OWEvent event_;
 		OWCameraArrows camera_arrows_;
 		OWHero hero_;
 		OWLevelTileGraphics level_tile_graphics_;
 		OWInventory inventory_;
+		char scratch_[ 3000 ];
 };

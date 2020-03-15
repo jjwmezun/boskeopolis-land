@@ -12,14 +12,13 @@
 #include "overworld_menu_state.hpp"
 #include "shop_state.hpp"
 #include "unit.hpp"
-#include <unordered_map>
 
-static std::vector<int> bg_tiles_[ OverworldState::NUMBER_OF_LAYERS ] = {};
-static std::vector<int> fg_tiles_[ OverworldState::NUMBER_OF_LAYERS ] = {};
-static std::vector<int> sprites_tiles_ = {};
-static int width_blocks_ = 0;
-static int height_blocks_ = 0;
+static constexpr int frameToScreenSize( int value )
+{
+	return value - 12;
+};
 
+static constexpr int MOVE_PLAYER_FRAME_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 40;
 static constexpr int NUMBER_OF_PALETTES = 9;
 static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
@@ -71,6 +70,8 @@ OverworldState::OverworldState( int previous_level, ShowEventType show_event )
 :
 	GameState( StateID::OVERWORLD_STATE, { getPaletteForLevel(), 2 } ),
 	state_ ( determineBeginningState( show_event ) ),
+	width_blocks_ ( 0 ),
+	height_blocks_ ( 0 ),
 	background_animation_timer_ ( 0 ),
 	background_animation_frame_ ( 0 ),
 	current_level_ ( previous_level ),
@@ -82,23 +83,19 @@ OverworldState::OverworldState( int previous_level, ShowEventType show_event )
 	object_on_ ( nullptr ),
 	objects_ (),
 	tilemap_ (),
+	screen_ ( Unit::WINDOW_WIDTH_PIXELS - 12, frameToScreenSize( Unit::WINDOW_HEIGHT_PIXELS ), 6, 6 ),
 	bg_textures_ (),
 	fg_textures_ (),
+	main_frame_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS, -1 ),
 	water_background_ ( "bg/overworld-water.png", { 0, 0, 400, 224 } ),
+	background_ ( "bg/ow-bg.png", 16, 16 ),
 	camera_ ( 800, 448 ),
 	event_ (),
 	camera_arrows_ (),
 	hero_ ( 300, 300 ),
 	level_tile_graphics_ (),
 	inventory_ ()
-{
-	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
-	{
-		bg_tiles_[ i ].clear();
-		fg_tiles_[ i ].clear();
-	}
-	sprites_tiles_.clear();
-};
+{};
 
 OverworldState::~OverworldState()
 {
@@ -110,6 +107,7 @@ OverworldState::~OverworldState()
 			fg_textures_[ i ][ j ].destroy();
 		}
 	}
+	screen_.destroy();
 };
 
 void OverworldState::stateUpdate()
@@ -297,27 +295,53 @@ void OverworldState::stateUpdate()
 	{
 		++current_animation_frame_;
 	}
+	background_.update();
+
+	if ( state_ == OWState::MOVE_PLAYER )
+	{
+		if ( main_frame_.getHeight() > MOVE_PLAYER_FRAME_HEIGHT )
+		{
+			main_frame_.changeHeight( -2 );
+			screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
+		}
+	}
+	else
+	{
+		if ( main_frame_.getHeight() < Unit::WINDOW_HEIGHT_PIXELS )
+		{
+			main_frame_.changeHeight( 2 );
+			screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
+		}
+	}
 };
 
 void OverworldState::stateRender()
 {
-	Render::colorCanvas( 2 );
-	water_background_.render();
-	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
-	{
-		bg_textures_[ i ][ current_animation_frame_.value() ].render();
-	}
-	level_tile_graphics_.render();
-	hero_.render( camera_ );
-	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
-	{
-		fg_textures_[ i ][ current_animation_frame_.value() ].render();
-	}
+	background_.render();
+	screen_.startDrawing();
+	Render::clearScreenTransparency();
+		water_background_.render();
+		for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+		{
+			bg_textures_[ i ][ current_animation_frame_.value() ].render();
+		}
+		level_tile_graphics_.render();
+		hero_.render( camera_ );
+		for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+		{
+			fg_textures_[ i ][ current_animation_frame_.value() ].render();
+		}
+	screen_.endDrawing();
+	screen_.render();
+
 	switch ( state_ )
 	{
 		case ( OWState::MOVE_PLAYER ):
 		{
-			inventory_.render();
+			if ( main_frame_.getHeight() == MOVE_PLAYER_FRAME_HEIGHT )
+			{
+				inventory_.render();
+			}
 		}
 		break;
 
@@ -325,12 +349,13 @@ void OverworldState::stateRender()
 		{
 			camera_arrows_.render();
 		}
-		break;
 	}
+	main_frame_.render();
 };
 
 void OverworldState::init()
 {
+	screen_.init();
 	newPalette( PALETTES[ current_palette_ ] );
 	generateMap();
 	tilemap_.init( width_blocks_, height_blocks_ );
@@ -394,6 +419,8 @@ void OverworldState::init()
 	{
 		tilemap_.updateSolids( bg_tiles_, fg_tiles_ );
 	}
+	main_frame_.setHeight( ( state_ == OWState::MOVE_PLAYER ) ? MOVE_PLAYER_FRAME_HEIGHT : Unit::WINDOW_HEIGHT_PIXELS );
+	screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
 
 	Audio::changeSong( "overworld" );
 };

@@ -27,6 +27,8 @@ class TextureBox final
         void setY( int value );
         int getX() const;
         int getY() const;
+        void setHeight( int value );
+        int getHeight() const;
         const sdl2::SDLRect& getDest() const;
 
     private:

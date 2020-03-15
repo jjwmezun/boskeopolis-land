@@ -1,16 +1,13 @@
 #include "frame.hpp"
 #include "render.hpp"
 
-Frame::Frame( int x, int y, int w, int h, int color )
-:
-    color_ ( color ),
-    coords_ ( x, y, w, h )
-{};
-
 void Frame::render() const
 {
     // Render BG
-    Render::renderRect( { coords_.x + 6, coords_.y + 6, coords_.w - 12, coords_.h - 12 }, color_ );
+    if ( color_ > -1 )
+    {
+        Render::renderRect( { coords_.x + 6, coords_.y + 6, coords_.w - 12, coords_.h - 12 }, color_ );
+    }
 
     // Left
     Render::renderObject( "bg/frame.png", { 0, 7, 7, 1 }, { coords_.x, coords_.y + 7, 7, coords_.h - 14 } );

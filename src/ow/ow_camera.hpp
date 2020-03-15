@@ -9,8 +9,8 @@ class DPoint;
 class OWCamera final
 {
 	public:
-		static constexpr int WIDTH = Unit::WINDOW_WIDTH_PIXELS;
-		static constexpr int HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - OWInventory::HEIGHT;
+		static constexpr int WIDTH = Unit::WINDOW_WIDTH_PIXELS - 12;
+		static constexpr int HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - OWInventory::HEIGHT - 12;
 		static constexpr int LEFT_BOUNDARY_POINT = ( int )( ( double )( WIDTH ) * 0.25 );
 		static constexpr int RIGHT_BOUNDARY_POINT = ( int )( ( double )( WIDTH ) * 0.75 );
 		static constexpr int TOP_BOUNDARY_POINT = ( int )( ( double )( HEIGHT ) * 0.25 );

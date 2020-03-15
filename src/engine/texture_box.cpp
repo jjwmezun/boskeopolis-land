@@ -106,3 +106,13 @@ const sdl2::SDLRect& TextureBox::getDest() const
 {
     return dest_;
 };
+
+void TextureBox::setHeight( int value )
+{
+    src_.h = dest_.h = value;
+};
+
+int TextureBox::getHeight() const
+{
+    return src_.h;
+};
