@@ -307,6 +307,7 @@ void Inventory::save()
 void Inventory::load( Save save )
 {
 	save_ = save;
+	total_funds_shown_ = save.data_.total_funds_;
 };
 
 void Inventory::win( const InventoryLevel& level_inventory )

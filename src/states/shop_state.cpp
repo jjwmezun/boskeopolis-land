@@ -29,9 +29,9 @@ ShopState::ShopState( int shop_number )
     item_description_ ( {} ),
     items_
     ({
-        { ShopItem::Type::HP_UPGRADE, Localization::getCurrentLanguage().getShopItemHPUpgradeName(), Localization::getCurrentLanguage().getShopItemHPUpgradeDescription(), 1000 },
-        { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 1000 },
-        { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Level::getSpecialLevelName( 1 ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 1000 }
+        { ShopItem::Type::HP_UPGRADE, Localization::getCurrentLanguage().getShopItemHPUpgradeName(), Localization::getCurrentLanguage().getShopItemHPUpgradeDescription(), 250000 },
+        { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 500000 },
+        { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Level::getSpecialLevelName( 1 ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 100000 }
     })
 {
     Inventory::setCurrentLevel( -2 );
@@ -196,6 +196,7 @@ void ShopState::stateUpdate()
                             cart_[ i ] = false;
                         }
                     }
+                    Inventory::save();
                     Audio::playSound( Audio::SoundType::CONFIRM );
                     changeDialogue( Localization::getCurrentLanguage().getCheckoutThanks() );
                     state_ = State::WAITING_FOR_CHECKOUT_THANKS_TO_FINISH;
