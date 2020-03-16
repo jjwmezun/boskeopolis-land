@@ -1,6 +1,7 @@
 #pragma once
 
 class EventSystem;
+class Health;
 class PlayerSprite;
 class SpriteGraphics;
 
@@ -13,7 +14,7 @@ class PlayerGraphics final
 	public:
 		PlayerGraphics();
 		~PlayerGraphics();
-		void update( const PlayerSprite& sprite, SpriteGraphics* graphics, const EventSystem* events = nullptr );
+		void update( const PlayerSprite& sprite, SpriteGraphics* graphics, const Health& health, const EventSystem* events = nullptr );
 
 	private:
 		TimerRepeat animation_timer_;

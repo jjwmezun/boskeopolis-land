@@ -322,6 +322,7 @@
         "messages":
         {
             "city-1": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
+            "attic-1": "Level still under construction. Please grab the Keycane ’bove & get out.",
             "ice-1": "You can bop fish from ’bove while underwater.",
             "city-2": "Paper planes are o’erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o’ their gluish grasp.",
             "ice-2": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o’ her jump a bit o’a boost.",
@@ -331,6 +332,8 @@
         "goals":
         {
             "city-3": "¡Collect 5 presents!",
+            "ice-1": "¡Unlock the treasure!",
+            "mines-1": "¡Unlock the treasure!",
             "city-4": "¡Get to the Keycane before “Dagny”!",
             "desert-2": "¡Get the silver moon & then ’scape ’fore time\nruns out!",
             "desert-4": "¡Shoot out all the Cowpokers & sentry guns!",

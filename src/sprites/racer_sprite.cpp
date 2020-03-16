@@ -30,7 +30,7 @@ void RacerSprite::customUpdate( LevelState& level_state )
 	{
 		vx_ *= .2;
 	}
-	player_gfx_.update( *this, graphics_.get() );
+	player_gfx_.update( *this, graphics_.get(), level_state.health() );
 };
 
 void RacerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )

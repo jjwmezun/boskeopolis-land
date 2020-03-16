@@ -43,7 +43,10 @@ void LevelState::stateUpdate()
 			sprites_.interact( *this );
 			sprites_.interactWithMap( *this );
 			sprites_.spriteInteraction( *this );
-			health_.update();
+			if ( !sprites_.hero().isDead() )
+			{
+				health_.update();
+			}
 		}
 		inventory_screen_.update( events_, health_ );
 		level_.updateGoal( *this );

@@ -69,7 +69,7 @@ void FlashlightPlayerSprite::customUpdate( LevelState& level_state )
 	invincibilityFlicker( health );
 	boundaries( camera, lvmap );
 	camera.adjust( *this, lvmap );
-	player_gfx_.update( *this, graphics_.get(), &events );
+	player_gfx_.update( *this, graphics_.get(), health, &events );
 	if ( !on_ladder_ )
 	{
 		if ( Input::held( Input::Action::MOVE_UP ) )

@@ -54,8 +54,9 @@ WTextObj::WTextObj
         }
     }
 
+    const int frames_size = frames.size();
     int i = 0;
-    while ( i < frames.size() )
+    while ( i < frames_size )
     {
         int ib = i;
         int xb = x;
@@ -78,12 +79,17 @@ WTextObj::WTextObj
                 lines_.emplace_back( x, y, std::vector<WTextCharacter>{}, std::vector<WTextCharacter>{} );
                 look_ahead = false;
             }
-            else if ( ib >= frames.size() )
+            else if ( ib >= frames_size )
             {
                 look_ahead = false;
                 break;
             }
 
+            if ( ib == frames_size )
+            {
+                look_ahead = false;
+                break;
+            }
             ++ib;
             xb += WTextCharacter::SIZE_PIXELS;
         }

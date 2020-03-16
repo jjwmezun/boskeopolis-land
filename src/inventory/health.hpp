@@ -27,6 +27,7 @@ class Health final
 		bool hasFullHealth() const;
 		int getInvincibilityCounter() const;
 		int maxHP() const;
+		bool oxygenLow() const;
 
 
 	private:

@@ -1,4 +1,5 @@
 #include "event_system.hpp"
+#include "health.hpp"
 #include "player_graphics.hpp"
 #include "player_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -15,7 +16,7 @@ PlayerGraphics::PlayerGraphics()
 
 PlayerGraphics::~PlayerGraphics() {};
 
-void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphics, const EventSystem* events )
+void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphics, const Health& health, const EventSystem* events )
 {
 	if ( sprite.directionX() == Direction::Horizontal::RIGHT )
 	{
@@ -48,22 +49,30 @@ void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphic
 	}
 	else if ( sprite.isDucking() )
 	{
-		if ( animation_timer_.hit() )
+		if ( health.oxygenLow() )
 		{
-			++blink_counter_;
-		}
-
-		animation_timer_.update();
-
-		if ( blink_counter_ == 3 )
-		{
-			graphics->current_frame_x_ = 0;
-			graphics->current_frame_y_ = 32;
+			graphics->current_frame_x_ = 112;
+			graphics->current_frame_y_ = 58;
 		}
 		else
 		{
-			graphics->current_frame_x_ = 64;
-			graphics->current_frame_y_ = 6;
+			if ( animation_timer_.hit() )
+			{
+				++blink_counter_;
+			}
+
+			animation_timer_.update();
+
+			if ( blink_counter_ == 3 )
+			{
+				graphics->current_frame_x_ = 0;
+				graphics->current_frame_y_ = 32;
+			}
+			else
+			{
+				graphics->current_frame_x_ = 64;
+				graphics->current_frame_y_ = 6;
+			}
 		}
 	}
 	else if ( !sprite.onGroundPrev() )
@@ -80,48 +89,77 @@ void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphic
 
 		animation_timer_.update();
 
-		switch ( walk_counter_.value() )
+		if ( health.oxygenLow() )
 		{
-			case 1:
-				graphics->current_frame_x_ = 0;
-			break;
-			case 2:
-				graphics->current_frame_x_ = 32;
-			break;
-			case 3:
-				graphics->current_frame_x_ = 0;
-			break;
-			default:
-				graphics->current_frame_x_ = 16;
-			break;
+			switch ( walk_counter_.value() )
+			{
+				case 1:
+					graphics->current_frame_x_ = 48;
+				break;
+				case 2:
+					graphics->current_frame_x_ = 80;
+				break;
+				case 3:
+					graphics->current_frame_x_ = 48;
+				break;
+				default:
+					graphics->current_frame_x_ = 64;
+				break;
+			}
+			graphics->current_frame_y_ = 52;
 		}
-
-		graphics->current_frame_y_ = 0;
+		else
+		{
+			switch ( walk_counter_.value() )
+			{
+				case 1:
+					graphics->current_frame_x_ = 0;
+				break;
+				case 2:
+					graphics->current_frame_x_ = 32;
+				break;
+				case 3:
+					graphics->current_frame_x_ = 0;
+				break;
+				default:
+					graphics->current_frame_x_ = 16;
+				break;
+			}
+			graphics->current_frame_y_ = 0;
+		}
 	}
 	else
 	{
-		if ( animation_timer_.hit() )
+		if ( health.oxygenLow() )
 		{
-			++blink_counter_;
+			graphics->current_frame_x_ = 48;
+			graphics->current_frame_y_ = 52;
+		}
+		else
+		{
+			if ( animation_timer_.hit() )
+			{
+				++blink_counter_;
+			}
+
+			animation_timer_.update();
+
+			switch ( blink_counter_.value() )
+			{
+				case 3:
+				{
+					graphics->current_frame_x_ = 112;
+				}
+				break;
+				default:
+				{
+					graphics->current_frame_x_ = ( sprite.isLookingUp() ) ? 80 : 0;
+				}
+				break;
+			}
+			graphics->current_frame_y_ = 0;
 		}
 
-		animation_timer_.update();
-
-		switch ( blink_counter_.value() )
-		{
-			case 3:
-			{
-				graphics->current_frame_x_ = 112;
-			}
-			break;
-			default:
-			{
-				graphics->current_frame_x_ = ( sprite.isLookingUp() ) ? 80 : 0;
-			}
-			break;
-		}
-
-		graphics->current_frame_y_ = 0;
 	}
 
 	if ( sprite.hasMovementType( SpriteMovement::Type::SWIMMING ) && !sprite.onGroundPrev() )
@@ -129,18 +167,48 @@ void PlayerGraphics::update( const PlayerSprite& sprite, SpriteGraphics* graphic
 		switch ( swim_counter_() )
 		{
 			case ( 0 ):
-				graphics->current_frame_x_ = 64;
-				graphics->current_frame_y_ = 26;
+			{
+				if ( health.oxygenLow() )
+				{
+					graphics->current_frame_x_ = 0;
+					graphics->current_frame_y_ = 52;
+				}
+				else
+				{
+					graphics->current_frame_x_ = 64;
+					graphics->current_frame_y_ = 26;
+				}
+			}
 			break;
 
 			case ( 1 ):
-				graphics->current_frame_x_ = 80;
-				graphics->current_frame_y_ = 26;
+			{
+				if ( health.oxygenLow() )
+				{
+					graphics->current_frame_x_ = 16;
+					graphics->current_frame_y_ = 52;
+				}
+				else
+				{
+					graphics->current_frame_x_ = 80;
+					graphics->current_frame_y_ = 26;
+				}
+			}
 			break;
 
 			case ( 2 ):
-				graphics->current_frame_x_ = 96;
-				graphics->current_frame_y_ = 26;
+			{
+				if ( health.oxygenLow() )
+				{
+					graphics->current_frame_x_ = 32;
+					graphics->current_frame_y_ = 52;
+				}
+				else
+				{
+					graphics->current_frame_x_ = 96;
+					graphics->current_frame_y_ = 26;
+				}
+			}
 			break;
 		}
 

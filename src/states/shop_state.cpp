@@ -13,7 +13,7 @@
 static constexpr int INPUT_DELAY_LENGTH = 8;
 static constexpr int CART_TOTAL_SHOWN_CHANGE = 10000;
 
-static WTextObj generateDialogue( const std::u32string& text );
+static WTextObj generateDialogue( std::u32string text );
 
 ShopState::ShopState( int shop_number )
 :
@@ -454,7 +454,7 @@ void ShopState::setItemDescriptionText()
     item_description_ = { { text, 6, 190, WTextCharacter::Color::BLACK, 388, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 6, 6, WTextObj::VAlign::TOP, 28 } };
 };
 
-static WTextObj generateDialogue( const std::u32string& text )
+static WTextObj generateDialogue( std::u32string text )
 {
     return { text, 304, 72, WTextCharacter::Color::BLACK, 72, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 0, WTextObj::VAlign::BOTTOM, 72 };
 };

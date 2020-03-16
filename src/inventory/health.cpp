@@ -168,3 +168,8 @@ bool Health::hasFullHealth() const
 {
 	return hp_ >= maxHP();
 };
+
+bool Health::oxygenLow() const
+{
+	return oxygenPercent() < 0.25;
+};

@@ -19,8 +19,14 @@ BlockType::BlockType
 :
 	graphics_   ( std::move( graphics ) ),
 	components_ ( std::move( components ) ),
-	conditions_ ( std::move( conditions ) )
-{};
+	conditions_ ( std::move( conditions ) ),
+	saved_components_ ()
+{
+	for ( int i = 0; i < components_.size(); ++i )
+	{
+		saved_components_.emplace_back( false );
+	}
+};
 
 BlockType::~BlockType() {};
 
@@ -28,7 +34,8 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 {
 	for ( int i = 0; i < components_.size(); ++i )
 	{
-		if ( testCanInteract( i, collision, sprite, block, level_state ) )
+		saved_components_[ i ] = testCanInteract( i, collision, sprite, block, level_state );
+		if ( saved_components_[ i ] )
 		{
 			if ( components_.at( i ) )
 			{
@@ -64,10 +71,13 @@ void BlockType::update( EventSystem& events )
 
 bool BlockType::hasComponentType( BlockComponent::Type type ) const
 {
-	for ( auto& t : components_ )
+	for ( int i = 0; i < components_.size(); ++i )
 	{
 		// True if a'least 1 component has type.
-		if ( t->type() == type ) return true;
+		if ( saved_components_[ i ] && components_[ i ]->type() == type )
+		{
+			return true;
+		}
 	}
 
 	// If all don't, false.

@@ -74,7 +74,7 @@ void PlayerSprite::customUpdate( LevelState& level_state )
 	if ( !level_state.events().testPauseHero() )
 	{
 		heroActions( level_state );
-		player_gfx_.update( *this, graphics_.get(), &level_state.events() );
+		player_gfx_.update( *this, graphics_.get(), level_state.health(), &level_state.events() );
 	}
 };
 

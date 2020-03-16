@@ -50,6 +50,7 @@ class BlockType final
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::vector<std::unique_ptr<BlockComponent>> components_;
 		std::vector<std::vector<std::unique_ptr<BlockCondition>>> conditions_;
+		std::vector<bool> saved_components_;
 
 		bool testCanInteract( int i, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const;
 };

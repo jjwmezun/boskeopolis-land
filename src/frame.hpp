@@ -5,7 +5,7 @@
 class Frame final
 {
     public:
-        constexpr Frame( int x, int y, int w, int h, int color )
+        constexpr Frame( int x, int y, int w, int h, int color = 1 )
         :
             color_ ( color ),
             coords_ ( x, y, w, h )
