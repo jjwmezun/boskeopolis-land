@@ -67,6 +67,11 @@
          "value":6
         }, 
         {
+         "name":"music",
+         "type":"string",
+         "value":"attic"
+        }, 
+        {
          "name":"palette",
          "type":"string",
          "value":"Dusty Brown"
