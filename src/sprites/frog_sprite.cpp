@@ -9,7 +9,7 @@ static constexpr int TONGUE_RELATIVE_Y = Unit::PixelsToSubPixels( 7 );
 
 FrogSprite::FrogSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/frog.png", 0, 0, false, false, 0.0, false, -1, -1, 2, 1 ), x, y, 11, 14, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 250, 2000, 250, 2000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/frog.png", 0, 0, false, false, 0.0, false, -1, -8, 2, 9 ), x, y, 26, 20, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 250, 2000, 250, 2000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr ),
     jump_timer_ (),
     tongue_ ( 0, 0, 0, Unit::PixelsToSubPixels( 4 ) ),
     state_ ( FrogState::STATIONARY )
@@ -25,7 +25,8 @@ void FrogSprite::customUpdate( LevelState& level_state )
         {
             if ( jump_timer_.update() )
             {
-                state_ = ( mezun::testRandomWithinPercentage( 33 ) ) ? FrogState::LICKING : FrogState::JUMPING;
+                //state_ = ( mezun::testRandomWithinPercentage( 33 ) ) ? FrogState::LICKING : FrogState::JUMPING;
+                state_ = FrogState::JUMPING;
                 if ( state_ == FrogState::JUMPING )
                 {
                     jump_top_speed_ = ( mezun::testRandomWithinPercentage( 25 ) ) ? 4000 : 2000;
@@ -114,10 +115,11 @@ void FrogSprite::customInteract( Collision& my_collision, Collision& their_colli
 
 void FrogSprite::render( Camera& camera, bool priority )
 {
-    graphics_->current_frame_y_ = 0;
+    graphics_->current_frame_x_ = 0;
+    graphics_->current_frame_y_ = 20;
     graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-    graphics_->current_frame_y_ = 16;
-    graphics_->render( Unit::SubPixelsToPixels( tongue_ ), &camera, priority );
+    //graphics_->current_frame_y_ = 16;
+    //graphics_->render( Unit::SubPixelsToPixels( tongue_ ), &camera, priority );
 };
 
 void FrogSprite::setTongueX()
