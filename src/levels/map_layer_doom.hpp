@@ -27,7 +27,7 @@ class MapLayerDoom final : public MapLayer
 		static constexpr double RAY_MAX_D = ( double )( RAY_MAX );
 		static constexpr int SCREEN_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 32;
 		static constexpr double SCREEN_HEIGHT_D = ( double )( SCREEN_HEIGHT );
-		static constexpr int NUMBER_OF_ITEM_TYPES = 6;
+		static constexpr int NUMBER_OF_ITEM_TYPES = 7;
 
 		struct TextureSlice
 		{

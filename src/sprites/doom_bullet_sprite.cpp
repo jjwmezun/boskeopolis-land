@@ -14,8 +14,8 @@ DoomBulletSprite::~DoomBulletSprite() {};
 
 void DoomBulletSprite::customUpdate( LevelState& level_state )
 {
-	vx_ = 2500.0 * dx_;
-	vy_ = 2500.0 * dy_;
+	vx_ = 4500.0 * dx_;
+	vy_ = 4500.0 * dy_;
 	if ( collide_top_ || collide_bottom_ || collide_left_ || collide_right_ )
 	{
 		kill();

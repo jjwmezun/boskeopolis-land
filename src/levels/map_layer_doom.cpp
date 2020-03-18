@@ -11,7 +11,7 @@
 #include "sprite_system.hpp"
 #include "sprite.hpp"
 
-static constexpr int TEXTURE_WIDTH = 336;
+static constexpr int TEXTURE_WIDTH = 352;
 static constexpr int FLOOR_TEXTURE_X_OFFSET = 32;
 static constexpr int CEILING_TEXTURE_X_OFFSET = 48;
 static constexpr int MAP_WIDTH = Unit::WINDOW_WIDTH_PIXELS / 4;
@@ -77,7 +77,7 @@ MapLayerDoom::MapLayerDoom()
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	item_info_ (),
 	items_ (),
-	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272 } ),
+	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272, 336 } ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
 	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
 	map_src_ ( 0, 0, MAP_WIDTH, MAP_HEIGHT ),
@@ -226,7 +226,7 @@ void MapLayerDoom::update( LevelState& level_state )
 					block_types[ ray_x ] = block;
 					break;
 				}
-				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 || block == 5 || block == 2 ) )
+				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 || block == 5 || block == 2 || block == 11 ) )
 				{
 					int type = 0;
 					switch ( block )
@@ -244,6 +244,11 @@ void MapLayerDoom::update( LevelState& level_state )
 						case ( 6 ):
 						{
 							type = 1;
+						}
+						break;
+						case ( 11 ):
+						{
+							type = 6;
 						}
 						break;
 					}
@@ -437,7 +442,7 @@ void MapLayerDoom::update( LevelState& level_state )
 			const std::vector<Block>& block_obj_list = level_state.blocks().getBlocksList();
 			for ( const Block& b : block_obj_list )
 			{
-				if ( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 )
+				if ( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 || b.typeID() == 10 )
 				{
 					Render::renderRect
 					(

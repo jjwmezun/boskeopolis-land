@@ -8,7 +8,7 @@
 #include "player_doom_sprite.hpp"
 #include "sprite_system.hpp"
 
-static constexpr double DEG_ROTATION_SPEED = mezun::DOUBLE_PI * 2;
+static constexpr double DEG_ROTATION_SPEED = mezun::DOUBLE_PI * 3;
 static constexpr double ROTATION_SPEED = DEG_ROTATION_SPEED / 360.0; // 1° in radians.
 static constexpr double N90DEGREES = mezun::DOUBLE_PI / 4; // 90°
 
@@ -45,8 +45,8 @@ PlayerDoomSprite::~PlayerDoomSprite() {};
 void PlayerDoomSprite::customUpdate( LevelState& level_state )
 {
 	const bool is_running = Input::held( Input::Action::RUN );
-	start_speed_ = ( is_running ) ? 2000 : 1000;
-	top_speed_ = ( is_running ) ? 2000 : 1000;
+	start_speed_ = ( is_running ) ? 3000 : 1500;
+	top_speed_ = ( is_running ) ? 3000 : 1500;
 
 	if ( Input::held( Input::Action::MOVE_UP ) )
 	{
