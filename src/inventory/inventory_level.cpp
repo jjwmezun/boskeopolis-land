@@ -179,3 +179,8 @@ Clock& InventoryLevel::clock()
 {
 	return clock_;
 };
+
+void InventoryLevel::setDiamondGotten()
+{
+	graphics_.reRenderDiamond();
+};

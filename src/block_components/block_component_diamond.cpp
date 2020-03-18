@@ -3,6 +3,7 @@
 #include "block_component_diamond.hpp"
 #include "collision.hpp"
 #include "inventory.hpp"
+#include "inventory_level.hpp"
 #include "level.hpp"
 #include "level_state.hpp"
 
@@ -22,6 +23,7 @@ void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite
 			Inventory::getDiamond();
 			Audio::playSound( Audio::SoundType::DIAMOND );
 			removeDiamond( block, level_state );
+			level_state.inventory().setDiamondGotten();
 		}
 	}
 };

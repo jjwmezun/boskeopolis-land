@@ -165,7 +165,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	}
 	if ( Inventory::haveDiamond() )
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
+		renderDiamond();
 	}
 	health_gfx_.render();
 	renderPtsGraphics( inventory );
@@ -274,4 +274,16 @@ void InventoryLevelGraphics::renderMcGuffinGraphics()
 	Render::renderObject( "bg/level-select-characters.png", { 16, 184, 8, 8 }, { MISC_X, TOP_ROW_Y_RELATIVE, 8, 8 } );
 	WTextObj text{ U"x" + mezun::intToChar32String( mcguffins_to_render_ ), MISC_X + 8, TOP_ROW_Y_RELATIVE };
 	text.render();
+};
+
+void InventoryLevelGraphics::reRenderDiamond()
+{
+	main_texture_.startDrawing();
+	Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
+	main_texture_.endDrawing();
+};
+
+void InventoryLevelGraphics::renderDiamond()
+{
+	Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { 18, TOP_ROW_Y_RELATIVE, 8, 8 } );
 };

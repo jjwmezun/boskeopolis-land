@@ -38,6 +38,7 @@ class InventoryLevelGraphics final
 		void setShowMcGuffins();
 		void changeKillCounter( int count );
 		void forceRerender( const InventoryLevel& inventory );
+		void reRenderDiamond();
 
 	private:
 		void updateHealthGraphics();
@@ -53,6 +54,7 @@ class InventoryLevelGraphics final
 		void renderSwitchGraphics();
 		void updateMcGuffinGraphics();
 		void renderMcGuffinGraphics();
+		void renderDiamond();
 		
 		bool showing_key_;
 		bool show_on_off_;

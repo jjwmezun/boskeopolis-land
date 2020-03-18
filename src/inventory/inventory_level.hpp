@@ -46,6 +46,7 @@ class InventoryLevel final
 		void addGhostKill();
 		void clearGhostKills();
 		Clock& clock();
+		void setDiamondGotten();
 
 		static constexpr int  FUNDS_MAX              = 99999;
 		static constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;
