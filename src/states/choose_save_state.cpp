@@ -372,7 +372,7 @@ void ChooseSaveState::init()
     for ( auto& file : std::filesystem::directory_iterator( Main::saveDirectory() ) )
     {
         // Skip backup saves.
-        if ( mezun::stringEndsWith( file.path(), ".bak" ) )
+        if ( file.path() == ".sav" || file.path() == "." || file.path() == ".." || mezun::stringEndsWith( file.path(), ".bak" ) )
         {
             continue;
         }

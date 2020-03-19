@@ -478,6 +478,7 @@ void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, EventSyst
 		}
 		jump_lock_ = false;
 	}
+	events.resetOnConveyorBelt();
 };
 
 void PlayerSprite::tryUnduck( const BlockSystem& blocks )

@@ -225,7 +225,6 @@ void EventSystem::update( LevelState& level_state )
 	updateTrainer( level_state );
 	testMessage( level_state.level() );
 	testLevelCompleteStatus( level_state.inventory() );
-	resetOnConveyorBelt();
 };
 
 void EventSystem::resetIsSliding()
