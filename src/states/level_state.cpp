@@ -232,3 +232,18 @@ void LevelState::initForTrainer()
 	sprites_.resetTrainer( *this );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
 };
+
+bool LevelState::trainerPaletteChanged() const
+{
+	return events_.paletteChanged();
+};
+
+Palette LevelState::getNewPalette()
+{
+	return events_.getPalette();
+};
+
+void LevelState::reRenderInventory()
+{
+	inventory_screen_.forceRerender();
+};

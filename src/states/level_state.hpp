@@ -11,6 +11,8 @@
 #include "player_graphics.hpp"
 #include "sprite_system.hpp"
 
+class Palette;
+
 class LevelState final : public GameState
 {
 	public:
@@ -40,6 +42,9 @@ class LevelState final : public GameState
 		const Map& currentMap() const;
 		InventoryLevel& inventory();
 		const InventoryLevel& inventory() const;
+		bool trainerPaletteChanged() const;
+		Palette getNewPalette();
+		void reRenderInventory();
 
 	private:
 		void testPause();
