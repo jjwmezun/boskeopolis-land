@@ -54,11 +54,6 @@
 		}
 	],
 	
-	"goal":
-	{
-		"message": "¡Get to the Keycane before \"Dagny\"!"
-	},
-	
 	"entrance_x": 4,
 	"entrance_y": 8,
 	"camera_x": 17,

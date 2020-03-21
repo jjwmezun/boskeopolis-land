@@ -322,7 +322,7 @@
         "messages":
         {
             "city-1": "Los valores de las joyas por luminosidad:\n\n* Medianas:   100\t\n* Brillantes: 250\t\n* Oscuras:    500\t",
-            "city-2": "Paper planes are o'erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o' their gluish grasp.",
+            "city-2": "Los aviones de papel son demasiados protectores y seguirán cayéndose hacia atrás al comienzo. Trata de temblar mucho escapar sus apretones adhesivos.",
             "ice-1": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o' her jump a bit o'a boost.",
             "pirate-3": "Warning: this oily water is e'en easier to drown in than normal water & sticks to you so you can't reoxygenate till you reach land.\n\nIn short: keep to land as much as possible.",
             "space-3": "Guards can see 'bout 8 blocks 'head, 1 block 'bove if you're on the ground, & a li'l higher if you're in the air.\n\nBut they can't see you if part o' you is covered by a solid block."
@@ -346,28 +346,8 @@
     },
     "news_ticker":
     [
-        "Kitties Want Answers In Possible Kitty Kibble Shortage",
-        "Thank you for reading this message. This message loves you.",
-        "Clean up on aisle Delfino.",
-        "Experts declare, SimCity 3000 Marquee + platformer = bad game - 9/10.",
-        "Experts declare, changing code through simple search & replace ne’er messes with in-Main:: text.",
-        "Experts declare, those who died are justified by wearing the badge, they’re your chosen whites. Details @ 11.",
-        "Experts declare, “Playing Railroad” taking way too long to finish.",
-        "...& that’s the news you can choose.",
-        "NEWSFLASH: Crazy woman running round grabbing floating gems everywhere she goes. Details @ 11.",
-        "¡AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH!",
-        "WARNING: Playing games for too long can be dangerous. Take 15-minute breaks ’tween each session or we’ll come to smash your hand with a hammer-& yes, Jacob, we’ll find you @ 2456 Acorn Avenue. We know where you live.",
-        "NEWSFLASH: Despite all o’ my rage, I am still just a rat in a cage. Details @ 11.",
-        "Thou shalt not waste thine time reading these dumb newsflashes ’stead o’ playing the game - ¡Look out for that Bad Apple! ¡You fool!",
-        "If you don’t know ’bout the tavern, then it is time.",
-        "Achievement Unlocked: You read a pointless message.",
-        "You are dead. Details @ 11.",
-        "Reported sightings o’ Bigfoot believing in conspiracy theories surrounding aliens & the Boskeopoleon government.",
-        "Experts declare, when the people all stop & stare & say, “¿Why you gotta be like that?”, to just look them in the eyes & tell them you were raised by bats. Details @ 11.",
-        "NEWSFLASH: I just cut my fingers trying to chop onions. Ow.",
-        "Boo.",
-        "Citizens claim they find boring religious pamphletes hidden in Muertoween candy. Details @ 11.",
-        "25% off costumes this Muertoween @ FredMart: We possess everything."
+        "Los gatitos quieren explicaciones por posible falta de Kittle Kibble.",
+        "Gracias por leer este mensaje. Este mensaje te ama."
     ],
     "shop":
     {
