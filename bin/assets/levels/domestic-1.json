@@ -18,8 +18,14 @@
         }
 	],
 
-	"entrance_x": 28,
-	"entrance_y": 69,
+	"entrance_x": 79,
+	"entrance_y": 146,
 	"gem_challenge": 0,
-	"time_challenge": 0
+	"time_challenge": 0,
+
+	"goal":
+	{
+		"type": "timed_on",
+		"time": 18
+	}
 }

@@ -39,6 +39,7 @@
 #include "stop_on_off_goal.hpp"
 #include "survive_time_goal.hpp"
 #include "timed_goal.hpp"
+#include "timed_on_goal.hpp"
 #include "warp_goal.hpp"
 
 static std::vector<std::string> level_list_;
@@ -777,6 +778,12 @@ Level Level::getLevel( int id )
 					goal_message = Localization::getCurrentLanguage().getStopOnOffGoalMessage();
 				}
 				goal = std::make_unique<StopOnOffGoal> ( goal_message );
+			}
+			else if ( mezun::areStringsEqual( goaltype, "timed_on" ) )
+			{
+				goal = ( lvg.HasMember( "time" ) && lvg[ "time" ].IsInt() )
+					? std::make_unique<TimedOnGoal> ( goal_message, lvg[ "time" ].GetInt() )
+					: std::make_unique<TimedOnGoal> ( goal_message );
 			}
 			else if ( mezun::areStringsEqual( goaltype, "timed" ) )
 			{

@@ -1,0 +1,18 @@
+{
+	"maps":
+	[
+		{
+			"slug": "space-7"
+		}
+	],
+
+	"entrance_x": 98,
+	"entrance_y": 56,
+	"gem_challenge": 9000,
+	"time_challenge": 2,
+
+	"goal":
+	{
+		"type": "timed_on"
+	}
+}

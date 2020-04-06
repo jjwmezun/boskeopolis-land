@@ -40,6 +40,7 @@
 #include "dungeon_healer_sprite.hpp"
 #include "dungeon_switch_sprite.hpp"
 #include "enemy_cart_sprite.hpp"
+#include "electric_wall_sprite.hpp"
 #include "event_system.hpp"
 #include "falling_snow_boulder_spawn_sprite.hpp"
 #include "falling_spike_sprite.hpp"
@@ -89,6 +90,7 @@
 #include "mezun_exceptions.hpp"
 #include "moon_sprite.hpp"
 #include "moveable_block_sprite.hpp"
+#include "moving_space_stone_sprite.hpp"
 #include "move_water_sprite.hpp"
 #include "octopig_sprite.hpp"
 #include "olive_spawner_sprite.hpp"
@@ -769,6 +771,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 193 ):
 			return std::unique_ptr<Sprite> ( new FallingSpikeSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 194 ):
+			return std::unique_ptr<Sprite> ( new MovingSpaceStoneSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 195 ):
+			return std::unique_ptr<Sprite> ( new ElectricWallSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
