@@ -5,6 +5,8 @@
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "map.hpp"
+#include "map_layer_lava.hpp"
+#include "map_layer_lava_switch.hpp"
 #include "map_layer_tilemap.hpp"
 #include "map_layer_tilemap_image.hpp"
 #include "map_layer_water.hpp"
@@ -106,6 +108,8 @@ Map Map::mapFromPath
 		bool watery = false;
 		bool oxygen = false;
 		bool hide = false;
+		int lava_y = -1;
+		int lava_y_alt = -1;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -491,6 +495,28 @@ Map Map::mapFromPath
 				{
 					hide = value.IsBool() && value.GetBool();
 				}
+
+				if ( mezun::areStringsEqual( name, "lava_y" ) && value.IsInt() )
+				{
+					lava_y = value.GetInt();
+				}
+
+				if ( mezun::areStringsEqual( name, "lava_y_switch_off" ) && value.IsInt() )
+				{
+					lava_y_alt = value.GetInt();
+				}
+			}
+		}
+
+		if ( lava_y > -1 )
+		{
+			if ( lava_y_alt > -1 )
+			{
+				foregrounds.emplace_back( std::make_unique<MapLayerLavaSwitch> ( lava_y, lava_y_alt ) );
+			}
+			else
+			{
+				foregrounds.emplace_back( std::make_unique<MapLayerLava> ( lava_y ) );
 			}
 		}
 

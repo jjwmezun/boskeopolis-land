@@ -65,6 +65,7 @@ EventSystem::EventSystem()
 	disable_pause_ ( false ),
 	move_water_ ( WATER_NULL ),
 	current_water_ ( WATER_NULL ),
+	switch_last_hit_ ( 0 ),
 	in_front_of_door_ ( Door::NONE ),
 	on_conveyor_belt_ ( false ),
 	played_death_song_ ( false ),
@@ -101,6 +102,7 @@ void EventSystem::reset()
 	disable_pause_ = false;
 	move_water_ = -1;
 	current_water_ = -1;
+	switch_last_hit_ = 0;
 	in_front_of_door_ = Door::NONE;
 	on_conveyor_belt_ = false;
 	played_death_song_ = false;
@@ -775,4 +777,14 @@ void EventSystem::setPauseHeroOn()
 void EventSystem::setPauseHeroOff()
 {
 	pause_hero_ = false;
+};
+
+bool EventSystem::switchIsNotLocked( const LevelState& level_state ) const
+{
+	return level_state.frame() > switch_last_hit_ + 8;
+};
+
+void EventSystem::setSwitchLock( const LevelState& level_state )
+{
+	switch_last_hit_ = level_state.frame();
 };

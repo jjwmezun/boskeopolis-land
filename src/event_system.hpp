@@ -89,6 +89,8 @@ class EventSystem final
 		bool testPauseHero() const;
 		void setPauseHeroOn();
 		void setPauseHeroOff();
+		bool switchIsNotLocked( const LevelState& level_state ) const;
+		void setSwitchLock( const LevelState& level_state );
 
 	private:
 		enum class LevelCompleteStatus
@@ -207,6 +209,7 @@ class EventSystem final
 		Door in_front_of_door_;
 		int move_water_;
 		int current_water_;
+		int switch_last_hit_;
 		Palette new_palette_;
 		EMisc misc_;
 };

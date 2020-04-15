@@ -20,9 +20,11 @@ void SwitchBlockSprite::customUpdate( LevelState& level_state )
 void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
 	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
-	if ( hit )
+	EventSystem& events = level_state.events();
+	if ( hit && events.switchIsNotLocked( level_state ) )
 	{
-		level_state.events().flipSwitch();
+		events.setSwitchLock( level_state );
+		events.flipSwitch();
 		Audio::playSound( Audio::SoundType::SWITCH );
 	}
 };

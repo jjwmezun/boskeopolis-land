@@ -1,0 +1,13 @@
+{
+	"name": "Mt. Rooster",
+	
+	"maps":
+	[
+		{
+			"slug": "mountain-6"
+		}
+	],
+
+	"entrance_x": 94,
+	"entrance_y": 61
+}

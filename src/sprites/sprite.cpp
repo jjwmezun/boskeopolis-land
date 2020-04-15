@@ -128,11 +128,11 @@ void Sprite::update( LevelState& level_state )
 		}
 		else
 		{
-			changeMovement( SpriteMovement::Type::FLOATING );
+			//changeMovement( SpriteMovement::Type::FLOATING );
 			acceleration_x_ = 0;
-			acceleration_y_ = 0;
+			//acceleration_y_ = 0;
 			vx_ = 0;
-			vy_ = 0;
+			//vy_ = 0;
 
 			if ( death_timer_.done() )
 			{
