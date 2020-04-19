@@ -1,5 +1,5 @@
 {
-	"name": "Bayou Jupiter",
+	"name": "Cattail Trail",
 
 	"maps":
 	[
@@ -20,5 +20,8 @@
 	],
 
 	"entrance_x": 8,
-	"entrance_y": 22
+	"entrance_y": 22,
+	
+	"gem_challenge": 9000,
+	"time_challenge": 25
 }
