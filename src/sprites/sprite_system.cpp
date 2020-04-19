@@ -115,6 +115,7 @@
 #include "pollo_del_aire_circle_sprite.hpp"
 #include "pollo_del_aire_still_sprite.hpp"
 #include "pollo_del_aire_vertical_sprite.hpp"
+#include "pollo_picante_sprite.hpp"
 #include "pufferbee_sprite.hpp"
 #include "pufferbee_square_sprite.hpp"
 #include "quadrapus_sprite.hpp"
@@ -777,6 +778,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 195 ):
 			return std::unique_ptr<Sprite> ( new ElectricWallSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 196 ):
+			return std::unique_ptr<Sprite> ( new PolloPicanteSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 197 ):
+			return std::unique_ptr<Sprite> ( new PolloPicanteSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

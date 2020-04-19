@@ -4,10 +4,21 @@
 	"maps":
 	[
 		{
-			"slug": "mountain-6"
+			"slug": "mountain-6",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "volcano.png",
+					"width": 527,
+					"height": 224,
+					"x_scroll": 0.1,
+					"y_scroll": 0.0
+				}
+			]
 		}
 	],
 
-	"entrance_x": 94,
-	"entrance_y": 61
+	"entrance_x": 74,
+	"entrance_y": 54
 }

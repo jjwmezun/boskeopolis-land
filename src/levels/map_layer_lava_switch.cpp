@@ -9,10 +9,11 @@
 
 static constexpr int MOVE_SPEED = 1000;
 
-MapLayerLavaSwitch::MapLayerLavaSwitch( int y_off_blocks, int y_on_blocks )
+MapLayerLavaSwitch::MapLayerLavaSwitch( int y_off_blocks, int y_on_blocks, int x_block_when_lava_rises_forever )
 :
     y_off_ ( Unit::BlocksToSubPixels( y_off_blocks ) ),
     y_on_ ( Unit::BlocksToSubPixels( y_on_blocks ) ),
+    x_point_when_lava_rises_forever_ ( Unit::BlocksToSubPixels( x_block_when_lava_rises_forever ) ),
     layer_ ( y_off_blocks )
 {};
 
@@ -22,7 +23,7 @@ void MapLayerLavaSwitch::update( LevelState& level_state )
 {
     const int target_y = ( level_state.events().isSwitchOn() )
         ? y_on_
-        : ( ( level_state.sprites().hero().hit_box_.x > Unit::BlocksToSubPixels( 102 ) ) ? 0 : y_off_ );
+        : ( ( x_point_when_lava_rises_forever_ != -1 && level_state.sprites().hero().hit_box_.x > x_point_when_lava_rises_forever_ ) ? 0 : y_off_ );
     if ( layer_.getY() != target_y )
     {
         const int new_value = ( layer_.getY() + MOVE_SPEED < target_y )
@@ -35,6 +36,7 @@ void MapLayerLavaSwitch::update( LevelState& level_state )
 
         layer_.setY( new_value );
     }
+    layer_.update( level_state );
 };
 
 void MapLayerLavaSwitch::render( const Camera& camera )

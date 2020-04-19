@@ -110,6 +110,7 @@ Map Map::mapFromPath
 		bool hide = false;
 		int lava_y = -1;
 		int lava_y_alt = -1;
+		int x_block_when_lava_rises_forever = -1;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -505,6 +506,11 @@ Map Map::mapFromPath
 				{
 					lava_y_alt = value.GetInt();
 				}
+
+				if ( mezun::areStringsEqual( name, "x_block_when_lava_rises_forever" ) && value.IsInt() )
+				{
+					x_block_when_lava_rises_forever = value.GetInt();
+				}
 			}
 		}
 
@@ -512,7 +518,7 @@ Map Map::mapFromPath
 		{
 			if ( lava_y_alt > -1 )
 			{
-				foregrounds.emplace_back( std::make_unique<MapLayerLavaSwitch> ( lava_y, lava_y_alt ) );
+				foregrounds.emplace_back( std::make_unique<MapLayerLavaSwitch> ( lava_y, lava_y_alt, x_block_when_lava_rises_forever ) );
 			}
 			else
 			{

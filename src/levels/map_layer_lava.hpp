@@ -20,5 +20,7 @@ class MapLayerLava final : public MapLayer
 
     private:
         int y_;
+        int animation_timer_;
+        int animation_frame_;
         char scratch_[ 3000 ];
 };
