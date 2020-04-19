@@ -53,6 +53,11 @@
          "value":70
         }, 
         {
+         "name":"music",
+         "type":"string",
+         "value":"volcano"
+        }, 
+        {
          "name":"palette",
          "type":"string",
          "value":"Volcano Red"
@@ -70,7 +75,7 @@
         {
          "name":"x_block_when_lava_rises_forever",
          "type":"int",
-         "value":85
+         "value":80
         }],
  "renderorder":"right-down",
  "tiledversion":"1.3.3",

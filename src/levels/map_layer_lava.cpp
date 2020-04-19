@@ -19,7 +19,6 @@ void MapLayerLava::update( LevelState& level_state )
     ++animation_timer_;
     if ( animation_timer_ == 8 )
     {
-        std::cout << animation_frame_ << std::endl;
         animation_frame_ += 16;
         if ( animation_frame_ > 16 )
         {
