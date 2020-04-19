@@ -7,7 +7,8 @@
 
 #include <iostream>
 
-static constexpr int MOVE_SPEED = 1000;
+static constexpr int MOVE_DOWN_SPEED = 2000;
+static constexpr int MOVE_UP_SPEED = 800;
 
 MapLayerLavaSwitch::MapLayerLavaSwitch( int y_off_blocks, int y_on_blocks, int x_block_when_lava_rises_forever )
 :
@@ -26,11 +27,11 @@ void MapLayerLavaSwitch::update( LevelState& level_state )
         : ( ( x_point_when_lava_rises_forever_ != -1 && level_state.sprites().hero().hit_box_.x > x_point_when_lava_rises_forever_ ) ? 0 : y_off_ );
     if ( layer_.getY() != target_y )
     {
-        const int new_value = ( layer_.getY() + MOVE_SPEED < target_y )
-            ? layer_.getY() + MOVE_SPEED
+        const int new_value = ( layer_.getY() + MOVE_DOWN_SPEED < target_y )
+            ? layer_.getY() + MOVE_DOWN_SPEED
             : (
-                  ( layer_.getY() - MOVE_SPEED > target_y )
-                  ? layer_.getY() - MOVE_SPEED
+                  ( layer_.getY() - MOVE_UP_SPEED > target_y )
+                  ? layer_.getY() - MOVE_UP_SPEED
                   : target_y
               );
 

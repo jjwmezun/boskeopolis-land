@@ -1,6 +1,4 @@
 {
-	"name": "Mt. Rooster",
-	
 	"maps":
 	[
 		{
@@ -20,5 +18,8 @@
 	],
 
 	"entrance_x": 74,
-	"entrance_y": 54
+	"entrance_y": 54,
+	
+	"gem_challenge": 12000,
+	"time_challenge": 30
 }
