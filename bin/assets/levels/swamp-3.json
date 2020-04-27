@@ -1,0 +1,26 @@
+{
+	"name": "Cascade Parade",
+	"maps":
+	[
+		{
+			"slug": "cascades",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "swamp-bg.png",
+					"width": 400,
+					"height": 224,
+					"x_scroll": 0.25,
+					"y_scroll": 0.0
+				}
+			]
+		}
+	],
+
+	"entrance_x": 57,
+	"entrance_y": 92,
+
+	"gem_challenge": 0,
+	"time_challenge": 0
+}

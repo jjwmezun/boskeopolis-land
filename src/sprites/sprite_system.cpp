@@ -81,6 +81,7 @@
 #include "lil_pipe_monster_sprite.hpp"
 #include "light_switch_sprite.hpp"
 #include "locked_door_sprite.hpp"
+#include "log_rafts_sprite.hpp"
 #include "mansion_door_sprite.hpp"
 #include "mansion_ghost_sprite.hpp"
 #include "map.hpp"
@@ -784,6 +785,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 197 ):
 			return std::unique_ptr<Sprite> ( new PolloPicanteSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 198 ):
+			return std::unique_ptr<Sprite> ( new LogRaftsSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
