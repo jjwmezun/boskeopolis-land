@@ -158,6 +158,7 @@
 #include "swamp_pole_sprite.hpp"
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
+#include "thrower_sprite.hpp"
 #include "top_down_player_sprite.hpp"
 #include "top_down_moveable_block_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
@@ -788,6 +789,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 198 ):
 			return std::unique_ptr<Sprite> ( new LogRaftsSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 199 ):
+			return std::unique_ptr<Sprite> ( new ThrowerSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 200 ):
+			return std::unique_ptr<Sprite> ( new ThrowerSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

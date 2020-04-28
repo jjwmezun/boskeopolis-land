@@ -308,10 +308,10 @@ class Sprite : public Object
 		bool death_finished_ = false;
 		bool dead_no_animation_ = false;
 		const int map_id_;
-		const int start_speed_walk_;
-		const int top_speed_walk_;
-		const int start_speed_run_;
-		const int top_speed_run_;
+		int start_speed_walk_;
+		int top_speed_walk_;
+		int start_speed_run_;
+		int top_speed_run_;
 		int vx_;
 		int vy_;
 		int x_prev_;
