@@ -1,5 +1,5 @@
-COMPILER = x86_64-w64-mingw32-gcc
-LINKER = x86_64-w64-mingw32-gcc
+COMPILER = x86_64-w64-mingw32-gcc-win32
+LINKER = x86_64-w64-mingw32-gcc-win32
 EXT = cpp
 CFLAGS = -g3 -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wfloat-equal -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Weffc++ -Wzero-as-null-pointer-constant -Wmain -Wfatal-errors -Wextra -Wall -std=c++17 -Wno-switch -Wno-unused-parameter -Wno-reorder -Wno-float-equal
 

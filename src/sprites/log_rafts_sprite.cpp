@@ -34,9 +34,9 @@ void LogRaftsSprite::customUpdate( LevelState& level_state )
 
     for ( int i = 0; i < MAX_RAFTS; ++i )
     {
-        if ( x <= Unit::BlocksToSubPixels( 35 ) )
+        if ( x <= Unit::BlocksToSubPixels( 45 ) )
         {
-            rafts_[ i ].y = hit_box_.y + ( Unit::BlocksToSubPixels( 35 ) - x );
+            rafts_[ i ].y = hit_box_.y + ( Unit::BlocksToSubPixels( 45 ) - x );
         }
         else if ( x < Unit::BlocksToSubPixels( 72 ) )
         {
