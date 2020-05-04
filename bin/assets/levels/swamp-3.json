@@ -8,19 +8,19 @@
 			[
 				{
 					"type": "image",
-					"img": "swamp-bg.png",
+					"img": "cascades-bg.png",
 					"width": 400,
 					"height": 224,
-					"x_scroll": 0.25,
+					"x_scroll": 0.0,
 					"y_scroll": 0.0
 				}
 			]
 		}
 	],
 
-	"entrance_x": 71,
-	"entrance_y": 92,
+	"entrance_x": 57,
+	"entrance_y": 29,
 
-	"gem_challenge": 0,
-	"time_challenge": 0
+	"gem_challenge": 8000,
+	"time_challenge": 45
 }

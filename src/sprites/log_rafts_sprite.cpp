@@ -7,7 +7,7 @@
 
 LogRaftsSprite::LogRaftsSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), 0, y, 72, 16, {}, 2000, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/raft.png" ), 0, y, 64, 16, {}, 2000, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
 {
     for ( int i = 0; i < MAX_RAFTS; ++i )
     {
@@ -34,41 +34,41 @@ void LogRaftsSprite::customUpdate( LevelState& level_state )
 
     for ( int i = 0; i < MAX_RAFTS; ++i )
     {
-        if ( x <= Unit::BlocksToSubPixels( 45 ) )
+        if ( x <= Unit::BlocksToSubPixels( 34 ) )
         {
-            rafts_[ i ].y = hit_box_.y + ( Unit::BlocksToSubPixels( 45 ) - x );
+            rafts_[ i ].y = hit_box_.y + ( Unit::BlocksToSubPixels( 34 ) - x );
         }
-        else if ( x < Unit::BlocksToSubPixels( 72 ) )
+        else if ( x < Unit::BlocksToSubPixels( 62 ) )
         {
             rafts_[ i ].y = hit_box_.y;
         }
-        else if ( x <= Unit::BlocksToSubPixels( 75 ) )
+        else if ( x <= Unit::BlocksToSubPixels( 65 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 ) + ( Unit::BlocksToSubPixels( 75 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 ) + ( Unit::BlocksToSubPixels( 65 ) - x );
         }
-        else if ( x < Unit::BlocksToSubPixels( 148 ) )
+        else if ( x < Unit::BlocksToSubPixels( 138 ) )
         {
             rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 );
         }
-        else if ( x <= Unit::BlocksToSubPixels( 151 ) )
+        else if ( x <= Unit::BlocksToSubPixels( 141 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 ) + ( Unit::BlocksToSubPixels( 151 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 ) + ( Unit::BlocksToSubPixels( 141 ) - x );
         }
-        else if ( x < Unit::BlocksToSubPixels( 157 ) )
+        else if ( x < Unit::BlocksToSubPixels( 147 ) )
         {
             rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 );
         }
-        else if ( x <= Unit::BlocksToSubPixels( 160 ) )
+        else if ( x <= Unit::BlocksToSubPixels( 150 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 ) + ( Unit::BlocksToSubPixels( 160 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 ) + ( Unit::BlocksToSubPixels( 150 ) - x );
         }
-        else if ( x < Unit::BlocksToSubPixels( 166 ) )
+        else if ( x < Unit::BlocksToSubPixels( 156 ) )
         {
             rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 );
         }
-        else if ( x <= Unit::BlocksToSubPixels( 169 ) )
+        else if ( x <= Unit::BlocksToSubPixels( 159 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 12 ) + ( Unit::BlocksToSubPixels( 169 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 12 ) + ( Unit::BlocksToSubPixels( 159 ) - x );
         }
         else
         {
@@ -84,23 +84,23 @@ void LogRaftsSprite::customInteract( Collision& my_collision, Collision& their_c
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-        const bool blocks_in_the_way = !level_state.blocks().blocksInTheWay
+        const bool blocks_in_the_way = level_state.blocks().blocksInTheWay
         (
             {
-                them.rightSubPixels(),
+                them.hit_box_.x,
                 them.topSubPixels(),
                 1000,
                 them.heightSubPixels()
             },
             BlockComponent::Type::SOLID
         );
-
+        
         for ( int i = 0; i < MAX_RAFTS; ++i )
         {
-		    const Collision collision = movement_->testCollision( them, rafts_[ i ] );
+            const Collision collision = movement_->testCollision( them, rafts_[ i ] );
             if ( collision.collideAny() )
             {
-                if ( collision.collideBottom() )
+                if ( !blocks_in_the_way && collision.collideBottom() )
                 {
                     them.hit_box_.x += vx_;
                 }

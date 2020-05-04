@@ -45,7 +45,7 @@
         {
          "name":"palette",
          "type":"string",
-         "value":"Choco Brown"
+         "value":"Swamp Brown"
         }, 
         {
          "name":"tileset",
@@ -58,7 +58,7 @@
          "value":29
         }],
  "renderorder":"right-down",
- "tiledversion":"1.3.1",
+ "tiledversion":"1.3.3",
  "tileheight":16,
  "tilesets":[
         {

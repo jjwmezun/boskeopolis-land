@@ -297,7 +297,7 @@
             "space-3": "Golden Gear Solid",
             "ice-3": "Frigid Frigates",
             "pirate-3": "Petrol Pond Place",
-            "swamp-3": "=BROKEN_LEVEL=",
+            "swamp-3": "Cascade Parade",
             "sewer-3": "Flush Flood",
             "factory-3": "Warm Up",
             "domestic-3": "=BROKEN_LEVEL=",
@@ -345,7 +345,8 @@
             "sky-3": "¡Unlock the treasure!",
             "sky-4": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane.",
             "special-3": "¡Catch the sale on rare collectibles!",
-            "special-4": "¡Collect everything & dodge the eyes!"
+            "special-4": "¡Collect everything & dodge the eyes!",
+            "swamp-3": "¡Don’t fall into the deadly water!"
         }
     },
     "news_ticker":
