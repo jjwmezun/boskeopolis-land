@@ -34,6 +34,7 @@
 #include "doom_door_sprite.hpp"
 #include "doom_enemy_sprite.hpp"
 #include "downhill_gem_sprite.hpp"
+#include "dragonfly_sprite.hpp"
 #include "dungeon_enemy_spreader_sprite.hpp"
 #include "dungeon_enemy_sprite.hpp"
 #include "dungeon_enemy_walls_sprite.hpp"
@@ -799,6 +800,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 201 ):
 			return std::unique_ptr<Sprite> ( new TargetSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 202 ):
+			return std::unique_ptr<Sprite> ( new DragonflySprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 203 ):
+			return std::unique_ptr<Sprite> ( new DragonflySprite( x, y, true ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
