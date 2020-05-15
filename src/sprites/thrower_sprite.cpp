@@ -13,7 +13,7 @@ static int generateTargetThrowTime()
 
 ThrowerSprite::ThrowerSprite( int x, int y, Direction::Horizontal direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 16, 24, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 0, 0, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/axe-monster.png", 12, 0, false, false, 0.0, false, -2, -1, 5, 1 ), x, y, 11, 23, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 0, 0, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	throw_timer_ ( 0 ),
 	target_throw_time_ ( generateTargetThrowTime() )
 {};

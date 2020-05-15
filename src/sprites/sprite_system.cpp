@@ -158,6 +158,7 @@
 #include "swamp_pole_sprite.hpp"
 #include "switch_block_sprite.hpp"
 #include "tall_tombstone_sprite.hpp"
+#include "target_sprite.hpp"
 #include "thrower_sprite.hpp"
 #include "top_down_player_sprite.hpp"
 #include "top_down_moveable_block_sprite.hpp"
@@ -795,6 +796,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 200 ):
 			return std::unique_ptr<Sprite> ( new ThrowerSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 201 ):
+			return std::unique_ptr<Sprite> ( new TargetSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -68,7 +68,7 @@ void ShooterPlayerSprite::customUpdate( LevelState& level_state )
 		{
 			sprites.spawnHeroBullet( centerXPixels(), yPixels() + 2, Direction::horizontalToSimple( direction_x_ ) );
 		}
-		shoot_delay_count_ = 16;
+		shoot_delay_count_ = ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? 32 : 16;
 		is_shooting_ = true;
 	}
 

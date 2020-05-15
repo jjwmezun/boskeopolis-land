@@ -7,7 +7,7 @@
 
 ThrowerProjectileSprite::ThrowerProjectileSprite( int x, int y, Direction::Horizontal direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 8, 8, { SpriteType::ENEMY }, 0, 0, 2000, 6000, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/axe-monster.png", 0, 0, false, false, 0.0, false, -2, -2, 7, 10 ), x, y, 5, 6, { SpriteType::ENEMY }, 0, 0, 2000, 6000, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, false )
 {
     on_ground_ = true;
     start_speed_ = mezun::randInt( 3000, 1000 );
@@ -27,6 +27,7 @@ void ThrowerProjectileSprite::customUpdate( LevelState& level_state )
     {
         kill();
     }
+    graphics_->rotation_ -= 5.0;
 };
 
 void ThrowerProjectileSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )

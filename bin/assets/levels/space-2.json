@@ -2,17 +2,12 @@
 	"maps":
 	[
 		{
-			"slug": "space-7"
+			"slug": "space-8"
 		}
 	],
 
-	"entrance_x": 98,
-	"entrance_y": 56,
+	"entrance_x": 1,
+	"entrance_y": 294,
 	"gem_challenge": 9000,
-	"time_challenge": 2,
-
-	"goal":
-	{
-		"type": "timed_on"
-	}
+	"time_challenge": 2
 }

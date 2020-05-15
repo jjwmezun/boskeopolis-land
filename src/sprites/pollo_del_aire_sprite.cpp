@@ -131,6 +131,12 @@ void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Col
 				}
 			}
 		}
+		else if ( them.hasType( SpriteType::HEROS_BULLET ) && their_collision.collideAny() )
+		{
+			me.kill();
+			them.kill();
+			Audio::playSound( Audio::SoundType::BOP );
+		}
 		else
 		{
 			if ( my_collision.collideRight() )
