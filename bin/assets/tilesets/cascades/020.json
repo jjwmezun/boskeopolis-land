@@ -22,5 +22,20 @@
 			{ "x": 15, "y": 4, "alpha": 128, "priority": true }
 		],
 		"priority": true
-	}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "kill",
+				"animation": false
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		}
+	]
 }

@@ -5,9 +5,11 @@
 
 #include <cstdio>
 
+static constexpr int Y_ADJUST =  + Unit::PixelsToSubPixels( 8 );
+
 LogRaftsSprite::LogRaftsSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/raft.png" ), 0, y, 64, 16, {}, 2000, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/raft.png" ), 0, y, 64, 16, {}, 1500, 1500, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
 {
     for ( int i = 0; i < MAX_RAFTS; ++i )
     {
@@ -36,43 +38,43 @@ void LogRaftsSprite::customUpdate( LevelState& level_state )
     {
         if ( x <= Unit::BlocksToSubPixels( 34 ) )
         {
-            rafts_[ i ].y = hit_box_.y + ( Unit::BlocksToSubPixels( 34 ) - x );
+            rafts_[ i ].y = hit_box_.y + ( Unit::BlocksToSubPixels( 34 ) - x ) + Y_ADJUST;
         }
         else if ( x < Unit::BlocksToSubPixels( 62 ) )
         {
-            rafts_[ i ].y = hit_box_.y;
+            rafts_[ i ].y = hit_box_.y + Y_ADJUST;
         }
         else if ( x <= Unit::BlocksToSubPixels( 65 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 ) + ( Unit::BlocksToSubPixels( 65 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 ) + ( Unit::BlocksToSubPixels( 65 ) - x ) + Y_ADJUST;
         }
         else if ( x < Unit::BlocksToSubPixels( 138 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 3 ) + Y_ADJUST;
         }
         else if ( x <= Unit::BlocksToSubPixels( 141 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 ) + ( Unit::BlocksToSubPixels( 141 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 ) + ( Unit::BlocksToSubPixels( 141 ) - x ) + Y_ADJUST;
         }
         else if ( x < Unit::BlocksToSubPixels( 147 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 6 ) + Y_ADJUST;
         }
         else if ( x <= Unit::BlocksToSubPixels( 150 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 ) + ( Unit::BlocksToSubPixels( 150 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 ) + ( Unit::BlocksToSubPixels( 150 ) - x ) + Y_ADJUST;
         }
         else if ( x < Unit::BlocksToSubPixels( 156 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 9 ) + Y_ADJUST;
         }
         else if ( x <= Unit::BlocksToSubPixels( 159 ) )
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 12 ) + ( Unit::BlocksToSubPixels( 159 ) - x );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 12 ) + ( Unit::BlocksToSubPixels( 159 ) - x ) + Y_ADJUST;
         }
         else
         {
-            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 12 );
+            rafts_[ i ].y = hit_box_.y - Unit::BlocksToSubPixels( 12 ) + Y_ADJUST;
         }
 
         rafts_[ i ].x = x;

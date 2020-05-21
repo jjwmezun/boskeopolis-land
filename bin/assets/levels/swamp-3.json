@@ -1,5 +1,4 @@
 {
-	"name": "Cascade Parade",
 	"maps":
 	[
 		{
@@ -21,6 +20,6 @@
 	"entrance_x": 57,
 	"entrance_y": 29,
 
-	"gem_challenge": 8000,
-	"time_challenge": 45
+	"gem_challenge": 10000,
+	"time_challenge": 50
 }

@@ -9,7 +9,7 @@ class DragonflySprite final : public Sprite
 		~DragonflySprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
-
     private:
+		int animation_timer_;
         char scratch_[ 500 ];
 };
