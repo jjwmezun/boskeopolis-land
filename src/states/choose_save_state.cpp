@@ -114,7 +114,6 @@ void ChooseSaveState::stateUpdate()
                     }
                     if ( Input::pressedBackspace() && !name_.empty() )
                     {
-                        printf( "GO\n" );
                         name_.pop_back();
                     }
                     ++timer_;
