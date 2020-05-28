@@ -3,8 +3,6 @@
 #include "render.hpp"
 #include "sprite.hpp"
 
-#include <iostream>
-
 MapLayerLava::MapLayerLava( int y_blocks )
 :
     y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
@@ -19,8 +17,8 @@ void MapLayerLava::update( LevelState& level_state )
     ++animation_timer_;
     if ( animation_timer_ == 8 )
     {
-        animation_frame_ += 16;
-        if ( animation_frame_ > 16 )
+        animation_frame_ += 800;
+        if ( animation_frame_ > 800 )
         {
             animation_frame_ = 0;
         }
@@ -32,10 +30,8 @@ void MapLayerLava::render( const Camera& camera )
 {
     const int x = -( camera.x() % 256 );
     const int y = camera.relativeY( Unit::SubPixelsToPixels( y_ ) );
-    sdl2::SDLRect r = { x, y, 800, 16 };
-    Render::renderObject( "bg/fire.png", { 0, animation_frame_, 800, 16 }, r );
-    r = { x, y + 16, 800, 256 };
-    Render::renderObject( "bg/fire.png", { 0, 32, 800, 256 }, r );
+    sdl2::SDLRect r = { x, y, 800, 272 };
+    Render::renderObject( "bg/fire.png", { animation_frame_, 0, 800, 272 }, r );
 };
 
 void MapLayerLava::interact( Sprite& sprite, LevelState& level_state )
