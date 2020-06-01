@@ -53,6 +53,7 @@
 #include "fishstick_sprite.hpp"
 #include "flashlight_player_sprite.hpp"
 #include "frog_sprite.hpp"
+#include "frozen_meat_sprite.hpp"
 #include "full_heal_block_sprite.hpp"
 #include "gemmy_sprite.hpp"
 #include "ghost_coffin_sprite.hpp"
@@ -806,6 +807,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 203 ):
 			return std::unique_ptr<Sprite> ( new DragonflySprite( x, y, true ) );
+		break;
+		case ( SPRITE_INDEX_START + 204 ):
+			return std::unique_ptr<Sprite> ( new FrozenMeatSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -1,0 +1,23 @@
+{
+	"maps":
+	[
+		{
+			"slug": "factory-4",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "factory-blocks.png",
+					"width": 48,
+					"height": 48
+				}
+			]
+		}
+	],
+
+	"entrance_x": 0,
+	"entrance_y": 67,
+
+	"gem_challenge": 33000,
+	"time_challenge": 16
+}
