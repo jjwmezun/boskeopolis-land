@@ -1,0 +1,28 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 13,
+		"y": 5
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "slope_low_left"
+			}
+		},
+		{
+			"component":
+			{
+				"type": "conveyor",
+				"direction": "left"
+			},
+			"conditions":
+			[
+				{ "type": "collide_bottom" }
+			]
+		}
+	]
+}

@@ -5,7 +5,7 @@
 
 FrozenMeatSprite::FrozenMeatSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/frozen-meat.png" ), x, y, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_INSTANTLY_OFFSCREEN
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/frozen-meat.png" ), x, y, 32, 32, {}, 500, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_INSTANTLY_OFFSCREEN
 	, false ),
 	top_hit_box_ ( hit_box_.x, hit_box_.y - Unit::PixelsToSubPixels( 32 ), Unit::PixelsToSubPixels( 32 ), Unit::PixelsToSubPixels( 32 ) ),
 	image_box_ ( x, y, 32, 64 )
