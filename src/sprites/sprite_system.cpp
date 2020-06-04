@@ -67,6 +67,7 @@
 #include "heat_beam_sprite.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hook_sprite.hpp"
+#include "horizontal_spark_sprite.hpp"
 #include "hydrant_sprite.hpp"
 #include "ice_box_rock_solid_hack_sprite.hpp"
 #include "iceblock_sprite.hpp"
@@ -810,6 +811,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 204 ):
 			return std::unique_ptr<Sprite> ( new FrozenMeatSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 205 ):
+			return std::unique_ptr<Sprite> ( new HorizontalSparkSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

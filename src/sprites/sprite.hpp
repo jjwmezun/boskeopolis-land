@@ -71,7 +71,8 @@ class Sprite : public Object
 			BARREL,
 			SPARK,
 			MANSION_GHOST,
-			SWAMP_POLE
+			SWAMP_POLE,
+			PI_BLOCK
 		};
 
 		enum class CameraMovement

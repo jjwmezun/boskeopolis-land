@@ -2,11 +2,13 @@
 #include "collision.hpp"
 #include "sprite_graphics.hpp"
 
+#include <cstdio>
+
 static constexpr int FALL_TIMER_LIMIT = 16;
 
 PiBlockSprite::PiBlockSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pi-block.png" ), x, y, 16, 16, {}, 200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pi-block.png" ), x, y, 16, 16, { SpriteType::PI_BLOCK }, 200, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	fall_timer_ ( 0 ),
 	hero_still_on_block_ ( false )
 {};
@@ -44,9 +46,9 @@ void PiBlockSprite::customUpdate( LevelState& level_state )
 
 void PiBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( them.collideBottomOnly( their_collision, *this ) )
+	if ( !them.hasType( SpriteType::PI_BLOCK ) && their_collision.collideAny() )
 	{
-		them.collideStopYBottom( their_collision.overlapYBottom() );
+		them.collideStopAny( their_collision );
 		if ( them.hasType( SpriteType::HERO ) )
 		{
 			hero_still_on_block_ = true;

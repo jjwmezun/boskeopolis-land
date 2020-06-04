@@ -2,7 +2,7 @@
 	"maps":
 	[
 		{
-			"slug": "factory-4",
+			"slug": "factory-4-2",
 			"backgrounds":
 			[
 				{
@@ -25,8 +25,8 @@
 		}
 	],
 
-	"entrance_x": 0,
-	"entrance_y": 19,
+	"entrance_x": 3,
+	"entrance_y": 6,
 
 	"gem_challenge": 33000,
 	"time_challenge": 16
