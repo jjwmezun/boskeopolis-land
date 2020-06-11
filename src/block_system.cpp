@@ -21,6 +21,17 @@ static bool testBlockInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type t
 		b.topSubPixels() < rect.bottom() &&
 		b.bottomSubPixels() > rect.y;
 };
+
+static bool testBlockInTheWayWhetherCollided( const sdl2::SDLRect& rect, BlockComponent::Type type, const Block& b )
+{
+	return
+		( type == BlockComponent::Type::NOTYPE || b.hasComponentTypeWhetherCollided( type ) ) &&
+		b.rightSubPixels() > rect.x      &&
+		b.leftSubPixels() < rect.right() &&
+		b.topSubPixels() < rect.bottom() &&
+		b.bottomSubPixels() > rect.y;
+};
+
 static bool testBlockInTheWayExcept( const sdl2::SDLRect& rect, BlockComponent::Type type, const Block& b )
 {
 	return
@@ -191,13 +202,26 @@ BlockType* BlockSystem::getBlockType( int type )
 
 bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const
 {
+	return blocksInTheWayGeneric( rect, type, false );
+}
+
+bool BlockSystem::blocksInTheWayWhetherCollided( const sdl2::SDLRect& rect, BlockComponent::Type type ) const
+{
+	return blocksInTheWayGeneric( rect, type, true );
+}
+
+bool BlockSystem::blocksInTheWayGeneric( const sdl2::SDLRect& rect, BlockComponent::Type type, bool whether_collided ) const
+{
 	if ( !blocks_work_offscreen_ )
 	{
 		for ( const auto& block : blocks_ )
 		{
-			if ( block.typeID() != -1 && testBlockInTheWay( rect, type, block ) )
+			if ( block.typeID() != -1 )
 			{
-				return true;
+				if ( ( whether_collided && testBlockInTheWayWhetherCollided( rect, type, block ) ) || ( !whether_collided && testBlockInTheWay( rect, type, block ) ) )
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -216,9 +240,12 @@ bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Typ
 				if ( n < blocks_.size() )
 				{
 					const Block& block = blocks_[ n ];
-					if ( block.typeID() != -1 && testBlockInTheWay( rect, type, block ) )
+					if ( block.typeID() != -1 )
 					{
-						return true;
+						if ( ( whether_collided && testBlockInTheWayWhetherCollided( rect, type, block ) ) || ( !whether_collided && testBlockInTheWay( rect, type, block ) ) )
+						{
+							return true;
+						}
 					}
 				}
 			}

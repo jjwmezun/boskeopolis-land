@@ -24,6 +24,8 @@ class BlockSystem final
 		void reset( const Map& lvmap );
 		void blocksFromMap( LevelState& level_state );
 		bool blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type = BlockComponent::Type::NOTYPE ) const;
+		bool blocksInTheWayWhetherCollided( const sdl2::SDLRect& rect, BlockComponent::Type type = BlockComponent::Type::NOTYPE ) const;
+		bool blocksInTheWayGeneric( const sdl2::SDLRect& rect, BlockComponent::Type type = BlockComponent::Type::NOTYPE, bool whether_collided = false ) const;
 		bool blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponent::Type type ) const;
 		BlockType* getBlockType( int type );
 		const std::vector<Block>& getBlocksList() const;

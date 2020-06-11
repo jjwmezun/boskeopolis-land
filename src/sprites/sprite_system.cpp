@@ -61,12 +61,12 @@
 #include "gorilla_sprite.hpp"
 #include "guard_spike_sprite.hpp"
 #include "guard_sprite.hpp"
-#include "handgun_sprite.hpp"
 #include "harpoon_sprite.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hook_sprite.hpp"
+#include "horizontal_pike_sprite.hpp"
 #include "horizontal_spark_sprite.hpp"
 #include "hydrant_sprite.hpp"
 #include "ice_box_rock_solid_hack_sprite.hpp"
@@ -146,6 +146,7 @@
 #include "space_lizard_sprite.hpp"
 #include "spark_sprite.hpp"
 #include "spawn_anchor_missile_sprite.hpp"
+#include "spawn_fist_missile_sprite.hpp"
 #include "spawn_icicle_sprite.hpp"
 #include "spider_sprite.hpp"
 #include "spike_egg_sprite.hpp"
@@ -156,6 +157,7 @@
 #include "sprite_component_right_and_left.hpp"
 #include "sprite_component_up_and_down.hpp"
 #include "sprite_system.hpp"
+#include "statue_laser_sprite.hpp"
 #include "stronger_cowpoker_sprite.hpp"
 #include "swamp_monster_sprite.hpp"
 #include "swamp_pole_sprite.hpp"
@@ -169,6 +171,7 @@
 #include "truck_platform_sprite.hpp"
 #include "underground_subway_sprite.hpp"
 #include "urban_bird_sprite.hpp"
+#include "vertical_pike_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
 #include "wall_crawler_sprite.hpp"
 #include "waterdrop_sprite.hpp"
@@ -243,7 +246,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new RopeSprite( x, y, 10, 52, 1600 ) );
 		break;
 		case ( SPRITE_INDEX_START + 15 ):
-			return std::unique_ptr<Sprite> ( new HandgunSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new SpawnFistMissileSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 16 ):
 			return std::unique_ptr<Sprite> ( new BuzzSawSprite( x, y ) );
@@ -815,6 +818,21 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 205 ):
 			return std::unique_ptr<Sprite> ( new HorizontalSparkSprite( x, y ) );
 		break;
+		case ( SPRITE_INDEX_START + 206 ):
+			return std::unique_ptr<Sprite> ( new StatueLaserSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 207 ):
+			return std::unique_ptr<Sprite> ( new HorizontalPikeSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 208 ):
+			return std::unique_ptr<Sprite> ( new HorizontalPikeSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 209 ):
+			return std::unique_ptr<Sprite> ( new VerticalPikeSprite( x, y, Direction::Vertical::UP ) );
+		break;
+		case ( SPRITE_INDEX_START + 210 ):
+			return std::unique_ptr<Sprite> ( new VerticalPikeSprite( x, y, Direction::Vertical::DOWN ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;
@@ -894,8 +912,8 @@ void SpriteSystem::interact( LevelState& level_state )
 			{
 				if
 				(
-					level_state.camera().onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) ||
-					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT )
+					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT ) ||
+					level_state.camera().onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING )
 				)
 				{
 					blocks.interact( *sprites_.at( i ), level_state );

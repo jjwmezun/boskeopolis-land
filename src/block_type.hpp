@@ -42,6 +42,7 @@ class BlockType final
 		void init( Block& block, LevelState& level_state ) const;
 
 		bool hasComponentType( BlockComponent::Type type ) const;
+		bool hasComponentTypeWhetherCollided( BlockComponent::Type type ) const;
 		bool testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const;
 		const SpriteGraphics* graphics() const;
 

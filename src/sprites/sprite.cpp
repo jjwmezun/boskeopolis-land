@@ -832,8 +832,8 @@ void Sprite::turnOnEdge( const BlockSystem& blocks )
 	switch ( direction_x_ )
 	{
 		case ( Direction::Horizontal::LEFT ):
-
-			if( !blocks.blocksInTheWay
+		{
+			if( !blocks.blocksInTheWayWhetherCollided
 			(
 				{
 					leftSubPixels() - Unit::BlocksToSubPixels( 1 ),
@@ -847,11 +847,12 @@ void Sprite::turnOnEdge( const BlockSystem& blocks )
 			{
 				direction_x_ = Direction::Horizontal::RIGHT;
 			}
+		}
 		break;
 
 		case ( Direction::Horizontal::RIGHT ):
-
-			if( !blocks.blocksInTheWay
+		{
+			if( !blocks.blocksInTheWayWhetherCollided
 			(
 				{
 					rightSubPixels(),
@@ -865,6 +866,7 @@ void Sprite::turnOnEdge( const BlockSystem& blocks )
 			{
 				direction_x_ = Direction::Horizontal::LEFT;
 			}
+		}
 		break;
 	}
 };

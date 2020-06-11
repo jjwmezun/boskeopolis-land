@@ -68,6 +68,15 @@ bool Block::hasComponentType( BlockComponent::Type type ) const
 	return false;
 };
 
+bool Block::hasComponentTypeWhetherCollided( BlockComponent::Type type ) const
+{
+	if ( hasType() )
+	{
+		return type_->hasComponentTypeWhetherCollided( type );
+	}
+	return false;
+};
+
 bool Block::testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const
 {
 	if ( hasType() )

@@ -28,9 +28,4 @@ class PikeSprite final : public Sprite
 		PikeState state_;
 		int wait_timer_;
 		sdl2::SDLRect horizontal_pike_;
-		int wrehrkjwe;
-		int afklhsdlkfjsad;
-		int afkljsdlkfj;
-		int aklsfjhlksajf;
-		int aklfjsadfj;
 };

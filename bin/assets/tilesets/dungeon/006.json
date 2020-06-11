@@ -1,0 +1,86 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"off":
+		{
+            "type": "animated",
+            "frames":
+            [
+                { "x": 9,  "y": 2 },
+                { "x": 10, "y": 2 },
+                { "x": 11, "y": 2 },
+                { "x": 12, "y": 2 },
+                { "x": 13, "y": 2 },
+                { "x": 14, "y": 2 }
+            ],
+            "priority": true
+		},
+		"on":
+		{
+            "type": "animated",
+            "frames":
+            [
+                { "x": 9,  "y": 0 },
+                { "x": 10, "y": 0 },
+                { "x": 11, "y": 0 },
+                { "x": 12, "y": 0 },
+                { "x": 13, "y": 0 },
+                { "x": 14, "y": 0 }
+            ],
+			"priority": true,
+			"alpha": 200
+		}
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "swim"
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "money",
+				"amount": 100
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" },
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "change_block",
+				"value": 100
+			},
+			"conditions":
+			[
+				{ "type": "switch_on" },
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "kill"
+			},
+			"conditions":
+			[
+				{ "type": "switch_off" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

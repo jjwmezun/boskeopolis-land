@@ -69,6 +69,21 @@ void BlockType::update( EventSystem& events )
 	}
 };
 
+bool BlockType::hasComponentTypeWhetherCollided( BlockComponent::Type type ) const
+{
+	for ( int i = 0; i < components_.size(); ++i )
+	{
+		// True if a'least 1 component has type.
+		if ( components_[ i ]->type() == type )
+		{
+			return true;
+		}
+	}
+
+	// If all don't, false.
+	return false;
+};
+
 bool BlockType::hasComponentType( BlockComponent::Type type ) const
 {
 	for ( int i = 0; i < components_.size(); ++i )

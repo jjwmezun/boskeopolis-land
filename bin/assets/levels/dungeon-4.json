@@ -36,34 +36,37 @@
 				{
 					"map": 1,
 					"entrance_x": 0,
-					"entrance_y": 59,
-					"location": [ 19, 25, 0, 12 ]
-				},
-				{
-					"map": 2,
-					"entrance_x": 1,
-					"entrance_y": 8,
-					"location": [ 222, 25, 0, 12 ],
-					"camera_x": 32
+					"entrance_y": 47,
+					"location": [ 0, 90, 0, 12 ]
 				}
 			]
 		},
 		{
-			"slug": "dungeon-1"
-		},
-		{
-			"slug": "dungeon-1-3",
-			"foregrounds":
+			"slug": "dungeon-1",
+			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "rain.png",
-					"width": 480,
-					"height": 320,
-					"frames": 16,
-					"animation_speed": 4
+					"img": "castle-chamsby.png",
+					"width": 320,
+					"height": 192,
+					"x_scroll": 0.1,
+					"y_scroll": 0.25,
+					"y_offset": -96
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 2,
+					"entrance_x": 3,
+					"entrance_y": 8,
+					"location": [ 71, 73, 22, 24 ]
 				}
 			]
+		},
+		{
+			"slug": "dungeon-1-3"
 		}
 	],
 

@@ -1,14 +1,32 @@
 {
 	"graphics":
 	{
-		"type": "animated",
-		"frames":
-		[
-			{ "x": 4, "y": 1 },
-			{ "x": 5, "y": 1 },
-			{ "x": 6, "y": 1 },
-			{ "x": 7, "y": 1 }
-		]
+		"type": "switch",
+		"off":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 4, "y": 1 },
+				{ "x": 5, "y": 1 },
+				{ "x": 6, "y": 1 },
+				{ "x": 7, "y": 1 }
+			],
+			"priority": true
+		},
+		"on":
+		{
+			"type": "animated",
+			"frames":
+			[
+				{ "x": 5, "y": 2 },
+				{ "x": 6, "y": 2 },
+				{ "x": 7, "y": 2 },
+				{ "x": 8, "y": 2 }
+			],
+			"alpha": 200,
+			"priority": true
+		}
 	},
 	"behavior":
 	[
@@ -19,6 +37,7 @@
 			},
 			"conditions":
 			[
+				{ "type": "switch_on" },
 				{ "type": "collide_any" }
 			]
 		}

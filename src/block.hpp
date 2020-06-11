@@ -26,6 +26,7 @@ class Block final : public Object
 		const BlockType* type() const;
 		bool isDestroyed() const;
 		bool hasComponentType( BlockComponent::Type type ) const;
+		bool hasComponentTypeWhetherCollided( BlockComponent::Type type ) const;
 		bool testForComponentTypeNow( BlockComponent::Type type, const Collision& collision, const Sprite& sprite, const Block& block, LevelState& level_state ) const;
 		void init( LevelState& level_state );
 
