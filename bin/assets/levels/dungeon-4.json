@@ -4,6 +4,9 @@
 	"maps":
 	[
 		{
+			"slug": "dungeon-1-4"
+		},
+		{
 			"slug": "dungeon-1-2",
 			"backgrounds":
 			[
@@ -70,8 +73,8 @@
 		}
 	],
 
-	"entrance_x": 1,
-	"entrance_y": 8,
+	"entrance_x": 6,
+	"entrance_y": 20,
 
 	"gem_challenge": 11000,
 	"time_challenge": 18
