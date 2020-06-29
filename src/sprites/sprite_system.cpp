@@ -415,7 +415,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new BadAppleSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 71 ):
-			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y, false ) );
+			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y, false, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 72 ):
 			return std::unique_ptr<Sprite> ( new ChoqueSprite( x, y ) );
@@ -836,6 +836,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 211 ):
 			return std::unique_ptr<Sprite> ( new FallingDollarGeneratorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 212 ):
+			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y, false, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

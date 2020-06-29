@@ -5,9 +5,9 @@
 #include "level_state.hpp"
 #include "sprite_graphics.hpp"
 
-AngryTruckSprite::AngryTruckSprite( int x, int y, bool permanent )
+AngryTruckSprite::AngryTruckSprite( int x, int y, bool permanent, Direction::Horizontal direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/angry_truck.png" ), x, y, 40, 32, {}, 2000, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::RESET_OFFSCREEN_AND_AWAY ) ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/angry_truck.png" ), x, y, 40, 32, {}, 2000, 2000, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, ( ( permanent ) ? CameraMovement::PERMANENT : CameraMovement::RESET_OFFSCREEN_AND_AWAY ) ),
 	parked_ ( false )
 {};
 

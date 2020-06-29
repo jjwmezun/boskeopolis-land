@@ -18,7 +18,7 @@ void AngryTruckGeneratorSprite::customUpdate( LevelState& level_state )
 {
 	if ( timer_ >= TIMER_LIMIT )
 	{
-		level_state.sprites().spawn( std::make_unique<AngryTruckSprite> ( xPixels(), yPixels(), true ) );
+		level_state.sprites().spawn( std::make_unique<AngryTruckSprite> ( xPixels(), yPixels(), true, Direction::Horizontal::LEFT ) );
 		timer_ = 0;
 	}
 	++timer_;
