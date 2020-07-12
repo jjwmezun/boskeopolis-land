@@ -76,6 +76,7 @@
 #include "icicle_sprite.hpp"
 #include "input_component_sequence.hpp"
 #include "iron_wall_sprite.hpp"
+#include "jumping_crock_sprite.hpp"
 #include "level.hpp"
 #include "level_state.hpp"
 #include "lava_platform_sprite.hpp"
@@ -839,6 +840,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 212 ):
 			return std::unique_ptr<Sprite> ( new AngryTruckSprite( x, y, false, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 213 ):
+			return std::unique_ptr<Sprite> ( new JumpingCrockSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
