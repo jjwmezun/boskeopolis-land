@@ -1,14 +1,27 @@
 {
-	"name": "Welcome to the Brick Parade",
+	"name": "I Wanna Be Your Vacuum Cleaner",
 	"maps":
 	[
 		{
-			"slug": "house-1"
+			"slug": "house-2",
+			"backgrounds":
+			[
+				{
+					"type": "image",
+					"img": "home-2-bg.png",
+					"width": 256,
+					"height": 160,
+					"y_offset": 16,
+					"x_scroll": 1.0,
+					"y_scroll": 0.0,
+					"y_repeat": false
+				}
+			]
 		}
 	],
 
-	"entrance_x": 13,
-	"entrance_y": 26,
+	"entrance_x": 16,
+	"entrance_y": 9,
 	"gem_challenge": 0,
 	"time_challenge": 0
 }

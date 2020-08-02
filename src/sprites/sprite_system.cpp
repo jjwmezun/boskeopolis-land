@@ -173,6 +173,7 @@
 #include "truck_platform_sprite.hpp"
 #include "underground_subway_sprite.hpp"
 #include "urban_bird_sprite.hpp"
+#include "vacuum_sprite.hpp"
 #include "vertical_pike_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
 #include "wall_crawler_sprite.hpp"
@@ -843,6 +844,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 213 ):
 			return std::unique_ptr<Sprite> ( new JumpingCrockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 214 ):
+			return std::unique_ptr<Sprite> ( new VacuumSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
