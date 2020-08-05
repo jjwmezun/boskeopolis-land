@@ -8,10 +8,10 @@
 			[
 				{
 					"type": "image",
-					"img": "home-2-bg.png",
-					"width": 256,
-					"height": 160,
-					"y_offset": 16,
+					"img": "home-3-bg.png",
+					"width": 400,
+					"height": 10,
+					"y_offset": 166,
 					"x_scroll": 1.0,
 					"y_scroll": 0.0,
 					"y_repeat": false
@@ -22,6 +22,6 @@
 
 	"entrance_x": 16,
 	"entrance_y": 9,
-	"gem_challenge": 0,
-	"time_challenge": 0
+	"gem_challenge": 14000,
+	"time_challenge": 32
 }

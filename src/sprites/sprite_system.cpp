@@ -7,6 +7,7 @@
 #include "bird_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
+#include "bouncing_ball_sprite.hpp"
 #include "bouncing_spike_fruit_sprite.hpp"
 #include "bridge_monster_sprite.hpp"
 #include "bubble_sprite.hpp"
@@ -847,6 +848,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 214 ):
 			return std::unique_ptr<Sprite> ( new VacuumSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 215 ):
+			return std::unique_ptr<Sprite> ( new BouncingBallSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -12,7 +12,7 @@ VacuumSprite::~VacuumSprite() {};
 void VacuumSprite::customUpdate( LevelState& level_state )
 {
     //moveRight();
-    start_speed_ += 1900;
+    start_speed_ += 2000;
     hit_box_.x = start_speed_;
 };
 

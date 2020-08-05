@@ -285,7 +285,7 @@
             "swamp-2": "I Can Go with the Flow",
             "sewer-2": "Soupy Sewers",
             "factory-2": "The Amazon Jungle",
-            "domestic-2": "Welcome to the Brick Parade",
+            "domestic-2": "I Wanna Be Your Vacuum Cleaner",
             "dungeon-2": "Mind Your Manors",
             "special-2": "Highway & Hellwater",
             "city-3": "Sleet Streets",
@@ -346,7 +346,8 @@
             "sky-4": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane.",
             "special-3": "¡Catch the sale on rare collectibles!",
             "special-4": "¡Collect everything & dodge the eyes!",
-            "swamp-3": "¡Don’t fall into the deadly water!"
+            "swamp-3": "¡Don’t fall into the deadly water!",
+            "domestic-2": "¡Don’t get sucked up by the giant vacuum!"
         }
     },
     "news_ticker":
