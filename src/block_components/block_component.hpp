@@ -14,7 +14,8 @@ class BlockComponent
 		{
 			NOTYPE,
 			SOLID,
-			HOLE
+			HOLE,
+			DIAMOND
 		};
 
 		BlockComponent( Type type = Type::NOTYPE );

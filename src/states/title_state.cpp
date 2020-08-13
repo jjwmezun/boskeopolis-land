@@ -38,11 +38,12 @@ static constexpr int OPTIONS_SIZE = 4;
 static constexpr int NUMBER_OF_TRAINER_LEVELS = 4;
 static const std::string TRAINER_LEVELS[ NUMBER_OF_TRAINER_LEVELS ] = { "city-4", "woods-1", "factory-2", "city-1" };
 
-static int trainer_ = -1;
+//static int trainer_ = -1;
 static const std::string& getRandomTrainerLevel()
 {
-    ++trainer_;
-    return ( trainer_ < 4 ) ? TRAINER_LEVELS[ trainer_ ] : TRAINER_LEVELS[ mezun::randInt( NUMBER_OF_TRAINER_LEVELS - 1, 0 ) ];
+    //++trainer_;
+    //return ( trainer_ < 4 ) ? TRAINER_LEVELS[ trainer_ ] : TRAINER_LEVELS[ mezun::randInt( NUMBER_OF_TRAINER_LEVELS - 1, 0 ) ];
+    return TRAINER_LEVELS[ mezun::randInt( NUMBER_OF_TRAINER_LEVELS - 1, 0 ) ];
 };
 
 TitleState::TitleState()

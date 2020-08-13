@@ -8,11 +8,10 @@
 			[
 				{
 					"type": "image",
-					"img": "home-3-bg.png",
-					"width": 400,
-					"height": 10,
-					"y_offset": 166,
-					"x_scroll": 1.0,
+					"img": "house-pipes.png",
+					"width": 96,
+					"height": 208,
+					"x_scroll": 0.5,
 					"y_scroll": 0.0,
 					"y_repeat": false
 				}
@@ -20,8 +19,8 @@
 		}
 	],
 
-	"entrance_x": 16,
+	"entrance_x": 12,
 	"entrance_y": 9,
 	"gem_challenge": 14000,
-	"time_challenge": 32
+	"time_challenge": 30
 }

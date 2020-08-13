@@ -74,7 +74,7 @@ bool BlockType::hasComponentTypeWhetherCollided( BlockComponent::Type type ) con
 	for ( int i = 0; i < components_.size(); ++i )
 	{
 		// True if a'least 1 component has type.
-		if ( components_[ i ]->type() == type )
+		if ( components_[ i ] != nullptr && components_[ i ]->type() == type )
 		{
 			return true;
 		}

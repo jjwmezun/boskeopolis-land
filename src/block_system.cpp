@@ -166,6 +166,10 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 					const int i = lvmap.indexFromXAndY( x, y );
 					const int type = lvmap.block( i ) - 1;
 					addBlock( x_pixels, y_pixels, i, type );
+					if ( !blocks_.empty() )
+					{
+						blocks_[ blocks_.size() - 1 ].init( level_state );
+					}
 				}
 			}
 
@@ -183,11 +187,16 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 				const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 				const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
 				addBlock( x, y, i, type );
-				blocks_[ i ].init( level_state );
+				if ( !blocks_.empty() )
+				{
+					blocks_[ blocks_.size() - 1 ].init( level_state );
+				}
 			}
 		}
 	}
 };
+
+#include <iostream>
 
 void BlockSystem::addBlock( int x, int y, int i, int type )
 {

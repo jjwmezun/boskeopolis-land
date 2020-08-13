@@ -170,6 +170,7 @@
 #include "thrower_sprite.hpp"
 #include "top_down_player_sprite.hpp"
 #include "top_down_moveable_block_sprite.hpp"
+#include "toy_soldier_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
 #include "truck_platform_sprite.hpp"
 #include "underground_subway_sprite.hpp"
@@ -851,6 +852,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 215 ):
 			return std::unique_ptr<Sprite> ( new BouncingBallSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 216 ):
+			return std::unique_ptr<Sprite> ( new ToySoldierSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -7,7 +7,11 @@
 #include "level.hpp"
 #include "level_state.hpp"
 
-BlockComponentDiamond::BlockComponentDiamond( int replacement_block ) : replacement_block_ ( replacement_block ) {};
+BlockComponentDiamond::BlockComponentDiamond( int replacement_block )
+:
+	BlockComponent( Type::DIAMOND ),
+	replacement_block_ ( replacement_block )
+{};
 BlockComponentDiamond::~BlockComponentDiamond() {};
 
 void BlockComponentDiamond::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
