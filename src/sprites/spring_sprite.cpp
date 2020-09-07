@@ -49,6 +49,4 @@ void SpringSprite::customInteract( Collision& my_collision, Collision& their_col
 	{
 		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
-
-	printf( "%d\n", hit_box_.h );
 };
