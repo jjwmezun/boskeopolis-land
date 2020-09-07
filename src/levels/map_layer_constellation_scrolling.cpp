@@ -24,11 +24,13 @@ static int calculateHeight( int map_width_blocks, int map_height_blocks );
 MapLayerConstellationScrolling::MapLayerConstellationScrolling
 (
 	int map_width_blocks,
-	int map_height_blocks
+	int map_height_blocks,
+	std::string image
 )
 :
 	MapLayer(),
 	src_ ( 0, 0, Unit::BlocksToPixels( map_width_blocks ), calculateHeight( map_width_blocks, map_height_blocks ) ),
+	image_ ( image ),
 	scroll_speed_ ( scrollSpeedX( map_width_blocks ) ),
 	texture_ ( nullptr )
 {
@@ -45,7 +47,7 @@ void MapLayerConstellationScrolling::update( LevelState& level_state )
 	const Camera& camera = level_state.camera();
 	if ( texture_ == nullptr )
 	{
-		texture_ = MapLayerConstellation::formTexture( src_ );
+		texture_ = MapLayerConstellation::formTexture( src_, image_ );
 	}
 	else
 	{

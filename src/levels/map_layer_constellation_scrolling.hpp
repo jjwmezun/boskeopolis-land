@@ -9,7 +9,8 @@ class MapLayerConstellationScrolling final : public MapLayer
 		MapLayerConstellationScrolling
 		(
 			int map_width_blocks,
-			int map_height_blocks
+			int map_height_blocks,
+			std::string image
 		);
 		~MapLayerConstellationScrolling();
 		void update( LevelState& level_state ) override;
@@ -18,6 +19,7 @@ class MapLayerConstellationScrolling final : public MapLayer
 	private:
 		const sdl2::SDLRect src_;
 		sdl2::SDLRect dest_;
+		std::string image_;
 		const double scroll_speed_;
 		SDL_Texture* texture_;
 };

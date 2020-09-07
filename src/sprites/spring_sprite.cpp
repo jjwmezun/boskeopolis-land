@@ -26,11 +26,11 @@ void SpringSprite::customUpdate( LevelState& level_state )
 
 void SpringSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( their_collision.collideBottom() )
+	if ( them.collideBottomOnly( their_collision, *this ) )
 	{
 		them.bounce( STRENGTH );
 		const int press_down_amount = ( them.vy_ * 10 ) - ( them.vy_ % 1000 );
-		hit_box_.h = 16000 - std::min( 8000, press_down_amount );
+		hit_box_.h = 8000;
 	}
 	else if ( their_collision.collideLeft() )
 	{
@@ -49,4 +49,6 @@ void SpringSprite::customInteract( Collision& my_collision, Collision& their_col
 	{
 		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
+
+	printf( "%d\n", hit_box_.h );
 };

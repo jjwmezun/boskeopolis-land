@@ -1,0 +1,24 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 3,
+		"y": 0,
+		"flip_x": true
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{
+					"type": "collide_bottom"
+				}
+			]
+		}
+	]
+}

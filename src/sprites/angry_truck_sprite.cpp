@@ -44,7 +44,7 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 	}
 	else
 	{
-		if ( their_collision.collideAny() )
+		if ( them.hasType( SpriteType::HERO ) )
 		{
 			if ( their_collision.collideBottom() )
 			{
@@ -59,6 +59,16 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 							them.heightSubPixels()
 						},
 						BlockComponent::Type::SOLID
+					) &&
+					!level_state.blocks().blocksInTheWay
+					(
+						{
+							them.hit_box_.x - 1000,
+							them.topSubPixels(),
+							1000,
+							them.heightSubPixels()
+						},
+						BlockComponent::Type::SOLID
 					)
 				)
 				{
@@ -66,8 +76,7 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 				}
 				them.collideStopAny( their_collision );
 			}
-
-			if ( them.hasType( SpriteType::HERO ) && !their_collision.collideBottom() )
+			else if ( their_collision.collideAny() )
 			{
 				level_state.health().hurt();
 			}

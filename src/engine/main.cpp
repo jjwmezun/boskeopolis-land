@@ -14,6 +14,7 @@
 #include "mezun_helpers.hpp"
 #include "mezun_exceptions.hpp"
 #include "mezun_math.hpp"
+#include "neon_overlay.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
 #include "title_state.hpp"
@@ -57,6 +58,8 @@ namespace Main
 
 	TransitionState transition_state_ = TransitionState::__NULL;
 	int transition_level_ = 0;
+
+	NeonOverlay neon = {};
 
 
 	// Private Function Declarations
@@ -208,6 +211,10 @@ namespace Main
 			{
 				case ( TransitionState::__NULL ):
 					states_.back()->update();
+					if ( getPalette().type() == "Neon" )
+					{
+						neon.update();
+					}
 				break;
 
 				case ( TransitionState::FADE_OUT ):
@@ -255,6 +262,10 @@ namespace Main
 		Render::clearScreen();
 		renderStates();
 		Input::renderQuitText();
+		if ( getPalette().type() == "Neon" )
+		{
+			neon.render();
+		}
 		renderTransition();
 		Render::presentScreen();
 	};

@@ -17,7 +17,8 @@ class Camera final
 			CENTER_X,
 			CENTER_Y,
 			CENTER_BOTH,
-			SCROLL_LOCK
+			SCROLL_LOCK,
+			PRIORITIZE_TOP
 		};
 
 		constexpr Camera

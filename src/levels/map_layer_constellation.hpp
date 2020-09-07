@@ -15,6 +15,6 @@ namespace MapLayerConstellation
 		BRIGHT_MEDIUM_STAR = 4,
 		BRIGHT_BIG_STAR = 5
 	};
-	std::string graphicsPath();
-	SDL_Texture* formTexture( const sdl2::SDLRect& src );
+	std::string graphicsPath( std::string image = "constellation.png" );
+	SDL_Texture* formTexture( const sdl2::SDLRect& src, std::string image = "constellation.png" );
 };

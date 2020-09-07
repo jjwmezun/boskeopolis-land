@@ -1,0 +1,33 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{
+				"type": "sprite",
+				"x": 12,
+				"y": 0
+			},
+			{
+				"type": "sprite",
+				"x": 15,
+				"y": 0
+			}
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "goal"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		}
+	]
+}

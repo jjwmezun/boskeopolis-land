@@ -6,7 +6,7 @@
 class MapLayerConstellationMoving final : public MapLayer
 {
 	public:
-		MapLayerConstellationMoving( int width, int height, double move_speed );
+		MapLayerConstellationMoving( int width, int height, double move_speed, std::string image );
 		~MapLayerConstellationMoving();
 		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;
@@ -15,6 +15,7 @@ class MapLayerConstellationMoving final : public MapLayer
 		const sdl2::SDLRect src_;
 		sdl2::SDLRect dest_;
 		sdl2::SDLRect dest2_;
+		std::string image_;
 		const double move_speed_;
 		SDL_Texture* texture_;
 };

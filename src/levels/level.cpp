@@ -566,6 +566,12 @@ Level Level::getLevel( int id )
 								else if ( mezun::areStringsEqual( bgtype, "constellation" ) )
 								{
 									double move_speed = 0.0;
+									std::string image = "constellation.png";
+
+									if ( bg.HasMember( "image" ) && bg[ "image" ].IsString() )
+									{
+										image = bg[ "image" ].GetString();
+									}
 
 									if ( bg.HasMember( "version" ) && bg[ "version" ].IsString() && strcmp( bg[ "version" ].GetString(), "moving" ) == 0 )
 									{
@@ -579,7 +585,8 @@ Level Level::getLevel( int id )
 											(
 												bgw,
 												bgh,
-												move_speed
+												move_speed,
+												image
 											)
 										);
 									}
@@ -590,7 +597,8 @@ Level Level::getLevel( int id )
 											std::make_unique<MapLayerConstellationScrolling>
 											(
 												bgw,
-												bgh
+												bgh,
+												image
 											)
 										);
 									}

@@ -91,8 +91,6 @@ Map Map::mapFromPath
 		int camera_limit_right = -1;
 		int scroll_loop_width = 0;
 		SpriteSystem::HeroType hero_type = SpriteSystem::HeroType::NORMAL;
-		bool camera_center_x = false;
-		bool camera_center_y = false;
 		bool blocks_work_offscreen = false;
 		bool loop_sides = false;
 		int water_effect_height = 0;
@@ -104,13 +102,13 @@ Map Map::mapFromPath
 		std::string music = "";
 		bool warp_on_fall = false;
 		int ui_bg_color = 1;
-		bool scroll_lock = false;
 		bool watery = false;
 		bool oxygen = false;
 		bool hide = false;
 		int lava_y = -1;
 		int lava_y_alt = -1;
 		int x_block_when_lava_rises_forever = -1;
+		Camera::Type camera_type = Camera::Type::NORMAL;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -382,7 +380,17 @@ Map Map::mapFromPath
 					if ( value.IsString() )
 					{
 						const std::string camera_priority_x_string = value.GetString();
-						camera_center_x = ( camera_priority_x_string.compare( "CENTER" ) == 0 );
+						if ( camera_priority_x_string.compare( "CENTER" ) == 0 )
+						{
+							if ( camera_type == Camera::Type::CENTER_Y || camera_type == Camera::Type::CENTER_BOTH )
+							{
+								camera_type = Camera::Type::CENTER_BOTH;
+							}
+							else
+							{
+								camera_type = Camera::Type::CENTER_X;
+							}
+						}
 					}
 				}
 
@@ -391,7 +399,21 @@ Map Map::mapFromPath
 					if ( value.IsString() )
 					{
 						const std::string camera_priority_y_string = value.GetString();
-						camera_center_y = ( camera_priority_y_string.compare( "CENTER" ) == 0 );
+						if ( camera_priority_y_string.compare( "CENTER" ) == 0 )
+						{
+							if ( camera_type == Camera::Type::CENTER_X || camera_type == Camera::Type::CENTER_BOTH )
+							{
+								camera_type = Camera::Type::CENTER_BOTH;
+							}
+							else
+							{
+								camera_type = Camera::Type::CENTER_Y;
+							}
+						}
+						else if ( camera_priority_y_string.compare( "TOP" ) == 0 )
+						{
+							camera_type = Camera::Type::PRIORITIZE_TOP;
+						}
 					}
 				}
 
@@ -479,7 +501,10 @@ Map Map::mapFromPath
 
 				else if ( mezun::areStringsEqual( name, "scroll_lock" ) )
 				{
-					scroll_lock = ( value.IsBool() && value.GetBool() );
+					if ( value.IsBool() && value.GetBool() )
+					{
+						camera_type = Camera::Type::SCROLL_LOCK;
+					}
 				}
 
 				else if ( mezun::areStringsEqual( name, "watery" ) )
@@ -544,21 +569,6 @@ Map Map::mapFromPath
 		{
 			backgrounds.emplace_back( std::make_unique<MapLayerWaterBack> ( water_ptr ) );
 			foregrounds.emplace_back( water_ptr );
-		}
-
-
-		Camera::Type camera_type = Camera::Type::NORMAL;
-		if ( scroll_lock )
-		{
-			camera_type = Camera::Type::SCROLL_LOCK;
-		}
-		else if ( camera_center_x )
-		{
-			camera_type = Camera::Type::CENTER_X;
-		}
-		else if ( camera_center_y )
-		{
-			camera_type = Camera::Type::CENTER_Y;
 		}
 
 

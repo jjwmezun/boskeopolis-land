@@ -133,6 +133,22 @@ void Camera::move( const Sprite& o, const Type type )
 			}
 		}
 		break;
+
+		case ( Type::PRIORITIZE_TOP ):
+		{
+			moveXNormal( o );
+
+			if ( o.yPixels() < boundaryCenterY() )
+			{
+				y_ -= boundaryCenterY() - o.yPixels();
+			}
+
+			if ( o. bottomPixels() > boundaryBottom() )
+			{
+				y_ += o. bottomPixels() - boundaryBottom();
+			}
+		}
+		break;
 	}
 };
 

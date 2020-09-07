@@ -15,10 +15,10 @@ namespace MapLayerConstellation
 	static constexpr int MOON_START_X = Unit::WINDOW_WIDTH_MINIBLOCKS;
 	static constexpr int MOON_START_Y = 3;
 
-	static void renderTexture( int width, int height );
+	static void renderTexture( int width, int height, std::string image );
 	static StarType drawStar();
 
-	SDL_Texture* formTexture( const sdl2::SDLRect& src )
+	SDL_Texture* formTexture( const sdl2::SDLRect& src, std::string image )
 	{
 		const int width_miniblocks = Unit::PixelsToMiniBlocks( src.w );
 		const int height_miniblocks = Unit::PixelsToMiniBlocks( src.h );
@@ -26,14 +26,14 @@ namespace MapLayerConstellation
 		SDL_Texture* texture = Render::createRenderBox( src.w, src.h );
 		Render::setRenderTarget( texture );
 			Render::clearScreenTransparency();
-			renderTexture( width_miniblocks, height_miniblocks );
+			renderTexture( width_miniblocks, height_miniblocks, image );
 		Render::releaseRenderTarget();
 		return texture;
 	};
 
-	void renderTexture( int width, int height )
+	void renderTexture( int width, int height, std::string image )
 	{
-		const std::string img = graphicsPath();
+		const std::string img = graphicsPath( image );
 		sdl2::SDLRect source = { 0, 0, TILE_SIZE, TILE_SIZE };
 		sdl2::SDLRect dest = { 0, 0, TILE_SIZE, TILE_SIZE };
 
@@ -103,8 +103,8 @@ namespace MapLayerConstellation
 		}
 	};
 
-	std::string graphicsPath()
+	std::string graphicsPath( std::string image )
 	{
-		return "bg" + Main::pathDivider() + "constellation.png";
+		return "bg" + Main::pathDivider() + image;
 	};
 }

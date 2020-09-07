@@ -6,10 +6,11 @@
 // MEMBER FUNCTIONS
 //=============================================================
 
-MapLayerConstellationMoving::MapLayerConstellationMoving( int width, int height, double move_speed )
+MapLayerConstellationMoving::MapLayerConstellationMoving( int width, int height, double move_speed, std::string image )
 :
 	MapLayer(),
 	src_ ( 0, 0, width, height ),
+	image_ ( image ),
 	move_speed_ ( abs( move_speed ) ),
 	texture_ ( nullptr )
 {
@@ -25,7 +26,7 @@ void MapLayerConstellationMoving::update( LevelState& level_state )
 {
 	if ( texture_ == nullptr )
 	{
-		texture_ = MapLayerConstellation::formTexture( src_ );
+		texture_ = MapLayerConstellation::formTexture( src_, image_ );
 	}
 	else
 	{
