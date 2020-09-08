@@ -9,6 +9,7 @@ class AtticMonsterSprite final : public Sprite
 		~AtticMonsterSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
+		void reset() override;
 
     private:
 		enum class State
