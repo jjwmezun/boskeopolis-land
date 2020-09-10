@@ -11,9 +11,10 @@ class FallingStarGeneratorSprite final : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 
     private:
-        void spawn( LevelState& level_state ) const;
+        void spawn( LevelState& level_state );
 
         int timer_;
         bool start_;
+        int prev_x_[ 3 ];
         char scratch_[ 3000 ];
 };

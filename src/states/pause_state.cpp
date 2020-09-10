@@ -2,6 +2,7 @@
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "frame.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -99,9 +100,9 @@ void PauseState::init()
 	bg_.init();
 	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
 	{
-		const int y = Y + ( ( i + 1 ) * ROW_HEIGHT );
-		highlighted_text_[ i ].changeSize( TEXT_WIDTH, HEIGHT );
-		highlighted_text_[ i ].setX( X + X_PADDING );
+		const int y = Y + ( ( i ) * ROW_HEIGHT + 10 ) - 4;
+		highlighted_text_[ i ].changeSize( TEXT_WIDTH + ( X_PADDING * 2 ) - 10, HEIGHT );
+		highlighted_text_[ i ].setX( X + 5 );
 		highlighted_text_[ i ].setY( y );
 		highlighted_text_[ i ].init();
 	}
@@ -111,19 +112,23 @@ void PauseState::init()
 void PauseState::generateTextures()
 {
 	bg_.startDrawing();
-	Render::renderObject( "bg/pause-frame.png", { 0, 0, WIDTH, HEIGHT }, { 0, 0, WIDTH, HEIGHT } );
+	//Render::renderObject( "bg/pause-frame.png", { 0, 0, WIDTH, HEIGHT }, { 0, 0, WIDTH, HEIGHT } );
+	Frame frame = { 0, 0, WIDTH, ROW_HEIGHT * NUMBER_OF_OPTIONS + 12 };
+	frame.render();
 	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
 	{
-		const int y = ( i + 1 ) * ROW_HEIGHT;
+		const int y = ( i ) * ROW_HEIGHT + 10;
 		WTextObj text{ getOptionName( ( PauseOption )( i ) ), 0, y, WTextCharacter::Color::BLACK, WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, X_PADDING };
 		text.render();
 	}
 	bg_.endDrawing();
+	sdl2::SDLRect highlight_bg = { 0, 0, WIDTH, ROW_HEIGHT };
 	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
 	{
 		highlighted_text_[ i ].startDrawing();
 		Render::clearScreenTransparency();
-		WTextObj text{ getOptionName( ( PauseOption )( i ) ), 0, 0, WTextCharacter::Color::LIGHT_MID_GRAY, WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL };
+		Render::renderRect( highlight_bg, 6 );
+		WTextObj text{ getOptionName( ( PauseOption )( i ) ), 0, 0, WTextCharacter::Color::LIGHT_MID_GRAY, WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, X_PADDING - 5, 4, WTextObj::VAlign::CENTER, ROW_HEIGHT };
 		text.render();
 		highlighted_text_[ i ].endDrawing();
 	}

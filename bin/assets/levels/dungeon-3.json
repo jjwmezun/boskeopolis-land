@@ -1,96 +1,30 @@
 {
-	"name": "Donut Dungeon",
+	"name": "Golden Gear Solid",
 
 	"maps":
 	[
 		{
-			"slug": "dungeon-3",
-			"foregrounds":
+			"slug": "space-5",
+			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "dungeon-walls.png",
-					"width": 400,
-					"height": 192,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 1,
-					"entrance_x": 4,
-					"entrance_y": 63,
-					"location": [ 3, 5, 62, 64 ]
-				},
-				{
-					"map": 1,
-					"entrance_x": 87,
-					"entrance_y": 19,
-					"location": [ 85, 89, 19, 21 ],
-					"camera_x": 1200,
-					"camera_y": 192
-				},
-				{
-					"map": 1,
-					"entrance_x": 62,
-					"entrance_y": 44,
-					"location": [ 61, 63, 43, 45 ]
-				}
-			]
-		},
-		{
-			"slug": "dungeon-3-2",
-			"foregrounds":
-			[
-				{
-					"type": "image",
-					"img": "dungeon-walls.png",
-					"width": 400,
-					"height": 192,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 0,
-					"entrance_x": 4,
-					"entrance_y": 63,
-					"location": [ 3, 5, 62, 64 ]
-				},
-				{
-					"map": 0,
-					"entrance_x": 87,
-					"entrance_y": 19,
-					"location": [ 85, 89, 19, 21 ],
-					"camera_x": 1200,
-					"camera_y": 0
-				},
-				{
-					"map": 0,
-					"entrance_x": 112,
-					"entrance_y": 44,
-					"location": [ 110, 114, 43, 45 ],
-					"camera_x": 1600,
-					"camera_y": 576
-				},
-				{
-					"map": 0,
-					"entrance_x": 4,
-					"entrance_y": 43,
-					"location": [ 3, 5, 42, 45 ]
+					"img": "rain.png",
+					"width": 480,
+					"height": 320,
+					"frames": 16,
+					"animation_speed": 4,
+					"alpha": 128
 				}
 			]
 		}
 	],
 
-	"entrance_x": 62,
-	"entrance_y": 81,
-	"gem_challenge": 0,
-	"time_challenge": 0,
-	"camera_x": 50,
-	"camera_y": 72
+	"entrance_x": 1,
+	"entrance_y": 26,
+
+	"message": "Guards can see 'bout 8 blocks 'head, 1 block 'bove if you're on the ground, & a li'l higher if you're in the air.\n\nBut they can't see you if part o' you is covered by a solid block.",
+
+	"gem_challenge": 9000,
+	"time_challenge": 50
 }
