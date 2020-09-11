@@ -789,6 +789,10 @@ Level Level::getLevel( int id )
 			}
 			else if ( mezun::areStringsEqual( goaltype, "timed_on" ) )
 			{
+				if ( goal_message == U"" )
+				{
+					goal_message = Localization::getCurrentLanguage().getGenericGoalMessage();
+				}
 				goal = ( lvg.HasMember( "time" ) && lvg[ "time" ].IsInt() )
 					? std::make_unique<TimedOnGoal> ( goal_message, lvg[ "time" ].GetInt() )
 					: std::make_unique<TimedOnGoal> ( goal_message );

@@ -28,6 +28,7 @@
 #include "cloud_block_sprite.hpp"
 #include "cloud_monster_sprite.hpp"
 #include "cloud_platform_sprite.hpp"
+#include "cockroach_sprite.hpp"
 #include "cowpoker_sprite.hpp"
 #include "crab_sprite.hpp"
 #include "crane_crate_sprite.hpp"
@@ -863,6 +864,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 218 ):
 			return std::unique_ptr<Sprite> ( new AtticMonsterSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 219 ):
+			return std::unique_ptr<Sprite> ( new CockroachSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

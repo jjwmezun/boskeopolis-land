@@ -248,7 +248,7 @@
         "past_right_edge": "¡Go past the end!",
         "starving": "¡Don’t let your money run out!",
         "stop_on_off": "¡Don’t move when the light’s red!",
-        "survive_time": "¡Last %n seconds without dying!",
+        "survive_time": "¡Survive %n seconds without dying!",
         "timed": "¡Don’t let time run out!",
         "warp": "¡Get out o’ here!",
         "kill_all": "¡Destroy all enemies!"
@@ -322,7 +322,7 @@
         "messages":
         {
             "city-1": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
-            "domestic-1": "Level still under construction. Please grab the Keycane ’bove & get out.",
+            "domestic-1": "This house is ramshackle & has faulty electricity, so these switches last only 30 seconds before shutting off ’gain.",
             "ice-1": "You can bop fish from ’bove while underwater.",
             "city-2": "Paper planes are o’erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o’ their gluish grasp.",
             "ice-2": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o’ her jump a bit o’a boost.",

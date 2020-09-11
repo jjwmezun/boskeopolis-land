@@ -26,6 +26,6 @@
 	"goal":
 	{
 		"type": "timed_on",
-		"time": 18
+		"time": 30
 	}
 }
