@@ -80,6 +80,7 @@ void GroundedSpriteMovement::position( Sprite& sprite ) const
 
 	if ( !sprite.onGround() && !sprite.isJumping() && !sprite.on_ladder_ && !sprite.is_bouncing_ )
 	{
+		sprite.bounce_height_ = 0;
 		sprite.acceleration_y_ = sprite.fall_start_speed_;
 	}
 
