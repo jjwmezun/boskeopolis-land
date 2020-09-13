@@ -20,8 +20,8 @@ void SpringSprite::customUpdate( LevelState& level_state )
 	// In case o' wind.
 	hit_box_.x = original_hit_box_.x;
 	hit_box_.y = original_hit_box_.y + ( 16000 - hit_box_.h );
-	
-	graphics_->current_frame_x_ = floor( ( 16000 - hit_box_.h ) / 1000 ) * 16;
+	graphics_->current_frame_y_ = floor( ( 16000 - hit_box_.h ) / 1000 );
+	graphics_->current_frame_x_ = graphics_->current_frame_y_ * 16;
 };
 
 void SpringSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
@@ -29,8 +29,11 @@ void SpringSprite::customInteract( Collision& my_collision, Collision& their_col
 	if ( them.collideBottomOnly( their_collision, *this ) )
 	{
 		them.bounce( STRENGTH );
-		const int press_down_amount = ( them.vy_ * 10 ) - ( them.vy_ % 1000 );
+		//const int press_down_amount = ( them.vy_ * 10 ) - ( them.vy_ % 1000 );
 		hit_box_.h = 8000;
+		hit_box_.y = original_hit_box_.y + ( 16000 - hit_box_.h );
+		graphics_->current_frame_y_ = floor( ( 16000 - hit_box_.h ) / 1000 );
+		graphics_->current_frame_x_ = graphics_->current_frame_y_ * 16;
 	}
 	else if ( their_collision.collideLeft() )
 	{
