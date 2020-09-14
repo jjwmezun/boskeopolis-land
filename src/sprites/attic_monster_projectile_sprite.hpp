@@ -11,5 +11,6 @@ class AtticMonsterProjectileSprite final : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 
     private:
+		const int rotation_;
         char scratch_[3000];
 };

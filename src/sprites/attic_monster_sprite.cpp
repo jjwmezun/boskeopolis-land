@@ -5,12 +5,13 @@
 #include "health.hpp"
 #include "inventory.hpp"
 #include "level_state.hpp"
+#include "render.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
 AtticMonsterSprite::AtticMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y + 20, 24, 24, {}, 100, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/attic-rat.png", 0, 0, false, false, 0.0, false, -4, -7, 7, 8 ), x + 4, y + 16, 15, 0, {}, 100, 2000, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
     timer_ ( 0 ),
     state_ ( State::DORMANT )
 {};
@@ -27,13 +28,13 @@ void AtticMonsterSprite::customUpdate( LevelState& level_state )
         break;
         case ( State::RISING ):
         {
-            moveUp();
-            if ( hit_box_.y <= original_hit_box_.y - Unit::PixelsToSubPixels( 24 ) )
+            hit_box_.h += Unit::PixelsToSubPixels( 1 );
+            if ( hit_box_.h >= Unit::PixelsToSubPixels( 16 ) )
             {
-                fullStopY();
-                hit_box_.y = original_hit_box_.y - Unit::PixelsToSubPixels( 24 );
+                hit_box_.h = Unit::PixelsToSubPixels( 16 );
                 state_ = State::BEFORE_THROW;
             }
+            hit_box_.y = original_hit_box_.y - hit_box_.h;
         }
         break;
         case ( State::BEFORE_THROW ):
@@ -42,10 +43,19 @@ void AtticMonsterSprite::customUpdate( LevelState& level_state )
             {
                 timer_ = 0;
                 state_ = State::THROW;
+                graphics_->current_frame_x_ = 66;
             }
             else
             {
                 ++timer_;
+                if ( timer_ == 8 )
+                {
+                    graphics_->current_frame_x_ = 22;
+                }
+                else if ( timer_ == 12 )
+                {
+                    graphics_->current_frame_x_ = 44;
+                }
             }
         }
         break;
@@ -63,18 +73,22 @@ void AtticMonsterSprite::customUpdate( LevelState& level_state )
             else
             {
                 ++timer_;
+                if ( timer_ == 4 )
+                {
+                    graphics_->current_frame_x_ = 0;
+                }
             }
         }
         break;
         case ( State::LOWERING ):
         {
-            moveDown();
-            if ( hit_box_.y >= original_hit_box_.y - Unit::PixelsToSubPixels( 1 ) )
+            hit_box_.h -= Unit::PixelsToSubPixels( 1 );
+            if ( hit_box_.h <= 0 )
             {
-                fullStopY();
-                hit_box_.y = original_hit_box_.y;
+                hit_box_.h = 0;
                 state_ = State::DELAYED;
             }
+            hit_box_.y = original_hit_box_.y - hit_box_.h;
         }
         break;
         case ( State::DELAYED ):
@@ -95,9 +109,10 @@ void AtticMonsterSprite::customUpdate( LevelState& level_state )
 
 void AtticMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-
-    if ( them.hasType( SpriteType::HERO ) )
+    if ( !isDead() && them.hasType( SpriteType::HERO ) )
     {
+        direction_x_ = ( them.hit_box_.x > rightSubPixels() ) ? Direction::Horizontal::RIGHT : Direction::Horizontal::LEFT;
+        flipGraphicsOnRight();
         switch ( state_ )
         {
             case ( State::DORMANT ):
@@ -110,8 +125,7 @@ void AtticMonsterSprite::customInteract( Collision& my_collision, Collision& the
             break;
             case ( State::THROW ):
             {
-                const Direction::Horizontal direction = ( them.hit_box_.x > rightSubPixels() ) ? Direction::Horizontal::RIGHT : Direction::Horizontal::LEFT;
-                level_state.sprites().spawn( std::unique_ptr<AtticMonsterProjectileSprite> ( new AtticMonsterProjectileSprite( centerXPixels(), centerYPixels(), direction ) ) );
+                level_state.sprites().spawn( std::unique_ptr<AtticMonsterProjectileSprite> ( new AtticMonsterProjectileSprite( centerXPixels(), centerYPixels(), direction_x_ ) ) );
                 state_ = State::AFTER_THROW;
             }
             break;
@@ -155,11 +169,35 @@ bool AtticMonsterSprite::testIsNear( const Sprite& them ) const
 
 void AtticMonsterSprite::reset()
 {
-    vy_ = 0;
-    acceleration_y_ = 0;
-    is_dead_ = dead_no_animation_ = death_finished_ = false;
-    changeMovement( SpriteMovement::Type::FLOATING );
-    state_ = State::DORMANT;
-    hit_box_ = original_hit_box_;
-    sprite_interact_ = true;
+    if ( !isDead() )
+    {
+        vy_ = 0;
+        acceleration_y_ = 0;
+        is_dead_ = dead_no_animation_ = death_finished_ = false;
+        changeMovement( SpriteMovement::Type::FLOATING );
+        state_ = State::DORMANT;
+        hit_box_ = original_hit_box_;
+        sprite_interact_ = true;
+    }
+};
+
+void AtticMonsterSprite::render( Camera& camera, bool priority )
+{
+    if ( !priority )
+    {
+        Render::renderObject( "sprites/attic-rat.png", { 88, 18, 22, 3 }, { camera.relativeX( xPixels() - 4 ), camera.relativeY( Unit::SubPixelsToPixels( original_hit_box_.y ) - 3 ), 22, 3 } );
+        graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+        Render::renderObject( "sprites/attic-rat.png", { 88, 21, 22, 3 }, { camera.relativeX( xPixels() - 4 ), camera.relativeY( Unit::SubPixelsToPixels( original_hit_box_.y ) - 1 ), 22, 3 } );
+    }
+};
+
+void AtticMonsterSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+{
+    graphics_->current_frame_x_ = 110;
+    hit_box_.h -= Unit::PixelsToSubPixels( 1 );
+    if ( hit_box_.h <= -8000 )
+    {
+        hit_box_.h = -8000;
+    }
+    hit_box_.y = original_hit_box_.y - hit_box_.h;
 };
