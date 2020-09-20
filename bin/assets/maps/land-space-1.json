@@ -48,9 +48,9 @@
          "value":"CENTER"
         }, 
         {
-         "name":"moon_gravity",
-         "type":"bool",
-         "value":true
+         "name":"gravity",
+         "type":"int",
+         "value":650
         }, 
         {
          "name":"music",

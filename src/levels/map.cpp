@@ -96,7 +96,7 @@ Map Map::mapFromPath
 		int water_effect_height = 0;
 		std::string water_effect_type = "NORMAL";
 		int wind_strength = 0;
-		bool moon_gravity = false;
+		int gravity = Sprite::GRAVITY_TOP_SPEED_NORMAL;
 		bool show_on_off = false;
 		int lightning_flash_color = 0;
 		std::string music = "";
@@ -457,11 +457,11 @@ Map Map::mapFromPath
 					}
 				}
 
-				else if ( mezun::areStringsEqual( name, "moon_gravity" ) )
+				else if ( mezun::areStringsEqual( name, "gravity" ) )
 				{
-					if ( value.IsBool() )
+					if ( value.IsInt() )
 					{
-						moon_gravity = value.GetBool();
+						gravity = value.GetInt();
 					}
 				}
 
@@ -597,7 +597,7 @@ Map Map::mapFromPath
 			blocks_work_offscreen,
 			loop_sides,
 			wind_strength,
-			moon_gravity,
+			gravity,
 			show_on_off,
 			lightning_flash_color,
 			music,
@@ -631,7 +631,7 @@ Map::Map
 	bool blocks_work_offscreen,
 	bool loop_sides,
 	int wind_strength,
-	bool moon_gravity,
+	int gravity,
 	bool show_on_off,
 	int lightning_flash_color,
 	std::string music,
@@ -662,7 +662,7 @@ Map::Map
 	blocks_work_offscreen_ ( blocks_work_offscreen ),
 	loop_sides_ ( loop_sides ),
 	wind_strength_ ( wind_strength ),
-	moon_gravity_ ( moon_gravity ),
+	gravity_ ( gravity ),
 	show_on_off_ ( show_on_off ),
 	lightning_flash_color_ ( lightning_flash_color ),
 	current_bg_ ( palette.bgN() ),
@@ -708,7 +708,7 @@ Map::Map( Map&& m ) noexcept
 	blocks_work_offscreen_ ( m.blocks_work_offscreen_ ),
 	loop_sides_ ( m.loop_sides_ ),
 	wind_strength_ ( m.wind_strength_ ),
-	moon_gravity_ ( m.moon_gravity_ ),
+	gravity_ ( m.gravity_ ),
 	changed_ ( m.changed_ ),
 	show_on_off_ ( m.show_on_off_ ),
 	lightning_flash_color_ ( m.lightning_flash_color_ ),
@@ -744,7 +744,7 @@ Map::Map( const Map& c )
 	blocks_work_offscreen_ ( c.blocks_work_offscreen_ ),
 	loop_sides_ ( c.loop_sides_ ),
 	wind_strength_ ( c.wind_strength_ ),
-	moon_gravity_ ( c.moon_gravity_ ),
+	gravity_ ( c.gravity_ ),
 	changed_ ( c.changed_ ),
 	show_on_off_ ( c.show_on_off_ ),
 	lightning_flash_color_ ( c.lightning_flash_color_ ),

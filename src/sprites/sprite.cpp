@@ -51,15 +51,19 @@ Sprite::Sprite
 	original_hit_box_ ( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y ), Unit::PixelsToSubPixels( width ), Unit::PixelsToSubPixels( height ) } ),
 	graphics_ ( std::move( graphics ) ),
 	types_ ( type ),
-	jump_start_speed_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? jump_top_speed / 4 : jump_start_speed ),
-	jump_top_speed_normal_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? jump_top_speed * 0.90 : jump_top_speed ),
-	jump_top_speed_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? jump_top_speed * 0.90 : jump_top_speed ),
-	start_speed_walk_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? start_speed / 1.5 : start_speed ),
-	top_speed_walk_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? top_speed / 1.5 : top_speed ),
-	start_speed_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? start_speed / 1.5 : start_speed ),
-	top_speed_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? top_speed / 1.5 : top_speed ),
-	start_speed_run_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? start_speed / 1.5 : start_speed ),
-	top_speed_run_ ( ( gravity_top_speed_ == GRAVITY_TOP_SPEED_MOON ) ? top_speed * ( 2.0 / 1.5 ) : top_speed * 2 ),
+	base_jump_start_speed_ ( jump_start_speed ),
+	base_jump_top_speed_ ( jump_top_speed ),
+	base_start_speed_ ( start_speed ),
+	base_top_speed_ ( top_speed ),
+	jump_start_speed_ ( jump_start_speed ),
+	jump_top_speed_normal_ ( jump_top_speed ),
+	jump_top_speed_        ( jump_top_speed ),
+	start_speed_walk_ ( start_speed ),
+	start_speed_      ( start_speed ),
+	start_speed_run_  ( start_speed ),
+	top_speed_walk_ ( ( int )( std::floor( ( double )( top_speed ) * ( 1.0 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity_top_speed_ ) * ( 1.0 / 6700.0 ) ) ) ) ) ),
+	top_speed_      ( ( int )( std::floor( ( double )( top_speed ) * ( 1.0 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity_top_speed_ ) * ( 1.0 / 6700.0 ) ) ) ) ) ),
+	top_speed_run_  ( ( int )( std::floor( ( double )( top_speed ) * ( 1.0 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity_top_speed_ ) * ( 1.0 / 6700.0 ) ) ) ) ) * 2 ),
 	direction_x_ ( direction_x ),
 	direction_x_orig_ ( direction_x ),
 	direction_y_ ( direction_y ),
@@ -68,7 +72,7 @@ Sprite::Sprite
 	movement_ ( getMovement( physics_state ) ),
 	camera_movement_ ( camera_movement ),
 	despawn_when_dead_ ( despawn_when_dead ),
-	block_interact_ ( block_interact ),
+	block_interact_ ( block_interact ), 
 	sprite_interact_ ( sprite_interact ),
 	bounce_ ( bounce ),
 	on_ground_padding_ (),
@@ -88,21 +92,17 @@ Sprite::Sprite
 	acceleration_y_ ( 0 ),
 	death_timer_ (),
 	bounce_height_ ( 0 ),
-	layer_ ( 1 )
+	layer_ ( 1 ),
+	gravity_modifier_ ( 1.0 )
 {};
 
 Sprite::~Sprite() {};
 
-void Sprite::moonGravityOn()
+void Sprite::setGravity( int gravity )
 {
-	gravity_start_speed_ = GRAVITY_START_SPEED_MOON;
-	gravity_top_speed_ = GRAVITY_TOP_SPEED_MOON;
-};
-
-void Sprite::moonGravityOff()
-{
-	gravity_start_speed_ = GRAVITY_START_SPEED_NORMAL;
-	gravity_top_speed_ = GRAVITY_TOP_SPEED_NORMAL;
+	gravity_top_speed_ = gravity;
+	gravity_start_speed_ = ( int )( std::floor( ( double )( gravity ) / 4000.0 * ( double )( GRAVITY_START_SPEED_NORMAL ) ) );
+	traction_ = 1.2 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity ) * ( ( 1.0005 - 1.2 ) / 3350.0 ) );
 };
 
 bool Sprite::fellInBottomlessPit( const Map& lvmap ) const
@@ -384,14 +384,14 @@ void Sprite::bounce( int amount )
 
 void Sprite::slowFall()
 {
-	fall_start_speed_ = gravity_start_speed_ * .75;
-	fall_top_speed_ = gravity_top_speed_ * .85;
+	fall_start_speed_ = ( int )( std::floor( ( double )( gravity_start_speed_ ) * gravity_modifier_ * 0.75 ) );
+	fall_top_speed_ = ( int )( std::floor( ( double )( gravity_top_speed_ ) * gravity_modifier_ * 0.85 ) );
 };
 
 void Sprite::fastFall()
 {
-	fall_start_speed_ = gravity_start_speed_;
-	fall_top_speed_ = gravity_top_speed_;
+	fall_start_speed_ = ( int )( std::floor( ( double )( gravity_start_speed_ ) * gravity_modifier_ ) );
+	fall_top_speed_ = ( int )( std::floor( ( double )( gravity_top_speed_ ) * gravity_modifier_ ) );
 };
 
 bool Sprite::isRunning() const

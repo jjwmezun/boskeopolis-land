@@ -1,0 +1,22 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 2,
+		"y": 1
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "right_gravity"
+            },
+            "conditions":
+            [
+                { "type": "hero" },
+                { "type": "collide_any" }
+            ]
+		}
+	]
+}

@@ -980,15 +980,6 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 
 	Sprite::resistance_x_ = lvmap.wind_strength_;
 
-	if ( lvmap.moon_gravity_ )
-	{
-		Sprite::moonGravityOn();
-	}
-	else
-	{
-		Sprite::moonGravityOff();
-	}
-
 	if ( lvmap.slippery_ )
 	{
 		Sprite::traction_ = Sprite::TRACTION_ICY;
@@ -997,6 +988,8 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 	{
 		Sprite::traction_ = Sprite::TRACTION_NORMAL;
 	}
+
+	Sprite::setGravity( lvmap.gravity_ );
 
 	if ( hero_ == nullptr )
 	{

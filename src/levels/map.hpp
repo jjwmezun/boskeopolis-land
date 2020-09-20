@@ -52,12 +52,12 @@ class Map final
 		const int scroll_loop_width_;
 		const int lightning_flash_color_;
 		const int ui_bg_color_;
+		const int gravity_;
 		int current_loop_;
 		int current_bg_;
 		const bool blocks_work_offscreen_;
 		const bool loop_sides_;
 		const bool slippery_;
-		const bool moon_gravity_;
 		const bool show_on_off_;
 		const bool warp_on_fall_;
 		const bool watery_;
@@ -132,7 +132,7 @@ class Map final
 			bool blocks_work_offscreen,
 			bool loop_sides,
 			int wind_strength,
-			bool moon_gravity,
+			int gravity,
 			bool show_on_off,
 			int lightning_flash_color,
 			std::string music,

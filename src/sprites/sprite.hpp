@@ -124,11 +124,8 @@ class Sprite : public Object
 
 		static constexpr int GRAVITY_START_SPEED_NORMAL = 500;
 		static constexpr int GRAVITY_TOP_SPEED_NORMAL = 4000;
-		static constexpr int GRAVITY_START_SPEED_MOON = 200;
-		static constexpr int GRAVITY_TOP_SPEED_MOON = 1000;
 
-		static void moonGravityOn();
-		static void moonGravityOff();
+		static void setGravity( int gravity );
 
 		void update( LevelState& level_state );
 		virtual void render( Camera& camera, bool priority = false );
@@ -317,6 +314,10 @@ class Sprite : public Object
 		int vy_;
 		int x_prev_;
 		int y_prev_;
+		int base_jump_start_speed_;
+		int base_jump_top_speed_;
+		int base_start_speed_;
+		int base_top_speed_;
 		int start_speed_;
 		int top_speed_;
 		int top_speed_upward_;
@@ -343,6 +344,7 @@ class Sprite : public Object
 		std::unique_ptr<SpriteComponent> component_;
 		const std::vector<SpriteType> types_;
 		const double bounce_;
+		double gravity_modifier_;
 		const sdl2::SDLRect original_hit_box_;
 		TimerSimpleT<32, false> death_timer_;
 		TimerSimpleT<4, false> on_ground_padding_;
