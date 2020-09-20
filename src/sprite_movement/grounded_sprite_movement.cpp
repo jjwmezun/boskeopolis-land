@@ -42,9 +42,19 @@ void GroundedSpriteMovement::jump( Sprite& sprite ) const
 		}
 	}
 
-	if ( sprite.vy_ <= -sprite.jump_top_speed_ )
+	if ( sprite.isUpsideDown() )
 	{
-		sprite.jump_start_ = false;
+		if ( sprite.vy_ >= -sprite.jump_top_speed_ )
+		{
+			sprite.jump_start_ = false;
+		}
+	}
+	else
+	{
+		if ( sprite.vy_ <= -sprite.jump_top_speed_ )
+		{
+			sprite.jump_start_ = false;
+		}
 	}
 };
 
@@ -135,21 +145,32 @@ void GroundedSpriteMovement::startJump( Sprite& sprite ) const
 
 void GroundedSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) const
 {
-	if ( sprite.vy_ > 0 )
+	if ( sprite.isUpsideDown() )
 	{
 		sprite.acceleration_y_ = 0;
-
-		if ( !sprite.onGround() )
+		sprite.hit_box_.y -= sprite.vy_;
+		sprite.vy_ = 0;
+		sprite.hit_box_.y -= overlap;
+		sprite.jump_end_ = true;
+	}
+	else
+	{
+		if ( sprite.vy_ > 0 )
 		{
-			sprite.hit_box_.y -= overlap;
+			sprite.acceleration_y_ = 0;
+
+			if ( !sprite.onGround() )
+			{
+				sprite.hit_box_.y -= overlap;
+			}
+
+			sprite.on_ground_ = true;
 		}
 
-		sprite.on_ground_ = true;
-	}
-
-	if ( sprite.on_ladder_ )
-	{
-		sprite.hit_box_.y -= sprite.LADDER_SPEED;
+		if ( sprite.on_ladder_ )
+		{
+			sprite.hit_box_.y -= sprite.LADDER_SPEED;
+		}
 	}
 
 	sprite.collide_top_ = true;
@@ -157,11 +178,33 @@ void GroundedSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) c
 
 void GroundedSpriteMovement::collideStopYTop( Sprite& sprite, int overlap ) const
 {
-	sprite.acceleration_y_ = 0;
-	sprite.hit_box_.y += sprite.vy_;
-	sprite.vy_ = 0;
-	sprite.hit_box_.y += overlap;
-	sprite.jump_end_ = true;
+	if ( sprite.isUpsideDown() )
+	{
+		if ( sprite.vy_ < 0 )
+		{
+			sprite.acceleration_y_ = 0;
+
+			if ( !sprite.onGround() )
+			{
+				sprite.hit_box_.y += overlap;
+			}
+
+			sprite.on_ground_ = true;
+		}
+
+		if ( sprite.on_ladder_ )
+		{
+			sprite.hit_box_.y += sprite.LADDER_SPEED;
+		}
+	}
+	else
+	{
+		sprite.acceleration_y_ = 0;
+		sprite.hit_box_.y += sprite.vy_;
+		sprite.vy_ = 0;
+		sprite.hit_box_.y += overlap;
+		sprite.jump_end_ = true;
+	}
 	sprite.collide_bottom_ = true;
 };
 
@@ -235,8 +278,17 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const s
 	(
 		me.leftSubPixels() < them.right() &&
 		me.rightSubPixels() > them.left() &&
-		me.topSubPixels() + top_padding < them.bottom() &&
-		me.bottomSubPixels() - 4000 > them.top() // Keep character from getting caught on sides o' floor blocks.
+		(
+			( me.isUpsideDown() )
+				? me.topSubPixels() + 4000 < them.bottom()
+				: me.topSubPixels() + top_padding < them.bottom()
+		) &&
+		(
+			( me.isUpsideDown() )
+				? me.bottomSubPixels() - top_padding > them.top()
+				: me.bottomSubPixels() - 4000 > them.top()
+		)
+		// Keep character from getting caught on sides o' floor blocks.
 	)
 	{
 		if ( me.centerXSubPixels() < them.centerWidth() )

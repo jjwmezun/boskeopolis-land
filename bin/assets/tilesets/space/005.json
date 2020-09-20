@@ -11,8 +11,14 @@
 		{
 			"component":
 			{
-				"type": "solid"
-			}
+				"type": "set_gravity",
+				"value": -1.0
+            },
+            "conditions":
+            [
+                { "type": "hero" },
+                { "type": "collide_any" }
+            ]
 		}
 	]
 }

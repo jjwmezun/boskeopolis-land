@@ -61,6 +61,7 @@ Sprite::Sprite
 	start_speed_walk_ ( start_speed ),
 	start_speed_      ( start_speed ),
 	start_speed_run_  ( start_speed ),
+	// These algorithms are just set so that normal gravity is 1x & 650 gravity is 1.5x, with values in between getting percentages in between.
 	top_speed_walk_ ( ( int )( std::floor( ( double )( top_speed ) * ( 1.0 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity_top_speed_ ) * ( 1.0 / 6700.0 ) ) ) ) ) ),
 	top_speed_      ( ( int )( std::floor( ( double )( top_speed ) * ( 1.0 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity_top_speed_ ) * ( 1.0 / 6700.0 ) ) ) ) ) ),
 	top_speed_run_  ( ( int )( std::floor( ( double )( top_speed ) * ( 1.0 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity_top_speed_ ) * ( 1.0 / 6700.0 ) ) ) ) ) * 2 ),
@@ -93,15 +94,36 @@ Sprite::Sprite
 	death_timer_ (),
 	bounce_height_ ( 0 ),
 	layer_ ( 1 ),
-	gravity_modifier_ ( 1.0 )
+	gravity_modifier_ ( 1.0 ),
+	fall_start_speed_ ( gravity_start_speed_ ),
+	fall_top_speed_ ( gravity_top_speed_ )
 {};
 
 Sprite::~Sprite() {};
+
+void Sprite::setGravityModifier( double gravity )
+{
+	if ( gravity > gravity_modifier_ + 0.000001 || gravity < gravity_modifier_ - 0.000001 )
+	{
+		gravity_modifier_ = gravity;
+		jump_start_speed_ = ( int )( std::floor( ( double )( base_jump_start_speed_ ) * gravity ) );
+		jump_top_speed_normal_ = jump_top_speed_ = ( int )( std::floor( ( double )( base_jump_top_speed_ ) * gravity ) );
+		fall_start_speed_ = ( int )( std::floor( ( double )( gravity_start_speed_ ) * gravity ) );
+		fall_top_speed_ = ( int )( std::floor( ( double )( gravity_top_speed_ ) * gravity ) );
+		top_speed_upward_ = 0;
+		if ( graphics_ )
+		{
+			graphics_->flip_y_ = isUpsideDown();
+		}
+	}
+};
 
 void Sprite::setGravity( int gravity )
 {
 	gravity_top_speed_ = gravity;
 	gravity_start_speed_ = ( int )( std::floor( ( double )( gravity ) / 4000.0 * ( double )( GRAVITY_START_SPEED_NORMAL ) ) );
+
+	// Basically set so traction is 1.2 with normal gravity & 1.0005 for 650 with middle values getting middle outcomes.
 	traction_ = 1.2 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity ) * ( ( 1.0005 - 1.2 ) / 3350.0 ) );
 };
 
@@ -259,16 +281,37 @@ void Sprite::positionY()
 {
 	vy_ += acceleration_y_;
 
-	if ( vy_ > top_speed_downward_ )
+	if ( isUpsideDown() )
 	{
-		vy_ = top_speed_downward_;
+		if ( vy_ < top_speed_downward_ )
+		{
+			vy_ = top_speed_downward_;
+		}
+	}
+	else
+	{
+		if ( vy_ > top_speed_downward_ )
+		{
+			vy_ = top_speed_downward_;
+		}
 	}
 
-	if ( vy_ < -top_speed_upward_ )
+	if ( isUpsideDown() )
 	{
-		vy_ = -top_speed_upward_;
+		if ( vy_ > -top_speed_upward_ )
+		{
+			vy_ = -top_speed_upward_;
+		}
+	}
+	else
+	{
+		if ( vy_ < -top_speed_upward_ )
+		{
+			vy_ = -top_speed_upward_;
+		}
 	}
 
+	printf( "%d : %d : %d\n", top_speed_downward_, -top_speed_upward_, vy_ );
 	hit_box_.y += vy_;
 };
 
@@ -996,8 +1039,11 @@ void Sprite::duck( const DuckData& duck_data )
 		// Hacky way to make player warp to the right position after height changes.
 		if ( !isDucking() )
 		{
-			hit_box_.y += Unit::PixelsToSubPixels( duck_data.y_change );
-			graphics_->y_adjustment_ = duck_data.gfx_y_change;
+			hit_box_.y += ( isUpsideDown() ) ? 0 : Unit::PixelsToSubPixels( duck_data.y_change );
+			if ( !isUpsideDown() )
+			{
+				graphics_->y_adjustment_ = duck_data.gfx_y_change;
+			}
 			graphics_->h_adjustment_ = duck_data.gfx_h_change;
 		}
 		is_ducking_ = true;
@@ -1010,7 +1056,7 @@ void Sprite::unduck( const UnDuckData& unduck_data )
 	// Hacky way to keep player from falling through ground after gaining height from unducking.
 	if ( isDucking() )
 	{
-		hit_box_.y -= Unit::PixelsToSubPixels( unduck_data.y_change );
+		hit_box_.y -= ( isUpsideDown() ) ? 0 : Unit::PixelsToSubPixels( unduck_data.y_change );
 		graphics_->y_adjustment_ = unduck_data.gfx_y_change;
 		graphics_->h_adjustment_ = unduck_data.gfx_h_change;
 	}
@@ -1049,4 +1095,9 @@ bool Sprite::isLeftOf( const Object& them ) const
 bool Sprite::isRightOf( const Object& them ) const
 {
 	return hit_box_.x > them.rightSubPixels();
+};
+
+bool Sprite::isUpsideDown() const
+{
+	return gravity_modifier_ < 0.0;
 };

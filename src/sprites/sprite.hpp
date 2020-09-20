@@ -126,6 +126,7 @@ class Sprite : public Object
 		static constexpr int GRAVITY_TOP_SPEED_NORMAL = 4000;
 
 		static void setGravity( int gravity );
+		void setGravityModifier( double gravity );
 
 		void update( LevelState& level_state );
 		virtual void render( Camera& camera, bool priority = false );
@@ -268,6 +269,7 @@ class Sprite : public Object
 
 		bool isLeftOf( const Object& them ) const;
 		bool isRightOf( const Object& them ) const;
+		bool isUpsideDown() const;
 
 		static const SpriteMovement floating_;
 		static const GroundedSpriteMovement grounded_;
@@ -324,8 +326,8 @@ class Sprite : public Object
 		int top_speed_downward_;
 		int acceleration_x_;
 		int acceleration_y_;
-		int fall_start_speed_ = gravity_start_speed_;
-		int fall_top_speed_ = gravity_top_speed_;
+		int fall_start_speed_;
+		int fall_top_speed_;
 		int jump_start_speed_;
 		int jump_top_speed_normal_;
 		int jump_top_speed_;

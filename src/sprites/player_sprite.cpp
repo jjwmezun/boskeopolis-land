@@ -318,7 +318,7 @@ void PlayerSprite::adjustJumpSpeed()
 {
 	if ( isDucking() )
 	{
-		jump_top_speed_ = JUMP_DUCK_TOP_SPEED;
+		jump_top_speed_ = ( isUpsideDown() ) ? -JUMP_DUCK_TOP_SPEED : JUMP_DUCK_TOP_SPEED;
 	}
 	else
 	{
@@ -437,7 +437,7 @@ void PlayerSprite::handleDuckingAndSliding( const BlockSystem& blocks, EventSyst
 
 void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, EventSystem& events )
 {
-	if ( input_->action1() && !( events.testOnConveyorBelt() && isDucking() && blocksJustAbove( blocks ) ) )
+	if ( input_->action1() && !( events.testOnConveyorBelt() && ( ( !isUpsideDown() && isDucking() && blocksJustAbove( blocks ) ) || ( isUpsideDown() && isDucking() && blocksJustBelow( blocks ) ) ) ) )
 	{
 		jump();
 		if ( jump_start_ && !jump_end_ )
@@ -483,7 +483,7 @@ void PlayerSprite::handleJumpingAndFalling( const BlockSystem& blocks, EventSyst
 
 void PlayerSprite::tryUnduck( const BlockSystem& blocks )
 {
-	if ( !blocksJustAbove( blocks ) )
+	if ( ( !isUpsideDown() && !blocksJustAbove( blocks ) ) || ( isUpsideDown() && !blocksJustBelow( blocks ) ) )
 	{
 		unduck( unduck_data_ );
 	}

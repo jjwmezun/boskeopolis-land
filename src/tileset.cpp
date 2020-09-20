@@ -28,6 +28,7 @@
 #include "block_component_money.hpp"
 #include "block_component_push_down.hpp"
 #include "block_component_secret_goal.hpp"
+#include "block_component_set_gravity.hpp"
 #include "block_component_sewer_door.hpp"
 #include "block_component_shmup_bullet.hpp"
 #include "block_component_single_use.hpp"
@@ -595,6 +596,17 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "sewer_door" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSewerDoor> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "set_gravity" ) )
+					{
+						if
+						(
+							comp_obj.HasMember( "value" ) &&
+							comp_obj[ "value" ].IsDouble()
+						)
+						{
+							components.emplace_back( std::make_unique<BlockComponentSetGravity> ( comp_obj[ "value" ].GetDouble() ) );
+						}
 					}
 					else if ( mezun::areStringsEqual( comp_type, "hole" ) )
 					{

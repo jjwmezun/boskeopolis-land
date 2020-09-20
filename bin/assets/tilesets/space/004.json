@@ -10,7 +10,8 @@
 		{
 			"component":
 			{
-				"type": "right_gravity"
+				"type": "set_gravity",
+				"value": 1.0
             },
             "conditions":
             [
