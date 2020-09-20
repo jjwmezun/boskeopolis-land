@@ -53,8 +53,6 @@ Sprite::Sprite
 	types_ ( type ),
 	base_jump_start_speed_ ( jump_start_speed ),
 	base_jump_top_speed_ ( jump_top_speed ),
-	base_start_speed_ ( start_speed ),
-	base_top_speed_ ( top_speed ),
 	jump_start_speed_ ( jump_start_speed ),
 	jump_top_speed_normal_ ( jump_top_speed ),
 	jump_top_speed_        ( jump_top_speed ),

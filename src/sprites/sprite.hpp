@@ -318,8 +318,6 @@ class Sprite : public Object
 		int y_prev_;
 		int base_jump_start_speed_;
 		int base_jump_top_speed_;
-		int base_start_speed_;
-		int base_top_speed_;
 		int start_speed_;
 		int top_speed_;
 		int top_speed_upward_;
