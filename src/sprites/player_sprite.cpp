@@ -277,11 +277,11 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 		{
 			if ( isJumping() )
 			{
-				acceleration_y_ = -LADDER_SPEED * 2;
+				acceleration_y_ = ( ( isUpsideDown() ) ? LADDER_SPEED : -LADDER_SPEED ) * 2;
 			}
 			else
 			{
-				acceleration_y_ = -LADDER_SPEED;
+				acceleration_y_ = ( isUpsideDown() ) ? LADDER_SPEED : -LADDER_SPEED;
 			}
 		}
 	}
@@ -289,7 +289,7 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 	{
 		if ( input_->down() )
 		{
-			acceleration_y_ = LADDER_SPEED;
+			acceleration_y_ = ( isUpsideDown() ) ? -LADDER_SPEED : LADDER_SPEED;
 		}
 		else
 		{

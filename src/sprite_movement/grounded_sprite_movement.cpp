@@ -148,7 +148,7 @@ void GroundedSpriteMovement::collideStopYBottom( Sprite& sprite, int overlap ) c
 	if ( sprite.isUpsideDown() )
 	{
 		sprite.acceleration_y_ = 0;
-		sprite.hit_box_.y -= sprite.vy_;
+		sprite.hit_box_.y += sprite.vy_;
 		sprite.vy_ = 0;
 		sprite.hit_box_.y -= overlap;
 		sprite.jump_end_ = true;
@@ -238,12 +238,12 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const s
 	int overlap_y_top    = 0;
 	int overlap_y_bottom = 0;
 
-	const int left_right_padding = 4000;
+	static constexpr int LEFT_RIGHT_PADDING = 4000;
 	// Keep character from catching on walls moving vertically.
 	if
 	(
-		me.leftSubPixels() + left_right_padding < them.right() &&
-		me.rightSubPixels() - left_right_padding > them.left() &&
+		me.leftSubPixels() + LEFT_RIGHT_PADDING < them.right() &&
+		me.rightSubPixels() - LEFT_RIGHT_PADDING > them.left() &&
 		me.topSubPixels() < them.bottom() &&
 		me.bottomSubPixels() > them.top()
 	)
@@ -255,16 +255,32 @@ const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const s
 	}
 
 	// But allow character to stand on the tip-ends o' blocks.
-	if
-	(
-		me.leftSubPixels() + 1000 < them.right() &&
-		me.rightSubPixels() - 3000 > them.left() &&
-		me.topSubPixels() < them.bottom() &&
-		me.bottomSubPixels() > them.top()
-	)
+
+	if ( !me.isUpsideDown() && me.centerYSubPixels() < them.centerHeight() )
 	{
-		if ( me.centerYSubPixels() < them.centerHeight() )
+		if
+		(
+			me.leftSubPixels() + 1000 < them.right() &&
+			me.rightSubPixels() - 3000 > them.left() &&
+			me.topSubPixels() < them.bottom() &&
+			me.bottomSubPixels() > them.top()
+		)
+		{
 			overlap_y_bottom = me.bottomSubPixels() - them.top();
+		}
+	}
+	else if ( me.isUpsideDown() && me.centerYSubPixels() > them.centerHeight() )
+	{
+		if
+		(
+			me.leftSubPixels() + 1000 < them.right() &&
+			me.rightSubPixels() - 3000 > them.left() &&
+			me.topSubPixels() < them.bottom() &&
+			me.bottomSubPixels() > them.top()
+		)
+		{
+			overlap_y_top = them.bottom() - me.topSubPixels();
+		}
 	}
 
 	// 8000 padding needed to keep Autumn from thunking sideways into ceiling while hitting it from below.

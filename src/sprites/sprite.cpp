@@ -310,8 +310,6 @@ void Sprite::positionY()
 			vy_ = -top_speed_upward_;
 		}
 	}
-
-	printf( "%d : %d : %d\n", top_speed_downward_, -top_speed_upward_, vy_ );
 	hit_box_.y += vy_;
 };
 
