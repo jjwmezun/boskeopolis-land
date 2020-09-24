@@ -34,22 +34,20 @@ void SpringSprite::customInteract( Collision& my_collision, Collision& their_col
 		hit_box_.y = original_hit_box_.y + ( 16000 - hit_box_.h );
 		graphics_->current_frame_y_ = floor( ( 16000 - hit_box_.h ) / 1000 );
 		graphics_->current_frame_x_ = graphics_->current_frame_y_ * 16;
+		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
 	else if ( their_collision.collideLeft() )
 	{
-		them.bounceLeft( their_collision.overlapXLeft() );
+		them.collideStopXLeft( their_collision.overlapXLeft() );
+		//them.bounceLeft( their_collision.overlapXLeft() );
 	}
 	else if ( their_collision.collideRight() )
 	{
-		them.bounceRight( their_collision.overlapXRight() );
+		them.collideStopXRight( their_collision.overlapXRight() );
+		//them.bounceRight( their_collision.overlapXRight() );
 	}
 	else if ( their_collision.collideTop() )
 	{
 		them.bounceDownward( their_collision.overlapYTop() );
-	}
-
-	if ( their_collision.collideAny() && them.hasType( SpriteType::HERO ) )
-	{
-		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
 };

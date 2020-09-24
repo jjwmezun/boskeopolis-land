@@ -34,10 +34,11 @@
         }
 	],
 
-	"entrance_x": 53,
+	"entrance_x": 52,
 	"entrance_y": 62,
 	"gem_challenge": 40000,
 	"time_challenge": 50,
+	"camera_x": 52,
 
 	"goal":
 	{

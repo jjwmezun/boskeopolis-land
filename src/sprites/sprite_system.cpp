@@ -1201,6 +1201,7 @@ void SpriteSystem::renderSuperPriority( Camera& camera )
 			sprites_.at( i )->renderSuperPriority( camera );
 		}
 	}
+	hero_->renderSuperPriority( camera );
 };
 
 Sprite& SpriteSystem::hero()

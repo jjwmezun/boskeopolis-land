@@ -524,3 +524,19 @@ bool PlayerSprite::isLookingUp() const
 {
 	return is_looking_up_;
 };
+
+void PlayerSprite::render( Camera& camera, bool priority )
+{
+	if ( !isDead() || dead_no_animation_ )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	}
+};
+
+void PlayerSprite::renderSuperPriority( Camera& camera )
+{
+	if ( isDead() && !dead_no_animation_ )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
+	}
+};

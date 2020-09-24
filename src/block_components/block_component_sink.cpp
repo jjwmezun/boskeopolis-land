@@ -13,6 +13,6 @@ void BlockComponentSink::interact( const Collision& collision, Sprite& sprite, B
 	
 	if ( collision.collideTop() )
 	{
-		sprite.kill();
+		sprite.killNoAnimation();
 	}
 };
