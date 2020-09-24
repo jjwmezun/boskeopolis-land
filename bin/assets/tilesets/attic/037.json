@@ -4,6 +4,6 @@
 		"type": "sprite",
 		"x": 6,
 		"y": 0,
-        "rotation": true
+        "rotation": 90
 	}
 }

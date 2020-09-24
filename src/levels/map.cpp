@@ -39,6 +39,7 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 			const std::string fg_line = std::string( std::string( "FG" ) + std::to_string( i ) );
 			const std::string fade_fg_line = std::string( std::string( "Fade FG" ) + std::to_string( i ) );
 			const std::string bg_img_line = std::string( std::string( "BGIMG" ) + std::to_string( i ) );
+			const std::string fg_img_line = std::string( std::string( "FGIMG" ) + std::to_string( i ) );
 
 			if ( layer_name == bg_line )
 			{
@@ -55,6 +56,10 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 			else if ( layer_name == bg_img_line )
 			{
 				return { LayerType::BACKGROUND_IMAGE, i };
+			}
+			else if ( layer_name == fg_img_line )
+			{
+				return { LayerType::FOREGROUND_IMAGE, i };
 			}
 		}
 	}
@@ -78,6 +83,7 @@ Map Map::mapFromPath
 		std::vector<std::vector<int>> bg_block_layers = {};
 		std::vector<std::vector<int>> bg_block_img_layers = {};
 		std::vector<std::vector<int>> fg_block_layers = {};
+		std::vector<std::vector<int>> fg_block_img_layers = {};
 		std::vector<std::vector<int>> fade_fg_block_layers = {};
 		std::vector<std::unique_ptr<MapLayer>> foregrounds;
 
@@ -196,6 +202,13 @@ Map Map::mapFromPath
 							}
 							bg_block_img_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
 						break;
+						case ( LayerType::FOREGROUND_IMAGE ):
+							while ( fg_block_img_layers.size() < layer_info.n )
+							{
+								fg_block_img_layers.emplace_back( std::vector<int> () );
+							}
+							fg_block_img_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
+						break;
 					}
 				}
 			}
@@ -213,6 +226,10 @@ Map Map::mapFromPath
 		for ( auto& fg_block_layer : fg_block_layers )
 		{
 			foregrounds.emplace_back( new MapLayerTilemap( fg_block_layer, width, height, false ) );
+		}
+		for ( auto& fg_block_img_layer : fg_block_img_layers )
+		{
+			foregrounds.emplace_back( new MapLayerTilemapImage( fg_block_img_layer, width, height ) );
 		}
 		for ( auto& fade_fg_block_layer : fade_fg_block_layers )
 		{

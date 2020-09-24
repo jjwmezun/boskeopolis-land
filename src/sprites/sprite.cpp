@@ -122,7 +122,7 @@ void Sprite::setGravity( int gravity )
 	gravity_start_speed_ = ( int )( std::floor( ( double )( gravity ) / 4000.0 * ( double )( GRAVITY_START_SPEED_NORMAL ) ) );
 
 	// Basically set so traction is 1.2 with normal gravity & 1.0005 for 650 with middle values getting middle outcomes.
-	traction_ = 1.2 + ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity ) * ( ( 1.0005 - 1.2 ) / 3350.0 ) );
+	traction_ += ( ( double )( GRAVITY_TOP_SPEED_NORMAL - gravity ) * ( ( 1.0005 - 1.2 ) / 3350.0 ) );
 };
 
 bool Sprite::fellInBottomlessPit( const Map& lvmap ) const

@@ -27,4 +27,7 @@ class MapLayerImageSwitch final : public MapLayerImage
 		);
 		~MapLayerImageSwitch();
 		void update( LevelState& level_state ) override;
+
+	private:
+		Uint8 on_alpha_;
 };

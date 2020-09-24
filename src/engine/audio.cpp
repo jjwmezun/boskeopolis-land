@@ -70,7 +70,7 @@ namespace Audio
 				printf( "Mix_Init: %s\n", Mix_GetError() );
 			}
 			Mix_AllocateChannels( MAX_CHANNELS );
-			Mix_VolumeMusic( MIX_MAX_VOLUME / 2 );
+			Mix_VolumeMusic( MIX_MAX_VOLUME );
 			Mix_Volume( -1, MIX_MAX_VOLUME );
 			sounds_[ ( int )( SoundType::GEM ) ] = loadSound( "gem.wav" );
 			sounds_[ ( int )( SoundType::HURT ) ] = loadSound( "hurt.wav" );

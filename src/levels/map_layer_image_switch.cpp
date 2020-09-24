@@ -40,7 +40,8 @@ MapLayerImageSwitch::MapLayerImageSwitch
 		flip,
 		alpha,
 		blend_mode
-	)
+	),
+	on_alpha_ ( alpha )
 {};
 
 MapLayerImageSwitch::~MapLayerImageSwitch() {};
@@ -49,7 +50,7 @@ void MapLayerImageSwitch::update( LevelState& level_state )
 {
 	if ( level_state.events().isSwitchOn() )
 	{
-		alpha_ = 255;
+		alpha_ = on_alpha_;
 	}
 	else
 	{

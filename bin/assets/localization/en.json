@@ -259,6 +259,7 @@
         "names":
         {
             "city-1": "Blueberry Burroughs",
+            "domestic-1": "I Wanna Be Your Vacuum Cleaner",
             "woods-1": "Wasabi Woods",
             "mines-1": "Blind Mice Mines",
             "desert-1": "Dry, Drought Desert",
@@ -270,10 +271,10 @@
             "swamp-1": "Bayou Jupiter",
             "sewer-1": "Porcelain Dreams",
             "factory-1": "Conveyor Slayer",
-            "domestic-1": "Attic Addict",
             "dungeon-1": "Gravity, Hypocrisy, & the Perils o’ Being in 3D",
             "special-1": "Play in the Background",
             "city-2": "Storming Skyscrapers",
+            "domestic-2": "Don’t Touch Me, I’m a Real Live Wire",
             "woods-2": "Bough Down",
             "mines-2": "Catahoneycombs",
             "desert-2": "Peperoncini Pyramid",
@@ -285,7 +286,6 @@
             "swamp-2": "I Can Go with the Flow",
             "sewer-2": "Soupy Sewers",
             "factory-2": "The Amazon Jungle",
-            "domestic-2": "I Wanna Be Your Vacuum Cleaner",
             "dungeon-2": "Mind Your Manors",
             "special-2": "Highway & Hellwater",
             "city-3": "Sleet Streets",
@@ -302,7 +302,7 @@
             "factory-3": "Warm Up",
             "domestic-3": "=BROKEN_LEVEL=",
             "dungeon-3": "Golden Gear Solid",
-            "special-3": "Mart Cart Madness",
+            "special-3": "=BROKEN LEVEL=",
             "city-4": "Rooftop Race",
             "woods-4": "Through the Sharp Hawthorn Blow the Winds",
             "mines-4": "The Minus Touch",
@@ -315,14 +315,14 @@
             "swamp-4": "Broccoli Bridge",
             "sewer-4": "Boskeopolis Underground",
             "factory-4": "Level Industries, Inc.",
-            "domestic-4": "=BROKEN_LEVEL=",
+            "domestic-4": "Mart Cart Madness",
             "dungeon-4": "Castle Chamsby",
             "special-4": "Maybe I’m a Maze"
         },
         "messages":
         {
             "city-1": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
-            "domestic-1": "This house is ramshackle & has faulty electricity, so these switches last only 30 seconds before shutting off ’gain.",
+            "domestic-2": "This house is ramshackle & has faulty electricity, so these switches last only 30 seconds before shutting off ’gain.",
             "ice-1": "You can bop fish from ’bove while underwater.",
             "city-2": "Paper planes are o’erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o’ their gluish grasp.",
             "ice-2": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o’ her jump a bit o’a boost.",
@@ -344,10 +344,10 @@
             "pirate-2": "¡Turn off the faucet!",
             "sky-3": "¡Unlock the treasure!",
             "sky-4": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane.",
-            "special-3": "¡Catch the sale on rare collectibles!",
+            "domestic-4": "¡Catch the sale on rare collectibles!",
             "special-4": "¡Collect everything & dodge the eyes!",
             "swamp-3": "¡Don’t fall into the deadly water!",
-            "domestic-2": "¡Don’t get sucked up by the giant vacuum!",
+            "domestic-1": "¡Don’t get sucked up by the giant vacuum!",
             "space-4": "¡Avoid the falling stars!"
         }
     },

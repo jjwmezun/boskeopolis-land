@@ -1,5 +1,5 @@
-COMPILER = g++-8
-LINKER = g++-8
+COMPILER = g++
+LINKER = g++
 WIN_COMPILER = x86_64-w64-mingw32-gcc
 WIN_LINKER = x86_64-w64-mingw32-gcc
 EXT = cpp

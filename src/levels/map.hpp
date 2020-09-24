@@ -23,7 +23,8 @@ class Map final
 			BACKGROUND,
 			FOREGROUND,
 			FADE_FOREGROUND,
-			BACKGROUND_IMAGE
+			BACKGROUND_IMAGE,
+			FOREGROUND_IMAGE
 		};
 
 		struct LayerInfo

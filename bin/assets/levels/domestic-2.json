@@ -1,26 +1,47 @@
 {
-	"name": "I Wanna Be Your Vacuum Cleaner",
 	"maps":
 	[
 		{
-			"slug": "house-2",
+            "slug": "attic-1",
 			"backgrounds":
 			[
 				{
 					"type": "image",
-					"img": "house-pipes.png",
-					"width": 96,
-					"height": 208,
+					"img": "attic-brick-wall-2.png",
+					"width": 400,
+					"height": 226,
 					"x_scroll": 0.5,
+					"y_scroll": 0.5
+                }
+            ],
+			"foregrounds":
+			[
+				{
+					"type": "image",
+					"img": "spotlight.png",
+					"width": 360,
+					"height": 224,
+					"x_scroll": 0.0,
 					"y_scroll": 0.0,
-					"y_repeat": false
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 20,
+					"lighten": true,
+					"alpha": 128,
+					"switch": true
 				}
 			]
-		}
+        }
 	],
 
-	"entrance_x": 12,
-	"entrance_y": 9,
-	"gem_challenge": 14000,
-	"time_challenge": 30
+	"entrance_x": 53,
+	"entrance_y": 62,
+	"gem_challenge": 40000,
+	"time_challenge": 50,
+
+	"goal":
+	{
+		"type": "timed_on",
+		"time": 30
+	}
 }

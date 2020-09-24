@@ -29,3 +29,25 @@ void CockroachSprite::customUpdate( LevelState& level_state )
 };
 
 void CockroachSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};
+
+void CockroachSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+{
+	graphics_->priority_ = true;
+	defaultDeathAction( camera );
+};
+
+void CockroachSprite::render( Camera& camera, bool priority )
+{
+	if ( !isDead() )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	}
+};
+
+void CockroachSprite::renderSuperPriority( Camera& camera )
+{
+	if ( isDead() )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
+	}
+};
