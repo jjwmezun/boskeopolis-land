@@ -78,7 +78,7 @@ Map Map::mapFromPath
 	// Setup
 	//=============================================================
 
-		std::vector<int> blocks = {};
+		std::vector<std::vector<int>> blocks_layers = {};
 		std::vector<int> sprites = {};
 		std::vector<std::vector<int>> bg_block_layers = {};
 		std::vector<std::vector<int>> bg_block_img_layers = {};
@@ -156,6 +156,7 @@ Map Map::mapFromPath
 		assert( map_data.HasMember("layers") );
 		assert( map_data[ "layers" ].IsArray() );
 
+		std::vector<int> blocks;
 		int i = 0;
 		for ( auto& v : map_data[ "layers" ].GetArray() )
 		{
@@ -169,7 +170,9 @@ Map Map::mapFromPath
 					switch ( layer_info.type )
 					{
 						case ( LayerType::BLOCKS ):
+						{
 							blocks.push_back( n.GetInt() );
+						}
 						break;
 						case ( LayerType::SPRITES ):
 							sprites.push_back( n.GetInt() );
@@ -214,6 +217,7 @@ Map Map::mapFromPath
 			}
 			++i;
 		}
+		blocks_layers.push_back( blocks );
 
 		for ( auto& bg_block_layer : bg_block_layers )
 		{
@@ -594,7 +598,7 @@ Map Map::mapFromPath
 
 		return Map
 		(
-			blocks,
+			blocks_layers,
 			sprites,
 			width,
 			height,
@@ -628,7 +632,7 @@ Map Map::mapFromPath
 
 Map::Map
 (
-	std::vector<int> blocks,
+	std::vector<std::vector<int>> blocks_layers,
 	std::vector<int> sprites,
 	int width,
 	int height,
@@ -659,7 +663,7 @@ Map::Map
 	bool hide
 )
 :
-	blocks_ ( blocks ),
+	blocks_layers_ ( blocks_layers ),
 	sprites_ ( sprites ),
 	width_ ( width ),
 	height_ ( height ),
@@ -704,7 +708,7 @@ Map::~Map() noexcept {};
 
 Map::Map( Map&& m ) noexcept
 :
-	blocks_ ( m.blocks_ ),
+	blocks_layers_ ( m.blocks_layers_ ),
 	sprites_ ( m.sprites_ ),
 	width_ ( m.width_ ),
 	height_ ( m.height_ ),
@@ -740,7 +744,7 @@ Map::Map( Map&& m ) noexcept
 
 Map::Map( const Map& c )
 :
-	blocks_ ( c.blocks_ ),
+	blocks_layers_ ( c.blocks_layers_ ),
 	sprites_ ( c.sprites_ ),
 	width_ ( c.width_ ),
 	height_ ( c.height_ ),
@@ -794,9 +798,10 @@ int Map::heightPixels() const
 	return Unit::BlocksToPixels( height_ );
 };
 
+// UNSAFE: FIX LATER
 int Map::blocksSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), ( int )( blocks_.size() ) );
+	return std::min( widthBlocks() * heightBlocks(), ( int )( blocks_layers_[ 0 ].size() ) );
 };
 
 int Map::spritesSize() const
@@ -804,6 +809,7 @@ int Map::spritesSize() const
 	return std::min( widthBlocks() * heightBlocks(), ( int )( sprites_.size() ) );
 };
 
+// UNSAFE: FIX LATER
 int Map::block( int n ) const
 {
 	if ( !inBounds( n ) )
@@ -812,7 +818,7 @@ int Map::block( int n ) const
 	}
 	else
 	{
-		return blocks_[ n ];
+		return blocks_layers_[ 0 ][ n ];
 	}
 };
 
@@ -826,6 +832,11 @@ int Map::sprite( int n ) const
 	{
 		return sprites_[ n ];
 	}
+};
+
+const std::vector<std::vector<int>>& Map::blocksLayers() const
+{
+	return blocks_layers_;
 };
 
 int Map::mapX( int n ) const
@@ -855,11 +866,12 @@ int Map::indexFromXAndY( int x, int y ) const
 	}
 };
 
+// UNSAFE: FIX LATER
 void Map::changeBlock( int where, int value )
 {
 	if ( inBounds( where ) )
 	{
-		blocks_[ where ] = value;
+		blocks_layers_[ 0 ][ where ] = value;
 	}
 	changed_ = true;
 };
@@ -879,7 +891,7 @@ void Map::deleteSprite( int where )
 
 bool Map::inBounds( int n ) const
 {
-	return n < blocks_.size();
+	return n < blocks_layers_[ 0 ].size();
 };
 
 void Map::update( LevelState& level_state )

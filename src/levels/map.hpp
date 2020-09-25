@@ -36,7 +36,7 @@ class Map final
 		const std::vector<Warp> warps_;
 		std::vector<std::shared_ptr<MapLayer>> backgrounds_;
 		std::vector<std::shared_ptr<MapLayer>> foregrounds_;
-		std::vector<int> blocks_;
+		std::vector<std::vector<int>> blocks_layers_;
 		std::vector<int> sprites_;
 		const std::string tileset_;
 		std::string music_;
@@ -94,6 +94,7 @@ class Map final
 		int spritesSize() const;
 		int block( int n ) const;
 		int sprite( int n ) const;
+		const std::vector<std::vector<int>>& blocksLayers() const;
 
 		int mapX( int n ) const;
 		int mapY( int n ) const;
@@ -113,7 +114,7 @@ class Map final
 	private:
 		Map
 		(
-			std::vector<int> blocks,
+			std::vector<std::vector<int>> blocks_layers,
 			std::vector<int> sprites,
 			int width,
 			int height,

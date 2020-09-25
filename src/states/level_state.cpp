@@ -103,12 +103,20 @@ void LevelState::stateRender()
 
 void LevelState::renderLevel()
 {
-	level_.currentMap().renderBG( camera_ );
-	blocks_.render( level_.currentMap(), camera_, false );
-	sprites_.render( camera_, false );
-	blocks_.render( level_.currentMap(), camera_, true );
-	sprites_.render( camera_, true );
-	level_.currentMap().renderFG( camera_ );
+	// 1
+	level_.currentMap().renderBG( camera_ ); // 2
+	// 3
+	blocks_.render( level_.currentMap(), camera_, false ); // 4
+	// 5
+	sprites_.render( camera_, false ); // 6
+	// 7
+	blocks_.render( level_.currentMap(), camera_, true ); // 8
+	// 9
+	sprites_.render( camera_, true ); // 10
+	// 11
+	level_.currentMap().renderFG( camera_ ); // 12
+	// 13
+	// 14 — FG Image
 	sprites_.renderSuperPriority( camera_ );
 }
 
