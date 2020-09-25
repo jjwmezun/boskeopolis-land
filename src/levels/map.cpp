@@ -23,45 +23,11 @@ static constexpr int BG_LAYER_LIMIT = 5;
 
 Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 {
-	if ( layer_name == "Blocks" )
+	if ( mezun::stringStartsWith( layer_name, "Blocks" ) )
 	{
-		return { LayerType::BLOCKS, 0 };
-	}
-	else if ( layer_name == "Sprites" )
-	{
-		return { LayerType::SPRITES, 0 };
-	}
-	else
-	{
-		for ( int i = 1; i <= BG_LAYER_LIMIT; ++i )
-		{
-			const std::string bg_line = std::string( std::string( "BG" ) + std::to_string( i ) );
-			const std::string fg_line = std::string( std::string( "FG" ) + std::to_string( i ) );
-			const std::string fade_fg_line = std::string( std::string( "Fade FG" ) + std::to_string( i ) );
-			const std::string bg_img_line = std::string( std::string( "BGIMG" ) + std::to_string( i ) );
-			const std::string fg_img_line = std::string( std::string( "FGIMG" ) + std::to_string( i ) );
-
-			if ( layer_name == bg_line )
-			{
-				return { LayerType::BACKGROUND, i };
-			}
-			else if ( layer_name == fg_line )
-			{
-				return { LayerType::FOREGROUND, i };
-			}
-			else if ( layer_name == fade_fg_line )
-			{
-				return { LayerType::FADE_FOREGROUND, i };
-			}
-			else if ( layer_name == bg_img_line )
-			{
-				return { LayerType::BACKGROUND_IMAGE, i };
-			}
-			else if ( layer_name == fg_img_line )
-			{
-				return { LayerType::FOREGROUND_IMAGE, i };
-			}
-		}
+		const std::string number_string = layer_name.substr( 6, layer_name.size() - 6 );
+		const int n = ( number_string.empty() ) ? 0 : std::stoi( number_string );
+		return { LayerType::BLOCKS, n };
 	}
 	return { LayerType::__NULL, 0 };
 };
@@ -78,7 +44,7 @@ Map Map::mapFromPath
 	// Setup
 	//=============================================================
 
-		std::vector<std::vector<int>> blocks_layers = {};
+		std::vector<BlockLayer> blocks_layers = {};
 		std::vector<int> sprites = {};
 		std::vector<std::vector<int>> bg_block_layers = {};
 		std::vector<std::vector<int>> bg_block_img_layers = {};
@@ -156,7 +122,6 @@ Map Map::mapFromPath
 		assert( map_data.HasMember("layers") );
 		assert( map_data[ "layers" ].IsArray() );
 
-		std::vector<int> blocks;
 		int i = 0;
 		for ( auto& v : map_data[ "layers" ].GetArray() )
 		{
@@ -165,15 +130,23 @@ Map Map::mapFromPath
 				const std::string layer_type = v[ "name" ].GetString();
 				const LayerInfo layer_info = getLayerInfo( layer_type );
 
+				switch ( layer_info.type )
+				{
+					case ( LayerType::BLOCKS ):
+					{
+						std::vector<int> blocks;
+						for ( auto& n : v[ "data" ].GetArray() )
+						{
+							blocks.push_back( n.GetInt() );
+						}
+						blocks_layers.push_back( { blocks, layer_info.n } );
+					}
+				}
+
 				for ( auto& n : v[ "data" ].GetArray() )
 				{
 					switch ( layer_info.type )
 					{
-						case ( LayerType::BLOCKS ):
-						{
-							blocks.push_back( n.GetInt() );
-						}
-						break;
 						case ( LayerType::SPRITES ):
 							sprites.push_back( n.GetInt() );
 						break;
@@ -217,7 +190,6 @@ Map Map::mapFromPath
 			}
 			++i;
 		}
-		blocks_layers.push_back( blocks );
 
 		for ( auto& bg_block_layer : bg_block_layers )
 		{
@@ -632,7 +604,7 @@ Map Map::mapFromPath
 
 Map::Map
 (
-	std::vector<std::vector<int>> blocks_layers,
+	std::vector<BlockLayer> blocks_layers,
 	std::vector<int> sprites,
 	int width,
 	int height,
@@ -798,10 +770,9 @@ int Map::heightPixels() const
 	return Unit::BlocksToPixels( height_ );
 };
 
-// UNSAFE: FIX LATER
 int Map::blocksSize() const
 {
-	return std::min( widthBlocks() * heightBlocks(), ( int )( blocks_layers_[ 0 ].size() ) );
+	return widthBlocks() * heightBlocks();
 };
 
 int Map::spritesSize() const
@@ -809,16 +780,15 @@ int Map::spritesSize() const
 	return std::min( widthBlocks() * heightBlocks(), ( int )( sprites_.size() ) );
 };
 
-// UNSAFE: FIX LATER
-int Map::block( int n ) const
+int Map::block( int layer, int n ) const
 {
-	if ( !inBounds( n ) )
+	if ( layer < 0 || layer > blocks_layers_.size() || n < 0 || n > blocks_layers_[ layer ].blocks_.size() )
 	{
 		return 0;
 	}
 	else
 	{
-		return blocks_layers_[ 0 ][ n ];
+		return blocks_layers_[ layer ].blocks_[ n ];
 	}
 };
 
@@ -834,7 +804,7 @@ int Map::sprite( int n ) const
 	}
 };
 
-const std::vector<std::vector<int>>& Map::blocksLayers() const
+const std::vector<Map::BlockLayer>& Map::blocksLayers() const
 {
 	return blocks_layers_;
 };
@@ -866,19 +836,19 @@ int Map::indexFromXAndY( int x, int y ) const
 	}
 };
 
-// UNSAFE: FIX LATER
-void Map::changeBlock( int where, int value )
+void Map::changeBlock( int layer, int where, int value )
 {
-	if ( inBounds( where ) )
+	assert( layer >= 0 && layer < blocks_layers_.size() );
+	if ( where >= 0 && where < blocks_layers_[ layer ].blocks_.size() )
 	{
-		blocks_layers_[ 0 ][ where ] = value;
+		blocks_layers_[ layer ].blocks_[ where ] = value;
 	}
 	changed_ = true;
 };
 
-void Map::deleteBlock( int where )
+void Map::deleteBlock( int layer, int where )
 {
-	changeBlock( where, 0 );
+	changeBlock( layer, where, 0 );
 };
 
 void Map::deleteSprite( int where )
@@ -891,7 +861,7 @@ void Map::deleteSprite( int where )
 
 bool Map::inBounds( int n ) const
 {
-	return n < blocks_layers_[ 0 ].size();
+	return n < blocks_layers_[ 0 ].blocks_.size();
 };
 
 void Map::update( LevelState& level_state )

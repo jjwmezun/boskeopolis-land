@@ -12,19 +12,23 @@
 #include "sprite_system.hpp"
 
 class Palette;
+class Renderable;
 
 class LevelState final : public GameState
 {
 	public:
+		static constexpr int NUMBER_OF_LAYERS = 17;
+
 		LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera = { Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 32, 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS} );
 		~LevelState();
 		void stateUpdate() override;
 		void stateRender() override;
 		void init() override;
 		void backFromPop() override;
-		void renderLevel();
+		void renderLevel() const;
 		void updateForTrainer();
 		void initForTrainer();
+		void addRenderable( Renderable* renderable, int layer );
 
 		Health& health();
 		const Health& health() const;
@@ -49,6 +53,7 @@ class LevelState final : public GameState
 	private:
 		void testPause();
 
+		std::vector<Renderable*> layers_[ NUMBER_OF_LAYERS ];
 		Health health_;
 		Camera camera_;
 		SpriteSystem sprites_;

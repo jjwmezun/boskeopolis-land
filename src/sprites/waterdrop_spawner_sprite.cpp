@@ -1,8 +1,10 @@
 #include "collision.hpp"
 #include "health.hpp"
 #include "level_state.hpp"
+#include <memory>
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
+#include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 
 WaterdropSpawnerSprite::WaterdropSpawnerSprite( int x, int y )
@@ -18,7 +20,7 @@ void WaterdropSpawnerSprite::customUpdate( LevelState& level_state )
 {
 	if ( timer_ % 120 == 0 )
 	{
-		level_state.sprites().spawnWaterdrop( xPixels(), yPixels() );
+		level_state.sprites().spawn( std::unique_ptr<WaterdropSprite> ( new WaterdropSprite( xPixels(), yPixels() ) ) );
 	}
 	
 	++timer_;

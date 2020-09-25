@@ -63,7 +63,7 @@ void BlockSystem::reset( const Map& lvmap )
 };
 
 void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority )
-{
+{/*
 	if ( lvmap.hide_ )
 	{
 		return;
@@ -101,7 +101,7 @@ void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority 
 				}
 			}
 		}
-	}
+	}*/
 };
 
 void BlockSystem::interact( Sprite& sprite, LevelState& level_state )
@@ -119,15 +119,13 @@ void BlockSystem::interact( Sprite& sprite, LevelState& level_state )
 			for ( int x = first_x; x < last_x; ++x )
 			{
 				const int n = y * GRID_WIDTH + x;
-				for ( auto& blocks : layers_ )
+				for ( auto& layer : layers_ )
 				{
+					auto& blocks = layer.blocks_;
 					if ( n < blocks.size() )
 					{
 						Block& block = blocks[ n ];
 						block.interact( sprite, level_state );
-					}
-					else
-					{
 					}
 				}
 			}
@@ -145,8 +143,9 @@ void BlockSystem::interact( Sprite& sprite, LevelState& level_state )
 			for ( int x = first_x; x < last_x; ++x )
 			{
 				const int n = y * level_state.currentMap().widthBlocks() + x;
-				for ( auto& blocks : layers_ )
+				for ( auto& layer : layers_ )
 				{
+					auto& blocks = layer.blocks_;
 					if ( n < blocks.size() )
 					{
 						Block& block = blocks[ n ];
@@ -162,21 +161,36 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 {
 	Map& lvmap = level_state.currentMap();
 	const Camera& camera = level_state.camera();
-	const auto& blocks_layers = lvmap.blocksLayers();
+	const auto& map_blocks_layers = lvmap.blocksLayers();
 	if ( !blocks_work_offscreen_ )
 	{
 		if ( camera.changed() || lvmap.changed_ )
 		{
-			layers_.clear();
-			for ( int li = 0; li < blocks_layers.size(); ++li )
+			if ( layers_.empty() )
 			{
-				layers_.emplace_back();
+				// These need to be separate loops so the pointers aren’t moved between
+				// setting level state renderables.
+				for ( int li = 0; li < map_blocks_layers.size(); ++li )
+				{
+					layers_.emplace_back( map_blocks_layers[ li ].position_, BlockLayer::RenderType::NORMAL );
+				}
+				for ( auto& layer : layers_ )
+				{
+					level_state.addRenderable( &layer, 0 );
+				}
 			}
+			else
+			{
+				for ( int li = 0; li < layers_.size(); ++li )
+				{
+					layers_[ li ].blocks_.clear();
+				}
+			}
+
 			const int first_x = Unit::PixelsToBlocks( camera.x() ) - CAMERA_PADDING; // Block a bit left o' camera.
 			const int first_y = Unit::PixelsToBlocks( camera.y() ) - CAMERA_PADDING; // Block a bit 'bove camera.
 			const int last_x  = Unit::PixelsToBlocks( camera.screenRight() ) + CAMERA_PADDING; // Block a bit right o' camera.
 			const int last_y  = Unit::PixelsToBlocks( camera.screenBottom() ) + CAMERA_PADDING; // Block a bit below camera.
-
 			for ( int y = first_y; y < last_y; ++y )
 			{
 				const int y_pixels = Unit::BlocksToPixels( y );
@@ -185,16 +199,14 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 					const int x_pixels = Unit::BlocksToPixels( x );
 					const int i = lvmap.indexFromXAndY( x, y );
 
-					for ( int li = 0; li < blocks_layers.size(); ++li )
+					for ( int li = 0; li < map_blocks_layers.size(); ++li )
 					{
-						auto& layer = layers_[ li ];
-						auto& blocks = blocks_layers[ li ];
+						auto& blocks = map_blocks_layers[ li ].blocks_;
 						const int type = ( i < blocks.size() ) ? blocks[ i ] - 1 : -1;
-						addBlock( layer, x_pixels, y_pixels, i, type, level_state );
+						addBlock( li, x_pixels, y_pixels, i, type, level_state );
 					}
 				}
 			}
-
 		}
 	}
 	else
@@ -203,27 +215,29 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 		{
 			// Create block object for every map tile, e'en if empty, so tile positions
 			// can be used for optimizations in updating & rendering.
-			for ( int li = 0; li < blocks_layers.size(); ++li )
+			for ( int li = 0; li < map_blocks_layers.size(); ++li )
 			{
-				const auto& blocks = blocks_layers[ li ];
-				std::vector<Block> layer;
+				layers_.emplace_back( map_blocks_layers[ li ].position_, BlockLayer::RenderType::OFFSCREEN );
+				level_state.addRenderable( &layers_[ layers_.size() - 1 ], 0 );
+
+				const auto& blocks = map_blocks_layers[ li ].blocks_;
 				for ( int i = 0; i < blocks.size(); ++i )
 				{
 					const int type = blocks[ i ] - 1;
 					const int x = Unit::BlocksToPixels( lvmap.mapX( i ) );
 					const int y = Unit::BlocksToPixels( lvmap.mapY( i ) );
-					addBlock( layer, x, y, i, type, level_state );
+					addBlock( li, x, y, i, type, level_state );
 				}
-				layers_.push_back( layer );
 			}
 		}
 	}
 };
 
-void BlockSystem::addBlock( std::vector<Block>& layer, int x, int y, int i, int type, LevelState& level_state )
+void BlockSystem::addBlock( int layer_index, int x, int y, int i, int type, LevelState& level_state )
 {
 	BlockType* block_type = getBlockType( type );
-	layer.emplace_back( x, y, block_type, i, type );
+	auto& layer = layers_[ layer_index ].blocks_;
+	layer.emplace_back( x, y, block_type, i, layer_index, type );
 	layer[ layer.size() - 1 ].init( level_state );
 };
 
@@ -246,8 +260,9 @@ bool BlockSystem::blocksInTheWayGeneric( const sdl2::SDLRect& rect, BlockCompone
 {
 	if ( !blocks_work_offscreen_ )
 	{
-		for ( const auto& blocks : layers_ )
+		for ( const auto& layer : layers_ )
 		{
+			const auto& blocks = layer.blocks_;
 			for ( const auto& block : blocks )
 			{
 				if ( block.typeID() != -1 )
@@ -272,8 +287,9 @@ bool BlockSystem::blocksInTheWayGeneric( const sdl2::SDLRect& rect, BlockCompone
 			for ( int x = first_x; x < last_x; ++x )
 			{
 				const int n = y * map_width_ + x;
-				for ( const auto& blocks : layers_ )
+				for ( const auto& layer : layers_ )
 				{
+					auto& blocks = layer.blocks_;
 					if ( n < blocks.size() )
 					{
 						const Block& block = blocks[ n ];
@@ -296,8 +312,9 @@ bool BlockSystem::blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponen
 {
 	if ( !blocks_work_offscreen_ )
 	{
-		for ( const auto& blocks : layers_ )
+		for ( const auto& layer : layers_ )
 		{
+			auto& blocks = layer.blocks_;
 			for ( const auto& block : blocks )
 			{
 				if ( block.typeID() != -1 && testBlockInTheWayExcept( rect, type, block ) )
@@ -319,8 +336,9 @@ bool BlockSystem::blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponen
 			for ( int x = first_x; x < last_x; ++x )
 			{
 				const int n = y * map_width_ + x;
-				for ( const auto& blocks : layers_ )
+				for ( const auto& layer : layers_ )
 				{
+					auto& blocks = layer.blocks_;
 					if ( n < blocks.size() )
 					{
 						const Block& block = blocks[ n ];
@@ -359,7 +377,7 @@ Tileset& BlockSystem::getTileset()
 // UNSAFE: FIX LATER
 const std::vector<Block>& BlockSystem::getBlocksList() const
 {
-	return layers_[ 0 ];
+	return layers_[ 0 ].blocks_;
 }
 
 const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::SDLRect& rect, const Camera& camera, const Sprite& sprite, LevelState& level_state ) const
@@ -377,8 +395,9 @@ const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::
 		for ( int x = first_x; x < last_x; ++x )
 		{
 			const int n = y * GRID_WIDTH + x;
-			for ( const auto& blocks : layers_ )
+			for ( const auto& layer : layers_ )
 			{
+				auto& blocks = layer.blocks_;
 				if ( n < blocks.size() )
 				{
 					const Block& block = blocks[ n ];

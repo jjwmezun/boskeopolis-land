@@ -1,5 +1,7 @@
 #include "cactooie_sprite.hpp"
+#include "cactooie_spine_sprite.hpp"
 #include "level_state.hpp"
+#include <memory>
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -98,7 +100,7 @@ void CactooieSprite::customUpdate( LevelState& level_state )
 			{
 				if ( spitting_delay_.countPercent() == .5 )
 				{
-					level_state.sprites().spawnCactooieSpine( xPixels(), centerYPixels() - 4, direction_x_ );
+					level_state.sprites().spawn( std::unique_ptr<CactooieSpineSprite> ( new CactooieSpineSprite( xPixels(), centerYPixels() - 4, direction_x_ ) ) );
 				}
 				
 				spitting_delay_.update();

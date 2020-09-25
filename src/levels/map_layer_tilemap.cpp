@@ -49,7 +49,7 @@ void MapLayerTilemap::update( LevelState& level_state )
 					BlockType* block_type = level_state.blocks().getBlockType( type );
 					if ( block_type != nullptr )
 					{
-						blocks_.emplace_back( xp, yp, block_type, i, type );
+						blocks_.emplace_back( xp, yp, block_type, i, 0, type );
 					}
 				}
 			}

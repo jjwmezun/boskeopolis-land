@@ -65,7 +65,7 @@ void PedestrianSprite::customUpdate( LevelState& level_state )
 		const int current_block_y = Unit::SubPixelsToBlocks( hit_box_.y );
 		const int current_block_n = lvmap.indexFromXAndY( current_block_x, current_block_y );
 
-		const int current_block = lvmap.block( current_block_n );
+		const int current_block = lvmap.block( 0, current_block_n );
 
 		if ( current_block == 65 + 15 || current_block == 65 + 50 )
 		{
@@ -80,10 +80,10 @@ void PedestrianSprite::customUpdate( LevelState& level_state )
 
 		const int block_types[ 4 ] =
 		{
-			lvmap.block( current_block_n - lvmap.widthBlocks() ), // UP
-			lvmap.block( current_block_n + 1                   ), // RIGHT
-			lvmap.block( current_block_n + lvmap.widthBlocks() ), // DOWN
-			lvmap.block( current_block_n - 1 				   )  // LEFT
+			lvmap.block( 0, current_block_n - lvmap.widthBlocks() ), // UP
+			lvmap.block( 0, current_block_n + 1                   ), // RIGHT
+			lvmap.block( 0, current_block_n + lvmap.widthBlocks() ), // DOWN
+			lvmap.block( 0, current_block_n - 1 				   )  // LEFT
 		};
 
 		int usable_blocks[ 4 ] = { -1, -1, -1, -1 };

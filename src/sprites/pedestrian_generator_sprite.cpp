@@ -22,7 +22,7 @@ void PedestrianGeneratorSprite::customUpdate( LevelState& level_state )
         for ( int x = 0; x < lvmap.widthBlocks(); ++x )
         {
             const int n = lvmap.indexFromXAndY( x, y );
-            const int block_type = lvmap.block( n );
+            const int block_type = lvmap.block( 0, n );
             if ( block_type == 66 && mezun::testRandomWithinPercentage( 10 ) )
             {
                 const int xpixels = Unit::BlocksToPixels( x );

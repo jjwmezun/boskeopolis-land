@@ -70,6 +70,7 @@ namespace mezun
 	std::string stringReplace( const std::string& in, std::string from, std::string to );
 	std::u32string removeEndingZeroFrom32String( const std::u32string& string );
 	std::u32string merge32Strings( const std::u32string& first, const std::u32string& second );
+	bool stringStartsWith( const std::string& haystack, const std::string& needle );
 	bool stringEndsWith( const std::string& haystack, const std::string& needle );
 	
 	template<typename T>

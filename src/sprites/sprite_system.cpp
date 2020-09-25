@@ -14,7 +14,6 @@
 #include "bubble_sprite.hpp"
 #include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
-#include "cactooie_spine_sprite.hpp"
 #include "cactooie_sprite.hpp"
 #include "camera.hpp"
 #include "change_camera_autoscroll_sprite.hpp"
@@ -141,7 +140,6 @@
 #include "rug_monster_sprite.hpp"
 #include "saw_sprite.hpp"
 #include "sewer_monster_sprite.hpp"
-#include "shmup_bullet_sprite.hpp"
 #include "shmup_enemy_sprite.hpp"
 #include "shmup_shooter_sprite.hpp"
 #include "shooter_player_sprite.hpp"
@@ -182,11 +180,12 @@
 #include "vertical_pike_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
 #include "wall_crawler_sprite.hpp"
-#include "waterdrop_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
 #include "water_spout_sprite.hpp"
 #include "weight_platform_sprite.hpp"
 #include "window_monster_sprite.hpp"
+
+static constexpr int SPRITES_LIMIT = 50;
 
 SpriteSystem::SpriteSystem()
 :
@@ -196,7 +195,7 @@ SpriteSystem::SpriteSystem()
 {
 	// Minimize chances o' sprite # going past space
 	// & forcing slow vector relocation.
-	sprites_.reserve( 50 );
+	sprites_.reserve( SPRITES_LIMIT );
 };
 
 SpriteSystem::~SpriteSystem() {};
@@ -876,42 +875,20 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 
 void SpriteSystem::spawn( std::unique_ptr<Sprite>&& sprite )
 {
-	sprites_.emplace_back( sprite.release() );
-};
-
-void SpriteSystem::spawnCactooieSpine( int x, int y, Direction::Horizontal direction )
-{
-	sprites_.emplace_back( new CactooieSpineSprite( x, y, direction ) );
-};
-
-void SpriteSystem::spawnWaterdrop( int x, int y )
-{
-	sprites_.emplace_back( new WaterdropSprite( x, y ) );
+	if ( sprites_.size() < SPRITES_LIMIT - 1 )
+	{
+		sprites_.emplace_back( sprite.release() );
+	}
 };
 
 void SpriteSystem::spawnEnemyBullet( int x, int y, Direction::Simple direction )
 {
-	sprites_.emplace_back( new BulletSprite( x, y, direction, false ) );
+	spawn( std::unique_ptr<BulletSprite> ( new BulletSprite( x, y, direction, false ) ) );
 };
 
 void SpriteSystem::spawnHeroBullet( int x, int y, Direction::Simple direction )
 {
-	sprites_.emplace_back( new BulletSprite( x, y, direction, true ) );
-};
-
-void SpriteSystem::spawnShmupBullet( int x, int y, double dy, double dx )
-{
-	sprites_.emplace_back( new ShmupBulletSprite( x, y, dy, dx ) );
-};
-
-void SpriteSystem::spawnOlive( int x, int y, Direction::Horizontal start_dir )
-{
-	sprites_.emplace_back( new OliveSprite( x, y, start_dir ) );
-};
-
-void SpriteSystem::spawnIcicle( int x, int y )
-{
-	sprites_.emplace_back( new IcicleSprite( x, y ) );
+	spawn( std::unique_ptr<BulletSprite> ( new BulletSprite( x, y, direction, true ) ) );
 };
 
 void SpriteSystem::heroOpenTreasureChest()
@@ -921,17 +898,20 @@ void SpriteSystem::heroOpenTreasureChest()
 
 void SpriteSystem::spritesFromMap( LevelState& level_state )
 {
-	const Map& lvmap = level_state.currentMap();
-	for ( int i = 0; i < lvmap.spritesSize(); ++i )
+	if ( sprites_.size() < SPRITES_LIMIT - 1 )
 	{
-		const int x = Unit::BlocksToSubPixels( lvmap.mapX( i ) );
-		const int y = Unit::BlocksToSubPixels( lvmap.mapY( i ) );
-		const int type = lvmap.sprite( i ) - 1;
-
-		if ( type != -1 )
+		const Map& lvmap = level_state.currentMap();
+		for ( int i = 0; i < lvmap.spritesSize(); ++i )
 		{
-			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, level_state ) );
-			sprites_.emplace_back( std::move( new_sprite ) );
+			const int x = Unit::BlocksToSubPixels( lvmap.mapX( i ) );
+			const int y = Unit::BlocksToSubPixels( lvmap.mapY( i ) );
+			const int type = lvmap.sprite( i ) - 1;
+
+			if ( type != -1 )
+			{
+				std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, level_state ) );
+				sprites_.emplace_back( std::move( new_sprite ) );
+			}
 		}
 	}
 };

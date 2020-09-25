@@ -188,6 +188,14 @@ void Sprite::render( Camera& camera, bool priority )
 	}
 };
 
+void Sprite::render( const LevelState& level_state ) const
+{
+	if ( graphics_ != nullptr )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &level_state.camera(), true );
+	}
+};
+
 void Sprite::renderSuperPriority( Camera& camera )
 {
 	// Do nothing.

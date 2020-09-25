@@ -1,6 +1,8 @@
 #include "level_state.hpp"
 #include "main.hpp"
+#include <memory>
 #include "olive_spawner_sprite.hpp"
+#include "olive_sprite.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
@@ -17,7 +19,7 @@ void OliveSpawnerSprite::customUpdate( LevelState& level_state )
 {
 	if ( Main::stateFrame() % SPAWN_SPEED == 0 )
 	{
-		level_state.sprites().spawnOlive( xPixels() + 4, yPixels(), direction_x_ );
+		level_state.sprites().spawn( std::unique_ptr<OliveSprite>( new OliveSprite( xPixels() + 4, yPixels(), direction_x_ ) ) );
 	}
 };
 

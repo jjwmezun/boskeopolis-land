@@ -215,6 +215,11 @@ namespace mezun
 		return out;
 	};
 
+	bool stringStartsWith( const std::string& haystack, const std::string& needle )
+	{
+		return haystack.rfind( needle, 0 ) == 0;
+	};
+
 	bool stringEndsWith( const std::string& haystack, const std::string& needle )
 	{
 	    return ( haystack.length() >= needle.length() )

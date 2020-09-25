@@ -16,6 +16,7 @@ class SpriteSystem;
 #include "render.hpp"
 #include <memory>
 #include "object.hpp"
+#include "renderable.hpp"
 #include <SDL2/SDL.h>
 #include "sprite_component.hpp"
 #include "timer_simple_t.hpp"
@@ -28,7 +29,7 @@ class SpriteSystem;
 #include "angled_sprite_movement.hpp"
 #include "stuck_sprite_movement.hpp"
 
-class Sprite : public Object
+class Sprite : public Object, public Renderable
 {
 	public:
 		struct DuckData
@@ -129,6 +130,7 @@ class Sprite : public Object
 		void setGravityModifier( double gravity );
 
 		void update( LevelState& level_state );
+		virtual void render( const LevelState& level_state ) const;
 		virtual void render( Camera& camera, bool priority = false );
 		virtual void renderSuperPriority( Camera& camera );
 		void drawHitBox( const Camera& camera );

@@ -7,13 +7,14 @@
 
 Block::Block
 (
-	int x, int y, BlockType* type, int location, int type_id
+	int x, int y, BlockType* type, int location, int layer, int type_id
 )
 :
 	Object( x, y, Unit::PIXELS_PER_BLOCK, Unit::PIXELS_PER_BLOCK ),
 	type_ ( type ),
+	type_id_ ( type_id ),
 	location_ ( location ),
-	type_id_ ( type_id )
+	layer_ ( layer )
 {};
 
 Block::~Block() {};
@@ -43,6 +44,11 @@ void Block::destroy()
 int Block::location() const
 {
 	return location_;
+};
+
+int Block::layer() const
+{
+	return layer_;
 };
 
 void Block::interact( Sprite& sprite, LevelState& level_state )

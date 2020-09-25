@@ -14,13 +14,14 @@ class SpriteSystem;
 class Block final : public Object
 {
 	public:
-		Block( int x, int y, BlockType* type, int location, int type_id );
+		Block( int x, int y, BlockType* type, int location, int layer, int type_id );
 		~Block();
 		void render( const Camera& camera, bool priority = false ) const;
 		void renderAnyPriority( const Camera& camera ) const;
 		void interact( Sprite& sprite, LevelState& level );
 		void destroy();
 		int location() const;
+		int layer() const;
 		int typeID() const;
 		bool hasType() const;
 		const BlockType* type() const;
@@ -34,4 +35,5 @@ class Block final : public Object
 		BlockType* type_; // COPY; owned by other object.
 		int type_id_;
 		const int location_;
+		const int layer_;
 };

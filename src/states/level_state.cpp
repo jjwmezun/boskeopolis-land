@@ -6,6 +6,7 @@
 #include "overworld_state.hpp"
 #include "pause_state.hpp"
 #include "level_select_state.hpp"
+#include "renderable.hpp"
 #include "time_start_state.hpp"
 
 LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera )
@@ -20,6 +21,10 @@ LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades,
 	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade )
 {
 	blocks_.init( level_.currentMap() );
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		layers_[ i ] = {};
+	}
 }
 
 LevelState::~LevelState() {};
@@ -101,23 +106,35 @@ void LevelState::stateRender()
 	inventory_screen_.render( events_, sprites_.hero(), camera_ );
 };
 
-void LevelState::renderLevel()
+void LevelState::renderLevel() const
 {
+	level_.currentMap().renderBGColor();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		for ( int j = 0; j < layers_[ i ].size(); ++j )
+		{
+			layers_[ i ][ j ]->render( *this );
+		}
+	}
+	/*
 	// 1
 	level_.currentMap().renderBG( camera_ ); // 2
 	// 3
-	blocks_.render( level_.currentMap(), camera_, false ); // 4
+	// BG2 4
 	// 5
-	sprites_.render( camera_, false ); // 6
+	blocks_.render( level_.currentMap(), camera_, false ); // 6
 	// 7
-	blocks_.render( level_.currentMap(), camera_, true ); // 8
+	sprites_.render( camera_, false ); // 8
 	// 9
-	sprites_.render( camera_, true ); // 10
+	blocks_.render( level_.currentMap(), camera_, true ); // 10
 	// 11
-	level_.currentMap().renderFG( camera_ ); // 12
+	sprites_.render( camera_, true ); // 12
 	// 13
-	// 14 — FG Image
-	sprites_.renderSuperPriority( camera_ );
+	level_.currentMap().renderFG( camera_ ); // 14
+	// 15
+	// 16 — FG2
+	// 17
+	sprites_.renderSuperPriority( camera_ ); // 18*/
 }
 
 void LevelState::init()
@@ -254,4 +271,9 @@ Palette LevelState::getNewPalette()
 void LevelState::reRenderInventory()
 {
 	inventory_screen_.forceRerender();
+};
+
+void LevelState::addRenderable( Renderable* renderable, int layer )
+{
+	layers_[ 0 ].push_back( renderable );
 };

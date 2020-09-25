@@ -11,6 +11,7 @@ class Sprite;
 class SpriteSystem;
 
 #include "block.hpp"
+#include "block_layer.hpp"
 #include "tileset.hpp"
 #include "unit.hpp"
 #include <vector>
@@ -35,11 +36,11 @@ class BlockSystem final
 	private:
 		bool blocks_work_offscreen_;
 		int map_width_;
-		std::vector<std::vector<Block>> layers_;
+		std::vector<BlockLayer> layers_;
 		std::string current_tileset_;
 		std::map<std::string, Tileset> tilesets_;
 
 		Tileset& getTileset();
-		void addBlock( std::vector<Block>& layer, int x, int y, int i, int type, LevelState& level_state );
+		void addBlock( int layer_index, int x, int y, int i, int type, LevelState& level_state );
 		void changeTileset( std::string new_tileset );
 };

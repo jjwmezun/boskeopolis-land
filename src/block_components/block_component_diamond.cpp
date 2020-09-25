@@ -42,7 +42,7 @@ void BlockComponentDiamond::init( Block& block, LevelState& level_state ) const
 
 void BlockComponentDiamond::removeDiamond( Block& block, LevelState& level_state ) const
 {
-	level_state.currentMap().deleteBlock( block.location() );
+	level_state.currentMap().deleteBlock( block.layer(), block.location() );
 
 	if ( replacement_block_ == -1 )
 	{
@@ -50,6 +50,6 @@ void BlockComponentDiamond::removeDiamond( Block& block, LevelState& level_state
 	}
 	else
 	{
-		level_state.currentMap().changeBlock( block.location(), replacement_block_ );
+		level_state.currentMap().changeBlock( block.layer(), block.location(), replacement_block_ );
 	}
 };

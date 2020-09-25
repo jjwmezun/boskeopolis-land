@@ -71,7 +71,7 @@ void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camer
 
 void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha, SDL_Texture* texture ) const
 {
-	if ( visible_ && ( ( priority && priority_ ) || ( !priority && !priority_ ) ) )
+	if ( visible_ )
 	{
 		sdl2::SDLRect dest = adjustBoundBox( bound_box );
 

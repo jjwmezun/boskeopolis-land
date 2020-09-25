@@ -1,4 +1,6 @@
+#include "icicle_sprite.hpp"
 #include "level_state.hpp"
+#include <memory>
 #include "mezun_math.hpp"
 #include "spawn_icicle_sprite.hpp"
 #include "sprite_graphics.hpp"
@@ -25,7 +27,7 @@ void SpawnIcicleSprite::customUpdate( LevelState& level_state )
 	{
 		if ( timer_ == SPAWN_SPEED )
 		{
-			level_state.sprites().spawnIcicle( xPixels(), yPixels() );
+			level_state.sprites().spawn( std::unique_ptr<IcicleSprite>( new IcicleSprite( xPixels(), yPixels() ) ) );
 			timer_ = 0;
 		}
 		else

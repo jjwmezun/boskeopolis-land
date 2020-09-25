@@ -26,7 +26,7 @@ void BlockComponentSingleUse::interact( const Collision& collision, Sprite& spri
 
 			const int location = ly + lx;
 
-			level_state.level().currentMap().deleteBlock( location );
+			level_state.level().currentMap().deleteBlock( block.layer(), location );
 			block.destroy();
 		}
 	}

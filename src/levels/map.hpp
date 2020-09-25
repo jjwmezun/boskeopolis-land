@@ -15,6 +15,12 @@ class SpriteSystem;
 class Map final
 {
 	public:
+		struct BlockLayer
+		{
+			std::vector<int> blocks_;
+			int position_;
+		};
+
 		enum class LayerType
 		{
 			__NULL,
@@ -36,7 +42,7 @@ class Map final
 		const std::vector<Warp> warps_;
 		std::vector<std::shared_ptr<MapLayer>> backgrounds_;
 		std::vector<std::shared_ptr<MapLayer>> foregrounds_;
-		std::vector<std::vector<int>> blocks_layers_;
+		std::vector<BlockLayer> blocks_layers_;
 		std::vector<int> sprites_;
 		const std::string tileset_;
 		std::string music_;
@@ -82,6 +88,7 @@ class Map final
 		void update( LevelState& level_state );
 		void renderBG( const Camera& camera );
 		void renderFG( const Camera& camera );
+		void renderBGColor() const;
 
 		const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
 
@@ -92,17 +99,17 @@ class Map final
 
 		int blocksSize() const;
 		int spritesSize() const;
-		int block( int n ) const;
+		int block( int layer, int n ) const;
 		int sprite( int n ) const;
-		const std::vector<std::vector<int>>& blocksLayers() const;
+		const std::vector<BlockLayer>& blocksLayers() const;
 
 		int mapX( int n ) const;
 		int mapY( int n ) const;
 		int indexFromXAndY( int x, int y ) const;
 
 		const std::string& tileset() const;
-		void changeBlock( int where, int value );
-		void deleteBlock( int where );
+		void changeBlock( int layer, int where, int value );
+		void deleteBlock( int layer, int where );
 		void deleteSprite( int where );
 
 		void interact( Sprite& sprite, LevelState& level_state );
@@ -114,7 +121,7 @@ class Map final
 	private:
 		Map
 		(
-			std::vector<std::vector<int>> blocks_layers,
+			std::vector<BlockLayer> blocks_layers,
 			std::vector<int> sprites,
 			int width,
 			int height,
@@ -148,7 +155,6 @@ class Map final
 		void updateLayers( LevelState& level_state );
 		void updateLoop( const SpriteSystem& sprites );
 		void updateBGColor();
-		void renderBGColor() const;
 		int scrollLoopWidthBlocks() const;
 		int scrollLoopWidthBlocks( int loop ) const;
 		int scrollLoopWidthPixels( int loop ) const;

@@ -166,7 +166,7 @@ void MapLayerDoom::update( LevelState& level_state )
 
 		// RAY LOOP START
 
-		bool items_caught[ lvmap.blocks_.size() ] = { false };
+		bool items_caught[ lvmap.blocksSize() ] = { false };
 		int block_types[ RAY_MAX ];
 		item_info_.clear();
 
@@ -220,7 +220,7 @@ void MapLayerDoom::update( LevelState& level_state )
 
 				//Check if ray has hit a wall
 				const int block_index = lvmap.indexFromXAndY( map_x, map_y );
-				const int block = lvmap.block( block_index );
+				const int block = lvmap.block( 0, block_index );
 				if ( block == 10 || block == 19 || block == 20 )
 				{
 					block_types[ ray_x ] = block;

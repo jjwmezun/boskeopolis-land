@@ -52,13 +52,8 @@ class SpriteSystem final
 		void reset( LevelState& level_state );
 		void resetTrainer( LevelState& level_state );
 		void spawn( std::unique_ptr<Sprite>&& sprite );
-		void spawnCactooieSpine( int x, int y, Direction::Horizontal direction );
-		void spawnWaterdrop( int x, int y );
 		void spawnEnemyBullet( int x, int y, Direction::Simple direction );
 		void spawnHeroBullet( int x, int y, Direction::Simple direction );
-		void spawnShmupBullet( int x, int y, double dy, double dx );
-		void spawnOlive( int x, int y, Direction::Horizontal start_dir );
-		void spawnIcicle( int x, int y );
 		void heroOpenTreasureChest();
 		Sprite& hero();
 		const Sprite& hero() const;

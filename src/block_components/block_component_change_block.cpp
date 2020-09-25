@@ -10,5 +10,5 @@ BlockComponentChangeBlock::~BlockComponentChangeBlock() {};
 
 void BlockComponentChangeBlock::interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const
 {
-	level_state.currentMap().changeBlock( block.location(), new_block_ );
+	level_state.currentMap().changeBlock( block.layer(), block.location(), new_block_ );
 };
