@@ -25,7 +25,10 @@ NewsTicker::NewsTicker( int y )
 
 NewsTicker::~NewsTicker()
 {
-	SDL_DestroyTexture( texture_ );
+	if ( texture_ != nullptr )
+	{
+		SDL_DestroyTexture( texture_ );
+	}
 };
 
 void NewsTicker::update()
