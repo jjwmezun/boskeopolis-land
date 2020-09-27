@@ -174,7 +174,7 @@ void RugMonsterSprite::customInteract( Collision& my_collision, Collision& their
     }
 };
 
-void RugMonsterSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void RugMonsterSprite::deathAction( LevelState& level_state )
 {
     stopX();
     if ( current_animation_frame_ <= 0 )

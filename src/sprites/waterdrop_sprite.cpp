@@ -29,7 +29,7 @@ void WaterdropSprite::customInteract( Collision& my_collision, Collision& their_
 	}
 };
 
-void WaterdropSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void WaterdropSprite::deathAction( LevelState& level_state )
 {
 	fullStopY();
 

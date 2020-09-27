@@ -47,7 +47,7 @@ void DoomEnemySprite::customInteract( Collision& my_collision, Collision& their_
 	}
 };
 
-void DoomEnemySprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void DoomEnemySprite::deathAction( LevelState& level_state )
 {
 	if ( animation_ == 0 )
 	{

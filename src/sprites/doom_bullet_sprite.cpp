@@ -31,7 +31,7 @@ void DoomBulletSprite::customInteract( Collision& my_collision, Collision& their
 	}
 };
 
-void DoomBulletSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void DoomBulletSprite::deathAction( LevelState& level_state )
 {
 	death_finished_ = true;
 };

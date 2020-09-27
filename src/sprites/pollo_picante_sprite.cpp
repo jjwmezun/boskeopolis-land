@@ -15,9 +15,9 @@ PolloPicanteSprite::PolloPicanteSprite( int x, int y, Direction::Horizontal dire
 
 PolloPicanteSprite::~PolloPicanteSprite() {};
 
-void PolloPicanteSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PolloPicanteSprite::deathAction( LevelState& level_state )
 {
-	PolloDelAireSprite::polloDeath( camera, *this, lvmap );
+	PolloDelAireSprite::polloDeath( level_state.camera(), *this, level_state.currentMap() );
 	graphics_->current_frame_y_ = 4;
 };
 

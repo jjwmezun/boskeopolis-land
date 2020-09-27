@@ -1,4 +1,4 @@
 #include "renderable.hpp"
 
-Renderable::Renderable() {};
+Renderable::Renderable( Type type ) : type_ ( type ) {};
 Renderable::~Renderable() {};

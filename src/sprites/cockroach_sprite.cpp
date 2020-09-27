@@ -30,10 +30,10 @@ void CockroachSprite::customUpdate( LevelState& level_state )
 
 void CockroachSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};
 
-void CockroachSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void CockroachSprite::deathAction( LevelState& level_state )
 {
 	graphics_->priority_ = true;
-	defaultDeathAction( camera );
+	defaultDeathAction( level_state.camera() );
 };
 
 void CockroachSprite::render( Camera& camera, bool priority )

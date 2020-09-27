@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "city-1",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -58,7 +58,7 @@
 		},
 		{
 			"slug": "city-1-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

@@ -45,11 +45,11 @@ void MazePlayerSprite::customUpdate( LevelState& level_state )
 void MazePlayerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
-void MazePlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void MazePlayerSprite::deathAction( LevelState& level_state )
 {
 	block_interact_ = false;
 
-	if ( camera.offscreen( hit_box_ ) )
+	if ( level_state.camera().offscreen( hit_box_ ) )
 	{
 		death_finished_ = true;
 	}
@@ -65,7 +65,7 @@ void MazePlayerSprite::deathAction( const Camera& camera, EventSystem& events, c
 
 		graphics_->rotation_ += DEATH_SPIN_SPEED;
 
-		if ( ( int )graphics_->rotation_ % 360 == 0 )
+		if ( ( int )( graphics_->rotation_ ) % 360 == 0 )
 		{
 			++death_spins_;
 		}

@@ -13,9 +13,9 @@ PolloDelAireStillSprite::PolloDelAireStillSprite( int x, int y, int map_id, bool
 
 PolloDelAireStillSprite::~PolloDelAireStillSprite() {};
 
-void PolloDelAireStillSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PolloDelAireStillSprite::deathAction( LevelState& level_state )
 {
-	PolloDelAireSprite::polloDeath( camera, *this, lvmap );
+	PolloDelAireSprite::polloDeath( level_state.camera(), *this, level_state.currentMap() );
 };
 
 void PolloDelAireStillSprite::reset()

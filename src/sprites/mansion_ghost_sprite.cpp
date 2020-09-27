@@ -108,7 +108,7 @@ void MansionGhostSprite::customInteract( Collision& my_collision, Collision& the
 	}
 };
 
-void MansionGhostSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void MansionGhostSprite::deathAction( LevelState& level_state )
 {
 	if ( graphics_->alpha_ == 0 )
 	{

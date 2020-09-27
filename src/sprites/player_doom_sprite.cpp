@@ -151,7 +151,7 @@ void PlayerDoomSprite::moveStraight( double multiplier, double angle )
 	vy_ += y_change;
 }
 
-void PlayerDoomSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PlayerDoomSprite::deathAction( LevelState& level_state )
 {
 	fullStopX();
 	fullStopY();

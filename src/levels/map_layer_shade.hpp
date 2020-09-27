@@ -6,7 +6,7 @@
 class MapLayerShade final : public MapLayer
 {
 	public:
-		MapLayerShade( int shade, int alpha );
+		MapLayerShade( int shade, int alpha, int layer_position = DEFAULT_POSITION );
 		~MapLayerShade();
 		void render( const Camera& camera ) override;
 		void update( LevelState& level_state ) override;

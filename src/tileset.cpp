@@ -93,7 +93,7 @@ void Tileset::update( EventSystem& events )
 	}
 };
 
-BlockType* Tileset::blockType( int type )
+BlockType* Tileset::blockType( int type ) const
 {
 	if ( type <= EMPTY_BLOCK )
 	{

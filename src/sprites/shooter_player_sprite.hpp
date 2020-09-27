@@ -10,7 +10,7 @@ class ShooterPlayerSprite final : public PlayerSprite
 		ShooterPlayerSprite( int x, int y );
 		~ShooterPlayerSprite();
 		void customUpdate( LevelState& level_state ) override;
-		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
+		void deathAction( LevelState& level_state ) override;
 
 	private:
 		bool is_shooting_;

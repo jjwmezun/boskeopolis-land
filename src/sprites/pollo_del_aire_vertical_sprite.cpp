@@ -13,9 +13,9 @@ PolloDelAireVerticalSprite::PolloDelAireVerticalSprite( int x, int y, Direction:
 
 PolloDelAireVerticalSprite::~PolloDelAireVerticalSprite() {};
 
-void PolloDelAireVerticalSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PolloDelAireVerticalSprite::deathAction( LevelState& level_state )
 {
-	PolloDelAireSprite::polloDeath( camera, *this, lvmap );
+	PolloDelAireSprite::polloDeath( level_state.camera(), *this, level_state.currentMap() );
 };
 
 void PolloDelAireVerticalSprite::reset()

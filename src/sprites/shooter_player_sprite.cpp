@@ -187,10 +187,10 @@ void ShooterPlayerSprite::updateGFX()
 	}
 };
 
-void ShooterPlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void ShooterPlayerSprite::deathAction( LevelState& level_state )
 {
 	graphics_->current_frame_x_ = 208;
 	graphics_->current_frame_y_ = 0;
-	defaultDeathAction( camera );
-	events.playDeathSoundIfNotAlreadyPlaying();
+	defaultDeathAction( level_state.camera() );
+	level_state.events().playDeathSoundIfNotAlreadyPlaying();
 };

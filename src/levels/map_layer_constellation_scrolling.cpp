@@ -25,10 +25,11 @@ MapLayerConstellationScrolling::MapLayerConstellationScrolling
 (
 	int map_width_blocks,
 	int map_height_blocks,
-	std::string image
+	std::string image,
+	int layer_position
 )
 :
-	MapLayer(),
+	MapLayer( layer_position ),
 	src_ ( 0, 0, Unit::BlocksToPixels( map_width_blocks ), calculateHeight( map_width_blocks, map_height_blocks ) ),
 	image_ ( image ),
 	scroll_speed_ ( scrollSpeedX( map_width_blocks ) ),

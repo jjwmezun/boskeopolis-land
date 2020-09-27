@@ -46,6 +46,7 @@ class Level final
 		const Level& operator=( const Level& ) = delete;
 
 		void init( LevelState& level_state );
+		void initCurrentMap( LevelState& level_state );
 		void updateGoal( LevelState& level_state );
 		Map& currentMap();
 		const Map& currentMap() const;

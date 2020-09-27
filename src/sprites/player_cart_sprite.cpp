@@ -175,10 +175,10 @@ void PlayerCartSprite::customInteract( Collision& my_collision, Collision& their
 	}
 };
 
-void PlayerCartSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PlayerCartSprite::deathAction( LevelState& level_state )
 {
-	defaultDeathAction( camera );
-	events.playDeathSoundIfNotAlreadyPlaying();
+	defaultDeathAction( level_state.camera() );
+	level_state.events().playDeathSoundIfNotAlreadyPlaying();
 };
 
 void PlayerCartSprite::updateGraphics()

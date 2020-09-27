@@ -17,6 +17,7 @@
 #include "neon_overlay.hpp"
 #include "render.hpp"
 #include <SDL2/SDL.h>
+#undef main
 #include "title_state.hpp"
 #include <vector>
 #include "wmessage_state.hpp"

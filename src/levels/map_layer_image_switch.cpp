@@ -19,7 +19,8 @@ MapLayerImageSwitch::MapLayerImageSwitch
 	int animation_speed,
 	bool flip,
 	Uint8 alpha,
-	SDL_BlendMode blend_mode
+	SDL_BlendMode blend_mode,
+	int layer_position
 )
 :
 	MapLayerImage
@@ -39,7 +40,8 @@ MapLayerImageSwitch::MapLayerImageSwitch
 		animation_speed,
 		flip,
 		alpha,
-		blend_mode
+		blend_mode,
+		layer_position
 	),
 	on_alpha_ ( alpha )
 {};

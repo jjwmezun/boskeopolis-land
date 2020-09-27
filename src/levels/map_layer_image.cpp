@@ -22,10 +22,11 @@ MapLayerImage::MapLayerImage
 	int animation_speed,
 	bool flip,
 	Uint8 alpha,
-	SDL_BlendMode blend_mode
+	SDL_BlendMode blend_mode,
+	int layer_position
 )
 :
-	MapLayer(),
+	MapLayer( layer_position ),
 	texture_ ( texture ),
 	source_ ( { 0, 0, width, height } ),
 	offset_x_ ( offset_x ),

@@ -9,7 +9,7 @@ class DoomEnemySprite final : public Sprite
 		~DoomEnemySprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
-		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap );
+		void deathAction( LevelState& level_state );
 
 	private:
 		int animation_;

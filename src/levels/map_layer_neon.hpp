@@ -6,7 +6,7 @@
 class MapLayerNeon final : public MapLayer
 {
 	public:
-		MapLayerNeon();
+		MapLayerNeon( int layer_position );
 		~MapLayerNeon();
 		void render( const Camera& camera ) override;
 		void update( LevelState& level_state ) override;

@@ -13,7 +13,7 @@
 class MapLayerTilemapImage final : public MapLayer
 {
 	public:
-		MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height );
+		MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height, int layer_position = DEFAULT_POSITION );
 		~MapLayerTilemapImage();
 		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;

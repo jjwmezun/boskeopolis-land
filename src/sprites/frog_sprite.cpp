@@ -132,8 +132,8 @@ void FrogSprite::setTongueY()
     tongue_.y = hit_box_.y + TONGUE_RELATIVE_Y;
 };
 
-void FrogSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void FrogSprite::deathAction( LevelState& level_state )
 {
     setTongueY();
-	defaultDeathAction( camera );
+	defaultDeathAction( level_state.camera() );
 };

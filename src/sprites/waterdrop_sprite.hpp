@@ -9,5 +9,5 @@ class WaterdropSprite final : public Sprite
 		~WaterdropSprite();
 		void customUpdate( LevelState& level_state );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state );
-		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
+		void deathAction( LevelState& level_state ) override;
 };

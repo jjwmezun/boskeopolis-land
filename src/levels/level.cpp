@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "block_system.hpp"
 #include "level_message_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
@@ -143,7 +144,9 @@ void Level::warp( LevelState& level_state )
 	{
 		Camera& camera = level_state.camera();
 	
+		currentMap().removeRenderableLayers( level_state );
 		current_map_ = warp->mapNum();
+		currentMap().initOtherLayers( level_state );
 		entrance_x_ = warp->entranceX();
 		entrance_y_ = warp->entranceY();
 
@@ -168,11 +171,9 @@ void Level::warp( LevelState& level_state )
 		camera.adjust( sprites.hero(), currentMap() );
 
 		level_state.events().changePalette( currentMap().palette_ );
-		level_state.blocks().reset( currentMap() );
+		level_state.blocks().reset( level_state );
 
 		Audio::changeSong( currentMap().music_ );
-
-		currentMap().changed_ = true;
 	}
 };
 
@@ -238,6 +239,12 @@ std::string Level::getCodeName() const
 void Level::init( LevelState& level_state )
 {
 	goal_->init( level_state );
+	initCurrentMap( level_state );
+};
+
+void Level::initCurrentMap( LevelState& level_state )
+{
+	currentMap().initOtherLayers( level_state );
 };
 
 void Level::updateGoal( LevelState& level_state )
@@ -369,308 +376,292 @@ Level Level::getLevel( int id )
 		/* LAYERS
 		==============================================================*/
 
-			// Can't rapidjson object to function, so we have to use dumb loops.
-			std::vector<std::string> map_layer_group_types = { "backgrounds", "foregrounds" };
-			std::map<std::string, std::vector<std::unique_ptr<MapLayer>>> map_layer_groups;
-
-			for ( auto& mlg : map_layer_group_types )
+			std::vector<std::shared_ptr<MapLayer>> layers;
+			if ( mobj.HasMember( "layers" ) && mobj[ "layers" ].IsArray() )
 			{
-				std::vector<std::unique_ptr<MapLayer>> group;
-				const char* mlgc = mlg.c_str();
-
-				if ( mobj.HasMember( mlgc ) && mobj[ mlgc ].IsArray() )
+				for ( auto& layer_item : mobj[ "layers" ].GetArray() )
 				{
-
-					for ( auto& bgitem : mobj[ mlgc ].GetArray() )
+					if ( layer_item.IsObject() )
 					{
-
-						if ( bgitem.IsObject() )
+						auto layer = layer_item.GetObject();
+						if ( layer.HasMember( "type" ) && layer[ "type" ].IsString() )
 						{
-							auto bg = bgitem.GetObject();
+							auto layer_type = layer[ "type" ].GetString();
+							int layer_width = 128;
+							int layer_height = 128;
+							double layer_x_scroll = 1;
+							double layer_y_scroll = 1;
+							int layer_x_speed  = 0;
+							int position = MapLayer::DEFAULT_POSITION;
 
-							if ( bg.HasMember( "type" ) && bg[ "type" ].IsString() )
+							if ( layer.HasMember( "layer" ) && layer[ "layer" ].IsInt() )
 							{
+								position = std::min( 0, std::max( LevelState::NUMBER_OF_LAYERS, layer[ "layer" ].GetInt() ) );
+							}
 
-								auto bgtype = bg[ "type" ].GetString();
+							if ( layer.HasMember( "width" ) && layer[ "width" ].IsInt() )
+							{
+								layer_width = layer[ "width" ].GetInt();
+							}
+							if ( layer.HasMember( "height" ) && layer[ "height" ].IsInt() )
+							{
+								layer_height = layer[ "height" ].GetInt();
+							}
 
-								int bgw = 128;
-								int bgh = 128;
-								double bgxscroll = 1;
-								double bgyscroll = 1;
-								int bgxspeed  = 0;
+							if ( layer.HasMember( "x_scroll" ) && layer[ "x_scroll" ].IsDouble() )
+							{
+								layer_x_scroll = layer[ "x_scroll" ].GetDouble();
+							}
+							else if ( layer.HasMember( "x_scroll" ) && layer[ "x_scroll" ].IsInt() )
+							{
+								layer_x_scroll = ( double )layer[ "x_scroll" ].GetInt();
+							}
 
-								if ( bg.HasMember( "width" ) && bg[ "width" ].IsInt() )
+							if ( layer.HasMember( "y_scroll" ) && layer[ "y_scroll" ].IsDouble() )
+							{
+								layer_y_scroll = layer[ "y_scroll" ].GetDouble();
+							}
+							else if ( layer.HasMember( "y_scroll" ) && layer[ "y_scroll" ].IsInt() )
+							{
+								layer_x_scroll = ( double )layer[ "y_scroll" ].GetInt();
+							}
+
+							if ( mezun::areStringsEqual( layer_type, "image" ) )
+							{
+								std::string img = "clouds.png";
+								int bgxoffset = 0;
+								int bgyoffset = 0;
+								int bgframes  = 1;
+								int bgxrepeat = 255;
+								int bgyrepeat = 255;
+								int bgyspeed  = 0;
+								int bganimspeed = 1;
+								bool bganimflip = false;
+								Uint8 alpha = 255;
+								SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE;
+
+								if ( layer.HasMember( "img" ) && layer[ "img" ].IsString() )
 								{
-									bgw = bg[ "width" ].GetInt();
+									img = "bg" + Main::pathDivider() + layer[ "img" ].GetString();
 								}
-								if ( bg.HasMember( "height" ) && bg[ "height" ].IsInt() )
+								if ( layer.HasMember( "alpha" ) && layer[ "alpha" ].IsInt() )
 								{
-									bgh = bg[ "height" ].GetInt();
+									alpha = ( Uint8 )( layer[ "alpha" ].GetInt() );
 								}
-
-								if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsDouble() )
+								if ( layer.HasMember( "frames" ) && layer[ "frames" ].IsInt() )
 								{
-									bgxscroll = bg[ "x_scroll" ].GetDouble();
+									bgframes = layer[ "frames" ].GetInt();
 								}
-								else if ( bg.HasMember( "x_scroll" ) && bg[ "x_scroll" ].IsInt() )
+								if ( layer.HasMember( "x_offset" ) && layer[ "x_offset" ].IsInt() )
 								{
-									bgxscroll = ( double )bg[ "x_scroll" ].GetInt();
+									bgxoffset = layer[ "x_offset" ].GetInt();
 								}
-
-								if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsDouble() )
+								if ( layer.HasMember( "y_offset" ) && layer[ "y_offset" ].IsInt() )
 								{
-									bgyscroll = bg[ "y_scroll" ].GetDouble();
+									bgyoffset = layer[ "y_offset" ].GetInt();
 								}
-								else if ( bg.HasMember( "y_scroll" ) && bg[ "y_scroll" ].IsInt() )
+								if ( layer.HasMember( "x_repeat" ) )
 								{
-									bgxscroll = ( double )bg[ "y_scroll" ].GetInt();
-								}
-
-								if ( mezun::areStringsEqual( bgtype, "image" ) )
-								{
-									std::string img = "clouds.png";
-									int bgxoffset = 0;
-									int bgyoffset = 0;
-									int bgframes  = 1;
-									int bgxrepeat = 255;
-									int bgyrepeat = 255;
-									int bgyspeed  = 0;
-									int bganimspeed = 1;
-									bool bganimflip = false;
-									Uint8 alpha = 255;
-									SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE;
-
-									if ( bg.HasMember( "img" ) && bg[ "img" ].IsString() )
+									if ( layer[ "x_repeat" ].IsBool() && !layer[ "x_repeat" ].GetBool() )
 									{
-										img = "bg" + Main::pathDivider() + bg[ "img" ].GetString();
+										bgxrepeat = 0;
 									}
-									if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
+									else if ( layer[ "x_repeat" ].IsInt() )
 									{
-										alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
-									}
-									if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
-									{
-										bgframes = bg[ "frames" ].GetInt();
-									}
-									if ( bg.HasMember( "x_offset" ) && bg[ "x_offset" ].IsInt() )
-									{
-										bgxoffset = bg[ "x_offset" ].GetInt();
-									}
-									if ( bg.HasMember( "y_offset" ) && bg[ "y_offset" ].IsInt() )
-									{
-										bgyoffset = bg[ "y_offset" ].GetInt();
-									}
-									if ( bg.HasMember( "x_repeat" ) )
-									{
-										if ( bg[ "x_repeat" ].IsBool() && !bg[ "x_repeat" ].GetBool() )
-										{
-											bgxrepeat = 0;
-										}
-										else if ( bg[ "x_repeat" ].IsInt() )
-										{
-											bgxrepeat = bg[ "x_repeat" ].GetInt();
-										}
-									}
-									if ( bg.HasMember( "y_repeat" ) )
-									{
-										if ( bg[ "y_repeat" ].IsBool() && !bg[ "y_repeat" ].GetBool() )
-										{
-											bgyrepeat = 0;
-										}
-										else if ( bg[ "y_repeat" ].IsInt() )
-										{
-											bgyrepeat = bg[ "y_repeat" ].GetInt();
-										}
-									}
-									if ( bg.HasMember( "frames" ) && bg[ "frames" ].IsInt() )
-									{
-										bgframes = bg[ "frames" ].GetInt();
-									}
-									if ( bg.HasMember( "x_speed" ) && bg[ "x_speed" ].IsInt() )
-									{
-										bgxspeed = bg[ "x_speed" ].GetInt();
-									}
-									if ( bg.HasMember( "y_speed" ) && bg[ "y_speed" ].IsInt() )
-									{
-										bgyspeed = bg[ "y_speed" ].GetInt();
-									}
-									if ( bg.HasMember( "animation_speed" ) && bg[ "animation_speed" ].IsInt() )
-									{
-										bganimspeed = bg[ "animation_speed" ].GetInt();
-									}
-									if ( bg.HasMember( "animation_flip" ) && bg[ "animation_flip" ].IsBool() )
-									{
-										bganimflip = bg[ "animation_flip" ].GetBool();
-									}
-									if ( bg.HasMember( "lighten" ) && bg[ "lighten" ].IsBool() && bg[ "lighten" ].GetBool() == true )
-									{
-										blend_mode = SDL_BLENDMODE_ADD;
-									}
-									else if ( bg.HasMember( "darken" ) && bg[ "darken" ].IsBool() && bg[ "darken" ].GetBool() == true )
-									{
-										blend_mode = SDL_BLENDMODE_MOD;
-									}
-
-									if ( bg.HasMember( "switch" ) && bg[ "switch" ].IsBool() && bg[ "switch" ].GetBool() == true )
-									{
-										group.emplace_back
-										(
-											std::make_unique<MapLayerImageSwitch>
-											(
-												std::forward<std::string> ( img ),
-												bgw,
-												bgh,
-												bgxoffset,
-												bgyoffset,
-												bgxscroll,
-												bgyscroll,
-												bgframes,
-												bgxrepeat,
-												bgyrepeat,
-												bgxspeed,
-												bgyspeed,
-												bganimspeed,
-												bganimflip,
-												alpha,
-												blend_mode
-											)
-										);
-									}
-									else
-									{
-										group.emplace_back
-										(
-											std::make_unique<MapLayerImage>
-											(
-												std::forward<std::string> ( img ),
-												bgw,
-												bgh,
-												bgxoffset,
-												bgyoffset,
-												bgxscroll,
-												bgyscroll,
-												bgframes,
-												bgxrepeat,
-												bgyrepeat,
-												bgxspeed,
-												bgyspeed,
-												bganimspeed,
-												bganimflip,
-												alpha,
-												blend_mode
-											)
-										);
-									}
-
-								}
-								else if ( mezun::areStringsEqual( bgtype, "constellation" ) )
-								{
-									double move_speed = 0.0;
-									std::string image = "constellation.png";
-
-									if ( bg.HasMember( "image" ) && bg[ "image" ].IsString() )
-									{
-										image = bg[ "image" ].GetString();
-									}
-
-									if ( bg.HasMember( "version" ) && bg[ "version" ].IsString() && strcmp( bg[ "version" ].GetString(), "moving" ) == 0 )
-									{
-										if ( bg.HasMember( "move_speed" ) && bg[ "move_speed" ].IsFloat() )
-										{
-											move_speed = bg[ "move_speed" ].GetFloat();
-										}
-										group.emplace_back
-										(
-											std::make_unique<MapLayerConstellationMoving>
-											(
-												bgw,
-												bgh,
-												move_speed,
-												image
-											)
-										);
-									}
-									else
-									{
-										group.emplace_back
-										(
-											std::make_unique<MapLayerConstellationScrolling>
-											(
-												bgw,
-												bgh,
-												image
-											)
-										);
+										bgxrepeat = layer[ "x_repeat" ].GetInt();
 									}
 								}
-								else if ( mezun::areStringsEqual( bgtype, "shade" ) )
+								if ( layer.HasMember( "y_repeat" ) )
 								{
-									Uint8 alpha = 255;
-
-									if ( bg.HasMember( "color" ) && bg[ "color" ].IsInt() )
+									if ( layer[ "y_repeat" ].IsBool() && !layer[ "y_repeat" ].GetBool() )
 									{
-										if ( bg.HasMember( "alpha" ) && bg[ "alpha" ].IsInt() )
-										{
-											alpha = ( Uint8 )( bg[ "alpha" ].GetInt() );
-										}
-
-										group.emplace_back
-										(
-											std::make_unique<MapLayerShade> ( bg[ "color" ].GetInt(), alpha )
-										);
+										bgyrepeat = 0;
+									}
+									else if ( layer[ "y_repeat" ].IsInt() )
+									{
+										bgyrepeat = layer[ "y_repeat" ].GetInt();
 									}
 								}
-								else if ( mezun::areStringsEqual( bgtype, "neon" ) )
+								if ( layer.HasMember( "frames" ) && layer[ "frames" ].IsInt() )
 								{
-									group.emplace_back
+									bgframes = layer[ "frames" ].GetInt();
+								}
+								if ( layer.HasMember( "x_speed" ) && layer[ "x_speed" ].IsInt() )
+								{
+									layer_x_speed = layer[ "x_speed" ].GetInt();
+								}
+								if ( layer.HasMember( "y_speed" ) && layer[ "y_speed" ].IsInt() )
+								{
+									bgyspeed = layer[ "y_speed" ].GetInt();
+								}
+								if ( layer.HasMember( "animation_speed" ) && layer[ "animation_speed" ].IsInt() )
+								{
+									bganimspeed = layer[ "animation_speed" ].GetInt();
+								}
+								if ( layer.HasMember( "animation_flip" ) && layer[ "animation_flip" ].IsBool() )
+								{
+									bganimflip = layer[ "animation_flip" ].GetBool();
+								}
+								if ( layer.HasMember( "lighten" ) && layer[ "lighten" ].IsBool() && layer[ "lighten" ].GetBool() == true )
+								{
+									blend_mode = SDL_BLENDMODE_ADD;
+								}
+								else if ( layer.HasMember( "darken" ) && layer[ "darken" ].IsBool() && layer[ "darken" ].GetBool() == true )
+								{
+									blend_mode = SDL_BLENDMODE_MOD;
+								}
+
+								if ( layer.HasMember( "switch" ) && layer[ "switch" ].IsBool() && layer[ "switch" ].GetBool() == true )
+								{
+									layers.emplace_back
 									(
-										std::make_unique<MapLayerNeon> ()
+										std::make_shared<MapLayerImageSwitch>
+										(
+											std::forward<std::string> ( img ),
+											layer_width,
+											layer_height,
+											bgxoffset,
+											bgyoffset,
+											layer_x_scroll,
+											layer_y_scroll,
+											bgframes,
+											bgxrepeat,
+											bgyrepeat,
+											layer_x_speed,
+											bgyspeed,
+											bganimspeed,
+											bganimflip,
+											alpha,
+											blend_mode,
+											position
+										)
 									);
 								}
-								else if ( mezun::areStringsEqual( bgtype, "lightning" ) )
+								else
 								{
-									group.emplace_back
+									layers.emplace_back
 									(
-										std::make_unique<MapLayerLightning> ()
-									);
-								}
-								else if ( mezun::areStringsEqual( bgtype, "doom" ) )
-								{
-									group.emplace_back
-									(
-										std::make_unique<MapLayerDoom> ()
+										std::make_shared<MapLayerImage>
+										(
+											std::forward<std::string> ( img ),
+											layer_width,
+											layer_height,
+											bgxoffset,
+											bgyoffset,
+											layer_x_scroll,
+											layer_y_scroll,
+											bgframes,
+											bgxrepeat,
+											bgyrepeat,
+											layer_x_speed,
+											bgyspeed,
+											bganimspeed,
+											bganimflip,
+											alpha,
+											blend_mode,
+											position
+										)
 									);
 								}
 
 							}
+							else if ( mezun::areStringsEqual( layer_type, "constellation" ) )
+							{
+								double move_speed = 0.0;
+								std::string image = "constellation.png";
 
+								if ( layer.HasMember( "image" ) && layer[ "image" ].IsString() )
+								{
+									image = layer[ "image" ].GetString();
+								}
+
+								if ( layer.HasMember( "version" ) && layer[ "version" ].IsString() && strcmp( layer[ "version" ].GetString(), "moving" ) == 0 )
+								{
+									if ( layer.HasMember( "move_speed" ) && layer[ "move_speed" ].IsFloat() )
+									{
+										move_speed = layer[ "move_speed" ].GetFloat();
+									}
+									layers.emplace_back
+									(
+										std::make_shared<MapLayerConstellationMoving>
+										(
+											layer_width,
+											layer_height,
+											move_speed,
+											image,
+											position
+										)
+									);
+								}
+								else
+								{
+									layers.emplace_back
+									(
+										std::make_shared<MapLayerConstellationScrolling>
+										(
+											layer_width,
+											layer_height,
+											image,
+											position
+										)
+									);
+								}
+							}
+							else if ( mezun::areStringsEqual( layer_type, "shade" ) )
+							{
+								Uint8 alpha = 255;
+
+								if ( layer.HasMember( "color" ) && layer[ "color" ].IsInt() )
+								{
+									if ( layer.HasMember( "alpha" ) && layer[ "alpha" ].IsInt() )
+									{
+										alpha = ( Uint8 )( layer[ "alpha" ].GetInt() );
+									}
+
+									layers.emplace_back
+									(
+										std::make_shared<MapLayerShade> ( layer[ "color" ].GetInt(), alpha, position )
+									);
+								}
+							}
+							else if ( mezun::areStringsEqual( layer_type, "neon" ) )
+							{
+								layers.emplace_back
+								(
+									std::make_shared<MapLayerNeon> ( position )
+								);
+							}
+							else if ( mezun::areStringsEqual( layer_type, "lightning" ) )
+							{
+								layers.emplace_back
+								(
+									std::make_shared<MapLayerLightning> ( position )
+								);
+							}
+							else if ( mezun::areStringsEqual( layer_type, "doom" ) )
+							{
+								layers.emplace_back
+								(
+									std::make_shared<MapLayerDoom> ( position )
+								);
+							}
 						}
-
 					}
-
 				}
-
-				map_layer_groups.insert( std::make_pair ( mlg, std::move( group ) ) );
 			}
-
-
-
 
 			maps.push_back
 			(
 				Map::mapFromPath
 				(
 					slug,
-					std::move( map_layer_groups.at( "backgrounds" ) ),
-					warps,
-					std::move( map_layer_groups.at( "foregrounds" ) )
+					layers,
+					warps
 				)
 			);
 
-
-
-				}
-			}
+		}
+	}
 
 
 

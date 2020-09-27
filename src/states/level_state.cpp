@@ -12,19 +12,16 @@
 LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera )
 :
 	GameState ( StateID::LEVEL_STATE ),
+	id_ ( 0 ),
 	health_ ( difficulty, heart_upgrades, has_oxygen_upgrade ),
 	camera_ ( camera ),
 	events_ (),
-	sprites_ (),
+	sprites_ ( *this ),
 	blocks_ (),
 	level_ ( Level::getLevel( level_id ) ),
 	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade )
 {
 	blocks_.init( level_.currentMap() );
-	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
-	{
-		layers_[ i ] = {};
-	}
 }
 
 LevelState::~LevelState() {};
@@ -256,6 +253,7 @@ void LevelState::initForTrainer()
 {
 	sprites_.resetTrainer( *this );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
+	level_.initCurrentMap( *this );
 };
 
 bool LevelState::trainerPaletteChanged() const
@@ -273,7 +271,57 @@ void LevelState::reRenderInventory()
 	inventory_screen_.forceRerender();
 };
 
-void LevelState::addRenderable( Renderable* renderable, int layer )
+int LevelState::addRenderable( std::unique_ptr<Renderable>&& renderable, int layer )
 {
-	layers_[ 0 ].push_back( renderable );
+	if ( layer >= 0  && layer < NUMBER_OF_LAYERS )
+	{
+		renderable->id_ = id_++;
+		renderable_map_.insert( std::pair<int, Renderable*> ( renderable->id_, renderable.get() ) );
+		layers_[ layer ].push_back( std::move( renderable ) );
+		return id_ - 1;
+	}
+	return -1;
+};
+
+void LevelState::removeRenderable( int id )
+{
+	auto renderable_iterator = renderable_map_.find( id );
+	if ( renderable_iterator != renderable_map_.end() )
+	{
+		for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+		{
+			for ( int j = 0; j < layers_[ i ].size(); ++j )
+			{
+				if ( renderable_iterator->second == layers_[ i ][ j ].get() )
+				{
+					layers_[ i ].erase( layers_[ i ].begin() + j );
+					renderable_map_.erase( renderable_iterator );
+					return;
+				}
+			}
+		}
+	}
+};
+
+void LevelState::changeRenderableLayer( int id, int layer )
+{
+	auto renderable_iterator = renderable_map_.find( id );
+	if ( renderable_iterator != renderable_map_.end() )
+	{
+		for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+		{
+			for ( int j = 0; j < layers_[ i ].size(); ++j )
+			{
+				if ( renderable_iterator->second == layers_[ i ][ j ].get() )
+				{
+					if ( layer != i )
+					{
+						layers_[ layer ].emplace_back( layers_[ i ][ j ].release() );
+						layers_[ i ].erase( layers_[ i ].begin() + j );
+					}
+					return;
+				}
+			}
+		}
+	}
 };

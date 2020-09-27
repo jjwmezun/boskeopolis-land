@@ -14,9 +14,9 @@ PolloDelAireCircleSprite::PolloDelAireCircleSprite( int x, int y, bool clockwise
 
 PolloDelAireCircleSprite::~PolloDelAireCircleSprite() {};
 
-void PolloDelAireCircleSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PolloDelAireCircleSprite::deathAction( LevelState& level_state )
 {
-	PolloDelAireSprite::polloDeath( camera, *this, lvmap );
+	PolloDelAireSprite::polloDeath( level_state.camera(), *this, level_state.currentMap() );
 };
 
 void PolloDelAireCircleSprite::reset()

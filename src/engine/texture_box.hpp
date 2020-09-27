@@ -29,7 +29,11 @@ class TextureBox final
         int getY() const;
         void setHeight( int value );
         int getHeight() const;
+        void setWidth( int value );
+        int getWidth() const;
         const sdl2::SDLRect& getDest() const;
+        const sdl2::SDLRect& getSrc() const;
+        SDL_Texture* getTexture() const;
 
     private:
         SDL_Texture* texture_;

@@ -144,7 +144,7 @@ void Sprite::update( LevelState& level_state )
 	{
 		if ( !dead_no_animation_ )
 		{
-			deathAction( level_state.camera(), level_state.events(), level_state.currentMap() );
+			deathAction( level_state );
 		}
 		else
 		{
@@ -188,11 +188,11 @@ void Sprite::render( Camera& camera, bool priority )
 	}
 };
 
-void Sprite::render( const LevelState& level_state ) const
+void Sprite::render( const Camera& camera ) const
 {
 	if ( graphics_ != nullptr )
 	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &level_state.camera(), true );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
 	}
 };
 
@@ -614,9 +614,9 @@ bool Sprite::despawnWhenDead() const
 	return despawn_when_dead_;
 }
 
-void Sprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void Sprite::deathAction( LevelState& level_state )
 {
-	defaultDeathAction( camera );
+	defaultDeathAction( level_state.camera() );
 };
 
 void Sprite::defaultDeathAction( const Camera& camera )
@@ -1104,4 +1104,13 @@ bool Sprite::isRightOf( const Object& them ) const
 bool Sprite::isUpsideDown() const
 {
 	return gravity_modifier_ < 0.0;
+};
+
+void Sprite::changeRenderableLayer( LevelState& level_state, int layer )
+{
+	if ( layer_ != layer )
+	{
+		layer_ = layer;
+		level_state.changeRenderableLayer( renderable_id_, 15 );
+	}
 };

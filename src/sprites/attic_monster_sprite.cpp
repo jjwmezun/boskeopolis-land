@@ -191,7 +191,7 @@ void AtticMonsterSprite::render( Camera& camera, bool priority )
     }
 };
 
-void AtticMonsterSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void AtticMonsterSprite::deathAction( LevelState& level_state )
 {
     graphics_->current_frame_x_ = 110;
     hit_box_.h -= Unit::PixelsToSubPixels( 1 );

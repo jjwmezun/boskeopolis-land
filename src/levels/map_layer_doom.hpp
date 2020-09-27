@@ -11,7 +11,7 @@
 class MapLayerDoom final : public MapLayer
 {
 	public:
-		MapLayerDoom();
+		MapLayerDoom( int layer_position = DEFAULT_POSITION );
 		~MapLayerDoom();
 		MapLayerDoom( const MapLayerDoom& ) = delete;
 		MapLayerDoom( MapLayerDoom&& ) = delete;

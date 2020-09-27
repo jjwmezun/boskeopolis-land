@@ -11,6 +11,7 @@
 #include "map_layer_tilemap_image.hpp"
 #include "map_layer_water.hpp"
 #include "map_layer_water_back.hpp"
+#include "map_layer_renderable.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
@@ -21,23 +22,50 @@ static constexpr int FLASH_DURATION = 8;
 static constexpr int INNER_FLASH_DURATION = 2;
 static constexpr int BG_LAYER_LIMIT = 5;
 
+struct TileLayerData
+{
+	int renderable_id_;
+	std::vector<int> tiles_;
+};
+
 Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 {
-	if ( mezun::stringStartsWith( layer_name, "Blocks" ) )
+	LayerType type = LayerType::__NULL;
+	int number_start = 0;
+	if ( mezun::stringStartsWith( layer_name, "BlocksTexture" ) )
 	{
-		const std::string number_string = layer_name.substr( 6, layer_name.size() - 6 );
-		const int n = ( number_string.empty() ) ? 0 : std::stoi( number_string );
-		return { LayerType::BLOCKS, n };
+		type = LayerType::BLOCKS_TEXTURE;
+		number_start = 13;
 	}
-	return { LayerType::__NULL, 0 };
+	else if ( mezun::stringStartsWith( layer_name, "Blocks" ) )
+	{
+		type = LayerType::BLOCKS;
+		number_start = 6;
+	}
+	else if ( mezun::stringStartsWith( layer_name, "Sprites" ) )
+	{
+		type = LayerType::SPRITES;
+		number_start = 7;
+	}
+	else if ( mezun::stringStartsWith( layer_name, "Texture" ) )
+	{
+		type = LayerType::TEXTURE;
+		number_start = 7;
+	}
+	else
+	{
+		return { LayerType::__NULL, 0 };
+	}
+	const std::string number_string = layer_name.substr( number_start, layer_name.size() - 6 );
+	const int n = ( number_string.empty() ) ? 0 : std::stoi( number_string );
+	return { type, n };
 };
 
 Map Map::mapFromPath
 (
 	std::string path,
-	std::vector<std::unique_ptr<MapLayer>> backgrounds,
-	std::vector<Warp> warps,
-	std::vector<std::unique_ptr<MapLayer>> top_foregrounds
+	std::vector<std::shared_ptr<MapLayer>> layers,
+	std::vector<Warp> warps
 )
 {
 
@@ -46,12 +74,7 @@ Map Map::mapFromPath
 
 		std::vector<BlockLayer> blocks_layers = {};
 		std::vector<int> sprites = {};
-		std::vector<std::vector<int>> bg_block_layers = {};
-		std::vector<std::vector<int>> bg_block_img_layers = {};
-		std::vector<std::vector<int>> fg_block_layers = {};
-		std::vector<std::vector<int>> fg_block_img_layers = {};
-		std::vector<std::vector<int>> fade_fg_block_layers = {};
-		std::vector<std::unique_ptr<MapLayer>> foregrounds;
+		std::vector<TileLayerData> texture_layers = {};
 
 		std::string palette = "Grayscale";
 		int bg_color = 1;
@@ -130,8 +153,14 @@ Map Map::mapFromPath
 				const std::string layer_type = v[ "name" ].GetString();
 				const LayerInfo layer_info = getLayerInfo( layer_type );
 
+				bool blocks_is_texture = false;
 				switch ( layer_info.type )
 				{
+					case ( LayerType::BLOCKS_TEXTURE ):
+					{
+						blocks_is_texture = true;
+					}
+					// fallthru
 					case ( LayerType::BLOCKS ):
 					{
 						std::vector<int> blocks;
@@ -139,17 +168,34 @@ Map Map::mapFromPath
 						{
 							blocks.push_back( n.GetInt() );
 						}
-						blocks_layers.push_back( { blocks, layer_info.n } );
+						blocks_layers.push_back( { blocks_is_texture, layer_info.n, blocks } );
 					}
+					break;
+					case ( LayerType::SPRITES ):
+					{
+						for ( auto& n : v[ "data" ].GetArray() )
+						{
+							sprites.push_back( n.GetInt() );
+						}
+					}
+					break;
+					case ( LayerType::TEXTURE ):
+					{
+						std::vector<int> tiles;
+						for ( auto& n : v[ "data" ].GetArray() )
+						{
+							tiles.emplace_back( n.GetInt() );
+						}
+						texture_layers.push_back({ layer_info.n, tiles });
+					}
+					break;
 				}
 
+				/*
 				for ( auto& n : v[ "data" ].GetArray() )
 				{
 					switch ( layer_info.type )
 					{
-						case ( LayerType::SPRITES ):
-							sprites.push_back( n.GetInt() );
-						break;
 						case ( LayerType::BACKGROUND ):
 							while ( bg_block_layers.size() < layer_info.n )
 							{
@@ -171,13 +217,6 @@ Map Map::mapFromPath
 							}
 							fade_fg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
 						break;
-						case ( LayerType::BACKGROUND_IMAGE ):
-							while ( bg_block_img_layers.size() < layer_info.n )
-							{
-								bg_block_img_layers.emplace_back( std::vector<int> () );
-							}
-							bg_block_img_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
-						break;
 						case ( LayerType::FOREGROUND_IMAGE ):
 							while ( fg_block_img_layers.size() < layer_info.n )
 							{
@@ -186,18 +225,18 @@ Map Map::mapFromPath
 							fg_block_img_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
 						break;
 					}
-				}
+				}*/
 			}
 			++i;
 		}
 
+		for ( auto& texture_layer : texture_layers )
+		{
+			layers.emplace_back( new MapLayerTilemapImage( texture_layer.tiles_, width, height, texture_layer.renderable_id_ ) );
+		}/*
 		for ( auto& bg_block_layer : bg_block_layers )
 		{
 			backgrounds.emplace_back( new MapLayerTilemap( bg_block_layer, width, height ) );
-		}
-		for ( auto& bg_block_img_layer : bg_block_img_layers )
-		{
-			backgrounds.emplace_back( new MapLayerTilemapImage( bg_block_img_layer, width, height ) );
 		}
 		for ( auto& fg_block_layer : fg_block_layers )
 		{
@@ -214,7 +253,7 @@ Map Map::mapFromPath
 		for ( auto& top_foreground : top_foregrounds )
 		{
 			foregrounds.emplace_back( top_foreground.release() );
-		}
+		}*/
 
 
 
@@ -532,6 +571,7 @@ Map Map::mapFromPath
 			}
 		}
 
+		/*
 		if ( lava_y > -1 )
 		{
 			if ( lava_y_alt > -1 )
@@ -563,6 +603,7 @@ Map Map::mapFromPath
 			backgrounds.emplace_back( std::make_unique<MapLayerWaterBack> ( water_ptr ) );
 			foregrounds.emplace_back( water_ptr );
 		}
+		*/
 
 
 	// Send all data
@@ -576,9 +617,8 @@ Map Map::mapFromPath
 			height,
 			tileset,
 			{ palette, bg_color },
-			std::move( backgrounds ),
+			layers,
 			warps,
-			std::move( foregrounds ),
 			slippery,
 			camera_limit_top,
 			camera_limit_bottom,
@@ -610,9 +650,8 @@ Map::Map
 	int height,
 	std::string tileset,
 	Palette palette,
-	std::vector<std::unique_ptr<MapLayer>> backgrounds,
+	std::vector<std::shared_ptr<MapLayer>> other_layers,
 	std::vector<Warp> warps,
-	std::vector<std::unique_ptr<MapLayer>> foregrounds,
 	bool slippery,
 	int top_limit,
 	int bottom_limit,
@@ -664,17 +703,9 @@ Map::Map
 	ui_bg_color_ ( ui_bg_color ),
 	watery_ ( watery ),
 	oxygen_ ( oxygen ),
-	hide_ ( hide )
-{
-	for ( auto& b : backgrounds )
-	{
-		backgrounds_.emplace_back( std::shared_ptr<MapLayer>( b.release() ) );
-	}
-	for ( auto& f : foregrounds )
-	{
-		foregrounds_.emplace_back( std::shared_ptr<MapLayer>( f.release() ) );
-	}
-};
+	hide_ ( hide ),
+	other_layers_ ( other_layers )
+{};
 
 Map::~Map() noexcept {};
 
@@ -686,9 +717,8 @@ Map::Map( Map&& m ) noexcept
 	height_ ( m.height_ ),
 	tileset_ ( m.tileset_ ),
 	palette_ ( m.palette_ ),
-	backgrounds_ ( std::move( m.backgrounds_ ) ),
+	other_layers_ ( m.other_layers_ ),
 	warps_ ( m.warps_ ),
-	foregrounds_ ( std::move( m.foregrounds_ ) ),
 	slippery_ ( m.slippery_ ),
 	top_limit_ ( m.top_limit_ ),
 	bottom_limit_ ( m.bottom_limit_ ),
@@ -722,8 +752,7 @@ Map::Map( const Map& c )
 	height_ ( c.height_ ),
 	tileset_ ( c.tileset_ ),
 	palette_ ( c.palette_ ),
-	backgrounds_ ( c.backgrounds_ ),
-	foregrounds_ ( c.foregrounds_ ),
+	other_layers_ ( c.other_layers_ ),
 	warps_ ( c.warps_ ),
 	slippery_ ( c.slippery_ ),
 	top_limit_ ( c.top_limit_ ),
@@ -874,13 +903,9 @@ void Map::update( LevelState& level_state )
 
 void Map::updateLayers( LevelState& level_state )
 {
-	for ( auto b : backgrounds_ )
+	for ( auto& layer : other_layers_ )
 	{
-		b->update( level_state );
-	}
-	for ( auto f : foregrounds_ )
-	{
-		f->update( level_state );
+		layer->update( level_state );
 	}
 };
 
@@ -949,26 +974,35 @@ void Map::updateBGColor()
 	}
 };
 
-void Map::renderBG( const Camera& camera )
+void Map::renderLayer( int n, const LevelState& level_state ) const
 {
-	renderBGColor();
-	for ( auto b : backgrounds_ )
+	if ( n >= 0 && n < other_layers_.size() )
 	{
-		b->render( camera );
-	}
-};
-
-void Map::renderFG( const Camera& camera )
-{
-	for ( auto f : foregrounds_ )
-	{
-		f->render( camera );
+		other_layers_[ n ]->render( level_state.camera() );
 	}
 };
 
 void Map::renderBGColor() const
 {
 	Render::colorCanvas( current_bg_ );
+};
+
+void Map::initOtherLayers( LevelState& level_state )
+{
+	for ( int i = 0; i < other_layers_.size(); ++i )
+	{
+		auto& layer = other_layers_[ i ];
+		layer->renderable_id_ = level_state.addRenderable( std::unique_ptr<MapLayerRenderable> ( new MapLayerRenderable( i ) ), layer->layer_position_ );
+	}
+};
+
+void Map::removeRenderableLayers( LevelState& level_state )
+{
+	for ( int i = 0; i < other_layers_.size(); ++i )
+	{
+		auto& layer = other_layers_[ i ];
+		level_state.removeRenderable( layer->renderable_id_ );
+	}
 };
 
 const Warp* Map::getWarp( int x_sub_pixels, int y_sub_pixels ) const
@@ -987,14 +1021,9 @@ void Map::interact( Sprite& sprite, LevelState& level_state )
 {
 	if ( !sprite.is_dead_ )
 	{
-		for ( auto b : backgrounds_ )
+		for ( auto& layer : other_layers_ )
 		{
-			b->interact( sprite, level_state );
-		}
-
-		for ( auto f : foregrounds_ )
-		{
-			f->interact( sprite, level_state );
+			layer->interact( sprite, level_state );
 		}
 	}
 

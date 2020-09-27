@@ -39,14 +39,14 @@ class SpriteSystem final
 			SPIKE_EGG
 		};
 
-		SpriteSystem();
+		SpriteSystem( LevelState& level_state );
 		~SpriteSystem();
 		SpriteSystem( const SpriteSystem& ) = delete;
 		SpriteSystem& operator= ( const SpriteSystem& ) = delete;
 
 		void update( LevelState& level_state );
-		void render( Camera& camera, bool priority = false );
-		void renderSuperPriority( Camera& camera );
+		void renderHero( const LevelState& level_state ) const;
+		void renderSprite( int id, const LevelState& level_state ) const;
 		void interact( LevelState& level_state );
 		void spriteInteraction( LevelState& level_state );
 		void reset( LevelState& level_state );
@@ -71,10 +71,15 @@ class SpriteSystem final
 		void clearSprites();
 		void destroySprite( int n, Map& lvmap );
 		void spritesFromMap( LevelState& level_state );
+		void addSprite( std::unique_ptr<Sprite>&& sprite );
 		std::unique_ptr<Sprite> spriteType( int type, int x, int y, int i, LevelState& level_state );
 		void resetInternal( LevelState& level_state, bool trainer );
 
+		int id_;
 		int permanently_killed_enemies_;
+		LevelState& level_state_;
 		std::unique_ptr<Sprite> hero_;
 		std::vector<std::unique_ptr<Sprite>> sprites_;
+		std::unordered_map<int, Sprite*> sprites_map_;
+		char scratch_[ 256 ];
 };

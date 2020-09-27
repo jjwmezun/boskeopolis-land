@@ -107,6 +107,16 @@ const sdl2::SDLRect& TextureBox::getDest() const
     return dest_;
 };
 
+const sdl2::SDLRect& TextureBox::getSrc() const
+{
+    return src_;
+};
+
+SDL_Texture* TextureBox::getTexture() const
+{
+    return texture_;
+};
+
 void TextureBox::setHeight( int value )
 {
     src_.h = dest_.h = value;
@@ -115,4 +125,14 @@ void TextureBox::setHeight( int value )
 int TextureBox::getHeight() const
 {
     return src_.h;
+};
+
+void TextureBox::setWidth( int value )
+{
+    src_.w = dest_.w = value;
+};
+
+int TextureBox::getWidth() const
+{
+    return src_.w;
 };

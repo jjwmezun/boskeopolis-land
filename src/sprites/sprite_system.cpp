@@ -68,6 +68,7 @@
 #include "harpoon_sprite.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
+#include "hero_renderable.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hook_sprite.hpp"
 #include "horizontal_pike_sprite.hpp"
@@ -160,6 +161,7 @@
 #include "sprite_component_circle.hpp"
 #include "sprite_component_right_and_left.hpp"
 #include "sprite_component_up_and_down.hpp"
+#include "sprite_renderable.hpp"
 #include "sprite_system.hpp"
 #include "statue_laser_sprite.hpp"
 #include "stronger_cowpoker_sprite.hpp"
@@ -187,10 +189,12 @@
 
 static constexpr int SPRITES_LIMIT = 50;
 
-SpriteSystem::SpriteSystem()
+SpriteSystem::SpriteSystem( LevelState& level_state )
 :
-	hero_ (),
+	id_ ( 0 ),
 	permanently_killed_enemies_ ( 0 ),
+	level_state_ ( level_state ),
+	hero_ (),
 	sprites_ ()
 {
 	// Minimize chances o' sprite # going past space
@@ -877,8 +881,16 @@ void SpriteSystem::spawn( std::unique_ptr<Sprite>&& sprite )
 {
 	if ( sprites_.size() < SPRITES_LIMIT - 1 )
 	{
-		sprites_.emplace_back( sprite.release() );
+		addSprite( std::move( sprite ) );
 	}
+};
+
+void SpriteSystem::addSprite( std::unique_ptr<Sprite>&& sprite )
+{
+	sprites_map_.insert( std::pair<int, Sprite*> ( id_++, sprite.get() ) );
+	sprite->layer_ = 8;
+	sprite->renderable_id_ = level_state_.addRenderable( std::unique_ptr<SpriteRenderable> ( new SpriteRenderable( id_ - 1 ) ), 8 );
+	sprites_.emplace_back( std::move( sprite ) );
 };
 
 void SpriteSystem::spawnEnemyBullet( int x, int y, Direction::Simple direction )
@@ -898,10 +910,10 @@ void SpriteSystem::heroOpenTreasureChest()
 
 void SpriteSystem::spritesFromMap( LevelState& level_state )
 {
-	if ( sprites_.size() < SPRITES_LIMIT - 1 )
+	const Map& lvmap = level_state.currentMap();
+	for ( int i = 0; i < lvmap.spritesSize(); ++i )
 	{
-		const Map& lvmap = level_state.currentMap();
-		for ( int i = 0; i < lvmap.spritesSize(); ++i )
+		if ( sprites_.size() < SPRITES_LIMIT - 1 )
 		{
 			const int x = Unit::BlocksToSubPixels( lvmap.mapX( i ) );
 			const int y = Unit::BlocksToSubPixels( lvmap.mapY( i ) );
@@ -910,7 +922,7 @@ void SpriteSystem::spritesFromMap( LevelState& level_state )
 			if ( type != -1 )
 			{
 				std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, level_state ) );
-				sprites_.emplace_back( std::move( new_sprite ) );
+				addSprite( std::move( new_sprite ) );
 			}
 		}
 	}
@@ -1019,6 +1031,9 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 				hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );
 			break;
 		}
+
+		hero_->renderable_id_ = level_state.addRenderable( std::unique_ptr<HeroRenderable>( new HeroRenderable() ), 8 );
+		hero_->layer_ = 8;
 	}
 
 	clearSprites();
@@ -1027,19 +1042,24 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 
 void SpriteSystem::clearSprites()
 {
-	sprites_.clear();
+	for ( int i = 0; i < sprites_.size(); ++i )
+	{
+		destroySprite( i, level_state_.currentMap() );
+	}
 };
 
 void SpriteSystem::destroySprite( int n, Map& lvmap )
 {
-	if ( sprites_.at( n )->hasType( Sprite::SpriteType::DEATH_COUNT ) )
-	{
-		lvmap.deleteSprite( sprites_.at( n )->map_id_ );
-		++permanently_killed_enemies_;
-	}
-
 	if ( ( std::vector<std::unique_ptr<Sprite> >::size_type )( n ) < sprites_.size() )
 	{
+		if ( sprites_.at( n )->hasType( Sprite::SpriteType::DEATH_COUNT ) )
+		{
+			lvmap.deleteSprite( sprites_.at( n )->map_id_ );
+			++permanently_killed_enemies_;
+		}
+
+		sprites_map_.erase( sprites_[ n ]->id_ );
+		level_state_.removeRenderable( sprites_[ n ]->renderable_id_ );
 		// Save time by just replacing dying sprite with last sprite & just
 		// popping off last sprite ( which is null now, anyway ),
 		// saving us from having to slowly shift every sprite back
@@ -1159,29 +1179,18 @@ void SpriteSystem::spriteInteraction( LevelState& level_state )
 	}
 };
 
-void SpriteSystem::render( Camera& camera, bool priority )
+void SpriteSystem::renderHero( const LevelState& level_state ) const
 {
-	for ( auto i = 0; i < sprites_.size(); ++i )
-	{
-		if ( sprites_.at( i ) != nullptr )
-		{
-			sprites_.at( i )->render( camera, priority );
-		}
-	}
-
-	hero_->render( camera, priority );
+	hero_->render( level_state.camera() );
 };
 
-void SpriteSystem::renderSuperPriority( Camera& camera )
+void SpriteSystem::renderSprite( int id, const LevelState& level_state ) const
 {
-	for ( auto i = 0; i < sprites_.size(); ++i )
+	auto sprite = sprites_map_.find( id );
+	if ( sprite != sprites_map_.end() )
 	{
-		if ( sprites_.at( i ) != nullptr )
-		{
-			sprites_.at( i )->renderSuperPriority( camera );
-		}
+		sprite->second->render( level_state.camera() );
 	}
-	hero_->renderSuperPriority( camera );
 };
 
 Sprite& SpriteSystem::hero()

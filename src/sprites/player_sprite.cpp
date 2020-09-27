@@ -489,14 +489,15 @@ void PlayerSprite::tryUnduck( const BlockSystem& blocks )
 	}
 };
 
-void PlayerSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void PlayerSprite::deathAction( LevelState& level_state )
 {
+	changeRenderableLayer( level_state, 15 );
 	graphics_->current_frame_x_ = 16;
 	graphics_->current_frame_y_ = 26;
 	unduck( unduck_data_ );
 	graphics_->priority_ = true;
-	defaultDeathAction( camera );
-	events.playDeathSoundIfNotAlreadyPlaying();
+	defaultDeathAction( level_state.camera() );
+	level_state.events().playDeathSoundIfNotAlreadyPlaying();
 };
 
 bool PlayerSprite::canJump() const

@@ -6,9 +6,9 @@
 // MEMBER FUNCTIONS
 //=============================================================
 
-MapLayerConstellationMoving::MapLayerConstellationMoving( int width, int height, double move_speed, std::string image )
+MapLayerConstellationMoving::MapLayerConstellationMoving( int width, int height, double move_speed, std::string image, int layer_position )
 :
-	MapLayer(),
+	MapLayer( layer_position ),
 	src_ ( 0, 0, width, height ),
 	image_ ( image ),
 	move_speed_ ( abs( move_speed ) ),

@@ -1,3 +1,5 @@
+#include "block_renderable.hpp"
+#include "block_texture_renderable.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"
 #include "collision.hpp"
@@ -55,15 +57,30 @@ void BlockSystem::update( EventSystem& events )
 	getTileset().update( events );
 };
 
-void BlockSystem::reset( const Map& lvmap )
+void BlockSystem::reset( LevelState& level_state )
 {
+	const auto& lvmap = level_state.currentMap();
 	changeTileset( lvmap.tileset() );
 	blocks_work_offscreen_ = lvmap.blocks_work_offscreen_;
 	map_width_ = lvmap.widthBlocks();
+	for ( const auto& layer : layers_ )
+	{
+		level_state.removeRenderable( layer.renderable_id_ );
+	}
+	layers_.clear();
 };
 
-void BlockSystem::render( const Map& lvmap, const Camera& camera, bool priority )
-{/*
+void BlockSystem::renderLayer( const LevelState& level_state, int layer ) const
+{	
+	const Camera& camera = level_state.camera();
+	if ( layer >= 0 && layer < layers_.size() )
+	{
+		for ( const auto& block : layers_[ layer ].blocks_ )
+		{
+			block.render( camera, true );
+		}
+	}
+	/*
 	if ( lvmap.hide_ )
 	{
 		return;
@@ -172,11 +189,15 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 				// setting level state renderables.
 				for ( int li = 0; li < map_blocks_layers.size(); ++li )
 				{
-					layers_.emplace_back( map_blocks_layers[ li ].position_, BlockLayer::RenderType::NORMAL );
-				}
-				for ( auto& layer : layers_ )
-				{
-					level_state.addRenderable( &layer, 0 );
+					layers_.push_back({ {}, level_state.addRenderable
+					(
+						(
+							( map_blocks_layers[ li ].texture_ )
+								? std::unique_ptr<Renderable> ( new BlockTextureRenderable( li, level_state ) )
+								: std::unique_ptr<Renderable> ( new BlockRenderable( li ) )
+						),
+						map_blocks_layers[ li ].position_ )
+					});
 				}
 			}
 			else
@@ -217,8 +238,7 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 			// can be used for optimizations in updating & rendering.
 			for ( int li = 0; li < map_blocks_layers.size(); ++li )
 			{
-				layers_.emplace_back( map_blocks_layers[ li ].position_, BlockLayer::RenderType::OFFSCREEN );
-				level_state.addRenderable( &layers_[ layers_.size() - 1 ], 0 );
+				layers_.push_back({ {}, level_state.addRenderable( std::unique_ptr<BlockRenderable> ( new BlockRenderable( li ) ), map_blocks_layers[ li ].position_ ) } );
 
 				const auto& blocks = map_blocks_layers[ li ].blocks_;
 				for ( int i = 0; i < blocks.size(); ++i )
@@ -241,9 +261,46 @@ void BlockSystem::addBlock( int layer_index, int x, int y, int i, int type, Leve
 	layer[ layer.size() - 1 ].init( level_state );
 };
 
+
+void BlockSystem::renderLayerAllBlocks( const LevelState& level_state, int layer ) const
+{
+	const auto& lvmap = level_state.currentMap();
+	const auto& blocks = lvmap.blocksLayers()[ layer ].blocks_;
+	sdl2::SDLRect block_dest = { 0, 0, Unit::BlocksToPixels( 1 ), Unit::BlocksToPixels( 1 ) };
+	sdl2::SDLRect tile_src = block_dest;
+	for ( int i = 0; i < blocks.size(); ++i )
+	{
+		const BlockType* type = getConstBlockType( blocks[ i ] - 1 );
+		if ( type != nullptr && type->graphics() != nullptr )
+		{
+			const SpriteGraphics* graphics = type->graphics();
+			block_dest.x = Unit::BlocksToPixels( lvmap.mapX( i ) );
+			block_dest.y = Unit::BlocksToPixels( lvmap.mapY( i ) );
+			tile_src.x = graphics->current_frame_x_;
+			tile_src.y = graphics->current_frame_y_;
+			Render::renderObject
+			(
+				graphics->texture_,
+				tile_src,
+				block_dest,
+				graphics->flip_x_,
+				graphics->flip_y_,
+				graphics->rotation_,
+				graphics->alpha_,
+				nullptr
+			);
+		}
+	}
+};
+
 BlockType* BlockSystem::getBlockType( int type )
 {
 	return getTileset().blockType( type );
+}
+
+const BlockType* BlockSystem::getConstBlockType( int type ) const
+{
+	return getConstTileset().blockType( type );
 }
 
 bool BlockSystem::blocksInTheWay( const sdl2::SDLRect& rect, BlockComponent::Type type ) const
@@ -262,8 +319,7 @@ bool BlockSystem::blocksInTheWayGeneric( const sdl2::SDLRect& rect, BlockCompone
 	{
 		for ( const auto& layer : layers_ )
 		{
-			const auto& blocks = layer.blocks_;
-			for ( const auto& block : blocks )
+			for ( const auto& block : layer.blocks_ )
 			{
 				if ( block.typeID() != -1 )
 				{
@@ -289,7 +345,7 @@ bool BlockSystem::blocksInTheWayGeneric( const sdl2::SDLRect& rect, BlockCompone
 				const int n = y * map_width_ + x;
 				for ( const auto& layer : layers_ )
 				{
-					auto& blocks = layer.blocks_;
+					const auto& blocks = layer.blocks_;
 					if ( n < blocks.size() )
 					{
 						const Block& block = blocks[ n ];
@@ -314,7 +370,7 @@ bool BlockSystem::blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponen
 	{
 		for ( const auto& layer : layers_ )
 		{
-			auto& blocks = layer.blocks_;
+			const auto& blocks = layer.blocks_;
 			for ( const auto& block : blocks )
 			{
 				if ( block.typeID() != -1 && testBlockInTheWayExcept( rect, type, block ) )
@@ -338,7 +394,7 @@ bool BlockSystem::blocksInTheWayExcept( const sdl2::SDLRect& rect, BlockComponen
 				const int n = y * map_width_ + x;
 				for ( const auto& layer : layers_ )
 				{
-					auto& blocks = layer.blocks_;
+					const auto& blocks = layer.blocks_;
 					if ( n < blocks.size() )
 					{
 						const Block& block = blocks[ n ];
@@ -374,6 +430,13 @@ Tileset& BlockSystem::getTileset()
 	return t->second;
 };
 
+const Tileset& BlockSystem::getConstTileset() const
+{
+	auto t = tilesets_.find( current_tileset_ );
+	assert( t != tilesets_.end() );
+	return t->second;
+};
+
 // UNSAFE: FIX LATER
 const std::vector<Block>& BlockSystem::getBlocksList() const
 {
@@ -397,7 +460,7 @@ const std::vector<const Block*> BlockSystem::getSolidBlocksInField( const sdl2::
 			const int n = y * GRID_WIDTH + x;
 			for ( const auto& layer : layers_ )
 			{
-				auto& blocks = layer.blocks_;
+				const auto& blocks = layer.blocks_;
 				if ( n < blocks.size() )
 				{
 					const Block& block = blocks[ n ];

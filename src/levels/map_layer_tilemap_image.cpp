@@ -5,9 +5,9 @@
 #include "map_layer_tilemap_image.hpp"
 #include "render.hpp"
 
-MapLayerTilemapImage::MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height )
+MapLayerTilemapImage::MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height, int layer_position )
 :
-	MapLayer(),
+	MapLayer( layer_position ),
 	tiles_ ( tiles ),
 	texture_ ( nullptr ),
 	src_ ( 0, 0, Unit::BlocksToPixels( width ), Unit::BlocksToPixels( height ) ),

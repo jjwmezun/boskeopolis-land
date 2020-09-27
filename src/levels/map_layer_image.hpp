@@ -29,7 +29,8 @@ class MapLayerImage : public MapLayer
 			int animation_speed = 1,
 			bool flip = false,
 			Uint8 alpha = 255,
-			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE
+			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
+			int layer_position = DEFAULT_POSITION
 		);
 		~MapLayerImage();
 		virtual void update( LevelState& level_state ) override;

@@ -41,7 +41,7 @@ class PlayerSprite : public Sprite
 		void render( Camera& camera, bool priority = false ) override;
 		void renderSuperPriority( Camera& camera ) override;
 
-		void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap ) override;
+		void deathAction( LevelState& level_state ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( LevelState& level_state );
 		bool isLookingUp() const;

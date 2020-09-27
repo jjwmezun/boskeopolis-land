@@ -17,8 +17,9 @@ class Map final
 	public:
 		struct BlockLayer
 		{
-			std::vector<int> blocks_;
+			bool texture_;
 			int position_;
+			std::vector<int> blocks_;
 		};
 
 		enum class LayerType
@@ -26,11 +27,8 @@ class Map final
 			__NULL,
 			BLOCKS,
 			SPRITES,
-			BACKGROUND,
-			FOREGROUND,
-			FADE_FOREGROUND,
-			BACKGROUND_IMAGE,
-			FOREGROUND_IMAGE
+			TEXTURE,
+			BLOCKS_TEXTURE
 		};
 
 		struct LayerInfo
@@ -40,9 +38,8 @@ class Map final
 		};
 
 		const std::vector<Warp> warps_;
-		std::vector<std::shared_ptr<MapLayer>> backgrounds_;
-		std::vector<std::shared_ptr<MapLayer>> foregrounds_;
 		std::vector<BlockLayer> blocks_layers_;
+		std::vector<std::shared_ptr<MapLayer>> other_layers_;
 		std::vector<int> sprites_;
 		const std::string tileset_;
 		std::string music_;
@@ -75,9 +72,8 @@ class Map final
 		static Map mapFromPath
 		(
 			std::string path,
-			std::vector<std::unique_ptr<MapLayer>> backgrounds = {},
-			std::vector<Warp> warps = {},
-			std::vector<std::unique_ptr<MapLayer>> foregrounds = {}
+			std::vector<std::shared_ptr<MapLayer>> layers = {},
+			std::vector<Warp> warps = {}
 		);
 		~Map() noexcept;
 		Map( Map&& m ) noexcept;
@@ -86,9 +82,10 @@ class Map final
 		Map& operator= ( const Map& c ) = delete;
 
 		void update( LevelState& level_state );
-		void renderBG( const Camera& camera );
-		void renderFG( const Camera& camera );
 		void renderBGColor() const;
+		void renderLayer( int n, const LevelState& level_state ) const;
+		void initOtherLayers( LevelState& level_state );
+		void removeRenderableLayers( LevelState& level_state );
 
 		const Warp* getWarp( int x_sub_pixels, int y_sub_pixels ) const;
 
@@ -127,9 +124,8 @@ class Map final
 			int height,
 			std::string tileset,
 			Palette palette,
-			std::vector<std::unique_ptr<MapLayer>> backgrounds,
+			std::vector<std::shared_ptr<MapLayer>> other_layers,
 			std::vector<Warp> warps,
-			std::vector<std::unique_ptr<MapLayer>> foregrounds,
 			bool slippery,
 			int top_limit,
 			int bottom_limit,

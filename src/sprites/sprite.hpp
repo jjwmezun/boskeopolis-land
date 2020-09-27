@@ -29,7 +29,7 @@ class SpriteSystem;
 #include "angled_sprite_movement.hpp"
 #include "stuck_sprite_movement.hpp"
 
-class Sprite : public Object, public Renderable
+class Sprite : public Object
 {
 	public:
 		struct DuckData
@@ -130,8 +130,8 @@ class Sprite : public Object, public Renderable
 		void setGravityModifier( double gravity );
 
 		void update( LevelState& level_state );
-		virtual void render( const LevelState& level_state ) const;
 		virtual void render( Camera& camera, bool priority = false );
+		virtual void render( const Camera& camera ) const;
 		virtual void renderSuperPriority( Camera& camera );
 		void drawHitBox( const Camera& camera );
 		void renderWithHitbox( Camera& camera, bool priority );
@@ -244,10 +244,11 @@ class Sprite : public Object, public Renderable
 		void position();
 		void positionX();
 		void positionY();
-		virtual void deathAction( const Camera& camera, EventSystem& events, const Map& lvmap );
+		virtual void deathAction( LevelState& level_state );
 		void defaultDeathAction( const Camera& camera );
 		void resetPosition();
 		void invincibilityFlicker( const Health& health );
+		void changeRenderableLayer( LevelState& level_state, int layer );
 
 		sdl2::SDLRect justAbove() const;
 		bool blocksJustAbove( const BlockSystem& blocks ) const;
@@ -333,6 +334,8 @@ class Sprite : public Object, public Renderable
 		int jump_top_speed_;
 		int bounce_height_;
 		int layer_;
+		int renderable_id_;
+		int id_;
 		Misc misc_;
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;
@@ -350,4 +353,5 @@ class Sprite : public Object, public Renderable
 		const sdl2::SDLRect original_hit_box_;
 		TimerSimpleT<32, false> death_timer_;
 		TimerSimpleT<4, false> on_ground_padding_;
+		char scratch_[ 256 ];
 };

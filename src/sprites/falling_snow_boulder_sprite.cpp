@@ -38,7 +38,7 @@ void FallingSnowBoulderSprite::customInteract( Collision& my_collision, Collisio
 	}
 };
 
-void FallingSnowBoulderSprite::deathAction( const Camera& camera, EventSystem& events, const Map& lvmap )
+void FallingSnowBoulderSprite::deathAction( LevelState& level_state )
 {
 	fullStopY();
 	hit_box_.y = BOTTOM;

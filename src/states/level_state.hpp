@@ -7,12 +7,14 @@
 #include "health.hpp"
 #include "inventory_level.hpp"
 #include "level.hpp"
+#include <map>
+#include <memory>
 #include "sprite.hpp"
 #include "player_graphics.hpp"
+#include "renderable.hpp"
 #include "sprite_system.hpp"
 
 class Palette;
-class Renderable;
 
 class LevelState final : public GameState
 {
@@ -28,7 +30,9 @@ class LevelState final : public GameState
 		void renderLevel() const;
 		void updateForTrainer();
 		void initForTrainer();
-		void addRenderable( Renderable* renderable, int layer );
+		int addRenderable( std::unique_ptr<Renderable>&& renderable, int layer );
+		void removeRenderable( int id );
+		void changeRenderableLayer( int id, int layer );
 
 		Health& health();
 		const Health& health() const;
@@ -53,7 +57,9 @@ class LevelState final : public GameState
 	private:
 		void testPause();
 
-		std::vector<Renderable*> layers_[ NUMBER_OF_LAYERS ];
+		int id_;
+		std::vector<std::unique_ptr<Renderable>> layers_[ NUMBER_OF_LAYERS ];
+		std::map<int, Renderable*> renderable_map_;
 		Health health_;
 		Camera camera_;
 		SpriteSystem sprites_;
@@ -61,4 +67,5 @@ class LevelState final : public GameState
 		EventSystem events_;
 		Level level_;
 		InventoryLevel inventory_screen_;
+		char scratch_[ 256 ];
 };
