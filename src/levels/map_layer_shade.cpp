@@ -3,7 +3,7 @@
 #include "map_layer_shade.hpp"
 #include "render.hpp"
 
-MapLayerShade::MapLayerShade( int shade, int alpha, int layer_position )
+MapLayerShade::MapLayerShade( int shade, int alpha, Unit::Layer layer_position )
 :
 	MapLayer( layer_position ),
 	shade_ ( shade ),

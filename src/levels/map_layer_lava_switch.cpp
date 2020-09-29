@@ -10,7 +10,7 @@
 static constexpr int MOVE_DOWN_SPEED = 2000;
 static constexpr int MOVE_UP_SPEED = 800;
 
-MapLayerLavaSwitch::MapLayerLavaSwitch( int y_off_blocks, int y_on_blocks, int x_block_when_lava_rises_forever, int layer_position )
+MapLayerLavaSwitch::MapLayerLavaSwitch( int y_off_blocks, int y_on_blocks, int x_block_when_lava_rises_forever, Unit::Layer layer_position )
 :
     MapLayer( layer_position ),
     y_off_ ( Unit::BlocksToSubPixels( y_off_blocks ) ),

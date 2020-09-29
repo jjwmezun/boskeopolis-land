@@ -5,7 +5,7 @@
 #include "map_layer_tilemap_image.hpp"
 #include "render.hpp"
 
-MapLayerTilemapImage::MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height, int layer_position )
+MapLayerTilemapImage::MapLayerTilemapImage( const std::vector<int>& tiles, int width, int height, Unit::Layer layer_position )
 :
 	MapLayer( layer_position ),
 	tiles_ ( tiles ),

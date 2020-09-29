@@ -111,7 +111,8 @@ class Sprite : public Object
 			bool block_interact = true,
 			bool sprite_interact = true,
 			double bounce_ = .2,
-			int map_id = -1
+			int map_id = -1,
+			Unit::Layer layer = Unit::Layer::SPRITES_1
 		);
 
 		virtual ~Sprite();
@@ -245,10 +246,10 @@ class Sprite : public Object
 		void positionX();
 		void positionY();
 		virtual void deathAction( LevelState& level_state );
-		void defaultDeathAction( const Camera& camera );
+		void defaultDeathAction( LevelState& level_state );
 		void resetPosition();
 		void invincibilityFlicker( const Health& health );
-		void changeRenderableLayer( LevelState& level_state, int layer );
+		void changeRenderableLayer( LevelState& level_state, Unit::Layer layer );
 
 		sdl2::SDLRect justAbove() const;
 		bool blocksJustAbove( const BlockSystem& blocks ) const;
@@ -333,9 +334,9 @@ class Sprite : public Object
 		int jump_top_speed_normal_;
 		int jump_top_speed_;
 		int bounce_height_;
-		int layer_;
+		Unit::Layer layer_;
 		int renderable_id_;
-		int id_;
+		int system_id_;
 		Misc misc_;
 		const Direction::Horizontal direction_x_orig_;
 		const Direction::Vertical direction_y_orig_;

@@ -41,7 +41,7 @@ static constexpr int MOVEABLE_BLOCK_TYPES_LOWER[ NUMBER_OF_MOVEABLE_BLOCK_TYPES_
 	132
 };
 
-static bool testMoveableBlockType( int value, int layer );
+static bool testMoveableBlockType( int value, Unit::Layer layer );
 
 PedestrianSprite::PedestrianSprite( int x, int y )
 :
@@ -49,8 +49,7 @@ PedestrianSprite::PedestrianSprite( int x, int y )
 	animation_ ()
 {
 	direction_ = Direction::Simple::RIGHT;
-	layer_ = 2;
-	graphics_->priority_ = true;
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 PedestrianSprite::~PedestrianSprite() {};
@@ -69,12 +68,12 @@ void PedestrianSprite::customUpdate( LevelState& level_state )
 
 		if ( current_block == 65 + 15 || current_block == 65 + 50 )
 		{
-			layer_ = 1;
+			layer_ = Unit::Layer::SPRITES_1;
 			graphics_->priority_ = false;
 		}
 		else if ( current_block == 65 + 31 || current_block == 65 + 66 )
 		{
-			layer_ = 2;
+			layer_ = Unit::Layer::SPRITES_2;
 			graphics_->priority_ = true;
 		}
 
@@ -135,9 +134,9 @@ bool PedestrianSprite::isAtTransitionPoint() const
 		: hit_box_.y % Unit::SUBPIXELS_PER_BLOCK == 5000;
 }
 
-static bool testMoveableBlockType( int value, int layer )
+static bool testMoveableBlockType( int value, Unit::Layer layer )
 {
-	if ( layer == 2 )
+	if ( layer == Unit::Layer::SPRITES_2 )
 	{
 		for ( int i = 0; i < NUMBER_OF_MOVEABLE_BLOCK_TYPES; ++i )
 		{

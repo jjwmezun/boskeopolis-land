@@ -6,7 +6,7 @@
 class TopDownBulletSprite final : public Sprite
 {
 	public:
-		TopDownBulletSprite( int x, int y, Direction::Simple direction, SpriteType type, int layer );
+		TopDownBulletSprite( int x, int y, Direction::Simple direction, SpriteType type, Unit::Layer layer );
 		~TopDownBulletSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;

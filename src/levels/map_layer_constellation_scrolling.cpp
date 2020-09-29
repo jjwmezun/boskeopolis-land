@@ -26,7 +26,7 @@ MapLayerConstellationScrolling::MapLayerConstellationScrolling
 	int map_width_blocks,
 	int map_height_blocks,
 	std::string image,
-	int layer_position
+	Unit::Layer layer_position
 )
 :
 	MapLayer( layer_position ),

@@ -6,7 +6,7 @@
 class MapLayerConstellationMoving final : public MapLayer
 {
 	public:
-		MapLayerConstellationMoving( int width, int height, double move_speed, std::string image, int layer_position = DEFAULT_POSITION );
+		MapLayerConstellationMoving( int width, int height, double move_speed, std::string image, Unit::Layer layer_position = DEFAULT_POSITION );
 		~MapLayerConstellationMoving();
 		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;

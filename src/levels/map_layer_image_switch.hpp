@@ -24,7 +24,7 @@ class MapLayerImageSwitch final : public MapLayerImage
 			bool flip = false,
 			Uint8 alpha = 255,
 			SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE,
-			int layer_position = DEFAULT_POSITION
+			Unit::Layer layer_position = DEFAULT_POSITION
 		);
 		~MapLayerImageSwitch();
 		void update( LevelState& level_state ) override;

@@ -191,6 +191,6 @@ void ShooterPlayerSprite::deathAction( LevelState& level_state )
 {
 	graphics_->current_frame_x_ = 208;
 	graphics_->current_frame_y_ = 0;
-	defaultDeathAction( level_state.camera() );
+	defaultDeathAction( level_state );
 	level_state.events().playDeathSoundIfNotAlreadyPlaying();
 };

@@ -21,8 +21,7 @@ PlayerCarSprite::PlayerCarSprite( int x, int y )
 	acceleration_ ( 0.0 ),
 	block_list_ ( {} )
 {
-	layer_ = 2;
-	graphics_->priority_ = true;
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 PlayerCarSprite::~PlayerCarSprite() {};

@@ -491,12 +491,11 @@ void PlayerSprite::tryUnduck( const BlockSystem& blocks )
 
 void PlayerSprite::deathAction( LevelState& level_state )
 {
-	changeRenderableLayer( level_state, 15 );
 	graphics_->current_frame_x_ = 16;
 	graphics_->current_frame_y_ = 26;
 	unduck( unduck_data_ );
 	graphics_->priority_ = true;
-	defaultDeathAction( level_state.camera() );
+	defaultDeathAction( level_state );
 	level_state.events().playDeathSoundIfNotAlreadyPlaying();
 };
 

@@ -113,25 +113,6 @@ void LevelState::renderLevel() const
 			layers_[ i ][ j ]->render( *this );
 		}
 	}
-	/*
-	// 1
-	level_.currentMap().renderBG( camera_ ); // 2
-	// 3
-	// BG2 4
-	// 5
-	blocks_.render( level_.currentMap(), camera_, false ); // 6
-	// 7
-	sprites_.render( camera_, false ); // 8
-	// 9
-	blocks_.render( level_.currentMap(), camera_, true ); // 10
-	// 11
-	sprites_.render( camera_, true ); // 12
-	// 13
-	level_.currentMap().renderFG( camera_ ); // 14
-	// 15
-	// 16 — FG2
-	// 17
-	sprites_.renderSuperPriority( camera_ ); // 18*/
 }
 
 void LevelState::init()
@@ -271,16 +252,15 @@ void LevelState::reRenderInventory()
 	inventory_screen_.forceRerender();
 };
 
-int LevelState::addRenderable( std::unique_ptr<Renderable>&& renderable, int layer )
+int LevelState::addRenderable( std::unique_ptr<Renderable>&& renderable, Unit::Layer layer )
 {
-	if ( layer >= 0  && layer < NUMBER_OF_LAYERS )
-	{
-		renderable->id_ = id_++;
-		renderable_map_.insert( std::pair<int, Renderable*> ( renderable->id_, renderable.get() ) );
-		layers_[ layer ].push_back( std::move( renderable ) );
-		return id_ - 1;
-	}
-	return -1;
+	int layer_number = ( int )( layer );
+	int id = id_;
+	renderable->id_ = id;
+	renderable_map_.insert( std::pair<int, Renderable*> ( id, renderable.get() ) );
+	layers_[ layer_number ].push_back( std::move( renderable ) );
+	++id_;
+	return id;
 };
 
 void LevelState::removeRenderable( int id )
@@ -294,8 +274,13 @@ void LevelState::removeRenderable( int id )
 			{
 				if ( renderable_iterator->second == layers_[ i ][ j ].get() )
 				{
-					layers_[ i ].erase( layers_[ i ].begin() + j );
 					renderable_map_.erase( renderable_iterator );
+					while ( j < layers_[ i ].size() - 1 )
+					{
+						layers_[ i ][ j ].reset( layers_[ i ][ j + 1 ].release() );
+						++j;
+					}
+					layers_[ i ].pop_back();
 					return;
 				}
 			}
@@ -303,8 +288,9 @@ void LevelState::removeRenderable( int id )
 	}
 };
 
-void LevelState::changeRenderableLayer( int id, int layer )
+void LevelState::changeRenderableLayer( int id, Unit::Layer layer )
 {
+	int layer_number = ( int )( layer );
 	auto renderable_iterator = renderable_map_.find( id );
 	if ( renderable_iterator != renderable_map_.end() )
 	{
@@ -314,9 +300,9 @@ void LevelState::changeRenderableLayer( int id, int layer )
 			{
 				if ( renderable_iterator->second == layers_[ i ][ j ].get() )
 				{
-					if ( layer != i )
+					if ( layer_number != i )
 					{
-						layers_[ layer ].emplace_back( layers_[ i ][ j ].release() );
+						layers_[ layer_number ].emplace_back( layers_[ i ][ j ].release() );
 						layers_[ i ].erase( layers_[ i ].begin() + j );
 					}
 					return;

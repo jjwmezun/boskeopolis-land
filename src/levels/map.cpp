@@ -24,7 +24,7 @@ static constexpr int BG_LAYER_LIMIT = 5;
 
 struct TileLayerData
 {
-	int renderable_id_;
+	Unit::Layer layer_position_;
 	std::vector<int> tiles_;
 };
 
@@ -32,33 +32,101 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 {
 	LayerType type = LayerType::__NULL;
 	int number_start = 0;
+	Unit::Layer layer_position = Unit::Layer::BEFORE_BG_1;
 	if ( mezun::stringStartsWith( layer_name, "BlocksTexture" ) )
 	{
 		type = LayerType::BLOCKS_TEXTURE;
 		number_start = 13;
+		layer_position = Unit::Layer::BLOCKS_1;
 	}
 	else if ( mezun::stringStartsWith( layer_name, "Blocks" ) )
 	{
 		type = LayerType::BLOCKS;
 		number_start = 6;
+		layer_position = Unit::Layer::BLOCKS_1;
 	}
 	else if ( mezun::stringStartsWith( layer_name, "Sprites" ) )
 	{
 		type = LayerType::SPRITES;
 		number_start = 7;
+		layer_position = Unit::Layer::SPRITES_1;
 	}
 	else if ( mezun::stringStartsWith( layer_name, "Texture" ) )
 	{
 		type = LayerType::TEXTURE;
 		number_start = 7;
+		layer_position = Unit::Layer::BG_1;
 	}
 	else
 	{
-		return { LayerType::__NULL, 0 };
+		return { LayerType::__NULL, layer_position };
 	}
+
 	const std::string number_string = layer_name.substr( number_start, layer_name.size() - 6 );
-	const int n = ( number_string.empty() ) ? 0 : std::stoi( number_string );
-	return { type, n };
+	try
+	{
+		if ( !number_string.empty() )
+		{
+			layer_position = Unit::IntToLayer( std::stoi( number_string ) );
+		}
+	}
+	catch ( std::invalid_argument& e )
+	{
+		switch ( type )
+		{
+			case ( LayerType::BLOCKS_TEXTURE ):
+			{
+			}
+			// Fallthru
+			case ( LayerType::BLOCKS ):
+			{
+				const auto substr = layer_name.substr( number_start, 2 );
+				if ( substr == "BG" )
+				{
+					layer_position = Unit::Layer::BLOCKS_1;
+				}
+				else if ( substr == "FG" )
+				{
+					layer_position = Unit::Layer::BLOCKS_2;
+				}
+			}
+			break;
+			case ( LayerType::TEXTURE ):
+			{
+				const auto substr = layer_name.substr( number_start, 3 );
+				if ( substr == "BG1" )
+				{
+					layer_position = Unit::Layer::BG_1;
+				}
+				else if ( substr == "FG1" )
+				{
+					layer_position = Unit::Layer::FG_1;
+				}
+				else if ( substr == "FG2" )
+				{
+					layer_position = Unit::Layer::FG_2;
+				}
+				else if ( substr == "BG2" )
+				{
+					layer_position = Unit::Layer::BG_2;
+				}
+				else
+				{
+					const auto substr = layer_name.substr( number_start, 2 );
+					if ( substr == "BG" )
+					{
+						layer_position = Unit::Layer::BG_1;
+					}
+					else if ( substr == "FG" )
+					{
+						layer_position = Unit::Layer::FG_1;
+					}
+				}
+			}
+			break;
+		}
+	}
+	return { type, layer_position };
 };
 
 Map Map::mapFromPath
@@ -154,7 +222,7 @@ Map Map::mapFromPath
 				const LayerInfo layer_info = getLayerInfo( layer_type );
 
 				bool blocks_is_texture = false;
-				switch ( layer_info.type )
+				switch ( layer_info.type_ )
 				{
 					case ( LayerType::BLOCKS_TEXTURE ):
 					{
@@ -168,7 +236,7 @@ Map Map::mapFromPath
 						{
 							blocks.push_back( n.GetInt() );
 						}
-						blocks_layers.push_back( { blocks_is_texture, layer_info.n, blocks } );
+						blocks_layers.push_back( { blocks_is_texture, layer_info.layer_position_, blocks } );
 					}
 					break;
 					case ( LayerType::SPRITES ):
@@ -186,74 +254,18 @@ Map Map::mapFromPath
 						{
 							tiles.emplace_back( n.GetInt() );
 						}
-						texture_layers.push_back({ layer_info.n, tiles });
+						texture_layers.push_back({ layer_info.layer_position_, tiles });
 					}
 					break;
 				}
-
-				/*
-				for ( auto& n : v[ "data" ].GetArray() )
-				{
-					switch ( layer_info.type )
-					{
-						case ( LayerType::BACKGROUND ):
-							while ( bg_block_layers.size() < layer_info.n )
-							{
-								bg_block_layers.emplace_back( std::vector<int> () );
-							}
-							bg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
-						break;
-						case ( LayerType::FOREGROUND ):
-							while ( fg_block_layers.size() < layer_info.n )
-							{
-								fg_block_layers.emplace_back( std::vector<int> () );
-							}
-							fg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
-						break;
-						case ( LayerType::FADE_FOREGROUND ):
-							while ( fade_fg_block_layers.size() < layer_info.n )
-							{
-								fade_fg_block_layers.emplace_back( std::vector<int> () );
-							}
-							fade_fg_block_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
-						break;
-						case ( LayerType::FOREGROUND_IMAGE ):
-							while ( fg_block_img_layers.size() < layer_info.n )
-							{
-								fg_block_img_layers.emplace_back( std::vector<int> () );
-							}
-							fg_block_img_layers[ layer_info.n - 1 ].emplace_back( n.GetInt() );
-						break;
-					}
-				}*/
 			}
 			++i;
 		}
 
 		for ( auto& texture_layer : texture_layers )
 		{
-			layers.emplace_back( new MapLayerTilemapImage( texture_layer.tiles_, width, height, texture_layer.renderable_id_ ) );
-		}/*
-		for ( auto& bg_block_layer : bg_block_layers )
-		{
-			backgrounds.emplace_back( new MapLayerTilemap( bg_block_layer, width, height ) );
+			layers.emplace_back( new MapLayerTilemapImage( texture_layer.tiles_, width, height, texture_layer.layer_position_ ) );
 		}
-		for ( auto& fg_block_layer : fg_block_layers )
-		{
-			foregrounds.emplace_back( new MapLayerTilemap( fg_block_layer, width, height, false ) );
-		}
-		for ( auto& fg_block_img_layer : fg_block_img_layers )
-		{
-			foregrounds.emplace_back( new MapLayerTilemapImage( fg_block_img_layer, width, height ) );
-		}
-		for ( auto& fade_fg_block_layer : fade_fg_block_layers )
-		{
-			foregrounds.emplace_back( new MapLayerTilemap( fade_fg_block_layer, width, height, true ) );
-		}
-		for ( auto& top_foreground : top_foregrounds )
-		{
-			foregrounds.emplace_back( top_foreground.release() );
-		}*/
 
 
 

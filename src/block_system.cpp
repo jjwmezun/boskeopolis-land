@@ -196,7 +196,7 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 								? std::unique_ptr<Renderable> ( new BlockTextureRenderable( li, level_state ) )
 								: std::unique_ptr<Renderable> ( new BlockRenderable( li ) )
 						),
-						map_blocks_layers[ li ].position_ )
+						map_blocks_layers[ li ].layer_position_ )
 					});
 				}
 			}
@@ -238,7 +238,7 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 			// can be used for optimizations in updating & rendering.
 			for ( int li = 0; li < map_blocks_layers.size(); ++li )
 			{
-				layers_.push_back({ {}, level_state.addRenderable( std::unique_ptr<BlockRenderable> ( new BlockRenderable( li ) ), map_blocks_layers[ li ].position_ ) } );
+				layers_.push_back({ {}, level_state.addRenderable( std::unique_ptr<BlockRenderable> ( new BlockRenderable( li ) ), map_blocks_layers[ li ].layer_position_ ) } );
 
 				const auto& blocks = map_blocks_layers[ li ].blocks_;
 				for ( int i = 0; i < blocks.size(); ++i )
@@ -271,7 +271,7 @@ void BlockSystem::renderLayerAllBlocks( const LevelState& level_state, int layer
 	for ( int i = 0; i < blocks.size(); ++i )
 	{
 		const BlockType* type = getConstBlockType( blocks[ i ] - 1 );
-		if ( type != nullptr && type->graphics() != nullptr )
+		if ( type != nullptr && type->graphics() != nullptr && !type->graphics()->texture_.empty() )
 		{
 			const SpriteGraphics* graphics = type->graphics();
 			block_dest.x = Unit::BlocksToPixels( lvmap.mapX( i ) );

@@ -44,7 +44,8 @@ Sprite::Sprite
 	bool block_interact,
 	bool sprite_interact,
 	double bounce,
-	int map_id
+	int map_id,
+	Unit::Layer layer
 )
 :
 	Object( x, y, width, height ),
@@ -91,7 +92,7 @@ Sprite::Sprite
 	acceleration_y_ ( 0 ),
 	death_timer_ (),
 	bounce_height_ ( 0 ),
-	layer_ ( 1 ),
+	layer_ ( layer ),
 	gravity_modifier_ ( 1.0 ),
 	fall_start_speed_ ( gravity_start_speed_ ),
 	fall_top_speed_ ( gravity_top_speed_ )
@@ -616,11 +617,12 @@ bool Sprite::despawnWhenDead() const
 
 void Sprite::deathAction( LevelState& level_state )
 {
-	defaultDeathAction( level_state.camera() );
+	defaultDeathAction( level_state );
 };
 
-void Sprite::defaultDeathAction( const Camera& camera )
+void Sprite::defaultDeathAction( LevelState& level_state )
 {
+	changeRenderableLayer( level_state, Unit::Layer::BEFORE_FG_2 );
 	acceleration_x_ = 0;
 	vx_ = 0;
 	block_interact_ = false;
@@ -628,7 +630,7 @@ void Sprite::defaultDeathAction( const Camera& camera )
 	movement_ = getMovement( SpriteMovement::Type::GROUNDED );
 	on_ladder_ = false;
 
-	if ( camera.offscreen( hit_box_ ) )
+	if ( level_state.camera().offscreen( hit_box_ ) )
 	{
 		death_finished_ = true;
 	}
@@ -1106,11 +1108,11 @@ bool Sprite::isUpsideDown() const
 	return gravity_modifier_ < 0.0;
 };
 
-void Sprite::changeRenderableLayer( LevelState& level_state, int layer )
+void Sprite::changeRenderableLayer( LevelState& level_state, Unit::Layer layer )
 {
 	if ( layer_ != layer )
 	{
 		layer_ = layer;
-		level_state.changeRenderableLayer( renderable_id_, 15 );
+		level_state.changeRenderableLayer( renderable_id_, layer );
 	}
 };

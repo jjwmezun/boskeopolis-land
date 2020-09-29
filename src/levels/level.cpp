@@ -392,11 +392,18 @@ Level Level::getLevel( int id )
 							double layer_x_scroll = 1;
 							double layer_y_scroll = 1;
 							int layer_x_speed  = 0;
-							int position = MapLayer::DEFAULT_POSITION;
+							Unit::Layer layer_position = MapLayer::DEFAULT_POSITION;
 
-							if ( layer.HasMember( "layer" ) && layer[ "layer" ].IsInt() )
+							if ( layer.HasMember( "layer" ) )
 							{
-								position = std::min( 0, std::max( LevelState::NUMBER_OF_LAYERS, layer[ "layer" ].GetInt() ) );
+								if ( layer[ "layer" ].IsInt() )
+								{
+									layer_position = Unit::IntToLayer( layer[ "layer" ].GetInt() );
+								}
+								else if ( layer[ "layer" ].IsString() && mezun::areStringsEqual( layer[ "layer" ].GetString(), "Foreground" ) )
+								{
+									layer_position = Unit::Layer::FG_1;
+								}
 							}
 
 							if ( layer.HasMember( "width" ) && layer[ "width" ].IsInt() )
@@ -533,7 +540,7 @@ Level Level::getLevel( int id )
 											bganimflip,
 											alpha,
 											blend_mode,
-											position
+											layer_position
 										)
 									);
 								}
@@ -559,7 +566,7 @@ Level Level::getLevel( int id )
 											bganimflip,
 											alpha,
 											blend_mode,
-											position
+											layer_position
 										)
 									);
 								}
@@ -589,7 +596,7 @@ Level Level::getLevel( int id )
 											layer_height,
 											move_speed,
 											image,
-											position
+											layer_position
 										)
 									);
 								}
@@ -602,7 +609,7 @@ Level Level::getLevel( int id )
 											layer_width,
 											layer_height,
 											image,
-											position
+											layer_position
 										)
 									);
 								}
@@ -620,7 +627,7 @@ Level Level::getLevel( int id )
 
 									layers.emplace_back
 									(
-										std::make_shared<MapLayerShade> ( layer[ "color" ].GetInt(), alpha, position )
+										std::make_shared<MapLayerShade> ( layer[ "color" ].GetInt(), alpha, layer_position )
 									);
 								}
 							}
@@ -628,21 +635,21 @@ Level Level::getLevel( int id )
 							{
 								layers.emplace_back
 								(
-									std::make_shared<MapLayerNeon> ( position )
+									std::make_shared<MapLayerNeon> ( layer_position )
 								);
 							}
 							else if ( mezun::areStringsEqual( layer_type, "lightning" ) )
 							{
 								layers.emplace_back
 								(
-									std::make_shared<MapLayerLightning> ( position )
+									std::make_shared<MapLayerLightning> ( layer_position )
 								);
 							}
 							else if ( mezun::areStringsEqual( layer_type, "doom" ) )
 							{
 								layers.emplace_back
 								(
-									std::make_shared<MapLayerDoom> ( position )
+									std::make_shared<MapLayerDoom> ( layer_position )
 								);
 							}
 						}

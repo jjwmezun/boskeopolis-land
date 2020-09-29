@@ -8,7 +8,7 @@ class SpriteSystem;
 class DungeonEnemySprite final : public Sprite
 {
 	public:
-		DungeonEnemySprite( int x, int y, int layer, bool stationary = false );
+		DungeonEnemySprite( int x, int y, Unit::Layer layer, bool stationary = false );
 		~DungeonEnemySprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;

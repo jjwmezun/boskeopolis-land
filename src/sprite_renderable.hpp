@@ -7,8 +7,8 @@ class LevelState;
 class SpriteRenderable : public Renderable
 {
     public:
-        SpriteRenderable( int id );
+        SpriteRenderable( int sprite_id );
         ~SpriteRenderable();
         void render( const LevelState& level_state ) const override;
-        int id_;
+        int sprite_id_;
 };

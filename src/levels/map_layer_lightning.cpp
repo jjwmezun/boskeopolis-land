@@ -9,7 +9,7 @@ static int generateNewNextDuration()
     return mezun::randInt( 256, 64 );
 };
 
-MapLayerLightning::MapLayerLightning( int layer_position )
+MapLayerLightning::MapLayerLightning( Unit::Layer layer_position )
 :
     MapLayer( layer_position ),
     state_ ( State::STAGNANT ),

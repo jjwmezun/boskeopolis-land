@@ -2,7 +2,7 @@
 #include "map_layer_neon.hpp"
 #include "render.hpp"
 
-MapLayerNeon::MapLayerNeon( int layer_position ) : MapLayer( layer_position ), hue_ ( 0 ), color_ ( { 255, 0, 0, 255 } ) {};
+MapLayerNeon::MapLayerNeon( Unit::Layer layer_position ) : MapLayer( layer_position ), hue_ ( 0 ), color_ ( { 255, 0, 0, 255 } ) {};
 MapLayerNeon::~MapLayerNeon() {};
 
 void MapLayerNeon::render( const Camera& camera )

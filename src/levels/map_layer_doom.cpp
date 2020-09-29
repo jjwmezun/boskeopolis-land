@@ -68,7 +68,7 @@ static constexpr int calcFloorTexture( double floor )
 	return ( int )( floor * Unit::PIXELS_PER_BLOCK ) % Unit::PIXELS_PER_BLOCK;
 }
 
-MapLayerDoom::MapLayerDoom( int layer_position )
+MapLayerDoom::MapLayerDoom( Unit::Layer layer_position )
 :
 	MapLayer( layer_position ),
 	hero_shooting_ ( false ),

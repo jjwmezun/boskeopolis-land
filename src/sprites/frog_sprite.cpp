@@ -118,8 +118,6 @@ void FrogSprite::render( Camera& camera, bool priority )
     graphics_->current_frame_x_ = 0;
     graphics_->current_frame_y_ = 20;
     graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-    //graphics_->current_frame_y_ = 16;
-    //graphics_->render( Unit::SubPixelsToPixels( tongue_ ), &camera, priority );
 };
 
 void FrogSprite::setTongueX()
@@ -135,5 +133,5 @@ void FrogSprite::setTongueY()
 void FrogSprite::deathAction( LevelState& level_state )
 {
     setTongueY();
-	defaultDeathAction( level_state.camera() );
+	defaultDeathAction( level_state );
 };

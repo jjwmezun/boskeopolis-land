@@ -20,7 +20,7 @@ class MapLayerLightning final : public MapLayer
             LIGHTENING,
             DARKENING
         };
-        MapLayerLightning( int layer_position = DEFAULT_POSITION );
+        MapLayerLightning( Unit::Layer layer_position = DEFAULT_POSITION );
 		~MapLayerLightning();
 		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;

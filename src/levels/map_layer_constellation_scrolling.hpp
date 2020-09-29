@@ -11,7 +11,7 @@ class MapLayerConstellationScrolling final : public MapLayer
 			int map_width_blocks,
 			int map_height_blocks,
 			std::string image,
-			int layer_position = DEFAULT_POSITION
+			Unit::Layer layer_position = DEFAULT_POSITION
 		);
 		~MapLayerConstellationScrolling();
 		void update( LevelState& level_state ) override;

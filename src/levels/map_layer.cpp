@@ -1,6 +1,6 @@
 #include "map_layer.hpp"
 
-MapLayer::MapLayer( int layer_position ) : layer_position_ ( layer_position ) {};
+MapLayer::MapLayer( Unit::Layer layer_position ) : layer_position_ ( layer_position ) {};
 
 MapLayer::~MapLayer() {};
 

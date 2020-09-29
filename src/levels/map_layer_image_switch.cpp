@@ -20,7 +20,7 @@ MapLayerImageSwitch::MapLayerImageSwitch
 	bool flip,
 	Uint8 alpha,
 	SDL_BlendMode blend_mode,
-	int layer_position
+	Unit::Layer layer_position
 )
 :
 	MapLayerImage

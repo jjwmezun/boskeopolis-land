@@ -11,6 +11,7 @@ class SpriteSystem;
 #include "sprite_system.hpp"
 #include <vector>
 #include "warp.hpp"
+#include "unit.hpp"
 
 class Map final
 {
@@ -18,23 +19,23 @@ class Map final
 		struct BlockLayer
 		{
 			bool texture_;
-			int position_;
+			Unit::Layer layer_position_;
 			std::vector<int> blocks_;
 		};
 
 		enum class LayerType
 		{
 			__NULL,
+			BLOCKS_TEXTURE,
 			BLOCKS,
 			SPRITES,
-			TEXTURE,
-			BLOCKS_TEXTURE
+			TEXTURE
 		};
 
 		struct LayerInfo
 		{
-			LayerType type;
-			int n;
+			LayerType type_;
+			Unit::Layer layer_position_;
 		};
 
 		const std::vector<Warp> warps_;

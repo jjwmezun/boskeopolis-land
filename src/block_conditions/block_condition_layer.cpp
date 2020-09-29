@@ -1,7 +1,7 @@
 #include "block_condition_layer.hpp"
 #include "sprite.hpp"
 
-BlockConditionLayer::BlockConditionLayer( int layer ) : layer_ ( layer ) {};
+BlockConditionLayer::BlockConditionLayer( Unit::Layer layer ) : layer_ ( layer ) {};
 
 BlockConditionLayer::~BlockConditionLayer() {};
 

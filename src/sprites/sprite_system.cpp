@@ -31,6 +31,7 @@
 #include "cowpoker_sprite.hpp"
 #include "crab_sprite.hpp"
 #include "crane_crate_sprite.hpp"
+#include <cstdlib>
 #include "desert_hawk_sprite.hpp"
 #include "direction.hpp"
 #include "doom_door_sprite.hpp"
@@ -653,13 +654,14 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new DungeonSwitchSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 147 ):
-			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 1 ) );
+			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, Unit::Layer::SPRITES_1 ) );
 		break;
 		case ( SPRITE_INDEX_START + 148 ):
 			return std::unique_ptr<Sprite> ( new TopDownMoveableBlockSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 149 ):
-			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 2 ) );
+			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, Unit::Layer::SPRITES_2
+			 ) );
 		break;
 		case ( SPRITE_INDEX_START + 150 ):
 			return std::unique_ptr<Sprite> ( new FirebarSprite( x, y ) );
@@ -671,7 +673,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new DungeonEnemyWallsSprite( x, y, Direction::Simple::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 153 ):
-			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, 1, true ) );
+			return std::unique_ptr<Sprite> ( new DungeonEnemySprite( x, y, Unit::Layer::SPRITES_1, true ) );
 		break;
 		case ( SPRITE_INDEX_START + 154 ):
 			return std::unique_ptr<Sprite> ( new BouncingSpikeFruitSprite( x, y ) );
@@ -887,10 +889,12 @@ void SpriteSystem::spawn( std::unique_ptr<Sprite>&& sprite )
 
 void SpriteSystem::addSprite( std::unique_ptr<Sprite>&& sprite )
 {
-	sprites_map_.insert( std::pair<int, Sprite*> ( id_++, sprite.get() ) );
-	sprite->layer_ = 8;
-	sprite->renderable_id_ = level_state_.addRenderable( std::unique_ptr<SpriteRenderable> ( new SpriteRenderable( id_ - 1 ) ), 8 );
+	const int id = id_;
+	sprites_map_.insert( std::pair<int, Sprite*> ( id, sprite.get() ) );
+	sprite->system_id_ = id;
+	sprite->renderable_id_ = level_state_.addRenderable( std::unique_ptr<SpriteRenderable> ( new SpriteRenderable( id ) ), sprite->layer_ );
 	sprites_.emplace_back( std::move( sprite ) );
+	++id_;
 };
 
 void SpriteSystem::spawnEnemyBullet( int x, int y, Direction::Simple direction )
@@ -1032,8 +1036,7 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 			break;
 		}
 
-		hero_->renderable_id_ = level_state.addRenderable( std::unique_ptr<HeroRenderable>( new HeroRenderable() ), 8 );
-		hero_->layer_ = 8;
+		hero_->renderable_id_ = level_state.addRenderable( std::unique_ptr<HeroRenderable>( new HeroRenderable() ), hero_->layer_ );
 	}
 
 	clearSprites();
@@ -1058,8 +1061,8 @@ void SpriteSystem::destroySprite( int n, Map& lvmap )
 			++permanently_killed_enemies_;
 		}
 
-		sprites_map_.erase( sprites_[ n ]->id_ );
 		level_state_.removeRenderable( sprites_[ n ]->renderable_id_ );
+		sprites_map_.erase( sprites_[ n ]->system_id_ );
 		// Save time by just replacing dying sprite with last sprite & just
 		// popping off last sprite ( which is null now, anyway ),
 		// saving us from having to slowly shift every sprite back
@@ -1187,10 +1190,12 @@ void SpriteSystem::renderHero( const LevelState& level_state ) const
 void SpriteSystem::renderSprite( int id, const LevelState& level_state ) const
 {
 	auto sprite = sprites_map_.find( id );
-	if ( sprite != sprites_map_.end() )
+	if ( sprite == sprites_map_.end() )
 	{
-		sprite->second->render( level_state.camera() );
-	}
+		printf( "Bad Render Sprite ID: %d\n", id );
+		exit( -1 );
+	};
+	sprite->second->render( level_state.camera() );
 };
 
 Sprite& SpriteSystem::hero()

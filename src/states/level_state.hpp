@@ -13,13 +13,14 @@
 #include "player_graphics.hpp"
 #include "renderable.hpp"
 #include "sprite_system.hpp"
+#include "unit.hpp"
 
 class Palette;
 
 class LevelState final : public GameState
 {
 	public:
-		static constexpr int NUMBER_OF_LAYERS = 17;
+		static constexpr int NUMBER_OF_LAYERS = Unit::NUMBER_OF_LAYERS;
 
 		LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera = { Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS - 32, 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS} );
 		~LevelState();
@@ -30,9 +31,9 @@ class LevelState final : public GameState
 		void renderLevel() const;
 		void updateForTrainer();
 		void initForTrainer();
-		int addRenderable( std::unique_ptr<Renderable>&& renderable, int layer );
+		int addRenderable( std::unique_ptr<Renderable>&& renderable, Unit::Layer layer );
 		void removeRenderable( int id );
-		void changeRenderableLayer( int id, int layer );
+		void changeRenderableLayer( int id, Unit::Layer layer );
 
 		Health& health();
 		const Health& health() const;

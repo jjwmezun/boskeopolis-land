@@ -554,7 +554,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							comp_obj[ "layer" ].IsInt()
 						)
 						{
-							components.emplace_back( std::make_unique<BlockComponentLayer> ( comp_obj[ "layer" ].GetInt() ) );
+							components.emplace_back( std::make_unique<BlockComponentLayer> ( Unit::IntToLayer( comp_obj[ "layer" ].GetInt() ) ) );
 						}
 					}
 					else if ( mezun::areStringsEqual( comp_type, "current_left" ) )
@@ -699,7 +699,7 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							{
 								if ( cond.HasMember( "layer" ) && cond[ "layer" ].IsInt() )
 								{
-									this_condition.emplace_back( std::make_unique<BlockConditionLayer> ( cond[ "layer" ].GetInt() ) );
+									this_condition.emplace_back( std::make_unique<BlockConditionLayer> ( Unit::IntToLayer( cond[ "layer" ].GetInt() ) ) );
 								}
 							}
 							else if ( mezun::areStringsEqual( cond_type, "rival" ) )

@@ -58,9 +58,9 @@ void ElectricWallSprite::customInteract( Collision& my_collision, Collision& the
     }
 };
 
-void ElectricWallSprite::render( Camera& camera, bool priority )
+void ElectricWallSprite::render( const Camera& camera ) const
 {
-    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
     const sdl2::SDLRect src1 = { 16, 6, 7, 8 };
     const sdl2::SDLRect dest1
     { 

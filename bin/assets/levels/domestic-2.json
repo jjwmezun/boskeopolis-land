@@ -3,7 +3,7 @@
 	[
 		{
             "slug": "attic-1",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -11,11 +11,9 @@
 					"width": 400,
 					"height": 226,
 					"x_scroll": 0.5,
-					"y_scroll": 0.5
-                }
-            ],
-			"foregrounds":
-			[
+					"y_scroll": 0.5,
+					"layer": "background"
+                },
 				{
 					"type": "image",
 					"img": "spotlight.png",
@@ -28,9 +26,10 @@
 					"x_offset": 20,
 					"lighten": true,
 					"alpha": 128,
-					"switch": true
+					"switch": true,
+					"layer": 16
 				}
-			]
+            ]
         }
 	],
 

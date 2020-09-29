@@ -1,0 +1,19 @@
+Layers:
+00 UNDER_BG_1
+01 BG1
+02
+03 BG2
+04
+05 Blocks1
+06
+07 Sprites 1
+08
+09 Blocks2
+10
+11 Sprites 2
+12
+13 FG1
+14
+15 FG2
+16
+17 Super

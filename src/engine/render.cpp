@@ -204,6 +204,7 @@ namespace Render
 
 		if ( rwop == nullptr )
 		{
+			printf( "Failed to read file %s\n", imgAddress( sheet ).c_str() );
 			SDL_Log( "SDL_RWFromFile failed: %s", SDL_GetError() );
 		}
 
@@ -212,6 +213,7 @@ namespace Render
 
 		if ( !surfaces_.at( sheet ) )
 		{
+			printf( "Failed to make surface for %s\n", imgAddress( sheet ).c_str() );
 			SDL_Log( "SDL_Surface failed: %s", SDL_GetError() );
 		}
 	};

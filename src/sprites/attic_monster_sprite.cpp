@@ -181,14 +181,11 @@ void AtticMonsterSprite::reset()
     }
 };
 
-void AtticMonsterSprite::render( Camera& camera, bool priority )
+void AtticMonsterSprite::render( const Camera& camera ) const
 {
-    if ( !priority )
-    {
-        Render::renderObject( "sprites/attic-rat.png", { 88, 18, 22, 3 }, { camera.relativeX( xPixels() - 4 ), camera.relativeY( Unit::SubPixelsToPixels( original_hit_box_.y ) - 3 ), 22, 3 } );
-        graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-        Render::renderObject( "sprites/attic-rat.png", { 88, 21, 22, 3 }, { camera.relativeX( xPixels() - 4 ), camera.relativeY( Unit::SubPixelsToPixels( original_hit_box_.y ) - 1 ), 22, 3 } );
-    }
+    Render::renderObject( "sprites/attic-rat.png", { 88, 18, 22, 3 }, { camera.relativeX( xPixels() - 4 ), camera.relativeY( Unit::SubPixelsToPixels( original_hit_box_.y ) - 3 ), 22, 3 } );
+    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+    Render::renderObject( "sprites/attic-rat.png", { 88, 21, 22, 3 }, { camera.relativeX( xPixels() - 4 ), camera.relativeY( Unit::SubPixelsToPixels( original_hit_box_.y ) - 1 ), 22, 3 } );
 };
 
 void AtticMonsterSprite::deathAction( LevelState& level_state )
