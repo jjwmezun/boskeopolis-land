@@ -10,9 +10,9 @@
 
 static constexpr int FADE_SPEED = 4;
 
-MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height, bool fade )
+MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height, bool fade, Unit::Layer layer_position )
 :
-	MapLayer(),
+	MapLayer( layer_position ),
 	blocks_ (),
 	tiles_ ( tiles ),
 	width_ ( map_width ),

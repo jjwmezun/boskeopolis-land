@@ -20,5 +20,4 @@ class PromptState : public GameState
 	protected:
         int selection_;
         std::u32string text_;
-        char scratch_[ 3000 ];
 };

@@ -11,5 +11,4 @@ class DragonflySprite final : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
     private:
 		int animation_timer_;
-        char scratch_[ 500 ];
 };

@@ -29,22 +29,7 @@ void MapLayerTilemapImage::update( LevelState& level_state )
 		sdl2::SDLRect tile_src = block_dest;
 		Render::setRenderTarget( texture_ );
 		Render::clearScreenTransparency();
-		for ( int y = 0; y < height_; ++y )
-		{
-			for ( int x = 0; x < width_; ++x )
-			{
-				const int i = mezun::nOfXY( x, y, width_ );
-				const BlockType* type = level_state.blocks().getBlockType( tiles_[ i ] - 1 );
-				if ( type != nullptr && type->graphics() != nullptr )
-				{
-					block_dest.x = Unit::BlocksToPixels( x );
-					block_dest.y = Unit::BlocksToPixels( y );
-					tile_src.x = type->graphics()->current_frame_x_;
-					tile_src.y = type->graphics()->current_frame_y_;
-					Render::renderObject( type->graphics()->texture_, tile_src, block_dest );
-				}
-			}
-		}
+		level_state.blocks().renderTiles( tiles_, width_, height_ );
 		Render::releaseRenderTarget();
 		tiles_.clear();
 	}

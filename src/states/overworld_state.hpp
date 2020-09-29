@@ -79,5 +79,4 @@ class OverworldState final : public GameState
 		OWHero hero_;
 		OWLevelTileGraphics level_tile_graphics_;
 		OWInventory inventory_;
-		char scratch_[ 3000 ];
 };

@@ -14,5 +14,4 @@ class LogRaftsSprite final : public Sprite
     private:
         static constexpr int MAX_RAFTS = 5;
         sdl2::SDLRect rafts_[ MAX_RAFTS ];
-        char scratch_[ 2500 ];
 };

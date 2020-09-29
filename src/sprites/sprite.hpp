@@ -306,6 +306,7 @@ class Sprite : public Object
 		bool collide_right_prev_ = false;
 		bool block_interact_ = true;
 		bool sprite_interact_ = true;
+		bool sprite_interact_from_this_to_others_only_ = false;
 		bool is_running_ = false;
 		bool is_moving_ = false;
 		bool is_dead_ = false;
@@ -354,5 +355,4 @@ class Sprite : public Object
 		const sdl2::SDLRect original_hit_box_;
 		TimerSimpleT<32, false> death_timer_;
 		TimerSimpleT<4, false> on_ground_padding_;
-		char scratch_[ 256 ];
 };

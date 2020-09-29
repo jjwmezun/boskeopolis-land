@@ -16,20 +16,23 @@ class SpriteSystem;
 class Map final
 {
 	public:
-		struct BlockLayer
-		{
-			bool texture_;
-			Unit::Layer layer_position_;
-			std::vector<int> blocks_;
-		};
-
 		enum class LayerType
 		{
 			__NULL,
 			BLOCKS_TEXTURE,
 			BLOCKS,
 			SPRITES,
-			TEXTURE
+			TEXTURE,
+			FADE_TEXTURE,
+			FADE,
+			TILES
+		};
+
+		struct BlockLayer
+		{
+			LayerType type_;
+			Unit::Layer layer_position_;
+			std::vector<int> blocks_;
 		};
 
 		struct LayerInfo

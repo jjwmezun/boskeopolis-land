@@ -81,5 +81,4 @@ class SpriteSystem final
 		std::unique_ptr<Sprite> hero_;
 		std::vector<std::unique_ptr<Sprite>> sprites_;
 		std::unordered_map<int, Sprite*> sprites_map_;
-		char scratch_[ 256 ];
 };

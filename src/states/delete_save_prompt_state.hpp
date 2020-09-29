@@ -18,5 +18,4 @@ class DeleteSavePromptState : public PromptState
 
 	private:
         Save& save_;
-        char scratch_[ 3000 ];
 };

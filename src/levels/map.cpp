@@ -22,12 +22,6 @@ static constexpr int FLASH_DURATION = 8;
 static constexpr int INNER_FLASH_DURATION = 2;
 static constexpr int BG_LAYER_LIMIT = 5;
 
-struct TileLayerData
-{
-	Unit::Layer layer_position_;
-	std::vector<int> tiles_;
-};
-
 Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 {
 	LayerType type = LayerType::__NULL;
@@ -57,6 +51,24 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 		number_start = 7;
 		layer_position = Unit::Layer::BG_1;
 	}
+	else if ( mezun::stringStartsWith( layer_name, "FadeTexture" ) )
+	{
+		type = LayerType::FADE_TEXTURE;
+		number_start = 11;
+		layer_position = Unit::Layer::FG_2;
+	}
+	else if ( mezun::stringStartsWith( layer_name, "Fade" ) )
+	{
+		type = LayerType::FADE;
+		number_start = 4;
+		layer_position = Unit::Layer::FG_2;
+	}
+	else if ( mezun::stringStartsWith( layer_name, "Tiles" ) )
+	{
+		type = LayerType::TILES;
+		number_start = 5;
+		layer_position = Unit::Layer::FG_2;
+	}
 	else
 	{
 		return { LayerType::__NULL, layer_position };
@@ -81,17 +93,37 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 			case ( LayerType::BLOCKS ):
 			{
 				const auto substr = layer_name.substr( number_start, 2 );
-				if ( substr == "BG" )
+				if ( substr == "BG1" )
 				{
 					layer_position = Unit::Layer::BLOCKS_1;
 				}
-				else if ( substr == "FG" )
+				else if ( substr == "FG1" )
 				{
 					layer_position = Unit::Layer::BLOCKS_2;
 				}
+				else if ( substr == "FG2" )
+				{
+					layer_position = Unit::Layer::FG_2;
+				}
+				else if ( substr == "BG2" )
+				{
+					layer_position = Unit::Layer::BG_2;
+				}
+				else
+				{
+					const auto substr = layer_name.substr( number_start, 2 );
+					if ( substr == "BG" )
+					{
+						layer_position = Unit::Layer::BLOCKS_1;
+					}
+					else if ( substr == "FG" )
+					{
+						layer_position = Unit::Layer::BLOCKS_2;
+					}
+				}
 			}
 			break;
-			case ( LayerType::TEXTURE ):
+			default:
 			{
 				const auto substr = layer_name.substr( number_start, 3 );
 				if ( substr == "BG1" )
@@ -140,9 +172,9 @@ Map Map::mapFromPath
 	// Setup
 	//=============================================================
 
-		std::vector<BlockLayer> blocks_layers = {};
-		std::vector<int> sprites = {};
-		std::vector<TileLayerData> texture_layers = {};
+		std::vector<BlockLayer> blocks_layers {};
+		std::vector<BlockLayer> new_layers {};
+		std::vector<int> sprites {};
 
 		std::string palette = "Grayscale";
 		int bg_color = 1;
@@ -220,25 +252,8 @@ Map Map::mapFromPath
 			{
 				const std::string layer_type = v[ "name" ].GetString();
 				const LayerInfo layer_info = getLayerInfo( layer_type );
-
-				bool blocks_is_texture = false;
 				switch ( layer_info.type_ )
 				{
-					case ( LayerType::BLOCKS_TEXTURE ):
-					{
-						blocks_is_texture = true;
-					}
-					// fallthru
-					case ( LayerType::BLOCKS ):
-					{
-						std::vector<int> blocks;
-						for ( auto& n : v[ "data" ].GetArray() )
-						{
-							blocks.push_back( n.GetInt() );
-						}
-						blocks_layers.push_back( { blocks_is_texture, layer_info.layer_position_, blocks } );
-					}
-					break;
 					case ( LayerType::SPRITES ):
 					{
 						for ( auto& n : v[ "data" ].GetArray() )
@@ -247,14 +262,14 @@ Map Map::mapFromPath
 						}
 					}
 					break;
-					case ( LayerType::TEXTURE ):
+					default:
 					{
 						std::vector<int> tiles;
 						for ( auto& n : v[ "data" ].GetArray() )
 						{
 							tiles.emplace_back( n.GetInt() );
 						}
-						texture_layers.push_back({ layer_info.layer_position_, tiles });
+						new_layers.push_back({ layer_info.type_, layer_info.layer_position_, tiles });
 					}
 					break;
 				}
@@ -262,9 +277,34 @@ Map Map::mapFromPath
 			++i;
 		}
 
-		for ( auto& texture_layer : texture_layers )
+		for ( auto& new_layer : new_layers )
 		{
-			layers.emplace_back( new MapLayerTilemapImage( texture_layer.tiles_, width, height, texture_layer.layer_position_ ) );
+			bool is_fade = false;
+			switch ( new_layer.type_ )
+			{
+				case ( LayerType::BLOCKS_TEXTURE ):
+				//Fallthru
+				case ( LayerType::BLOCKS ):
+				{
+					blocks_layers.push_back( new_layer );
+				}
+				break;
+				case ( LayerType::FADE ):
+				{
+					is_fade = true;
+				}
+				// Fallthru
+				case ( LayerType::TILES ):
+				{
+					layers.emplace_back( new MapLayerTilemap( new_layer.blocks_, width, height, is_fade, new_layer.layer_position_ ) );
+				}
+				break;
+				default:
+				{
+					layers.emplace_back( new MapLayerTilemapImage( new_layer.blocks_, width, height, new_layer.layer_position_ ) );
+				}
+				break;
+			}
 		}
 
 

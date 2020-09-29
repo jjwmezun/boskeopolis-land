@@ -32,5 +32,4 @@ class ShopPlayer final
         double position_;
         double speed_;
         SDL_RendererFlip flip_;
-        char scratch_[3000];
 };

@@ -27,6 +27,7 @@ class BlockSystem final
 		void update( EventSystem& events );
 		void renderLayer( const LevelState& level_state, int layer ) const;
 		void renderLayerAllBlocks( const LevelState& level_state, int layer ) const;
+		void renderTiles( const std::vector<int>& tiles, int width, int height ) const;
 		void interact( Sprite& sprite, LevelState& level_state );
 		void reset( LevelState& level_state );
 		void blocksFromMap( LevelState& level_state );

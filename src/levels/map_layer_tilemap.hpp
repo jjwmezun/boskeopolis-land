@@ -14,7 +14,7 @@ class MapLayerTilemap final : public MapLayer
 			FADING
 		};
 
-		MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height, bool fade = false );
+		MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height, bool fade = false, Unit::Layer layer_position = DEFAULT_POSITION );
 		~MapLayerTilemap();
 		void update( LevelState& level_state ) override;
 		void render( const Camera& camera ) override;

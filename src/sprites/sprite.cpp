@@ -95,7 +95,8 @@ Sprite::Sprite
 	layer_ ( layer ),
 	gravity_modifier_ ( 1.0 ),
 	fall_start_speed_ ( gravity_start_speed_ ),
-	fall_top_speed_ ( gravity_top_speed_ )
+	fall_top_speed_ ( gravity_top_speed_ ),
+	sprite_interact_from_this_to_others_only_ ( false )
 {};
 
 Sprite::~Sprite() {};

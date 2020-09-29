@@ -48,5 +48,4 @@ class ChooseSaveState final : public GameState
 		int bottom_selection_;
 		Save temp_save_;
 		bool new_save_confirm_;
-        char scratch_[ 3000 ];
 };

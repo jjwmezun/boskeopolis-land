@@ -16,5 +16,4 @@ class BlockTextureRenderable final : public Renderable
         BlockTextureRenderable& operator=( const BlockTextureRenderable& ) = delete;
         void render( const LevelState& level_state ) const override;
         TextureBox texture_;
-        char scratch_[ 256 ];
 };

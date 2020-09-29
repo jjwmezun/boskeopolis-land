@@ -192,7 +192,7 @@ void BlockSystem::blocksFromMap( LevelState& level_state )
 					layers_.push_back({ {}, level_state.addRenderable
 					(
 						(
-							( map_blocks_layers[ li ].texture_ )
+							( map_blocks_layers[ li ].type_ == Map::LayerType::BLOCKS_TEXTURE )
 								? std::unique_ptr<Renderable> ( new BlockTextureRenderable( li, level_state ) )
 								: std::unique_ptr<Renderable> ( new BlockRenderable( li ) )
 						),
@@ -266,29 +266,38 @@ void BlockSystem::renderLayerAllBlocks( const LevelState& level_state, int layer
 {
 	const auto& lvmap = level_state.currentMap();
 	const auto& blocks = lvmap.blocksLayers()[ layer ].blocks_;
+	renderTiles( blocks, lvmap.widthBlocks(), lvmap.heightBlocks() );
+};
+
+void BlockSystem::renderTiles( const std::vector<int>& tiles, int width, int height ) const
+{
 	sdl2::SDLRect block_dest = { 0, 0, Unit::BlocksToPixels( 1 ), Unit::BlocksToPixels( 1 ) };
 	sdl2::SDLRect tile_src = block_dest;
-	for ( int i = 0; i < blocks.size(); ++i )
+	for ( int y = 0; y < height; ++y )
 	{
-		const BlockType* type = getConstBlockType( blocks[ i ] - 1 );
-		if ( type != nullptr && type->graphics() != nullptr && !type->graphics()->texture_.empty() )
+		for ( int x = 0; x < width; ++x )
 		{
-			const SpriteGraphics* graphics = type->graphics();
-			block_dest.x = Unit::BlocksToPixels( lvmap.mapX( i ) );
-			block_dest.y = Unit::BlocksToPixels( lvmap.mapY( i ) );
-			tile_src.x = graphics->current_frame_x_;
-			tile_src.y = graphics->current_frame_y_;
-			Render::renderObject
-			(
-				graphics->texture_,
-				tile_src,
-				block_dest,
-				graphics->flip_x_,
-				graphics->flip_y_,
-				graphics->rotation_,
-				graphics->alpha_,
-				nullptr
-			);
+			const int i = mezun::nOfXY( x, y, width );
+			const BlockType* type = getConstBlockType( tiles[ i ] - 1 );
+			if ( type != nullptr && type->graphics() != nullptr && !type->graphics()->texture_.empty() )
+			{
+				const SpriteGraphics* graphics = type->graphics();
+				block_dest.x = Unit::BlocksToPixels( x );
+				block_dest.y = Unit::BlocksToPixels( y );
+				tile_src.x = type->graphics()->current_frame_x_;
+				tile_src.y = type->graphics()->current_frame_y_;
+				Render::renderObject
+				(
+					graphics->texture_,
+					tile_src,
+					block_dest,
+					graphics->flip_x_,
+					graphics->flip_y_,
+					graphics->rotation_,
+					graphics->alpha_,
+					nullptr
+				);
+			}
 		}
 	}
 };

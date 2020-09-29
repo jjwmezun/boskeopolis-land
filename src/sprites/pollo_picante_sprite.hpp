@@ -16,5 +16,4 @@ class PolloPicanteSprite final : public Sprite
 	private:
 		int animation_counter_;
         int shoot_timer_;
-        char scratch_[ 3000 ];
 };

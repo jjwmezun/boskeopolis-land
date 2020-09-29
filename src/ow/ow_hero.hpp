@@ -36,5 +36,4 @@ class OWHero final
 		double x_speed_;
 		double y_speed_;
 		TimerRepeatT2<8> animation_timer_;
-		char scratch_[ 1800 ];
 };

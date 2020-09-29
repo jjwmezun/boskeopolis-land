@@ -68,5 +68,4 @@ class LevelState final : public GameState
 		EventSystem events_;
 		Level level_;
 		InventoryLevel inventory_screen_;
-		char scratch_[ 256 ];
 };
