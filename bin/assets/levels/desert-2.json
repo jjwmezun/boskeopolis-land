@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "desert-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

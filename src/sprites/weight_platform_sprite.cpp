@@ -133,7 +133,7 @@ void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& t
 	}
 };
 
-void WeightPlatformSprite::render( Camera& camera ) const
+void WeightPlatformSprite::render( const Camera& camera ) const
 {
 	renderBars( camera );
 	renderPlatforms( camera );

@@ -82,7 +82,7 @@ void PikeSprite::customUpdate( LevelState& level_state )
 	}
 };
 
-void PikeSprite::render( Camera& camera )
+void PikeSprite::render( const Camera& camera ) const
 {
 	graphics_->flip_x_ = false;
 	graphics_->flip_y_ = verticalIsDownward( direction_ );

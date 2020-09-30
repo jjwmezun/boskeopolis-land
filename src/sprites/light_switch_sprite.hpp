@@ -10,7 +10,7 @@ class LightSwitchSprite final : public Sprite
 		~LightSwitchSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
-		void render( Camera& camera ) override;
+		void render( const Camera& camera ) const override;
 
     private:
 		BumpUnderBlockSprite bump_under_block_component;

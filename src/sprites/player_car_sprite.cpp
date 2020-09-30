@@ -120,7 +120,7 @@ void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_
 {
 };
 
-void PlayerCarSprite::render( Camera& camera )
+void PlayerCarSprite::render( const Camera& camera ) const
 {
 	for ( const Block* block : block_list_ )
 	{

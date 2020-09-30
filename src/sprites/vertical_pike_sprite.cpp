@@ -60,7 +60,7 @@ void VerticalPikeSprite::customUpdate( LevelState& level_state )
 	}
 };
 
-void VerticalPikeSprite::render( Camera& camera ) const
+void VerticalPikeSprite::render( const Camera& camera ) const
 {
 	graphics_->flip_y_ = direction_y_ == Direction::Vertical::DOWN;
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );

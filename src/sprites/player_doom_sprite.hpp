@@ -13,7 +13,7 @@ class PlayerDoomSprite final : public Sprite
 		~PlayerDoomSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
-		void render( Camera& camera ) override;
+		void render( const Camera& camera ) const override;
 		void deathAction( LevelState& level_state ) override;
 
 		SDL_Color screen_tint_;

@@ -88,7 +88,7 @@ void StatueLaserSprite::customInteract( Collision& my_collision, Collision& thei
     }
 };
 
-void StatueLaserSprite::render( Camera& camera ) const
+void StatueLaserSprite::render( const Camera& camera ) const
 {
     if ( laser_state_ == LaserState::DORMANT || laser_state_ == LaserState::START_CHARGING )
     {

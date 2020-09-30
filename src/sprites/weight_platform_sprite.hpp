@@ -9,7 +9,7 @@ class WeightPlatformSprite final : public Sprite
 		~WeightPlatformSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
-		void render( Camera& camera ) const override;
+		void render( const Camera& camera ) const override;
 
 	private:
 		int break_timer_;

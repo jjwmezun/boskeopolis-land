@@ -116,7 +116,7 @@ void MoonSprite::customInteract( Collision& my_collision, Collision& their_colli
 	}
 };
 
-void MoonSprite::render( Camera& camera )
+void MoonSprite::render( const Camera& camera ) const
 {
 	switch ( moon_state_ )
 	{

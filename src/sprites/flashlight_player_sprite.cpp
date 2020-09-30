@@ -95,20 +95,20 @@ void FlashlightPlayerSprite::customUpdate( LevelState& level_state )
 		level_state.inventory().clearGhostKills();
 		MansionGhostSprite::last_ghost_death_frame_ = -1;
 	}
+
+	flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
+	flashlight_box_.y = yPixels();
+	flashlight_gfx_.flip_x_ = flash_beam_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
+	flashlight_gfx_.rotation_ = flash_beam_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
+	flashlight_gfx_.rotation_center_.x = flash_beam_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
 };
 
-void FlashlightPlayerSprite::render( Camera& camera )
+void FlashlightPlayerSprite::render( const Camera& camera ) const
 {
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 
 	if ( !on_ladder_ && !is_dead_ )
 	{
-		flashlight_box_.x = xPixels() + ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -44 : 1 );
-		flashlight_box_.y = yPixels();
-		flashlight_gfx_.flip_x_ = flash_beam_gfx_.flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
-		flashlight_gfx_.rotation_ = flash_beam_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
-		flashlight_gfx_.rotation_center_.x = flash_beam_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
-
 		flash_beam_gfx_.render( flashlight_box_, &camera );
 		flashlight_gfx_.render( flashlight_box_, &camera );
 	}

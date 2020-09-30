@@ -185,7 +185,7 @@ void WallCrawlerSprite::customInteract( Collision& my_collision, Collision& thei
     }
 };
 
-void WallCrawlerSprite::render( Camera& camera ) const
+void WallCrawlerSprite::render( const Camera& camera ) const
 {
     graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
     /*

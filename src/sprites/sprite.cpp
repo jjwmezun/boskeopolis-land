@@ -182,14 +182,6 @@ void Sprite::update( LevelState& level_state )
 	on_slope_ = Direction::Horizontal::__NULL;
 };
 
-void Sprite::render( Camera& camera )
-{
-	if ( graphics_ != nullptr )
-	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
-	}
-};
-
 void Sprite::render( const Camera& camera ) const
 {
 	if ( graphics_ != nullptr )
