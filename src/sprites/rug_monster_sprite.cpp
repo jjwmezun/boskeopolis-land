@@ -11,7 +11,7 @@ static constexpr int TICKS_PER_FRAME = 8;
 
 RugMonsterSprite::RugMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/rug-monster.png", 0, 0, false, false, 0.0, false, -1, -1, 2, 1 ), x, y + 11, 14, 5, {}, 100, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/rug-monster.png", 0, 0, false, false, 0.0, -1, -1, 2, 1 ), x, y + 11, 14, 5, {}, 100, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     reached_end_ ( false ),
     state_ ( RugMonsterState::DORMANT ),
     animation_timer_ ( 0 ),

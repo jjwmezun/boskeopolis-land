@@ -22,13 +22,15 @@ int MansionGhostSprite::last_ghost_death_frame_ = -1;
 
 MansionGhostSprite::MansionGhostSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-3.png", 0, 0, false, false, 0.0, true, -10, -6, 16, 7, 160, SDL_BLENDMODE_ADD ), x, y, 15, 18, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-3.png", 0, 0, false, false, 0.0, -10, -6, 16, 7, 160, SDL_BLENDMODE_ADD ), x, y, 15, 18, { SpriteType::ENEMY, SpriteType::MANSION_GHOST, SpriteType::DEATH_COUNT }, 100, 1000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
 	animation_counter_ (),
 	light_timer_ ( 0 ),
 	vertical_acceleration_ ( 0 ),
 	vertical_speed_ ( 0 ),
 	being_flashed_ ( false )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 MansionGhostSprite::~MansionGhostSprite() {};
 

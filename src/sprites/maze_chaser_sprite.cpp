@@ -16,7 +16,7 @@ MazeChaserSprite::MazeChaserSprite( int x, int y, Type type )
 :
 	Sprite
 	(
-		std::make_unique<SpriteGraphics> ( "sprites/eyeball.png", mazeChaserImgXFrame( type ), 0, false, false, 0, false, -1, -1, 2, 2 ),
+		std::make_unique<SpriteGraphics> ( "sprites/eyeball.png", mazeChaserImgXFrame( type ), 0, false, false, 0, -1, -1, 2, 2 ),
 		x,
 		y,
 		14,

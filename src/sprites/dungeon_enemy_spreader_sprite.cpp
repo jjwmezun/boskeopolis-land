@@ -12,7 +12,7 @@ static constexpr double SPIKE_SPREAD_MIN = 25000.0;
 
 DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0, true ), x, y, 16, 16, { SpriteType::ENEMY }, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0 ), x, y, 16, 16, { SpriteType::ENEMY }, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	spikes_
 	({
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y - 16, 16, 16 } ),
@@ -41,7 +41,9 @@ DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 	invincibility_timer_ (),
 	hp_ ( 3 ),
 	spikes_going_out_ ( true )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 DungeonEnemySpreaderSprite::~DungeonEnemySpreaderSprite() {};
 
@@ -151,11 +153,11 @@ void DungeonEnemySpreaderSprite::customInteract( Collision& my_collision, Collis
 	}
 };
 
-void DungeonEnemySpreaderSprite::render( Camera& camera, bool priority )
+void DungeonEnemySpreaderSprite::render( const Camera& camera ) const
 {
 	if ( !invincibilityFlickerOff() )
 	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	}
 	for ( int i = 0; i < NUMBER_OF_SPIKES; ++i )
 	{

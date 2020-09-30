@@ -13,7 +13,7 @@ RacerSprite::RacerSprite( int x, int y )
 		800,
 		4000,
 		std::unique_ptr<InputComponent> ( new InputComponentSequence( "racer" ) ),
-		std::make_unique<SpriteGraphics> ( "sprites/racer.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 ),
+		std::make_unique<SpriteGraphics> ( "sprites/racer.png", 0, 0, false, false, 0, -1, -2, 2, 4 ),
 		SpriteType::RIVAL,
 		2100,
 		2100

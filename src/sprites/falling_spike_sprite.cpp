@@ -8,7 +8,9 @@ FallingSpikeSprite::FallingSpikeSprite( int x, int y )
     state_ ( State::STATIC ),
     timer_ (),
     frame_ ( 0 )
-{};
+{
+    layer_ = Unit::Layer::AFTER_FG_2;
+};
 
 FallingSpikeSprite::~FallingSpikeSprite() {};
 
@@ -50,9 +52,7 @@ void FallingSpikeSprite::customInteract( Collision& my_collision, Collision& the
 	}
 };
 
-void FallingSpikeSprite::render( Camera& camera, bool priority ) {};
-
-void FallingSpikeSprite::renderSuperPriority( Camera& camera )
+void FallingSpikeSprite::render( const Camera& camera ) const
 {
     graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

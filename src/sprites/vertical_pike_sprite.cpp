@@ -9,7 +9,7 @@ static constexpr int WAIT_TIME = 32;
 
 VerticalPikeSprite::VerticalPikeSprite( int x, int y, Direction::Vertical direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pike.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 ), x, y, 10, 0, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, direction, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pike.png", 0, 0, false, false, 0, -1, -1, 2, 2 ), x, y, 10, 0, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, direction, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	grow_speed_ ( 0 ),
 	state_ ( PikeState::WAIT ),
 	wait_timer_ ( 0 )
@@ -60,10 +60,10 @@ void VerticalPikeSprite::customUpdate( LevelState& level_state )
 	}
 };
 
-void VerticalPikeSprite::render( Camera& camera, bool priority )
+void VerticalPikeSprite::render( Camera& camera ) const
 {
 	graphics_->flip_y_ = direction_y_ == Direction::Vertical::DOWN;
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };
 
 void VerticalPikeSprite::accelerateGrowth()

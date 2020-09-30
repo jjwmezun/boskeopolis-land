@@ -6,7 +6,7 @@ LilPipeMonsterSprite::LilPipeMonsterSprite( int x, int y, Direction::Vertical di
 :
 	Sprite
 	(
-		std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 16, 16, false, direction == Direction::Vertical::DOWN, 0, false, -3, -3, 6, 6 ),
+		std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 16, 16, false, direction == Direction::Vertical::DOWN, 0, -3, -3, 6, 6 ),
 		x+3,
 		y+3,
 		10,

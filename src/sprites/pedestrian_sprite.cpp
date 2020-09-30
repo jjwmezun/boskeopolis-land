@@ -45,7 +45,7 @@ static bool testMoveableBlockType( int value, Unit::Layer layer );
 
 PedestrianSprite::PedestrianSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pedestrian.png", 0, 0, false, false, 0.0, false, -1, -1, 2, 2 ), x + 6, y + 5, 2, 5, {}, 250, 250, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pedestrian.png", 0, 0, false, false, 0.0, -1, -1, 2, 2 ), x + 6, y + 5, 2, 5, {}, 250, 250, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false ),
 	animation_ ()
 {
 	direction_ = Direction::Simple::RIGHT;
@@ -68,13 +68,11 @@ void PedestrianSprite::customUpdate( LevelState& level_state )
 
 		if ( current_block == 65 + 15 || current_block == 65 + 50 )
 		{
-			layer_ = Unit::Layer::SPRITES_1;
-			graphics_->priority_ = false;
+			level_state.changeRenderableLayer( renderable_id_, Unit::Layer::SPRITES_1 );
 		}
 		else if ( current_block == 65 + 31 || current_block == 65 + 66 )
 		{
-			layer_ = Unit::Layer::SPRITES_2;
-			graphics_->priority_ = true;
+			level_state.changeRenderableLayer( renderable_id_, Unit::Layer::SPRITES_2 );
 		}
 
 		const int block_types[ 4 ] =

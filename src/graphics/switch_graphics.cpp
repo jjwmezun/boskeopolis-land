@@ -8,27 +8,18 @@ SwitchGraphics::SwitchGraphics
 )
 :
 	SpriteGraphics( "" ),
+	current_gfx_ ( gfx_off_.get() ),
 	gfx_off_ ( std::move( gfx_off ) ),
-	gfx_on_ ( std::move( gfx_on ) ),
-	current_gfx_ ( gfx_off_.get() )
+	gfx_on_ ( std::move( gfx_on ) )
 {};
 
 void SwitchGraphics::update( const EventSystem& events )
 {
-	switch ( events.isSwitchOn() )
-	{
-		case ( true ):
-			current_gfx_ = gfx_on_.get();
-		break;
-
-		case ( false ):
-			current_gfx_ = gfx_off_.get();
-		break;
-	}
+	current_gfx_ = ( events.isSwitchOn() ) ? gfx_on_.get() : gfx_off_.get();
 	current_gfx_->update( events );
 };
 
-void SwitchGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
+void SwitchGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera ) const
 {
-	current_gfx_->render( bound_box, camera, priority );
+	current_gfx_->render( bound_box, camera );
 };

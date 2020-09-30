@@ -15,7 +15,7 @@ static int getRandomDelay()
 
 UrbanBirdSprite::UrbanBirdSprite( int x, int y, Sprite* hero_address )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0, true ), x, y, 16, 16, { SpriteType::PHASE_THROUGH }, 200, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0 ), x, y, 16, 16, { SpriteType::PHASE_THROUGH }, 200, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	left_pressed_before_ ( false ),
 	right_pressed_before_ ( false ),
 	jump_pressed_before_ ( false ),
@@ -25,7 +25,9 @@ UrbanBirdSprite::UrbanBirdSprite( int x, int y, Sprite* hero_address )
 	remember_y_ ( 0 ),
 	struggle_counter_ ( 0 ),
 	hero_address_ ( hero_address )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 UrbanBirdSprite::~UrbanBirdSprite() {};
 
@@ -69,14 +71,14 @@ void UrbanBirdSprite::customUpdate( LevelState& level_state )
 				// so it can't grab you right after releasing yourself from it.
 				remember_y_ = -1;
 				remember_x_ = -3200;
-				hero_address_->graphics_->priority_ = false;
+				hero_address_->changeRenderableLayer( level_state, Unit::Layer::SPRITES_1 );
 				struggle_counter_ = 0;
 				hero_address_->sprite_interact_ = true;
 				hero_address_->block_interact_ = true;
 			}
 			else
 			{
-				hero_address_->graphics_->priority_ = true;
+				hero_address_->changeRenderableLayer( level_state, Unit::Layer::SPRITES_2 );
 				hero_address_->hit_box_.x = hit_box_.x - remember_x_; // Keep their x position relative to bird.
 				hero_address_->hit_box_.y = remember_y_; // Keep them to their y position when they were grabbed.
 				hero_address_->sprite_interact_ = false;

@@ -6,7 +6,7 @@
 
 SnowboulderSprite::SnowboulderSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowboulder.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 28, 28, {}, 2000, 3000 )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowboulder.png", 0, 0, false, false, 0, -2, -2, 4, 4 ), x, y, 28, 28, {}, 2000, 3000 )
 {};
 
 SnowboulderSprite::~SnowboulderSprite() {};

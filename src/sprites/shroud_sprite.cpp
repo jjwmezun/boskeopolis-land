@@ -11,8 +11,7 @@ ShroudSprite::ShroudSprite( int x, int y )
 	state_ ( ShroudState::VISIBLE ),
 	alpha_ ( 255, 255, 0 ),
 	activated_ ( false )
-{
-};
+{};
 
 ShroudSprite::~ShroudSprite() {};
 
@@ -73,9 +72,9 @@ void ShroudSprite::customInteract( Collision& my_collision, Collision& their_col
 	}
 };
 
-void ShroudSprite::render( Camera& camera, bool priority )
+void ShroudSprite::render( Camera& camera )
 {
-	if ( priority && state_ != ShroudState::HIDDEN )
+	if ( state_ != ShroudState::HIDDEN )
 	{
 		sdl2::SDLRect top = top_;
 		sdl2::SDLRect bottom = bottom_;

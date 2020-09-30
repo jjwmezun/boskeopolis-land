@@ -5,8 +5,10 @@
 
 FallingStarSprite::FallingStarSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/star.png", 0, 0, false, false, 0.0, true, -4, -4, 8, 8 ), x, y, 8, 8, { SpriteType::ENEMY }, 1000, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false )
-{};
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/star.png", 0, 0, false, false, 0.0, -4, -4, 8, 8 ), x, y, 8, 8, { SpriteType::ENEMY }, 1000, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, true, false )
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 FallingStarSprite::~FallingStarSprite() {};
 

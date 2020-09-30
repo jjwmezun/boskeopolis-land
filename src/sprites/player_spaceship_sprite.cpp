@@ -11,7 +11,7 @@
 
 PlayerSpaceshipSprite::PlayerSpaceshipSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/shmup.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 ), x, y, 14, 14, { SpriteType::HERO }, 500, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/shmup.png", 0, 0, false, false, 0, -1, -1, 2, 2 ), x, y, 14, 14, { SpriteType::HERO }, 500, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	direction_ ( Direction::Simple::RIGHT ),
 	camera_direction_ ( Direction::Simple::RIGHT )
 {};

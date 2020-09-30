@@ -20,7 +20,7 @@ static constexpr bool horizontalIsLeft( Direction::Simple direction )
 
 PikeSprite::PikeSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pike.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 ), x + 3, y + 1, 10, 0, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pike.png", 0, 0, false, false, 0, -1, -1, 2, 2 ), x + 3, y + 1, 10, 0, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	grow_speed_ ( 0 ),
 	state_ ( PikeState::WAIT ),
 	wait_timer_ ( 0 ),
@@ -82,17 +82,17 @@ void PikeSprite::customUpdate( LevelState& level_state )
 	}
 };
 
-void PikeSprite::render( Camera& camera, bool priority )
+void PikeSprite::render( Camera& camera )
 {
 	graphics_->flip_x_ = false;
 	graphics_->flip_y_ = verticalIsDownward( direction_ );
 	graphics_->current_frame_x_ = 0;
 	graphics_->current_frame_y_ = 0;
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	graphics_->flip_x_ = horizontalIsLeft( direction_ );
 	graphics_->flip_y_ = false;
 	graphics_->current_frame_x_ = 44 - Unit::SubPixelsToPixels( horizontal_pike_.w );
-	graphics_->render( Unit::SubPixelsToPixels( horizontal_pike_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( horizontal_pike_ ), &camera );
 };
 
 void PikeSprite::accelerateGrowth()

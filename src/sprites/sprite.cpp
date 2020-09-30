@@ -182,11 +182,11 @@ void Sprite::update( LevelState& level_state )
 	on_slope_ = Direction::Horizontal::__NULL;
 };
 
-void Sprite::render( Camera& camera, bool priority )
+void Sprite::render( Camera& camera )
 {
 	if ( graphics_ != nullptr )
 	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	}
 };
 
@@ -194,24 +194,16 @@ void Sprite::render( const Camera& camera ) const
 {
 	if ( graphics_ != nullptr )
 	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	}
 };
 
-void Sprite::renderSuperPriority( Camera& camera )
-{
-	// Do nothing.
-};
-
-void Sprite::renderWithHitbox( Camera& camera, bool priority )
+void Sprite::renderWithHitbox( Camera& camera )
 {
 	if ( graphics_ != nullptr )
 	{
-		if ( priority == graphics_->priority_ )
-		{
-			drawHitBox( camera );
-		}
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+		drawHitBox( camera );
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	}
 };
 

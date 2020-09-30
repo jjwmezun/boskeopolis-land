@@ -133,21 +133,15 @@ void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& t
 	}
 };
 
-void WeightPlatformSprite::render( Camera& camera, bool priority )
+void WeightPlatformSprite::render( Camera& camera ) const
 {
-	if ( graphics_->priority_ == priority )
-	{
-		renderBars( camera );
-		renderPlatforms( camera );
-		renderWheels( camera );
-	}
+	renderBars( camera );
+	renderPlatforms( camera );
+	renderWheels( camera );
 
-	if ( priority )
+	if ( isBroken() && break_timer_ < SHOW_SCORE_TIMER_LIMIT )
 	{
-		if ( isBroken() && break_timer_ < SHOW_SCORE_TIMER_LIMIT )
-		{
-			renderScore( camera );
-		}
+		renderScore( camera );
 	}
 };
 
@@ -196,14 +190,14 @@ void WeightPlatformSprite::renderRightPlatform( const Camera& camera ) const
 
 void WeightPlatformSprite::renderPlatform( const Camera& camera, const sdl2::SDLRect& side ) const
 {
-	graphics_->render( Unit::SubPixelsToPixels( side ), &camera, graphics_->priority_ );
+	graphics_->render( Unit::SubPixelsToPixels( side ), &camera );
 };
 
 void WeightPlatformSprite::renderTopBar( const Camera& camera ) const
 {
 	const int height = ( isBroken() && broken_higher_bar_ == &left_ ) ? 6 : Unit::SubPixelsToPixels( std::min( original_hit_box_.h, ( left_.y - original_hit_box_.y ) ) ) + 9;
 	graphics_->current_frame_x_ = height;
-	graphics_->render( { xPixels() + LEFT_BAR_X + 1, wheelMachineY() - 1, WEIGHT_WIDTH + WEIGHT_SPACE_APART, 4 }, &camera, graphics_->priority_ );
+	graphics_->render( { xPixels() + LEFT_BAR_X + 1, wheelMachineY() - 1, WEIGHT_WIDTH + WEIGHT_SPACE_APART, 4 }, &camera );
 };
 
 void WeightPlatformSprite::renderLeftBar( const Camera& camera ) const
@@ -223,7 +217,7 @@ void WeightPlatformSprite::renderSideBar( const Camera& camera, int x_offset, co
 	// whichever is higher ( smaller ).
 	const int height = ( isBroken() && broken_higher_bar_ == &side ) ? 6 : Unit::SubPixelsToPixels( std::min( original_hit_box_.h, ( side.y - original_hit_box_.y ) ) ) + 9;
 	graphics_->current_frame_y_ = ( 96 * 2 ) - height;
-	graphics_->render( { xPixels() + x_offset, wheelMachineY() + 1, 4, height }, &camera, graphics_->priority_ );
+	graphics_->render( { xPixels() + x_offset, wheelMachineY() + 1, 4, height }, &camera );
 };
 
 void WeightPlatformSprite::renderLeftWheel( const Camera& camera ) const
@@ -238,7 +232,7 @@ void WeightPlatformSprite::renderRightWheel( const Camera& camera ) const
 
 void WeightPlatformSprite::renderWheel( const Camera& camera, int x_offset ) const
 {
-	graphics_->render( { xPixels() + x_offset, wheelMachineY(), 8, 8 }, &camera, graphics_->priority_ );
+	graphics_->render( { xPixels() + x_offset, wheelMachineY(), 8, 8 }, &camera );
 };
 
 void WeightPlatformSprite::renderScore( const Camera& camera ) const

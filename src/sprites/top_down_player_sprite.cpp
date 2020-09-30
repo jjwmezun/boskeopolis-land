@@ -52,7 +52,6 @@ TopDownPlayerSprite::TopDownPlayerSprite( int x, int y )
 			false,
 			false,
 			0,
-			false,
 			-2,
 			-1,
 			3,

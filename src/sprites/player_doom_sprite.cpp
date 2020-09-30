@@ -131,7 +131,7 @@ void PlayerDoomSprite::rotate( double rotation_speed )
 void PlayerDoomSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
-void PlayerDoomSprite::render( Camera& camera, bool priority )
+void PlayerDoomSprite::render( Camera& camera )
 {
 	Render::tintScreen( screen_tint_ );
 };

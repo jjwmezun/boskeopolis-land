@@ -12,7 +12,7 @@ static constexpr int STAND_PADDING = GOING_AWAY_DURATION / 2;
 
 PelicanSprite::PelicanSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pelican.png", 0, 0, false, false, 0, false, -7, -6, 16, 6 ), x, y, 48, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pelican.png", 0, 0, false, false, 0, -7, -6, 16, 6 ), x, y, 48, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	state_ ( State::HERE ),
 	timer_ ( 0 ),
 	stepped_on_ ( false )

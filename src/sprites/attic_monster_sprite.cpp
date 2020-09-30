@@ -11,7 +11,7 @@
 
 AtticMonsterSprite::AtticMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/attic-rat.png", 0, 0, false, false, 0.0, false, -4, -7, 7, 8 ), x + 4, y + 16, 15, 0, {}, 100, 2000, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/attic-rat.png", 0, 0, false, false, 0.0, -4, -7, 7, 8 ), x + 4, y + 16, 15, 0, {}, 100, 2000, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
     timer_ ( 0 ),
     state_ ( State::DORMANT )
 {};

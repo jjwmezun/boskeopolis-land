@@ -13,10 +13,12 @@ static int newTargetTime()
 
 SpawnFistMissileSprite::SpawnFistMissileSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/handgun.png", 30, 0, false, false, 0.0, true ), x, y, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/handgun.png", 30, 0, false, false, 0.0 ), x, y, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	timer_ ( 0 ),
 	target_time_ ( newTargetTime() )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 SpawnFistMissileSprite::~SpawnFistMissileSprite() {};
 

@@ -34,7 +34,7 @@ PlayerSprite::PlayerSprite
 :
 	Sprite
 	(
-		( gfx == nullptr ) ? std::make_unique<SpriteGraphics> ( Inventory::getPlayerCostume(), 0, 0, false, false, 0, false, -1, -2, 2, 4 ) : std::move( gfx ),
+		( gfx == nullptr ) ? std::make_unique<SpriteGraphics> ( Inventory::getPlayerCostume(), 0, 0, false, false, 0, -1, -2, 2, 4 ) : std::move( gfx ),
 		x,
 		y,
 		14,
@@ -183,7 +183,6 @@ void PlayerSprite::handleDoorBehavior( EventSystem& events )
 		else if ( events.isInFrontOfSewerDoor() )
 		{
 			events.changeMapSewer();
-			graphics_->priority_ = true;
 			vx_ = 0;
 			acceleration_x_ = 0;
 			Audio::playSound( Audio::SoundType::SEWER_HOLE );
@@ -494,7 +493,6 @@ void PlayerSprite::deathAction( LevelState& level_state )
 	graphics_->current_frame_x_ = 16;
 	graphics_->current_frame_y_ = 26;
 	unduck( unduck_data_ );
-	graphics_->priority_ = true;
 	defaultDeathAction( level_state );
 	level_state.events().playDeathSoundIfNotAlreadyPlaying();
 };
@@ -525,18 +523,7 @@ bool PlayerSprite::isLookingUp() const
 	return is_looking_up_;
 };
 
-void PlayerSprite::render( Camera& camera, bool priority )
+void PlayerSprite::render( const Camera& camera ) const
 {
-	if ( !isDead() || dead_no_animation_ )
-	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	}
-};
-
-void PlayerSprite::renderSuperPriority( Camera& camera )
-{
-	if ( isDead() && !dead_no_animation_ )
-	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
-	}
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

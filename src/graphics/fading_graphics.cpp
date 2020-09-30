@@ -13,7 +13,6 @@ FadingGraphics::FadingGraphics
 	bool flip_x,
 	bool flip_y,
 	double rotation,
-	bool priority,
 	int x_adjustment,
 	int y_adjustment,
 	int w_adjustment,
@@ -21,7 +20,7 @@ FadingGraphics::FadingGraphics
 	int animation_speed
 )
 :
-	SpriteGraphics( std::forward<std::string> ( texture ), frame_x, frame_y, flip_x, flip_y, rotation, priority, x_adjustment, y_adjustment, w_adjustment, h_adjustment, ( ( start_on ) ? FULL_OPACITY : 0 ) ),
+	SpriteGraphics( std::forward<std::string> ( texture ), frame_x, frame_y, flip_x, flip_y, rotation, x_adjustment, y_adjustment, w_adjustment, h_adjustment, ( ( start_on ) ? FULL_OPACITY : 0 ) ),
 	change_per_update_ ( changePerUpdate( speed ) ),
 	fading_in_ ( !start_on )
 {};
@@ -30,16 +29,14 @@ FadingGraphics::~FadingGraphics() {};
 
 void FadingGraphics::update()
 {
-	switch ( fading_in_ )
+	if ( fading_in_ )
 	{
-		case ( true ):
-			alpha_ = std::min( FULL_OPACITY, ( int )( alpha_ ) + change_per_update_ );
-			fading_in_ = ( alpha_ != FULL_OPACITY );
-		break;
-			
-		case ( false ):
-			alpha_ = std::max( 0, ( int )( alpha_ ) - change_per_update_ );
-			fading_in_ = ( alpha_ == 0 );
-		break;
+		alpha_ = std::min( FULL_OPACITY, ( int )( alpha_ ) + change_per_update_ );
+		fading_in_ = ( alpha_ != FULL_OPACITY );
+	}
+	else
+	{
+		alpha_ = std::max( 0, ( int )( alpha_ ) - change_per_update_ );
+		fading_in_ = ( alpha_ == 0 );
 	}
 };

@@ -77,7 +77,7 @@ void BlockSystem::renderLayer( const LevelState& level_state, int layer ) const
 	{
 		for ( const auto& block : layers_[ layer ].blocks_ )
 		{
-			block.render( camera, true );
+			block.render( camera );
 		}
 	}
 	/*
@@ -92,7 +92,7 @@ void BlockSystem::renderLayer( const LevelState& level_state, int layer ) const
 		{
 			for ( const auto& block : blocks )
 			{
-				block.render( camera, priority );
+				block.render( camera );
 			}
 		}
 	}
@@ -113,7 +113,7 @@ void BlockSystem::renderLayer( const LevelState& level_state, int layer ) const
 					if ( n < blocks.size() )
 					{
 						const Block& block = blocks[ n ];
-						block.render( camera, priority );
+						block.render( camera );
 					}
 				}
 			}

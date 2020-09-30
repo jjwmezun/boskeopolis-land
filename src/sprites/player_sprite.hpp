@@ -38,8 +38,7 @@ class PlayerSprite : public Sprite
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 		virtual void tryUnduck( const BlockSystem& blocks );
 		virtual bool canJump() const override;
-		void render( Camera& camera, bool priority = false ) override;
-		void renderSuperPriority( Camera& camera ) override;
+		void render( const Camera& camera ) const override;
 
 		void deathAction( LevelState& level_state ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );

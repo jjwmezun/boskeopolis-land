@@ -11,7 +11,7 @@ static const int DISTANCE_LIMIT_Y = 16000;
 
 GuardSprite::GuardSprite( int x, int y )
 :
-    Sprite( std::make_unique<SpriteGraphics> ( "sprites/guard.png", 0, 0, false, false, 0, false, 0, 0, 0, 0 ), x, y, 16, 24, { SpriteType::ENEMY }, 400, 1200, 0, 0, Direction::Horizontal::LEFT ),
+    Sprite( std::make_unique<SpriteGraphics> ( "sprites/guard.png", 0, 0, false, false, 0, 0, 0, 0, 0 ), x, y, 16, 24, { SpriteType::ENEMY }, 400, 1200, 0, 0, Direction::Horizontal::LEFT ),
     stunned_ ( false ),
     distance_limit_y_ ( DISTANCE_LIMIT_Y ),
     animation_frame_ (),

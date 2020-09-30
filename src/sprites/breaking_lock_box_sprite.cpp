@@ -3,9 +3,9 @@
 
 BreakingLockBoxSprite::BreakingLockBoxSprite( int x, int y, int type )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 0, 32, false, false, 0, 0, true ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::DESPAWN_OFFSCREEN, false, false, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/universal.png", 0, 32, false, false, 0, 0 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::DESPAWN_OFFSCREEN, false, false, false )
 {
-	graphics_->priority_ = true;
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 BreakingLockBoxSprite::~BreakingLockBoxSprite() {};

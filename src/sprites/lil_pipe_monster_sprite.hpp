@@ -1,8 +1,6 @@
-#ifndef LIL_PIPE_MONSTER_SPRITE_H
-#define LIL_PIPE_MONSTER_SPRITE_H
+#pragma once
 
 class Block;
-
 
 #include "sprite.hpp"
 
@@ -17,5 +15,3 @@ class LilPipeMonsterSprite final : public Sprite
 	private:
 		const Direction::Vertical original_direction_y_;
 };
-
-#endif // LIL_PIPE_MONSTER_SPRITE_H

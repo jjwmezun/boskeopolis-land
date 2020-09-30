@@ -185,9 +185,9 @@ void WallCrawlerSprite::customInteract( Collision& my_collision, Collision& thei
     }
 };
 
-void WallCrawlerSprite::render( Camera& camera, bool priority )
+void WallCrawlerSprite::render( Camera& camera ) const
 {
-    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
     /*
     Render::renderRectDebug( camera.relativeRect( Unit::SubPixelsToPixels( getFirstRect() ) ), { 255, 0, 0, 128 } );
     Render::renderRectDebug( camera.relativeRect( Unit::SubPixelsToPixels( getSecondRect() ) ), { 0, 0, 255, 128 } );

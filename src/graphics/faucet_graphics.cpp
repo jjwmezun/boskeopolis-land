@@ -28,14 +28,8 @@ void FaucetGraphics::update( const FaucetSprite& sprite, SpriteGraphics* graphic
 	graphics->current_frame_y_ = sprite.getHits() * 80;
 };
 
-void FaucetGraphics::render( const SpriteGraphics* graphics, const Camera* camera, bool priority, int x, int y ) const
+void FaucetGraphics::render( const SpriteGraphics* graphics, const Camera* camera, int x, int y ) const
 {
-	if ( priority )
-	{
-		graphics->masterRender( { x -= ( 16 * 3 ), y + 16, 16, 80 }, graphics->current_frame_x_, graphics->current_frame_y_, camera, !priority );
-	}
-	else
-	{
-		graphics->masterRender( { x, y, 16, 16 }, 256, 0, camera, priority );
-	}
+	graphics->masterRender( { x -= ( 16 * 3 ), y + 16, 16, 80 }, graphics->current_frame_x_, graphics->current_frame_y_, camera );
+	graphics->masterRender( { x, y, 16, 16 }, 256, 0, camera );
 }

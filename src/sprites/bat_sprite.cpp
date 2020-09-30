@@ -9,7 +9,6 @@ BatSprite::BatSprite( int x, int y )
 	awake_ ( false )
 {
 	block_interact_ = false;
-	graphics_->priority_ = true;
 };
 
 BatSprite::~BatSprite() {};

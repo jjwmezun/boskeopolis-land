@@ -4,7 +4,7 @@
 
 SpaceLizardSprite::SpaceLizardSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/space-lizard.png", 0, 0, false, false, 0.0, false, -1, -2, 4, 2 ), x, y, 14, 23, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/space-lizard.png", 0, 0, false, false, 0.0, -1, -2, 4, 2 ), x, y, 14, 23, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	animation_frame_ (),
 	animation_timer_ ()
 {};

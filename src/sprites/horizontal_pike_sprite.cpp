@@ -9,7 +9,7 @@ static constexpr int WAIT_TIME = 8;
 
 HorizontalPikeSprite::HorizontalPikeSprite( int x, int y, Direction::Horizontal direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pike.png", 12, 12, false, false, 0, false, -1, -1, 2, 2 ), x, y, 0, 10, { SpriteType::ENEMY }, 0, 0, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pike.png", 12, 12, false, false, 0, -1, -1, 2, 2 ), x, y, 0, 10, { SpriteType::ENEMY }, 0, 0, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	grow_speed_ ( 0 ),
 	state_ ( PikeState::WAIT ),
 	wait_timer_ ( 0 )
@@ -60,11 +60,11 @@ void HorizontalPikeSprite::customUpdate( LevelState& level_state )
 	}
 };
 
-void HorizontalPikeSprite::render( Camera& camera, bool priority )
+void HorizontalPikeSprite::render( const Camera& camera ) const
 {
 	graphics_->flip_x_ = direction_x_ == Direction::Horizontal::LEFT;
 	graphics_->current_frame_x_ = 92 - Unit::SubPixelsToPixels( hit_box_.w );
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };
 
 void HorizontalPikeSprite::accelerateGrowth()

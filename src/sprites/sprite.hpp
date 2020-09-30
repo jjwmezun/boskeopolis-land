@@ -131,11 +131,9 @@ class Sprite : public Object
 		void setGravityModifier( double gravity );
 
 		void update( LevelState& level_state );
-		virtual void render( Camera& camera, bool priority = false );
 		virtual void render( const Camera& camera ) const;
-		virtual void renderSuperPriority( Camera& camera );
 		void drawHitBox( const Camera& camera );
-		void renderWithHitbox( Camera& camera, bool priority );
+		void renderWithHitbox( Camera& camera );
 		void interact( Sprite& them, LevelState& level_state );
 
 		virtual void customUpdate( LevelState& level_state ) = 0;

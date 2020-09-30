@@ -9,9 +9,11 @@ static constexpr int BOTTOM = Unit::BlocksToSubPixels( 35 ) + Unit::PixelsToSubP
 
 FallingSnowBoulderSprite::FallingSnowBoulderSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowboulder.png", 0, 0, false, false, 0, true, -4, -4, 8, 8 ), x, y, 24, 24, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowboulder.png", 0, 0, false, false, 0, -4, -4, 8, 8 ), x, y, 24, 24, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, true, false ),
 	timer_ ( 0 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 FallingSnowBoulderSprite::~FallingSnowBoulderSprite() {};
 

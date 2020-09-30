@@ -13,12 +13,12 @@ static constexpr int FADE_SPEED = 4;
 MapLayerTilemap::MapLayerTilemap( const std::vector<int>& tiles, int map_width, int map_height, bool fade, Unit::Layer layer_position )
 :
 	MapLayer( layer_position ),
-	blocks_ (),
-	tiles_ ( tiles ),
+	alpha_ ( 255 ),
+	fade_type_ ( ( fade ) ? FadeType::NOT_FADING : FadeType::DONT_FADE ),
 	width_ ( map_width ),
 	height_ ( map_height ),
-	fade_type_ ( ( fade ) ? FadeType::NOT_FADING : FadeType::DONT_FADE ),
-	alpha_ ( 255 )
+	tiles_ ( tiles ),
+	blocks_ ()
 {};
 
 MapLayerTilemap::~MapLayerTilemap() {};
@@ -79,7 +79,7 @@ void MapLayerTilemap::render( const Camera& camera )
 			switch ( fade_type_ )
 			{
 				case ( FadeType::DONT_FADE ):
-					b.renderAnyPriority( camera );
+					b.render( camera );
 				break;
 
 				case ( FadeType::NOT_FADING ):
@@ -87,7 +87,14 @@ void MapLayerTilemap::render( const Camera& camera )
 					if ( alpha_ == 0 ) return;
 					if ( b.hasType() && b.type()->graphics() != nullptr )
 					{
-						b.type()->graphics()->renderAnyPriorityOverrideAlpha( Unit::SubPixelsToPixels( b.hitBox() ), alpha_, &camera );
+						b.type()->graphics()->masterRender
+						(
+							Unit::SubPixelsToPixels( b.hitBox() ),
+							b.type()->graphics()->current_frame_x_,
+							b.type()->graphics()->current_frame_y_,
+							&camera,
+							alpha_
+						);
 					}
 				break;
 			}

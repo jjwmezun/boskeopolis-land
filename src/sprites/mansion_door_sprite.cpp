@@ -5,7 +5,7 @@
 
 MansionDoorSprite::MansionDoorSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/mansion-door.png", 0, 0, false, false, 0.0, false, -3, 0, 16, 0 ), x, y, 5, 48, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/mansion-door.png", 0, 0, false, false, 0.0, -3, 0, 16, 0 ), x, y, 5, 48, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     animation_counter_ (),
     state_ ( MansionDoorState::CLOSED )
 {};

@@ -4,7 +4,7 @@
 
 SparkSprite::SparkSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spark.png", 0, 0, false, false, 0.0, false, 0, 0, 0, 4 ), x, y + 12, 0, 4, { SpriteType::ENEMY, SpriteType::SPARK }, 4000, 4000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spark.png", 0, 0, false, false, 0.0, 0, 0, 0, 4 ), x, y + 12, 0, 4, { SpriteType::ENEMY, SpriteType::SPARK }, 4000, 4000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true ),
 	hit_wall_position_ ( -1 )
 {};
 

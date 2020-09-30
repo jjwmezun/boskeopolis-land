@@ -14,7 +14,7 @@ static constexpr int JUMP_LIMIT = Unit::BlocksToSubPixels( 32 );
 
 PlayerCartSprite::PlayerCartSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_cart.png", 0, 0, false, false, 0, -2, -2, 4, 4 ), x, y, 44, 44, { SpriteType::HERO }, 160, 5000, 1000, 7000, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT, false, true, true, false, .8 ),
 	reached_height_ ( false ),
 	duck_data_ ( { true, 8, 8, -2, 4 } ),
 	unduck_data_ ( { 8, 0, -2, 4 } )

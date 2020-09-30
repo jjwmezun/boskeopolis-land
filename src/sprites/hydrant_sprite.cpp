@@ -8,7 +8,7 @@
 
 HydrantSprite::HydrantSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/hydrant.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 ), x, y, 14, 14, {}, 100, 1500, 3000, 3000 )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/hydrant.png", 0, 0, false, false, 0, -1, -1, 2, 2 ), x, y, 14, 14, {}, 100, 1500, 3000, 3000 )
 {
 	jump_lock_ = false;
 };

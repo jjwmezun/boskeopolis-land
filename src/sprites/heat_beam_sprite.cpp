@@ -13,7 +13,7 @@ HeatBeamSprite::HeatBeamSprite( int x, int y, HeatBeamSprite::Type type )
 :
 	Sprite
 	(
-		std::make_unique<SpriteGraphics> ( "sprites/heatbeam.png", 0, 0, false, false, 0, false, -2, 0, 4, 0 ),
+		std::make_unique<SpriteGraphics> ( "sprites/heatbeam.png", 0, 0, false, false, 0, -2, 0, 4, 0 ),
 		x+2,
 		y,
 		12,

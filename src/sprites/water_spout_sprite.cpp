@@ -4,7 +4,7 @@
 
 WaterSpoutSprite::WaterSpoutSprite( int x, int y )
 :
-	Sprite( std::make_unique<AnimatedGraphics> ( "sprites/water-spout.png", std::vector<std::pair<int, int>>{ { 0, 0 }, { 40, 0 } }, false, false, 0, false, -4, -1, 8, 1 ), x, y, 32, 0, { SpriteType::WATER_SPOUT }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<AnimatedGraphics> ( "sprites/water-spout.png", std::vector<std::pair<int, int>>{ { 0, 0 }, { 40, 0 } }, false, false, 0, -4, -1, 8, 1 ), x, y, 32, 0, { SpriteType::WATER_SPOUT }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	delay_timer_ ( 0 ),
 	grow_speed_ ( 0 ),
 	state_ ( SpoutState::DORMANT ),

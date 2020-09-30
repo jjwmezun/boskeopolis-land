@@ -12,7 +12,7 @@ std::unique_ptr<Sprite> generateOctopigSprite( int x, int y )
 		new JumpAndShootSprite
 		(
 			x, y, 14, 14,
-			std::make_unique<SpriteGraphics> ( "sprites/octopig.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 ),
+			std::make_unique<SpriteGraphics> ( "sprites/octopig.png", 0, 0, false, false, 0, -1, -1, 2, 2 ),
 			[]( const Sprite& me, SpriteSystem& sprites )
 			{
 				sprites.spawn
@@ -22,7 +22,7 @@ std::unique_ptr<Sprite> generateOctopigSprite( int x, int y )
 						me.centerXPixels(), me.centerYPixels(),
 						2, 2,
 						me.direction_x_,
-						std::make_unique<SpriteGraphics> ( "sprites/octopig.png", 16, 0, false, false, 0, false, -1, -1, 2, 2 )
+						std::make_unique<SpriteGraphics> ( "sprites/octopig.png", 16, 0, false, false, 0, -1, -1, 2, 2 )
 					)
 				);
 				Audio::playSound( Audio::SoundType::BOP );

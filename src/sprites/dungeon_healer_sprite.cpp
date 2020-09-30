@@ -9,14 +9,16 @@
 
 DungeonHealerSprite::DungeonHealerSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 16, 16, false, false, 0.0, true ), x + Unit::BlocksToPixels( 12 ), y + Unit::BlocksToPixels( 5 ), 18, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 16, 16, false, false, 0.0 ), x + Unit::BlocksToPixels( 12 ), y + Unit::BlocksToPixels( 5 ), 18, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     laser_gfx_ ( "sprites/nut-monk.png", 0, 32 ),
     heart_gfx_ ( "tilesets/universal.png", 16, 0 ),
     laser_box_ ( Unit::PixelsToSubPixels(  sdl2::SDLRect{ x + Unit::BlocksToPixels( 12 ), y + Unit::BlocksToPixels( 5 ), 16, 96 }) ),
     heart_box_ ( Unit::PixelsToSubPixels( x ) + Unit::BlocksToSubPixels( 12 ), Unit::PixelsToSubPixels( y ) + Unit::BlocksToSubPixels( 6 ), Unit::BlocksToSubPixels( 1 ), Unit::BlocksToSubPixels( 1 ) ),
     text_ ( "Pay 5,000 & you can heal.", Unit::BlocksToPixels( 3 ), Unit::BlocksToPixels( 3 ), Text::FontColor::WHITE, Text::FontAlign::CENTER, Text::FontColor::BLACK, false, 38, 0, 1, std::make_unique<TextComponentGradual> ( 2 ) ),
     timer_ ( -1 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 DungeonHealerSprite::~DungeonHealerSprite() {};
 
@@ -64,17 +66,17 @@ void DungeonHealerSprite::customInteract( Collision& my_collision, Collision& th
     }
 };
 
-void DungeonHealerSprite::render( Camera& camera, bool priority )
+void DungeonHealerSprite::render( const Camera& camera ) const
 {
-    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-    heart_gfx_.render( Unit::SubPixelsToPixels( heart_box_ ), &camera, priority );
+    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+    heart_gfx_.render( Unit::SubPixelsToPixels( heart_box_ ), &camera );
     if ( camera.onscreen( hit_box_ ) )
     {
         text_.render();
     }
     if ( timer_ >= 47 )
     {
-        laser_gfx_.render( Unit::SubPixelsToPixels( laser_box_ ), &camera, priority );
+        laser_gfx_.render( Unit::SubPixelsToPixels( laser_box_ ), &camera );
         Render::colorCanvas( 1 );
     }
 };

@@ -7,18 +7,20 @@
 
 CloudMonsterSprite::CloudMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cloud-monster.png", 0, 0, false, false, 0, true, 0, -8, 0, 8 ), x, y, 80, 40, { SpriteType::CLOUD_MONSTER }, 60, 4200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cloud-monster.png", 0, 0, false, false, 0, 0, -8, 0, 8 ), x, y, 80, 40, { SpriteType::CLOUD_MONSTER }, 60, 4200, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	lightning_ ( lightningPosition(), y + 28 ),
 	lightning_is_on_ ( false ),
 	lightning_timer_ ( 0 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 CloudMonsterSprite::~CloudMonsterSprite() {};
 
-void CloudMonsterSprite::render( Camera& camera, bool priority )
+void CloudMonsterSprite::render( const Camera& camera ) const 
 {
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	lightning_.render( camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+	lightning_.render( camera );
 };
 
 void CloudMonsterSprite::customUpdate( LevelState& level_state )

@@ -24,7 +24,7 @@ static inline int testShoot()
 
 DungeonEnemySprite::DungeonEnemySprite( int x, int y, Unit::Layer layer, bool stationary )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0, false, 1, 1, 5, 2 ), x, y, 14, 14, { SpriteType::ENEMY }, 250, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0, 1, 1, 5, 2 ), x, y, 14, 14, { SpriteType::ENEMY }, 250, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	walk_delay_ ( generateWalkDelay() ),
 	walk_timer_ ( 0 ),
 	hp_ ( MAX_HP ),

@@ -10,7 +10,7 @@ static constexpr int ANIMATION_SPEED = 8;
 
 AntSprite::AntSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ant.png", 0, 0, false, false, 0, false, -1, -3, 2, 5 ), x, y, 22, 9, { SpriteType::BOPPABLE, SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/ant.png", 0, 0, false, false, 0, -1, -3, 2, 5 ), x, y, 22, 9, { SpriteType::BOPPABLE, SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
 	direction_ ( START_DIRECTION ),
 	slope_timer_ ( 0 )
 {};

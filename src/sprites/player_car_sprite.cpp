@@ -15,7 +15,7 @@
 
 PlayerCarSprite::PlayerCarSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_car.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 18, 28, { SpriteType::HERO }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::ANGLED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/autumn_car.png", 0, 0, false, false, 0, -2, -2, 4, 4 ), x, y, 18, 28, { SpriteType::HERO }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::ANGLED, CameraMovement::PERMANENT ),
 	angle_ ( 0.0 ),
 	speed_ ( 0.0 ),
 	acceleration_ ( 0.0 ),
@@ -120,7 +120,7 @@ void PlayerCarSprite::customInteract( Collision& my_collision, Collision& their_
 {
 };
 
-void PlayerCarSprite::render( Camera& camera, bool priority )
+void PlayerCarSprite::render( Camera& camera )
 {
 	for ( const Block* block : block_list_ )
 	{
@@ -128,7 +128,7 @@ void PlayerCarSprite::render( Camera& camera, bool priority )
 		Render::renderRectDebug( relative_box, { 255, 0, 0, 128 } );
 	}
 
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	const auto lines = AngledSpriteMovement::getLinesFromBox( hit_box_, mezun::convertDegreesToRadians( angle_ ) );
 	for ( const Line& line : lines )
 	{

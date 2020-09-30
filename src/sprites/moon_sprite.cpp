@@ -16,14 +16,16 @@ static constexpr int ANIMATION_LIMIT = 19;
 
 MoonSprite::MoonSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/moon.png", 0, 0, false, false, 0, true ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/moon.png", 0, 0, false, false, 0 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	small_pebble_src_ ( 0, 0, 3, 3 ),
 	big_pebble_src_ ( 3, 0, 5, 4 ),
 	large_pebble_src_ ( 0, 4, 8, 7 ),
 	moon_state_ ( MoonState::UNUSED ),
 	timer_ ( 0 ),
 	animation_counter_ ( 0 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 MoonSprite::~MoonSprite() {};
 
@@ -114,7 +116,7 @@ void MoonSprite::customInteract( Collision& my_collision, Collision& their_colli
 	}
 };
 
-void MoonSprite::render( Camera& camera, bool priority )
+void MoonSprite::render( Camera& camera )
 {
 	switch ( moon_state_ )
 	{
@@ -122,14 +124,18 @@ void MoonSprite::render( Camera& camera, bool priority )
 		case ( MoonState::BEFORE_FREEZE ):
 		case ( MoonState::FREEZE ):
 		case ( MoonState::AFTER_FREEZE ):
-			graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+		{
+			graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+		}
 		break;
 
 		case ( MoonState::RUNNING ):
+		{
 			for ( int i = 0; i < MAX_PEBBLES; ++i )
 			{
 				pebbles_[ i ].render( *this );
 			}
+		}
 		break;
 	}
 };

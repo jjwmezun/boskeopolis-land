@@ -60,7 +60,7 @@ void LockedDoorSprite::customInteract( Collision& my_collision, Collision& their
 	}
 };
 
-void LockedDoorSprite::render( Camera& camera, bool priority )
+void LockedDoorSprite::render( Camera& camera )
 {
 	for ( int y = yPixels(); y < bottomPixels(); y += 2 )
 	{

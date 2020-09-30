@@ -9,7 +9,7 @@ SewerMonsterSprite::SewerMonsterSprite( int x, int y )
 :
 	Sprite
 	(
-		std::make_unique<SpriteGraphics> ( "sprites/sewer_monster.png", 0, 0, false, false, 0, false, -16, -16, 32, 32 ),
+		std::make_unique<SpriteGraphics> ( "sprites/sewer_monster.png", 0, 0, false, false, 0, -16, -16, 32, 32 ),
 		x+16,
 		y+16,
 		48,
@@ -37,28 +37,28 @@ SewerMonsterSprite::SewerMonsterSprite( int x, int y )
 
 SewerMonsterSprite::~SewerMonsterSprite() {};
 
-void SewerMonsterSprite::stateGraphics()
+void SewerMonsterSprite::stateGraphics( LevelState& level_state )
 {
 	switch( state_ )
 	{
 		case ( MonsterState::SLEEPING ):
 			graphics_->current_frame_x_ = 0;
-			graphics_->priority_ = false;
+			level_state.changeRenderableLayer( renderable_id_, Unit::Layer::SPRITES_1 );
 		break;
 
 		case ( MonsterState::WAKING ):
 			graphics_->current_frame_x_ = getXImg( WAKING_FRAMES[ getFrame( waking_timer_.counter() ) ] );
-			graphics_->priority_ = true;
+			level_state.changeRenderableLayer( renderable_id_, Unit::Layer::SPRITES_2 );
 		break;
 
 		case ( MonsterState::ATTACK ):
 			graphics_->current_frame_x_ = 10*80;
-			graphics_->priority_ = true;
+			level_state.changeRenderableLayer( renderable_id_, Unit::Layer::SPRITES_2 );
 		break;
 
 		case ( MonsterState::FALLING_ASLEEP ):
-			graphics_->priority_ = true;
 			graphics_->current_frame_x_ = getXImg( FALLING_ASLEEP_FRAMES[ getFrame( falling_asleep_timer_.counter() ) ] );
+			level_state.changeRenderableLayer( renderable_id_, Unit::Layer::SPRITES_2 );
 		break;
 	}
 };

@@ -32,13 +32,17 @@ void CactooieSpineSprite::customUpdate( LevelState& level_state )
 	switch ( direction_x_ )
 	{
 		case ( Direction::Horizontal::LEFT ):
+		{
 			moveLeft();
 			graphics_->flip_x_ = false;
+		}
 		break;
 			
 		case ( Direction::Horizontal::RIGHT ):
+		{
 			moveRight();
 			graphics_->flip_x_ = true;
+		}
 		break;
 	}
 };

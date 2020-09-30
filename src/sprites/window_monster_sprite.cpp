@@ -10,7 +10,7 @@ static constexpr int ROTATION_SPEED = 2;
 
 WindowMonsterSprite::WindowMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/window-monster.png", 0, 0, false, false, 0, false, -5, -5, 10, 10 ), x, y - 8, 26, 26, {}, 500, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/window-monster.png", 0, 0, false, false, 0, -5, -5, 10, 10 ), x, y - 8, 26, 26, {}, 500, 2000, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	activated_ ( false ),
 	timer_ ( 0 )
 {};

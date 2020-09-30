@@ -5,7 +5,7 @@
 
 CarrotSprite::CarrotSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/carrot.png", 0, 0, false, false, 0, false, -2, 0, 4, 2 ), x, y, 12, 22, { SpriteType::ENEMY }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/carrot.png", 0, 0, false, false, 0, -2, 0, 4, 2 ), x, y, 12, 22, { SpriteType::ENEMY }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	timer_ ( 0 )
 {};
 

@@ -11,7 +11,7 @@ std::unique_ptr<Sprite> generateSnowmanSprite( int x, int y )
 		new JumpAndShootSprite
 		(
 			x, y, 15, 22,
-			std::make_unique<SpriteGraphics> ( "sprites/snowman.png", 8, 0, false, false, 0, false, -1, -2, 2, 4 ),
+			std::make_unique<SpriteGraphics> ( "sprites/snowman.png", 8, 0, false, false, 0, -1, -2, 2, 4 ),
 			[]( const Sprite& me, SpriteSystem& sprites )
 			{
 				sprites.spawn
@@ -21,7 +21,7 @@ std::unique_ptr<Sprite> generateSnowmanSprite( int x, int y )
 						me.centerXPixels(), me.yPixels() + 8,
 						6, 6,
 						me.direction_x_,
-						std::make_unique<SpriteGraphics> ( "sprites/snowman.png", 0, 0, false, false, 0, false, -1, -1, 2, 2 )
+						std::make_unique<SpriteGraphics> ( "sprites/snowman.png", 0, 0, false, false, 0, -1, -1, 2, 2 )
 					)
 				);
 			}

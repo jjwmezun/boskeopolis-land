@@ -8,7 +8,7 @@
 
 BouncingBallSprite::BouncingBallSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bouncing-ball.png", 0, 0, false, false, 0.0, false, -3, -3, 6, 6 ), x, y, 26, 26, {}, 250, 4500, 250, 4500, Direction::Horizontal::__NULL, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bouncing-ball.png", 0, 0, false, false, 0.0, -3, -3, 6, 6 ), x, y, 26, 26, {}, 250, 4500, 250, 4500, Direction::Horizontal::__NULL, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
 {};
 
 BouncingBallSprite::~BouncingBallSprite() {};
@@ -71,7 +71,7 @@ void BouncingBallSprite::customInteract( Collision& my_collision, Collision& the
     }
 };
 
-void BouncingBallSprite::render( Camera& camera, bool priority )
+void BouncingBallSprite::render( const Camera& camera ) const
 {
     Render::renderObject( "sprites/bouncing-ball.png", { 0, 0, 32, 32 }, camera.relativeRect({ xPixels() - 3, yPixels() - 3, widthPixels() + 6, heightPixels() + 6 }) );
 };

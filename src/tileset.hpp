@@ -34,7 +34,6 @@ class Tileset final
 		bool flip_x = false;
 		bool flip_y = false;
 		double rotation = 0;
-		bool priority = false;
 		Uint8 alpha = 255;
 
 		if ( g.HasMember( "flip_x" ) && g[ "flip_x" ].IsBool() )
@@ -50,11 +49,6 @@ class Tileset final
 		if ( g.HasMember( "rotation" ) && g[ "rotation" ].IsInt() )
 		{
 			rotation = g[ "rotation" ].GetInt();
-		}
-
-		if ( g.HasMember( "priority" ) && g[ "priority" ].IsBool() )
-		{
-			priority = g[ "priority" ].GetBool();
 		}
 
 		if ( g.HasMember( "alpha" ) && g[ "alpha" ].IsInt() )
@@ -89,7 +83,6 @@ class Tileset final
 					flip_x,
 					flip_y,
 					rotation,
-					priority,
 					0,
 					0,
 					0,
@@ -139,7 +132,6 @@ class Tileset final
 						flip_x,
 						flip_y,
 						rotation,
-						priority,
 						0,
 						0,
 						0,
@@ -186,7 +178,6 @@ class Tileset final
 					flip_x,
 					flip_y,
 					rotation,
-					priority,
 					0,
 					0,
 					0,

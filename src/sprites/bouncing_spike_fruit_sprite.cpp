@@ -15,7 +15,7 @@ static constexpr int decideSpikeFruitJumpHeight( int x )
 
 BouncingSpikeFruitSprite::BouncingSpikeFruitSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spikyfruit.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x, y, 12, 12, { SpriteType::ENEMY }, 3000, 3000, 1000, decideSpikeFruitJumpHeight( x ), Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spikyfruit.png", 0, 0, false, false, 0, -2, -2, 4, 4 ), x, y, 12, 12, { SpriteType::ENEMY }, 3000, 3000, 1000, decideSpikeFruitJumpHeight( x ), Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
 {};
 
 BouncingSpikeFruitSprite::~BouncingSpikeFruitSprite() {};

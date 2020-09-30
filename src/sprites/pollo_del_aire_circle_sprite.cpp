@@ -7,7 +7,7 @@
 
 PolloDelAireCircleSprite::PolloDelAireCircleSprite( int x, int y, bool clockwise, int map_id, bool despawn_when_dead )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, clockwise, false, 0, false, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, .2, map_id ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pollo_no_noko.png", 0, 32, clockwise, false, 0, -1, -6, 2, 8 ), x, y, 22, 22, { SpriteType::DEATH_COUNT }, 500, 1000, 500, 4000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, despawn_when_dead, true, true, .2, map_id ),
 	clockwise_ ( clockwise ),
 	animation_counter_ ( 0 )
 {};

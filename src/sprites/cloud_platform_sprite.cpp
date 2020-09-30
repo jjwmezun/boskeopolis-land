@@ -16,7 +16,6 @@ CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal di
 			false,
 			false,
 			0,
-			true,
 			0,
 			-6,
 			0,
@@ -40,7 +39,9 @@ CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal di
 	   false
 	),
 	started_ ( false )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 CloudPlatformSprite::~CloudPlatformSprite() {};
 

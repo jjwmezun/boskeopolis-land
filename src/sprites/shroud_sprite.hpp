@@ -1,11 +1,9 @@
-#ifndef SHROUD_SPRITE_H
-#define SHROUD_SPRITE_H
-
-class Block;
-
+#pragma once
 
 #include "counter.hpp"
 #include "sprite.hpp"
+
+class Block;
 
 class ShroudSprite final : public Sprite
 {
@@ -14,7 +12,7 @@ class ShroudSprite final : public Sprite
 		~ShroudSprite();
 		void customUpdate( LevelState& level_state );
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state );
-		void render( Camera& camera, bool priority = false );
+		void render( Camera& camera );
 		
 	private:
 		enum class ShroudState
@@ -34,6 +32,3 @@ class ShroudSprite final : public Sprite
 		Counter alpha_;
 		bool activated_;
 };
-
-
-#endif // SHROUD_SPRITE_H

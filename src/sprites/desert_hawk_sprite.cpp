@@ -25,8 +25,9 @@ static int setDesertHawkGraphics( int frame )
 
 DesertHawkSprite::DesertHawkSprite( int x, int y, Direction::Horizontal direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/desert-hawk.png", 0, 0, false, false, 0, true, 0, -5, 0, 5 ), x, y, 24, 11, {}, 700, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/desert-hawk.png", 0, 0, false, false, 0, 0, -5, 0, 5 ), x, y, 24, 11, {}, 700, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false )
 {
+	layer_ = Unit::Layer::SPRITES_2;
 	if ( direction == Direction::Horizontal::RIGHT )
 	{
 		graphics_->flip_x_ = true;

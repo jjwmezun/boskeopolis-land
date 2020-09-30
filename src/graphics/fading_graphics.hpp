@@ -15,7 +15,6 @@ class FadingGraphics final : public SpriteGraphics
 			bool flip_x = false,
 			bool flip_y = false,
 			double rotation = 0,
-			bool priority = false,
 			int x_adjustment = 0,
 			int y_adjustment = 0,
 			int w_adjustment = 0,

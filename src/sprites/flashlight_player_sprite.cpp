@@ -31,10 +31,10 @@ FlashlightPlayerSprite::FlashlightPlayerSprite( int x, int y )
 		1000,
 		6000,
 		std::unique_ptr<InputComponentPlayer> ( new InputComponentPlayer() ),
-		std::make_unique<SpriteGraphics> ( "sprites/flashlight-autumn.png", 0, 0, false, false, 0, false, -1, -2, 2, 4 )
+		std::make_unique<SpriteGraphics> ( "sprites/flashlight-autumn.png", 0, 0, false, false, 0, -1, -2, 2, 4 )
 	),
-	flashlight_gfx_ ( "sprites/flashlight-autumn.png", 0, 51, false, false, 0.0, false, 0, 0, 0, 0, 255, SDL_BLENDMODE_NONE, { 0, 13 }, true ),
-	flash_beam_gfx_ ( "sprites/flashlight-beam.png", 0, 0, false, false, 0.0, false, 0, 0, 0, 0, 128, SDL_BLENDMODE_ADD, { 0, 13 }, true ),
+	flashlight_gfx_ ( "sprites/flashlight-autumn.png", 0, 51, false, false, 0.0, 0, 0, 0, 0, 255, SDL_BLENDMODE_NONE, { 0, 13 }, true ),
+	flash_beam_gfx_ ( "sprites/flashlight-beam.png", 0, 0, false, false, 0.0, 0, 0, 0, 0, 128, SDL_BLENDMODE_ADD, { 0, 13 }, true ),
 	flashlight_box_ ( x, y, 56, 26 ),
 	angle_( 0.0 )
 {};
@@ -97,9 +97,9 @@ void FlashlightPlayerSprite::customUpdate( LevelState& level_state )
 	}
 };
 
-void FlashlightPlayerSprite::render( Camera& camera, bool priority )
+void FlashlightPlayerSprite::render( Camera& camera )
 {
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 
 	if ( !on_ladder_ && !is_dead_ )
 	{
@@ -109,8 +109,8 @@ void FlashlightPlayerSprite::render( Camera& camera, bool priority )
 		flashlight_gfx_.rotation_ = flash_beam_gfx_.rotation_ = ( ( direction_x_ == Direction::Horizontal::LEFT ) ? -1.0 : 1.0 ) * ( 1.0 / mezun::HALF_PI ) * 90.0 * angle_;
 		flashlight_gfx_.rotation_center_.x = flash_beam_gfx_.rotation_center_.x = ( direction_x_ == Direction::Horizontal::LEFT ) ? 56 : 0;
 
-		flash_beam_gfx_.render( flashlight_box_, &camera, priority );
-		flashlight_gfx_.render( flashlight_box_, &camera, priority );
+		flash_beam_gfx_.render( flashlight_box_, &camera );
+		flashlight_gfx_.render( flashlight_box_, &camera );
 	}
 };
 

@@ -9,7 +9,7 @@ CactooieSprite::CactooieSprite( int x, int y )
 :
 	Sprite
 	(
-		std::make_unique<SpriteGraphics> ( "sprites/cactooie.png", 0, 0, false, false, 0, false, -4, -4, 8, 8 ),
+		std::make_unique<SpriteGraphics> ( "sprites/cactooie.png", 0, 0, false, false, 0, -4, -4, 8, 8 ),
 		x,
 		y,
 		16,

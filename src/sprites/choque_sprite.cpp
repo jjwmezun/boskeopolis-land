@@ -125,7 +125,7 @@ void ChoqueSprite::reset()
 	still_ = true;
 };
 
-void ChoqueSprite::render( Camera& camera, bool priority )
+void ChoqueSprite::render( const Camera& camera ) const
 {
 	// Setup Data
 	const EyePosition position = getEyePosition( eye_placement_ );
@@ -135,7 +135,7 @@ void ChoqueSprite::render( Camera& camera, bool priority )
 	dest_eye_right_.y = position.right_y + yPixels();
 
 	// Render
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	Render::renderObject( graphics_->texture_, src_, dest_eye_left_, SDL_FLIP_NONE, 0.0, 255, &camera );
 	Render::renderObject( graphics_->texture_, src_, dest_eye_right_, SDL_FLIP_NONE, 0.0, 255, &camera );
 };

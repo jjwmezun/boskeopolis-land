@@ -7,7 +7,7 @@
 
 HandgunSprite::HandgunSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/handgun.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ), x+2, y+2, 28, 28, {}, 200, 5000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/handgun.png", 0, 0, false, false, 0, -2, -2, 4, 4 ), x+2, y+2, 28, 28, {}, 200, 5000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_INSTANTLY_OFFSCREEN, false, false )
 {};
 
 HandgunSprite::~HandgunSprite() {};

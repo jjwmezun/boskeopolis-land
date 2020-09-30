@@ -45,19 +45,11 @@ void BlockType::interact( Collision& collision, Sprite& sprite, Block& block, Le
 	}
 };
 
-void BlockType::renderAnyPriority( const sdl2::SDLRect& dest, const Camera* camera ) const
+void BlockType::render( const sdl2::SDLRect& dest, const Camera* camera ) const
 {
 	if ( graphics_ )
 	{
-		graphics_->renderAnyPriority( dest, camera );
-	}
-};
-
-void BlockType::render( const sdl2::SDLRect& dest, bool priority, const Camera* camera ) const
-{
-	if ( graphics_ )
-	{
-		graphics_->render( dest, camera, priority );
+		graphics_->render( dest, camera );
 	}
 };
 

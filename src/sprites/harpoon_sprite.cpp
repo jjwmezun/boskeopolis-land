@@ -121,9 +121,9 @@ void HarpoonSprite::customInteract( Collision& my_collision, Collision& their_co
 	}
 };
 
-void HarpoonSprite::render( Camera& camera, bool priority )
+void HarpoonSprite::render( const Camera& camera ) const
 {
-	left_harpoon_gfx_.render( Unit::SubPixelsToPixels( left_harpoon_ ), &camera, priority );
-	right_harpoon_gfx_.render( Unit::SubPixelsToPixels( right_harpoon_ ), &camera, priority );
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	left_harpoon_gfx_.render( Unit::SubPixelsToPixels( left_harpoon_ ), &camera );
+	right_harpoon_gfx_.render( Unit::SubPixelsToPixels( right_harpoon_ ), &camera );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

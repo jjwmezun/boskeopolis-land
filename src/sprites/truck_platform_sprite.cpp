@@ -39,20 +39,17 @@ void TruckPlatformSprite::reset()
 	fullStopY();
 };
 
-void TruckPlatformSprite::render( Camera& camera, bool priority )
+void TruckPlatformSprite::render( const Camera& camera ) const
 {
-	if ( !priority )
-	{
-		Render::renderObject
-		(
-			"sprites/truck-platform.png",
-			{ 0, 6, 64, 1 },
-			{ xPixels(), yPixels() + 6, 64, 10 + ( Unit::SubPixelsToPixels( original_hit_box_.y ) - yPixels() ) },
-			SDL_FLIP_NONE,
-			0.0,
-			255,
-			&camera
-		);
-	}
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	Render::renderObject
+	(
+		"sprites/truck-platform.png",
+		{ 0, 6, 64, 1 },
+		{ xPixels(), yPixels() + 6, 64, 10 + ( Unit::SubPixelsToPixels( original_hit_box_.y ) - yPixels() ) },
+		SDL_FLIP_NONE,
+		0.0,
+		255,
+		&camera
+	);
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

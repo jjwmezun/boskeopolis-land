@@ -9,13 +9,13 @@ static constexpr int MOVE_DELAY = 16;
 
 BirdSprite::BirdSprite( int x, int y, Direction::Horizontal dir )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bird.png", 0, 0, false, false, 0, false, 0, 0, 5, 5 ), x, y, 19, 11, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 4000, 0, 0, dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/bird.png", 0, 0, false, false, 0, 0, 0, 5, 5 ), x, y, 19, 11, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 4000, 0, 0, dir, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	wait_limit_counter_ ( 0 ),
 	move_delay_counter_ ( 0 ),
 	propeller_animation_timer_ ( 0 ),
 	flip_x_ ( false )
 {
-	graphics_->priority_ = true;
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 BirdSprite::~BirdSprite() {};

@@ -284,7 +284,6 @@ void EventSystem::testWarp( LevelState& level_state )
 				level.sewerWarp( sprites, *this );
 				change_map_ = 0;
 				in_front_of_door_ = 0;
-				sprites.hero().graphics_->priority_ = true;
 				misc_.data_.sewer_gfx_->fade_in_ = true;
 			}*/
 		}
@@ -559,7 +558,6 @@ void EventSystem::doSewerAnimation( SpriteSystem& sprites )
 					misc_.data_.sewer_gfx_->dest_.w = SEWER_START_W;
 					misc_.data_.sewer_gfx_->dest_.h = SEWER_START_H;
 				}
-				sprites.hero().graphics_->priority_ = false;
 			}
 		}
 	}

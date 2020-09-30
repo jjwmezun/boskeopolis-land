@@ -78,9 +78,9 @@ sdl2::SDLRect MoveableBlockSprite::getRightSide() const
     return { hit_box_.x - 4000, hit_box_.y + 4000, 8000, hit_box_.h - 8000 };
 };
 
-void MoveableBlockSprite::render( Camera& camera, bool priority )
+void MoveableBlockSprite::render( const Camera& camera ) const
 {
-    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+    graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
     const auto left = camera.relativeRect( Unit::SubPixelsToPixels( getLeftSide() ) );
     Render::renderRectDebug( left, { 255, 0, 0, 128 } );
     const auto right = camera.relativeRect( Unit::SubPixelsToPixels( getRightSide() ) );

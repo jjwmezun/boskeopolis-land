@@ -15,6 +15,6 @@ class WaterdropGraphics final : public SpriteGraphics
 		void update( Sprite& sprite );
 
 	private:
-		TimerRepeat animation_timer_;
 		bool init_;
+		TimerRepeat animation_timer_;
 };

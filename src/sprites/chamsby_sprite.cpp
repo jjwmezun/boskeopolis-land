@@ -15,7 +15,7 @@ static constexpr int MAX_HP = NUMBER_OF_HITS * HEALTH_PER_HIT;
 
 ChamsbySprite::ChamsbySprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/chamsby.png", 0, 0, false, false, 0.0, false, 2, 1, 5, 1 ), x, y, 14, 25, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/chamsby.png", 0, 0, false, false, 0.0, 2, 1, 5, 1 ), x, y, 14, 25, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
 	health_ ( 0 ),
 	invincibility_ ( 0 ),
 	walk_timer_ (),

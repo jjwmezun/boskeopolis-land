@@ -6,7 +6,7 @@
 
 PlayerSpriteFluttering::PlayerSpriteFluttering( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/owl.png", 0, 0, false, false, 0, false, -10, -4, 18, 11 ), x, y, 15, 23, { SpriteType::HERO }, 160, 2000, 4000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::PERMANENT, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/owl.png", 0, 0, false, false, 0, -10, -4, 18, 11 ), x, y, 15, 23, { SpriteType::HERO }, 160, 2000, 4000, 7000, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLUTTERING, CameraMovement::PERMANENT, false )
 {};
 
 PlayerSpriteFluttering::~PlayerSpriteFluttering() {};

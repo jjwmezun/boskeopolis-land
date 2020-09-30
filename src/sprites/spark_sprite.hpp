@@ -13,8 +13,5 @@ class SparkSprite final : public Sprite
 
 	private:
 		int hit_wall_position_;
-		int sdfsaf;
-		double njaksdfnfas;
-		double jknwerwejkrn;
-		double cdsancsajknc;
+		char scratch_[ 3000 ];
 };

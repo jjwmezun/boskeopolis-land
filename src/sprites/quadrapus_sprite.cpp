@@ -4,7 +4,7 @@
 
 QuadrapusSprite::QuadrapusSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/quadrapus.png", 0, 0, false, false, 0, false, -1, -21, 2, 22 ), x, y, 30, 10, { SpriteType::ENEMY }, 100, 2000, 400, 5000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/quadrapus.png", 0, 0, false, false, 0, -1, -21, 2, 22 ), x, y, 30, 10, { SpriteType::ENEMY }, 100, 2000, 400, 5000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false )
 {};
 
 QuadrapusSprite::~QuadrapusSprite() {};

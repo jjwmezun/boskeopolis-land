@@ -18,7 +18,7 @@ static constexpr int GEM_FRAME_X = KEY_CANE_MAIN_X_FRAME + 32;
 
 TreasureChestSprite::TreasureChestSprite( int x, int y, ItemType item_type )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/treasure-chest.png", 0, 0, false, false, 0.0, false, 0, 0, 0, -14 ), x + 2, y + 4, 28, 28, { SpriteType::TREASURE_CHEST }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/treasure-chest.png", 0, 0, false, false, 0.0, 0, 0, 0, -14 ), x + 2, y + 4, 28, 28, { SpriteType::TREASURE_CHEST }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	BOTTOM ( { x + 2, y + 18, 28, 14 } ),
 	item_type_ ( item_type ),
 	key_cane_height_ ( 0 ),
@@ -59,29 +59,26 @@ void TreasureChestSprite::customInteract( Collision& my_collision, Collision& th
 	}
 };
 
-void TreasureChestSprite::render( Camera& camera, bool priority )
+void TreasureChestSprite::render( const Camera& camera ) const
 {
-	if ( !priority )
-	{
-		renderChestTopHalf( camera );
-		renderKeyCane( camera );
-		renderChestBottomHalf( camera );
-	}
+	renderChestTopHalf( camera );
+	renderKeyCane( camera );
+	renderChestBottomHalf( camera );
 };
 
-void TreasureChestSprite::renderKeyCane( const Camera& camera )
+void TreasureChestSprite::renderKeyCane( const Camera& camera ) const
 {
 	Render::renderObject( graphics_->texture_, { key_cane_flash_frame_, 14, 16, key_cane_height_ }, getKeyCaneGFXPosition(), false, false, 0, 255, &camera );
 };
 
-void TreasureChestSprite::renderChestBottomHalf( const Camera& camera )
+void TreasureChestSprite::renderChestBottomHalf( const Camera& camera ) const
 {
 	Render::renderObject( graphics_->texture_, { 0, 14, 28, 14 }, BOTTOM, false, false, 0, 255, &camera );
 };
 
-void TreasureChestSprite::renderChestTopHalf( const Camera& camera )
+void TreasureChestSprite::renderChestTopHalf( const Camera& camera ) const
 {
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, false );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };
 
 void TreasureChestSprite::animateChestOpening()

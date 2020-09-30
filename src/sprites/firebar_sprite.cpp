@@ -24,7 +24,7 @@ static constexpr CircleMovement generateCircle( int x, int y )
 
 FirebarSprite::FirebarSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/sword.png", 0, 0, false, false, 0, false, -32, -32, 64, 64 ), x, y, 16, 16, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/sword.png", 0, 0, false, false, 0, -32, -32, 64, 64 ), x, y, 16, 16, { SpriteType::ENEMY }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	circles_
 	({
 		generateCircle<1>( x, y ),
@@ -66,7 +66,7 @@ void FirebarSprite::customInteract( Collision& my_collision, Collision& their_co
 	}
 };
 
-void FirebarSprite::render( Camera& camera, bool priority )
+void FirebarSprite::render( const Camera& camera ) const
 {
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

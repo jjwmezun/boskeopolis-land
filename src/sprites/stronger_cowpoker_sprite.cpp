@@ -10,7 +10,7 @@
 
 StrongerCowpokerSprite::StrongerCowpokerSprite( int x, int y, int map_id )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", 0, 74, false, false, 0, true, -1, -3, 2, 4 ), x, y, 15, 22, { SpriteType::DEATH_COUNT }, 500, 1000, jumpHeight(), jumpHeight(), Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, .2, map_id ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", 0, 74, false, false, 0, -1, -3, 2, 4 ), x, y, 15, 22, { SpriteType::DEATH_COUNT }, 500, 1000, jumpHeight(), jumpHeight(), Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, .2, map_id ),
 	awake_ ( false ),
 	jump_ ( false ),
 	is_shooting_ ( false ),
@@ -26,6 +26,7 @@ StrongerCowpokerSprite::StrongerCowpokerSprite( int x, int y, int map_id )
 	is_shooting_counter_ ( 0 )
 {
 	jump_lock_ = false;
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 StrongerCowpokerSprite::~StrongerCowpokerSprite() {};

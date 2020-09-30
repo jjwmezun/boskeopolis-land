@@ -23,12 +23,12 @@ class MapLayerTilemap final : public MapLayer
 	private:
 		static constexpr int CAMERA_PADDING = 4;
 
-		std::vector<Block> blocks_;
-		const std::vector<int> tiles_;
+		Uint8 alpha_;
+		FadeType fade_type_;
 		const int width_;
 		const int height_;
-		FadeType fade_type_;
-		Uint8 alpha_;
+		const std::vector<int> tiles_;
+		std::vector<Block> blocks_;
 
 		int nOfXY( int x, int y ) const;
 };

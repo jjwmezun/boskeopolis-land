@@ -6,9 +6,11 @@
 
 FallingSnowBoulderSpawnSprite::FallingSnowBoulderSpawnSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowboulder.png", 128, 0, false, true, 0, true ), x, y, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/snowboulder.png", 128, 0, false, true, 0 ), x, y, 32, 32, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
 	timer_ ( -1 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 FallingSnowBoulderSpawnSprite::~FallingSnowBoulderSpawnSprite() {};
 

@@ -74,9 +74,9 @@ void FaucetSprite::customInteract( Collision& my_collision, Collision& their_col
 	}
 };
 
-void FaucetSprite::render( Camera& camera, bool priority )
+void FaucetSprite::render( const Camera& camera ) const
 {
-	gfx_component_.render( graphics_.get(), &camera, priority, xPixels(), yPixels() );
+	gfx_component_.render( graphics_.get(), &camera, xPixels(), yPixels() );
 };
 
 int FaucetSprite::getHits() const

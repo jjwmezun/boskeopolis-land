@@ -3,7 +3,7 @@
 
 FallingFistSprite::FallingFistSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fist.png", 0, 32, false, false, 0, false, -3, -3, 6, 10 ), x, y, 28, 24, { SpriteType::ENEMY }, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fist.png", 0, 32, false, false, 0, -3, -3, 6, 10 ), x, y, 28, 24, { SpriteType::ENEMY }, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, false )
 {};
 
 FallingFistSprite::~FallingFistSprite() {};
@@ -36,13 +36,10 @@ void FallingFistSprite::customUpdate( LevelState& level_state )
 void FallingFistSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {};
 
-void FallingFistSprite::render( Camera& camera, bool priority )
+void FallingFistSprite::render( const Camera& camera ) const
 {
-	if ( !priority )
-	{
-		drawCrane( camera );
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	}
+	drawCrane( camera );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };
 
 void FallingFistSprite::drawCrane( const Camera& camera )

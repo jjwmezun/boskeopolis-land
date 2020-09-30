@@ -12,11 +12,13 @@ static int randFireball()
 
 VolcanoMonsterSprite::VolcanoMonsterSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/volcano-monster.png", 0, 0, false, false, 0, true ), x, y, 16, 17, { SpriteType::ENEMY }, 400, 800, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/volcano-monster.png", 0, 0, false, false, 0 ), x, y, 16, 17, { SpriteType::ENEMY }, 400, 800, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED ),
 	timer_ ( 0 ),
 	next_spit_ ( randFireball() ),
 	animation_timer_ ( 0 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 VolcanoMonsterSprite::~VolcanoMonsterSprite() {};
 

@@ -6,7 +6,7 @@ static constexpr int FRAMES[ ToySoldierSprite::NUM_O_FRAMES ] = { 0, 15, 0, 30 }
 
 ToySoldierSprite::ToySoldierSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/toy-soldier.png", 0, 0, false, false, 0.0, false, -5, -1, 7, 1 ), x, y, 8, 31, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/toy-soldier.png", 0, 0, false, false, 0.0, -5, -1, 7, 1 ), x, y, 8, 31, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	animation_frame_ (),
 	animation_timer_ ()
 {};

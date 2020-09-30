@@ -112,11 +112,10 @@ void LogRaftsSprite::customInteract( Collision& my_collision, Collision& their_c
 	}
 };
 
-void LogRaftsSprite::render( Camera& camera, bool priority )
+void LogRaftsSprite::render( Camera& camera )
 {
-
     for ( int i = 0; i < MAX_RAFTS; ++i )
     {
-        graphics_->render( Unit::SubPixelsToPixels( rafts_[ i ] ), &camera, priority );
+        graphics_->render( Unit::SubPixelsToPixels( rafts_[ i ] ), &camera );
     }
 };

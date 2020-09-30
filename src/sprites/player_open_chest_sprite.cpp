@@ -18,7 +18,7 @@ PlayerOpenChestSprite::PlayerOpenChestSprite( int x, int y, Direction::Horizonta
 :
 	Sprite
 	(
-		std::make_unique<SpriteGraphics> ( Inventory::getPlayerCostume(), 0, 0, ( ( dir == Direction::Horizontal::RIGHT ) ? true : false ), false, 0, false, -1, -2, 2, 4 ),
+		std::make_unique<SpriteGraphics> ( Inventory::getPlayerCostume(), 0, 0, ( ( dir == Direction::Horizontal::RIGHT ) ? true : false ), false, 0, -1, -2, 2, 4 ),
 		x,
 		y,
 		14,

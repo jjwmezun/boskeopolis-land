@@ -6,7 +6,7 @@ static constexpr int MOVE_DISTANCE = Unit::BlocksToSubPixels( 6 );
 
 DragonflySprite::DragonflySprite( int x, int y, bool vertical )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/dragonfly.png", 0, 0, false, false, 0.0, false, -2, -14, 9, 16 ), x, y, 28, 8, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1500, 1500, 0, 0, ( vertical ) ? Direction::Horizontal::__NULL : Direction::Horizontal::RIGHT, ( vertical ) ? Direction::Vertical::UP : Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/dragonfly.png", 0, 0, false, false, 0.0, -2, -14, 9, 16 ), x, y, 28, 8, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1500, 1500, 0, 0, ( vertical ) ? Direction::Horizontal::__NULL : Direction::Horizontal::RIGHT, ( vertical ) ? Direction::Vertical::UP : Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     animation_timer_ ( 0 )
 {};
 

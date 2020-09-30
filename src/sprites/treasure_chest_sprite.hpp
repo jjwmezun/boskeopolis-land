@@ -17,7 +17,7 @@ class TreasureChestSprite : public Sprite
 		~TreasureChestSprite();
 		virtual void customUpdate( LevelState& level_state ) override;
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
-		void render( Camera& camera, bool priority = false ) override;
+		void render( const Camera& camera ) const override;
 
 	protected:
 		const sdl2::SDLRect BOTTOM;
@@ -28,9 +28,9 @@ class TreasureChestSprite : public Sprite
 		int timer_;
 		int gem_count_;
 
-		void renderKeyCane( const Camera& camera );
-		void renderChestBottomHalf( const Camera& camera );
-		void renderChestTopHalf( const Camera& camera );
+		void renderKeyCane( const Camera& camera ) const;
+		void renderChestBottomHalf( const Camera& camera ) const;
+		void renderChestTopHalf( const Camera& camera ) const;
 		void animateChestOpening();
 		void raiseItem( InventoryLevel& inventory );
 		int getAnimationFrame( int speed ) const;

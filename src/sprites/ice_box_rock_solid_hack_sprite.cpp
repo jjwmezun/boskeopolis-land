@@ -39,7 +39,3 @@ void IceBoxRockSolidHackSprite::customInteract( Collision& my_collision, Collisi
 		}
 	}
 };
-
-void IceBoxRockSolidHackSprite::render( Camera& camera, bool priority )
-{
-};

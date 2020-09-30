@@ -19,7 +19,7 @@ SpawnAnchorMissileSprite::SpawnAnchorMissileSprite( int x, int y, SpawnAnchorMis
 	timer_ ( 0 ),
 	target_time_ ( newTargetTime() )
 {
-	graphics_->priority_ = true;
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 SpawnAnchorMissileSprite::~SpawnAnchorMissileSprite() {};

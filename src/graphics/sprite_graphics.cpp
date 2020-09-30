@@ -9,7 +9,6 @@ SpriteGraphics::SpriteGraphics
 	bool flip_x,
 	bool flip_y,
 	double rotation,
-	bool priority,
 	int x_adjustment,
 	int y_adjustment,
 	int w_adjustment,
@@ -22,9 +21,12 @@ SpriteGraphics::SpriteGraphics
 :
 	flip_x_ ( flip_x ),
 	flip_y_ ( flip_y ),
-	priority_ ( priority ),
 	visible_ ( true ),
+	default_rotation_point_ ( default_rotation_point ),
 	alpha_ ( alpha ),
+	blend_mode_ ( blend_mode ),
+	prev_frame_x_ ( 0 ),
+	prev_frame_y_ ( 0 ),
 	current_frame_x_ ( current_frame_x ),
 	current_frame_y_ ( current_frame_y ),
 	x_adjustment_ ( x_adjustment ),
@@ -32,12 +34,8 @@ SpriteGraphics::SpriteGraphics
 	w_adjustment_ ( w_adjustment ),
 	h_adjustment_ ( h_adjustment ),
 	rotation_ ( rotation ),
-	texture_ ( texture ),
-	prev_frame_x_ ( 0 ),
-	prev_frame_y_ ( 0 ),
-	blend_mode_ ( blend_mode ),
 	rotation_center_ ( rotation_center ),
-	default_rotation_point_ ( default_rotation_point )
+	texture_ ( texture )
 {};
 
 SpriteGraphics::~SpriteGraphics() {};
@@ -54,27 +52,16 @@ void SpriteGraphics::update( const EventSystem& events )
 	update();
 };
 
-void SpriteGraphics::renderAnyPriority( const sdl2::SDLRect& bound_box, const Camera* camera ) const
+void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera ) const
 {
-	render( bound_box, camera, priority_ );
+	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, alpha_ );
 };
 
-void SpriteGraphics::renderAnyPriorityOverrideAlpha( const sdl2::SDLRect& bound_box, Uint8 alpha, const Camera* camera ) const
-{
-	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority_, alpha );
-};
-
-void SpriteGraphics::render( const sdl2::SDLRect& bound_box, const Camera* camera, bool priority ) const
-{
-	masterRender( bound_box, current_frame_x_, current_frame_y_, camera, priority, alpha_ );
-};
-
-void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, bool priority, Uint8 alpha, SDL_Texture* texture ) const
+void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_frame_x, int current_frame_y, const Camera* camera, Uint8 alpha, SDL_Texture* texture ) const
 {
 	if ( visible_ )
 	{
 		sdl2::SDLRect dest = adjustBoundBox( bound_box );
-
 		sdl2::SDLRect source =
 		{
 			current_frame_x,
@@ -82,8 +69,20 @@ void SpriteGraphics::masterRender( const sdl2::SDLRect& bound_box, int current_f
 			dest.w,
 			dest.h
 		};
-
-		Render::renderObject( texture_, source, dest, flip_x_, flip_y_, rotation_, alpha, camera, blend_mode_, nullptr, ( ( default_rotation_point_ ) ? &rotation_center_ : nullptr ) );
+		Render::renderObject
+		(
+			texture_,
+			source,
+			dest,
+			flip_x_,
+			flip_y_,
+			rotation_,
+			alpha,
+			camera,
+			blend_mode_,
+			nullptr,
+			( default_rotation_point_ ) ? &rotation_center_ : nullptr
+		);
 	}
 };
 
@@ -103,11 +102,15 @@ void SpriteGraphics::rotate( Direction::Clockwise dir, int amount )
 	switch ( dir )
 	{
 		case ( Direction::Clockwise::CLOCKWISE ):
+		{
 			rotation_ += amount;
+		}
 		break;
 
 		case ( Direction::Clockwise::COUNTERCLOCKWISE ):
+		{
 			rotation_ -= amount;
+		}
 		break;
 	}
 };

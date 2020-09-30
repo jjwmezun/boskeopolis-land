@@ -19,19 +19,11 @@ Block::Block
 
 Block::~Block() {};
 
-void Block::render( const Camera& camera, bool priority ) const
+void Block::render( const Camera& camera ) const
 {
 	if ( hasType() )
 	{
-		type_->render( Unit::SubPixelsToPixels( hitBox() ), priority, &camera );
-	}
-};
-
-void Block::renderAnyPriority( const Camera& camera ) const
-{
-	if ( hasType() )
-	{
-		type_->renderAnyPriority( Unit::SubPixelsToPixels( hitBox() ), &camera );
+		type_->render( Unit::SubPixelsToPixels( hitBox() ), &camera );
 	}
 };
 

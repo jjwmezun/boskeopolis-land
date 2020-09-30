@@ -50,9 +50,9 @@ void FrozenMeatSprite::customInteract( Collision& my_collision, Collision& their
 	}
 };
 
-void FrozenMeatSprite::render( Camera& camera, bool priority )
+void FrozenMeatSprite::render( const Camera& camera ) const
 {
-	graphics_->render( image_box_, &camera, priority );
+	graphics_->render( image_box_, &camera );
 };
 
 void FrozenMeatSprite::updateOtherHitBoxes()

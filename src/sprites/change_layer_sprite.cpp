@@ -27,11 +27,13 @@ ChangeLayerSprite* ChangeLayerSprite::makeBackgroundDuo( int x, int y )
 
 ChangeLayerSprite::ChangeLayerSprite( int x, int y, int w, int h, int frame_size, Direction::Vertical dir, std::string texture )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( std::move( texture ), 0, 4, false, ( dir == Direction::Vertical::UP ), 0, true ), x, y, w, h, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, dir, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( std::move( texture ), 0, 4, false, ( dir == Direction::Vertical::UP ), 0 ), x, y, w, h, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, dir, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	flash_timer_ ( 0 ),
 	frame_size_ ( frame_size ),
 	activated_ ( false )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 ChangeLayerSprite::~ChangeLayerSprite() {};
 

@@ -44,13 +44,10 @@ void HookSprite::customInteract( Collision& my_collision, Collision& their_colli
 };
 
 
-void HookSprite::render( Camera& camera, bool priority )
+void HookSprite::render( const Camera& camera ) const
 {
-	if ( !priority )
-	{
-		sdl2::SDLRect dest = camera.relativeRect( { xPixels(), yPixels() - 192, 16, 192 } );
-		sdl2::SDLRect src = { 0, 16, 16, 192 };
-		Render::renderObject( "sprites/hook.png", src, dest );
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	}
+	sdl2::SDLRect dest = camera.relativeRect( { xPixels(), yPixels() - 192, 16, 192 } );
+	sdl2::SDLRect src = { 0, 16, 16, 192 };
+	Render::renderObject( "sprites/hook.png", src, dest );
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

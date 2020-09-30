@@ -4,7 +4,7 @@
 
 CockroachSprite::CockroachSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cockroach.png", 0, 0, false, false, 0.0, false, -1, -5, 3, 9 ), x, y, 29, 7, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 2000, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cockroach.png", 0, 0, false, false, 0.0, -1, -5, 3, 9 ), x, y, 29, 7, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 500, 2000, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	timer_ ( 0 )
 {};
 
@@ -29,25 +29,3 @@ void CockroachSprite::customUpdate( LevelState& level_state )
 };
 
 void CockroachSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};
-
-void CockroachSprite::deathAction( LevelState& level_state )
-{
-	graphics_->priority_ = true;
-	defaultDeathAction( level_state );
-};
-
-void CockroachSprite::render( Camera& camera, bool priority )
-{
-	if ( !isDead() )
-	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, priority );
-	}
-};
-
-void CockroachSprite::renderSuperPriority( Camera& camera )
-{
-	if ( isDead() )
-	{
-		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera, true );
-	}
-};

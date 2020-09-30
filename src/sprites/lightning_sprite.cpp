@@ -6,8 +6,10 @@
 
 LightningSprite::LightningSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/lightning.png", 0, 0, false, false, 0, true ), x, y, 4, 160, { SpriteType::LIGHTNING }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
-{};
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/lightning.png", 0, 0, false, false, 0 ), x, y, 4, 160, { SpriteType::LIGHTNING }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT )
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 LightningSprite::~LightningSprite() {};
 

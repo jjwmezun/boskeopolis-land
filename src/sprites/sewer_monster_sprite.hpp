@@ -35,7 +35,7 @@ class SewerMonsterSprite final : public Sprite
 		TimerSimpleT<NUM_O_ATTACK_FRAMES * FRAME_SPEED, false> attack_timer_;
 		TimerSimpleT<NUM_O_FALLING_ASLEEP_FRAMES * FRAME_SPEED, false> falling_asleep_timer_;
 
-		void stateGraphics();
+		void stateGraphics( LevelState& level_state );
 		int getFrame( int tick ) const;
 		int getXImg( int frame ) const;
 };

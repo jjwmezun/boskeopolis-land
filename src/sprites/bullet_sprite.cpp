@@ -10,7 +10,7 @@ static std::vector<Sprite::SpriteType> bulletType( bool heros );
 
 BulletSprite::BulletSprite( int x, int y, Direction::Simple dir, bool heros )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", ( ( heros ) ? 5 : 0 ), 117, false, false, 0, false, 0, 0, 1, 1 ), x, y, 4, 4, bulletType( heros ), 1600, 3000, 0, 0, Direction::simpleToHorizontal( dir ), Direction::simpleToVertical( dir ), nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, false, true )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/cowpoker.png", ( ( heros ) ? 5 : 0 ), 117, false, false, 0, 0, 0, 1, 1 ), x, y, 4, 4, bulletType( heros ), 1600, 3000, 0, 0, Direction::simpleToHorizontal( dir ), Direction::simpleToVertical( dir ), nullptr, SpriteMovement::Type::FLOATING, CameraMovement::DESPAWN_OFFSCREEN, false, true )
 {};
 
 BulletSprite::~BulletSprite() {};

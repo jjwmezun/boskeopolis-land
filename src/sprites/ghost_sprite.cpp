@@ -9,30 +9,18 @@ static constexpr int MAX_OUTLINE_FRAME = 9;
 
 GhostSprite::GhostSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-2.png", 0, 0, true, false, 0, true, 10, 6, 15, 9 ), x, y, 32, 32, { SpriteType::ENEMY }, 1600, 1600, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-2.png", 0, 0, true, false, 0, 10, 6, 15, 9 ), x, y, 32, 32, { SpriteType::ENEMY }, 1600, 1600, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	animation_ ( 0 ),
 	tongue_frame_ ( 0 ),
 	outline_frame_ ( 0 )
-{};
+{
+	layer_ = Unit::Layer::SPRITES_2;
+};
 
 GhostSprite::~GhostSprite() {};
 
 void GhostSprite::customUpdate( LevelState& level_state )
 {
-	/*
-	switch ( direction_x_ )
-	{
-		case ( Direction::Horizontal::RIGHT ):
-			graphics_->flip_x_ = true;
-			moveRight();
-		break;
-			
-		default:
-			graphics_->flip_x_ = false;
-			moveLeft();
-		break;
-	}*/
-
 	if ( animation_ >= Unit::DEFAULT_ANIMATION_SPEED )
 	{
 		++tongue_frame_;

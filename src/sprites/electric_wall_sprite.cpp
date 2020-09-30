@@ -10,7 +10,7 @@
 
 ElectricWallSprite::ElectricWallSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/electric-wall.png", 0, 0, false, false, 0.0, false, -1, 0, 2, 0 ), x + 6, y, 2, 96, {}, 500, 500, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/electric-wall.png", 0, 0, false, false, 0.0, -1, 0, 2, 0 ), x + 6, y, 2, 96, {}, 500, 500, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false )
 {};
 
 ElectricWallSprite::~ElectricWallSprite() {};

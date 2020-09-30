@@ -16,8 +16,7 @@ class Block final : public Object
 	public:
 		Block( int x, int y, BlockType* type, int location, int layer, int type_id );
 		~Block();
-		void render( const Camera& camera, bool priority = false ) const;
-		void renderAnyPriority( const Camera& camera ) const;
+		void render( const Camera& camera ) const;
 		void interact( Sprite& sprite, LevelState& level );
 		void destroy();
 		int location() const;

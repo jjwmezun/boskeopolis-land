@@ -25,7 +25,6 @@ PipeEelSprite::PipeEelSprite( int x, int y, Direction::Vertical dir_y )
 			false,
 			( dir_y == Direction::Vertical::UP ),
 			0,
-			false,
 			-1,
 			-7,
 			2,
