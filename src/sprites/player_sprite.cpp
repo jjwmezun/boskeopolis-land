@@ -65,6 +65,7 @@ PlayerSprite::PlayerSprite
 	{
 		input_.reset( new InputComponentPlayer() );
 	}
+	layer_ = Unit::Layer::BEFORE_BLOCKS_2;
 };
 
 PlayerSprite::~PlayerSprite() {};

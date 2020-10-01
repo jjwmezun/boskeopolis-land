@@ -112,7 +112,7 @@ void LogRaftsSprite::customInteract( Collision& my_collision, Collision& their_c
 	}
 };
 
-void LogRaftsSprite::render( Camera& camera )
+void LogRaftsSprite::render( const Camera& camera ) const
 {
     for ( int i = 0; i < MAX_RAFTS; ++i )
     {

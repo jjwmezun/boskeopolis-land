@@ -3,7 +3,7 @@
 	[
 		{
 			"slug": "factory-4-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -35,7 +35,7 @@
 		},
 		{
 			"slug": "factory-4",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

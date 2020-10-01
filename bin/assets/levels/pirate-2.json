@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "pirate-1",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

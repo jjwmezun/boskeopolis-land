@@ -1,4 +1,5 @@
 #include "collision.hpp"
+#include "level_state.hpp"
 #include "sewer_monster_sprite.hpp"
 #include "sprite_graphics.hpp"
 
@@ -122,7 +123,7 @@ void SewerMonsterSprite::customUpdate( LevelState& level_state )
 		break;
 	}
 
-	stateGraphics();
+	stateGraphics( level_state );
 };
 
 void SewerMonsterSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )

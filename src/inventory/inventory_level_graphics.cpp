@@ -119,7 +119,11 @@ void InventoryLevelGraphics::render( const EventSystem& events, const Sprite& he
 	{
 		ticker_.render();
 	}
+};
 
+
+void InventoryLevelGraphics::renderBops( const Sprite& hero, const Camera& camera, const InventoryLevel& inventory ) const
+{
 	// BOPS
 	if ( inventory.bopsMultiplier() )
 	{

@@ -35,6 +35,7 @@ class InventoryLevelGraphics final
 		void init( const Map& lvmap, const InventoryLevel& inventory );
 		void update( const EventSystem& events, const Health& health, const InventoryLevel& inventory, bool funds_changed, bool time_changed );
 		void render( const EventSystem& events, const Sprite& hero, const Camera& camera, const InventoryLevel& inventory );
+		void renderBops( const Sprite& hero, const Camera& camera, const InventoryLevel& inventory ) const;
 		void setShowMcGuffins();
 		void changeKillCounter( int count );
 		void forceRerender( const InventoryLevel& inventory );

@@ -12,6 +12,7 @@
 #include "map_layer_neon.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
+#include "message_state.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"
 #include <cassert>
@@ -27,6 +28,7 @@
 #include "rapidjson/istreamwrapper.h"
 #include "sprite.hpp"
 #include "sprite_system.hpp"
+#include "wmessage_state.hpp"
 
 //GOALS
 #include "avoid_money_goal.hpp"
@@ -617,7 +619,6 @@ Level Level::getLevel( int id )
 							else if ( mezun::areStringsEqual( layer_type, "shade" ) )
 							{
 								Uint8 alpha = 255;
-
 								if ( layer.HasMember( "color" ) && layer[ "color" ].IsInt() )
 								{
 									if ( layer.HasMember( "alpha" ) && layer[ "alpha" ].IsInt() )
@@ -935,7 +936,12 @@ void Level::buildLevelList()
 					{
 						has_secret_goals_.emplace_back( false );
 					}
-				} 
+				}
+				else
+				{
+					//throw mezun::CorruptedLevel( code_names_[ i ] );
+					Main::changeState( std::unique_ptr<GameState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( std::string( "Level “" + code_names_[ i ] + "”’s JSON file in assets/levels has been corrupted. Please redownload game." ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
+				}
 
 				ifs.close();
 			}

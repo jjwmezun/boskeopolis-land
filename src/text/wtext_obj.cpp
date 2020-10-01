@@ -64,6 +64,12 @@ WTextObj::WTextObj
 
         while ( look_ahead )
         {
+            if ( ib >= frames_size )
+            {
+                look_ahead = false;
+                break;
+            }
+
             if ( frames[ ib ].isNewline() )
             {
                 look_ahead = false;
@@ -80,12 +86,6 @@ WTextObj::WTextObj
                 look_ahead = false;
             }
             else if ( ib >= frames_size )
-            {
-                look_ahead = false;
-                break;
-            }
-
-            if ( ib == frames_size )
             {
                 look_ahead = false;
                 break;

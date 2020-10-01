@@ -14,5 +14,5 @@ class FallingFistSprite final : public Sprite
 		void render( const Camera& camera ) const override;
 
 	private:
-		void drawCrane( const Camera& camera );
+		void drawCrane( const Camera& camera ) const;
 };

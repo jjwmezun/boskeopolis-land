@@ -3,7 +3,7 @@
 
 PufferbeeGraphics::PufferbeeGraphics()
 :
-	SpriteGraphics( "sprites/pufferbee.png", 0, 0, false, false, 0, false, -2, -2, 4, 4 ),
+	SpriteGraphics( "sprites/pufferbee.png", 0, 0, false, false, 0, -2, -2, 4, 4 ),
 	animation_frame_ ( { 0, 1, 0, true } ),
 	animation_timer_ ()
 {};

@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "dungeon-4",
-			"backgrounds":
+			"layers":
 			[
 				{ "type": "doom" }
 			]

@@ -28,7 +28,7 @@ class LevelState final : public GameState
 		void stateRender() override;
 		void init() override;
 		void backFromPop() override;
-		void renderLevel() const;
+		void renderLevel();
 		void updateForTrainer();
 		void initForTrainer();
 		int addRenderable( std::unique_ptr<Renderable>&& renderable, Unit::Layer layer );

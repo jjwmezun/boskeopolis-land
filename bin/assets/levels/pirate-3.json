@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "harbor-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

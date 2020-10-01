@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "snow-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

@@ -4,7 +4,7 @@
 	[
 		{
 			"slug": "swamp-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

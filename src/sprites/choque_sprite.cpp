@@ -50,6 +50,13 @@ void ChoqueSprite::customUpdate( LevelState& level_state )
 	{
 		still_ = true;
 	}
+
+	// Update Eye Position
+	const EyePosition position = getEyePosition( eye_placement_ );
+	dest_eye_left_.x = position.left_x + xPixels();
+	dest_eye_left_.y = position.left_y + yPixels();
+	dest_eye_right_.x = position.right_x + xPixels();
+	dest_eye_right_.y = position.right_y + yPixels();
 };
 
 void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
@@ -127,13 +134,6 @@ void ChoqueSprite::reset()
 
 void ChoqueSprite::render( const Camera& camera ) const
 {
-	// Setup Data
-	const EyePosition position = getEyePosition( eye_placement_ );
-	dest_eye_left_.x = position.left_x + xPixels();
-	dest_eye_left_.y = position.left_y + yPixels();
-	dest_eye_right_.x = position.right_x + xPixels();
-	dest_eye_right_.y = position.right_y + yPixels();
-
 	// Render
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 	Render::renderObject( graphics_->texture_, src_, dest_eye_left_, SDL_FLIP_NONE, 0.0, 255, &camera );

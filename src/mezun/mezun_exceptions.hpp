@@ -86,6 +86,12 @@ namespace mezun
 			MissingLevel( const std::string& lvname );
 	};
 
+	class CorruptedLevel final : public std::runtime_error
+	{
+		public:
+			CorruptedLevel( const std::string& lvname );
+	};
+
 	class BrokenLevelFile final : public std::runtime_error
 	{
 		public:

@@ -47,7 +47,7 @@ OptionBox::OptionBox( OptionBox&& o )
 
 void OptionBox::init()
 {
-	for ( int i = 0; i < WTextCharacter::NUMBER_OF_COLORS - 1; ++i )
+	for ( int i = 0; i < WTextCharacter::NUMBER_OF_COLORS; ++i )
 	{
 		WTextObj::generateTexture
 		(
@@ -61,9 +61,9 @@ void OptionBox::init()
 	WTextObj::generateTexture
 	(
 		text_[ WTextCharacter::NUMBER_OF_COLORS - 1 ],
-		words_, x_ + 2, y_ + 2, ( WTextCharacter::Color )( 2 ),
+		words_, x_ + 4, y_ + 4, ( WTextCharacter::Color )( 2 ),
 		width_, WTextObj::Align::CENTER, WTextCharacter::Color::__NULL,
-		Unit::PIXELS_PER_MINIBLOCK, Unit::PIXELS_PER_MINIBLOCK,
+		Unit::PIXELS_PER_MINIBLOCK - 2, Unit::PIXELS_PER_MINIBLOCK,
 		WTextObj::VAlign::CENTER, BOX_HEIGHT
 	);
 }

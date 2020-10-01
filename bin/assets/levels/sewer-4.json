@@ -4,7 +4,7 @@
 	[
 		{
 			"slug": "sewer-5",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -13,10 +13,7 @@
 					"height": 1456,
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "boskeopolis-underground-spotlight.png",
@@ -29,13 +26,14 @@
 					"x_offset": 88,
 					"lighten": true,
 					"alpha": 0,
-					"switch": true
+					"switch": true,
+					"layer": "foreground"
 				}
 			]
 		},
 		{
 			"slug": "sewer-5-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -44,10 +42,7 @@
 					"height": 1456,
 					"x_scroll": 1.0,
 					"y_scroll": 1.0
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "boskeopolis-underground-spotlight.png",
@@ -60,7 +55,8 @@
 					"x_offset": 88,
 					"lighten": true,
 					"alpha": 0,
-					"switch": true
+					"switch": true,
+					"layer": "foreground"
 				}
 			]
 		}

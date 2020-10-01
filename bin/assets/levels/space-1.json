@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "space-1",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "constellation",

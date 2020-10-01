@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "mountain-1",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

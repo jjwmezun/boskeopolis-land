@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "snow-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -14,17 +14,15 @@
 					"height": 256,
 					"x_scroll": 0.5,
 					"y_scroll": 0.15
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "snow.png",
 					"width": 16,
 					"height": 16,
 					"frames": 16,
-					"animation_speed": 4
+					"animation_speed": 4,
+					"layer": "foreground"
 				}
 			],
 			"warps":
@@ -72,7 +70,7 @@
 					"location": [ 0, 20, 0, 9 ]
 				}
 			],
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -94,7 +92,7 @@
 		},
 		{
 			"slug": "snow-3-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -135,7 +133,7 @@
 		},
 		{
 			"slug": "snow-3-5",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -166,7 +164,7 @@
 		},
 		{
 			"slug": "snow-3-6",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -197,7 +195,7 @@
 		},
 		{
 			"slug": "snow-3-4",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -206,10 +204,7 @@
 					"height": 160,
 					"x_scroll": 0.5,
 					"y_scroll": 0.5
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "fog_2.png",
@@ -219,7 +214,8 @@
 					"x_scroll": 0.1,
 					"y_scroll": 0.1,
 					"x_speed": -40,
-					"y_speed": -20
+					"y_speed": -20,
+					"layer": "foreground"
 				},
 				{
 					"type": "image",
@@ -230,7 +226,8 @@
 					"x_scroll": 0.25,
 					"y_scroll": 0.25,
 					"x_speed": -80,
-					"y_speed": -40
+					"y_speed": -40,
+					"layer": "foreground"
 				}
 			],
 			"warps":

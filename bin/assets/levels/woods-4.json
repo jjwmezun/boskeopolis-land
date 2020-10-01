@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "woods-4",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -29,10 +29,7 @@
 					"width": 640,
 					"height": 256,
 					"x_scroll": 0.5
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "windy-leaves.png",
@@ -43,7 +40,8 @@
 					"x_speed": -3000,
 					"y_speed": 1500,
 					"frames": 6,
-					"animation_speed": 16
+					"animation_speed": 16,
+					"layer": "foreground"
 				}
 			]
 		}

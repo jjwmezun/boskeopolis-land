@@ -39,7 +39,7 @@ MapLayerImageSwitch::MapLayerImageSwitch
 		move_speed_y,
 		animation_speed,
 		flip,
-		alpha,
+		0,
 		blend_mode,
 		layer_position
 	),
@@ -52,10 +52,26 @@ void MapLayerImageSwitch::update( LevelState& level_state )
 {
 	if ( level_state.events().isSwitchOn() )
 	{
-		alpha_ = on_alpha_;
+		if ( alpha_ < on_alpha_ )
+		{
+			alpha_ += 4;
+		}
+
+		if ( alpha_ > on_alpha_ )
+		{
+			alpha_ = on_alpha_;
+		}
 	}
 	else
 	{
-		alpha_ = 0;
+		if ( alpha_ > 0 )
+		{
+			alpha_ -= 4;
+		}
+
+		if ( alpha_ < 0 )
+		{
+			alpha_ = 0;
+		}
 	}
 };

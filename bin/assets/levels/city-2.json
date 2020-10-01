@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "city-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -29,10 +29,7 @@
 					"frames": 5,
 					"animation_speed": 32,
 					"animation_flip": true
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "rain.png",
@@ -40,7 +37,8 @@
 					"height": 320,
 					"frames": 16,
 					"animation_speed": 4,
-					"alpha": 128
+					"alpha": 128,
+					"layer": "foreground"
 				}
 			]
 		}

@@ -8,7 +8,7 @@ LightSwitchSprite::LightSwitchSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/light-switch.png", 0, 0, false, false, 0.0, 0, 0, 0, 0, 255 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY )
 {
-	layer_ = Unit::Layer::SPRITES_2;
+	layer_ = Unit::Layer::AFTER_FG_2;
 };
 
 LightSwitchSprite::~LightSwitchSprite() {};
@@ -28,7 +28,7 @@ void LightSwitchSprite::customInteract( Collision& my_collision, Collision& thei
 	}
 };
 
-void LightSwitchSprite::render( Camera& camera )
+void LightSwitchSprite::render( const Camera& camera ) const
 {
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };

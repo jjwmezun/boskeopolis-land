@@ -103,10 +103,18 @@ void LevelState::stateRender()
 	inventory_screen_.render( events_, sprites_.hero(), camera_ );
 };
 
-void LevelState::renderLevel() const
+void LevelState::renderLevel()
 {
 	level_.currentMap().renderBGColor();
-	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	for ( int i = 0; i < ( int )( Unit::Layer::FG_2 ); ++i )
+	{
+		for ( int j = 0; j < layers_[ i ].size(); ++j )
+		{
+			layers_[ i ][ j ]->render( *this );
+		}
+	}
+	inventory_screen_.renderBops( sprites_.hero(), camera_ );
+	for ( int i = ( int )( Unit::Layer::FG_2 ); i < NUMBER_OF_LAYERS; ++i )
 	{
 		for ( int j = 0; j < layers_[ i ].size(); ++j )
 		{

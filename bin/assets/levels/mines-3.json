@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "mines-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

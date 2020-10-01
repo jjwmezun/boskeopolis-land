@@ -42,7 +42,7 @@ void FallingFistSprite::render( const Camera& camera ) const
 	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
 };
 
-void FallingFistSprite::drawCrane( const Camera& camera )
+void FallingFistSprite::drawCrane( const Camera& camera ) const
 {
 	const int crane_y = Unit::SubPixelsToPixels( original_hit_box_.y );
 	const int crane_w_change = floor( ( yPixels() - crane_y ) / 16 );

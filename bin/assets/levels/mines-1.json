@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "mines-4",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -14,13 +14,11 @@
 					"height": 128,
 					"x_scroll": 0.5,
 					"y_scroll": 0.5
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "shade",
-					"color": 6
+					"color": 6,
+					"layer": 15
 				}
 			]
 		}

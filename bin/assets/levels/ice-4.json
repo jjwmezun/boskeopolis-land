@@ -4,7 +4,7 @@
 	[
 		{
 			"slug": "snow-4",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -14,10 +14,7 @@
 					"x_scroll": 0.5,
 					"y_scroll": 0.5,
 					"alpha": 2
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "fog_2.png",
@@ -28,7 +25,8 @@
 					"y_scroll": 0.1,
 					"x_speed": -40,
 					"y_speed": -20,
-					"lighten": true
+					"lighten": true,
+					"layer": "foreground"
 				},
 				{
 					"type": "image",
@@ -40,7 +38,8 @@
 					"y_scroll": 0.25,
 					"x_speed": -80,
 					"y_speed": -40,
-					"lighten": true
+					"lighten": true,
+					"layer": "foreground"
 				}
 			]
 		}

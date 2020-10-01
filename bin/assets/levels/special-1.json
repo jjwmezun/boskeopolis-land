@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "play-1",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -14,17 +14,15 @@
 					"height": 192,
 					"x_scroll": 0.5,
 					"y_scroll": 0.0
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "stageplay.png",
 					"width": 400,
 					"height": 192,
 					"x_scroll": 0.0,
-					"y_scroll": 0.0
+					"y_scroll": 0.0,
+					"layer": "foreground"
 				}
 			],
 			"warps":
@@ -39,7 +37,7 @@
 		},
 		{
 			"slug": "play-1-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -49,10 +47,7 @@
 					"x_scroll": 0.5,
 					"y_repeat": false,
 					"x_offset": 56
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "play-rafters-2.png",
@@ -61,7 +56,8 @@
 					"x_scroll": 0.5,
 					"alpha": 200,
 					"y_repeat": false,
-					"x_offset": 56
+					"x_offset": 56,
+					"layer": "foreground"
 				},
 				{
 					"type": "image",
@@ -69,7 +65,8 @@
 					"width": 400,
 					"height": 192,
 					"x_scroll": 0.0,
-					"y_scroll": 0.0
+					"y_scroll": 0.0,
+					"layer": "foreground"
 				}
 			],
 			"warps":

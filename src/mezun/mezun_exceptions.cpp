@@ -7,6 +7,11 @@ namespace mezun
 		std::runtime_error( "Level “" + lvname + "” is missing its JSON file in the resources/levels directory.\nPlease redownload game." )
 	{};
 
+	CorruptedLevel::CorruptedLevel( const std::string& lvname )
+	:
+		std::runtime_error( "Level “" + lvname + "” JSON file has been corrupted in the resources/levels directory.\nPlease redownload game." )
+	{};
+
 	BrokenLevelFile::BrokenLevelFile( const std::string& lvname )
 	:
 		std::runtime_error( "The JSON file for level “" + lvname + "” in the resources/levels directory has become corrupted & isn't valid JSON & can't be loaded.\nPlease redownload game." )

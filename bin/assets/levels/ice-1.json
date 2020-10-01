@@ -4,17 +4,14 @@
 	[
 		{
 			"slug": "snow-7",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
 					"img": "ice-bg.png",
 					"width": 431,
 					"height": 192
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "ice-light.png",
@@ -23,7 +20,8 @@
 					"x_offset": 64,
 					"x_repeat": false,
 					"y_repeat": false,
-					"alpha": 128
+					"alpha": 128,
+					"layer": "foreground"
 				}
 			]
 		}

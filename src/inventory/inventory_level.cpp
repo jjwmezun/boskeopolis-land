@@ -46,6 +46,11 @@ void InventoryLevel::render( const EventSystem& events, const Sprite& hero, cons
 	graphics_.render( events, hero, camera, *this );
 };
 
+void InventoryLevel::renderBops( const Sprite& hero, const Camera& camera ) const
+{
+	graphics_.renderBops( hero, camera, *this );
+};
+
 void InventoryLevel::setShowMcGuffins()
 {
 	graphics_.setShowMcGuffins();

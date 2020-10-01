@@ -9,7 +9,7 @@ static constexpr int GRID_WIDTH = Unit::WINDOW_WIDTH_PIXELS - ( SPACE_BETWEEN_OP
 
 static constexpr int calculateNumberOfGridColumns( int box_width )
 {
-    return ( int )( std::floor( ( double )( GRID_WIDTH ) / ( double )( box_width + SPACE_BETWEEN_OPTIONS_PIXELS ) ) );
+    return ( int )( std::ceil( ( double )( GRID_WIDTH ) / ( double )( box_width + SPACE_BETWEEN_OPTIONS_PIXELS ) ) );
 };
 
 OptionSystem OptionSystem::generateGridOptionSystem( const std::vector<std::u32string>& option_strings )

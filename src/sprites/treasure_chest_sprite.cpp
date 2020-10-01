@@ -26,7 +26,9 @@ TreasureChestSprite::TreasureChestSprite( int x, int y, ItemType item_type )
 	key_cane_flash_frame_ ( ( item_type == ItemType::RANDOM_GEMS ) ? GEM_FRAME_X : KEY_CANE_MAIN_X_FRAME ),
 	timer_ ( 0 ),
 	gem_count_ ( 0 )
-{};
+{
+	layer_ = Unit::Layer::BEFORE_SPRITES_1;
+};
 
 TreasureChestSprite::~TreasureChestSprite() {};
 

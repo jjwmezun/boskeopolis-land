@@ -5,7 +5,7 @@
 	[
 		{
 			"slug": "train",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -94,7 +94,7 @@
 		},
 		{
 			"slug": "train-2",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",
@@ -139,10 +139,7 @@
 					"y_repeat": false,
 					"y_repeat": false,
 					"x_speed": -6400
-				}
-			],
-			"foregrounds":
-			[
+				},
 				{
 					"type": "image",
 					"img": "tunnel_overlay.png",
@@ -154,7 +151,8 @@
 					"x_speed": -4800,
 					"alpha": 224,
 					"x_repeat": false,
-					"x_offset": 4000
+					"x_offset": 4000,
+					"layer": "foreground"
 				}
 			],
 			"warps":
@@ -199,7 +197,7 @@
 		},
 		{
 			"slug": "train-3",
-			"backgrounds":
+			"layers":
 			[
 				{
 					"type": "image",

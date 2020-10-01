@@ -208,6 +208,12 @@ namespace Main
 				break;
 			}
 
+			if ( states_.empty() )
+			{
+				quit();
+				return;
+			}
+
 			switch ( transition_state_ )
 			{
 				case ( TransitionState::__NULL ):
@@ -377,7 +383,11 @@ namespace Main
 		{
 			assert ( !states_.empty() );
 			states_.pop_back();
-			assert ( !states_.empty() );
+			if ( states_.empty() )
+			{
+				quit();
+				return;
+			}
 			states_.back()->changePalette();
 			states_.back()->backFromPop();
 			stateReset();
