@@ -9,32 +9,38 @@
 			[
 				{
 					"type": "image",
-					"img": "moon.png",
-					"width": 32,
-					"height": 32,
-					"x_offset": 8,
-					"y_offset": 32,
-					"x_scroll": -0.2,
-					"y_scroll": 0.1,
-					"frames": 1,
-					"x_repeat": false,
-					"y_repeat": false
+					"img": "shady_firs.png",
+					"width": 461,
+					"height": 300,
+					"y_offset": -48,
+					"x_scroll": 0.1,
+					"y_scroll": 0.25
 				},
 				{
 					"type": "image",
-					"img": "horror-tree-2.png",
-					"width": 590,
-					"height": 352,
-					"y_repeat": false,
+					"img": "thin_boughs.png",
+					"width": 256,
+					"height": 256,
 					"x_scroll": 0.25
 				},
 				{
 					"type": "image",
-					"img": "horror-tree.png",
-					"width": 585,
-					"height": 352,
-					"y_repeat": false,
+					"img": "thick_boughs.png",
+					"width": 640,
+					"height": 256,
 					"x_scroll": 0.5
+				},
+				{
+					"type": "image",
+					"img": "fog_1.png",
+					"alpha": 48,
+					"width": 128,
+					"height": 128,
+					"x_scroll": 1,
+					"y_scroll": 1,
+					"x_speed": -40,
+					"y_speed": -20,
+					"layer": 16
 				}
 			]
 		}
