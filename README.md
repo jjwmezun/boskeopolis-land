@@ -49,6 +49,8 @@ The vast majority o’ music used is royalty-free music by Kevin MacLeod @ incom
 * Failure: Lobby Time
 * City1, City2, City4: District Four
 * City3: Nouvelle Noel
+* Domestic1: Le Grand Chase
+* Domestic2: Leaving Home
 * Woods1, Woods2: Breakdown
 * Woods3: Nightmare Machine
 * Woods4: Autumn Day
@@ -61,10 +63,13 @@ The vast majority o’ music used is royalty-free music by Kevin MacLeod @ incom
 * Sky1, Sky2, Sky3: Nowhere Land
 * Sky4: Dreamer
 * Space1: Disco Lounge
+* Space3: Local Forecast – Elevator
+* Space4: Beauty Flow
 * Ice1 & Ice2: Crinoline Dreams
 * Ice3 & Ice4: Chillin Hard
-* Pirate1, Pirate3: Salty Ditty
-* Pirate2: Rocket Power
+* Pirate1: Salty Ditty
+* Pirate2, Swamp3: Rocket Power
+* Swamp1, Swamp2, Swamp4: Netherworld Shanty
 * Sewers1, Sewers2, Sewers3: RetroFuture Nasty
 * Sewers4: Raw
 * Factory1: Robozo
@@ -79,6 +84,6 @@ The vast majority o’ music used is royalty-free music by Kevin MacLeod @ incom
 Other songs used:
 
 * “Play in the Background”: a rendition o’ Mozart’s “Rondo alla turca” from Musopen @ https://musopen.org/music/2079/wolfgang-amadeus-mozart/rondo-alla-turca-from-sonata-kv-331/.
-* “Good Shop Lifestyle”: “Skyhawk Beach” by Blue Wave Theory @ http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in. Released under Creative Commons Attribution-ShareAlike 4.0 International ( https://creativecommons.org/licenses/by-sa/4.0/ ).
+* “Petrol Pond Place” & “Good Shop Lifestyle”: “Skyhawk Beach” by Blue Wave Theory @ http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in. Released under Creative Commons Attribution-ShareAlike 4.0 International ( https://creativecommons.org/licenses/by-sa/4.0/ ).
 * “Mind Your Manors”: “Arround the Village” by Lobo Loco @ https://freemusicarchive.org/music/Lobo_Loco/Good_Old_Organ_Ice/Arround_the_Village_ID_1183. Released under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International ( https://creativecommons.org/licenses/by-nc-nd/4.0/ ).
 * “Castle Chamsby”, 1st Outside Area: “Soothing Nighttime Ambience” by SPANAC @ https://www.freesoundslibrary.com/soothing-nighttime-ambience/. Released under Attribution 4.0 International ( https://creativecommons.org/licenses/by/4.0/ ).
