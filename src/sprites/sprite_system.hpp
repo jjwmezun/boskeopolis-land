@@ -65,9 +65,6 @@ class SpriteSystem final
 
 
 	private:
-		static constexpr int SPRITE_INDEX_START = 400;
-		static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
-
 		void clearSprites();
 		void destroySprite( int n, Map& lvmap );
 		void spritesFromMap( LevelState& level_state );

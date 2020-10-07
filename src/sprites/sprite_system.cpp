@@ -189,6 +189,14 @@
 #include "window_monster_sprite.hpp"
 
 static constexpr int SPRITES_LIMIT = 50;
+static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
+static constexpr int SPRITE_INDEX_START = 400;
+
+static bool permanentOrOnScreen( const Camera& camera, const Sprite& sprite )
+{
+	return sprite.cameraMovement() == Sprite::CameraMovement::PERMANENT ||
+		camera.onscreen( sprite.hitBox(), OFFSCREEN_PADDING );
+};
 
 SpriteSystem::SpriteSystem( LevelState& level_state )
 :
@@ -937,17 +945,17 @@ void SpriteSystem::interact( LevelState& level_state )
 	BlockSystem& blocks = level_state.blocks();
 	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
-		if ( sprites_.at( i ) != nullptr )
+		if ( sprites_[ i ] != nullptr )
 		{
-			if ( sprites_.at( i )->interactsWithBlocks() )
+			if ( sprites_[ i ]->interactsWithBlocks() )
 			{
 				if
 				(
-					sprites_.at( i )->hasCameraMovement( Sprite::CameraMovement::PERMANENT ) ||
-					level_state.camera().onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING )
+					sprites_[ i ]->hasCameraMovement( Sprite::CameraMovement::PERMANENT ) ||
+					level_state.camera().onscreen( sprites_[ i ]->hitBox(), OFFSCREEN_PADDING )
 				)
 				{
-					blocks.interact( *sprites_.at( i ), level_state );
+					blocks.interact( *sprites_[ i ], level_state );
 				}
 			}
 		}
@@ -1078,60 +1086,60 @@ void SpriteSystem::update( LevelState& level_state )
 	Map& lvmap = level_state.currentMap();
 	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
-		if ( sprites_.at( i )->despawnWhenDead() )
+		if ( sprites_[ i ]->despawnWhenDead() )
 		{
-			if ( sprites_.at( i )->deathFinished() )
+			if ( sprites_[ i ]->deathFinished() )
 			{
 				destroySprite( i, lvmap );
 				continue; // SPRITE IS DEAD--DO NOT TRY UPDATING.
 			}
 		}
 
-		switch( sprites_.at( i )->cameraMovement() )
+		switch( sprites_[ i ]->cameraMovement() )
 		{
 			case ( Sprite::CameraMovement::PAUSE_OFFSCREEN ):
-				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
+				if ( camera.onscreen( sprites_[ i ]->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( level_state );
+					sprites_[ i ]->update( level_state );
 				}
 			break;
 
 			case ( Sprite::CameraMovement::PERMANENT ):
-				sprites_.at( i )->update( level_state );
+				sprites_[ i ]->update( level_state );
 			break;
 
 			case ( Sprite::CameraMovement::RESET_INSTANTLY_OFFSCREEN ):
-				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
+				if ( camera.onscreen( sprites_[ i ]->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( level_state );
+					sprites_[ i ]->update( level_state );
 				}
 				else
 				{
-					if ( camera.onscreen( sprites_.at( i )->originalHitBox(), OFFSCREEN_PADDING ) )
+					if ( camera.onscreen( sprites_[ i ]->originalHitBox(), OFFSCREEN_PADDING ) )
 					{
-						sprites_.at( i )->reset();
+						sprites_[ i ]->reset();
 					}
 				}
 			break;
 
 			case ( Sprite::CameraMovement::RESET_OFFSCREEN_AND_AWAY ):
-				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
+				if ( camera.onscreen( sprites_[ i ]->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( level_state );
+					sprites_[ i ]->update( level_state );
 				}
 				else
 				{
-					if ( camera.offscreen( sprites_.at( i )->originalHitBox(), OFFSCREEN_PADDING ) )
+					if ( camera.offscreen( sprites_[ i ]->originalHitBox(), OFFSCREEN_PADDING ) )
 					{
-						sprites_.at( i )->reset();
+						sprites_[ i ]->reset();
 					}
 				}
 			break;
 
 			case ( Sprite::CameraMovement::DESPAWN_OFFSCREEN ):
-				if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) )
+				if ( camera.onscreen( sprites_[ i ]->hitBox(), OFFSCREEN_PADDING ) )
 				{
-					sprites_.at( i )->update( level_state );
+					sprites_[ i ]->update( level_state );
 				}
 				else
 				{
@@ -1159,23 +1167,34 @@ void SpriteSystem::spriteInteraction( LevelState& level_state )
 	const Camera& camera = level_state.camera();
 	for ( auto i = 0; i < sprites_.size(); ++i )
 	{
-		if ( sprites_.at( i ) != nullptr )
+		// Check that current sprite is valid & can interact with others.
+		if ( sprites_[ i ] != nullptr && sprites_[ i ]->sprite_interact_ )
 		{
-			if ( camera.onscreen( sprites_.at( i )->hitBox(), OFFSCREEN_PADDING ) || sprites_[ i ]->cameraMovement() == Sprite::CameraMovement::PERMANENT )
+			if ( permanentOrOnScreen( camera, *sprites_[ i ] ) )
 			{
-				if ( sprites_.at( i )->interactsWithSprites() && hero_->interactsWithSprites() )
+				if ( hero_->sprite_interact_ )
 				{
-					sprites_.at( i )->interact( *hero_, level_state );
-					hero_->interact( *sprites_.at( i ), level_state );
+					sprites_[ i ]->interact( *hero_, level_state );
+					if ( !sprites_[ i ]->sprite_interact_from_this_to_others_only_ )
+					{
+						hero_->interact( *sprites_[ i ], level_state );
+					}
 				}
 
+				// Interact with all other sprites.
 				for ( auto j = 0; j < sprites_.size(); ++j )
 				{
-					if ( sprites_[ j ] != nullptr )
-						if ( i != j )
-							if ( camera.onscreen( sprites_[ j ]->hitBox(), OFFSCREEN_PADDING ) || sprites_[ j ]->cameraMovement() == Sprite::CameraMovement::PERMANENT )
-								if ( sprites_.at( i )->interactsWithSprites() && sprites_[ j ]->interactsWithSprites() )
-									sprites_.at( i )->interact( *sprites_[ j ], level_state );
+					if
+					(
+						i != j && // Skip if current sprite ( so it doesn’t interact with itself ).
+						sprites_[ j ] != nullptr &&
+						permanentOrOnScreen( camera, *sprites_[ j ] ) &&
+						sprites_[ j ]->sprite_interact_ &&
+						!sprites_[ j ]->sprite_interact_from_this_to_others_only_
+					)
+					{
+						sprites_[ i ]->interact( *sprites_[ j ], level_state );
+					}
 				}
 			}
 		}
