@@ -52,9 +52,5 @@
 	"entrance_x": 81,
 	"entrance_y": -2,
 	"gem_challenge": 13000,
-	"time_challenge": 48,
-	"goal":
-	{
-		"message": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane."
-	}
+	"time_challenge": 48
 }
