@@ -8,8 +8,6 @@
 #include "sprite_system.hpp"
 #include "unit.hpp"
 
-#include <cstdio>
-
 FallingStarGeneratorSprite::FallingStarGeneratorSprite( int x, int y )
 :
 	Sprite( nullptr, x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),

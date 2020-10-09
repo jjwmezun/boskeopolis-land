@@ -1,6 +1,4 @@
 {
-	"name": "Freaky Forest",
-
 	"maps":
 	[
 		{
@@ -45,10 +43,8 @@
 			]
 		}
 	],
-
 	"entrance_x": 80,
 	"entrance_y": 19,
-
 	"gem_challenge": 6000,
 	"time_challenge": 22
 }

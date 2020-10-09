@@ -73,7 +73,8 @@ class Sprite : public Object
 			SPARK,
 			MANSION_GHOST,
 			SWAMP_POLE,
-			PI_BLOCK
+			PI_BLOCK,
+			ZOMBIE
 		};
 
 		enum class CameraMovement

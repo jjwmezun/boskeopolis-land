@@ -187,6 +187,7 @@
 #include "water_spout_sprite.hpp"
 #include "weight_platform_sprite.hpp"
 #include "window_monster_sprite.hpp"
+#include "zombie_generator_sprite.hpp"
 
 static constexpr int SPRITES_LIMIT = 50;
 static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
@@ -880,6 +881,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 219 ):
 			return std::unique_ptr<Sprite> ( new CockroachSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 220 ):
+			return std::unique_ptr<Sprite> ( new ZombieGeneratorSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

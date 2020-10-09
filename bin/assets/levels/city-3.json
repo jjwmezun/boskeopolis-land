@@ -1,0 +1,27 @@
+{
+	"maps":
+	[
+		{
+            "slug": "muerto-1",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "fog_1.png",
+					"alpha": 48,
+					"width": 128,
+					"height": 128,
+					"x_scroll": 1,
+					"y_scroll": 1,
+					"x_speed": -40,
+					"y_speed": -20,
+					"layer": 16
+				}
+			]
+        }
+	],
+	"entrance_x": 12,
+	"entrance_y": 17,
+	"gem_challenge": 12000,
+	"time_challenge": 40
+}

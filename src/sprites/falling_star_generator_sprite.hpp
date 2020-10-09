@@ -16,5 +16,4 @@ class FallingStarGeneratorSprite final : public Sprite
         int timer_;
         bool start_;
         int prev_x_[ 3 ];
-        char scratch_[ 3000 ];
 };

@@ -11,7 +11,7 @@
 
 constexpr bool testMultiples( int value )
 {
-	return value > 1 && value <= InventoryLevel::MAX_BOPS;
+	return value > 1;
 };
 
 InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade )
@@ -177,7 +177,7 @@ void InventoryLevel::addFundsForMultiplier( int value )
 {
 	//  2    3    4    5     6      7      8
 	// 100, 200, 400, 800, 1,600, 3,200, 6,400
-	funds_ += ( int )( 100 * pow( 2, value - 2 ) );
+	funds_ += ( int )( 100 * pow( 2, std::min( MAX_BOPS, value ) - 2 ) );
 }
 
 Clock& InventoryLevel::clock()
