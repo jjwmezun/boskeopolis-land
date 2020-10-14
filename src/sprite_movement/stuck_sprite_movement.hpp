@@ -13,5 +13,5 @@ class StuckSpriteMovement final : public SpriteMovement
 		void jump( Sprite& sprite ) const override;
 		void bounce( Sprite& sprite, int amount ) const override;
 		void position( Sprite& sprite ) const override;
-		const Collision testCollision( const Sprite& me, const sdl2::SDLRect& them ) const override;
+		const Collision testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const override;
 };

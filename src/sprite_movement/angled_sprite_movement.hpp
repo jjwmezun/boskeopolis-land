@@ -8,7 +8,7 @@ class AngledSpriteMovement final : public SpriteMovement
 	public:
 		AngledSpriteMovement();
 		void position( Sprite& sprite ) const override;
-		const Collision testCollision( const Sprite& me, const sdl2::SDLRect& them ) const override;
+		const Collision testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const override;
 		void collideStopXLeft( Sprite& sprite, int overlap ) const override;
 		void collideStopXRight( Sprite& sprite, int overlap ) const override;
 		void collideStopYBottom( Sprite& sprite, int overlap ) const override;

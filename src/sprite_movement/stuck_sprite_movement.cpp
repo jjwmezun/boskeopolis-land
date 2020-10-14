@@ -45,6 +45,6 @@ void StuckSpriteMovement::position( Sprite& sprite ) const
 	sprite.acceleration_y_ = 0;
 };
 
-const Collision StuckSpriteMovement::testCollision( const Sprite& me, const sdl2::SDLRect& them ) const
+const Collision StuckSpriteMovement::testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const
 {
 };

@@ -47,7 +47,7 @@ void Block::interact( Sprite& sprite, LevelState& level_state )
 {
 	if ( hasType() )
 	{
-		Collision collision = sprite.testCollision( *this );
+		Collision collision = sprite.testBlockCollision( *this );
 		type_->interact( collision, sprite, *this, level_state );
 	}
 };

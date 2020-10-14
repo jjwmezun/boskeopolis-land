@@ -57,6 +57,7 @@
 #include "firebar_sprite.hpp"
 #include "fishstick_sprite.hpp"
 #include "flashlight_player_sprite.hpp"
+#include "flying_grave_monster_sprite.hpp"
 #include "frog_sprite.hpp"
 #include "frozen_meat_sprite.hpp"
 #include "full_heal_block_sprite.hpp"
@@ -72,6 +73,7 @@
 #include "hero_renderable.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hook_sprite.hpp"
+#include "hopping_zombie_sprite.hpp"
 #include "horizontal_pike_sprite.hpp"
 #include "horizontal_spark_sprite.hpp"
 #include "hydrant_sprite.hpp"
@@ -180,6 +182,7 @@
 #include "underground_subway_sprite.hpp"
 #include "urban_bird_sprite.hpp"
 #include "vacuum_sprite.hpp"
+#include "vanishing_forest_ground_sprite.hpp"
 #include "vertical_pike_sprite.hpp"
 #include "volcano_monster_sprite.hpp"
 #include "wall_crawler_sprite.hpp"
@@ -456,7 +459,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new BirdSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 78 ):
-			return std::unique_ptr<Sprite> ( new GhostSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new GhostSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 79 ):
 			return std::unique_ptr<Sprite> ( new GemmySprite( x, y ) );
@@ -884,6 +887,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 220 ):
 			return std::unique_ptr<Sprite> ( new ZombieGeneratorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 221 ):
+			return std::unique_ptr<Sprite> ( new HoppingZombieSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 222 ):
+			return std::unique_ptr<Sprite> ( new GhostSprite( x, y, Direction::Horizontal::LEFT, 3 ) );
+		break;
+		case ( SPRITE_INDEX_START + 223 ):
+			return std::unique_ptr<Sprite> ( new VanishingForestGroundSprite( x, y, 5 ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

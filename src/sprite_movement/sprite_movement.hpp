@@ -39,6 +39,7 @@ class SpriteMovement
 		virtual void collideStopYTop( Sprite& sprite, int overlap ) const;
 		virtual void collideStopAny( Sprite& sprite, const Collision& collision ) const;
 		virtual const Collision testCollision( const Sprite& me, const sdl2::SDLRect& them ) const;
+		virtual const Collision testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const;
 
 	protected:
 		const Type type_;

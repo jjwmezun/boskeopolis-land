@@ -139,6 +139,51 @@ const Collision SpriteMovement::testCollision( const Sprite& me, const sdl2::SDL
 
 	if
 	(
+		me.leftSubPixels() < them.right() &&
+		me.rightSubPixels() > them.left() &&
+		me.topSubPixels() < them.bottom() &&
+		me.bottomSubPixels() > them.top()
+	)
+	{
+		if ( me.centerYSubPixels() > them.centerHeight() )
+		{
+			overlap_y_top = them.bottom() - me.topSubPixels();
+		}
+		else
+		{
+			overlap_y_bottom = me.bottomSubPixels() - them.top();
+		}
+	}
+
+	if
+	(
+		me.leftSubPixels() < them.right() &&
+		me.rightSubPixels() > them.left() &&
+		me.topSubPixels() < them.bottom() &&
+		me.bottomSubPixels() > them.top()
+	)
+	{
+		if ( me.centerXSubPixels() < them.centerWidth() )
+		{
+			overlap_x_right = me.rightSubPixels() - them.left();
+		}
+		else if ( me.centerXSubPixels() > them.centerWidth() )
+		{
+			overlap_x_left = them.right() - me.leftSubPixels();
+		}
+	}
+	return Collision( overlap_x_left, overlap_x_right, overlap_y_top, overlap_y_bottom );
+};
+
+const Collision SpriteMovement::testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const
+{
+	int overlap_x_left   = 0;
+	int overlap_x_right  = 0;
+	int overlap_y_top    = 0;
+	int overlap_y_bottom = 0;
+
+	if
+	(
 		// Allows sprite to still move vertically, e'en if colliding with a block horizontally.
 		me.leftSubPixels() + SMOOTH_MOVEMENT_PADDING < them.right() &&
 		me.rightSubPixels() - SMOOTH_MOVEMENT_PADDING  > them.left() &&

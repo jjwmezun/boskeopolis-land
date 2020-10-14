@@ -40,7 +40,7 @@ AngledSpriteMovement::AngledSpriteMovement()
 	SpriteMovement( Type::ANGLED )
 {};
 
-const Collision AngledSpriteMovement::testCollision( const Sprite& me, const sdl2::SDLRect& them ) const
+const Collision AngledSpriteMovement::testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const
 {
 	const auto collision_lines = getLinesFromBox( me.hit_box_, mezun::convertDegreesToRadians( me.graphics_->rotation_ ) );
 	for ( const Line& line : collision_lines )

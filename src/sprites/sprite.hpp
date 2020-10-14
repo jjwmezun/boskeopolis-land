@@ -186,12 +186,15 @@ class Sprite : public Object
 
 		const Collision testCollision( const sdl2::SDLRect& hitbox ) const;
 		const Collision testCollision( const Object& them ) const;
+		const Collision testBlockCollision( const sdl2::SDLRect& hitbox ) const;
+		const Collision testBlockCollision( const Object& them ) const;
 		void collideStopAny( const Collision& collision );
 		void collideStopXLeft( int overlap );
 		void collideStopXRight( int overlap );
 		void collideStopYBottom( int overlap );
 		void collideStopYTop( int overlap );
 		bool collideBottomOnly( const Collision& collision, const Object& other ) const;
+		bool collideBottomOnly( const Collision& collision, const sdl2::SDLRect& other ) const;
 
 		void slowFall();
 		void fastFall();

@@ -108,7 +108,7 @@ void MapLayerTilemap::interact( Sprite& sprite, LevelState& level_state )
 	{
 		for ( auto& b : blocks_ )
 		{
-			const Collision collision = sprite.testCollision( b );
+			const Collision collision = sprite.testBlockCollision( b );
 			if ( collision.collideAny() )
 			{
 				fade_type_ = FadeType::FADING;

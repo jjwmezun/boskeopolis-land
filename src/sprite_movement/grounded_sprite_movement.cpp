@@ -231,7 +231,7 @@ void GroundedSpriteMovement::collideStopAny( Sprite& sprite, const Collision& co
 	}
 };
 
-const Collision GroundedSpriteMovement::testCollision( const Sprite& me, const sdl2::SDLRect& them ) const
+const Collision GroundedSpriteMovement::testBlockCollision( const Sprite& me, const sdl2::SDLRect& them ) const
 {
 	int overlap_x_left   = 0;
 	int overlap_x_right  = 0;

@@ -642,6 +642,11 @@ bool Sprite::collideBottomOnly( const Collision& collision, const Object& other 
 	return collision.collideBottom() && prevBottomSubPixels() <= other.ySubPixels() + 1000;
 };
 
+bool Sprite::collideBottomOnly( const Collision& collision, const sdl2::SDLRect& other ) const
+{
+	return collision.collideBottom() && prevBottomSubPixels() <= other.y + 1000;
+};
+
 void Sprite::bounceLeft( int overlap )
 {
 	stopX();
@@ -679,6 +684,20 @@ const Collision Sprite::testCollision( const sdl2::SDLRect& hitbox ) const
 const Collision Sprite::testCollision( const Object& them ) const
 {
 	return testCollision( them.hit_box_ );
+};
+
+const Collision Sprite::testBlockCollision( const sdl2::SDLRect& hitbox ) const
+{
+	if ( movement_ != nullptr )
+	{
+		return movement_->testBlockCollision( *this, hitbox );
+	}
+	return { 0, 0, 0, 0 };
+};
+
+const Collision Sprite::testBlockCollision( const Object& them ) const
+{
+	return testBlockCollision( them.hit_box_ );
 };
 
 SpriteMovement::Type Sprite::movementType() const

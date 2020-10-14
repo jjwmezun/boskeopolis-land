@@ -136,3 +136,8 @@ int TextureBox::getWidth() const
 {
     return src_.w;
 };
+
+void TextureBox::setAlpha( Uint8 alpha )
+{
+    SDL_SetTextureAlphaMod( texture_, alpha );
+}

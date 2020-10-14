@@ -7,9 +7,9 @@ static constexpr int VERTICAL_DIST_LIMIT_SUBPIXELS = Unit::BlocksToSubPixels( VE
 static constexpr int MAX_TONGUE_FRAME = 5;
 static constexpr int MAX_OUTLINE_FRAME = 9;
 
-GhostSprite::GhostSprite( int x, int y )
+GhostSprite::GhostSprite( int x, int y, Direction::Horizontal direction, int speed )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-2.png", 0, 0, true, false, 0, 10, 6, 15, 9 ), x, y, 32, 32, { SpriteType::ENEMY }, 1600, 1600, 0, 0, Direction::Horizontal::RIGHT, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/kappa-obake-2.png", 0, 0, direction == Direction::Horizontal::RIGHT, false, 0, 10, 6, 15, 9 ), x, y, 32, 32, { SpriteType::ENEMY }, 800 * speed, 800 * speed, 0, 0, direction, Direction::Vertical::DOWN, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
 	animation_ ( 0 ),
 	tongue_frame_ ( 0 ),
 	outline_frame_ ( 0 )
@@ -81,7 +81,7 @@ void GhostSprite::customUpdate( LevelState& level_state )
 		break;
 	}
 
-	moveRight();
+	moveInDirectionX();
 	switch ( direction_y_ )
 	{
 		case ( Direction::Vertical::DOWN ):
