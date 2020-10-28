@@ -80,6 +80,7 @@ void GhostSprite::customUpdate( LevelState& level_state )
 			graphics_->current_frame_y_ = 41 * 5;
 		break;
 	}
+	graphics_->current_frame_y_ = 41 * 5;
 
 	moveInDirectionX();
 	switch ( direction_y_ )

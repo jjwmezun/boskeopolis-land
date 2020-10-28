@@ -14,8 +14,9 @@ void TallTombstoneSprite::customUpdate( LevelState& level_state )
 
 void TallTombstoneSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
+	Collision collision = them.testBlockCollision( *this );
+	if ( them.hasType( SpriteType::HERO ) && collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
+		them.collideStopAny( collision );
 	}
 };

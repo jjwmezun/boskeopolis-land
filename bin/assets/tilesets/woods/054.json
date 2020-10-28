@@ -2,7 +2,7 @@
 	"graphics":
 	{
 		"type": "fading",
-		"speed": 48,
+		"speed": 64,
 		"x": 7,
 		"y": 6,
 		"flip_x": true
