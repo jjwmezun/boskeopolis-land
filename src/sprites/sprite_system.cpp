@@ -33,6 +33,7 @@
 #include "crane_crate_sprite.hpp"
 #include <cstdlib>
 #include "desert_hawk_sprite.hpp"
+#include "devil_sprite.hpp"
 #include "direction.hpp"
 #include "doom_door_sprite.hpp"
 #include "doom_enemy_sprite.hpp"
@@ -896,6 +897,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 223 ):
 			return std::unique_ptr<Sprite> ( new VanishingForestGroundSprite( x, y, 5 ) );
+		break;
+		case ( SPRITE_INDEX_START + 224 ):
+			return std::unique_ptr<Sprite> ( new DevilSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

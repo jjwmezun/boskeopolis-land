@@ -20,7 +20,7 @@ static int generateRandomJumpHeight()
 
 HoppingZombieSprite::HoppingZombieSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 16, 24, {}, 100, 1000, 1000, generateRandomJumpHeight(), Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/zombie.png", 0, 0, false, false, 0.0, -2, -1, 5, 2 ), x, y, 10, 26, {}, 100, 1000, 1000, generateRandomJumpHeight(), Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     timer_ ( 0 ),
     target_time_ ( generateRandomTargetTime() )
 {
@@ -56,23 +56,26 @@ void HoppingZombieSprite::customUpdate( LevelState& level_state )
 
 void HoppingZombieSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-    if ( their_collision.collideBottom() && them.vy_ > 0 )
+    if ( them.hasType( SpriteType::HERO ) )
     {
-        kill();
-        them.bounce();
-        if ( them.movementType() != SpriteMovement::Type::SWIMMING )
+        if ( their_collision.collideBottom() && them.vy_ > 0 )
         {
-            level_state.inventory().bop();
+            kill();
+            them.bounce();
+            if ( them.movementType() != SpriteMovement::Type::SWIMMING )
+            {
+                level_state.inventory().bop();
+            }
+            Audio::playSound( Audio::SoundType::BOP );
         }
-        Audio::playSound( Audio::SoundType::BOP );
-    }
-    else if ( their_collision.collideAny() && level_state.events().testIsSlidingPreviously() )
-    {
-        kill();
-        Audio::playSound( Audio::SoundType::BOP );
-    }
-    else if ( !isDead() && their_collision.collideAny() )
-    {
-        level_state.health().hurt();
+        else if ( their_collision.collideAny() && level_state.events().testIsSlidingPreviously() )
+        {
+            kill();
+            Audio::playSound( Audio::SoundType::BOP );
+        }
+        else if ( !isDead() && their_collision.collideAny() )
+        {
+            level_state.health().hurt();
+        }
     }
 };

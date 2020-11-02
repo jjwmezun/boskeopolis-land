@@ -7,6 +7,14 @@
 			[
 				{
 					"type": "image",
+					"img": "mountains-and-trees-darker.png",
+					"width": 48,
+					"height": 280,
+					"x_scroll": 0.25,
+					"y_scroll": 0.33
+				},
+				{
+					"type": "image",
 					"img": "fog_1.png",
 					"alpha": 48,
 					"width": 128,

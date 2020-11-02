@@ -123,14 +123,15 @@ void VanishingForestGroundSprite::customInteract( Collision& my_collision, Colli
                     timer_ = 0; // Reset timer if no longer colliding.
                 }
             }
+            else
+            {
+                doHeroCollision( them );
+            }
         }
         break;
         case ( GroundState::FLASHING ):
         {
-            if ( them.hasType( SpriteType::HERO ) )
-            {
-                doHeroCollision( them );
-            }
+            doHeroCollision( them );
         }
         break;
         case ( GroundState::GONE ):
