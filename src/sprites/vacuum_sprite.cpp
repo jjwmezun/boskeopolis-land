@@ -4,8 +4,10 @@
 
 VacuumSprite::VacuumSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/vacuum.png", 0, 0, false, false, 0.0, true, -32, 0, 80, 0 ), x, y, 16, 181, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false )
-{};
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/vacuum.png", 0, 0, false, false, 0.0, -32, 0, 80, 0 ), x, y, 16, 181, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false )
+{
+    layer_ = Unit::Layer::BEFORE_FG_1;
+};
 
 VacuumSprite::~VacuumSprite() {};
 
