@@ -16,7 +16,7 @@ MapLayerLavaSwitch::MapLayerLavaSwitch( int y_off_blocks, int y_on_blocks, int x
     y_off_ ( Unit::BlocksToSubPixels( y_off_blocks ) ),
     y_on_ ( Unit::BlocksToSubPixels( y_on_blocks ) ),
     x_point_when_lava_rises_forever_ ( Unit::BlocksToSubPixels( x_block_when_lava_rises_forever ) ),
-    layer_ ( y_off_blocks )
+    layer_ ( y_off_blocks, layer_position )
 {};
 
 MapLayerLavaSwitch::~MapLayerLavaSwitch() {};

@@ -5,7 +5,7 @@
 class MapLayerLava final : public MapLayer
 {
 	public:
-        MapLayerLava( int y_blocks );
+        MapLayerLava( int y_blocks, Unit::Layer layer_position = DEFAULT_POSITION );
         ~MapLayerLava();
         MapLayerLava( const MapLayerLava& ) = delete;
         MapLayerLava( MapLayerLava&& ) = delete;

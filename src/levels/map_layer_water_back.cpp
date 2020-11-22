@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "map_layer_water.hpp"
 #include "map_layer_water_back.hpp"
+#include "unit.hpp"
 
 static constexpr int HEIGHT = 6;
 
@@ -9,7 +10,9 @@ MapLayerWaterBack::MapLayerWaterBack( MapLayerWater* water_ptr )
 	src_ ( 0, 0, MapLayerWater::WIDTH, HEIGHT ),
 	dest_ ( 0, MapLayerWater::MAX_FRAME, MapLayerWater::WIDTH, HEIGHT ),
 	water_ptr_ ( water_ptr )
-{};
+{
+	layer_position_ = Unit::Layer::BEFORE_BG_1;
+};
 
 MapLayerWaterBack::~MapLayerWaterBack() {};
 

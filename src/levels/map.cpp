@@ -623,39 +623,37 @@ Map Map::mapFromPath
 			}
 		}
 
-		/*
 		if ( lava_y > -1 )
 		{
 			if ( lava_y_alt > -1 )
 			{
-				foregrounds.emplace_back( std::make_unique<MapLayerLavaSwitch> ( lava_y, lava_y_alt, x_block_when_lava_rises_forever ) );
+				layers.emplace_back( new MapLayerLavaSwitch( lava_y, lava_y_alt, x_block_when_lava_rises_forever, Unit::Layer::AFTER_FG_2 ) );
 			}
 			else
 			{
-				foregrounds.emplace_back( std::make_unique<MapLayerLava> ( lava_y ) );
+				layers.emplace_back( new MapLayerLava( lava_y, Unit::Layer::AFTER_FG_2 ) );
 			}
 		}
 
 		MapLayerWater* water_ptr = nullptr;
 		if ( water_effect_type == "RISING" )
 		{
-			water_ptr = MapLayerWater::makeRisingWater( water_effect_height );
+			water_ptr = MapLayerWater::makeRisingWater( water_effect_height, Unit::Layer::AFTER_FG_2 );
 		}
 		else if ( water_effect_type == "SLUDGE" )
 		{
-			water_ptr = MapLayerWater::makeSludgeWater( water_effect_height );
+			water_ptr = MapLayerWater::makeSludgeWater( water_effect_height, Unit::Layer::AFTER_FG_2 );
 		}
 		else if ( water_effect_height != 0 )
 		{
-			water_ptr = MapLayerWater::makeNormalWater( water_effect_height );
+			water_ptr = MapLayerWater::makeNormalWater( water_effect_height, Unit::Layer::AFTER_FG_2 );
 		}
 
 		if ( water_ptr != nullptr )
 		{
-			backgrounds.emplace_back( std::make_unique<MapLayerWaterBack> ( water_ptr ) );
-			foregrounds.emplace_back( water_ptr );
+			layers.emplace_back( new MapLayerWaterBack( water_ptr ) );
+			layers.emplace_back( water_ptr );
 		}
-		*/
 
 
 	// Send all data

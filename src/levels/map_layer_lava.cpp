@@ -3,8 +3,9 @@
 #include "render.hpp"
 #include "sprite.hpp"
 
-MapLayerLava::MapLayerLava( int y_blocks )
+MapLayerLava::MapLayerLava( int y_blocks, Unit::Layer layer_position )
 :
+    MapLayer( layer_position ),
     y_ ( Unit::BlocksToSubPixels( y_blocks ) ),
     animation_timer_ ( 0 ),
     animation_frame_ ( 0 )

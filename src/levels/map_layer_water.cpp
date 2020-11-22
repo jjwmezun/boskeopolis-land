@@ -9,24 +9,24 @@
 
 static constexpr int MOVE_SPEED = 700;
 
-MapLayerWater* MapLayerWater::makeNormalWater( int y_blocks )
+MapLayerWater* MapLayerWater::makeNormalWater( int y_blocks, Unit::Layer layer_position )
 {
-	return new MapLayerWater( y_blocks, { new WaterLayerComponentSwim() } );
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSwim() }, layer_position );
 };
 
-MapLayerWater* MapLayerWater::makeRisingWater( int y_blocks )
+MapLayerWater* MapLayerWater::makeRisingWater( int y_blocks, Unit::Layer layer_position )
 {
-	return new MapLayerWater( y_blocks, { new WaterLayerComponentSwim(), new WaterLayerComponentRising() } );
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSwim(), new WaterLayerComponentRising() }, layer_position );
 };
 
-MapLayerWater* MapLayerWater::makeSludgeWater( int y_blocks )
+MapLayerWater* MapLayerWater::makeSludgeWater( int y_blocks, Unit::Layer layer_position )
 {
-	return new MapLayerWater( y_blocks, { new WaterLayerComponentSludge() }, "bg/animated_water_3.png", 255, 6 );
+	return new MapLayerWater( y_blocks, { new WaterLayerComponentSludge() }, layer_position, "bg/animated_water_3.png", 255, 6 );
 };
 
-MapLayerWater::MapLayerWater( int y_blocks, ComponentGroup components, std::string gfx, Uint8 alpha, int color )
+MapLayerWater::MapLayerWater( int y_blocks, ComponentGroup components, Unit::Layer layer_position, std::string gfx, Uint8 alpha, int color )
 :
-	MapLayer(),
+	MapLayer( layer_position ),
 	src_ ( 0, 0, WIDTH, HEIGHT ),
 	dest_ ( 0, 0, WIDTH, HEIGHT ),
 	body_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),

@@ -1,6 +1,4 @@
 {
-	"name": "Tubboat Blues",
-	
 	"maps":
 	[
 		{
@@ -32,11 +30,6 @@
 			]
 		}
 	],
-	
-	"goal":
-	{
-		"message": "¡Turn off the faucet!"
-	},
 	
 	"entrance_x": 1,
 	"entrance_y": 30,
