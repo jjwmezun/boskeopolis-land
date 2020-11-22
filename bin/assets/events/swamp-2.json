@@ -1,8 +1,38 @@
 {
-    "camera_target_x": 56,
-    "camera_target_y": 162,
-    "speed": 8,
-    "changes":
-    [
-    ]
+	"changes": [
+		[
+			{
+				"layer": "BG2",
+				"x": 133,
+				"y": 103,
+				"tile": -1
+			}
+		],
+		[
+			{
+				"layer": "BG2",
+				"x": 133,
+				"y": 104,
+				"tile": -1
+			}
+		],
+		[
+			{
+				"layer": "BG1",
+				"x": 133,
+				"y": 105,
+				"tile": 2
+			}
+		],
+		[
+			{
+				"layer": "BG1",
+				"x": 133,
+				"y": 106,
+				"tile": 2
+			}
+		]
+	],
+	"camera_target_x": 133,
+	"camera_target_y": 105
 }
