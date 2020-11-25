@@ -150,6 +150,7 @@
 #include "shmup_enemy_sprite.hpp"
 #include "shmup_shooter_sprite.hpp"
 #include "shooter_player_sprite.hpp"
+#include "shove_out_sprite.hpp"
 #include "shroud_sprite.hpp"
 #include "sillyfish_sprite.hpp"
 #include "snowboulder_sprite.hpp"
@@ -908,6 +909,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 226 ):
 			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 227 ):
+			return std::unique_ptr<Sprite> ( new ShoveOutSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
