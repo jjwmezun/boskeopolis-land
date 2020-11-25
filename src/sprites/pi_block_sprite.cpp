@@ -46,12 +46,16 @@ void PiBlockSprite::customUpdate( LevelState& level_state )
 
 void PiBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( !them.hasType( SpriteType::PI_BLOCK ) && their_collision.collideAny() )
+	if ( !them.hasType( SpriteType::PI_BLOCK ) )
 	{
-		them.collideStopAny( their_collision );
-		if ( them.hasType( SpriteType::HERO ) )
+		Collision collision = them.testBlockCollision( *this );
+		if ( collision.collideAny() )
 		{
-			hero_still_on_block_ = true;
+			them.collideStopAny( collision );
+			if ( them.hasType( SpriteType::HERO ) )
+			{
+				hero_still_on_block_ = true;
+			}
 		}
 	}
 };
