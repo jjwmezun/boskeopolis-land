@@ -2,64 +2,13 @@
 	"maps":
 	[
 		{
-			"slug": "factory-4-3",
-			"layers":
-			[
-				{
-					"type": "image",
-					"img": "ice-box-rock-2.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "ice-box-rock-3.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25
-				}
-			],
-			"warps":
-			[
-				{
-					"map": 1,
-					"entrance_x": 0,
-					"entrance_y": 19,
-					"location": [ 42, 46, 25, 32 ],
-					"camera_y": 0
-				}
-			]
-		},
-		{
-			"slug": "factory-4",
-			"layers":
-			[
-				{
-					"type": "image",
-					"img": "ice-box-rock-2.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "ice-box-rock-3.png",
-					"width": 128,
-					"height": 128,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25
-				}
-			]
+			"slug": "house-1"
 		}
 	],
 
-	"entrance_x": 4,
-	"entrance_y": 0,
+	"entrance_x": 12,
+	"entrance_y": 26,
 
-	"gem_challenge": 33000,
-	"time_challenge": 16
+	"gem_challenge": 99999,
+	"time_challenge": 1
 }

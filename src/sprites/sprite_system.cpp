@@ -24,6 +24,7 @@
 #include "change_layer_sprite.hpp"
 #include "choque_sprite.hpp"
 #include "circle_block_sprite.hpp"
+#include "clock_hand_sprite.hpp"
 #include "cloud_block_sprite.hpp"
 #include "cloud_monster_sprite.hpp"
 #include "cloud_platform_sprite.hpp"
@@ -111,6 +112,7 @@
 #include "olive_sprite.hpp"
 #include "pelican_sprite.hpp"
 #include "pedestrian_generator_sprite.hpp"
+#include "pendulum_sprite.hpp"
 #include "penguin_sprite.hpp"
 #include "pike_sprite.hpp"
 #include "pipe_eel_sprite.hpp"
@@ -900,6 +902,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 224 ):
 			return std::unique_ptr<Sprite> ( new DevilSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 225 ):
+			return std::unique_ptr<Sprite> ( new PendulumSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 226 ):
+			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
