@@ -33,6 +33,7 @@
 #include "crab_sprite.hpp"
 #include "crane_crate_sprite.hpp"
 #include <cstdlib>
+#include "cuckoo_sprite.hpp"
 #include "desert_hawk_sprite.hpp"
 #include "devil_sprite.hpp"
 #include "direction.hpp"
@@ -912,6 +913,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 227 ):
 			return std::unique_ptr<Sprite> ( new ShoveOutSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 228 ):
+			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 229 ):
+			return std::unique_ptr<Sprite> ( new CuckooSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
