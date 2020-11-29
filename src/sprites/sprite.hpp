@@ -133,7 +133,7 @@ class Sprite : public Object
 
 		void update( LevelState& level_state );
 		virtual void render( const Camera& camera ) const;
-		void drawHitBox( const Camera& camera );
+		void drawHitBox( const Camera& camera ) const;
 		void renderWithHitbox( Camera& camera );
 		void interact( Sprite& them, LevelState& level_state );
 

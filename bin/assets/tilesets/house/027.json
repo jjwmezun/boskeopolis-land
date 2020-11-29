@@ -1,0 +1,39 @@
+{
+	"graphics":
+	{
+        "type": "switch",
+        "frames":
+        [
+            {
+                "type": "sprite",
+                "x": 15,
+                "y": 2
+            },
+            {
+                "type": "sprite",
+                "x": 14,
+                "y": 2
+            },
+            {
+                "type": "sprite",
+                "x": 15,
+                "y": 2
+            }
+        ]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "door"
+			},
+			"conditions":
+			[
+                { "type": "switch", "value": 1 },
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

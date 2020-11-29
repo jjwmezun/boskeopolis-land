@@ -7,14 +7,15 @@
 #include "render.hpp"
 #include "sprite_graphics.hpp"
 
-ClockHandSprite::ClockHandSprite( int x, int y )
+ClockHandSprite::ClockHandSprite( int x, int y, Direction::Clockwise direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/clock-hand.png" ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
-    inner_left_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), 4000, 0.1, -0.333 ),
-    inner_right_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), 4000, 0.1, 0.333 ),
-    outer_left_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), Unit::BlocksToSubPixels( 4 ), 0.1, -0.0333 ),
-    outer_right_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), Unit::BlocksToSubPixels( 4 ), 0.1, 0.0333 ),
-    image_box_ ( x - 2, y - 60, 20, 74 )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/clock-hand.png" ), x - Unit::BlocksToPixels( 3 ), y - Unit::BlocksToPixels( 3 ), Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 8 ), {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+    inner_left_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), 4000, (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), -0.333 ),
+    inner_right_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), 4000, (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), 0.333 ),
+    outer_left_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), Unit::BlocksToSubPixels( 4 ), (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), -0.0333 ),
+    outer_right_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), Unit::BlocksToSubPixels( 4 ), (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), 0.0333 ),
+    image_box_ ( x + 6, y - 52, 20, 74 ),
+    graphics_rotation_amount_ ( ( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? 93.0 : 83.0 )
 {
     graphics_->default_rotation_point_ = true;
     graphics_->rotation_center_ = { 10, 70 };
@@ -29,7 +30,7 @@ void ClockHandSprite::customUpdate( LevelState& level_state )
     inner_right_.update();
     outer_left_.update();
     outer_right_.update();
-    graphics_->rotation_ += mezun::convertRadiansToDegrees( 0.1 );
+    graphics_->rotation_ = graphics_rotation_amount_ + mezun::convertRadiansToDegrees( outer_right_.getAngle() );
 };
 
 void ClockHandSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )

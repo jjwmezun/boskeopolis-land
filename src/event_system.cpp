@@ -58,7 +58,7 @@ EventSystem::EventSystem()
 	message_ ( false ),
 	message_lock_ ( false ),
 	change_map_ ( 0 ),
-	switch_ ( false ),
+	switch_ ( 0 ),
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
 	new_palette_ ( mezun::emptyString(), 0 ),
@@ -84,7 +84,7 @@ EventSystem::EventSystem()
 
 void EventSystem::init( const Level& level )
 {
-	switch_ = level.startOn();
+	switch_ = ( int )( level.startOn() );
 };
 
 EventSystem::~EventSystem()
@@ -98,7 +98,7 @@ void EventSystem::reset()
 	message_ = false;
 	message_lock_ = false;
 	key_ = false;
-	switch_ = false;
+	switch_ = 0;
 	disable_pause_ = false;
 	move_water_ = -1;
 	current_water_ = -1;
@@ -208,7 +208,7 @@ bool EventSystem::switchChanged() const
 
 void EventSystem::flipSwitch()
 {
-	switch_ = !switch_;
+	switch_ = ( switch_ == 0 ) ? 1 : 0;
 	switch_changed_ = true;
 };
 
@@ -408,7 +408,7 @@ bool EventSystem::waterShouldStop() const
 bool EventSystem::testLightSwitch()
 {
 	bool temp = switch_;
-	switch_ = false;
+	switch_ = 0;
 	return temp;
 };
 
@@ -697,19 +697,19 @@ bool EventSystem::isInFrontOfSewerDoor() const
 	return in_front_of_door_ == Door::SEWER;
 };
 
-void EventSystem::forceSwitch( bool value)
+void EventSystem::forceSwitch( int value )
 {
 	switch_ = value;
 };
 
 void EventSystem::forceSwitchOn()
 {
-	switch_ = true;
+	switch_ = 1;
 };
 
 void EventSystem::forceSwitchOff()
 {
-	switch_ = false;
+	switch_ = 0;
 };
 
 void EventSystem::setCanClimbDown()
@@ -785,4 +785,14 @@ bool EventSystem::switchIsNotLocked( const LevelState& level_state ) const
 void EventSystem::setSwitchLock( const LevelState& level_state )
 {
 	switch_last_hit_ = level_state.frame();
+};
+
+bool EventSystem::isSwitch( int value ) const
+{
+	return switch_ == value;
+};
+
+int EventSystem::getSwitchValue() const
+{
+	return switch_;
 };

@@ -1,0 +1,40 @@
+{
+	"graphics":
+	{
+		"type": "switch",
+		"frames":
+		[
+			{
+				"type": "sprite",
+				"x": 13,
+				"y": 1
+			},
+			{
+				"type": "sprite",
+				"x": 13,
+				"y": 1
+			},
+			{
+				"type": "sprite",
+				"x": 13,
+				"y": 0
+			}
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{
+					"type": "switch",
+					"value": 2
+				}
+			]
+		}
+	]
+}

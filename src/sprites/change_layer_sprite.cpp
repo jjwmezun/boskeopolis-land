@@ -41,7 +41,7 @@ void ChangeLayerSprite::customUpdate( LevelState& level_state )
 {
 	if ( activated_ )
 	{
-		level_state.events().forceSwitch( direction_y_ == Direction::Vertical::DOWN );
+		level_state.events().forceSwitch( ( int )( direction_y_ == Direction::Vertical::DOWN ) );
 
 		if ( flash_timer_ > 0 && flash_timer_ % FLASH_SPEED == 0 )
 		{

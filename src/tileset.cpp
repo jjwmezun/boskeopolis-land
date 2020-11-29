@@ -63,6 +63,7 @@
 #include "block_condition_not_hero.hpp"
 #include "block_condition_not_on_ladder.hpp"
 #include "block_condition_rival.hpp"
+#include "block_condition_switch.hpp"
 #include "block_condition_switch_off.hpp"
 #include "block_condition_switch_on.hpp"
 #include <fstream>
@@ -168,13 +169,33 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 
 			if ( g.HasMember( "type" ) && g[ "type" ].IsString() && strcmp( g[ "type" ].GetString(), "switch" ) == 0 )
 			{
-				assert( g.HasMember( "off" ) && g[ "off" ].IsObject() );
-				assert( g.HasMember( "on" )  && g[ "on" ].IsObject()  );
+				std::vector<std::unique_ptr<SpriteGraphics>> gfx_list;
 
-				std::unique_ptr<SpriteGraphics> off_gfx = getGraphics( g[ "off" ].GetObject(), texture );
-				std::unique_ptr<SpriteGraphics> on_gfx = getGraphics( g[ "on" ].GetObject(), texture );
-
-				graphics = std::make_unique<SwitchGraphics> ( std::move( off_gfx ), std::move( on_gfx ) );
+				if ( g.HasMember( "frames" ) && g[ "frames" ].IsArray() )
+				{
+					for ( auto& frame : g[ "frames" ].GetArray() )
+					{
+						if ( frame.IsObject() )
+						{
+							gfx_list.emplace_back( getGraphics( frame.GetObject(), texture ) );	
+						}
+					}
+					graphics = std::make_unique<SwitchGraphics> ( std::move( gfx_list ) );
+				}
+				else if
+				(
+					g.HasMember( "off" ) && g[ "off" ].IsObject() &&
+					g.HasMember( "on" )  && g[ "on" ].IsObject()
+				)
+				{				
+					gfx_list.emplace_back( getGraphics( g[ "off" ].GetObject(), texture ) );
+					gfx_list.emplace_back( getGraphics( g[ "on" ].GetObject(), texture ) );
+					graphics = std::make_unique<SwitchGraphics> ( std::move( gfx_list ) );
+				}
+				else
+				{
+					graphics = nullptr;
+				}
 			}
 			else
 			{
@@ -670,6 +691,13 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							else if ( mezun::areStringsEqual( cond_type, "switch_off" ) )
 							{
 								this_condition.emplace_back( std::make_unique<BlockConditionSwitchOff> () );
+							}
+							else if ( mezun::areStringsEqual( cond_type, "switch" ) )
+							{
+								if ( cond.HasMember( "value" ) && cond[ "value" ].IsInt() )
+								{
+									this_condition.emplace_back( std::make_unique<BlockConditionSwitch> ( cond[ "value" ].GetInt() ) );
+								}
 							}
 							else if ( mezun::areStringsEqual( cond_type, "key" ) )
 							{

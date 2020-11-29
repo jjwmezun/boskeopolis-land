@@ -850,7 +850,7 @@ bool Sprite::blocksJustRight( const BlockSystem& blocks ) const
 	return blocks.blocksInTheWay( justRight(), BlockComponent::Type::SOLID );
 };
 
-void Sprite::drawHitBox( const Camera& camera )
+void Sprite::drawHitBox( const Camera& camera ) const
 {
 	auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );
 	Render::renderRect( r, 4, 128 );

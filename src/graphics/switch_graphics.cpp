@@ -1,21 +1,27 @@
+#include <cassert>
 #include "event_system.hpp"
 #include "switch_graphics.hpp"
 
 SwitchGraphics::SwitchGraphics
 (
-	std::unique_ptr<SpriteGraphics> gfx_off,
-	std::unique_ptr<SpriteGraphics> gfx_on
+	std::vector<std::unique_ptr<SpriteGraphics>>&& gfx
 )
 :
 	SpriteGraphics( "" ),
-	current_gfx_ ( gfx_off_.get() ),
-	gfx_off_ ( std::move( gfx_off ) ),
-	gfx_on_ ( std::move( gfx_on ) )
-{};
+	current_gfx_ ( nullptr ),
+	gfx_ ( std::move( gfx ) )
+{
+	assert( gfx_.size() > 0 );
+	current_gfx_ = gfx_[ 0 ].get();
+};
 
 void SwitchGraphics::update( const EventSystem& events )
 {
-	current_gfx_ = ( events.isSwitchOn() ) ? gfx_on_.get() : gfx_off_.get();
+	const int switch_value = events.getSwitchValue();
+	if ( switch_value < gfx_.size() )
+	{
+		current_gfx_ = gfx_[ switch_value ].get();
+	}
 	current_gfx_->update( events );
 };
 

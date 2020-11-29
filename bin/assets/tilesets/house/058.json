@@ -1,0 +1,59 @@
+{
+	"graphics":
+	{
+        "type": "switch",
+        "frames":
+        [
+            {
+                "type": "animated",
+                "frames":
+                [
+                    { "x": 9, "y": 6 },
+                    { "x": 10, "y": 6 },
+                    { "x": 11, "y": 6 },
+                    { "x": 12, "y": 6 },
+                    { "x": 13, "y": 6 },
+                    { "x": 14, "y": 6 }
+                ]
+            },
+            {
+                "type": "sprite",
+                "x": 15,
+                "y": 6
+            },
+            {
+                "type": "sprite",
+                "x": 15,
+                "y": 6
+            }
+        ]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "money",
+				"amount": 500
+			},
+			"conditions":
+			[
+                { "type": "switch", "value": 0 },
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+                { "type": "switch", "value": 0 },
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

@@ -72,7 +72,7 @@ class EventSystem final
 		void resetInFrontOfDoor();
 		bool isInFrontOfRegularDoor() const;
 		bool isInFrontOfSewerDoor() const;
-		void forceSwitch( bool value );
+		void forceSwitch( int value );
 		void forceSwitchOn();
 		void forceSwitchOff();
 		void setCanClimbDown();
@@ -91,6 +91,8 @@ class EventSystem final
 		void setPauseHeroOff();
 		bool switchIsNotLocked( const LevelState& level_state ) const;
 		void setSwitchLock( const LevelState& level_state );
+		bool isSwitch( int value ) const;
+		int getSwitchValue() const;
 
 	private:
 		enum class LevelCompleteStatus
@@ -191,7 +193,6 @@ class EventSystem final
 		bool key_;
 		bool message_;
 		bool message_lock_;
-		bool switch_;
 		bool switch_changed_;
 		bool palette_changed_;
 		bool on_conveyor_belt_;
@@ -204,6 +205,7 @@ class EventSystem final
 		bool is_sliding_;
 		bool is_sliding_prev_;
 		bool pause_hero_;
+		int switch_;
 		int change_map_;
 		LevelCompleteStatus level_complete_status_;
 		Door in_front_of_door_;
