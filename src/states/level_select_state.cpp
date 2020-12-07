@@ -112,7 +112,6 @@ void LevelSelectState::stateUpdate()
 			Audio::playSound( Audio::SoundType::CANCEL );
 		}
 	}
-
 	else if ( Input::pressed( Input::Action::MENU ) )
 	{
 		Audio::playSound( Audio::SoundType::CANCEL );

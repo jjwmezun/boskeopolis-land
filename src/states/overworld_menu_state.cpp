@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "cards_menu_state.hpp"
 #include "input.hpp"
 #include "level_select_state.hpp"
 #include "localization.hpp"
@@ -13,7 +14,7 @@ static constexpr int LEVEL_NAME_Y = 192;
 static constexpr int LEVEL_NAME_W = 312;
 static constexpr int LEVEL_NAME_H = 16;
 static constexpr int BG_WIDTH = 208;
-static constexpr int BG_HEIGHT = 104;
+static constexpr int BG_HEIGHT = 120;
 static constexpr int BG_X = ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - BG_WIDTH ) / 2.0 );
 static constexpr int BG_Y = ( int )( ( double )( Unit::WINDOW_HEIGHT_PIXELS - BG_HEIGHT ) / 2.0 );
 static constexpr WTextCharacter::Color HIGHLIGHT_COLOR = WTextCharacter::Color::DARK_MID_GRAY;
@@ -41,7 +42,7 @@ OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_stat
 		BG_WIDTH,
 		BG_HEIGHT
 	),
-	frame_ ( "bg/overworld_menu_frame.png", { 0, 0, BG_WIDTH, BG_HEIGHT }, { BG_X, BG_Y, BG_WIDTH, BG_HEIGHT } )
+	frame_ ( BG_X, BG_Y, BG_WIDTH, BG_HEIGHT )
 {
 	generateOptionsText();
 	Audio::playSound( Audio::SoundType::PAUSE );
@@ -95,6 +96,12 @@ void OverworldMenuState::stateUpdate()
 			{
 				*camera_state_ = OWState::MOVE_CAMERA;
 				Main::popState();
+			}
+			break;
+
+			case ( Option::CARDS ):
+			{
+				Main::pushState( std::make_unique<CardsMenuState> (), true );
 			}
 			break;
 

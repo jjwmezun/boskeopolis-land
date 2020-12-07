@@ -101,4 +101,13 @@ namespace mezun
 		}
 		return out;
 	};
+
+	template<typename T, typename U, typename V>
+	const V& findInMap( const T& list, const U& name, const V& fallback )
+	{
+		const auto& search = list.find( name );
+		return ( search == list.end() )
+			? fallback
+			: search->second;
+	};
 };

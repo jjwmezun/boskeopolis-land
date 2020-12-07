@@ -221,6 +221,7 @@
             "continue": "Continua",
             "level_list": "La lista de niveles",
             "camera_view": "La Vista de Cámera",
+            "cards": "Trading Cards",
             "options": "Las Opciones",
             "quit": "Cerra Juego"
         }
@@ -342,6 +343,249 @@
             "sky-4": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane.",
             "special-3": "¡Catch the sale on rare collectibles!",
             "special-4": "¡Collect everything & dodge the eyes!"
+        },
+        "cards":
+        {
+            "city-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "domestic-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mines-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "ice-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "city-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "domestic-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mines-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "ice-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "city-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mines-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "ice-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "domestic-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "city-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mines-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "ice-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "domestic-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            }
         }
     },
     "news_ticker":

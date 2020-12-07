@@ -221,6 +221,7 @@
             "continue": "Continue",
             "level_list": "Level List",
             "camera_view": "Camera View",
+            "cards": "Trading Cards",
             "options": "Options",
             "quit": "Quit"
         }
@@ -350,6 +351,259 @@
             "swamp-3": "¡Don’t fall into the deadly water!",
             "domestic-1": "¡Don’t get sucked up by the giant vacuum!",
             "space-4": "¡Avoid the falling stars!"
+        },
+        "cards":
+        {
+            "city-1": {
+                "title": "Diamond o’ Misfortune",
+                "description": "Legend says that anyone who takes this million-₧ diamond will be cursed with bad luck.",
+                "episode": "#BOSK-AA0800-SHIP: DIGNITY 40 DEGREES BELOW DIGNITY"
+            },
+            "domestic-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-1": {
+                "title": "The Song o’ Highway Breezes",
+                "description": "This banger, when played on a magical music player, will warp one to any place in the world.",
+                "episode": "#BOSK-FC5558-ERRANDS: LONG MY DAZE I’VE ALLED IGUALMINDED TO TRAVEL THE ERRAND ROAD AND TO TAKE MY PATH LEFT THEN WRITE IT ON THE LIST I’M GOING TO FRED MART THIS NOON"
+            },
+            "mines-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "ice-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-1": {
+                "title": "Tanuki Leaves",
+                "description": "Native to Spinach Swamp, ingesting this powerful drug will fill one with unfathomable philosophy &, unfortunately, the delusion that incessant T.S. Eliot references makes good writing.",
+                "episode": "#BOSK-CC1D1A-POISON: GUZZLE UP BITTER CONDUCT AND UNSAVORY GUIDE IT’S ALL UNNATURAL"
+            },
+            "sewer-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "city-2": {
+                "title": "Lost Moneybag o’ Syrup Bank",
+                "description": "Nobody knows what happened to those giant bags o’ cash that disappeared from Syrup Bank.",
+                "episode": "#BOSK-AJ0909-BANK: BANKRUPTURE"
+            },
+            "domestic-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mines-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-2": {
+                "title": "Euler’s Sexy Formula",
+                "description": "Women will drench their trousers & men will harden harder than a golem @ the mere glimpse o’ this magnificent arrangement o’ letters, numbers, & symbols.",
+                "episode": "#BOSK-BIT-AL117: I TREASURE THE MEMORIES SO DON’T TOUCH THEM YOU’LL BREAK THEM"
+            },
+            "ice-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "city-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "woods-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mines-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "mountain-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "space-3": {
+                "title": "The Moon Opal o’ Latvia",
+                "description": "The most pirated jewel out in the intergalactic seas. Don’t be fooled by the copies with “.exe” @ the end, tho — they’re fakes & will just infect you with viruses.",
+                "episode": "#BOSK-DB2625-SPACE: 7E0 A SPACE ILIAD"
+            },
+            "ice-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "swamp-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "factory-3": {
+                "title": "Lost Evidence o’ Ol’ Factory",
+                "description": "These papers prove",
+                "episode": "#BOSK-CI1C20-FACTORY: MASKED PRODUCTION"
+            },
+            "domestic-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "city-4": {
+                "title": "General Clay’s Pipe",
+                "description": "The former dictator o’ Boskeopolis’s favorite pipe he always smoked while in photos or watching civilians get tortured without trial. It disappeared from Atlas Tower while Chamsby was mayor."
+            },
+            "woods-4": {
+                "title": "Ruby Heart",
+                "description": "Legends say that deep within the root stem o’ the very center o’ Wasabi Woods pulses the Ruby Heart, which glows with so much passion o’ its holder’s o’erflowing love that it can blind an eye for o’er 28.9 seconds"
+            },
+            "mines-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "desert-4": {
+                "title": "The Ghost o’ Kropotkin",
+                "description": "The spirit o’ this Russian anarcho-communist haunts the Playing Railroad on stormy nights in case he needs to respond to any industry-baron-conductor who happens to utter his name as a curse.",
+                "episode": "#BOSK-CL1B23-TRAIN: ON A LOCO TRAIN WITH CRAZY MOTION"
+            },
+            "mountain-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sky-4": {
+                "title": "Infinitesimal Hairs",
+                "description": "These red hairs were left in the empty treasure chest @ the end o’ the infamously treacherous Cyanide Skies. They’re so small that e’en those few who have survived Cyanide Skies have ne’er seen them."
+            },
+            "space-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "ice-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "pirate-4": {
+                "title": "Buzzjaw",
+                "description": "¡He’s a giant fish!"
+            },
+            "swamp-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "sewer-4": {
+                "title": "Chamsby’s Lost Wealth",
+                "description": "Hidden deep in Boskeopolis Underground by the late Fitzgerald J. Chamsby to avoid paying taxes on it & said to be worth an unfathomable ’mount o’ money — literally, the # is so big it breaks the limit & rolls round… which means that anyone who finds this treasure will owe a ridiculous ’mount o’ money.",
+                "episode": "#BOSK-BB160D-UNDERGROUND: SECRET UNDER THE CITY AND THE CLOUDS AND THE STARS AND THAT AIRPLANE THAT KEEPS MAKING NOISE NEAR MY HOUSE I HATE IT"
+            },
+            "factory-4": {
+                "title": "The Clock Tower o’ Applewood 2ndary School",
+                "description": "Why there’s a clock tower build ’hind this 2ndary school & why it’s so dangerous & can be used to control time is a mystery.",
+                "episode": "#BOSK-CE191C-HURRY: HURRY UP PLEASE IT’S HURRY UP PLEASE IT’S HURRY UP PLEASE IT’S TIME"
+            },
+            "domestic-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "dungeon-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "special-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            }
         }
     },
     "news_ticker":

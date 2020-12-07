@@ -75,6 +75,8 @@ class Level final
 		static int getIDFromCodeName( std::string code_name );
 		static const std::u32string* getLevelNames();
 		static const std::string& getCodeName( int level_id );
+		static const int getIDbyCycleAndTheme( int cycle, int theme );
+		static const std::string& getCodeNameByCycleAndTheme( int cycle, int theme );
 		static void regenerateLevelNames();
 		static const std::u32string& getSpecialLevelName( int number );
 

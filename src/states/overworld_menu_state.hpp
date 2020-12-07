@@ -1,8 +1,8 @@
 #pragma once
 
 #include "counter_flip.hpp"
+#include "frame.hpp"
 #include "game_state.hpp"
-#include "image_graphics.hpp"
 #include "mezun_sdl2.hpp"
 #include "ow_state.hpp"
 #include "wtext_obj.hpp"
@@ -22,6 +22,7 @@ class OverworldMenuState final : public GameState
 			CONTINUE,
 			LIST,
 			CAMERA,
+			CARDS,
 			OPTIONS,
 			QUIT
 		};
@@ -45,5 +46,5 @@ class OverworldMenuState final : public GameState
 		TextureBox level_name_replacement_;
 		WTextObj options_text_[ NUM_O_OPTIONS ];
 		const sdl2::SDLRect bg_;
-		ImageGraphics frame_;
+		Frame frame_;
 };

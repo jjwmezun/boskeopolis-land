@@ -6,9 +6,23 @@
 #include <SDL2/SDL_image.h>
 #include "timers/timer_repeat.hpp"
 
+class GameState;
+
+class PaletteChanger
+{
+	public:
+		PaletteChanger();
+		void setCurrentPalette( GameState* state, int bg = 1 );
+		void setNextPalette( GameState* state, int bg = 1 );
+		void setPreviousPalette( GameState* state, int bg = 1 );
+	private:
+		int number_;
+};
+
 class Palette final
 {
 	public:
+		friend class PaletteChanger;
 		static constexpr int COLOR_LIMIT = 7;
 		Palette( std::string type, int bg );
 		bool operator!= ( const Palette& p ) const;
@@ -23,7 +37,6 @@ class Palette final
 		Uint8 bgB() const;
 		Uint8 bgA() const;
 		static void init();
-
 
 	private:
 		unsigned int testColor( unsigned int n ) const;

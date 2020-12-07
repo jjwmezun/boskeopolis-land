@@ -21,7 +21,8 @@ class GameState
 			LEVEL_TILE_MENU,
 			SHOP_STATE,
 			NEW_GAME_STATE,
-			LOAD_GAME_STATE
+			LOAD_GAME_STATE,
+			CARD_MENU_STATE
 		};
 
 		GameState

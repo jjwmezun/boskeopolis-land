@@ -1024,3 +1024,13 @@ const std::u32string& Level::getSpecialLevelName( int number )
 {
 	return getLevelNames()[ NUMBER_OF_THEMES * number - 1 ];
 };
+
+const int Level::getIDbyCycleAndTheme( int cycle, int theme )
+{
+	return cycle * NUMBER_OF_THEMES + theme;
+};
+
+const std::string& Level::getCodeNameByCycleAndTheme( int cycle, int theme )
+{
+	return code_names_[ getIDbyCycleAndTheme( cycle, theme ) ];
+};

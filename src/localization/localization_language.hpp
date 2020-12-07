@@ -5,6 +5,7 @@
 #include "input.hpp"
 #include "rapidjson/document.h"
 #include <string>
+#include "trading_card.hpp"
 #include <vector>
 #include <unordered_map>
 
@@ -13,7 +14,7 @@ class LocalizationLanguage final
     public:
         LocalizationLanguage( const std::filesystem::directory_entry& file );
 
-        static constexpr int NUMBER_OF_OVERWORLD_MENU_OPTIONS = 5;
+        static constexpr int NUMBER_OF_OVERWORLD_MENU_OPTIONS = 6;
 
         const std::u32string& getLanguageName() const;
         const std::u32string& getIntroText() const;
@@ -87,6 +88,7 @@ class LocalizationLanguage final
         std::u32string getMissingPaletteErrorMessage( const std::string& palette_name ) const;
         std::u32string getUnlockSpecialLevelDescription() const;
         std::u32string getUnlockSpecialLevelName( const std::u32string& level_name ) const;
+        TradingCard getLevelTradingCard( const std::string& level_name ) const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -174,5 +176,6 @@ class LocalizationLanguage final
         std::unordered_map<std::string, std::u32string> level_goal_messages_;
         std::u32string controls_actions_names_[ Input::NUM_O_ACTIONS ];
         std::u32string overworld_menu_names_[ NUMBER_OF_OVERWORLD_MENU_OPTIONS ];
+        std::unordered_map<std::string, TradingCard> trading_cards_;
         std::vector<std::u32string> news_ticker_messages_;
 };

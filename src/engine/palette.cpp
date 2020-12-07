@@ -1,4 +1,5 @@
 #include <fstream>
+#include "game_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -10,6 +11,7 @@
 #include "wmessage_state.hpp"
 
 static std::unordered_map<std::string, std::array<sdl2::SDLColor, Palette::COLOR_LIMIT>> palettes_;
+static std::vector<std::string> palette_names_;
 
 Palette::Palette( std::string type, int bg )
 :
@@ -160,6 +162,8 @@ void Palette::init()
 										colors
 									)
 								);
+
+								palette_names_.push_back( type );
 							}
 						}
 					}						
@@ -169,4 +173,31 @@ void Palette::init()
 
 		}
 	}
+};
+
+PaletteChanger::PaletteChanger() : number_ ( 0 ) {};
+void PaletteChanger::setCurrentPalette( GameState* state, int bg )
+{
+	state->newPalette( { palette_names_[ number_ ], bg } );
+	printf( "Current Palette: %s\n", palette_names_[ number_ ].c_str() );
+};
+
+void PaletteChanger::setNextPalette( GameState* state, int bg )
+{
+	++number_;
+	if ( number_ >= palette_names_.size() )
+	{
+		number_ = 0;
+	}
+	setCurrentPalette( state, bg );
+};
+
+void PaletteChanger::setPreviousPalette( GameState* state, int bg )
+{
+	--number_;
+	if ( number_ < 0 )
+	{
+		number_ = palette_names_.size() - 1;
+	}
+	setCurrentPalette( state, bg );
 };
