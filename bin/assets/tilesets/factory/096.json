@@ -10,6 +10,17 @@
 		{
 			"component":
 			{
+				"type": "conveyor",
+				"direction": "right"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
 				"type": "slope_steep_left"
 			}
 		}

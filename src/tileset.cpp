@@ -431,19 +431,22 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					}
 					else if ( mezun::areStringsEqual( comp_type, "conveyor" ) )
 					{
-						if
+						const int speed =
+						(
+							comp_obj.HasMember( "speed" ) &&
+							comp_obj[ "speed" ].IsInt()
+						)
+						? comp_obj[ "speed" ].GetInt()
+						: 1;
+						const Direction::Horizontal direction =
 						(
 							comp_obj.HasMember( "direction" ) &&
 							comp_obj[ "direction" ].IsString() &&
 							mezun::areStringsEqual( comp_obj[ "direction" ].GetString(), "right" )
 						)
-						{
-							components.emplace_back( std::make_unique<BlockComponentConveyor> ( Direction::Horizontal::RIGHT ) );
-						}
-						else
-						{
-							components.emplace_back( std::make_unique<BlockComponentConveyor> ( Direction::Horizontal::LEFT ) );
-						}
+						? Direction::Horizontal::RIGHT
+						: Direction::Horizontal::LEFT;
+						components.emplace_back( std::make_unique<BlockComponentConveyor> ( direction, speed ) );
 					}
 					else if ( mezun::areStringsEqual( comp_type, "climb_down" ) )
 					{

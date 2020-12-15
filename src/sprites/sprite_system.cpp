@@ -77,6 +77,7 @@
 #include "hero_renderable.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hook_sprite.hpp"
+#include "hopping_clock_sprite.hpp"
 #include "hopping_zombie_sprite.hpp"
 #include "horizontal_pike_sprite.hpp"
 #include "horizontal_spark_sprite.hpp"
@@ -907,7 +908,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new DevilSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 225 ):
-			return std::unique_ptr<Sprite> ( new PendulumSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new PendulumSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 226 ):
 			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y, Direction::Clockwise::CLOCKWISE ) );
@@ -929,6 +930,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 232 ):
 			return std::unique_ptr<Sprite> ( new ColoredSwitchBlockSprite( x, y, 2 ) );
+		break;
+		case ( SPRITE_INDEX_START + 233 ):
+			return std::unique_ptr<Sprite> ( new PendulumSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 234 ):
+			return std::unique_ptr<Sprite> ( new HoppingClockSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

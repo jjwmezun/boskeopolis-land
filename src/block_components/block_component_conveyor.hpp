@@ -7,7 +7,7 @@
 class BlockComponentConveyor final : public BlockComponent
 {
 	public:
-		BlockComponentConveyor( Direction::Horizontal direction, int speed = 1000 );
+		BlockComponentConveyor( Direction::Horizontal direction, int speed = 1 );
 		~BlockComponentConveyor();
 		void interact( const Collision& collision, Sprite& sprite, Block& block, BlockType& type, LevelState& level_state ) const override;
 

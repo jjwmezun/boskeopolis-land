@@ -7,7 +7,7 @@
 
 BlockComponentConveyor::BlockComponentConveyor( Direction::Horizontal direction, int speed )
 :
-	x_effect_ ( ( direction == Direction::Horizontal::LEFT ) ? -speed : speed )
+	x_effect_ ( Unit::PixelsToSubPixels( ( direction == Direction::Horizontal::LEFT ) ? -speed : speed ) )
 {};
 
 BlockComponentConveyor::~BlockComponentConveyor() {};

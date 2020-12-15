@@ -9,7 +9,7 @@
 
 ClockHandSprite::ClockHandSprite( int x, int y, Direction::Clockwise direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/clock-hand.png" ), x - Unit::BlocksToPixels( 3 ), y - Unit::BlocksToPixels( 3 ), Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 8 ), {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/clock-hand.png" ), x - Unit::BlocksToPixels( 3 ), y - Unit::BlocksToPixels( 3 ), Unit::BlocksToPixels( 8 ), Unit::BlocksToPixels( 8 ), {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false ),
     inner_left_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), 4000, (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), -0.333 ),
     inner_right_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), 4000, (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), 0.333 ),
     outer_left_ ( { centerXSubPixels(), centerYSubPixels(), 1, 1 }, centerXSubPixels(), centerYSubPixels(), Unit::BlocksToSubPixels( 4 ), (( direction == Direction::Clockwise::COUNTERCLOCKWISE ) ? -0.1 : 0.1 ), -0.0333 ),
@@ -52,6 +52,7 @@ void ClockHandSprite::customInteract( Collision& my_collision, Collision& their_
 
 void ClockHandSprite::render( const Camera& camera ) const
 {
+    drawHitBox( camera );
     graphics_->render( image_box_, &camera );
     /*
     const Line left_line = camera.relativeLine(Unit::SubPixelsToPixels({{ inner_left_.position_.x, inner_left_.position_.y }, { outer_left_.position_.x, outer_left_.position_.y }}));
