@@ -413,7 +413,7 @@ namespace Main
 				(
 					{ Localization::getCurrentLanguage().getIntroText() },
 					WMessageState::Type::CHANGE,
-					{ "Grayscale", 1 },
+					{ "Classic Green", 1 },
 					std::unique_ptr<GameState> ( new TitleState() )
 				)
 			)
