@@ -7,12 +7,9 @@
 			[
 				{
 					"type": "image",
-					"img": "attic-brick-wall-2.png",
-					"width": 400,
-					"height": 226,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5,
-					"layer": "background"
+					"img": "checkerboard.png",
+					"width": 420,
+					"height": 271
                 }
             ],
 			"warps":
