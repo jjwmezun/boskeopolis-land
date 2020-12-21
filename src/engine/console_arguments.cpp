@@ -9,6 +9,7 @@ ConsoleArguments::ConsoleArguments( int argc, char** argv )
 	noaudio_ ( false ),
 	nosave_ ( false ),
 	noharm_ ( false ),
+	changepalette_ ( false ),
 	magnification_ ( -1 )
 {
 	for ( int i = 0; i < argc; ++i )
@@ -29,6 +30,10 @@ ConsoleArguments::ConsoleArguments( int argc, char** argv )
 		if ( mezun::areCStringsEqual( arg, "--noharm" ) )
 		{
 			noharm_ = true;
+		}
+		if ( mezun::areCStringsEqual( arg, "--changepal" ) )
+		{
+			changepalette_ = true;
 		}
 		if ( mezun::areCStringsEqual( arg, "-m" ) )
 		{
@@ -81,6 +86,11 @@ bool ConsoleArguments::nosave() const
 bool ConsoleArguments::noharm() const
 {
 	return noharm_;
+};
+
+bool ConsoleArguments::changepalette() const
+{
+	return changepalette_;
 };
 
 int ConsoleArguments::magnification() const

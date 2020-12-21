@@ -8,6 +8,7 @@ class ConsoleArguments final
 		bool noaudio() const;
 		bool nosave() const;
 		bool noharm() const;
+		bool changepalette() const;
 		int magnification() const;
 
 	private:
@@ -15,5 +16,6 @@ class ConsoleArguments final
 		bool noaudio_;
 		bool nosave_;
 		bool noharm_;
+		bool changepalette_;
 		int magnification_;
 };

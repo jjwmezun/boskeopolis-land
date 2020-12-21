@@ -7,9 +7,27 @@
 			[
 				{
 					"type": "image",
-					"img": "checkerboard.png",
+					"img": "checkerboard2.png",
 					"width": 420,
 					"height": 271
+                },
+				{
+					"type": "image",
+					"img": "block-room-1-bg.png",
+					"width": 400,
+					"height": 416,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"layer": 4
+                },
+				{
+					"type": "image",
+					"img": "block-room-1-fg.png",
+					"width": 400,
+					"height": 416,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"layer": 15
                 }
             ],
 			"warps":

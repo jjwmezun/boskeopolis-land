@@ -53,6 +53,7 @@ namespace Main
 	std::string path_divider_ = "/";
 	bool NOSAVE = false;
 	bool NOHARM = false;
+	bool CHANGE_PALETTE = false;
 
 	std::deque< std::unique_ptr<GameState> > push_states_ = {};
 	std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
@@ -61,6 +62,7 @@ namespace Main
 	int transition_level_ = 0;
 
 	NeonOverlay neon = {};
+	PaletteChanger palette_changer_;
 
 
 	// Private Function Declarations
@@ -123,6 +125,7 @@ namespace Main
 		const ConsoleArguments args( argc, argv );
 		NOSAVE = args.nosave();
 		NOHARM = args.noharm();
+		CHANGE_PALETTE = args.changepalette();
 		mezun::initRand();
 		Render::init( args.windowed(), args.magnification() );
 		Audio::init( args.noaudio() );
@@ -169,8 +172,24 @@ namespace Main
 						quit();
 					break;
 					case ( SDL_KEYDOWN ):
-						Input::keyPress( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
-						Input::keyHold( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					{
+						const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
+						if ( CHANGE_PALETTE )
+						{
+							if ( code == 93 )
+							{
+								auto* state = states_[ states_.size() - 1 ].get();
+								palette_changer_.setNextPalette( state, state->palette().bgN() );
+							}
+							else if ( code == 91 )
+							{
+								auto* state = states_[ states_.size() - 1 ].get();
+								palette_changer_.setPreviousPalette( state, state->palette().bgN() );
+							}
+						}
+						Input::keyPress( code );
+						Input::keyHold( code );
+					}
 					break;
 					case ( SDL_KEYUP ):
 						Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
