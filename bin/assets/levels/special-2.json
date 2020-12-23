@@ -7,9 +7,9 @@
 			[
 				{
 					"type": "image",
-					"img": "checkerboard2.png",
-					"width": 420,
-					"height": 271
+					"img": "brick.png",
+					"width": 400,
+					"height": 224
                 },
 				{
 					"type": "image",
@@ -35,13 +35,13 @@
 				{
 					"map": 1,
 					"entrance_x": 5,
-					"entrance_y": 24,
+					"entrance_y": 22,
 					"location": [ 0, 12, 0, 28 ]
 				},
 				{
 					"map": 3,
-					"entrance_x": 4,
-					"entrance_y": 12,
+					"entrance_x": 2,
+					"entrance_y": 11,
 					"location": [ 13, 25, 0, 28 ]
 				}
 			]
@@ -52,12 +52,31 @@
 			[
 				{
 					"type": "image",
-					"img": "attic-brick-wall-2.png",
+					"img": "brick.png",
 					"width": 400,
-					"height": 226,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5,
-					"layer": "background"
+					"height": 224
+                },
+				{
+					"type": "image",
+					"img": "block-room-2-bg.png",
+					"width": 1376,
+					"height": 480,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"x_offset": 0,
+					"y_offset": 0,
+					"layer": 4
+                },
+				{
+					"type": "image",
+					"img": "block-room-2-fg.png",
+					"width": 1376,
+					"height": 480,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"x_offset": 0,
+					"y_offset": 0,
+					"layer": 15
                 }
             ],
 			"warps":
@@ -65,7 +84,7 @@
 				{
 					"map": 2,
 					"entrance_x": 12,
-					"entrance_y": 22,
+					"entrance_y": 20,
 					"location": [ 55, 85, 0, 32 ]
 				}
 			]
@@ -76,12 +95,31 @@
 			[
 				{
 					"type": "image",
-					"img": "attic-brick-wall-2.png",
+					"img": "brick.png",
 					"width": 400,
-					"height": 226,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5,
-					"layer": "background"
+					"height": 224
+                },
+				{
+					"type": "image",
+					"img": "block-room-3-bg.png",
+					"width": 400,
+					"height": 416,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"x_offset": 0,
+					"y_offset": 0,
+					"layer": 4
+                },
+				{
+					"type": "image",
+					"img": "block-room-3-fg.png",
+					"width": 400,
+					"height": 416,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"x_offset": 0,
+					"y_offset": 0,
+					"layer": 15
                 }
             ]
 		},
@@ -91,12 +129,31 @@
 			[
 				{
 					"type": "image",
-					"img": "attic-brick-wall-2.png",
+					"img": "brick.png",
 					"width": 400,
-					"height": 226,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5,
-					"layer": "background"
+					"height": 224
+                },
+				{
+					"type": "image",
+					"img": "block-room-4-bg.png",
+					"width": 400,
+					"height": 288,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"x_offset": 0,
+					"y_offset": 0,
+					"layer": 4
+                },
+				{
+					"type": "image",
+					"img": "block-room-4-fg.png",
+					"width": 400,
+					"height": 288,
+					"x_scroll": 1.0,
+					"y_scroll": 1.0,
+					"x_offset": 0,
+					"y_offset": 0,
+					"layer": 15
                 }
             ],
 			"warps":
@@ -111,7 +168,7 @@
 		}
 	],
 
-	"entrance_x": 5,
+	"entrance_x": 9,
 	"entrance_y": 20,
 
 	"gem_challenge": 16000,

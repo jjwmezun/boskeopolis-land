@@ -1,0 +1,24 @@
+{
+	"graphics":
+	{
+        "type": "switch",
+        "frames":
+        [
+            {
+                "type": "sprite",
+                "x": 12,
+                "y": 13
+            },
+            {
+                "type": "sprite",
+                "x": 12,
+                "y": 10
+            },
+            {
+                "type": "sprite",
+                "x": 12,
+                "y": 13
+            }
+        ]
+	}
+}
