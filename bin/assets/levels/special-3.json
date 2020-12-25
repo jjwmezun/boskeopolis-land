@@ -1,0 +1,257 @@
+{
+	"name": "Sleet Streets",
+
+	"maps":
+	[
+		{
+			"slug": "snow-3",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "snow_firs.png",
+					"width": 164,
+					"height": 256,
+					"x_scroll": 0.5,
+					"y_scroll": 0.15
+				},
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4,
+					"layer": "foreground"
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 5,
+					"entrance_y": 5,
+					"location": [ 0, 16, 20, 40 ]
+				},
+				{
+					"map": 2,
+					"entrance_x": 20,
+					"entrance_y": 3,
+					"location": [ 80, 100, 20, 40 ]
+				},
+				{
+					"map": 4,
+					"entrance_x": 5,
+					"entrance_y": 5,
+					"location": [ 130, 140, 20, 40 ]
+				},
+				{
+					"map": 3,
+					"entrance_x": 19,
+					"entrance_y": 3,
+					"location": [ 290, 300, 0, 16 ]
+				},
+				{
+					"map": 5,
+					"entrance_x": 45,
+					"entrance_y": 2,
+					"location": [ 130, 140, 60, 70 ]
+				}
+			]
+		},
+		{
+			"slug": "snow-3-2",
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 10,
+					"entrance_y": 35,
+					"location": [ 0, 20, 0, 9 ]
+				}
+			],
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "skyline_small.png",
+					"width": 48,
+					"height": 48,
+					"y_offset": 64,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			]
+		},
+		{
+			"slug": "snow-3-3",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "skyline_small.png",
+					"width": 48,
+					"height": 48,
+					"y_offset": 56,
+					"y_repeat": false,
+					"y_scroll": 0.75
+				},
+				{
+					"type": "image",
+					"img": "skyline_small.png",
+					"width": 48,
+					"height": 48,
+					"y_offset": 200,
+					"y_repeat": false,
+					"y_scroll": 0.75
+				},
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 89,
+					"entrance_y": 64,
+					"location": [ 0, 20, 0, 36 ]
+				}
+			]
+		},
+		{
+			"slug": "snow-3-5",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "skyline_small.png",
+					"width": 48,
+					"height": 48,
+					"y_offset": 64,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 286,
+					"entrance_y": 16,
+					"location": [ 0, 20, 0, 9 ]
+				}
+			]
+		},
+		{
+			"slug": "snow-3-6",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "skyline_small.png",
+					"width": 48,
+					"height": 48,
+					"y_offset": 64,
+					"y_repeat": false
+				},
+				{
+					"type": "image",
+					"img": "snow.png",
+					"width": 16,
+					"height": 16,
+					"frames": 16,
+					"animation_speed": 4
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 138,
+					"entrance_y": 37,
+					"location": [ 0, 20, 0, 16 ]
+				}
+			]
+		},
+		{
+			"slug": "snow-3-4",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "pipeline.png",
+					"width": 360,
+					"height": 160,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
+				},
+				{
+					"type": "image",
+					"img": "fog_2.png",
+					"alpha": 128,
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": -40,
+					"y_speed": -20,
+					"layer": "foreground"
+				},
+				{
+					"type": "image",
+					"img": "fog_1.png",
+					"alpha": 128,
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.25,
+					"y_scroll": 0.25,
+					"x_speed": -80,
+					"y_speed": -40,
+					"layer": "foreground"
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 97,
+					"entrance_y": 64,
+					"location": [ 0, 10, 0, 10 ]
+				}
+			]
+		}
+	],
+	
+	"goal":
+	{
+		"type": "mcguffin",
+		"amount": 5,
+		"message": "¡Collect 5 presents!"
+	},
+	
+	"entrance_x": 2,
+	"entrance_y": 35,
+	
+	"gem_challenge": 12500,
+	"time_challenge": 70
+}

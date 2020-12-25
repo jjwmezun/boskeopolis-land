@@ -2,16 +2,7 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 15,
-		"y": 9
-	},
-	"behavior":
-	[
-		{
-			"component":
-			{
-				"type": "solid"
-			}
-		}
-	]
+		"x": 0,
+		"y": 6
+	}
 }

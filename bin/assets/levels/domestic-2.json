@@ -2,46 +2,24 @@
 	"maps":
 	[
 		{
-            "slug": "attic-1",
+			"slug": "house-2",
 			"layers":
 			[
 				{
 					"type": "image",
-					"img": "attic-brick-wall-2.png",
-					"width": 400,
-					"height": 226,
+					"img": "house-pipes.png",
+					"width": 96,
+					"height": 208,
 					"x_scroll": 0.5,
-					"y_scroll": 0.5,
-					"layer": "background"
-                },
-				{
-					"type": "image",
-					"img": "spotlight.png",
-					"width": 360,
-					"height": 224,
-					"x_scroll": 0.0,
 					"y_scroll": 0.0,
-					"y_repeat": false,
-					"x_repeat": false,
-					"x_offset": 20,
-					"lighten": true,
-					"alpha": 128,
-					"switch": true,
-					"layer": 16
+					"y_repeat": false
 				}
-            ]
-        }
+			]
+		}
 	],
 
-	"entrance_x": 52,
-	"entrance_y": 62,
-	"gem_challenge": 40000,
-	"time_challenge": 50,
-	"camera_x": 52,
-
-	"goal":
-	{
-		"type": "timed_on",
-		"time": 30
-	}
+	"entrance_x": 12,
+	"entrance_y": 9,
+	"gem_challenge": 14000,
+	"time_challenge": 30
 }
