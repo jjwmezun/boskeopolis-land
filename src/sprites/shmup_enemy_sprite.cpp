@@ -15,7 +15,7 @@ static int getShootTargetTime()
 
 ShmupEnemySprite::ShmupEnemySprite()
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/shmup.png", 48, 16 ), -64, -64, 16, 16, { SpriteType::ENEMY }, 500, 4000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "tilesets/shmup.png", 48, 16 ), -64, -64, 16, 16, { SpriteType::ENEMY }, 250, 2000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	reset_ ( true ),
 	shoot_timer_ ( 0 ),
 	shoot_timer_target_ ( getShootTargetTime() )

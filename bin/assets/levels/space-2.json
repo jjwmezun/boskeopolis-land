@@ -2,12 +2,12 @@
 	"maps":
 	[
 		{
-			"slug": "space-9"
+			"slug": "space-10"
 		}
 	],
 
-	"entrance_x": 31,
-	"entrance_y": 75,
+	"entrance_x": 139,
+	"entrance_y": 60,
 	"gem_challenge": 9000,
 	"time_challenge": 2
 }

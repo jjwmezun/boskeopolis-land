@@ -1,61 +1,22 @@
 {
-	"name": "Rooftop Rumble",
-	
 	"maps":
 	[
 		{
-			"slug": "city-4",
+			"slug": "city-6",
 			"layers":
 			[
 				{
-					"type": "image",
-					"img": "gradient.png",
-					"width": 8,
-					"height": 160,
-					"x_scroll": 0,
-					"y_scroll": 0.0,
-					"y_offset": 32,
-					"y_repeat": false
-				},
-				{
-					"type": "lightning"
-				},
-				{
 					"type": "constellation",
-					"width": 320,
-					"height": 16
-				},
-				{
-					"type": "image",
-					"img": "skyline.png",
-					"width": 264,
-					"height": 224,
-					"x_scroll": 0.25,
-					"y_scroll": 0.0,
-					"y_offset": 32,
-					"y_repeat": false,
-					"frames": 5,
-					"animation_speed": 32,
-					"animation_flip": true
-				},
-				{
-					"type": "image",
-					"img": "rain.png",
-					"width": 480,
-					"height": 320,
-					"frames": 16,
-					"animation_speed": 4,
-					"alpha": 128,
-					"layer": "foreground"
+					"width": 224,
+					"height": 8,
+					"image": "constellation-neon.png"
 				}
 			]
 		}
 	],
-	
-	"entrance_x": 4,
-	"entrance_y": 8,
-	"camera_x": 17,
-	
-	"gem_challenge": 7000,
+
+	"entrance_x": 6,
+	"entrance_y": 26,
+	"gem_challenge": 10000,
 	"time_challenge": 30
 }

@@ -1,27 +1,13 @@
 {
-	"name": "Stop & Go Space Station",
 	"maps":
 	[
 		{
-			"slug": "space-3",
-			"layers":
-			[
-				{
-					"type": "constellation",
-					"width": 224,
-					"height": 8
-				}
-			]
+			"slug": "space-9"
 		}
 	],
 
-	"goal":
-	{
-		"type": "stop_on_off"
-	},
-
-	"entrance_x": 4,
-	"entrance_y": 35,
-	"gem_challenge": 12000,
-	"time_challenge": 20
+	"entrance_x": 31,
+	"entrance_y": 75,
+	"gem_challenge": 9000,
+	"time_challenge": 2
 }

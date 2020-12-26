@@ -25,7 +25,7 @@ void ShmupShooterSprite::customInteract( Collision& my_collision, Collision& the
 	}
 	else if ( them.hasType( SpriteType::HERO ) )
 	{
-		if ( Main::nextStateFrame( mezun::randInt( 60, 24 ) ) )
+		if ( Main::nextStateFrame( mezun::randInt( 80, 40 ) ) )
 		{
 			const double dx = ( double )( them.centerXSubPixels() - centerXSubPixels() );
 			const double dy = ( double )( them.centerYSubPixels() - centerYSubPixels() );
