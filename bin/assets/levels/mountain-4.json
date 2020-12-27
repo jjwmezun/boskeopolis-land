@@ -1,18 +1,14 @@
 {
-	"name": "Mt. Volcocoa",
-	
 	"maps":
 	[
 		{
-			"slug": "mountain-4"
+			"slug": "mountain-2"
 		}
 	],
 
-	"goal":
-	{
-		"type": "heat"
-	},
+	"entrance_x": 2,
+	"entrance_y": 44,
 	
-	"entrance_x": 67,
-	"entrance_y": -32
+	"gem_challenge": 12000,
+	"time_challenge": 30
 }

@@ -21,13 +21,16 @@ void SnowboulderSprite::customUpdate( LevelState& level_state )
 
 void SnowboulderSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( their_collision.collideBottom() )
+	if ( them.hasType( SpriteType::HERO ) )
 	{
-		them.collideStopYBottom( their_collision.overlapYBottom() );
-	}
-	else if ( their_collision.collideAny() )
-	{
-		them.collideStopAny( their_collision );
-		level_state.health().hurt();
+		if ( their_collision.collideBottom() )
+		{
+			them.collideStopYBottom( their_collision.overlapYBottom() );
+		}
+		else if ( their_collision.collideAny() )
+		{
+			them.collideStopAny( their_collision );
+			level_state.health().hurt();
+		}
 	}
 };

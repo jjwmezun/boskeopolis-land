@@ -111,17 +111,18 @@ void IceBlockSprite::customUpdate( LevelState& level_state )
 
 void IceBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-    if ( their_collision.collideAny() )
+    const Collision collision = them.testBlockCollision( *this );
+    if ( collision.collideAny() )
     {
         if ( crack_state_ != CrackState::SHATTERED && crack_state_ != CrackState::GONE_GROWING )
         {
-            them.collideStopAny( their_collision );
+            them.collideStopAny( collision );
         }
     }
 
     if ( them.hasType( SpriteType::HERO ) )
     {
-        if ( their_collision.collideBottom() )
+        if ( collision.collideBottom() )
         {
             if ( crack_state_ == CrackState::NORMAL )
             {
@@ -133,7 +134,7 @@ void IceBlockSprite::customInteract( Collision& my_collision, Collision& their_c
             }
         }
 
-        if ( their_collision.collideTop() )
+        if ( collision.collideTop() )
         {
             if ( crack_state_ == CrackState::NORMAL )
             {
