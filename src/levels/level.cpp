@@ -172,7 +172,12 @@ void Level::warp( LevelState& level_state )
 		camera.setPosition( camera_x, camera_y );
 		camera.adjust( sprites.hero(), currentMap() );
 
-		level_state.events().changePalette( currentMap().palette_ );
+		EventSystem& events = level_state.events();
+		events.changePalette( currentMap().palette_ );
+		if ( currentMap().auto_message_ )
+		{
+			events.showMessage();
+		}
 		level_state.blocks().reset( level_state );
 
 		Audio::changeSong( currentMap().music_ );

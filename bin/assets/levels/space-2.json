@@ -2,12 +2,20 @@
 	"maps":
 	[
 		{
-			"slug": "space-10"
+            "slug": "space-10",
+            "layers":
+            [
+				{
+					"type": "constellation",
+					"width": 256,
+					"height": 16
+				}
+            ]
 		}
 	],
 
-	"entrance_x": 139,
-	"entrance_y": 60,
-	"gem_challenge": 9000,
-	"time_challenge": 2
+	"entrance_x": 86,
+	"entrance_y": 37,
+	"gem_challenge": 50000,
+	"time_challenge": 35
 }

@@ -40,11 +40,11 @@ All artwork, including graphics & text, are released under Creative Commons Attr
 
 ### Music
 
-* A rendition o’ Mozart’s “Rondo alla turca” from Musopen
+* A rendition o’ Mozart’s “Rondo alla turca” by Musopen
   Link: https://musopen.org/music/2079/wolfgang-amadeus-mozart/rondo-alla-turca-from-sonata-kv-331/
   License: Public Domain
 
-* “Arround the Village” by Lobo Loco
+* Arround the Village by Lobo Loco
   Link: https://freemusicarchive.org/music/Lobo_Loco/Good_Old_Organ_Ice/Arround_the_Village_ID_1183
   License: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
@@ -184,11 +184,11 @@ All artwork, including graphics & text, are released under Creative Commons Attr
   Link: https://incompetech.com/wordpress/2015/02/secrets-of-the-schoolyard/
   License: https://filmmusic.io/standard-license
 
-* “Skyhawk Beach” by Blue Wave Theory
+* Skyhawk Beach by Blue Wave Theory
   Link: http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
   License: https://creativecommons.org/licenses/by-sa/4.0/
 
-* “Soothing Nighttime Ambience” by SPANAC
+* Soothing Nighttime Ambience by SPANAC
   Link: https://www.freesoundslibrary.com/soothing-nighttime-ambience/
   License: https://creativecommons.org/licenses/by/4.0/
 
@@ -202,6 +202,10 @@ All artwork, including graphics & text, are released under Creative Commons Attr
 
 * Too Cool by Kevin MacLeod
   Link: https://incompetech.filmmusic.io/song/4534-too-cool
+  License: https://filmmusic.io/standard-license
+
+* Voxel Revolution by Kevin MacLeod
+  Link: https://incompetech.filmmusic.io/song/7017-voxel-revolution
   License: https://filmmusic.io/standard-license
 
 * Wepa by Kevin MacLeod

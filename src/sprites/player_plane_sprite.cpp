@@ -11,9 +11,9 @@
 #define ACCELERATION 100.0
 #define TURN_SPEED 2.0
 
-PlayerPlaneSprite::PlayerPlaneSprite( int x, int y )
+PlayerPlaneSprite::PlayerPlaneSprite( int x, int y, std::string tileset )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0, -2, -2, 4, 4 ), x, y, 12, 12, { SpriteType::HERO }, ACCELERATION, MAX_SPEED, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, 10.0 ),
+	Sprite( std::make_unique<SpriteGraphics> ( std::move( tileset ), 0, 0, false, false, 0.0, -4, -4, 8, 8 ), x, y, 8, 8, { SpriteType::HERO }, ACCELERATION, MAX_SPEED, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, true, true, 10.0 ),
 	angle_ ( 180.0 ),
 	speed_ ( 0.0 )
 {};

@@ -200,6 +200,7 @@ Map Map::mapFromPath
 		bool watery = false;
 		bool oxygen = false;
 		bool hide = false;
+		bool auto_message = false;
 		int lava_y = -1;
 		int lava_y_alt = -1;
 		int x_block_when_lava_rises_forever = -1;
@@ -408,6 +409,18 @@ Map Map::mapFromPath
 					else if ( value.IsString() )
 					{
 						slippery = ( ( strcmp( value.GetString(), "true" ) == 0 ) ? true : false );
+					}
+				}
+
+				else if ( mezun::areStringsEqual( name, "auto_message" ) )
+				{
+					if ( value.IsBool() )
+					{
+						auto_message = value.GetBool();
+					}
+					else if ( value.IsString() )
+					{
+						auto_message = ( ( strcmp( value.GetString(), "true" ) == 0 ) ? true : false );
 					}
 				}
 
@@ -688,7 +701,8 @@ Map Map::mapFromPath
 			ui_bg_color,
 			watery,
 			oxygen,
-			hide
+			hide,
+			auto_message
 		);
 };
 
@@ -721,7 +735,8 @@ Map::Map
 	int ui_bg_color,
 	bool watery,
 	bool oxygen,
-	bool hide
+	bool hide,
+	bool auto_message
 )
 :
 	blocks_layers_ ( blocks_layers ),
@@ -754,7 +769,8 @@ Map::Map
 	watery_ ( watery ),
 	oxygen_ ( oxygen ),
 	hide_ ( hide ),
-	other_layers_ ( other_layers )
+	other_layers_ ( other_layers ),
+	auto_message_ ( auto_message )
 {};
 
 Map::~Map() noexcept {};
@@ -791,7 +807,8 @@ Map::Map( Map&& m ) noexcept
 	ui_bg_color_ ( m.ui_bg_color_ ),
 	watery_ ( m.watery_ ),
 	oxygen_ ( m.oxygen_ ),
-	hide_ ( m.hide_ )
+	hide_ ( m.hide_ ),
+	auto_message_ ( m.auto_message_ )
 {};
 
 Map::Map( const Map& c )
@@ -826,7 +843,8 @@ Map::Map( const Map& c )
 	ui_bg_color_ ( c.ui_bg_color_ ),
 	watery_ ( c.watery_ ),
 	oxygen_ ( c.oxygen_ ),
-	hide_ ( c.hide_ )
+	hide_ ( c.hide_ ),
+	auto_message_ ( c.auto_message_ )
 {};
 
 int Map::widthBlocks() const

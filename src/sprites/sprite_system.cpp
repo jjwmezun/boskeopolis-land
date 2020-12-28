@@ -1093,7 +1093,7 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 			hero_.reset( new PlayerDoomSprite( level.entranceX(), level.entranceY() ) );
 		break;
 		case ( HeroType::PLANE ):
-			hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY() ) );
+			hero_.reset( new PlayerPlaneSprite( level.entranceX(), level.entranceY(), ( level_state.currentMap().tileset_ == "shmup" ) ? "tilesets/shmup.png" : "sprites/urban-bird.png" ) );
 		break;
 		case ( HeroType::FLASHLIGHT ):
 			hero_.reset( new FlashlightPlayerSprite( level.entranceX(), level.entranceY() ) );

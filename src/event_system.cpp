@@ -85,6 +85,7 @@ EventSystem::EventSystem()
 void EventSystem::init( const Level& level )
 {
 	switch_ = ( int )( level.startOn() );
+	message_ = level.currentMap().auto_message_;
 };
 
 EventSystem::~EventSystem()

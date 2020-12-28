@@ -1,20 +1,9 @@
 {
 	"graphics":
 	{
-		"type": "animated",
-		"frames":
-		[
-			{
-				"type": "sprite",
-				"x": 14,
-				"y": 1
-			},
-			{
-				"type": "sprite",
-				"x": 15,
-				"y": 1
-			}
-		]
+		"type": "sprite",
+		"x": 14,
+		"y": 1
 	},
 	"behavior":
 	[

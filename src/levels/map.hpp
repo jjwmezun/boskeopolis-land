@@ -71,6 +71,7 @@ class Map final
 		const bool watery_;
 		const bool oxygen_;
 		const bool hide_;
+		const bool auto_message_;
 		bool changed_;
 
 		static Map mapFromPath
@@ -149,7 +150,8 @@ class Map final
 			int ui_bg_color,
 			bool watery,
 			bool oxygen,
-			bool hide
+			bool hide,
+			bool auto_message
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( LevelState& level_state );
