@@ -10,8 +10,12 @@
 		{
 			"component":
 			{
-				"type": "solid"
-			}
+				"type": "force_rightward"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
 		}
 	]
 }

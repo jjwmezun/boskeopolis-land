@@ -3,14 +3,14 @@
 	{
 		"type": "sprite",
 		"x": 2,
-		"y": 1
+		"y": 18
 	},
 	"behavior":
 	[
 		{
 			"component":
 			{
-				"type": "force_rightward"
+				"type": "force_upward"
 			},
 			"conditions":
 			[
