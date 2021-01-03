@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "collision.hpp"
 #include "event_system.hpp"
 #include "level_state.hpp"
 #include "sprite_graphics.hpp"
@@ -19,12 +20,16 @@ void SwitchBlockSprite::customUpdate( LevelState& level_state )
 
 void SwitchBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
-	EventSystem& events = level_state.events();
-	if ( hit && events.switchIsNotLocked( level_state ) )
+	if ( them.block_interact_ )
 	{
-		events.setSwitchLock( level_state );
-		events.flipSwitch();
-		Audio::playSound( Audio::SoundType::SWITCH );
+		const Collision collision = them.testBlockCollision( *this );
+		const bool hit = bump_under_block_component.testHit( *this, them, collision );
+		EventSystem& events = level_state.events();
+		if ( hit && events.switchIsNotLocked( level_state ) && them.hasType( Sprite::SpriteType::HERO ) )
+		{
+			events.setSwitchLock( level_state );
+			events.flipSwitch();
+			Audio::playSound( Audio::SoundType::SWITCH );
+		}
 	}
 };

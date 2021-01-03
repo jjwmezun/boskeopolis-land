@@ -41,7 +41,7 @@ void BumpUnderBlockSprite::update( Sprite& sprite )
 bool BumpUnderBlockSprite::testHit( Sprite& me, Sprite& them, const Collision& collision )
 {
 	int hit = false;
-	if ( them.hasType( Sprite::SpriteType::HERO ) && collision.collideAny() )
+	if ( collision.collideAny() )
 	{
 		them.collideStopAny( collision );
 		if ( collision.collideTop() )

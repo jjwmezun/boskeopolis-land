@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "collision.hpp"
 #include "full_heal_block_sprite.hpp"
 #include "health.hpp"
 #include "level_state.hpp"
@@ -19,18 +20,26 @@ void FullHealBlockSprite::customUpdate( LevelState& level_state )
 
 void FullHealBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	const bool hit = bump_under_block_component.testHit( *this, them, their_collision );
+	const Collision collision = them.testBlockCollision( *this );
+	const bool hit = bump_under_block_component.testHit( *this, them, collision );
 	if ( hit )
 	{
-		Health& health = level_state.health();
-		if ( health.hasFullHealth() )
+		if ( them.hasType( Sprite::SpriteType::HERO ) )
 		{
-			Audio::playSound( Audio::SoundType::BUMP );
+			Health& health = level_state.health();
+			if ( health.hasFullHealth() )
+			{
+				Audio::playSound( Audio::SoundType::BUMP );
+			}
+			else
+			{
+				health.fullHeal();
+				Audio::playSound( Audio::SoundType::HEAL );
+			}
 		}
 		else
 		{
-			health.fullHeal();
-			Audio::playSound( Audio::SoundType::HEAL );
+			Audio::playSound( Audio::SoundType::BUMP );
 		}
 	}
 };

@@ -67,6 +67,7 @@
 #include "full_heal_block_sprite.hpp"
 #include "gemmy_sprite.hpp"
 #include "ghost_coffin_sprite.hpp"
+#include "ghost_player_sprite.hpp"
 #include "ghost_sprite.hpp"
 #include "gorilla_sprite.hpp"
 #include "guard_spike_sprite.hpp"
@@ -110,6 +111,7 @@
 #include "moveable_block_sprite.hpp"
 #include "moving_space_stone_sprite.hpp"
 #include "move_water_sprite.hpp"
+#include "nocturnal_ghost_sprite.hpp"
 #include "octopig_sprite.hpp"
 #include "olive_spawner_sprite.hpp"
 #include "olive_sprite.hpp"
@@ -174,6 +176,7 @@
 #include "sprite_renderable.hpp"
 #include "sprite_system.hpp"
 #include "statue_laser_sprite.hpp"
+#include "straight_ghost_sprite.hpp"
 #include "stronger_cowpoker_sprite.hpp"
 #include "swamp_monster_sprite.hpp"
 #include "swamp_pole_sprite.hpp"
@@ -936,6 +939,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 234 ):
 			return std::unique_ptr<Sprite> ( new HoppingClockSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 235 ):
+			return std::unique_ptr<Sprite> ( new GhostPlayerSprite() );
+		break;
+		case ( SPRITE_INDEX_START + 236 ):
+			return std::unique_ptr<Sprite> ( new StraightGhostSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 237 ):
+			return std::unique_ptr<Sprite> ( new NocturnalGhostSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

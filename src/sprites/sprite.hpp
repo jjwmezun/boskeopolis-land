@@ -284,7 +284,7 @@ class Sprite : public Object
 		static const AngledSpriteMovement angled_;
 		static const StuckSpriteMovement stuck_movement_;
 
-		const bool despawn_when_dead_;
+		bool despawn_when_dead_;
 		bool jump_lock_;
 		bool on_ground_;
 		bool in_water_;
@@ -314,7 +314,7 @@ class Sprite : public Object
 		bool is_dead_ = false;
 		bool death_finished_ = false;
 		bool dead_no_animation_ = false;
-		const int map_id_;
+		int map_id_;
 		int start_speed_walk_;
 		int top_speed_walk_;
 		int start_speed_run_;
@@ -341,20 +341,20 @@ class Sprite : public Object
 		int renderable_id_;
 		int system_id_;
 		Misc misc_;
-		const Direction::Horizontal direction_x_orig_;
-		const Direction::Vertical direction_y_orig_;
+		Direction::Horizontal direction_x_orig_;
+		Direction::Vertical direction_y_orig_;
 		Direction::Simple direction_;
 		Direction::Horizontal direction_x_;
 		Direction::Vertical direction_y_;
 		Direction::Horizontal on_slope_;
-		const CameraMovement camera_movement_;
+		CameraMovement camera_movement_;
 		const SpriteMovement* movement_;
 		std::unique_ptr<SpriteGraphics> graphics_;
 		std::unique_ptr<SpriteComponent> component_;
-		const std::vector<SpriteType> types_;
-		const double bounce_;
+		std::vector<SpriteType> types_;
+		double bounce_;
 		double gravity_modifier_;
-		const sdl2::SDLRect original_hit_box_;
+		sdl2::SDLRect original_hit_box_;
 		TimerSimpleT<32, false> death_timer_;
 		TimerSimpleT<4, false> on_ground_padding_;
 };
