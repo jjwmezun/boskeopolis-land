@@ -11,6 +11,7 @@ class InventoryLevel;
 class Inventory final
 {
 	public:
+		static OWTile currentSpace();
 		static int currentLevel();
 		static bool levelComplete( int level );
 		static bool haveDiamond();
@@ -27,7 +28,7 @@ class Inventory final
 		static bool levelUnlocked( int level );
 		static bool beenToLevel( int level );
 		static void levelStart( int level );
-		static void setCurrentLevel( int level );
+		static void setSpaceAsShop( int value );
 		static int totalFundsShown();
 		static int totalFunds();
 		static double percent();

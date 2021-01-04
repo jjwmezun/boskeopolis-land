@@ -1,6 +1,4 @@
 {
-	"name": "Playing Railroad",
-
 	"maps":
 	[
 		{
@@ -249,8 +247,7 @@
 
 	"goal":
 	{
-		"type": "kill_all",
-		"message": "¡Shoot out all the Cowpokers & sentry guns!"
+		"type": "kill_all"
 	},
 
 	"gem_challenge": 18000,

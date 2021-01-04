@@ -1,6 +1,4 @@
 {
-	"name": "Crying Lightning",
-	
 	"maps":
 	[
 		{
@@ -38,11 +36,6 @@
 			]
 		}
 	],
-	
-	"goal":
-	{
-		"message": "¡Unlock the treasure!"
-	},
 	
 	"entrance_x": 21,
 	"entrance_y": 31,

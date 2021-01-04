@@ -1,6 +1,4 @@
 {
-	"name": "Dry, Drought Desert",
-	
 	"maps":
 	[
 		{
@@ -23,7 +21,6 @@
 					"y_offset": 64,
 					"x_scroll": 0.5,
 					"y_scroll": 0.0,
-					"y_offset": 32,
 					"y_repeat": false
 				}
 			]

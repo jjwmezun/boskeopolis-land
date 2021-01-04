@@ -1,6 +1,4 @@
 {
-	"name": "Maybe I'm a Maze",
-	
 	"maps":
 	[
 		{
@@ -11,8 +9,7 @@
 	"goal":
 	{
 		"type": "collect",
-		"amount": 66900,
-		"message": "¡Collect everything & dodge the eyes!"
+		"amount": 66900
 	},
 	
 	"entrance_x": 19,

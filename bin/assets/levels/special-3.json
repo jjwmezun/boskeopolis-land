@@ -1,6 +1,4 @@
 {
-	"name": "Sleet Streets",
-
 	"maps":
 	[
 		{
@@ -245,8 +243,7 @@
 	"goal":
 	{
 		"type": "mcguffin",
-		"amount": 5,
-		"message": "¡Collect 5 presents!"
+		"amount": 5
 	},
 	
 	"entrance_x": 2,

@@ -199,7 +199,7 @@ void ChooseSaveState::stateUpdate()
                     {
                         Inventory::load( saves_[ selection_ ] );
                         Audio::playSound( Audio::SoundType::CONFIRM );
-                        Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( Inventory::currentLevel() ) ) );
+                        Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( Inventory::currentSpace() ) ) );
                     }
                     break;
                     case ( 1 ):

@@ -1,5 +1,4 @@
 {
-	"name": "Ice Box Rock",
 	"maps":
 	[
 		{
@@ -30,7 +29,5 @@
 	"entrance_y": 0,
 
 	"gem_challenge": 11100,
-	"time_challenge": 22,
-
-	"message": "Looter Lessons:\n\nAutumn can still jump a few frames afterfalling off an edge if running, which\ncan give the length o' her jump a bit o'a boost."
+	"time_challenge": 22
 }

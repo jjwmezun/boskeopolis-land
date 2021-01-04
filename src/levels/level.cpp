@@ -45,11 +45,9 @@
 #include "timed_on_goal.hpp"
 #include "warp_goal.hpp"
 
-static std::vector<std::string> level_list_;
 static std::vector<int> gem_challenge_list_;
 static std::vector<int> time_challenge_list_;
 static std::vector<bool> has_secret_goals_;
-static unsigned int real_level_num_ = 0;
 
 static std::string code_names_[ Level::NUMBER_OF_LEVELS ] =
 {
@@ -59,6 +57,26 @@ static std::string code_names_[ Level::NUMBER_OF_LEVELS ] =
 static std::u32string level_names_[ Level::NUMBER_OF_LEVELS ] =
 {
 	U"MISSING LEVEL"
+};
+
+static constexpr char THEMES[ Level::NUMBER_OF_THEMES ][ 9 ] =
+{
+	"city",
+	"domestic",
+	"woods",
+	"mines",
+	"desert",
+	"mountain",
+	"sky",
+	"space",
+	"ice",
+	"pirate",
+	"swamp",
+	"muerto",
+	"sewer",
+	"factory",
+	"dungeon",
+	"special"
 };
 
 Level::Level ( Level&& m )
@@ -191,16 +209,10 @@ void Level::sewerWarp( SpriteSystem& sprites, EventSystem& events )
 	currentMap().changed_ = true;
 };
 
-const std::string& Level::NameOLevel( unsigned int n )
-{
-	assert( n < level_list_.size() );
-	return level_list_.at( n );
-};
-
 int Level::gemChallenge( unsigned int n )
 {
-	assert( n < level_list_.size() );
-	return gem_challenge_list_.at( n );
+	assert( n < NUMBER_OF_LEVELS );
+	return gem_challenge_list_[ n ];
 };
 
 std::u32string Level::gemChallengeText( unsigned int n )
@@ -210,8 +222,8 @@ std::u32string Level::gemChallengeText( unsigned int n )
 
 int Level::timeChallenge( unsigned int n )
 {
-	assert( n < level_list_.size() );
-	return time_challenge_list_.at( n );
+	assert( n < NUMBER_OF_LEVELS );
+	return time_challenge_list_[ n ];
 };
 
 bool Level::hasSecretGoal( unsigned int n )
@@ -220,7 +232,7 @@ bool Level::hasSecretGoal( unsigned int n )
 	{
 		return false;
 	}
-	return has_secret_goals_.at( n );
+	return has_secret_goals_[ n ];
 };
 
 std::u32string Level::timeChallengeText( unsigned int n )
@@ -258,12 +270,6 @@ void Level::updateGoal( LevelState& level_state )
 {
 	goal_->update( level_state );
 };
-
-unsigned int Level::realLevelNum()
-{
-	return real_level_num_;
-};
-
 
 Level Level::getLevel( int id )
 {
@@ -875,6 +881,22 @@ Level Level::getLevel( int id )
 	return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message, start_on );
 };
 
+void Level::buildCodeNames()
+{
+	int i = 0;
+	for ( int cycle = 1; cycle <= NUMBER_OF_CYCLES; ++cycle )
+	{
+		for ( int theme_id = 0; theme_id < NUMBER_OF_THEMES; ++theme_id )
+		{
+			const std::string theme = THEMES[ theme_id ];
+			code_names_[ i ] = theme + "-" + std::to_string( cycle );
+			++i;
+		}
+	}
+	code_names_[ i++ ] = "chamsby";
+	code_names_[ i ] = "bonus";
+};
+
 void Level::buildLevelList()
 {
 	const std::string path = Main::resourcePath() + "levels" + Main::pathDivider();
@@ -884,79 +906,62 @@ void Level::buildLevelList()
 		throw mezun::CantLoadLevelNames();
 	}
 
-	int i = 0;
-	for ( int cycle = 1; cycle <= NUMBER_OF_CYCLES; ++cycle )
+	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
 	{
-		for ( int theme_id = 0; theme_id < NUMBER_OF_THEMES; ++theme_id )
+		level_names_[ i ] = Localization::getCurrentLanguage().getLevelName( code_names_[ i ] );
+
+		const std::string file_path = path + code_names_[ i ]  + ".json";
+
+		std::ifstream ifs( file_path );
+
+		if ( ifs.is_open() )
 		{
-			const std::string theme = Level::THEMES[ theme_id ];
-			code_names_[ i ] = theme + "-" + std::to_string( cycle );
-			level_names_[ i ] = Localization::getCurrentLanguage().getLevelName( code_names_[ i ] );
+			rapidjson::IStreamWrapper ifs_wrap( ifs );
+			rapidjson::Document lv;
+			lv.ParseStream( ifs_wrap );
 
-			const std::string file_path = path + code_names_[ i ]  + ".json";
-
-			std::ifstream ifs( file_path );
-
-			if ( ifs.is_open() )
+			if ( lv.IsObject() )
 			{
-				rapidjson::IStreamWrapper ifs_wrap( ifs );
-				rapidjson::Document lv;
-				lv.ParseStream( ifs_wrap );
-
-				if ( lv.IsObject() )
+				if ( lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
 				{
-					if ( lv.HasMember( "name" ) && lv[ "name" ].IsString() )
-					{
-						level_list_.emplace_back( lv[ "name" ].GetString() );
-						++real_level_num_;
-					}
-					else
-					{
-						level_list_.emplace_back( "" );
-					}
-
-					if ( lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
-					{
-						gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
-					}
-					else
-					{
-						gem_challenge_list_.emplace_back( 0 );
-					}
-
-					if ( lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
-					{
-						time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
-					}
-					else
-					{
-						time_challenge_list_.emplace_back( 0 );
-					}
-
-					if ( lv.HasMember( "secret_goal" ) && lv[ "secret_goal" ].IsBool() )
-					{
-						has_secret_goals_.emplace_back( lv[ "secret_goal" ].GetBool() );
-					}
-					else
-					{
-						has_secret_goals_.emplace_back( false );
-					}
+					gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
 				}
 				else
 				{
-					//throw mezun::CorruptedLevel( code_names_[ i ] );
-					Main::changeState( std::unique_ptr<GameState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( std::string( "Level “" + code_names_[ i ] + "”’s JSON file in assets/levels has been corrupted. Please redownload game." ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
+					gem_challenge_list_.emplace_back( 0 );
 				}
 
-				ifs.close();
+				if ( lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
+				{
+					time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
+				}
+				else
+				{
+					time_challenge_list_.emplace_back( 0 );
+				}
+
+				if ( lv.HasMember( "secret_goal" ) && lv[ "secret_goal" ].IsBool() )
+				{
+					has_secret_goals_.emplace_back( lv[ "secret_goal" ].GetBool() );
+				}
+				else
+				{
+					has_secret_goals_.emplace_back( false );
+				}
 			}
 			else
 			{
-				level_list_.emplace_back( "=BROKEN_LEVEL=" );
-				gem_challenge_list_.emplace_back( 0 );
-				time_challenge_list_.emplace_back( 0 );
+				//throw mezun::CorruptedLevel( code_names_[ i ] );
+				Main::changeState( std::unique_ptr<GameState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( std::string( "Level “" + code_names_[ i ] + "”’s JSON file in assets/levels has been corrupted. Please redownload game." ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
 			}
-			++i;
+
+			ifs.close();
+		}
+		else
+		{
+			gem_challenge_list_.emplace_back( 0 );
+			time_challenge_list_.emplace_back( 0 );
+			has_secret_goals_.emplace_back( false );
 		}
 	}
 };
@@ -1011,12 +1016,13 @@ int Level::getIDFromCodeName( std::string code_name )
 			return i;
 		}
 	}
+	printf( "%s\n", code_name );
 	assert( false );
 };
 
-const std::u32string* Level::getLevelNames()
+const std::u32string Level::getLevelName( int level )
 {
-	return level_names_;
+	return ( level < 0 || level >= NUMBER_OF_LEVELS ) ? U"INVALID LEVEL" : level_names_[ level ];
 };
 
 const std::string& Level::getCodeName( int level_id )
@@ -1025,9 +1031,14 @@ const std::string& Level::getCodeName( int level_id )
 	return code_names_[ level_id ];
 };
 
-const std::u32string& Level::getSpecialLevelName( int number )
+int Level::getSpecialLevelID( int number )
 {
-	return getLevelNames()[ NUMBER_OF_THEMES * number - 1 ];
+	return NUMBER_OF_THEMES * number - 1;
+};
+
+const std::u32string Level::getSpecialLevelName( int number )
+{
+	return ( number < 1 || number > NUMBER_OF_CYCLES ) ? U"INVALID LEVEL" : level_names_[ getSpecialLevelID( number ) ];
 };
 
 const int Level::getIDbyCycleAndTheme( int cycle, int theme )
@@ -1038,4 +1049,50 @@ const int Level::getIDbyCycleAndTheme( int cycle, int theme )
 const std::string& Level::getCodeNameByCycleAndTheme( int cycle, int theme )
 {
 	return code_names_[ getIDbyCycleAndTheme( cycle, theme ) ];
+};
+
+int Level::getCycleFromLevelID( int level )
+{
+	return ( int )( std::floor( ( double )( level ) / ( double )( NUMBER_OF_THEMES ) ) ) + 1;
+};
+
+int Level::getThemeFromLevelID( int level )
+{
+	return level % NUMBER_OF_THEMES;
+};
+
+std::u32string Level::getThemeCodeFromLevelID( int level )
+{
+	const int theme = getThemeFromLevelID( level );
+	const char letter[ 1 ] = { 65 + theme };
+	return mezun::charToChar32String( letter );
+};
+
+std::u32string Level::getLevelHeader( int level )
+{
+	return mezun::charToChar32String
+	(
+		mezun::stringReplace
+		(
+			mezun::stringReplace( "%c-%t: ", "%c", std::to_string( getCycleFromLevelID( level ) ) ),
+			"%t",
+			mezun::string32ToString8( getThemeCodeFromLevelID( level ) )
+		).c_str()
+	);
+};
+
+int Level::getNextLevel( int level )
+{
+	// Is last level.
+	if ( level == NUMBER_OF_LEVELS - 1 )
+	{
+		return -1;
+	}
+	// If theme is last ( special ), no next.
+	// If theme is 2nd-to-last ( final main theme ),
+	// next is after special, so 2 after.
+	// Else, just the next level.
+	const int theme = getThemeFromLevelID( level );
+	return ( theme == NUMBER_OF_THEMES - 1 ) ? -1 : ( theme == NUMBER_OF_THEMES - 2 ) ? level + 2 : level + 1;
+
 };

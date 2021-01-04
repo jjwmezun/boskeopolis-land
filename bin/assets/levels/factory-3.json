@@ -1,6 +1,4 @@
 {
-	"name": "Warm Up",
-
 	"maps":
 	[
 		{
@@ -38,8 +36,7 @@
 	"goal":
 	{
 		"type": "survive_time",
-		"amount": 30,
-		"message": "¡Last 30 seconds without being cooked!"
+		"amount": 30
 	},
 
 	"entrance_x": 7,

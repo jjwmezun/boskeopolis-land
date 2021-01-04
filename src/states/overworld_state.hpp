@@ -26,7 +26,7 @@ class OverworldState final : public GameState
 {
 	public:
 		static constexpr int NUMBER_OF_LAYERS = 2;
-		OverworldState( int previous_level, ShowEventType show_event = ShowEventType::NONE );
+		OverworldState( OWTile previous_level, ShowEventType show_event = ShowEventType::NONE );
 		~OverworldState();
 
 		void stateUpdate() override;
@@ -55,13 +55,13 @@ class OverworldState final : public GameState
 		int height_blocks_;
 		int background_animation_timer_;
 		int background_animation_frame_;
-		int current_level_;
-		int previous_level_;
 		int language_id_;
 		int current_palette_;
 		CounterFlip<MAX_ANIMATION_FRAMES - 1> current_animation_frame_;
 		TimerRepeatT2<32> animation_timer_;
 		OWObject* object_on_;
+		OWTile current_space_;
+		OWTile previous_space_;
 		std::vector<int> sprites_tiles_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;

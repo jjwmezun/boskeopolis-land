@@ -1,6 +1,4 @@
 {
-	"name": "Foul Fowl Farm",
-
 	"maps":
 	[
 		{
@@ -56,8 +54,7 @@
 
 	"goal":
 	{
-		"type": "kill_all",
-		"message": "¡Knock out all the Noko no Pollos!"
+		"type": "kill_all"
 	},
 
 	"gem_challenge": 14000,

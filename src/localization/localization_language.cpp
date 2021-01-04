@@ -497,55 +497,52 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
     const auto& level_messages = levels[ "messages" ].GetObject();
     const auto& level_goal_messages = levels[ "goals" ].GetObject();
     const auto& level_cards = levels[ "cards" ].GetObject();
-    for ( int cycle = 1; cycle <= Level::NUMBER_OF_CYCLES; ++cycle )
+    for ( int level = 0; level < Level::NUMBER_OF_LEVELS; ++level )
     {
-        for ( int theme_id = 0; theme_id < Level::NUMBER_OF_THEMES; ++theme_id )
+        const std::string code_name = Level::getCodeNameByID( level );
+        if ( level_names.HasMember( code_name.c_str() ) && level_names[ code_name.c_str() ].IsString() )
         {
-            const std::string code_name = std::string( Level::THEMES[ theme_id ] ) + "-" + std::to_string( cycle );
-            if ( level_names.HasMember( code_name.c_str() ) && level_names[ code_name.c_str() ].IsString() )
+            level_names_.insert
+            ({
+                std::string( code_name.c_str() ),
+                mezun::charToChar32String( level_names[ code_name.c_str() ].GetString() )
+            });
+        }
+        if ( level_messages.HasMember( code_name.c_str() ) && level_messages[ code_name.c_str() ].IsString() )
+        {
+            level_messages_.insert
+            ({
+                std::string( code_name.c_str() ),
+                mezun::charToChar32String( level_messages[ code_name.c_str() ].GetString() )
+            });
+        }
+        if ( level_goal_messages.HasMember( code_name.c_str() ) && level_goal_messages[ code_name.c_str() ].IsString() )
+        {
+            level_goal_messages_.insert
+            ({
+                std::string( code_name.c_str() ),
+                mezun::charToChar32String( level_goal_messages[ code_name.c_str() ].GetString() )
+            });
+        }
+        if ( level_cards.HasMember( code_name.c_str() ) && level_cards[ code_name.c_str() ].IsObject() )
+        {
+            const auto& card = level_cards[ code_name.c_str() ].GetObject();
+            if
+            (
+                card.HasMember( "title" ) &&
+                card[ "title" ].IsString() &&
+                card.HasMember( "description" ) &&
+                card[ "description" ].IsString()
+            )
             {
-                level_names_.insert
+                trading_cards_.insert
                 ({
                     std::string( code_name.c_str() ),
-                    mezun::charToChar32String( level_names[ code_name.c_str() ].GetString() )
+                    {
+                        mezun::charToChar32String( card[ "title" ].GetString() ),
+                        mezun::charToChar32String( card[ "description" ].GetString() )
+                    }
                 });
-            }
-            if ( level_messages.HasMember( code_name.c_str() ) && level_messages[ code_name.c_str() ].IsString() )
-            {
-                level_messages_.insert
-                ({
-                    std::string( code_name.c_str() ),
-                    mezun::charToChar32String( level_messages[ code_name.c_str() ].GetString() )
-                });
-            }
-            if ( level_goal_messages.HasMember( code_name.c_str() ) && level_goal_messages[ code_name.c_str() ].IsString() )
-            {
-                level_goal_messages_.insert
-                ({
-                    std::string( code_name.c_str() ),
-                    mezun::charToChar32String( level_goal_messages[ code_name.c_str() ].GetString() )
-                });
-            }
-            if ( level_cards.HasMember( code_name.c_str() ) && level_cards[ code_name.c_str() ].IsObject() )
-            {
-                const auto& card = level_cards[ code_name.c_str() ].GetObject();
-                if
-                (
-                    card.HasMember( "title" ) &&
-                    card[ "title" ].IsString() &&
-                    card.HasMember( "description" ) &&
-                    card[ "description" ].IsString()
-                )
-                {
-                    trading_cards_.insert
-                    ({
-                        std::string( code_name.c_str() ),
-                        {
-                            mezun::charToChar32String( card[ "title" ].GetString() ),
-                            mezun::charToChar32String( card[ "description" ].GetString() )
-                        }
-                    });
-                }
             }
         }
     }

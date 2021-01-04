@@ -17,27 +17,9 @@ class SpriteSystem;
 class Level final
 {
 	public:
-		static constexpr int NUMBER_OF_THEMES = 15;
+		static constexpr int NUMBER_OF_THEMES = 16;
 		static constexpr int NUMBER_OF_CYCLES = 4;
-		static constexpr int NUMBER_OF_LEVELS = NUMBER_OF_THEMES * NUMBER_OF_CYCLES;
-		static constexpr char THEMES[ Level::NUMBER_OF_THEMES ][ 9 ] =
-		{
-			"city",
-			"domestic",
-			"woods",
-			"mines",
-			"desert",
-			"mountain",
-			"sky",
-			"space",
-			"ice",
-			"pirate",
-			"swamp",
-			"sewer",
-			"factory",
-			"dungeon",
-			"special"
-		};
+		static constexpr int NUMBER_OF_LEVELS = NUMBER_OF_THEMES * NUMBER_OF_CYCLES + 2;
 
 		~Level();
 		Level( Level&& m );
@@ -63,22 +45,27 @@ class Level final
 		int id() const;
 
 		static Level getLevel( int id );
-		static const std::string& NameOLevel( unsigned int n );
-		static unsigned int realLevelNum();
 		static int gemChallenge( unsigned int n );
 		static int timeChallenge( unsigned int n );
 		static bool hasSecretGoal( unsigned int n );
 		static std::u32string gemChallengeText( unsigned int n );
 		static std::u32string timeChallengeText( unsigned int n );
+		static void buildCodeNames();
 		static void buildLevelList();
 		static std::string getCodeNameByID( int id );
 		static int getIDFromCodeName( std::string code_name );
-		static const std::u32string* getLevelNames();
+		static const std::u32string getLevelName( int level );
 		static const std::string& getCodeName( int level_id );
 		static const int getIDbyCycleAndTheme( int cycle, int theme );
 		static const std::string& getCodeNameByCycleAndTheme( int cycle, int theme );
 		static void regenerateLevelNames();
-		static const std::u32string& getSpecialLevelName( int number );
+		static const std::u32string getSpecialLevelName( int number );
+		static int getCycleFromLevelID( int level );
+		static int getThemeFromLevelID( int level );
+		static std::u32string getLevelHeader( int level );
+		static std::u32string getThemeCodeFromLevelID( int level );
+		static int getSpecialLevelID( int number );
+		static int getNextLevel( int level );
 
 	private:
 		const bool start_on_;

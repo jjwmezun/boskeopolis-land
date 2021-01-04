@@ -28,7 +28,10 @@ static constexpr int calculateEntryY( int entry )
 static constexpr int calculateNumberOfLevelsInPage( int page )
 {
 	// If last page o’ cycle, calculate remaining levels that fit ( since it could be less than max ); else, max per page.
-	return ( page % LevelSelectState::PAGES_PER_CYCLE == LevelSelectState::PAGES_PER_CYCLE - 1 ) ? Level::NUMBER_OF_THEMES % LevelSelectState::LEVELS_PER_PAGE : LevelSelectState::LEVELS_PER_PAGE;
+	const int remainder = Level::NUMBER_OF_THEMES % LevelSelectState::LEVELS_PER_PAGE;
+	return ( page % LevelSelectState::PAGES_PER_CYCLE == LevelSelectState::PAGES_PER_CYCLE - 1 )
+			? ( ( remainder == 0 ) ? LevelSelectState::LEVELS_PER_PAGE : remainder )
+			: LevelSelectState::LEVELS_PER_PAGE;
 };
 
 static void renderGemScoreOfColor( WTextCharacter::Color color, int level, int y );
@@ -45,8 +48,6 @@ static void renderPtSymbolOfColorOffset( int color_offset, int y );
 static void renderClockSymbolOfColorOffset( int color_offset, int y );
 static void renderPtSymbol( int y );
 static void renderClockSymbol( int y );
-static void renderThemeIconOfColorOffset( int color_offset, int theme, int y );
-static void renderThemeIcon( int theme, int y );
 static int getThemeFromLevel( int level );
 static void renderGemTargetScore( int level, int y );
 static void renderTimeTargetScore( int level, int y );
@@ -104,7 +105,7 @@ void LevelSelectState::stateUpdate()
 		if ( Inventory::beenToLevel( getSelectedLevel() ) )
 		{
 			Audio::playSound( Audio::SoundType::CONFIRM );
-			Main::changeState( std::make_unique<OverworldState> ( getSelectedLevel() ) );
+			Main::changeState( std::make_unique<OverworldState> ( OWTile::createLevel( getSelectedLevel() ) ) );
 			return;
 		}
 		else
@@ -317,7 +318,6 @@ void LevelSelectState::generateMovingPageTextures()
 			const int y = calculateEntryY( entry );
 
 			renderLevelName( level );
-			renderThemeIcon( theme, y );
 
 			if ( Inventory::victory( level ) )
 			{
@@ -374,7 +374,6 @@ void LevelSelectState::redrawStaticPageTexture()
 		if ( entry == selection_ )
 		{
 			renderLevelName( level );
-			renderThemeIcon( theme, y );
 
 			if ( Inventory::victory( level ) )
 			{
@@ -535,11 +534,6 @@ void LevelSelectState::renderFlashingLevelName( int level )
 	renderLevelNameOfColor( ( WTextCharacter::Color )( FLASH_FRAMES[ flash_frame_ ] ), level );
 };
 
-void LevelSelectState::renderFlashingThemeIcon( int theme, int y ) const
-{
-	renderThemeIconOfColorOffset( FLASH_FRAMES[ flash_frame_ ], theme, y );
-};
-
 void LevelSelectState::renderFlashingVictoryCheck( int y ) const
 {
 	renderVictoryCheckOfColorOffset( FLASH_FRAMES[ flash_frame_ ], y );
@@ -593,7 +587,6 @@ void LevelSelectState::renderFlashFrame()
 		if ( Inventory::levelComplete( level ) )
 		{
 			renderFlashingLevelName( level );
-			renderFlashingThemeIcon( theme, y );
 			renderFlashingVictoryCheck( y );
 			renderFlashingDiamondWinIcon( y );
 			renderFlashingCrownWinIcon( y );
@@ -642,7 +635,7 @@ void LevelSelectState::generateLevelNames()
 	{
 		const int cycle = ( int )( std::floor( ( double )( level ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
 		const int theme = level % Level::NUMBER_OF_THEMES;
-		const std::u32string& level_name = Level::getLevelNames()[ level ];
+		const std::u32string& level_name = Level::getLevelName( level );
 		std::u32string level_name_string = U"";
 		if ( Inventory::beenToLevel( level ) )
 		{
@@ -663,8 +656,9 @@ void LevelSelectState::generateLevelNames()
 				}
 			}
 		}
-		level_name_headers_[ level ] = { mezun::intToChar32String( cycle ) + U": ", 32, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 24, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
-		level_names_[ level ] = { level_name_string, 48, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 288, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
+		level_name_headers_[ level ] = { Level::getLevelHeader( level ), 24, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
+		const int padding = ( level_name_headers_[ level ].getNumberOfCharacters() + 1 ) * WTextCharacter::SIZE_PIXELS;
+		level_names_[ level ] = { level_name_string, 24 + padding, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 320 - padding, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 	}
 };
 
@@ -773,16 +767,6 @@ static void renderPtSymbol( int y )
 static void renderClockSymbol( int y )
 {
 	renderClockSymbolOfColorOffset( 1, y );
-};
-
-static void renderThemeIconOfColorOffset( int color_offset, int theme, int y )
-{
-	Render::renderObject( "bg/level-select-characters.png", { color_offset * 8, 48 + ( theme * 8 ), 8, 8 }, { 28, y + 4, 8, 8 } );
-};
-
-static void renderThemeIcon( int theme, int y )
-{
-	renderThemeIconOfColorOffset( 1, theme, y );
 };
 
 static int getThemeFromLevel( int level )

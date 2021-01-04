@@ -28,11 +28,11 @@ OWInventory::OWInventory()
 	sound_lock_ ( false ),
 	color_animation_ ( 0 ),
 	color_animation_timer_ ( 0 ),
-	prev_level_ ( -1 ),
-	level_ ( -1 ),
+	previous_space_ (),
+	space_ (),
 	current_gem_score_texture_ ( &gem_score_textures_[ 0 ] ),
 	current_time_score_texture_ ( &time_score_textures_[ 0 ] ),
-	level_name_textures_ (),
+	name_textures_ (),
 	gem_score_textures_ (),
 	time_score_textures_ (),
 	gem_score_target_texture_ (),
@@ -52,7 +52,7 @@ OWInventory::~OWInventory()
 {
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
-		level_name_textures_[ i ].destroy();
+		name_textures_[ i ].destroy();
 		gem_score_textures_[ i ].destroy();
 		time_score_textures_[ i ].destroy();
 	}
@@ -64,7 +64,7 @@ void OWInventory::init()
 {
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
-		level_name_textures_[ i ].init();
+		name_textures_[ i ].init();
 		gem_score_textures_[ i ].init();
 		time_score_textures_[ i ].init();
 	}
@@ -72,36 +72,36 @@ void OWInventory::init()
 	time_score_target_texture_.init();
 };
 
-void OWInventory::update( int level )
+void OWInventory::update( OWTile space )
 {
-	level_ = level;
+	space_ = space;
 	Inventory::updateForOverworld();
 	updateShowChallengeScoresInput();
 	updateFlashColor();
 	if ( testOnDifferentLevel() )
 	{
-		if ( testStandingOnLevel() )
+		if ( space_.isLevel() )
 		{
 			regenerateLevelGraphics();
 		}
-		else if ( testStandingOnShop() )
+		else if ( space_.isShop() )
 		{
 			regenerateShopGraphics();
 		}
-		prev_level_ = level_;
+		previous_space_ = space_;
 	}
 };
 
 void OWInventory::render()
 {
 	bg_frame_.render();
-	if ( testStandingOnLevel() )
+	if ( space_.isLevel() )
 	{
 		renderLevelInfo();
 	}
-	else if ( testStandingOnShop() )
+	else if ( space_.isShop() )
 	{
-		level_name_textures_[ 0 ].render();
+		name_textures_[ 0 ].render();
 	}
 	renderPts();
 };
@@ -116,7 +116,7 @@ void OWInventory::renderLevelInfo()
 	current_gem_score_texture_->render();
 	current_time_score_texture_->render();
 	secret_goal_icon_.render();
-	level_name_textures_[ getFlashColor() ].render();
+	name_textures_[ getFlashColor() ].render();
 }
 
 void OWInventory::renderPts()
@@ -147,9 +147,9 @@ void OWInventory::setShowChallengesOff()
 
 void OWInventory::updateTextFlashColor()
 {
-	if ( testStandingOnLevel() )
+	if ( space_.isLevel() )
 	{
-		if ( Inventory::levelComplete( level_ ) )
+		if ( Inventory::levelComplete( space_.getLevelNumber() ) )
 		{
 			win_icon_.src_.x = getFlashColor() * 8;
 			diamond_icon_.src_.x = getFlashColor() * 8;
@@ -159,7 +159,7 @@ void OWInventory::updateTextFlashColor()
 
 		if ( !show_challenges_ )
 		{
-			if ( Inventory::gemChallengeBeaten( level_ ) )
+			if ( Inventory::gemChallengeBeaten( space_.getLevelNumber() ) )
 			{
 				gem_score_icon_.src_.x = getFlashColor() * 8;
 			}
@@ -168,7 +168,7 @@ void OWInventory::updateTextFlashColor()
 
 		if ( !show_challenges_ )
 		{
-			if ( Inventory::timeChallengeBeaten( level_ ) )
+			if ( Inventory::timeChallengeBeaten( space_.getLevelNumber() ) )
 			{
 				time_score_icon_.src_.x = getFlashColor() * 8;
 			}
@@ -179,12 +179,12 @@ void OWInventory::updateTextFlashColor()
 
 bool OWInventory::testOnDifferentLevel() const
 {
-	return prev_level_ != level_;
+	return previous_space_ != space_;
 };
 
 void OWInventory::regenerateLevelGraphics()
 {
-	if ( Inventory::victory( level_ ) )
+	if ( Inventory::victory( space_.getLevelNumber() ) )
 	{
 		win_icon_.src_.x = 16;
 		win_icon_.src_.y = 40;
@@ -194,7 +194,7 @@ void OWInventory::regenerateLevelGraphics()
 		win_icon_.src_.x = 0;
 		win_icon_.src_.y = 16;
 	}
-	if ( Inventory::haveDiamond( level_ ) )
+	if ( Inventory::haveDiamond( space_.getLevelNumber() ) )
 	{
 		diamond_icon_.src_.x = 16;
 		diamond_icon_.src_.y = 32;
@@ -204,44 +204,41 @@ void OWInventory::regenerateLevelGraphics()
 		diamond_icon_.src_.x = 8;
 		diamond_icon_.src_.y = 24;
 	}
-	crown_icon_.src_.x = ( Inventory::hasCrown( level_ ) ) ? 24 : 0;
+	crown_icon_.src_.x = ( Inventory::hasCrown( space_.getLevelNumber() ) ) ? 24 : 0;
 
-	if ( Level::hasSecretGoal( level_ ) )
+	if ( Level::hasSecretGoal( space_.getLevelNumber() ) )
 	{
 		secret_goal_icon_.src_.w = secret_goal_icon_.src_.h = 8;
-		secret_goal_icon_.src_.x = ( Inventory::getSecretGoal( level_ ) ) ? 24 : 0;
+		secret_goal_icon_.src_.x = ( Inventory::getSecretGoal( space_.getLevelNumber() ) ) ? 24 : 0;
 	}
 	else
 	{
 		secret_goal_icon_.src_.w = secret_goal_icon_.src_.h = 0;
 	}
 
-	WTextObj gem_score = { Inventory::gemScore( level_ ).c_str(), SCORE_X, ROW_1 };
-	WTextObj time_score = { Inventory::timeScore( level_ ), SCORE_X + 8, ROW_2 };
-	WTextObj level_name = generateLevelName();
-	WTextObj level_name_header = generateLevelNameHeader();
+	WTextObj gem_score = { Inventory::gemScore( space_.getLevelNumber() ).c_str(), SCORE_X, ROW_1 };
+	WTextObj time_score = { Inventory::timeScore( space_.getLevelNumber() ), SCORE_X + 8, ROW_2 };
 
 	// Generate texture for each color o’ flashing text.
+	regenerateLevelNameGraphics();
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
-		regenerateLevelNameGraphics( level_name, level_name_header, i );
-
-		gem_score.changeColor( Inventory::gemChallengeBeaten( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
+		gem_score.changeColor( Inventory::gemChallengeBeaten( space_.getLevelNumber() ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
 		gem_score_textures_[ i ].init();
 		gem_score_textures_[ i ].startDrawing();
 		Render::clearScreenTransparency();
 		gem_score.render();
 		gem_score_textures_[ i ].endDrawing();
 
-		time_score.changeColor( Inventory::timeChallengeBeaten( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
+		time_score.changeColor( Inventory::timeChallengeBeaten( space_.getLevelNumber() ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK );
 		time_score_textures_[ i ].init();
 		time_score_textures_[ i ].startDrawing();
 		Render::clearScreenTransparency();
 		time_score.render();
 		time_score_textures_[ i ].endDrawing();
 	}
-	const WTextObj gem_score_target = { Level::gemChallengeText( level_ ), SCORE_X, ROW_1, WTextCharacter::Color::DARK_GRAY };
-	const WTextObj time_score_target = { Level::timeChallengeText( level_ ), SCORE_X + 8, ROW_2, WTextCharacter::Color::DARK_GRAY };
+	const WTextObj gem_score_target = { Level::gemChallengeText( space_.getLevelNumber() ), SCORE_X, ROW_1, WTextCharacter::Color::DARK_GRAY };
+	const WTextObj time_score_target = { Level::timeChallengeText( space_.getLevelNumber() ), SCORE_X + 8, ROW_2, WTextCharacter::Color::DARK_GRAY };
 	gem_score_target_texture_.startDrawing();
 		Render::clearScreenTransparency();
 	gem_score_target.render();
@@ -268,40 +265,23 @@ WTextObj OWInventory::generateName( std::u32string name, int offset ) const
 	};
 };
 
-WTextObj OWInventory::generateLevelName() const
+void OWInventory::regenerateLevelNameGraphics()
 {
-	return generateName( Level::getLevelNames()[ level_ ], 24 );
-};
-
-WTextObj OWInventory::generateShopName() const
-{
-	return generateName( Localization::getCurrentLanguage().getOverworldShopTitle(), 0 );
-};
-
-WTextObj OWInventory::generateLevelNameHeader() const
-{
-	const int cycle_number = ( int )( std::floor( ( double )( level_ ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
-	const std::u32string header = mezun::charToChar32String( mezun::stringReplace( "%n: ", "%n", std::to_string( cycle_number ) ).c_str() );
-	return { header, LEVEL_NAME_X + 16, ROW_1 };
-};
-
-void OWInventory::regenerateLevelNameGraphics( WTextObj& level_name, WTextObj& level_name_header, int i )
-{
-	const WTextCharacter::Color color = Inventory::levelComplete( level_ ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK;
-	const int theme = level_ % Level::NUMBER_OF_THEMES;
-	level_name.changeColor( color );
-	level_name_textures_[ i ].startDrawing();
-	Render::clearScreenTransparency();
-	if ( !isShop() )
+	const std::u32string level_name_header_text = Level::getLevelHeader( space_.getLevelNumber() );
+	WTextObj level_name_header { level_name_header_text, LEVEL_NAME_X + 16, ROW_1 };
+	WTextObj level_name = generateName( Level::getLevelName( space_.getLevelNumber() ), WTextCharacter::SIZE_PIXELS * ( level_name_header_text.length() + 1 ) );
+	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
-		level_icon_.src_.y = 48 + ( 8 * theme );
-		level_icon_.src_.x = 8 * ( int )( color );
-		level_icon_.render();
+		const WTextCharacter::Color color = Inventory::levelComplete( space_.getLevelNumber() ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK;
 		level_name_header.changeColor( color );
+		level_name.changeColor( color );
+
+		name_textures_[ i ].startDrawing();
+		Render::clearScreenTransparency();
 		level_name_header.render();
+		level_name.render();
+		name_textures_[ i ].endDrawing();
 	}
-	level_name.render();
-	level_name_textures_[ i ].endDrawing();
 };
 
 void OWInventory::updateFlashColor()
@@ -325,7 +305,7 @@ void OWInventory::updateShowChallengeScoresInput()
 	{
 		show_challenges_lock_ = false;
 	}
-	else if ( level_ < 0 )
+	else if ( !space_.isLevel() )
 	{
 		show_challenges_lock_ = true;
 	}
@@ -351,43 +331,23 @@ bool OWInventory::testMoneyInTheRed() const
 	return Inventory::totalFundsShown() < 0;
 };
 
-bool OWInventory::testStandingOnLevel() const
-{
-	return level_ > -1;
-};
-
-bool OWInventory::testStandingOnShop() const
-{
-	return level_ < -1;
-};
-
 void OWInventory::forceLevelNameRedraw()
 {
-	if ( testStandingOnShop() )
+	if ( space_.isShop() )
 	{
 		regenerateShopGraphics();
 	}
-	else if ( testStandingOnLevel() )
+	else if ( space_.isLevel() )
 	{
-		WTextObj level_name = generateLevelName();
-		WTextObj level_name_header = generateLevelNameHeader();
-		for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
-		{
-			regenerateLevelNameGraphics( level_name, level_name_header, i );
-		}
+		regenerateLevelNameGraphics();
 	}
 };
 
 void OWInventory::regenerateShopGraphics()
 {
-	WTextObj shop_name = generateShopName();
-	level_name_textures_[ 0 ].startDrawing();
+	WTextObj shop_name = generateName( Localization::getCurrentLanguage().getOverworldShopTitle(), 0 );
+	name_textures_[ 0 ].startDrawing();
 	Render::clearScreenTransparency();
 	shop_name.render();
-	level_name_textures_[ 0 ].endDrawing();
-};
-
-bool OWInventory::isShop() const
-{
-	return level_ < 0;
+	name_textures_[ 0 ].endDrawing();
 };

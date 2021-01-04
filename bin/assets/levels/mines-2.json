@@ -1,45 +1,24 @@
 {
-	"name": "Catahoneycombs",
 	"maps":
 	[
 		{
-			"slug": "mines-5",
+			"slug": "mines-3",
 			"layers":
 			[
 				{
 					"type": "image",
-					"img": "blinking-bees.png",
-					"width": 10,
-					"height": 10,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25,
-					"frames": 26,
-					"animation_speed": 8,
-					"alpha": 64
-				},
-				{
-					"type": "image",
-					"img": "hive_bg_3.png",
-					"width": 460,
-					"height": 280,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "hive_bg_2.png",
-					"width": 460,
-					"height": 280,
-					"x_scroll": 0.25,
-					"y_scroll": 0.25,
-					"alpha": 64
+					"img": "mines-bg.png",
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.5,
+					"y_scroll": 0.5
 				}
 			]
 		}
 	],
 
-	"entrance_x": 5,
-	"entrance_y": 53,
-	"gem_challenge": 9000,
-	"time_challenge": 20
+	"entrance_x": 0,
+	"entrance_y": 29,
+	"gem_challenge": 19000,
+	"time_challenge": 25
 }

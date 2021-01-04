@@ -93,13 +93,14 @@ Save Save::createNew( std::u32string name )
     save.name_ = name;
     save.data_.oxygen_upgrade_ = false;
     save.data_.total_funds_ = 0;
-    save.data_.current_level_ = -1;
+    save.data_.current_space_ = OWTile::createNull();
     save.data_.health_upgrades_[ 0 ] = false;
     save.data_.health_upgrades_[ 1 ] = false;
     save.data_.health_upgrades_[ 2 ] = false;
     for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
     {
         save.data_.been_to_level_[ i ] =
+            save.data_.levels_unlocked_[ i ] =
             save.data_.victories_[ i ] =
             save.data_.secret_goals_[ i ] =
             save.data_.diamonds_[ i ] =
@@ -222,8 +223,7 @@ bool Save::validateSaveData( const SaveData& data )
     return
         data.total_funds_ >= Unit::TOTAL_FUNDS_MIN &&
         data.total_funds_ <= Unit::TOTAL_FUNDS_MAX &&
-        data.current_level_ >= -2 &&
-        data.current_level_ < Level::NUMBER_OF_LEVELS;
+        data.current_space_.isValid();
 };
 
 static Save::Status saveDataToBackup( const std::string& name, const SaveData& data )

@@ -34,7 +34,7 @@ ShopState::ShopState( int shop_number )
         { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Level::getSpecialLevelName( 1 ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 100000 }
     })
 {
-    Inventory::setCurrentLevel( -2 );
+    Inventory::setSpaceAsShop( shop_number );
     Inventory::save();
 };
 
@@ -262,7 +262,7 @@ void ShopState::stateUpdate()
                         event_type = ShowEventType::NORMAL;
                     }
                 }
-                Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( -2, event_type ) ) );
+                Main::changeState( std::unique_ptr<OverworldState> ( new OverworldState( Inventory::currentSpace(), event_type ) ) );
             }
         }
         break;

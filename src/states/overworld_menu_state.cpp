@@ -25,11 +25,11 @@ static constexpr int getOptionY( int i )
 	return BG_Y + 16 + ( 16 * i );
 };
 
-OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_state, int level, int level_color )
+OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_state, OWTile space, int level_color )
 :
 	GameState( StateID::OVERWORLD_MENU_STATE, pal ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
-	level_ ( level ),
+	space_ ( space ),
 	level_color_ ( level_color ),
 	option_selection_ ( ( int )( Option::CONTINUE ) ),
 	camera_state_ ( camera_state ),
@@ -154,11 +154,11 @@ void OverworldMenuState::regenerateOptionsTextOnLanguageChange()
 		generateOptionsText();
 		language_id_ = Localization::getCurrentLanguageIndex();
 
-		if ( testOverworldShowsLevelName() )
+		if ( space_.isLevel() )
 		{
 			generateReplacementLevelNameTexture();
 		}
-		else if ( testOverworldShowsShopName() )
+		else if ( space_.isShop() )
 		{
 			generateReplacementShopNameTexture();
 		}
@@ -173,16 +173,6 @@ void OverworldMenuState::generateOptionsText()
 		const WTextCharacter::Color color = ( i == option_selection_.value() ) ? HIGHLIGHT_COLOR : REGULAR_COLOR;
 		options_text_[ i ] = WTextObj( names[ i ], BG_X, getOptionY( i ), color, BG_WIDTH, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 16 );
 	}
-};
-
-bool OverworldMenuState::testOverworldShowsLevelName() const
-{
-	return level_ > -1;
-};
-
-bool OverworldMenuState::testOverworldShowsShopName() const
-{
-	return level_ < -1;
 };
 
 void OverworldMenuState::generateReplacementNameTexture( const std::u32string& string, WTextCharacter::Color color )
@@ -200,7 +190,7 @@ void OverworldMenuState::generateReplacementNameTexture( const std::u32string& s
 
 void OverworldMenuState::generateReplacementLevelNameTexture()
 {
-	generateReplacementNameTexture( Level::getLevelNames()[ level_ ], ( WTextCharacter::Color )( level_color_ ) );
+	generateReplacementNameTexture( Level::getLevelName( space_.getLevelNumber() ), ( WTextCharacter::Color )( level_color_ ) );
 };
 
 void OverworldMenuState::generateReplacementShopNameTexture()

@@ -1,49 +1,13 @@
 {
-	"name": "Mind Your Manors",
 	"maps":
 	[
 		{
-			"slug": "mansion-1",
-			"layers":
-			[
-				{
-					"type": "image",
-					"img": "waxing-gibbous-moon-2.png",
-					"width": 32,
-					"height": 32,
-					"x_scroll": 0.0,
-					"y_scroll": 0.0,
-					"y_repeat": false,
-					"x_repeat": false,
-					"x_offset": 48,
-					"y_offset": 24
-				},
-				{
-					"type": "image",
-					"img": "thin_boughs_dark.png",
-					"width": 256,
-					"height": 256,
-					"x_scroll": 0.25
-				},
-				{
-					"type": "image",
-					"img": "thick_boughs.png",
-					"width": 640,
-					"height": 256,
-					"x_scroll": 0.5
-				}
-			]
+			"slug": "dungeon-2"
 		}
 	],
 
-	"entrance_x": 97,
-	"entrance_y": 55,
-	"gem_challenge": 20000,
-	"time_challenge": 40,
-
-	"goal":
-	{
-		"type": "kill_all",
-		"message": "¡Make all the ghosts fade with your flashlight!"
-	}
+	"entrance_x": 21,
+	"entrance_y": 34,
+	"gem_challenge": 99999,
+	"time_challenge": 1
 }

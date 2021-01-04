@@ -35,8 +35,7 @@
 	
 	"goal":
 	{
-		"type": "past_right_edge",
-		"message": "¡Catch the sale on rare collectibles!"
+		"type": "past_right_edge"
 	},
 	
 	"entrance_x": -2,

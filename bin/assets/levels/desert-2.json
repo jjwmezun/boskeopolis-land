@@ -1,6 +1,4 @@
 {
-	"name": "Peperoncini Pyramid",
-	
 	"maps":
 	[
 		{
@@ -19,8 +17,7 @@
 
 	"goal":
 	{
-		"type": "warp",
-		"message": "¡Get the silver moon & then 'scape 'fore time\nruns out!"
+		"type": "warp"
 	},
 
 	"entrance_x": 5,

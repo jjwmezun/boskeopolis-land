@@ -1,6 +1,7 @@
 #pragma once
 
 #include "image_graphics.hpp"
+#include "ow_tile.hpp"
 #include "sprite_graphics.hpp"
 #include "text_obj.hpp"
 #include "texture_box.hpp"
@@ -25,7 +26,7 @@ class OWInventory final
 		OWInventory( OWInventory&& ) = delete;
 		OWInventory& operator=( const OWInventory& ) = delete;
 		OWInventory& operator=( OWInventory&& ) = delete;
-		void update( int level );
+		void update( OWTile space );
 		void render();
 		void init();
 		void forceLevelNameRedraw();
@@ -46,26 +47,20 @@ class OWInventory final
 		void updateTextFlashColor();
 		bool testOnDifferentLevel() const;
 		bool testMoneyInTheRed() const;
-		bool testStandingOnLevel() const;
-		void regenerateLevelNameGraphics( WTextObj& level_name, WTextObj& level_name_header, int i );
+		void regenerateLevelNameGraphics();
 		WTextObj generateName( std::u32string text, int offset ) const;
-		WTextObj generateLevelName() const;
-		WTextObj generateShopName() const;
-		bool testStandingOnShop() const;
 		void regenerateShopGraphics();
-		WTextObj generateLevelNameHeader() const;
-		bool isShop() const;
 
 		bool show_challenges_;
 		bool show_challenges_lock_;
 		bool sound_lock_;
 		int color_animation_;
 		int color_animation_timer_;
-		int prev_level_;
-		int level_;
 		TextureBox* current_gem_score_texture_;
 		TextureBox* current_time_score_texture_;
-		TextureBox level_name_textures_[ ( int )( WTextCharacter::Color::__NULL ) ];
+		OWTile previous_space_;
+		OWTile space_;
+		TextureBox name_textures_[ ( int )( WTextCharacter::Color::__NULL ) ];
 		TextureBox gem_score_textures_[ ( int )( WTextCharacter::Color::__NULL ) ];
 		TextureBox time_score_textures_[ ( int )( WTextCharacter::Color::__NULL ) ];
 		TextureBox gem_score_target_texture_;

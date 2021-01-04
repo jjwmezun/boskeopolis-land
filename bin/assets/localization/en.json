@@ -255,6 +255,25 @@
         "kill_all": "¡Destroy all enemies!"
     },
     "dungeon_healer_text": "Pay 5,000 & you can heal.",
+    "themes_codes":
+    [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "$"
+    ],
     "levels":
     {
         "names":
@@ -269,17 +288,18 @@
             "space-1": "¿…Or Is it All Just… Lunacy?",
             "ice-1": "Chillblain Lake",
             "pirate-1": "Fortune Beach",
-            "swamp-1": "Bayou Jupiter",
+            "swamp-1": "Cattail Trail",
             "sewer-1": "Porcelain Dreams",
             "factory-1": "Ol’ Factory",
-            "dungeon-1": "Gravity, Hypocrisy, & the Perils o’ Being in 3D",
+            "muerto-1": "Mind Your Manors",
+            "dungeon-1": "The Perils o’ Being in 3D",
             "special-1": "Play in the Background",
             "city-2": "Storming Skyscrapers",
             "domestic-2": "I Wanna Be Your Vacuum Cleaner",
             "woods-2": "Bough Down",
             "mines-2": "Catahoneycombs",
             "desert-2": "Peperoncini Pyramid",
-            "mountain-2": "Milky Mountain",
+            "mountain-2": "Honeydew Hills",
             "sky-2": "Value Valhalla",
             "space-2": "Mothership Contention",
             "ice-2": "Ice Box Rock",
@@ -287,10 +307,12 @@
             "swamp-2": "I Can Go with the Flow",
             "sewer-2": "Soupy Sewers",
             "factory-2": "The Amazon Jungle",
-            "dungeon-2": "Mind Your Manors",
+            "muerto-2": "Paranormal Reading",
+            "dungeon-2": "¡Guards! ¡Guards!",
             "special-2": "Casino Vulgaire",
             "city-3": "Rooftop Race",
-            "woods-3": "Foggy Forest",
+            "domestic-3": "Don’t Touch Me, I’m a Real Live Wire",
+            "woods-3": "Arbor Heights",
             "mines-3": "Curse o’ the Ladder-Splayed Caves",
             "desert-3": "Dark Sahara",
             "mountain-3": "Mt. Rooster",
@@ -301,10 +323,11 @@
             "swamp-3": "Cascade Parade",
             "sewer-3": "Flush Flood",
             "factory-3": "Warm Up",
-            "domestic-3": "Don’t Touch Me, I’m a Real Live Wire",
+            "muerto-3": "Foggy Forest",
             "dungeon-3": "Golden Gear Solid",
             "special-3": "Sleet Streets",
             "city-4": "Cometropolis",
+            "domestic-4": "Mart Cart Madness",
             "woods-4": "Thru the Sharp Hawthorn Blow the Winds",
             "mines-4": "The Minus Touch",
             "desert-4": "Playing Railroad",
@@ -315,10 +338,12 @@
             "pirate-4": "Good Ship Lifestyle",
             "swamp-4": "Broccoli Bridge",
             "sewer-4": "Boskeopolis Underground",
-            "factory-4": "Level Industries, Inc.",
-            "domestic-4": "Mart Cart Madness",
+            "factory-4": "An Orange Clockwork",
+            "muerto-4": "& Pass the Cemetery Gates",
             "dungeon-4": "Castle Chamsby",
-            "special-4": "Maybe I’m a Maze"
+            "special-4": "Maybe I’m a Maze",
+            "final": "FINAL BOSS: Lance Chamsby",
+            "bonus": "Treasure Towers"
         },
         "messages":
         {
@@ -411,6 +436,10 @@
                 "title": "MISSING CARD TITLE",
                 "description": "MISSING CARD DESCRIPTION"
             },
+            "muerto-1": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
             "dungeon-1": {
                 "title": "MISSING CARD TITLE",
                 "description": "MISSING CARD DESCRIPTION"
@@ -470,6 +499,10 @@
                 "description": "MISSING CARD DESCRIPTION"
             },
             "factory-2": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "muerto-2": {
                 "title": "MISSING CARD TITLE",
                 "description": "MISSING CARD DESCRIPTION"
             },
@@ -535,6 +568,10 @@
                 "title": "MISSING CARD TITLE",
                 "description": "MISSING CARD DESCRIPTION"
             },
+            "muerto-3": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
             "dungeon-3": {
                 "title": "MISSING CARD TITLE",
                 "description": "MISSING CARD DESCRIPTION"
@@ -595,6 +632,10 @@
                 "episode": "#BOSK-CE191C-HURRY: HURRY UP PLEASE IT’S HURRY UP PLEASE IT’S HURRY UP PLEASE IT’S TIME"
             },
             "domestic-4": {
+                "title": "MISSING CARD TITLE",
+                "description": "MISSING CARD DESCRIPTION"
+            },
+            "muerto-4": {
                 "title": "MISSING CARD TITLE",
                 "description": "MISSING CARD DESCRIPTION"
             },

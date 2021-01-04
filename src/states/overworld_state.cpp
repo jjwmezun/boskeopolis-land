@@ -33,13 +33,14 @@ static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 	"Overworld Black"
 };
 
-static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS + 2 ] = 
+static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS + 4 ] = 
 {
-	1, 0,
-	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 3, 3, 8, 0,
-	8, 1, 0, 0, 0, 0, 0, 0, 8, 8, 7, 3, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 7, 3, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 7, 3, 3, 8, 0, // CYCLE 1
+	8, 1, 0, 0, 0, 0, 0, 0, 8, 8, 7, 7, 3, 0, 0, 0, // CYCLE 2
+	0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 7, 7, 3, 0, 0, 0, // CYCLE 3
+	0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 7, 7, 3, 0, 0, 0, // CYCLE 4
+	8, 8, // CHAMSBY & TREASURE TOWERS
+	1, 1, 1, 1 // SHOP PALETTES
 };
 
 static const std::unordered_map<int, std::array<int, 2>> animated_frames_
@@ -64,23 +65,24 @@ static constexpr OWState determineBeginningState( ShowEventType event_type )
 	}
 };
 
-static const char* getPaletteForLevel();
+static const char* getSpacePaletteName( OWTile space );
+static int getSpacePalette( OWTile space );
 
-OverworldState::OverworldState( int previous_level, ShowEventType show_event )
+OverworldState::OverworldState( OWTile previous_space, ShowEventType show_event )
 :
-	GameState( StateID::OVERWORLD_STATE, { getPaletteForLevel(), 2 } ),
+	GameState( StateID::OVERWORLD_STATE, { getSpacePaletteName( previous_space ), 2 } ),
 	state_ ( determineBeginningState( show_event ) ),
 	width_blocks_ ( 0 ),
 	height_blocks_ ( 0 ),
 	background_animation_timer_ ( 0 ),
 	background_animation_frame_ ( 0 ),
-	current_level_ ( previous_level ),
-	previous_level_ ( previous_level ),
 	language_id_ ( Localization::getCurrentLanguageIndex() ),
-	current_palette_ ( LEVEL_PALETTES[ previous_level + 2 ] ),
+	current_palette_ ( getSpacePalette( previous_space ) ),
 	current_animation_frame_ ( 0 ),
 	animation_timer_ (),
 	object_on_ ( nullptr ),
+	current_space_ ( previous_space ),
+	previous_space_ ( previous_space ),
 	objects_ (),
 	tilemap_ (),
 	screen_ ( Unit::WINDOW_WIDTH_PIXELS - 12, frameToScreenSize( Unit::WINDOW_HEIGHT_PIXELS ), 6, 6 ),
@@ -120,8 +122,8 @@ void OverworldState::stateUpdate()
 			camera_.adjust( hero_.getGraphicsBox() );
 			hero_.update( tilemap_, camera_.getBox() );
 
-			const int level_momento = current_level_;
-			current_level_ = -1;
+			const OWTile level_momento = current_space_;
+			current_space_ = OWTile::createNull();
 			const DPoint& hero_position = hero_.getPosition();
 			const int tile_x = ( int )( std::floor( ( hero_position.x ) / 16.0 ) );
 			const int tile_y = ( int )( std::floor( ( hero_position.y ) / 16.0 ) );
@@ -135,7 +137,7 @@ void OverworldState::stateUpdate()
 				{
 					case ( OWObject::Type::LEVEL ):
 					{
-						current_level_ = seek->second.getLevelValue();
+						current_space_ = OWTile::createLevel( seek->second.getLevelValue() );
 					}
 					break;
 					case ( OWObject::Type::PALETTE ):
@@ -150,12 +152,12 @@ void OverworldState::stateUpdate()
 					break;
 					case ( OWObject::Type::SHOP ):
 					{
-						current_level_ = -2;
+						current_space_ = OWTile::createShop( 1 );
 					}
 					break;
 				}
 			}
-			inventory_.update( current_level_ );
+			inventory_.update( current_space_ );
 
 			if ( Input::pressed( Input::Action::CONFIRM ) )
 			{
@@ -180,7 +182,7 @@ void OverworldState::stateUpdate()
 			}
 			else
 			{
-				if ( current_level_ != -1 && current_level_ != level_momento )
+				if ( !current_space_.isNull() && current_space_ != level_momento )
 				{
 					Audio::playSound( Audio::SoundType::SELECT );
 				}
@@ -377,7 +379,7 @@ void OverworldState::init()
 	camera_.setBounds( width, height );
 
 	generateSprites();
-	if ( Inventory::specialLevelUnlocked( 1 ) && ( state_ != OWState::CAMERA_MOVES_TO_EVENT || -2 != current_level_ ) )
+	if ( Inventory::specialLevelUnlocked( 1 ) && ( state_ != OWState::CAMERA_MOVES_TO_EVENT || !current_space_.isShop() ) )
 	{
 		OWEvent event;
 		event.init( -2, width_blocks_, false );
@@ -386,14 +388,20 @@ void OverworldState::init()
 	}
 	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
 	{
-		if ( Inventory::victory( i ) && ( state_ != OWState::CAMERA_MOVES_TO_EVENT || i != current_level_ ) )
+		const bool reveal_event =
+		(
+			state_ != OWState::CAMERA_MOVES_TO_EVENT ||
+			!current_space_.isLevel() ||
+			!current_space_.isLevelNumber( i )
+		);
+		if ( Inventory::victory( i ) && reveal_event )
 		{
 			OWEvent event;
 			event.init( i, width_blocks_, false );
 			event.changeAllTiles( bg_tiles_, fg_tiles_ );
 			level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
 		}
-		if ( Inventory::getSecretGoal( i ) && ( state_ != OWState::CAMERA_MOVES_TO_SECRET_EVENT || i != current_level_ ) )
+		if ( Inventory::getSecretGoal( i ) && reveal_event )
 		{
 			OWEvent event;
 			event.init( i, width_blocks_, true );
@@ -436,7 +444,7 @@ void OverworldState::testForMenuAction()
 	{
 		Main::pushState
 		(
-			std::make_unique<OverworldMenuState> ( palette(), &state_, current_level_, inventory_.getFlashColor() )
+			std::make_unique<OverworldMenuState> ( palette(), &state_, current_space_, inventory_.getFlashColor() )
 		);
 	}
 };
@@ -498,7 +506,7 @@ void OverworldState::generateSprites()
 			}
 			if ( sprite_tile == 2048 )
 			{
-				if ( previous_level_ == -1 )
+				if ( previous_space_.isNull() )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
@@ -508,7 +516,7 @@ void OverworldState::generateSprites()
 				const int theme = ( sprite_tile - 2064 ) % 16;
 				const int cycle = ( int )( std::floor( ( double )( sprite_tile - 2064 ) / 16.0 ) );
 				const int level_id = cycle * Level::NUMBER_OF_THEMES + theme;
-				if ( previous_level_ == level_id )
+				if ( previous_space_.isLevel() && previous_space_.isLevelNumber( level_id ) )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
@@ -519,7 +527,7 @@ void OverworldState::generateSprites()
 			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
 			{
 				const int shop_number = sprite_tile - 2160 + 1;
-				if ( previous_level_ == -2 )
+				if ( previous_space_.isShop() )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
@@ -718,8 +726,14 @@ bool OverworldState::testLanguageHasChanged() const
 	return Localization::getCurrentLanguageIndex() != language_id_;
 };
 
-static const char* getPaletteForLevel()
+static const char* getSpacePaletteName( OWTile space )
 {
-	const int level = Inventory::currentLevel();
-	return ( level >= 0 ) ? PALETTES[ LEVEL_PALETTES[ level ] ] : PALETTES[ 0 ];
+	return PALETTES[ getSpacePalette( space ) ];
+};
+
+static int getSpacePalette( OWTile space )
+{
+	return ( space.isShop() ) ? LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ]
+		: ( space.isLevel() ) ? LEVEL_PALETTES[ space.getLevelNumber() ]
+		: 0;
 };

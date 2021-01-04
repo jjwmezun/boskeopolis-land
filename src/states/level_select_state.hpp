@@ -41,7 +41,6 @@ class LevelSelectState final : public GameState
 		void renderLevelNameOfColor( WTextCharacter::Color color, int level );
 		void renderLevelName( int level );
 		void renderFlashingLevelName( int level );
-		void renderFlashingThemeIcon( int theme, int y ) const;
 		void renderFlashingVictoryCheck( int y ) const;
 		void renderFlashingDiamondWinIcon( int y ) const;
 		void renderFlashingCrownWinIcon( int y ) const;

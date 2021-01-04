@@ -17,7 +17,9 @@
 CounterT<Unit::TOTAL_FUNDS_MAX, Unit::TOTAL_FUNDS_MIN> Inventory::total_funds_shown_{};
 Save Inventory::save_{};
 
-int Inventory::currentLevel() { return save_.data_.current_level_; };
+OWTile Inventory::currentSpace() { return save_.data_.current_space_; };
+
+int Inventory::currentLevel() { return save_.data_.current_space_.getLevelNumber(); };
 
 bool Inventory::levelComplete( int level )
 {
@@ -31,7 +33,7 @@ bool Inventory::levelComplete( int level )
 
 bool Inventory::haveDiamond()
 {
-	return save_.data_.diamonds_[ save_.data_.current_level_ ];
+	return ( save_.data_.current_space_.isLevel() ) ? save_.data_.diamonds_[ currentLevel() ] : false;
 };
 
 bool Inventory::haveDiamond( int level )
@@ -41,8 +43,11 @@ bool Inventory::haveDiamond( int level )
 
 void Inventory::getDiamond()
 {
-	save_.data_.diamonds_[ save_.data_.current_level_ ] = true;
-	save();
+	if ( save_.data_.current_space_.isLevel() )
+	{
+		save_.data_.diamonds_[ currentLevel() ] = true;
+		save();
+	}
 };
 
 std::u32string Inventory::gemScore( int level )
@@ -62,9 +67,9 @@ void Inventory::setGemScore( int level, int value )
 
 void Inventory::winGemScore( int funds )
 {
-	if ( funds >= save_.data_.gem_scores_[ save_.data_.current_level_ ] )
+	if ( save_.data_.current_space_.isLevel() && funds >= save_.data_.gem_scores_[ currentLevel() ] )
 	{
-		setGemScore( save_.data_.current_level_, funds );
+		setGemScore( currentLevel(), funds );
 	}
 };
 
@@ -90,9 +95,12 @@ void Inventory::setTimeScore( int level, int value )
 
 void Inventory::winTimeScore( const Clock& clock )
 {
-	if ( save_.data_.time_scores_[ save_.data_.current_level_ ] < 0 || clock.totalSeconds() <= save_.data_.time_scores_[ save_.data_.current_level_ ] )
+	if ( save_.data_.current_space_.isLevel() )
 	{
-		setTimeScore( save_.data_.current_level_, clock.totalSeconds() );
+		if ( save_.data_.time_scores_[ currentLevel() ] < 0 || clock.totalSeconds() <= save_.data_.time_scores_[ currentLevel() ] )
+		{
+			setTimeScore( currentLevel(), clock.totalSeconds() );
+		}
 	}
 };
 
@@ -103,7 +111,7 @@ bool Inventory::timeChallengeBeaten( int level )
 
 bool Inventory::victory()
 {
-	return save_.data_.victories_[ save_.data_.current_level_ ];
+	return ( save_.data_.current_space_.isLevel() ) ? save_.data_.victories_[ currentLevel() ] : false;
 };
 
 bool Inventory::victory( int level )
@@ -113,7 +121,7 @@ bool Inventory::victory( int level )
 
 bool Inventory::getSecretGoal()
 {
-	return save_.data_.secret_goals_[ save_.data_.current_level_ ];
+	return ( save_.data_.current_space_.isLevel() ) ? save_.data_.secret_goals_[ currentLevel() ] : false;
 };
 
 bool Inventory::getSecretGoal( int level )
@@ -129,13 +137,13 @@ bool Inventory::beenToLevel( int level )
 void Inventory::levelStart( int level )
 {
 	save_.data_.been_to_level_[ level ] = true;
-	save_.data_.current_level_ = level;
+	save_.data_.current_space_ = OWTile::createLevel( level );
 	save();
 };
 
-void Inventory::setCurrentLevel( int level )
+void Inventory::setSpaceAsShop( int value )
 {
-	save_.data_.current_level_ = level;
+	save_.data_.current_space_ = OWTile::createShop( value );
 };
 
 int Inventory::totalFundsShown()
@@ -312,8 +320,13 @@ void Inventory::load( Save save )
 
 void Inventory::win( const InventoryLevel& level_inventory )
 {
-	save_.data_.victories_[ save_.data_.current_level_ ] = true;
-	generalVictory( level_inventory );
+	if ( save_.data_.current_space_.isLevel() )
+	{
+		const int level_id = save_.data_.current_space_.getLevelNumber();
+		save_.data_.victories_[ level_id ] = true;
+		save_.data_.levels_unlocked_[ Level::getNextLevel( level_id ) ] = true;
+		generalVictory( level_inventory );
+	}
 };
 
 void Inventory::fail()
@@ -332,15 +345,18 @@ void Inventory::quit()
 
 void Inventory::secretGoal( const InventoryLevel& level_inventory )
 {
-	save_.data_.secret_goals_[ save_.data_.current_level_ ] = true;
-	generalVictory( level_inventory );
+	if ( save_.data_.current_space_.isLevel() )
+	{
+		save_.data_.secret_goals_[ currentLevel() ] = true;
+		generalVictory( level_inventory );
+	}
 };
 
 void Inventory::generalVictory( const InventoryLevel& level_inventory )
 {
 	if ( level_inventory.isHardMode() )
 	{
-		save_.data_.crowns_[ save_.data_.current_level_ ] = true;
+		save_.data_.crowns_[ currentLevel() ] = true;
 	}
 	winGemScore( level_inventory.funds() );
 	winTimeScore( level_inventory.clock() );
@@ -410,10 +426,10 @@ void Inventory::giveHPUpgrade( int number )
 
 void Inventory::unlockSpecialLevel( int number )
 {
-	save_.data_.special_levels_[ number ] = true;
+	save_.data_.levels_unlocked_[ Level::getSpecialLevelID( number ) ] = true;
 };
 
 bool Inventory::specialLevelUnlocked( int number )
 {
-	return save_.data_.special_levels_[ number ];
+	return save_.data_.levels_unlocked_[ Level::getSpecialLevelID( number ) ];
 };

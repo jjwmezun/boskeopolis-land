@@ -121,6 +121,7 @@ namespace Main
 	{
 		initSDL();
 		setResourcePaths();
+		Level::buildCodeNames();
 		Localization::init();
 		const ConsoleArguments args( argc, argv );
 		NOSAVE = args.nosave();
