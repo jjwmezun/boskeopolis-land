@@ -43,5 +43,7 @@
 	{
 		"type": "timed_on",
 		"time": 30
-	}
+	},
+	"cycle": 3,
+	"theme": 2
 }

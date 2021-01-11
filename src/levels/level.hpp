@@ -39,7 +39,7 @@ class Level final
 		void warp( LevelState& level_state );
 		void sewerWarp( SpriteSystem& sprites, EventSystem& events );
 		const std::u32string& message() const;
-		std::string getCodeName() const;
+		const std::string& getCodeName() const;
 		int allEnemiesToKill() const;
 		bool startOn() const;
 		int id() const;
@@ -52,19 +52,15 @@ class Level final
 		static std::u32string timeChallengeText( unsigned int n );
 		static void buildCodeNames();
 		static void buildLevelList();
-		static std::string getCodeNameByID( int id );
 		static int getIDFromCodeName( std::string code_name );
-		static const std::u32string getLevelName( int level );
 		static const std::string& getCodeName( int level_id );
-		static const int getIDbyCycleAndTheme( int cycle, int theme );
+		static int getIDbyCycleAndTheme( int cycle, int theme );
 		static const std::string& getCodeNameByCycleAndTheme( int cycle, int theme );
-		static void regenerateLevelNames();
-		static const std::u32string getSpecialLevelName( int number );
+		static int getSpecialLevelID( int number );
 		static int getCycleFromLevelID( int level );
 		static int getThemeFromLevelID( int level );
 		static std::u32string getLevelHeader( int level );
 		static std::u32string getThemeCodeFromLevelID( int level );
-		static int getSpecialLevelID( int number );
 		static int getNextLevel( int level );
 
 	private:

@@ -190,7 +190,7 @@ void OverworldMenuState::generateReplacementNameTexture( const std::u32string& s
 
 void OverworldMenuState::generateReplacementLevelNameTexture()
 {
-	generateReplacementNameTexture( Level::getLevelName( space_.getLevelNumber() ), ( WTextCharacter::Color )( level_color_ ) );
+	generateReplacementNameTexture( Localization::getCurrentLanguage().getLevelName( Level::getCodeName( space_.getLevelNumber() ) ), ( WTextCharacter::Color )( level_color_ ) );
 };
 
 void OverworldMenuState::generateReplacementShopNameTexture()

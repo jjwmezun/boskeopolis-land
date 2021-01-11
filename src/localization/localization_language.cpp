@@ -499,7 +499,7 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
     const auto& level_cards = levels[ "cards" ].GetObject();
     for ( int level = 0; level < Level::NUMBER_OF_LEVELS; ++level )
     {
-        const std::string code_name = Level::getCodeNameByID( level );
+        const std::string code_name = Level::getCodeName( level );
         if ( level_names.HasMember( code_name.c_str() ) && level_names[ code_name.c_str() ].IsString() )
         {
             level_names_.insert

@@ -511,18 +511,19 @@ void OverworldState::generateSprites()
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
 			}
+			else if ( sprite_tile == 2049 )
+			{
+				setLevelSprite( Level::NUMBER_OF_LEVELS - 2, i, dest );
+			}
+			else if ( sprite_tile == 2050 )
+			{
+				setLevelSprite( Level::NUMBER_OF_LEVELS - 1, i, dest );
+			}
 			else if ( sprite_tile > 2063 && sprite_tile < 2063 + ( 16 * 4 ) )
 			{
 				const int theme = ( sprite_tile - 2064 ) % 16;
 				const int cycle = ( int )( std::floor( ( double )( sprite_tile - 2064 ) / 16.0 ) );
-				const int level_id = cycle * Level::NUMBER_OF_THEMES + theme;
-				if ( previous_space_.isLevel() && previous_space_.isLevelNumber( level_id ) )
-				{
-					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
-				}
-				objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( level_id ) ) );
-				bool reveal = level_id == 0;
-				level_tile_graphics_.add( dest, level_id, reveal );
+				setLevelSprite( Level::getIDbyCycleAndTheme( cycle, theme ), i, dest );
 			}
 			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
 			{
@@ -724,6 +725,17 @@ void OverworldState::generateMap()
 bool OverworldState::testLanguageHasChanged() const
 {
 	return Localization::getCurrentLanguageIndex() != language_id_;
+};
+
+void OverworldState::setLevelSprite( int level_id, int i, const sdl2::SDLRect& dest )
+{
+	if ( previous_space_.isLevel() && previous_space_.isLevelNumber( level_id ) )
+	{
+		hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
+	}
+	objects_.insert( std::pair<int, OWObject>( i, OWObject::createLevel( level_id ) ) );
+	const bool reveal = level_id == 0;
+	level_tile_graphics_.add( dest, level_id, reveal );
 };
 
 static const char* getSpacePaletteName( OWTile space )

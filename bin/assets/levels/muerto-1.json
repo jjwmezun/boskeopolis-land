@@ -43,5 +43,7 @@
 	"goal":
 	{
 		"type": "kill_all"
-	}
+	},
+	"cycle": 1,
+	"theme": 12
 }

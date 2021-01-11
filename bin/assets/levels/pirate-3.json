@@ -31,8 +31,8 @@
 
 	"entrance_x": 6,
 	"entrance_y": 41,
-	"message": "Warning: this oily water is e'en easier to drown in than normal water & sticks to you so you can't reoxygenate till you reach land.\n\nIn short: keep to land as much as possible.",
-
 	"gem_challenge": 10000,
-	"time_challenge": 30
+	"time_challenge": 30,
+	"cycle": 3,
+	"theme": 10
 }

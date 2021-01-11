@@ -55,5 +55,7 @@
 	"camera_x": 17,
 	
 	"gem_challenge": 7000,
-	"time_challenge": 30
+	"time_challenge": 30,
+	"cycle": 3,
+	"theme": 1
 }

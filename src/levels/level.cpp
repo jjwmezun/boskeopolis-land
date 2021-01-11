@@ -22,6 +22,7 @@
 #include <fstream>
 #include "main.hpp"
 #include "level.hpp"
+#include "level_list.hpp"
 #include "level_state.hpp"
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
@@ -52,11 +53,6 @@ static std::vector<bool> has_secret_goals_;
 static std::string code_names_[ Level::NUMBER_OF_LEVELS ] =
 {
 	""
-};
-
-static std::u32string level_names_[ Level::NUMBER_OF_LEVELS ] =
-{
-	U"MISSING LEVEL"
 };
 
 static constexpr char THEMES[ Level::NUMBER_OF_THEMES ][ 9 ] =
@@ -250,9 +246,9 @@ int Level::id() const
 	return id_;
 };
 
-std::string Level::getCodeName() const
+const std::string& Level::getCodeName() const
 {
-	return Level::getCodeNameByID( id_ );
+	return Level::getCodeName( id_ );
 };
 
 void Level::init( LevelState& level_state )
@@ -273,7 +269,7 @@ void Level::updateGoal( LevelState& level_state )
 
 Level Level::getLevel( int id )
 {
-	const std::string lvname = getCodeNameByID( id );
+	const std::string lvname = getCodeName( id );
 	const std::string file_path = Main::resourcePath() + "levels" + Main::pathDivider() + lvname + ".json";
 
 	std::ifstream ifs( file_path );
@@ -893,7 +889,7 @@ void Level::buildCodeNames()
 			++i;
 		}
 	}
-	code_names_[ i++ ] = "chamsby";
+	code_names_[ i++ ] = "final";
 	code_names_[ i ] = "bonus";
 };
 
@@ -906,12 +902,12 @@ void Level::buildLevelList()
 		throw mezun::CantLoadLevelNames();
 	}
 
+	const std::vector<std::string> list = LevelList::getListOfCodeNames( path );
+
 	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
 	{
-		level_names_[ i ] = Localization::getCurrentLanguage().getLevelName( code_names_[ i ] );
-
-		const std::string file_path = path + code_names_[ i ]  + ".json";
-
+		const std::string local = ( i == NUMBER_OF_LEVELS - 1 ) ? "bonus" : ( i == NUMBER_OF_LEVELS - 2 ) ? "final" : code_names_[ i ];
+		const std::string file_path = path + local + ".json";
 		std::ifstream ifs( file_path );
 
 		if ( ifs.is_open() )
@@ -951,8 +947,7 @@ void Level::buildLevelList()
 			}
 			else
 			{
-				//throw mezun::CorruptedLevel( code_names_[ i ] );
-				Main::changeState( std::unique_ptr<GameState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( std::string( "Level “" + code_names_[ i ] + "”’s JSON file in assets/levels has been corrupted. Please redownload game." ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
+				Main::changeState( std::unique_ptr<GameState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( std::string( "Level “" + local + "”’s JSON file in assets/levels has been corrupted. Please redownload game." ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
 			}
 
 			ifs.close();
@@ -963,14 +958,6 @@ void Level::buildLevelList()
 			time_challenge_list_.emplace_back( 0 );
 			has_secret_goals_.emplace_back( false );
 		}
-	}
-};
-
-void Level::regenerateLevelNames()
-{
-	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
-	{
-		level_names_[ i ] = Localization::getCurrentLanguage().getLevelName( code_names_[ i ] );
 	}
 };
 
@@ -1002,11 +989,6 @@ bool Level::startOn() const
 	return start_on_;
 };
 
-std::string Level::getCodeNameByID( int id )
-{
-	return code_names_[ id ];
-};
-
 int Level::getIDFromCodeName( std::string code_name )
 {
 	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
@@ -1020,11 +1002,6 @@ int Level::getIDFromCodeName( std::string code_name )
 	assert( false );
 };
 
-const std::u32string Level::getLevelName( int level )
-{
-	return ( level < 0 || level >= NUMBER_OF_LEVELS ) ? U"INVALID LEVEL" : level_names_[ level ];
-};
-
 const std::string& Level::getCodeName( int level_id )
 {
 	assert( level_id >= 0 && level_id < Level::NUMBER_OF_LEVELS );
@@ -1036,12 +1013,7 @@ int Level::getSpecialLevelID( int number )
 	return NUMBER_OF_THEMES * number - 1;
 };
 
-const std::u32string Level::getSpecialLevelName( int number )
-{
-	return ( number < 1 || number > NUMBER_OF_CYCLES ) ? U"INVALID LEVEL" : level_names_[ getSpecialLevelID( number ) ];
-};
-
-const int Level::getIDbyCycleAndTheme( int cycle, int theme )
+int Level::getIDbyCycleAndTheme( int cycle, int theme )
 {
 	return cycle * NUMBER_OF_THEMES + theme;
 };

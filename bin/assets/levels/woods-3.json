@@ -32,11 +32,10 @@
 		}
 	],
 	
-	"entrance_x": 1,
-	"entrance_y": 15,
-	
-	"gem_challenge": 14650,
-	"time_challenge": 28,
-	"cycle": 2,
+	"entrance_x": 0,
+	"entrance_y": 0,
+	"gem_challenge": 0,
+	"time_challenge": 0,
+	"cycle": 3,
 	"theme": 3
 }

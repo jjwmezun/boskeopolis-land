@@ -20,5 +20,7 @@
 	"entrance_x": 0,
 	"entrance_y": 29,
 	"gem_challenge": 19000,
-	"time_challenge": 25
+	"time_challenge": 25,
+	"cycle": 2,
+	"theme": 4
 }

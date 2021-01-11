@@ -18,5 +18,7 @@
 	"entrance_y": 13,
 
 	"gem_challenge": 8000,
-	"time_challenge": 50
+	"time_challenge": 50,
+	"cycle": 1,
+	"theme": 8
 }

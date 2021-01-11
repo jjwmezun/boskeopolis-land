@@ -254,8 +254,8 @@ namespace Input
 			(
 				getConfigFilename(),
 				loadConfigFunction,
-				"Input configuration is missing.\nConfig file has been replaced with default.",
-				"Input configuration file has been corruped.\nConfig file has been replaced with default.",
+				mezun::charToChar32String( "Input configuration is missing.\nConfig file has been replaced with default." ),
+				mezun::charToChar32String( "Input configuration file has been corruped.\nConfig file has been replaced with default." ),
 				saveConfig,
 				saveConfig
 			);

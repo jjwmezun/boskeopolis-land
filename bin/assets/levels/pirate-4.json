@@ -45,5 +45,7 @@
 	"entrance_y": 31,
 	"camera_x": 38,
 	"gem_challenge": 20000,
-	"time_challenge": 40
+	"time_challenge": 40,
+	"cycle": 4,
+	"theme": 10
 }

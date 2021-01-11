@@ -269,7 +269,7 @@ void OWInventory::regenerateLevelNameGraphics()
 {
 	const std::u32string level_name_header_text = Level::getLevelHeader( space_.getLevelNumber() );
 	WTextObj level_name_header { level_name_header_text, LEVEL_NAME_X + 16, ROW_1 };
-	WTextObj level_name = generateName( Level::getLevelName( space_.getLevelNumber() ), WTextCharacter::SIZE_PIXELS * ( level_name_header_text.length() + 1 ) );
+	WTextObj level_name = generateName( Localization::getCurrentLanguage().getLevelName( Level::getCodeName( space_.getLevelNumber() ) ), WTextCharacter::SIZE_PIXELS * ( level_name_header_text.length() + 1 ) );
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
 		const WTextCharacter::Color color = Inventory::levelComplete( space_.getLevelNumber() ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK;

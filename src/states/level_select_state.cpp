@@ -635,7 +635,7 @@ void LevelSelectState::generateLevelNames()
 	{
 		const int cycle = ( int )( std::floor( ( double )( level ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
 		const int theme = level % Level::NUMBER_OF_THEMES;
-		const std::u32string& level_name = Level::getLevelName( level );
+		const std::u32string& level_name = Localization::getCurrentLanguage().getLevelName( Level::getCodeName( level ) );
 		std::u32string level_name_string = U"";
 		if ( Inventory::beenToLevel( level ) )
 		{

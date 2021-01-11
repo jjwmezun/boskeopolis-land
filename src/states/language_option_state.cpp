@@ -91,5 +91,4 @@ void LanguageOptionState::saveLanguageSettings() const
 		document.AddMember( "language", language, document.GetAllocator() );
 	}
 	Config::saveData( document );
-	Level::regenerateLevelNames();
 };

@@ -251,5 +251,7 @@
 	},
 
 	"gem_challenge": 18000,
-	"time_challenge": 110
+	"time_challenge": 110,
+	"cycle": 4,
+	"theme": 5
 }

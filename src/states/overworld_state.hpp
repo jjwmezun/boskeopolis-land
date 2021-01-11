@@ -47,6 +47,7 @@ class OverworldState final : public GameState
 		void generateMap();
 		bool testLanguageHasChanged() const;
 		void updateSolids( int tile, int i );
+		void setLevelSprite( int level_id, int i, const sdl2::SDLRect& dest );
 
 		static constexpr int MAX_ANIMATION_FRAMES = 2;
 

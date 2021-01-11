@@ -26,5 +26,7 @@
 	},
 	
 	"gem_challenge": 0,
-	"time_challenge": 70
+	"time_challenge": 70,
+	"cycle": 4,
+	"theme": 4
 }

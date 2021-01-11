@@ -44,8 +44,9 @@
 
 	"entrance_x": 3,
 	"entrance_y": 35,
-	"message": "Paper planes are o'erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o' their gluish grasp.",
 
 	"gem_challenge": 12000,
-	"time_challenge": 20
+	"time_challenge": 20,
+	"cycle": 2,
+	"theme": 1
 }
