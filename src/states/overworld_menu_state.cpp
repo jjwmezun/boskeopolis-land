@@ -1,6 +1,7 @@
 #include "audio.hpp"
 #include "cards_menu_state.hpp"
 #include "input.hpp"
+#include "level_list.hpp"
 #include "level_select_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
@@ -190,7 +191,7 @@ void OverworldMenuState::generateReplacementNameTexture( const std::u32string& s
 
 void OverworldMenuState::generateReplacementLevelNameTexture()
 {
-	generateReplacementNameTexture( Localization::getCurrentLanguage().getLevelName( Level::getCodeName( space_.getLevelNumber() ) ), ( WTextCharacter::Color )( level_color_ ) );
+	generateReplacementNameTexture( Localization::getCurrentLanguage().getLevelName( LevelList::getCodeNameFromID( space_.getLevelNumber() ) ), ( WTextCharacter::Color )( level_color_ ) );
 };
 
 void OverworldMenuState::generateReplacementShopNameTexture()

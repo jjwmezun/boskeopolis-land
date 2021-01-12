@@ -1,7 +1,7 @@
 #include "audio.hpp"
 #include <fstream>
 #include "inventory.hpp"
-#include "level.hpp"
+#include "level_list.hpp"
 #include "main.hpp"
 #include "ow_event.hpp"
 #include "rapidjson/document.h"
@@ -29,7 +29,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
     }
     else
     {
-        path = Main::resourcePath() + "events/" + Level::getCodeName( level ) + ( ( is_secret ) ? "-secret.json" : ".json" );
+        path = Main::resourcePath() + "events/" + LevelList::getCodeNameFromID( level ) + ( ( is_secret ) ? "-secret.json" : ".json" );
     }
 	std::ifstream ifs( path );
 	if( !ifs.is_open() )
@@ -43,7 +43,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
 
     if ( !document.IsObject() )
     {
-		throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " is missing. Please redownload game." );
+		throw std::runtime_error( "O’erworld event for level " + LevelList::getCodeNameFromID( level ) + " is missing. Please redownload game." );
     }
 
     const auto& data = document.GetObject();
@@ -58,7 +58,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
         || !data[ "changes" ].IsArray()
     )
     {
-		throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " has been corrupted. Please redownload game." );
+		throw std::runtime_error( "O’erworld event for level " + LevelList::getCodeNameFromID( level ) + " has been corrupted. Please redownload game." );
     }
 
     target_position_.x = ( double )( Unit::BlocksToPixels( data[ "camera_target_x" ].GetInt() ) );
@@ -68,7 +68,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
     {
         if ( !change_data.IsArray() )
         {
-		    throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " has been corrupted. Please redownload game." );
+		    throw std::runtime_error( "O’erworld event for level " + LevelList::getCodeNameFromID( level ) + " has been corrupted. Please redownload game." );
         }
 
         std::vector<OWEventTile> change_list;
@@ -77,7 +77,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
         {
             if ( !tile_o.IsObject() )
             {
-		        throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " has been corrupted. Please redownload game." );
+		        throw std::runtime_error( "O’erworld event for level " + LevelList::getCodeNameFromID( level ) + " has been corrupted. Please redownload game." );
             }
 
             const auto& tile = tile_o.GetObject();
@@ -94,7 +94,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
                 || !tile[ "tile" ].IsInt()
             )
             {
-		        throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " has been corrupted. Please redownload game." );
+		        throw std::runtime_error( "O’erworld event for level " + LevelList::getCodeNameFromID( level ) + " has been corrupted. Please redownload game." );
             }
 
             OWEventTile::Layer layer;
@@ -118,7 +118,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
             else
             {
                 printf( "%s\n", layer_string.c_str() );
-		        throw std::runtime_error( "O’erworld event for level " + Level::getCodeName( level ) + " has been corrupted. Please redownload game." );
+		        throw std::runtime_error( "O’erworld event for level " + LevelList::getCodeNameFromID( level ) + " has been corrupted. Please redownload game." );
             }
 
             const int position = tile[ "y" ].GetInt() * map_width + tile[ "x" ].GetInt();
@@ -136,7 +136,7 @@ void OWEvent::init( int level, int map_width, bool is_secret )
     if ( data.HasMember( "next_level" ) && data[ "next_level" ].IsString() )
     {
         const std::string key = data[ "next_level" ].GetString();
-        next_level_ = Level::getIDFromCodeName( key );
+        next_level_ = LevelList::getIDFromCodeName( key );
     }
     else
     {

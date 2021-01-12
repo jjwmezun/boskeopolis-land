@@ -4,6 +4,7 @@
 #include "inventory_level.hpp"
 #include <fstream>
 #include "level.hpp"
+#include "level_list.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -26,7 +27,7 @@ bool Inventory::levelComplete( int level )
 	return haveDiamond( level ) &&
 		victory( level ) &&
 		hasCrown( level ) &&
-		( !Level::hasSecretGoal( level ) || getSecretGoal( level ) ) &&
+		( !LevelList::hasSecretGoal( level ) || getSecretGoal( level ) ) &&
 		gemChallengeBeaten( level ) &&
 		timeChallengeBeaten( level );
 };
@@ -75,7 +76,7 @@ void Inventory::winGemScore( int funds )
 
 bool Inventory::gemChallengeBeaten( int level )
 {
-	return save_.data_.gem_scores_[ level ] >= Level::gemChallenge( level );
+	return save_.data_.gem_scores_[ level ] >= LevelList::gemChallenge( level );
 }
 
 std::u32string Inventory::timeScore( int level )
@@ -106,7 +107,7 @@ void Inventory::winTimeScore( const Clock& clock )
 
 bool Inventory::timeChallengeBeaten( int level )
 {
-	return save_.data_.time_scores_[ level ] > 0 && save_.data_.time_scores_[ level ] <= Level::timeChallenge( level );
+	return save_.data_.time_scores_[ level ] > 0 && save_.data_.time_scores_[ level ] <= LevelList::timeChallenge( level );
 }
 
 bool Inventory::victory()
@@ -324,7 +325,7 @@ void Inventory::win( const InventoryLevel& level_inventory )
 	{
 		const int level_id = save_.data_.current_space_.getLevelNumber();
 		save_.data_.victories_[ level_id ] = true;
-		save_.data_.levels_unlocked_[ Level::getNextLevel( level_id ) ] = true;
+		save_.data_.levels_unlocked_[ LevelList::getNextLevel( level_id ) ] = true;
 		generalVictory( level_inventory );
 	}
 };
@@ -426,10 +427,10 @@ void Inventory::giveHPUpgrade( int number )
 
 void Inventory::unlockSpecialLevel( int number )
 {
-	save_.data_.levels_unlocked_[ Level::getSpecialLevelID( number ) ] = true;
+	save_.data_.levels_unlocked_[ LevelList::getSpecialLevelID( number ) ] = true;
 };
 
 bool Inventory::specialLevelUnlocked( int number )
 {
-	return save_.data_.levels_unlocked_[ Level::getSpecialLevelID( number ) ];
+	return save_.data_.levels_unlocked_[ LevelList::getSpecialLevelID( number ) ];
 };

@@ -1,6 +1,7 @@
 #include "audio.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "level_list.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -31,7 +32,7 @@ ShopState::ShopState( int shop_number )
     ({
         { ShopItem::Type::HP_UPGRADE, Localization::getCurrentLanguage().getShopItemHPUpgradeName(), Localization::getCurrentLanguage().getShopItemHPUpgradeDescription(), 250000 },
         { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 500000 },
-        { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Localization::getCurrentLanguage().getLevelName( Level::getCodeName( Level::getSpecialLevelID( 1 ) ) ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 100000 }
+        { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Localization::getCurrentLanguage().getLevelName( LevelList::getCodeNameFromID( LevelList::getSpecialLevelID( 1 ) ) ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 100000 }
     })
 {
     Inventory::setSpaceAsShop( shop_number );

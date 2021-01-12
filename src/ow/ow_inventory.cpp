@@ -2,6 +2,7 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
+#include "level_list.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "mezun_helpers.hpp"
@@ -206,7 +207,7 @@ void OWInventory::regenerateLevelGraphics()
 	}
 	crown_icon_.src_.x = ( Inventory::hasCrown( space_.getLevelNumber() ) ) ? 24 : 0;
 
-	if ( Level::hasSecretGoal( space_.getLevelNumber() ) )
+	if ( LevelList::hasSecretGoal( space_.getLevelNumber() ) )
 	{
 		secret_goal_icon_.src_.w = secret_goal_icon_.src_.h = 8;
 		secret_goal_icon_.src_.x = ( Inventory::getSecretGoal( space_.getLevelNumber() ) ) ? 24 : 0;
@@ -237,8 +238,8 @@ void OWInventory::regenerateLevelGraphics()
 		time_score.render();
 		time_score_textures_[ i ].endDrawing();
 	}
-	const WTextObj gem_score_target = { Level::gemChallengeText( space_.getLevelNumber() ), SCORE_X, ROW_1, WTextCharacter::Color::DARK_GRAY };
-	const WTextObj time_score_target = { Level::timeChallengeText( space_.getLevelNumber() ), SCORE_X + 8, ROW_2, WTextCharacter::Color::DARK_GRAY };
+	const WTextObj gem_score_target = { LevelList::gemChallengeText( space_.getLevelNumber() ), SCORE_X, ROW_1, WTextCharacter::Color::DARK_GRAY };
+	const WTextObj time_score_target = { LevelList::timeChallengeText( space_.getLevelNumber() ), SCORE_X + 8, ROW_2, WTextCharacter::Color::DARK_GRAY };
 	gem_score_target_texture_.startDrawing();
 		Render::clearScreenTransparency();
 	gem_score_target.render();
@@ -267,9 +268,9 @@ WTextObj OWInventory::generateName( std::u32string name, int offset ) const
 
 void OWInventory::regenerateLevelNameGraphics()
 {
-	const std::u32string level_name_header_text = Level::getLevelHeader( space_.getLevelNumber() );
+	const std::u32string level_name_header_text = LevelList::getLevelHeader( space_.getLevelNumber() );
 	WTextObj level_name_header { level_name_header_text, LEVEL_NAME_X + 16, ROW_1 };
-	WTextObj level_name = generateName( Localization::getCurrentLanguage().getLevelName( Level::getCodeName( space_.getLevelNumber() ) ), WTextCharacter::SIZE_PIXELS * ( level_name_header_text.length() + 1 ) );
+	WTextObj level_name = generateName( Localization::getCurrentLanguage().getLevelName( LevelList::getCodeNameFromID( space_.getLevelNumber() ) ), WTextCharacter::SIZE_PIXELS * ( level_name_header_text.length() + 1 ) );
 	for ( int i = 0; i < ( int )( WTextCharacter::Color::__NULL ); ++i )
 	{
 		const WTextCharacter::Color color = Inventory::levelComplete( space_.getLevelNumber() ) ? ( WTextCharacter::Color )( i ) : WTextCharacter::Color::BLACK;

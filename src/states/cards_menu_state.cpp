@@ -2,6 +2,7 @@
 #include "cards_menu_state.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "level_list.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
@@ -41,7 +42,7 @@ CardsMenuState::CardsMenuState()
     {
         for ( int theme = 0; theme < Level::NUMBER_OF_THEMES; ++theme )
         {
-            const TradingCard& card = Localization::getCurrentLanguage().getLevelTradingCard( Level::getCodeNameByCycleAndTheme( cycle, theme ) );
+            const TradingCard& card = Localization::getCurrentLanguage().getLevelTradingCard( LevelList::getCodeNameByCycleAndTheme( cycle, theme ) );
             card_text_[ cycle ][ theme ] =
             {
                 mezun::merge32Strings( mezun::merge32Strings( card.name_, U"\n" ), card.description_ ),
@@ -115,7 +116,7 @@ void CardsMenuState::stateRender()
             const int y = generateCardY( yi );
             Render::renderObject( "bg/card-select-card-2.png", { 0, 0, CARD_WIDTH, CARD_HEIGHT }, { x, y, CARD_WIDTH, CARD_HEIGHT } );
             Render::renderObject( "bg/card-select-card-2.png", { 40, 0, 13, 22 }, { x + 4, y + 4, 13, 22 } );
-            if ( Inventory::haveDiamond( Level::getIDbyCycleAndTheme( yi, xi ) ) )
+            if ( Inventory::haveDiamond( LevelList::getIDbyCycleAndTheme( yi, xi ) ) )
             {
                 Render::renderRect( { x + 4, y + 4, 13, 22 }, 1 );
                 Render::renderObject( "bg/trading-card-items-small.png", { 13 * xi, 22 * yi, 13, 22 }, { x + 4, y + 4, 13, 22 } );
@@ -124,7 +125,7 @@ void CardsMenuState::stateRender()
     }
     Render::renderObject( "bg/card-select-card-2.png", { 20, 0, CARD_WIDTH, CARD_HEIGHT }, { generateCardX( selection_x_.value() ), generateCardY( selection_y_.value() ), CARD_WIDTH, CARD_HEIGHT } );
 
-    if ( Inventory::haveDiamond( Level::getIDbyCycleAndTheme( selection_y_.value(), selection_x_.value() ) ) )
+    if ( Inventory::haveDiamond( LevelList::getIDbyCycleAndTheme( selection_y_.value(), selection_x_.value() ) ) )
     {
         Render::renderObject( "bg/trading-card-items-large.png", { 39 * selection_x_.value(), 48 * selection_y_.value(), 39, 48 }, { 8, 168, 39, 48 } );
         card_text_[ selection_y_.value() ][ selection_x_.value() ].render();

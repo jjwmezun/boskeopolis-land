@@ -4,6 +4,7 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include "level.hpp"
+#include "level_list.hpp"
 #include "level_tile_menu_state.hpp"
 #include "localization.hpp"
 #include "main.hpp"
@@ -523,7 +524,7 @@ void OverworldState::generateSprites()
 			{
 				const int theme = ( sprite_tile - 2064 ) % 16;
 				const int cycle = ( int )( std::floor( ( double )( sprite_tile - 2064 ) / 16.0 ) );
-				setLevelSprite( Level::getIDbyCycleAndTheme( cycle, theme ), i, dest );
+				setLevelSprite( LevelList::getIDbyCycleAndTheme( cycle, theme ), i, dest );
 			}
 			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
 			{

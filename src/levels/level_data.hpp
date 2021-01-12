@@ -2,7 +2,7 @@
 
 #include <string>
 
-struct LevelData
+struct LevelData final
 {
     bool has_secret_goal_;
     bool has_card_;
@@ -13,5 +13,6 @@ struct LevelData
     unsigned int theme_;
     unsigned int gem_challenge_;
     unsigned int time_challenge_;
+    unsigned int next_level_;
     std::string code_name_;
 };

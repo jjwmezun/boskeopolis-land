@@ -17,6 +17,8 @@ class SpriteSystem;
 class Level final
 {
 	public:
+		friend class LevelList;
+
 		static constexpr int NUMBER_OF_THEMES = 16;
 		static constexpr int NUMBER_OF_CYCLES = 4;
 		static constexpr int NUMBER_OF_LEVELS = NUMBER_OF_THEMES * NUMBER_OF_CYCLES + 2;
@@ -44,37 +46,10 @@ class Level final
 		bool startOn() const;
 		int id() const;
 
-		static Level getLevel( int id );
-		static int gemChallenge( unsigned int n );
-		static int timeChallenge( unsigned int n );
-		static bool hasSecretGoal( unsigned int n );
-		static std::u32string gemChallengeText( unsigned int n );
-		static std::u32string timeChallengeText( unsigned int n );
 		static void buildCodeNames();
 		static void buildLevelList();
-		static int getIDFromCodeName( std::string code_name );
-		static const std::string& getCodeName( int level_id );
-		static int getIDbyCycleAndTheme( int cycle, int theme );
-		static const std::string& getCodeNameByCycleAndTheme( int cycle, int theme );
-		static int getSpecialLevelID( int number );
-		static int getCycleFromLevelID( int level );
-		static int getThemeFromLevelID( int level );
-		static std::u32string getLevelHeader( int level );
-		static std::u32string getThemeCodeFromLevelID( int level );
-		static int getNextLevel( int level );
 
 	private:
-		const bool start_on_;
-		const int id_;
-		const int camera_x_;
-		const int camera_y_;
-		int entrance_x_;
-		int entrance_y_;
-		unsigned int current_map_;
-		std::unique_ptr<Goal> goal_;
-		std::vector<Map> maps_;
-		const std::u32string message_;
-
 		Level
 		(
 			int id,
@@ -87,5 +62,16 @@ class Level final
 			std::u32string message = U"",
 			bool start_on = false
 		);
+
+		const bool start_on_;
+		const int id_;
+		const int camera_x_;
+		const int camera_y_;
+		int entrance_x_;
+		int entrance_y_;
+		unsigned int current_map_;
+		std::unique_ptr<Goal> goal_;
+		std::vector<Map> maps_;
+		const std::u32string message_;
 		unsigned int testCurrentMap() const;
 };

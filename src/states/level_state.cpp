@@ -2,6 +2,7 @@
 #include "input.hpp"
 #include "inventory.hpp"
 #include "main.hpp"
+#include "level_list.hpp"
 #include "level_state.hpp"
 #include "overworld_state.hpp"
 #include "pause_state.hpp"
@@ -18,7 +19,7 @@ LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades,
 	events_ (),
 	sprites_ ( *this ),
 	blocks_ (),
-	level_ ( Level::getLevel( level_id ) ),
+	level_ ( LevelList::getLevel( level_id ) ),
 	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade )
 {
 	blocks_.init( level_.currentMap() );

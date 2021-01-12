@@ -2,6 +2,7 @@
 #include "main.hpp"
 #include "input.hpp"
 #include "inventory.hpp"
+#include "level_list.hpp"
 #include "level_select_state.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
@@ -331,7 +332,7 @@ void LevelSelectState::generateMovingPageTextures()
 			{
 				renderCrownWinIcon( y );
 			}
-			if ( Level::hasSecretGoal( level ) )
+			if ( LevelList::hasSecretGoal( level ) )
 			{
 				if ( Inventory::getSecretGoal( level ) )
 				{
@@ -402,7 +403,7 @@ void LevelSelectState::redrawStaticPageTexture()
 				renderEmptyCrownIcon( y );
 			}
 
-			if ( Level::hasSecretGoal( level ) )
+			if ( LevelList::hasSecretGoal( level ) )
 			{
 				if ( Inventory::getSecretGoal( level ) )
 				{
@@ -590,7 +591,7 @@ void LevelSelectState::renderFlashFrame()
 			renderFlashingVictoryCheck( y );
 			renderFlashingDiamondWinIcon( y );
 			renderFlashingCrownWinIcon( y );
-			if ( Level::hasSecretGoal( level ) )
+			if ( LevelList::hasSecretGoal( level ) )
 			{
 				renderFlashingSecretGoalIcon( y );
 			}
@@ -635,7 +636,7 @@ void LevelSelectState::generateLevelNames()
 	{
 		const int cycle = ( int )( std::floor( ( double )( level ) / ( double )( Level::NUMBER_OF_THEMES ) ) ) + 1;
 		const int theme = level % Level::NUMBER_OF_THEMES;
-		const std::u32string& level_name = Localization::getCurrentLanguage().getLevelName( Level::getCodeName( level ) );
+		const std::u32string& level_name = Localization::getCurrentLanguage().getLevelName( LevelList::getCodeNameFromID( level ) );
 		std::u32string level_name_string = U"";
 		if ( Inventory::beenToLevel( level ) )
 		{
@@ -656,7 +657,7 @@ void LevelSelectState::generateLevelNames()
 				}
 			}
 		}
-		level_name_headers_[ level ] = { Level::getLevelHeader( level ), 24, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
+		level_name_headers_[ level ] = { LevelList::getLevelHeader( level ), 24, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, Unit::WINDOW_WIDTH_PIXELS, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 		const int padding = ( level_name_headers_[ level ].getNumberOfCharacters() + 1 ) * WTextCharacter::SIZE_PIXELS;
 		level_names_[ level ] = { level_name_string, 24 + padding, theme_positions[ theme ], WTextCharacter::Color::DARK_GRAY, 320 - padding, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 4, 4 };
 	}
@@ -776,13 +777,13 @@ static int getThemeFromLevel( int level )
 
 static void renderGemTargetScore( int level, int y )
 {
-	WTextObj gem_score{ Level::gemChallengeText( level ), 352, y, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
+	WTextObj gem_score{ LevelList::gemChallengeText( level ), 352, y, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 	gem_score.render();
 };
 
 static void renderTimeTargetScore( int level, int y )
 {
-	WTextObj time_score{ Level::timeChallengeText( level ), 360, y + 8, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
+	WTextObj time_score{ LevelList::timeChallengeText( level ), 360, y + 8, WTextCharacter::Color::LIGHT_MID_GRAY, 312, WTextObj::Align::LEFT, WTextCharacter::Color::__NULL, 0, 4 };
 	time_score.render();
 };
 
