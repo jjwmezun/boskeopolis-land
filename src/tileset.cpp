@@ -14,6 +14,7 @@
 #include "block_component_full_heal.hpp"
 #include "block_component_goal.hpp"
 #include "block_component_heal.hpp"
+#include "block_component_hero_to_shooter.hpp"
 #include "block_component_hole.hpp"
 #include "block_component_honey.hpp"
 #include "block_component_hurt.hpp"
@@ -639,6 +640,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "spark_wall" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentSparkWall> () );
+					}
+					else if ( mezun::areStringsEqual( comp_type, "hero_to_shooter" ) )
+					{
+						components.emplace_back( std::make_unique<BlockComponentHeroToShooter> () );
 					}
 				}
 

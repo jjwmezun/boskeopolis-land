@@ -1395,3 +1395,8 @@ const std::vector<std::unique_ptr<Sprite>>& SpriteSystem::getSpritesList() const
 {
 	return sprites_;
 };
+
+void SpriteSystem::changeHeroToShooter()
+{
+	hero_.reset( new ShooterPlayerSprite( hero_->xPixels(), hero_->yPixels(), "sprites/autumn-shooter.png" ) );
+};

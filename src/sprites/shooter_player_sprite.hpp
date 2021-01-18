@@ -7,7 +7,7 @@
 class ShooterPlayerSprite final : public PlayerSprite
 {
 	public:
-		ShooterPlayerSprite( int x, int y );
+		ShooterPlayerSprite( int x, int y, std::string&& tileset = "sprites/cowgirl_autumn.png" );
 		~ShooterPlayerSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void deathAction( LevelState& level_state ) override;

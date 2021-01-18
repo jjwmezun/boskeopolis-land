@@ -62,6 +62,7 @@ class SpriteSystem final
 		int numberOfSprites() const;
 		bool spritesOnScreen( const Camera& camera, const Sprite::SpriteType type ) const;
 		const std::vector<std::unique_ptr<Sprite>>& getSpritesList() const;
+		void changeHeroToShooter();
 
 
 	private:

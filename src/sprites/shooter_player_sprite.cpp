@@ -5,7 +5,7 @@
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
 
-ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
+ShooterPlayerSprite::ShooterPlayerSprite( int x, int y, std::string&& tileset )
 :
 	PlayerSprite
 	(
@@ -14,7 +14,7 @@ ShooterPlayerSprite::ShooterPlayerSprite( int x, int y )
 		1000,
 		6000,
 		std::unique_ptr<InputComponent> ( new InputComponentPlayer() ),
-		std::make_unique<SpriteGraphics> ( "sprites/cowgirl_autumn.png", 0, 0, false, false, 0, false, -8, -3, 12, 5 ),
+		std::make_unique<SpriteGraphics> ( std::move( tileset ), 0, 0, false, false, 0, -8, -3, 12, 5 ),
 		SpriteType::HERO,
 		160,
 		2000,
