@@ -8,11 +8,21 @@
 #include "level_tile_menu_state.hpp"
 #include "localization.hpp"
 #include "main.hpp"
+#include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
 #include "mezun_json.hpp"
 #include "overworld_state.hpp"
 #include "overworld_menu_state.hpp"
 #include "shop_state.hpp"
 #include "unit.hpp"
+
+static constexpr int TILES_BEFORE_SPRITES = 2048;
+static constexpr int LEVEL_TILES_START = TILES_BEFORE_SPRITES + 16;
+static constexpr int MAX_LEVEL_TILES = 256;
+static constexpr int SHOP_TILES_START = LEVEL_TILES_START + MAX_LEVEL_TILES;
+static constexpr int MAX_SHOP_TILES = 16;
+static constexpr int PALETTE_TILES_START = SHOP_TILES_START + MAX_SHOP_TILES;
+static constexpr int MAX_PALETTE_TILES = 16;
 
 static constexpr int frameToScreenSize( int value )
 {
@@ -32,16 +42,6 @@ static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 	"Overworld Orange",
 	"Overworld Olive",
 	"Overworld Black"
-};
-
-static constexpr int LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS + 4 ] = 
-{
-	0, 1, 1, 3, 2, 2, 2, 4, 5, 6, 7, 7, 3, 3, 8, 0, // CYCLE 1
-	8, 1, 0, 0, 0, 0, 0, 0, 8, 8, 7, 7, 3, 0, 0, 0, // CYCLE 2
-	0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 7, 7, 3, 0, 0, 0, // CYCLE 3
-	0, 0, 0, 0, 0, 0, 0, 0, 5, 6, 7, 7, 3, 0, 0, 0, // CYCLE 4
-	8, 8, // CHAMSBY & TREASURE TOWERS
-	1, 1, 1, 1 // SHOP PALETTES
 };
 
 static const std::unordered_map<int, std::array<int, 2>> animated_frames_
@@ -387,7 +387,7 @@ void OverworldState::init()
 		event.changeAllTiles( bg_tiles_, fg_tiles_ );
 		level_tile_graphics_.showTile( camera_.getBox(), event.getNextLevel() );
 	}
-	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+	for ( int i = 0; i < LevelList::getNumberOfLevels(); ++i )
 	{
 		const bool reveal_event =
 		(
@@ -501,34 +501,24 @@ void OverworldState::generateSprites()
 		dest.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) ) );
 		if ( sprite_tile > -1 )
 		{
-			if ( sprite_tile < 2048 )
+			if ( sprite_tile < TILES_BEFORE_SPRITES )
 			{
-				throw std::runtime_error( "Invalid sprite in o’erworld map." );
+				throw mezun::Exception( mezun::charToChar32String( "Invalid sprite in o’erworld map." ) );
 			}
-			if ( sprite_tile == 2048 )
+			if ( sprite_tile == TILES_BEFORE_SPRITES )
 			{
 				if ( previous_space_.isNull() )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
 			}
-			else if ( sprite_tile == 2049 )
+			else if ( sprite_tile >= LEVEL_TILES_START && sprite_tile < SHOP_TILES_START )
 			{
-				setLevelSprite( Level::NUMBER_OF_LEVELS - 2, i, dest );
+				setLevelSprite( sprite_tile - LEVEL_TILES_START, i, dest );
 			}
-			else if ( sprite_tile == 2050 )
+			else if ( sprite_tile >= SHOP_TILES_START && sprite_tile < PALETTE_TILES_START )
 			{
-				setLevelSprite( Level::NUMBER_OF_LEVELS - 1, i, dest );
-			}
-			else if ( sprite_tile > 2063 && sprite_tile < 2063 + ( 16 * 4 ) )
-			{
-				const int theme = ( sprite_tile - 2064 ) % 16;
-				const int cycle = ( int )( std::floor( ( double )( sprite_tile - 2064 ) / 16.0 ) );
-				setLevelSprite( LevelList::getIDbyCycleAndTheme( cycle, theme ), i, dest );
-			}
-			else if ( sprite_tile >= 2160 && sprite_tile < 2160 + 6 )
-			{
-				const int shop_number = sprite_tile - 2160 + 1;
+				const int shop_number = sprite_tile - SHOP_TILES_START + 1;
 				if ( previous_space_.isShop() )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
@@ -536,9 +526,9 @@ void OverworldState::generateSprites()
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createShop( shop_number ) ) );
 				level_tile_graphics_.add( dest, -2, true );
 			}
-			else if ( sprite_tile >= 2176 && sprite_tile < 2176 + NUMBER_OF_PALETTES )
+			else if ( sprite_tile >= PALETTE_TILES_START && sprite_tile < PALETTE_TILES_START + NUMBER_OF_PALETTES )
 			{
-				const int palette_id = sprite_tile - 2176;
+				const int palette_id = sprite_tile - PALETTE_TILES_START;
 				objects_.insert( std::pair<int, OWObject> ( i, OWObject::createPaletteChanger( palette_id ) ) );
 			}
 		}
@@ -746,7 +736,7 @@ static const char* getSpacePaletteName( OWTile space )
 
 static int getSpacePalette( OWTile space )
 {
-	return ( space.isShop() ) ? LEVEL_PALETTES[ Level::NUMBER_OF_LEVELS ]
-		: ( space.isLevel() ) ? LEVEL_PALETTES[ space.getLevelNumber() ]
+	return ( space.isShop() ) ? 0
+		: ( space.isLevel() ) ? 0
 		: 0;
 };

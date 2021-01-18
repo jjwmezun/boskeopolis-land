@@ -54,4 +54,14 @@ namespace mezun
 			}
 		}
 	};
+
+	int JSONTryInt( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& object, const char* name, int fallback )
+	{
+		return ( object.HasMember( name ) && object[ name ].IsInt() ) ? object[ name ].GetInt() : fallback;
+	};
+
+	int JSONTryBool( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& object, const char* name, bool fallback )
+	{
+		return ( object.HasMember( name ) && object[ name ].IsBool() ) ? object[ name ].GetBool() : fallback;
+	};
 }

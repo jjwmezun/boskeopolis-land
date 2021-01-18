@@ -10,6 +10,10 @@
 	"entrance_y": 0,
 	"gem_challenge": 0,
 	"time_challenge": 0,
-	"cycle": 2,
-	"theme": 16
+	"has_card": false,
+	"has_crown": false,
+	"cycle": 4,
+	"theme": 18,
+	"show_cycle": false,
+	"show_theme": false
 }

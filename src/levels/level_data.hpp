@@ -8,6 +8,8 @@ struct LevelData final
     bool has_card_;
     bool has_suits_;
     bool has_crown_;
+    bool show_cycle_;
+    bool show_theme_;
     unsigned int id_;
     unsigned int cycle_;
     unsigned int theme_;

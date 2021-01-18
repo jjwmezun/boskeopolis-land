@@ -1,18 +1,5 @@
 #include "audio.hpp"
 #include "block_system.hpp"
-#include "level_message_state.hpp"
-#include "localization.hpp"
-#include "localization_language.hpp"
-#include "map_layer_constellation_moving.hpp"
-#include "map_layer_constellation_scrolling.hpp"
-#include "map_layer_doom.hpp"
-#include "map_layer_image.hpp"
-#include "map_layer_image_switch.hpp"
-#include "map_layer_lightning.hpp"
-#include "map_layer_neon.hpp"
-#include "map_layer_shade.hpp"
-#include "map_layer_water.hpp"
-#include "message_state.hpp"
 #include "block_system.hpp"
 #include "camera.hpp"
 #include <cassert>
@@ -24,56 +11,8 @@
 #include "level.hpp"
 #include "level_list.hpp"
 #include "level_state.hpp"
-#include "mezun_exceptions.hpp"
-#include "mezun_helpers.hpp"
-#include "rapidjson/istreamwrapper.h"
 #include "sprite.hpp"
 #include "sprite_system.hpp"
-#include "wmessage_state.hpp"
-
-//GOALS
-#include "avoid_money_goal.hpp"
-#include "collect_goal.hpp"
-#include "do_nothing_goal.hpp"
-#include "heat_goal.hpp"
-#include "kill_all_goal.hpp"
-#include "mcguffin_goal.hpp"
-#include "past_right_edge_goal.hpp"
-#include "starving_goal.hpp"
-#include "stop_on_off_goal.hpp"
-#include "survive_time_goal.hpp"
-#include "timed_goal.hpp"
-#include "timed_on_goal.hpp"
-#include "warp_goal.hpp"
-
-static std::vector<int> gem_challenge_list_;
-static std::vector<int> time_challenge_list_;
-static std::vector<bool> has_secret_goals_;
-
-static std::string code_names_[ Level::NUMBER_OF_LEVELS ] =
-{
-	""
-};
-
-static constexpr char THEMES[ Level::NUMBER_OF_THEMES ][ 9 ] =
-{
-	"city",
-	"domestic",
-	"woods",
-	"mines",
-	"desert",
-	"mountain",
-	"sky",
-	"space",
-	"ice",
-	"pirate",
-	"swamp",
-	"muerto",
-	"sewer",
-	"factory",
-	"dungeon",
-	"special"
-};
 
 Level::Level ( Level&& m )
 :
@@ -234,90 +173,6 @@ void Level::initCurrentMap( LevelState& level_state )
 void Level::updateGoal( LevelState& level_state )
 {
 	goal_->update( level_state );
-};
-
-void Level::buildCodeNames()
-{
-	int i = 0;
-	for ( int cycle = 1; cycle <= NUMBER_OF_CYCLES; ++cycle )
-	{
-		for ( int theme_id = 0; theme_id < NUMBER_OF_THEMES; ++theme_id )
-		{
-			const std::string theme = THEMES[ theme_id ];
-			code_names_[ i ] = theme + "-" + std::to_string( cycle );
-			++i;
-		}
-	}
-	code_names_[ i++ ] = "final";
-	code_names_[ i ] = "bonus";
-};
-
-void Level::buildLevelList()
-{
-	const std::string path = Main::resourcePath() + "levels" + Main::pathDivider();
-
-	if ( !mezun::checkDirectory( path ) )
-	{
-		throw mezun::CantLoadLevelNames();
-	}
-
-	const std::vector<std::string> list = LevelList::getListOfCodeNames( path );
-
-	for ( int i = 0; i < NUMBER_OF_LEVELS; ++i )
-	{
-		const std::string local = ( i == NUMBER_OF_LEVELS - 1 ) ? "bonus" : ( i == NUMBER_OF_LEVELS - 2 ) ? "final" : code_names_[ i ];
-		const std::string file_path = path + local + ".json";
-		std::ifstream ifs( file_path );
-
-		if ( ifs.is_open() )
-		{
-			rapidjson::IStreamWrapper ifs_wrap( ifs );
-			rapidjson::Document lv;
-			lv.ParseStream( ifs_wrap );
-
-			if ( lv.IsObject() )
-			{
-				if ( lv.HasMember( "gem_challenge" ) && lv[ "gem_challenge" ].IsInt() )
-				{
-					gem_challenge_list_.emplace_back( lv[ "gem_challenge" ].GetInt() );
-				}
-				else
-				{
-					gem_challenge_list_.emplace_back( 0 );
-				}
-
-				if ( lv.HasMember( "time_challenge" ) && lv[ "time_challenge" ].IsInt() )
-				{
-					time_challenge_list_.emplace_back( lv[ "time_challenge" ].GetInt() );
-				}
-				else
-				{
-					time_challenge_list_.emplace_back( 0 );
-				}
-
-				if ( lv.HasMember( "secret_goal" ) && lv[ "secret_goal" ].IsBool() )
-				{
-					has_secret_goals_.emplace_back( lv[ "secret_goal" ].GetBool() );
-				}
-				else
-				{
-					has_secret_goals_.emplace_back( false );
-				}
-			}
-			else
-			{
-				Main::changeState( std::unique_ptr<GameState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( std::string( "Level “" + local + "”’s JSON file in assets/levels has been corrupted. Please redownload game." ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
-			}
-
-			ifs.close();
-		}
-		else
-		{
-			gem_challenge_list_.emplace_back( 0 );
-			time_challenge_list_.emplace_back( 0 );
-			has_secret_goals_.emplace_back( false );
-		}
-	}
 };
 
 // For "Kill All Enemies" goal.

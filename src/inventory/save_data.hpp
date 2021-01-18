@@ -1,7 +1,7 @@
 #pragma once
 
 #include "counter_t.hpp"
-#include "level.hpp"
+#include "level_list.hpp"
 #include "ow_tile.hpp"
 #include "unit.hpp"
 
@@ -14,13 +14,13 @@ struct SaveData
     CounterT<Unit::TOTAL_FUNDS_MAX, Unit::TOTAL_FUNDS_MIN> total_funds_;
     OWTile current_space_;
 	bool health_upgrades_[ Unit::MAX_HEART_UPGRADES ];
-    bool been_to_level_[ Level::NUMBER_OF_LEVELS ];
-    bool levels_unlocked_[ Level::NUMBER_OF_LEVELS ];
-    bool victories_[ Level::NUMBER_OF_LEVELS ];
-    bool secret_goals_[ Level::NUMBER_OF_LEVELS ];
-    bool diamonds_[ Level::NUMBER_OF_LEVELS ];
-    bool crowns_[ Level::NUMBER_OF_LEVELS ];
-    bool suits_[ Level::NUMBER_OF_LEVELS ];
-    int gem_scores_[ Level::NUMBER_OF_LEVELS ];
-    int time_scores_[ Level::NUMBER_OF_LEVELS ];
+    bool been_to_level_[ LevelList::MAX_LEVELS ];
+    bool levels_unlocked_[ LevelList::MAX_LEVELS ];
+    bool victories_[ LevelList::MAX_LEVELS ];
+    bool secret_goals_[ LevelList::MAX_LEVELS ];
+    bool diamonds_[ LevelList::MAX_LEVELS ];
+    bool crowns_[ LevelList::MAX_LEVELS ];
+    bool suits_[ LevelList::MAX_LEVELS ];
+    int gem_scores_[ LevelList::MAX_LEVELS ];
+    int time_scores_[ LevelList::MAX_LEVELS ];
 };

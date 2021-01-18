@@ -18,18 +18,19 @@ class LevelTileMenuState final : public GameState
 		void init() override;
 
 	private:
-        enum class Option
+        enum class OptionType
         {
             PLAY,
             HARD_MODE,
             CANCEL
         };
-        static constexpr int NUMBER_OF_OPTIONS = ( int )( Option::CANCEL ) + 1;
+        static constexpr int MAX_OPTIONS = 4;
 
-        std::u32string getOptionName( Option type );
+        std::u32string getOptionName( OptionType type );
 
         int level_;
-        CounterFlip<NUMBER_OF_OPTIONS - 1> selection_;
+        int selection_;
+        std::vector<OptionType> options_;
         TextureBox bg_;
-        TextureBox highlighted_text_[ NUMBER_OF_OPTIONS ];
+        TextureBox highlighted_text_[ MAX_OPTIONS ];
 };

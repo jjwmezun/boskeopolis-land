@@ -13,5 +13,11 @@
 	"goal":
 	{
 		"message": "¡Defeat Lance Chamsby!"
-	}
+	},
+	"has_card": false,
+	"has_crown": false,
+	"cycle": 4,
+	"theme": 17,
+	"show_cycle": false,
+	"show_theme": false
 }

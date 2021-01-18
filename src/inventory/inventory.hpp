@@ -54,10 +54,6 @@ class Inventory final
 		static std::string getPlayerCostume();
 
 	private:
-		static double percentPerLevel();
-		static double percentPerVictory();
-		static double percentPerDiamond();
-		static double percentPerScore();
 		static int levelsBeaten();
 		static int diamondsGotten();
 		static int gemChallengesWon();
@@ -66,10 +62,6 @@ class Inventory final
 		static void setTimeScore( int level, int value );
 		static void winGemScore( int funds );
 		static void winTimeScore( const Clock& clock );
-		static double totalVictoryPercents();
-		static double totalDiamondPercents();
-		static double totalGemChallengePercents();
-		static double totalTimeChallengePercents();
 		static void generalVictory( const InventoryLevel& level_inventory );
 
 		static constexpr bool DEFAULT_VICTORY        = false;

@@ -85,93 +85,109 @@ unsigned int Palette::testColor( unsigned int n ) const
 
 void Palette::init()
 {
+	// Create default palette as backup.
+	palettes_.insert
+	(
+		std::make_pair
+		(
+			"Grayscale",
+			std::array<sdl2::SDLColor, Palette::COLOR_LIMIT> {
+				sdl2::SDLColor{ 255, 255, 255, 0   },
+				sdl2::SDLColor{ 255, 255, 255, 255 },
+				sdl2::SDLColor{ 200, 200, 200, 255 },
+				sdl2::SDLColor{ 150, 150, 150, 255 },
+				sdl2::SDLColor{ 100, 100, 100, 255 },
+				sdl2::SDLColor{  50,  50,  50, 255 },
+				sdl2::SDLColor{   0,   0,   0, 255 }
+			}
+		)
+	);
+	palette_names_.push_back( "Grayscale" );
+
 	const std::string file_path = Main::resourcePath() + "palettes" + Main::pathDivider() + "palettes.json";
-
 	std::ifstream ifs( file_path );
-
-	if ( ifs.is_open() )
+	if ( !ifs.is_open() )
 	{
-		rapidjson::IStreamWrapper ifs_wrap( ifs );
-		rapidjson::Document pal;
-		pal.ParseStream( ifs_wrap );
+		throw mezun::Exception( U"Missing palettes file.\nPlease redownload game." );
+	}
 
-		if ( pal.IsObject() )
+	rapidjson::IStreamWrapper ifs_wrap( ifs );
+	rapidjson::Document pal;
+	pal.ParseStream( ifs_wrap );
+	if ( !pal.IsObject() )
+	{
+		throw mezun::Exception( U"Palettes file has become corrupted.\nPlease redownload game." );
+	}
+	const auto& palobj = pal.GetObject();
+	if ( !palobj.HasMember( "palettes" ) || !palobj[ "palettes" ].IsArray() )
+	{
+		throw mezun::Exception( U"Palettes file has become corrupted.\nPlease redownload game." );
+	}
+
+	for ( auto& pitem : palobj[ "palettes" ].GetArray() )
+	{
+		if ( pitem.IsObject() )
 		{
-			auto palobj = pal.GetObject();
+			auto p = pitem.GetObject();
 
-			if ( palobj.HasMember( "palettes" ) && palobj[ "palettes" ].IsArray() )
+			if ( p.HasMember( "name" ) && p[ "name" ].IsString() )
 			{
 
-				for ( auto& pitem : palobj[ "palettes" ].GetArray() )
+				std::string type = p[ "name" ].GetString();
+
+				if ( p.HasMember( "colors" ) && p[ "colors" ].IsArray() )
 				{
+					sdl2::SDLColor t = { 0, 0, 0, 0 };
 
-					if ( pitem.IsObject() )
+					std::array<sdl2::SDLColor, COLOR_LIMIT> colors = { t, t, t, t, t, t, t };
+
+					int i = 0;
+					for ( auto& c : p[ "colors" ].GetArray() )
 					{
-						auto p = pitem.GetObject();
-
-						if ( p.HasMember( "name" ) && p[ "name" ].IsString() )
+						if ( c.IsObject() )
 						{
+							auto cobj = c.GetObject();
 
-							std::string type = p[ "name" ].GetString();
+							t = { 0, 0, 0, 0 };
 
-							if ( p.HasMember( "colors" ) && p[ "colors" ].IsArray() )
+							if ( cobj.HasMember( "r" ) && cobj[ "r" ].IsInt() )
 							{
-								sdl2::SDLColor t = { 0, 0, 0, 0 };
-
-								std::array<sdl2::SDLColor, COLOR_LIMIT> colors = { t, t, t, t, t, t, t };
-
-								int i = 0;
-								for ( auto& c : p[ "colors" ].GetArray() )
-								{
-									if ( c.IsObject() )
-									{
-										auto cobj = c.GetObject();
-
-										t = { 0, 0, 0, 0 };
-
-										if ( cobj.HasMember( "r" ) && cobj[ "r" ].IsInt() )
-										{
-											t.r = cobj[ "r" ].GetInt();
-										}
-										if ( cobj.HasMember( "g" ) && cobj[ "g" ].IsInt() )
-										{
-											t.g = cobj[ "g" ].GetInt();
-										}
-										if ( cobj.HasMember( "b" ) && cobj[ "b" ].IsInt() )
-										{
-											t.b = cobj[ "b" ].GetInt();
-										}
-										if ( cobj.HasMember( "a" ) && cobj[ "a" ].IsInt() )
-										{
-											t.a = cobj[ "a" ].GetInt();
-										}
-
-										colors.at( i ) = t;
-
-										++i;
-
-										if ( i > 6 ) break;
-									}
-								}
-
-								palettes_.insert
-								(
-									std::make_pair
-									(
-										type,
-										colors
-									)
-								);
-
-								palette_names_.push_back( type );
+								t.r = cobj[ "r" ].GetInt();
 							}
+							if ( cobj.HasMember( "g" ) && cobj[ "g" ].IsInt() )
+							{
+								t.g = cobj[ "g" ].GetInt();
+							}
+							if ( cobj.HasMember( "b" ) && cobj[ "b" ].IsInt() )
+							{
+								t.b = cobj[ "b" ].GetInt();
+							}
+							if ( cobj.HasMember( "a" ) && cobj[ "a" ].IsInt() )
+							{
+								t.a = cobj[ "a" ].GetInt();
+							}
+
+							colors.at( i ) = t;
+
+							++i;
+
+							if ( i > 6 ) break;
 						}
-					}						
+					}
+
+					palettes_.insert
+					(
+						std::make_pair
+						(
+							type,
+							colors
+						)
+					);
+
+					palette_names_.push_back( type );
 				}
-
 			}
-
-		}
+		}						
 	}
 };
 

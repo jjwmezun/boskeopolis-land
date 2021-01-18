@@ -19,10 +19,6 @@ class Level final
 	public:
 		friend class LevelList;
 
-		static constexpr int NUMBER_OF_THEMES = 16;
-		static constexpr int NUMBER_OF_CYCLES = 4;
-		static constexpr int NUMBER_OF_LEVELS = NUMBER_OF_THEMES * NUMBER_OF_CYCLES + 2;
-
 		~Level();
 		Level( Level&& m );
 		Level( const Level& ) = delete;
@@ -45,9 +41,6 @@ class Level final
 		int allEnemiesToKill() const;
 		bool startOn() const;
 		int id() const;
-
-		static void buildCodeNames();
-		static void buildLevelList();
 
 	private:
 		Level

@@ -272,3 +272,19 @@ int WTextObj::getNumberOfLines() const
 {
     return ( int )( lines_.size() );
 };
+
+void WTextObj::setX( int x )
+{
+    for ( auto& line : lines_ )
+    {
+        line.x_ = x;
+    }
+};
+
+void WTextObj::addToX( int value )
+{
+    for ( auto& line : lines_ )
+    {
+        line.x_ += value;
+    }
+};

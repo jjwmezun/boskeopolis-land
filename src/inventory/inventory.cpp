@@ -3,7 +3,7 @@
 #include "inventory.hpp"
 #include "inventory_level.hpp"
 #include <fstream>
-#include "level.hpp"
+#include "level_data.hpp"
 #include "level_list.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
@@ -20,7 +20,7 @@ Save Inventory::save_{};
 
 OWTile Inventory::currentSpace() { return save_.data_.current_space_; };
 
-int Inventory::currentLevel() { return save_.data_.current_space_.getLevelNumber(); };
+int Inventory::currentLevel() { return ( save_.data_.current_space_.isLevel() ) ? save_.data_.current_space_.getLevelNumber() : -1; };
 
 bool Inventory::levelComplete( int level )
 {
@@ -157,26 +157,6 @@ int Inventory::totalFunds()
 	return save_.data_.total_funds_();
 };
 
-double Inventory::percentPerLevel()
-{
-	return 100.0 / ( double )( Level::NUMBER_OF_LEVELS );
-};
-
-double Inventory::percentPerVictory()
-{
-	return percentPerLevel() * 0.5;
-};
-
-double Inventory::percentPerDiamond()
-{
-	return percentPerLevel() * 0.3;
-};
-
-double Inventory::percentPerScore()
-{
-	return percentPerLevel() * 0.1;
-};
-
 int Inventory::levelsBeaten()
 {
 	int n = 0;
@@ -211,7 +191,7 @@ int Inventory::gemChallengesWon()
 {
 	int n = 0;
 
-	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+	for ( int i = 0; i < LevelList::getNumberOfLevels(); ++i )
 	{
 		if ( gemChallengeBeaten( i ) )
 		{
@@ -226,7 +206,7 @@ int Inventory::timeChallengesWon()
 {
 	int n = 0;
 
-	for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+	for ( int i = 0; i < LevelList::getNumberOfLevels(); ++i )
 	{
 		if ( timeChallengeBeaten( i ) )
 		{
@@ -237,36 +217,56 @@ int Inventory::timeChallengesWon()
 	return n;
 };
 
-double Inventory::totalVictoryPercents()
-{
-	return levelsBeaten() * percentPerVictory();
-};
-
-double Inventory::totalDiamondPercents()
-{
-	return diamondsGotten() * percentPerDiamond();
-};
-
-double Inventory::totalGemChallengePercents()
-{
-	return gemChallengesWon() * percentPerScore();
-};
-
-double Inventory::totalTimeChallengePercents()
-{
-	return timeChallengesWon() * percentPerScore();
-};
-
 double Inventory::percent()
 {
-	// Divide 100 by # o' levels
-	// Divide each level percent into 4 types o' completion:
-	// * Beaten         -> 50%
-	// * Diamond        -> 30%
-	// * Gem Challenge  -> 10%
-	// * Time Challenge -> 10%
+	int score_target = 0;
+	int score_attained = 0;
+	for ( const auto& level : LevelList::getLevelDataList() )
+	{
+		score_target += 20;
+		if ( victory( level.id_ ) )
+		{
+			score_attained += 20;
+		}
 
-	return totalVictoryPercents() + totalDiamondPercents() + totalGemChallengePercents() + totalTimeChallengePercents();
+		if ( LevelList::hasCard( level.id_ ) )
+		{
+			score_target += 10;
+			if ( haveDiamond( level.id_ ) )
+			{
+				score_attained += 10;
+			}
+		}
+
+		if ( LevelList::hasGemScore( level.id_ ) )
+		{
+			score_target += 5;
+			if ( gemChallengeBeaten( level.id_ ) )
+			{
+				score_attained += 5;
+			}
+		}
+
+		if ( LevelList::hasTimeScore( level.id_ ) )
+		{
+			score_target += 5;
+			if ( timeChallengeBeaten( level.id_ ) )
+			{
+				score_attained += 5;
+			}
+		}
+
+		if ( LevelList::hasSecretGoal( level.id_ ) )
+		{
+			score_target += 20;
+			if ( getSecretGoal( level.id_ ) )
+			{
+				score_attained += 20;
+			}
+		}
+	}
+
+	return ( double )( score_attained ) / ( double )( score_target );
 };
 
 std::u32string Inventory::percentShown()

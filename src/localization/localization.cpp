@@ -6,6 +6,7 @@
 #include "localization.hpp"
 #include "localization_language.hpp"
 #include "main.hpp"
+#include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
 #include <string>
 #include <vector>
@@ -14,9 +15,9 @@
 namespace Localization
 {
     static constexpr const char* GAME_TITLE = "Boskeopolis Land";
-    static std::vector<LocalizationLanguage> languages;
-    static std::vector<std::u32string> language_names;
-    static int current_language = 0;
+    static std::vector<LocalizationLanguage> languages_ { LocalizationLanguage() };
+    static std::vector<std::u32string> language_names_ { U"fallback" };
+    static int current_language_ = 0;
 
     void init()
     {
@@ -24,24 +25,35 @@ namespace Localization
 
         // Generate LocalizationLanguage object for each file in "resources/localization" directory.
 	    const std::string localization_directory = Main::resourcePath() + "localization";
-        for ( const auto& file : std::filesystem::directory_iterator( localization_directory ) )
+
+        std::vector<LocalizationLanguage> languages {};
+        try
         {
-            try
+            for ( const auto& file : std::filesystem::directory_iterator( localization_directory ) )
             {
-                languages.push_back( LocalizationLanguage( file ) );
+                try
+                {
+                    languages.emplace_back( LocalizationLanguage( file ) );
+                }
+                catch ( const InvalidLocalizationLanguageException& e )
+                {
+                    const std::string localization_name = mezun::stringReplace( file.path(), localization_directory, "" );
+                    Main::pushState( std::unique_ptr<WMessageState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( mezun::stringReplace( "Localization file “%f” has been corrupted. Please redownload game. Hold ESC for a few seconds to close.", "%f", localization_name ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
+                }       
             }
-            catch ( const InvalidLocalizationLanguageException& e )
-            {
-                const std::string localization_name = mezun::stringReplace( file.path(), localization_directory, "" );
-                Main::pushState( std::unique_ptr<WMessageState> ( WMessageState::generateErrorMessage( mezun::charToChar32String( mezun::stringReplace( "Localization file “%f” has been corrupted. Please redownload game. Hold ESC for a few seconds to close.", "%f", localization_name ).c_str() ), WMessageState::Type::POP, nullptr ) ) );
-            }       
         }
+        catch ( const std::filesystem::filesystem_error& exception )
+        {
+            Main::pushState( std::unique_ptr<WMessageState> ( WMessageState::generateErrorMessage( U"Missing localization folder.\nPlease redownload game.", WMessageState::Type::POP, nullptr ) ) );
+        }
+
+        languages_ = languages;        
 
         // Sort languages list by order property.
         std::sort
         (
-            std::begin( languages ),
-            std::end( languages ),
+            std::begin( languages_ ),
+            std::end( languages_ ),
             []( const LocalizationLanguage& lhs, const LocalizationLanguage& rhs )
             {
                 return lhs.getOrder() < rhs.getOrder();
@@ -49,19 +61,20 @@ namespace Localization
         );
 
         // Generate list o’ language names.
-        for ( const auto& language : languages )
+        language_names_.clear();
+        for ( const auto& language : languages_ )
         {
-            language_names.push_back( language.getLanguageName() );
+            language_names_.emplace_back( language.getLanguageName() );
         }
-        assert( languages.size() == language_names.size() );
+        assert( languages_.size() == language_names_.size() );
 
         if ( config_language != "" )
         {
-            for ( int i = 0; i < languages.size(); ++i )
+            for ( int i = 0; i < languages_.size(); ++i )
             {
-                if ( languages[ i ].getPathName() == config_language )
+                if ( languages_[ i ].getPathName() == config_language )
                 {
-                    current_language = i;
+                    current_language_ = i;
                 }
             }
         }
@@ -74,23 +87,23 @@ namespace Localization
 
     const LocalizationLanguage& getCurrentLanguage()
     {
-        return languages[ current_language ];
+        return languages_[ current_language_ ];
     };
 
     const std::vector<std::u32string>& getLanguageNames()
     {
-        return language_names;
+        return language_names_;
     };
 
     void setLanguage( int language_index )
     {
-        current_language = language_index;
+        current_language_ = language_index;
         Input::changeQuittingText();
         // TODO: If mo’ need changes like these, implement a mo’ sophisticated observer system.
     };
 
     int getCurrentLanguageIndex()
     {
-        return current_language;
+        return current_language_;
     };
 }

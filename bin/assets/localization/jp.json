@@ -383,6 +383,25 @@
         "warp": "¡Get out o' here!",
         "kill_all": "¡Destroy all enemies!"
     },
+    "theme_codes":
+    [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "$"
+    ],
     "dungeon_healer_text": "Pay 5,000 & you can heal.",
     "levels":
     {

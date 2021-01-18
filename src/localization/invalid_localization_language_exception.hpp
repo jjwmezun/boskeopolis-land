@@ -1,10 +1,9 @@
 #pragma once
 
-#include <stdexcept>
+#include "mezun_exceptions.hpp"
 
-class InvalidLocalizationLanguageException final : public std::runtime_error
+class InvalidLocalizationLanguageException final : public mezun::Exception
 {
     public:
-        InvalidLocalizationLanguageException( const std::string& path ) :
-            std::runtime_error( "The text info file “" + path + "” has been tampered with. Please redownload game & try ’gain." ) {};
+        InvalidLocalizationLanguageException( const std::string& path );
 };

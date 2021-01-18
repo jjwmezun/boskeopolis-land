@@ -36,13 +36,6 @@ OverworldMenuState::OverworldMenuState( const Palette& pal, OWState* camera_stat
 	camera_state_ ( camera_state ),
 	level_name_replacement_ (),
 	options_text_ (),
-	bg_
-	(
-		BG_X,
-		BG_Y,
-		BG_WIDTH,
-		BG_HEIGHT
-	),
 	frame_ ( BG_X, BG_Y, BG_WIDTH, BG_HEIGHT )
 {
 	generateOptionsText();

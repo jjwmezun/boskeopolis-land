@@ -44,6 +44,5 @@ class OverworldMenuState final : public GameState
 		OWTile space_;
 		TextureBox level_name_replacement_;
 		WTextObj options_text_[ NUM_O_OPTIONS ];
-		const sdl2::SDLRect bg_;
 		Frame frame_;
 };

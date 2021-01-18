@@ -36,15 +36,16 @@ CardsMenuState::CardsMenuState()
     selection_x_ ( 0 ),
     selection_y_ ( 0 ),
     bg_ (),
-    input_delay_ ( INPUT_DELAY_LENGTH )
+    input_delay_ ( INPUT_DELAY_LENGTH ),
+    number_of_rows_ ( 0 )
 {
-    for ( int cycle = 0; cycle < Level::NUMBER_OF_CYCLES; ++cycle )
+    for ( int i = 0; i < LevelList::getNumberOfLevels(); ++i )
     {
-        for ( int theme = 0; theme < Level::NUMBER_OF_THEMES; ++theme )
+        if ( LevelList::hasCard( i ) )
         {
-            const TradingCard& card = Localization::getCurrentLanguage().getLevelTradingCard( LevelList::getCodeNameByCycleAndTheme( cycle, theme ) );
-            card_text_[ cycle ][ theme ] =
-            {
+            const TradingCard& card = Localization::getCurrentLanguage().getLevelTradingCard( LevelList::getCodeNameFromID( i ) );
+            card_text_.emplace_back
+            (
                 mezun::merge32Strings( mezun::merge32Strings( card.name_, U"\n" ), card.description_ ),
                 40,
                 Unit::WINDOW_HEIGHT_PIXELS - MESSAGE_HEIGHT,
@@ -56,9 +57,11 @@ CardsMenuState::CardsMenuState()
                 8,
                 WTextObj::VAlign::TOP,
                 MESSAGE_HEIGHT
-            };
+            );
+            card_level_ids_.emplace_back( i );
         }
     }
+    number_of_rows_ = ( int )( std::ceil( ( double )( card_text_.size() ) / ( double )( CARDS_PER_COLUMN ) ) );
 };
 
 CardsMenuState::~CardsMenuState() {};
@@ -77,22 +80,51 @@ void CardsMenuState::stateUpdate()
         if ( Input::held( Input::Action::MOVE_RIGHT ) )
         {
             ++selection_x_;
+            if ( selection_x_ == CARDS_PER_COLUMN || ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_y_ == number_of_rows_ - 1 && selection_x_ == card_text_.size() % CARDS_PER_COLUMN ) )
+            {
+                selection_x_ = 0;
+            }
             doGeneralSelection();
         }
         else if ( Input::held( Input::Action::MOVE_LEFT ) )
         {
             --selection_x_;
+            if ( selection_x_ < 0 )
+            {
+                selection_x_ = ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_y_ == number_of_rows_ - 1 )
+                    ? ( card_text_.size() % CARDS_PER_COLUMN ) - 1
+                    : CARDS_PER_COLUMN - 1;
+            }
             doGeneralSelection();
         }
 
         if ( Input::held( Input::Action::MOVE_DOWN ) )
         {
             ++selection_y_;
+            if ( selection_y_ == number_of_rows_ )
+            {
+                selection_y_ = 0;
+            }
+            else if ( selection_y_ == number_of_rows_ - 1 )
+            {
+                if ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_x_ >= card_text_.size() % CARDS_PER_COLUMN )
+                {
+                    selection_x_ = ( card_text_.size() % CARDS_PER_COLUMN ) - 1;
+                }
+            }
             doGeneralSelection();
         }
         else if ( Input::held( Input::Action::MOVE_UP ) )
         {
             --selection_y_;
+            if ( selection_y_ < 0 )
+            {
+                selection_y_ = number_of_rows_ - 1;
+                if ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_x_ >= card_text_.size() % CARDS_PER_COLUMN )
+                {
+                    selection_x_ = ( card_text_.size() % CARDS_PER_COLUMN ) - 1;
+                }
+            }
             doGeneralSelection();
         }
     }
@@ -108,27 +140,27 @@ void CardsMenuState::stateRender()
 {
     bg_.render();
     message_frame_.render();
-    for ( int yi = 0; yi < Level::NUMBER_OF_CYCLES; ++yi )
+    for ( int i = 0; i < card_text_.size(); ++i )
     {
-        for ( int xi = 0; xi < Level::NUMBER_OF_THEMES; ++xi )
+        const int xi = mezun::xOfN( i, CARDS_PER_COLUMN );
+        const int yi = mezun::yOfN( i, CARDS_PER_COLUMN );
+        const int x = generateCardX( xi );
+        const int y = generateCardY( yi );
+        Render::renderObject( "bg/card-select-card-2.png", { 0, 0, CARD_WIDTH, CARD_HEIGHT }, { x, y, CARD_WIDTH, CARD_HEIGHT } );
+        Render::renderObject( "bg/card-select-card-2.png", { 40, 0, 13, 22 }, { x + 4, y + 4, 13, 22 } );
+        if ( Inventory::haveDiamond( card_level_ids_[ i ] ) )
         {
-            const int x = generateCardX( xi );
-            const int y = generateCardY( yi );
-            Render::renderObject( "bg/card-select-card-2.png", { 0, 0, CARD_WIDTH, CARD_HEIGHT }, { x, y, CARD_WIDTH, CARD_HEIGHT } );
-            Render::renderObject( "bg/card-select-card-2.png", { 40, 0, 13, 22 }, { x + 4, y + 4, 13, 22 } );
-            if ( Inventory::haveDiamond( LevelList::getIDbyCycleAndTheme( yi, xi ) ) )
-            {
-                Render::renderRect( { x + 4, y + 4, 13, 22 }, 1 );
-                Render::renderObject( "bg/trading-card-items-small.png", { 13 * xi, 22 * yi, 13, 22 }, { x + 4, y + 4, 13, 22 } );
-            }
+            Render::renderRect( { x + 4, y + 4, 13, 22 }, 1 );
+            Render::renderObject( "bg/trading-card-items-small.png", { 13 * xi, 22 * yi, 13, 22 }, { x + 4, y + 4, 13, 22 } );
         }
     }
-    Render::renderObject( "bg/card-select-card-2.png", { 20, 0, CARD_WIDTH, CARD_HEIGHT }, { generateCardX( selection_x_.value() ), generateCardY( selection_y_.value() ), CARD_WIDTH, CARD_HEIGHT } );
+    Render::renderObject( "bg/card-select-card-2.png", { 20, 0, CARD_WIDTH, CARD_HEIGHT }, { generateCardX( selection_x_ ), generateCardY( selection_y_ ), CARD_WIDTH, CARD_HEIGHT } );
 
-    if ( Inventory::haveDiamond( LevelList::getIDbyCycleAndTheme( selection_y_.value(), selection_x_.value() ) ) )
+    const int selection = selection_y_ * CARDS_PER_COLUMN + selection_x_;
+    if ( Inventory::haveDiamond( card_level_ids_[ selection ] ) )
     {
-        Render::renderObject( "bg/trading-card-items-large.png", { 39 * selection_x_.value(), 48 * selection_y_.value(), 39, 48 }, { 8, 168, 39, 48 } );
-        card_text_[ selection_y_.value() ][ selection_x_.value() ].render();
+        Render::renderObject( "bg/trading-card-items-large.png", { 39 * selection_x_, 48 * selection_y_, 39, 48 }, { 8, 168, 39, 48 } );
+        card_text_[ selection ].render();
     }
     title_.render();
 };

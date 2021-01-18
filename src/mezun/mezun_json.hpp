@@ -15,4 +15,6 @@ namespace mezun
 		void ( *file_load_error_function )() = nullptr,
 		void ( *json_load_error_function )() = nullptr
 	);
+	int JSONTryInt( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& object, const char* name, int fallback );
+	int JSONTryBool( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& object, const char* name, bool fallback );
 }

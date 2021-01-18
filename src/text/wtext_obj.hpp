@@ -57,6 +57,8 @@ class WTextObj final
 		void render() const;
 		void render( int limit ) const;
 		void changeColor( WTextCharacter::Color color );
+		void setX( int x );
+		void addToX( int value );
 		void generateTexture( TextureBox& texture_box ) const;
 		int getNumberOfCharacters() const;
 		int getNumberOfLines() const;

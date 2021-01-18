@@ -8,7 +8,7 @@
 #include "input.hpp"
 #include "localization.hpp"
 #include "localization_language.hpp"
-#include "level.hpp"
+#include "level_list.hpp"
 #include "main.hpp"
 #include "message_state.hpp"
 #include "mezun_helpers.hpp"
@@ -121,27 +121,29 @@ namespace Main
 	{
 		initSDL();
 		setResourcePaths();
-		Level::buildCodeNames();
-		Localization::init();
 		const ConsoleArguments args( argc, argv );
 		NOSAVE = args.nosave();
 		NOHARM = args.noharm();
 		CHANGE_PALETTE = args.changepalette();
-		mezun::initRand();
 		Render::init( args.windowed(), args.magnification() );
+		mezun::initRand();
 		Audio::init( args.noaudio() );
-		Palette::init();
 		try
 		{
-			Level::buildLevelList();
+			Palette::init();
+			Localization::init();
+			LevelList::init();
 			firstState();
 		}
-		catch ( const mezun::CantLoadLevelNames e )
+		catch ( const mezun::Exception& exception )
 		{
-			Main::changeState
-			(
-				std::unique_ptr<MessageState> ( MessageState::errorMessage( e.what() ) )
-			);
+			states_.clear();
+			states_.push_back( WMessageState::generateErrorMessage( exception.getMessage(), WMessageState::Type::POP, nullptr ) );
+			states_.back()->changePalette();
+			states_.back()->init();
+			transition_state_ = TransitionState::FADE_IN;
+			transition_level_ = TRANSITION_LIMIT;
+			Render::clearSurfaces();
 		}
 		Input::init();
 	};
@@ -165,122 +167,129 @@ namespace Main
 
 		while ( !testTotalQuit() )
 		{
-			while ( SDL_PollEvent( &event ) != 0 )
+			try
 			{
-				switch ( event.type )
+				while ( SDL_PollEvent( &event ) != 0 )
 				{
-					case ( SDL_QUIT ):
-						quit();
-					break;
-					case ( SDL_KEYDOWN ):
+					switch ( event.type )
 					{
-						const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
-						if ( CHANGE_PALETTE )
+						case ( SDL_QUIT ):
+							quit();
+						break;
+						case ( SDL_KEYDOWN ):
 						{
-							if ( code == 93 )
+							const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
+							if ( CHANGE_PALETTE )
 							{
-								auto* state = states_[ states_.size() - 1 ].get();
-								palette_changer_.setNextPalette( state, state->palette().bgN() );
+								if ( code == 93 )
+								{
+									auto* state = states_[ states_.size() - 1 ].get();
+									palette_changer_.setNextPalette( state, state->palette().bgN() );
+								}
+								else if ( code == 91 )
+								{
+									auto* state = states_[ states_.size() - 1 ].get();
+									palette_changer_.setPreviousPalette( state, state->palette().bgN() );
+								}
 							}
-							else if ( code == 91 )
-							{
-								auto* state = states_[ states_.size() - 1 ].get();
-								palette_changer_.setPreviousPalette( state, state->palette().bgN() );
-							}
+							Input::keyPress( code );
+							Input::keyHold( code );
 						}
-						Input::keyPress( code );
-						Input::keyHold( code );
+						break;
+						case ( SDL_KEYUP ):
+							Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+						break;
+						case ( SDL_JOYAXISMOTION ):
+							Input::axis( event.jaxis );
+						break;
+						case ( SDL_JOYBUTTONDOWN ):
+							Input::buttonPress( event.jbutton.button );
+							Input::buttonHold( event.jbutton.button );
+						break;
+						case ( SDL_JOYBUTTONUP ):
+							Input::buttonRelease( event.jbutton.button );
+						break;
 					}
+				}
+
+				maintainFrameRate();
+
+				if ( Input::exitButtonHeldLongEnough() )
+				{
+					quit();
+				}
+
+				switch ( state_change_type_ )
+				{
+					case ( StateChangeType::CHANGE ):
+						changeStateSafe();
 					break;
-					case ( SDL_KEYUP ):
-						Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+					case ( StateChangeType::POP ):
+						popStateSafe();
 					break;
-					case ( SDL_JOYAXISMOTION ):
-						Input::axis( event.jaxis );
-					break;
-					case ( SDL_JOYBUTTONDOWN ):
-						Input::buttonPress( event.jbutton.button );
-						Input::buttonHold( event.jbutton.button );
-					break;
-					case ( SDL_JOYBUTTONUP ):
-						Input::buttonRelease( event.jbutton.button );
+					case ( StateChangeType::PUSH ):
+						pushStateSafe();
 					break;
 				}
-			}
 
-			maintainFrameRate();
+				if ( states_.empty() )
+				{
+					quit();
+					return;
+				}
 
-			if ( Input::exitButtonHeldLongEnough() )
-			{
-				quit();
-			}
-
-			switch ( state_change_type_ )
-			{
-				case ( StateChangeType::CHANGE ):
-					changeStateSafe();
-				break;
-				case ( StateChangeType::POP ):
-					popStateSafe();
-				break;
-				case ( StateChangeType::PUSH ):
-					pushStateSafe();
-				break;
-			}
-
-			if ( states_.empty() )
-			{
-				quit();
-				return;
-			}
-
-			switch ( transition_state_ )
-			{
-				case ( TransitionState::__NULL ):
-					states_.back()->update();
-					if ( getPalette().type() == "Neon" )
-					{
-						neon.update();
-					}
-				break;
-
-				case ( TransitionState::FADE_OUT ):
-					if ( transition_level_ < TRANSITION_LIMIT )
-					{
-						transition_level_ += TRANSITION_SPEED;
-						if ( transition_level_ > TRANSITION_LIMIT )
+				switch ( transition_state_ )
+				{
+					case ( TransitionState::__NULL ):
+						states_.back()->update();
+						if ( getPalette().type() == "Neon" )
 						{
-							transition_level_ = TRANSITION_LIMIT;
+							neon.update();
 						}
-					}
-					else
-					{
-						transition_state_ = TransitionState::FADE_IN;
-					}
-				break;
+					break;
 
-				case ( TransitionState::FADE_IN ):
-					states_.back()->update();
-					if ( transition_level_ > 0 )
-					{
-						transition_level_ -= TRANSITION_SPEED;
-						if ( transition_level_ < 0 )
+					case ( TransitionState::FADE_OUT ):
+						if ( transition_level_ < TRANSITION_LIMIT )
 						{
-							transition_level_ = 0;
+							transition_level_ += TRANSITION_SPEED;
+							if ( transition_level_ > TRANSITION_LIMIT )
+							{
+								transition_level_ = TRANSITION_LIMIT;
+							}
 						}
-					}
-					else
-					{
-						transition_state_ = TransitionState::__NULL;
-					}
-				break;
+						else
+						{
+							transition_state_ = TransitionState::FADE_IN;
+						}
+					break;
+
+					case ( TransitionState::FADE_IN ):
+						states_.back()->update();
+						if ( transition_level_ > 0 )
+						{
+							transition_level_ -= TRANSITION_SPEED;
+							if ( transition_level_ < 0 )
+							{
+								transition_level_ = 0;
+							}
+						}
+						else
+						{
+							transition_state_ = TransitionState::__NULL;
+						}
+					break;
+				}
+
+				++frames_;
+				ticks_ = SDL_GetTicks();
+
+				Input::update();
+				render();
 			}
-
-			++frames_;
-			ticks_ = SDL_GetTicks();
-
-			Input::update();
-			render();
+			catch ( const mezun::Exception& exception )
+			{
+				changeState( WMessageState::generateErrorMessage( exception.getMessage(), WMessageState::Type::POP, nullptr ) );
+			}
 		}
 	};
 

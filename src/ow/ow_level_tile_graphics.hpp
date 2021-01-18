@@ -1,7 +1,6 @@
 #pragma once
 
 #include "counter_t.hpp"
-#include "level.hpp"
 #include "mezun_sdl2.hpp"
 #include <string>
 #include "timer_repeat_t2.hpp"
@@ -23,7 +22,6 @@ class OWLevelTileGraphics final
         {
             0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0
         };
-        static constexpr int NUMBER_OF_TILES = Level::NUMBER_OF_LEVELS + 2;
 
         bool testOnCamera( const sdl2::SDLRect& position, const sdl2::SDLRect& camera ) const;
         void refreshGraphics( const sdl2::SDLRect& camera );
@@ -35,6 +33,6 @@ class OWLevelTileGraphics final
         std::string tileset_;
         std::vector<sdl2::SDLRect> destinations_;
         sdl2::SDLRect source_;
-        bool reveal_[ NUMBER_OF_TILES ];
-        sdl2::SDLRect positions_[ NUMBER_OF_TILES ];
+        std::vector<bool> reveal_;
+        std::vector<sdl2::SDLRect> positions_;
 };

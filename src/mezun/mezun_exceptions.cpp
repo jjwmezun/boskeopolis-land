@@ -1,10 +1,22 @@
 #include "mezun_exceptions.hpp"
+#include "mezun_helpers.hpp"
 
 namespace mezun
 {
+	Exception::Exception( std::u32string message )
+	:
+		std::runtime_error( mezun::string32ToString8( message ) ),
+		message_ ( message )
+	{};
+
+	const std::u32string& Exception::getMessage() const
+	{
+		return message_;
+	};
+
 	MissingLevel::MissingLevel( const std::string& lvname )
 	:
-		std::runtime_error( "Level “" + lvname + "” is missing its JSON file in the resources/levels directory.\nPlease redownload game." )
+		std::runtime_error( "Level “" + lvname + "” is missing its JSON file in the assets/levels directory.\nPlease redownload game." )
 	{};
 
 	CorruptedLevel::CorruptedLevel( const std::string& lvname )

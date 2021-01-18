@@ -6,6 +6,16 @@
 
 namespace mezun
 {
+	class Exception : public std::runtime_error
+	{
+		public:
+			Exception( std::u32string message );
+			const std::u32string& getMessage() const;
+
+		private:
+			std::u32string message_;
+	};
+
 	class SDLWindowFailure final : public std::runtime_error
 	{
 		public:

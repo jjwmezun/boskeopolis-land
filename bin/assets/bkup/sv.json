@@ -358,6 +358,25 @@
             "special-3": "¡Catch the sale on rare collectibles!",
             "special-4": "¡Collect everything & dodge the eyes!"
         },
+        "themes_codes":
+        [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "$"
+        ],
         "cards":
         {
             "city-1": {

@@ -1,5 +1,5 @@
 #include <cassert>
-#include "level.hpp"
+#include "level_list.hpp"
 #include "ow_tile.hpp"
 
 OWTile::OWTile()
@@ -55,7 +55,7 @@ bool OWTile::isValid() const
     return
     (
         type_ == Type::__NULL ||
-        ( type_ == Type::LEVEL && value_ >= 0 && value_ < Level::NUMBER_OF_LEVELS ) ||
+        ( type_ == Type::LEVEL && value_ >= 0 && value_ < LevelList::getNumberOfLevels() ) ||
         ( type_ == Type::SHOP )
     );
 };

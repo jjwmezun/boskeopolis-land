@@ -12,6 +12,7 @@
 class LocalizationLanguage final
 {
     public:
+        LocalizationLanguage();
         LocalizationLanguage( const std::filesystem::directory_entry& file );
 
         static constexpr int NUMBER_OF_OVERWORLD_MENU_OPTIONS = 6;
@@ -42,7 +43,7 @@ class LocalizationLanguage final
         std::u32string getLevelGoalMessage( const std::string& code_name ) const;
         const std::u32string* getOverworldMenuNames() const;
         const std::u32string& getPressAnyKey() const;
-        const std::u32string& getRandomNewsTickerMessage() const;
+        std::u32string getRandomNewsTickerMessage() const;
         int getMaxNewsTickerMessageWidth() const;
         const std::u32string& getPauseContinue() const;
         const std::u32string& getPauseOptions() const;
@@ -89,6 +90,7 @@ class LocalizationLanguage final
         std::u32string getUnlockSpecialLevelDescription() const;
         std::u32string getUnlockSpecialLevelName( const std::u32string& level_name ) const;
         TradingCard getLevelTradingCard( const std::string& level_name ) const;
+        std::u32string getThemeCode( int theme ) const;
 
     private:
         void loadCharset( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
@@ -106,8 +108,10 @@ class LocalizationLanguage final
         void loadPauseText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadLevelTileMenuText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadGoalText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void loadThemeCodeText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadSuccessAndFailureText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
         void loadShopText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path );
+        void objectToMap( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& object, std::unordered_map<std::string, std::u32string>& target );
 
         int order_;
         int charset_height_;
@@ -178,4 +182,5 @@ class LocalizationLanguage final
         std::u32string overworld_menu_names_[ NUMBER_OF_OVERWORLD_MENU_OPTIONS ];
         std::unordered_map<std::string, TradingCard> trading_cards_;
         std::vector<std::u32string> news_ticker_messages_;
+        std::vector<std::u32string> theme_codes_;
 };

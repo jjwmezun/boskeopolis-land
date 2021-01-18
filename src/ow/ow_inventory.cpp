@@ -110,12 +110,24 @@ void OWInventory::render()
 void OWInventory::renderLevelInfo()
 {
 	win_icon_.render();
-	diamond_icon_.render();
-	crown_icon_.render();
-	gem_score_icon_.render();
+	if ( LevelList::hasCard( space_.getLevelNumber() ) )
+	{
+		diamond_icon_.render();
+	}
+	if ( LevelList::hasHardMode( space_.getLevelNumber() ) )
+	{
+		crown_icon_.render();
+	}
+	if ( LevelList::hasGemScore( space_.getLevelNumber() ) )
+	{
+		gem_score_icon_.render();
+		current_gem_score_texture_->render();
+	}
+	if ( LevelList::hasTimeScore( space_.getLevelNumber() ) )
+	{
 	time_score_icon_.render();
-	current_gem_score_texture_->render();
 	current_time_score_texture_->render();
+	}
 	secret_goal_icon_.render();
 	name_textures_[ getFlashColor() ].render();
 }

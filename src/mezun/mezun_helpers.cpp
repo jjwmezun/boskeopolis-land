@@ -70,8 +70,12 @@ namespace mezun
 			text += combineCharactersByCharsize( charsize, source );
 			source += charsize;
 		}
-		//text += ( char32_t )( '\0' );
 		return text;
+	};
+
+	std::u32string string8ToString32( const std::string& source )
+	{
+		return charToChar32String( source.c_str() );
 	};
 
     static int getCharacterSize( char character )

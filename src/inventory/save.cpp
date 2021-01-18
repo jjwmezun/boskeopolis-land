@@ -97,7 +97,7 @@ Save Save::createNew( std::u32string name )
     save.data_.health_upgrades_[ 0 ] = false;
     save.data_.health_upgrades_[ 1 ] = false;
     save.data_.health_upgrades_[ 2 ] = false;
-    for ( int i = 0; i < Level::NUMBER_OF_LEVELS; ++i )
+    for ( int i = 0; i < LevelList::MAX_LEVELS; ++i )
     {
         save.data_.been_to_level_[ i ] =
             save.data_.levels_unlocked_[ i ] =

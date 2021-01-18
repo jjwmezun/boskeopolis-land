@@ -7,6 +7,34 @@
 #include "mezun_time.hpp"
 #include "rapidjson/istreamwrapper.h"
 
+LocalizationLanguage::LocalizationLanguage()
+:
+    order_ ( 0 ),
+    charset_height_ ( 8 ),
+    default_character_ (),
+    title_options_ (),
+    options_options_ (),
+    language_ (),
+    intro_text_ (),
+    title_created_by_ (),
+    input_quitting_ (),
+    screen_option_fullscreen_ (),
+    screen_option_window_ (),
+    options_title_ (),
+    screen_options_title_ (),
+    language_options_title_ (),
+    controls_options_title_ (),
+    level_select_title_ (),
+    level_select_cycle_name_ (),
+    level_select_percent_symbol_ (),
+    path_name_ ( "default" ),
+    charset_image_src_ (),
+    charset_ (),
+    level_names_ (),
+    controls_actions_names_ (),
+    trading_cards_ ()
+{};
+
 LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_entry& file )
 :
     order_ ( 0 ),
@@ -66,6 +94,7 @@ LocalizationLanguage::LocalizationLanguage( const std::filesystem::directory_ent
     loadPauseText( data, path );
     loadLevelTileMenuText( data, path );
     loadGoalText( data, path );
+    loadThemeCodeText( data, path );
     loadSuccessAndFailureText( data, path );
     loadShopText( data, path );
 };
@@ -494,58 +523,36 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
         throw InvalidLocalizationLanguageException( path );
     }
 
-    const auto& level_names = levels[ "names" ].GetObject();
-    const auto& level_messages = levels[ "messages" ].GetObject();
-    const auto& level_goal_messages = levels[ "goals" ].GetObject();
-    const auto& level_cards = levels[ "cards" ].GetObject();
-    for ( int level = 0; level < Level::NUMBER_OF_LEVELS; ++level )
+    objectToMap( levels[ "names" ].GetObject(), level_names_ );
+    objectToMap( levels[ "messages" ].GetObject(), level_messages_ );
+    objectToMap( levels[ "goals" ].GetObject(), level_goal_messages_ );
+
+    for ( const auto& item : levels[ "cards" ].GetObject() )
     {
-        const std::string code_name = LevelList::getCodeNameFromID( level );
-        if ( level_names.HasMember( code_name.c_str() ) && level_names[ code_name.c_str() ].IsString() )
-        {
-            level_names_.insert
-            ({
-                std::string( code_name.c_str() ),
-                mezun::charToChar32String( level_names[ code_name.c_str() ].GetString() )
-            });
-        }
-        if ( level_messages.HasMember( code_name.c_str() ) && level_messages[ code_name.c_str() ].IsString() )
-        {
-            level_messages_.insert
-            ({
-                std::string( code_name.c_str() ),
-                mezun::charToChar32String( level_messages[ code_name.c_str() ].GetString() )
-            });
-        }
-        if ( level_goal_messages.HasMember( code_name.c_str() ) && level_goal_messages[ code_name.c_str() ].IsString() )
-        {
-            level_goal_messages_.insert
-            ({
-                std::string( code_name.c_str() ),
-                mezun::charToChar32String( level_goal_messages[ code_name.c_str() ].GetString() )
-            });
-        }
-        if ( level_cards.HasMember( code_name.c_str() ) && level_cards[ code_name.c_str() ].IsObject() )
-        {
-            const auto& card = level_cards[ code_name.c_str() ].GetObject();
-            if
-            (
-                card.HasMember( "title" ) &&
-                card[ "title" ].IsString() &&
-                card.HasMember( "description" ) &&
-                card[ "description" ].IsString()
-            )
+        assert( item.name.IsString() && item.value.IsObject() );
+        const auto& card = item.value.GetObject();
+        assert( card.HasMember( "title" ) && card[ "title" ].IsString() && card.HasMember( "description" ) && card[ "description" ].IsString() );
+        trading_cards_.insert
+        ({
+            item.name.GetString(),
             {
-                trading_cards_.insert
-                ({
-                    std::string( code_name.c_str() ),
-                    {
-                        mezun::charToChar32String( card[ "title" ].GetString() ),
-                        mezun::charToChar32String( card[ "description" ].GetString() )
-                    }
-                });
+                mezun::charToChar32String( card[ "title" ].GetString() ),
+                mezun::charToChar32String( card[ "description" ].GetString() )
             }
-        }
+        });  
+    }
+};
+
+void LocalizationLanguage::objectToMap( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& object, std::unordered_map<std::string, std::u32string>& target )
+{
+    for ( const auto& item : object )
+    {
+        assert( item.name.IsString() && item.value.IsString() );      
+        target.insert
+        ({
+            item.name.GetString(),
+            mezun::charToChar32String( item.value.GetString() )
+        });  
     }
 };
 
@@ -721,6 +728,22 @@ void LocalizationLanguage::loadGoalText( const rapidjson::GenericObject<false, r
     kill_all_goal_message_ = mezun::charToChar32String( goals[ "kill_all" ].GetString() );
 };
 
+void LocalizationLanguage::loadThemeCodeText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
+{
+    if ( !data.HasMember( "theme_codes" ) || !data[ "theme_codes" ].IsArray() )
+    {
+        throw InvalidLocalizationLanguageException( path );
+    }
+
+    for ( const auto& theme : data[ "theme_codes" ].GetArray() )
+    {
+        if ( theme.IsString() )
+        {
+            theme_codes_.emplace_back( mezun::charToChar32String( theme.GetString() ) );
+        }
+    }
+};
+
 void LocalizationLanguage::loadSuccessAndFailureText( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& data, const std::string& path )
 {
     if
@@ -877,9 +900,9 @@ const std::u32string& LocalizationLanguage::getPressAnyKey() const
     return press_any_key_;
 };
 
-const std::u32string& LocalizationLanguage::getRandomNewsTickerMessage() const
+std::u32string LocalizationLanguage::getRandomNewsTickerMessage() const
 {
-    return mezun::randEntry( news_ticker_messages_ );
+    return ( news_ticker_messages_.size() > 0 ) ? mezun::randEntry( news_ticker_messages_ ) : U"";
 };
 
 int LocalizationLanguage::getMaxNewsTickerMessageWidth() const
@@ -1103,4 +1126,9 @@ std::u32string LocalizationLanguage::getUnlockSpecialLevelName( const std::u32st
 TradingCard LocalizationLanguage::getLevelTradingCard( const std::string& level_name ) const
 {
     return mezun::findInMap( trading_cards_, level_name, TradingCard( U"MISSING CARD NAME", U"MISSING CARD DESCRIPTION" ) );
+};
+
+std::u32string LocalizationLanguage::getThemeCode( int theme ) const
+{
+    return ( theme >= 0 && theme < theme_codes_.size() ) ? theme_codes_[ theme ] : U"?";
 };

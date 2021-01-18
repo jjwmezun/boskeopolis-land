@@ -4,7 +4,6 @@
 #include "counter_flip.hpp"
 #include "frame.hpp"
 #include "game_state.hpp"
-#include "level.hpp"
 #include "wtext_highlight.hpp"
 #include "wtext_obj.hpp"
 
@@ -20,14 +19,17 @@ class CardsMenuState final : public GameState
 		void init() override;
 
 	private:
-        WTextObj card_text_[ Level::NUMBER_OF_CYCLES ][ Level::NUMBER_OF_THEMES ];
-		WTextHighlight<> title_;
+		void doGeneralSelection();
+
+		static constexpr int CARDS_PER_COLUMN = 16;
+		int selection_x_;
+		int selection_y_;
+		int input_delay_;
+		int number_of_rows_;
+		std::vector<int> card_level_ids_;
+        std::vector<WTextObj> card_text_;
 		CheckeredBackground bg_;
         Frame message_frame_;
-		CounterFlip<Level::NUMBER_OF_THEMES - 1> selection_x_;
-		CounterFlip<Level::NUMBER_OF_CYCLES - 1> selection_y_;
-		int input_delay_;
-        char scratch_[3000];
-
-		void doGeneralSelection();
+		WTextHighlight<> title_;
+		char scratch_[3000];
 };

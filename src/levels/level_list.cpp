@@ -9,6 +9,7 @@
 #include "mezun_exceptions.hpp"
 #include "mezun_helpers.hpp"
 #include "mezun_json.hpp"
+#include "wmessage_state.hpp"
 
 #include "map_layer_constellation_moving.hpp"
 #include "map_layer_constellation_scrolling.hpp"
@@ -35,7 +36,6 @@
 #include "timed_on_goal.hpp"
 #include "warp_goal.hpp"
 
-static std::vector<std::string> code_names_;
 static std::string directory_;
 static std::vector<LevelData> levels_;
 static std::string current_code_name_;
@@ -43,21 +43,30 @@ static std::string current_code_name_;
 static void loadListFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& root );
 static void loadLevelDataFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& root );
 
-std::vector<std::string> LevelList::getListOfCodeNames( const std::string& directory )
+void LevelList::init()
 {
-    directory_ = directory;
+    directory_ = Main::resourcePath() + "levels" + Main::pathDivider();
+
+	if ( !mezun::checkDirectory( directory_ ) )
+	{
+        throw mezun::Exception( U"Can’t load assets/levels directory. Please redownload game." );
+	}
+
     mezun::loadJSON
     (
-        directory + "list.json",
+        directory_ + "list.json",
         loadListFunction,
         mezun::charToChar32String( "Failed to load level list. Please redownload game & try ’gain" ),
         mezun::charToChar32String( "Level list has become corrupted. Please redownload game & try ’gain." )
     );
-    return code_names_;
 };
 
 Level LevelList::getLevel( int id )
 {
+    if ( id < 0 || id >= levels_.size() )
+    {
+        throw mezun::Exception( mezun::stringReplace( U"Missing Level ID #%d.", U"%d", mezun::charToChar32String( std::to_string( id ).c_str() ) ) );
+    };
     const std::string lvname = levels_[ id ].code_name_;
     const std::string file_path = directory_ + lvname + ".json";
 
@@ -65,7 +74,7 @@ Level LevelList::getLevel( int id )
 
     if( !ifs.is_open() )
     {
-        throw mezun::MissingLevel( lvname );
+        throw mezun::Exception( mezun::string8ToString32( "Level “" + lvname + "” is missing its JSON file in the assets/levels directory.\nPlease redownload game." ) );
     }
 
     rapidjson::IStreamWrapper ifs_wrap( ifs );
@@ -74,7 +83,7 @@ Level LevelList::getLevel( int id )
 
     if ( !lv.IsObject() )
     {
-        throw mezun::BrokenLevelFile( lvname );
+        throw mezun::Exception( mezun::string8ToString32( "The JSON file for level “" + lvname + "” in the assets/levels directory has become corrupted & isn't valid JSON & can't be loaded.\nPlease redownload game." ) );
     }
 
     auto lvobj = lv.GetObject();
@@ -666,6 +675,16 @@ Level LevelList::getLevel( int id )
     return Level( id, maps, std::move( goal ), entrance_x, entrance_y, camera_x, camera_y, message, start_on );
 };
 
+const std::vector<LevelData>& LevelList::getLevelDataList()
+{
+    return levels_;
+};
+
+int LevelList::getNumberOfLevels()
+{
+    return levels_.size();
+};
+
 int LevelList::gemChallenge( unsigned int level )
 {
     return levels_[ level ].gem_challenge_;
@@ -700,8 +719,8 @@ int LevelList::getIDFromCodeName( std::string code_name )
 			return i;
 		}
 	}
-	printf( "MISSING LEVEL FOR CODE NAME %s\n", code_name );
-	assert( false );
+    Main::pushState( WMessageState::generateErrorMessage( mezun::stringReplace( mezun::charToChar32String( "Missing level data for code name “%c”. Please redownload game." ), U"%c", mezun::charToChar32String( code_name.c_str() ) ), WMessageState::Type::POP, nullptr ) );
+    return -1;
 };
 
 const std::string& LevelList::getCodeNameFromID( unsigned int level )
@@ -723,8 +742,8 @@ int LevelList::getIDbyCycleAndTheme( unsigned int cycle, unsigned int theme )
 			return i;
 		}
 	}
-	printf( "MISSING LEVEL FOR CYCLE %d & THEME %d\n", cycle, theme );
-	assert( false );
+    Main::pushState( WMessageState::generateErrorMessage( mezun::string8ToString32( "Missing level data for level with cycle #" + std::to_string( cycle ) + " & theme #" + std::to_string( theme ) + ". Please redownload game." ), WMessageState::Type::POP, nullptr ) );
+    return -1;
 };
 
 const std::string& LevelList::getCodeNameByCycleAndTheme( unsigned int cycle, unsigned int theme )
@@ -744,13 +763,18 @@ int LevelList::getThemeFromLevelID( unsigned int level )
 
 std::u32string LevelList::getThemeCodeFromLevelID( unsigned int level )
 {
-	const int theme = getThemeFromLevelID( level );
-	const char letter[ 1 ] = { 65 + theme };
-	return mezun::charToChar32String( letter );
+	return Localization::getCurrentLanguage().getThemeCode( getThemeFromLevelID( level ) - 1 );
 };
 
 std::u32string LevelList::getLevelHeader( unsigned int level )
 {
+    const unsigned int theme = getThemeFromLevelID( level );
+    const unsigned int cycle = getCycleFromLevelID( level );
+    if ( !levels_[ level ].show_cycle_ || !levels_[ level ].show_theme_ || theme == 0 || cycle == 0 )
+    {
+        return U"";
+    }
+
 	return mezun::charToChar32String
 	(
 		mezun::stringReplace
@@ -767,6 +791,26 @@ int LevelList::getNextLevel( unsigned int level )
     return levels_[ level ].next_level_;
 };
 
+bool LevelList::hasGemScore( unsigned int level )
+{
+    return levels_[ level ].gem_challenge_ > 0;
+};
+
+bool LevelList::hasTimeScore( unsigned int level )
+{
+    return levels_[ level ].time_challenge_ > 0;
+};
+
+bool LevelList::hasCard( unsigned int level )
+{
+    return levels_[ level ].has_card_;
+};
+
+bool LevelList::hasHardMode( unsigned int level )
+{
+    return levels_[ level ].has_crown_;
+};
+
 void loadListFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& root )
 {
     if ( root.HasMember( "levels" ) & root[ "levels" ].IsArray() )
@@ -776,7 +820,6 @@ void loadListFunction( const rapidjson::GenericObject<false, rapidjson::GenericV
             if ( item.IsString() )
             {
                 current_code_name_ = item.GetString();
-                code_names_.emplace_back( current_code_name_ );
                 mezun::loadJSON
                 (
                     directory_ + current_code_name_ + ".json",
@@ -793,12 +836,16 @@ void loadLevelDataFunction( const rapidjson::GenericObject<false, rapidjson::Gen
 {
     LevelData level;
     level.code_name_ = current_code_name_;
-    level.cycle_ = 0;
-    level.theme_ = 0;
+    level.cycle_ = mezun::JSONTryInt( root, "cycle", 0 );
+    level.theme_ = mezun::JSONTryInt( root, "theme", 0 );;
     level.id_ = levels_.size();
-    level.time_challenge_ = 0;
-    level.gem_challenge_ = 0;
-    level.has_card_ = level.has_crown_ = level.has_suits_ = true;
-    level.has_secret_goal_ = false;
+    level.time_challenge_ = mezun::JSONTryInt( root, "time_challenge", 0 );
+    level.gem_challenge_ = mezun::JSONTryInt( root, "gem_challenge", 0 );
+    level.has_card_ = mezun::JSONTryBool( root, "has_card", true );
+    level.has_crown_ = mezun::JSONTryBool( root, "has_crown", true );
+    level.show_cycle_ = mezun::JSONTryBool( root, "show_cycle", true );
+    level.show_theme_ = mezun::JSONTryBool( root, "show_theme", true );
+    level.has_suits_ = false;
+    level.has_secret_goal_ = mezun::JSONTryBool( root, "secret_goal", false );
     levels_.emplace_back( level );
 };
