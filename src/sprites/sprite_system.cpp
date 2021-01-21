@@ -69,6 +69,7 @@
 #include "ghost_coffin_sprite.hpp"
 #include "ghost_player_sprite.hpp"
 #include "ghost_sprite.hpp"
+#include "glass_button_sprite.hpp"
 #include "gorilla_sprite.hpp"
 #include "guard_spike_sprite.hpp"
 #include "guard_sprite.hpp"
@@ -137,12 +138,14 @@
 #include "pollo_del_aire_still_sprite.hpp"
 #include "pollo_del_aire_vertical_sprite.hpp"
 #include "pollo_picante_sprite.hpp"
+#include "prison_bars_sprite.hpp"
 #include "pufferbee_sprite.hpp"
 #include "pufferbee_square_sprite.hpp"
 #include "quadrapus_sprite.hpp"
 #include "racer_sprite.hpp"
 #include "raft_sprite.hpp"
 #include "random_treasure_chest_sprite.hpp"
+#include "regular_guard_sprite.hpp"
 #include "rising_package_sprite.hpp"
 #include "rising_ice_cube_sprite.hpp"
 #include "rising_platform_sprite.hpp"
@@ -154,6 +157,7 @@
 #include "sewer_monster_sprite.hpp"
 #include "shmup_enemy_sprite.hpp"
 #include "shmup_shooter_sprite.hpp"
+#include "shooter_guard_sprite.hpp"
 #include "shooter_player_sprite.hpp"
 #include "shove_out_sprite.hpp"
 #include "shroud_sprite.hpp"
@@ -948,6 +952,63 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 237 ):
 			return std::unique_ptr<Sprite> ( new NocturnalGhostSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 238 ):
+			return std::unique_ptr<Sprite> ( new ShooterGuardSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 239 ):
+			return std::unique_ptr<Sprite> ( new RegularGuardSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 240 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 1 ) );
+		break;
+		case ( SPRITE_INDEX_START + 241 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 2 ) );
+		break;
+		case ( SPRITE_INDEX_START + 242 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 3 ) );
+		break;
+		case ( SPRITE_INDEX_START + 243 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 4 ) );
+		break;
+		case ( SPRITE_INDEX_START + 244 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 5 ) );
+		break;
+		case ( SPRITE_INDEX_START + 245 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 6 ) );
+		break;
+		case ( SPRITE_INDEX_START + 246 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 7 ) );
+		break;
+		case ( SPRITE_INDEX_START + 247 ):
+			return std::unique_ptr<Sprite> ( new PrisonBarsSprite( x, y, 8 ) );
+		break;
+		case ( SPRITE_INDEX_START + 248 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 1 ) );
+		break;
+		case ( SPRITE_INDEX_START + 249 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 2 ) );
+		break;
+		case ( SPRITE_INDEX_START + 250 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 3 ) );
+		break;
+		case ( SPRITE_INDEX_START + 251 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 4 ) );
+		break;
+		case ( SPRITE_INDEX_START + 252 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 5 ) );
+		break;
+		case ( SPRITE_INDEX_START + 253 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 6 ) );
+		break;
+		case ( SPRITE_INDEX_START + 254 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 7 ) );
+		break;
+		case ( SPRITE_INDEX_START + 255 ):
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 8, Direction::Simple::DOWN ) );
+		break;
+		case ( SPRITE_INDEX_START + 256 ):
+			return std::unique_ptr<Sprite> ( new RegularGuardSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

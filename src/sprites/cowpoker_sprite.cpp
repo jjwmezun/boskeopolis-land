@@ -29,7 +29,7 @@ CowpokerSprite::~CowpokerSprite() {};
 void CowpokerSprite::customUpdate( LevelState& level_state )
 {
 	handleGraphics();
-	handleThrowing( level_state.sprites() );
+	handleShooting( level_state.sprites() );
 };
 
 void CowpokerSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
@@ -60,7 +60,7 @@ void CowpokerSprite::handleGraphics()
 	}
 }
 
-void CowpokerSprite::handleThrowing( SpriteSystem& sprites )
+void CowpokerSprite::handleShooting( SpriteSystem& sprites )
 {
 	if ( throw_timer_.update() )
 	{

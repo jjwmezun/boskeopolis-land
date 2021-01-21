@@ -22,7 +22,7 @@ class CowpokerSprite final : public Sprite
 
 		CowpokerSprite( int x, int y, int w, int h, CowpokerType type, std::unique_ptr<SpriteGraphics>&& gfx, int map_id );
 		void handleGraphics();
-		void handleThrowing( SpriteSystem& sprites );
+		void handleShooting( SpriteSystem& sprites );
 
 		CowpokerType type_;
 		bool is_shooting_;
