@@ -14,7 +14,7 @@ PastRightEdgeGoal::~PastRightEdgeGoal() {};
 
 void PastRightEdgeGoal::update( LevelState& level_state )
 {
-	if ( level_state.sprites().hero().xPixels() > level_state.currentMap().widthPixels() + level_state.sprites().hero().widthPixels() )
+	if ( level_state.sprites().hero().rightPixels() >= level_state.currentMap().widthPixels() )
 	{
 		level_state.events().win();
 	}

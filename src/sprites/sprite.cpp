@@ -346,7 +346,14 @@ void Sprite::boundaries( Camera& camera, Map& lvmap )
 		}
 		else
 		{
-			containCameraX( camera );
+			if ( hit_box_.x < 0 )
+			{
+				collideStopXLeft( abs ( -hit_box_.x ) );
+			}
+			else if ( rightSubPixels() > Unit::PixelsToSubPixels( lvmap.widthPixels() ) )
+			{
+				collideStopXRight( rightSubPixels() - Unit::PixelsToSubPixels( lvmap.widthPixels() ) );
+			}
 		}
 
 		if ( hit_box_.y < -hit_box_.h )

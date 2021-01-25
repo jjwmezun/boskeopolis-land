@@ -70,6 +70,7 @@
 #include "ghost_player_sprite.hpp"
 #include "ghost_sprite.hpp"
 #include "glass_button_sprite.hpp"
+#include "glass_door_sprite.hpp"
 #include "gorilla_sprite.hpp"
 #include "guard_spike_sprite.hpp"
 #include "guard_sprite.hpp"
@@ -1009,6 +1010,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 256 ):
 			return std::unique_ptr<Sprite> ( new RegularGuardSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 257 ):
+			return std::unique_ptr<Sprite> ( new GlassDoorSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -2,12 +2,30 @@
 	"maps":
 	[
 		{
-			"slug": "dungeon-2"
+			"slug": "dungeon-2",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "mountains-and-trees.png",
+					"width": 48,
+					"height": 280,
+					"y_repeat": false,
+					"x_scroll": 0.5,
+					"y_scroll": 0.01,
+					"y_offset": -48
+				}
+			]
 		}
 	],
+	
+	"goal":
+	{
+		"type": "past_right_edge"
+	},
 
-	"entrance_x": 104,
-	"entrance_y": 28,
+	"entrance_x": 70,
+	"entrance_y": 36,
 	"gem_challenge": 0,
 	"time_challenge": 0,
 	"cycle": 2,
