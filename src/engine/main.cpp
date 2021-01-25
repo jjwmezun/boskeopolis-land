@@ -43,26 +43,27 @@ namespace Main
 	static constexpr int TRANSITION_SPEED = 16;
 	static constexpr int TRANSITION_LIMIT = 255;
 
-	StateChangeType state_change_type_ = StateChangeType::__NULL;
+	static StateChangeType state_change_type_ = StateChangeType::__NULL;
 
-	int ticks_ = 0;
-	int updates_per_frame_ = 0;
-	int frames_ = 0;
-	std::string resource_path_ = "";
-	std::string save_path_ = "";
-	std::string path_divider_ = "/";
-	bool NOSAVE = false;
-	bool NOHARM = false;
-	bool CHANGE_PALETTE = false;
+	static int ticks_ = 0;
+	static int updates_per_frame_ = 0;
+	static int frames_ = 0;
+	static int accumulator_ = 0;
+	static std::string resource_path_ = "";
+	static std::string save_path_ = "";
+	static std::string path_divider_ = "/";
+	static bool NOSAVE = false;
+	static bool NOHARM = false;
+	static bool CHANGE_PALETTE = false;
 
-	std::deque< std::unique_ptr<GameState> > push_states_ = {};
-	std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
+	static std::deque< std::unique_ptr<GameState> > push_states_ = {};
+	static std::vector< std::unique_ptr<GameState> > states_ = {}; // Polymorphism pointers.
 
-	TransitionState transition_state_ = TransitionState::__NULL;
-	int transition_level_ = 0;
+	static TransitionState transition_state_ = TransitionState::__NULL;
+	static int transition_level_ = 0;
 
-	NeonOverlay neon = {};
-	PaletteChanger palette_changer_;
+	static NeonOverlay neon = {};
+	static PaletteChanger palette_changer_;
 
 
 	// Private Function Declarations
@@ -86,8 +87,6 @@ namespace Main
 
 	void renderStates();
 	void renderTransition();
-
-	void maintainFrameRate();
 
 
 	// Function Implementations
@@ -164,7 +163,6 @@ namespace Main
 	void execute()
 	{
 		SDL_Event event;
-
 		while ( !testTotalQuit() )
 		{
 			try
@@ -212,78 +210,82 @@ namespace Main
 					}
 				}
 
-				maintainFrameRate();
-
-				if ( Input::exitButtonHeldLongEnough() )
+				int new_time = SDL_GetTicks();
+				int frame_time = new_time - ticks_;
+				ticks_ = new_time;
+				accumulator_ += frame_time;
+				while ( accumulator_ >= 17 )
 				{
-					quit();
-				}
+					if ( Input::exitButtonHeldLongEnough() )
+					{
+						quit();
+					}
 
-				switch ( state_change_type_ )
-				{
-					case ( StateChangeType::CHANGE ):
-						changeStateSafe();
-					break;
-					case ( StateChangeType::POP ):
-						popStateSafe();
-					break;
-					case ( StateChangeType::PUSH ):
-						pushStateSafe();
-					break;
-				}
+					switch ( state_change_type_ )
+					{
+						case ( StateChangeType::CHANGE ):
+							changeStateSafe();
+						break;
+						case ( StateChangeType::POP ):
+							popStateSafe();
+						break;
+						case ( StateChangeType::PUSH ):
+							pushStateSafe();
+						break;
+					}
 
-				if ( states_.empty() )
-				{
-					quit();
-					return;
-				}
+					if ( states_.empty() )
+					{
+						quit();
+						return;
+					}
 
-				switch ( transition_state_ )
-				{
-					case ( TransitionState::__NULL ):
-						states_.back()->update();
-						if ( getPalette().type() == "Neon" )
-						{
-							neon.update();
-						}
-					break;
-
-					case ( TransitionState::FADE_OUT ):
-						if ( transition_level_ < TRANSITION_LIMIT )
-						{
-							transition_level_ += TRANSITION_SPEED;
-							if ( transition_level_ > TRANSITION_LIMIT )
+					switch ( transition_state_ )
+					{
+						case ( TransitionState::__NULL ):
+							states_.back()->update();
+							if ( getPalette().type() == "Neon" )
 							{
-								transition_level_ = TRANSITION_LIMIT;
+								neon.update();
 							}
-						}
-						else
-						{
-							transition_state_ = TransitionState::FADE_IN;
-						}
-					break;
+						break;
 
-					case ( TransitionState::FADE_IN ):
-						states_.back()->update();
-						if ( transition_level_ > 0 )
-						{
-							transition_level_ -= TRANSITION_SPEED;
-							if ( transition_level_ < 0 )
+						case ( TransitionState::FADE_OUT ):
+							if ( transition_level_ < TRANSITION_LIMIT )
 							{
-								transition_level_ = 0;
+								transition_level_ += TRANSITION_SPEED;
+								if ( transition_level_ > TRANSITION_LIMIT )
+								{
+									transition_level_ = TRANSITION_LIMIT;
+								}
 							}
-						}
-						else
-						{
-							transition_state_ = TransitionState::__NULL;
-						}
-					break;
+							else
+							{
+								transition_state_ = TransitionState::FADE_IN;
+							}
+						break;
+
+						case ( TransitionState::FADE_IN ):
+							states_.back()->update();
+							if ( transition_level_ > 0 )
+							{
+								transition_level_ -= TRANSITION_SPEED;
+								if ( transition_level_ < 0 )
+								{
+									transition_level_ = 0;
+								}
+							}
+							else
+							{
+								transition_state_ = TransitionState::__NULL;
+							}
+						break;
+					}
+					Input::update();
+
+            		accumulator_ -= 17;
 				}
 
-				++frames_;
-				ticks_ = SDL_GetTicks();
-
-				Input::update();
 				render();
 			}
 			catch ( const mezun::Exception& exception )
@@ -531,14 +533,6 @@ namespace Main
 	{
 		return states_.back()->palette();
 	}
-
-	void maintainFrameRate()
-	{
-		if ( ( int )( SDL_GetTicks() ) - ticks_ < fpsMilliseconds() )
-		{
-			SDL_Delay( std::max( 0, fpsMilliseconds() - ( ( int )( SDL_GetTicks() ) - ticks_ ) ) );
-		}
-	};
 };
 
 int main( int argc, char* argv[] )
