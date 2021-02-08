@@ -1463,5 +1463,15 @@ const std::vector<std::unique_ptr<Sprite>>& SpriteSystem::getSpritesList() const
 
 void SpriteSystem::changeHeroToShooter()
 {
-	hero_.reset( new ShooterPlayerSprite( hero_->xPixels(), hero_->yPixels(), "sprites/autumn-shooter.png" ) );
+	int vx = hero_->vx_;
+	int vy = hero_->vy_;
+	int accx = hero_->acceleration_x_;
+	int accy = hero_->acceleration_y_;
+	bool on_ground = hero_->on_ground_;
+	hero_.reset( new ShooterPlayerSprite( hero_->xPixels(), hero_->yPixels() - 4, "sprites/autumn-shooter.png" ) );
+	hero_->vx_ = vx;
+	hero_->vy_ = vy;
+	hero_->acceleration_x_ = accx;
+	hero_->acceleration_y_ = accy;
+	hero_->on_ground_ = on_ground;
 };

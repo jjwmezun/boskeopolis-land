@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "timer_repeat_t2.hpp"
 
 class ShooterGuardSprite final : public Sprite
 {
@@ -9,6 +10,7 @@ class ShooterGuardSprite final : public Sprite
 		~ShooterGuardSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
+        void deathAction( LevelState& level_state ) override;
 
     private:
         enum class State
@@ -17,6 +19,6 @@ class ShooterGuardSprite final : public Sprite
             STOP
         };
         State state_;
-        int timer_;
-        char scratch_[3000];
+        TimerRepeatT2<30, 0, 30> shoot_timer_;
+		TimerRepeatT2<> animation_timer_;
 };

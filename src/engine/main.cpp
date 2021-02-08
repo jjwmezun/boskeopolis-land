@@ -167,55 +167,56 @@ namespace Main
 		{
 			try
 			{
-				while ( SDL_PollEvent( &event ) != 0 )
-				{
-					switch ( event.type )
-					{
-						case ( SDL_QUIT ):
-							quit();
-						break;
-						case ( SDL_KEYDOWN ):
-						{
-							const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
-							if ( CHANGE_PALETTE )
-							{
-								if ( code == 93 )
-								{
-									auto* state = states_[ states_.size() - 1 ].get();
-									palette_changer_.setNextPalette( state, state->palette().bgN() );
-								}
-								else if ( code == 91 )
-								{
-									auto* state = states_[ states_.size() - 1 ].get();
-									palette_changer_.setPreviousPalette( state, state->palette().bgN() );
-								}
-							}
-							Input::keyPress( code );
-							Input::keyHold( code );
-						}
-						break;
-						case ( SDL_KEYUP ):
-							Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
-						break;
-						case ( SDL_JOYAXISMOTION ):
-							Input::axis( event.jaxis );
-						break;
-						case ( SDL_JOYBUTTONDOWN ):
-							Input::buttonPress( event.jbutton.button );
-							Input::buttonHold( event.jbutton.button );
-						break;
-						case ( SDL_JOYBUTTONUP ):
-							Input::buttonRelease( event.jbutton.button );
-						break;
-					}
-				}
-
 				int new_time = SDL_GetTicks();
 				int frame_time = new_time - ticks_;
 				ticks_ = new_time;
 				accumulator_ += frame_time;
 				while ( accumulator_ >= 17 )
 				{
+					while ( SDL_PollEvent( &event ) != 0 )
+					{
+						switch ( event.type )
+						{
+							case ( SDL_QUIT ):
+								quit();
+							break;
+							case ( SDL_KEYDOWN ):
+							{
+								const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
+								if ( CHANGE_PALETTE )
+								{
+									if ( code == 93 )
+									{
+										auto* state = states_[ states_.size() - 1 ].get();
+										palette_changer_.setNextPalette( state, state->palette().bgN() );
+									}
+									else if ( code == 91 )
+									{
+										auto* state = states_[ states_.size() - 1 ].get();
+										palette_changer_.setPreviousPalette( state, state->palette().bgN() );
+									}
+								}
+								Input::keyPress( code );
+								Input::keyHold( code );
+							}
+							break;
+							case ( SDL_KEYUP ):
+								Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
+							break;
+							case ( SDL_JOYAXISMOTION ):
+								Input::axis( event.jaxis );
+							break;
+							case ( SDL_JOYBUTTONDOWN ):
+								Input::buttonPress( event.jbutton.button );
+								Input::buttonHold( event.jbutton.button );
+							break;
+							case ( SDL_JOYBUTTONUP ):
+								Input::buttonRelease( event.jbutton.button );
+							break;
+						}
+					}
+
+
 					if ( Input::exitButtonHeldLongEnough() )
 					{
 						quit();

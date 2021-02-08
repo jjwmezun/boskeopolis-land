@@ -1,12 +1,14 @@
 #pragma once
 
-template<int max_T, int min_T = 0>
+#include "timer_t.hpp"
+
+template<int max_T = TIMER_T_DEFAULT_FRAMES, int min_T = 0, int start_T = min_T>
 class TimerRepeatT2 final
 {
 	public:
 		constexpr TimerRepeatT2()
 		:
-			timer_ ( min_T )
+			timer_ ( start_T )
 		{};
 
 		bool update()
@@ -26,6 +28,11 @@ class TimerRepeatT2 final
 		constexpr int value() const
 		{
 			return timer_;
+		};
+
+		constexpr void reset()
+		{
+			timer_ = start_T;
 		};
 
 	private:

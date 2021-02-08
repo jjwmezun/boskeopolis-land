@@ -81,7 +81,7 @@ namespace Render
 
 	void createRenderer()
 	{
-		renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_TARGETTEXTURE );
+		renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_ACCELERATED );
 
 		if ( !renderer_ )
 		{
