@@ -3,24 +3,24 @@
 #include "spring_sprite.hpp"
 #include "sprite_graphics.hpp"
 
-SpringSprite::SpringSprite( int x, int y )
+SpringSprite::SpringSprite( int x, int y, int w, int h, std::string tileset )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/spring.png", 0, 0 ), x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING )
+	Sprite( std::make_unique<SpriteGraphics> ( std::move( tileset ), 0, 0 ), x, y + ( 16 - h ), w, h, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING )
 {};
 
 SpringSprite::~SpringSprite() {};
 
 void SpringSprite::customUpdate( LevelState& level_state )
 {
-	if ( hit_box_.h < 16000 )
+	if ( hit_box_.h < original_hit_box_.h )
 	{
 		hit_box_.h += 1000;
 	}
 
 	// In case o' wind.
 	hit_box_.x = original_hit_box_.x;
-	hit_box_.y = original_hit_box_.y + ( 16000 - hit_box_.h );
-	graphics_->current_frame_y_ = floor( ( 16000 - hit_box_.h ) / 1000 );
+	hit_box_.y = original_hit_box_.y + ( original_hit_box_.h - hit_box_.h );
+	graphics_->current_frame_y_ = Unit::SubPixelsToPixels( original_hit_box_.h - hit_box_.h );
 	graphics_->current_frame_x_ = graphics_->current_frame_y_ * 16;
 };
 
@@ -29,22 +29,19 @@ void SpringSprite::customInteract( Collision& my_collision, Collision& their_col
 	if ( them.collideBottomOnly( their_collision, *this ) )
 	{
 		them.bounce( STRENGTH );
-		//const int press_down_amount = ( them.vy_ * 10 ) - ( them.vy_ % 1000 );
-		hit_box_.h = 8000;
-		hit_box_.y = original_hit_box_.y + ( 16000 - hit_box_.h );
-		graphics_->current_frame_y_ = floor( ( 16000 - hit_box_.h ) / 1000 );
+		hit_box_.h = original_hit_box_.h / 2;
+		hit_box_.y = original_hit_box_.y + ( original_hit_box_.h - hit_box_.h );
+		graphics_->current_frame_y_ = Unit::SubPixelsToPixels( original_hit_box_.h - hit_box_.h );
 		graphics_->current_frame_x_ = graphics_->current_frame_y_ * 16;
 		Audio::playSound( Audio::SoundType::BOUNCE );
 	}
 	else if ( their_collision.collideLeft() )
 	{
 		them.collideStopXLeft( their_collision.overlapXLeft() );
-		//them.bounceLeft( their_collision.overlapXLeft() );
 	}
 	else if ( their_collision.collideRight() )
 	{
 		them.collideStopXRight( their_collision.overlapXRight() );
-		//them.bounceRight( their_collision.overlapXRight() );
 	}
 	else if ( their_collision.collideTop() )
 	{

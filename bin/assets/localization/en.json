@@ -366,7 +366,7 @@
             "city-3": "¡Get to the Keycane before “Dagny”!",
             "desert-2": "¡Get the silver moon & then ’scape ’fore time\nruns out!",
             "desert-4": "¡Shoot out all the Cowpokers & sentry guns!",
-            "dungeon-2": "¡Make all the ghosts fade with your flashlight!",
+            "dungeon-2": "¡Swipe a gun & blast your way out o’ prison!",
             "factory-3": "¡Last 30 seconds without being cooked!",
             "mountain-1": "¡Knock out all the Noko no Pollos!",
             "pirate-1": "¡Find the chest with the Keycane!",
@@ -507,8 +507,9 @@
                 "description": "MISSING CARD DESCRIPTION"
             },
             "dungeon-2": {
-                "title": "MISSING CARD TITLE",
-                "description": "MISSING CARD DESCRIPTION"
+                "title": "Square Prison Pizza",
+                "description": "The kind o’ fine cuisine Autumn experienced during her time in Carver’s™ Penitentiary after pilfering 1 too many stereos from the local “Everywhere Electronics”.",
+                "episode": "#BOSK-EZ4F55-JAIL: JAIL TIME POST PROGRESSIVE CONTEMPORARY DOOM POP"
             },
             "special-2": {
                 "title": "MISSING CARD TITLE",

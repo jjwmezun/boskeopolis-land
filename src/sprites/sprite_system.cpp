@@ -1003,7 +1003,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 6 ) );
 		break;
 		case ( SPRITE_INDEX_START + 254 ):
-			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 7 ) );
+			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 7, Direction::Simple::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 255 ):
 			return std::unique_ptr<Sprite> ( new GlassButtonSprite( x, y, 8, Direction::Simple::DOWN ) );
@@ -1013,6 +1013,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 257 ):
 			return std::unique_ptr<Sprite> ( new GlassDoorSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 258 ):
+			return std::unique_ptr<Sprite> ( new SpringSprite( x, y, 13, 8, "sprites/mattress-spring.png" ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

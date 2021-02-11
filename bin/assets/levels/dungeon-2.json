@@ -24,10 +24,10 @@
 		"type": "past_right_edge"
 	},
 
-	"entrance_x": 70,
-	"entrance_y": 36,
-	"gem_challenge": 0,
-	"time_challenge": 0,
+	"entrance_x": 82,
+	"entrance_y": 39,
+	"gem_challenge": 25000,
+	"time_challenge": 40,
 	"cycle": 2,
 	"theme": 15
 }
