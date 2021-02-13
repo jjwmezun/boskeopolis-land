@@ -30,7 +30,9 @@ namespace Audio
 		BUMP = 20,
 		SWITCH = 21,
 		GHOST = 22,
-		PAGE = 23
+		PAGE = 23,
+		GLASS = 24,
+		EXPLOSION = 25
 	};
 
 	void init( bool noaudio );

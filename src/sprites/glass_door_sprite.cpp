@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "glass_door_sprite.hpp"
 #include "collision.hpp"
 #include "level_state.hpp"
@@ -76,6 +77,14 @@ void GlassDoorSprite::customInteract( Collision& my_collision, Collision& their_
         else if ( them.hasType( SpriteType::HEROS_BULLET ) && !them.is_dead_ && their_collision.collideAny() )
         {
             ++hits_;
+            if ( hits_ == MAX_HITS )
+            {
+                Audio::playSound( Audio::SoundType::EXPLOSION );
+            }
+            else
+            {
+                Audio::playSound( Audio::SoundType::GLASS );
+            }
             them.kill();
             graphics_->current_frame_x_ = 8 * hits_;
         }

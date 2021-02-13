@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "glass_button_sprite.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
@@ -78,7 +79,14 @@ void GlassButtonSprite::customInteract( Collision& my_collision, Collision& thei
                 // Set “switch_number_” bit on switch value to 1.
                 // Using bits allows us to use the single switch value as 8 or mo’ independent values.
                 level_state.events().forceSwitch( level_state.events().getSwitchValue() | ( int )( std::pow( 2, switch_number_ - 1 ) ) );
+
+                Audio::playSound( Audio::SoundType::EXPLOSION );
             }
+            else
+            {
+                Audio::playSound( Audio::SoundType::GLASS );
+            }
+
             if ( Direction::SimpleIsHorizontal( direction_ ) )
             {
                 graphics_->current_frame_x_ = 6 * hits_;
