@@ -1,6 +1,7 @@
 #include "kill_all_goal.hpp"
 #include "event_system.hpp"
 #include "inventory_level.hpp"
+#include "inventory_level_graphics.hpp"
 #include "level.hpp"
 #include "level_state.hpp"
 #include "sprite_system.hpp"
@@ -21,7 +22,7 @@ void KillAllGoal::update( LevelState& level_state )
 
 	if ( sprites_left_ != sprites_left_momento )
 	{
-		level_state.inventory().changeKillCounter( sprites_left_ );
+		level_state.inventory().changeCounter( sprites_left_ );
 	}
 
 	if ( sprites_left_ <= 0 )
@@ -32,5 +33,6 @@ void KillAllGoal::update( LevelState& level_state )
 
 void KillAllGoal::customInit( LevelState& level_state )
 {
-	sprites_to_kill_ = level_state.level().allEnemiesToKill();
+	sprites_left_ = sprites_to_kill_ = level_state.level().allEnemiesToKill();
+	level_state.inventory().setShowCounter( InventoryLevelGraphics::Icon::COWPOKER, sprites_left_ );
 };

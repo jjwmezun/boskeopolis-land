@@ -2,241 +2,31 @@
 	"maps":
 	[
 		{
-			"slug": "house-1",
+            "slug": "attic-2",
 			"layers":
 			[
 				{
 					"type": "image",
-					"img": "night-space.png",
+					"img": "attic-brick-wall-2.png",
 					"width": 400,
-					"height": 224,
+					"height": 226,
 					"x_scroll": 0.5,
-					"y_scroll": 0.5
-                },
-				{
-					"type": "image",
-					"img": "skyline-2.png",
-					"width": 264,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.25,
-					"frames": 4,
-					"animation_speed": 32,
-					"animation_flip": true,
-					"y_offset": 32,
-					"x_offset": -32,
-					"y_repeat": false
-				},
-				{
-					"type": "image",
-					"img": "block-room-1-bg.png",
-					"width": 400,
-					"height": 416,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"layer": 4
-                },
-				{
-					"type": "image",
-					"img": "block-room-1-fg.png",
-					"width": 400,
-					"height": 416,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"layer": 15
-                }
-            ],
-			"warps":
-			[
-				{
-					"map": 1,
-					"entrance_x": 5,
-					"entrance_y": 22,
-					"location": [ 0, 12, 0, 28 ]
-				},
-				{
-					"map": 3,
-					"entrance_x": 2,
-					"entrance_y": 13,
-					"location": [ 13, 25, 0, 28 ]
-				}
-			]
-		},
-		{
-			"slug": "house-1-2",
-			"layers":
-			[
-				{
-					"type": "image",
-					"img": "night-space.png",
-					"width": 400,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
-                },
-				{
-					"type": "image",
-					"img": "skyline-2.png",
-					"width": 264,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.25,
-					"frames": 4,
-					"animation_speed": 32,
-					"animation_flip": true,
-					"y_offset": 64,
-					"x_offset": -32,
-					"y_repeat": false
-				},
-				{
-					"type": "image",
-					"img": "block-room-2-bg.png",
-					"width": 1376,
-					"height": 480,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"x_offset": 0,
-					"y_offset": 0,
-					"layer": 4
-                },
-				{
-					"type": "image",
-					"img": "block-room-2-fg.png",
-					"width": 1376,
-					"height": 480,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"x_offset": 0,
-					"y_offset": 0,
-					"layer": 15
-                }
-            ],
-			"warps":
-			[
-				{
-					"map": 2,
-					"entrance_x": 12,
-					"entrance_y": 20,
-					"location": [ 55, 85, 0, 32 ]
-				}
-			]
-		},
-		{
-			"slug": "house-1-3",
-			"layers":
-			[
-				{
-					"type": "image",
-					"img": "night-space.png",
-					"width": 400,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
-                },
-				{
-					"type": "image",
-					"img": "skyline-2.png",
-					"width": 264,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.25,
-					"frames": 4,
-					"animation_speed": 32,
-					"animation_flip": true,
-					"y_offset": 32,
-					"x_offset": -32,
-					"y_repeat": false
-				},
-				{
-					"type": "image",
-					"img": "block-room-3-bg.png",
-					"width": 400,
-					"height": 416,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"x_offset": 0,
-					"y_offset": 0,
-					"layer": 4
-                },
-				{
-					"type": "image",
-					"img": "block-room-3-fg.png",
-					"width": 400,
-					"height": 416,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"x_offset": 0,
-					"y_offset": 0,
-					"layer": 15
+					"y_scroll": 0.5,
+					"layer": "background"
                 }
             ]
-		},
-		{
-			"slug": "house-1-4",
-			"layers":
-			[
-				{
-					"type": "image",
-					"img": "night-space.png",
-					"width": 400,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.5
-                },
-				{
-					"type": "image",
-					"img": "skyline-2.png",
-					"width": 264,
-					"height": 224,
-					"x_scroll": 0.5,
-					"y_scroll": 0.25,
-					"frames": 4,
-					"animation_speed": 32,
-					"animation_flip": true,
-					"y_offset": 32,
-					"x_offset": -32,
-					"y_repeat": false
-				},
-				{
-					"type": "image",
-					"img": "block-room-4-bg.png",
-					"width": 400,
-					"height": 320,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"x_offset": 0,
-					"y_offset": 0,
-					"layer": 4
-                },
-				{
-					"type": "image",
-					"img": "block-room-4-fg.png",
-					"width": 400,
-					"height": 320,
-					"x_scroll": 1.0,
-					"y_scroll": 1.0,
-					"x_offset": 0,
-					"y_offset": 0,
-					"layer": 15
-                }
-            ],
-			"warps":
-			[
-				{
-					"map": 0,
-					"entrance_x": 19,
-					"entrance_y": 6,
-					"location": [ 0, 25, 0, 18 ]
-				}
-			]
-		}
+        }
 	],
 
-	"entrance_x": 9,
-	"entrance_y": 20,
-
-	"gem_challenge": 18000,
-	"time_challenge": 28,
+	"entrance_x": 32,
+	"entrance_y": 67,
+	"gem_challenge": 50000,
+	"time_challenge": 120,
+	"goal":
+	{
+		"type": "collect",
+		"amount": 50000
+	},
 	"cycle": 1,
 	"theme": 2
 }

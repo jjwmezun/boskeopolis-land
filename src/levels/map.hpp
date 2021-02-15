@@ -67,6 +67,7 @@ class Map final
 		const bool loop_sides_;
 		const bool slippery_;
 		const bool show_on_off_;
+		const bool show_key_;
 		const bool warp_on_fall_;
 		const bool watery_;
 		const bool oxygen_;
@@ -144,6 +145,7 @@ class Map final
 			int wind_strength,
 			int gravity,
 			bool show_on_off,
+			bool show_key,
 			int lightning_flash_color,
 			std::string music,
 			bool warp_on_fall,

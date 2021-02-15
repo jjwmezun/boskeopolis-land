@@ -40,6 +40,7 @@
 #include "block_component_solid.hpp"
 #include "block_component_spark_wall.hpp"
 #include "block_component_sticky.hpp"
+#include "block_component_suit.hpp"
 #include "block_component_swimmable.hpp"
 #include "block_component_switch_off.hpp"
 #include "block_component_switch_on.hpp"
@@ -243,6 +244,48 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 							components.emplace_back( std::make_unique<BlockComponentMoney> () );
 						}
 					}
+					else if ( mezun::areStringsEqual( comp_type, "diamond" ) )
+					{
+						if
+						(
+							comp_obj.HasMember( "replacement" ) &&
+							comp_obj[ "replacement" ].IsInt()
+						)
+						{
+							components.emplace_back( std::make_unique<BlockComponentDiamond> ( comp_obj[ "replacement" ].GetInt() ) );
+						}
+						else
+						{
+							components.emplace_back( std::make_unique<BlockComponentDiamond> () );
+						}
+					}
+					else if ( mezun::areStringsEqual( comp_type, "suit" ) )
+					{
+						if
+						(
+							comp_obj.HasMember( "suit" ) &&
+							comp_obj[ "suit" ].IsString()
+						)
+						{
+							const std::string suit = comp_obj[ "suit" ].GetString();
+							if ( suit == "club" )
+							{
+								components.emplace_back( std::make_unique<BlockComponentSuit> ( CardSuit::CLUB ) );
+							}
+							else if ( suit == "diamond" )
+							{
+								components.emplace_back( std::make_unique<BlockComponentSuit> ( CardSuit::DIAMOND ) );
+							}
+							else if ( suit == "heart" )
+							{
+								components.emplace_back( std::make_unique<BlockComponentSuit> ( CardSuit::HEART ) );
+							}
+							else if ( suit == "spade" )
+							{
+								components.emplace_back( std::make_unique<BlockComponentSuit> ( CardSuit::SPADE ) );
+							}
+						}
+					}
 					else if ( mezun::areStringsEqual( comp_type, "mcguffin" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentMcGuffin> () );
@@ -270,21 +313,6 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 					else if ( mezun::areStringsEqual( comp_type, "full_heal" ) )
 					{
 						components.emplace_back( std::make_unique<BlockComponentFullHeal> () );
-					}
-					else if ( mezun::areStringsEqual( comp_type, "diamond" ) )
-					{
-						if
-						(
-							comp_obj.HasMember( "replacement" ) &&
-							comp_obj[ "replacement" ].IsInt()
-						)
-						{
-							components.emplace_back( std::make_unique<BlockComponentDiamond> ( comp_obj[ "replacement" ].GetInt() ) );
-						}
-						else
-						{
-							components.emplace_back( std::make_unique<BlockComponentDiamond> () );
-						}
 					}
 					else if ( mezun::areStringsEqual( comp_type, "swim" ) )
 					{

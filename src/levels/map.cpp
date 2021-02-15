@@ -193,6 +193,7 @@ Map Map::mapFromPath
 		int wind_strength = 0;
 		int gravity = Sprite::GRAVITY_TOP_SPEED_NORMAL;
 		bool show_on_off = false;
+		bool show_key = false;
 		int lightning_flash_color = 0;
 		std::string music = "";
 		bool warp_on_fall = false;
@@ -570,6 +571,14 @@ Map Map::mapFromPath
 					}
 				}
 
+				else if ( mezun::areStringsEqual( name, "show_key" ) )
+				{
+					if ( value.IsBool() )
+					{
+						show_key = value.GetBool();
+					}
+				}
+
 				else if ( mezun::areStringsEqual( name, "warp_on_fall" ) )
 				{
 					if ( value.IsBool() )
@@ -695,6 +704,7 @@ Map Map::mapFromPath
 			wind_strength,
 			gravity,
 			show_on_off,
+			show_key,
 			lightning_flash_color,
 			music,
 			warp_on_fall,
@@ -729,6 +739,7 @@ Map::Map
 	int wind_strength,
 	int gravity,
 	bool show_on_off,
+	bool show_key,
 	int lightning_flash_color,
 	std::string music,
 	bool warp_on_fall,
@@ -761,6 +772,7 @@ Map::Map
 	wind_strength_ ( wind_strength ),
 	gravity_ ( gravity ),
 	show_on_off_ ( show_on_off ),
+	show_key_ ( show_key ),
 	lightning_flash_color_ ( lightning_flash_color ),
 	current_bg_ ( palette.bgN() ),
 	music_ ( music ),
@@ -800,6 +812,7 @@ Map::Map( Map&& m ) noexcept
 	gravity_ ( m.gravity_ ),
 	changed_ ( m.changed_ ),
 	show_on_off_ ( m.show_on_off_ ),
+	show_key_ ( m.show_key_ ),
 	lightning_flash_color_ ( m.lightning_flash_color_ ),
 	current_bg_ ( m.current_bg_ ),
 	music_ ( m.music_ ),
@@ -836,6 +849,7 @@ Map::Map( const Map& c )
 	gravity_ ( c.gravity_ ),
 	changed_ ( c.changed_ ),
 	show_on_off_ ( c.show_on_off_ ),
+	show_key_ ( c.show_key_ ),
 	lightning_flash_color_ ( c.lightning_flash_color_ ),
 	current_bg_ ( c.current_bg_ ),
 	music_ ( c.music_ ),

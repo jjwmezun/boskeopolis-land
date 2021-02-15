@@ -2,7 +2,7 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 7,
+		"x": 0,
 		"y": 0
 	},
 	"behavior":
@@ -10,13 +10,12 @@
 		{
 			"component":
 			{
-				"type": "solid"
+				"type": "door"
 			},
 			"conditions":
 			[
-				{
-					"type": "collide_bottom"
-				}
+				{ "type": "collide_any" },
+				{ "type": "hero" }
 			]
 		}
 	]

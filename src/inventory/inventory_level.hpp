@@ -3,9 +3,10 @@
 class Camera;
 class EventSystem;
 class Health;
-class Map;
+class Level;
 class Sprite;
 
+#include "card_suit.hpp"
 #include "clock.hpp"
 #include "counter_t.hpp"
 #include "difficulty.hpp"
@@ -20,12 +21,12 @@ class InventoryLevel final
 		InventoryLevel( InventoryLevel&& ) = delete;
 		InventoryLevel& operator=( const InventoryLevel& ) = delete;
 		InventoryLevel& operator=( InventoryLevel&& ) = delete;
-		void init( const Map& lvmap );
+		void init( const Level& level );
 		void update( EventSystem& events, const Health& health );
 		void render( const EventSystem& events, const Sprite& hero, const Camera& camera );
 		void renderBops( const Sprite& hero, const Camera& camera ) const;
-		void setShowMcGuffins();
-		void changeKillCounter( int count );
+		void setShowCounter( InventoryLevelGraphics::Icon icon, int start_count );
+		void changeCounter( int count );
 		void forceRerender();
 
 		int funds() const;
@@ -37,6 +38,7 @@ class InventoryLevel final
 		int howManyGhostKills() const;
 		bool multipleGhostKills() const;
 		bool isHardMode() const;
+		bool haveSuit( CardSuit suit ) const;
 	
 		void addFunds( int n );
 		void loseFunds( int n );
@@ -48,6 +50,7 @@ class InventoryLevel final
 		void clearGhostKills();
 		Clock& clock();
 		void setDiamondGotten();
+		void getSuit( CardSuit suit );
 
 		static constexpr int  FUNDS_MAX              = 99999;
 		static constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;
@@ -65,8 +68,10 @@ class InventoryLevel final
 		int mcguffins_;
 		int bops_;
 		int ghost_kills_;
+		bool suits_[ NUMBER_OF_CARD_SUITS ];
 		CounterT<FUNDS_MAX> funds_;
 		CounterT<FUNDS_MAX> funds_shown_;
 		Clock clock_ = Clock();
 		InventoryLevelGraphics graphics_;
+		char scratch_[3000];
 };

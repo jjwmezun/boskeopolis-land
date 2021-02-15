@@ -209,7 +209,7 @@ void PlayerOpenChestSprite::customInteract( Collision& my_collision, Collision& 
 			break;
 		}
 	}
-	else if ( them.hasType( SpriteType::CLOUD_MONSTER ) )
+	else if ( them.hasType( SpriteType::CLOUD_MONSTER ) || them.hasType( SpriteType::GHOST_PLAYER ))
 	{
 		them.kill();
 	}

@@ -4,16 +4,38 @@
 #include "render.hpp"
 #include "health.hpp"
 
-OxygenMeter::OxygenMeter( int y )
+static constexpr int BASE_WIDTH = 8;
+static constexpr int BASE_WIDTH_UPGRADED = 12;
+static constexpr int HEIGHT_MINIBLOCKS = 1;
+static constexpr int HEIGHT_PIXELS = Unit::MiniBlocksToPixels( HEIGHT_MINIBLOCKS );
+static constexpr int X_PIXELS = Unit::MiniBlocksToPixels( 27 );
+static constexpr int FIRST_BLOCK = 0;
+
+static int widthMiniBlocks()
+{
+	return ( Inventory::haveOxygenUpgrade() ) ? BASE_WIDTH_UPGRADED : BASE_WIDTH;
+};
+
+static int widthPixels()
+{
+	return Unit::MiniBlocksToPixels( widthMiniBlocks() );
+};
+
+static int lastBlock()
+{
+	return widthMiniBlocks() - 1;
+};
+
+OxygenMeter::OxygenMeter( int right, int y )
 :
 	gfx_left_bar_ ( "tilesets/universal.png", 0, 16 ),
 	gfx_middle_bar_ ( "tilesets/universal.png", 8, 16 ),
 	gfx_right_bar_ ( "tilesets/universal.png", 0, 16, true ),
 	meter_bar_
 	({
-		X_PIXELS,
+		right - widthPixels(),
 		y,
-		width_pixels(),
+		widthPixels(),
 		HEIGHT_PIXELS
 	}),
 	show_ ( false ),
@@ -28,7 +50,7 @@ void OxygenMeter::update( const Health& health )
 	if ( health.losingMeter() || percent < .998 )
 	{
 		show_ = true;
-		meter_bar_.w = round( width_pixels() * percent );
+		meter_bar_.w = round( widthPixels() * percent );
 
 		color( percent );
 	}
@@ -67,12 +89,12 @@ void OxygenMeter::renderMeter() const
 
 void OxygenMeter::renderShell() const
 {
-	for ( int i = 0; i < width_mini_blocks(); ++i )
+	for ( int i = 0; i < widthMiniBlocks(); ++i )
 	{
 
 		const sdl2::SDLRect r =
 		{
-			X_PIXELS + Unit::MiniBlocksToPixels( i ),
+			meter_bar_.x + Unit::MiniBlocksToPixels( i ),
 			meter_bar_.y,
 			Unit::MiniBlocksToPixels( 1 ),
 			Unit::MiniBlocksToPixels( 1 )
@@ -82,7 +104,7 @@ void OxygenMeter::renderShell() const
 		{
 			gfx_left_bar_.render( r );
 		}
-		else if ( i == last_block() )
+		else if ( i == lastBlock() )
 		{
 			gfx_right_bar_.render( r );
 		}
@@ -92,19 +114,4 @@ void OxygenMeter::renderShell() const
 		}
 
 	}
-};
-
-int OxygenMeter::width_mini_blocks() const
-{
-	return ( Inventory::haveOxygenUpgrade() ) ? BASE_WIDTH_UPGRADED : BASE_WIDTH;
-};
-
-int OxygenMeter::width_pixels() const
-{
-	return Unit::MiniBlocksToPixels( width_mini_blocks() );
-};
-
-int OxygenMeter::last_block() const
-{
-	return width_mini_blocks() - 1;
 };

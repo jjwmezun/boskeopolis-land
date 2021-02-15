@@ -1,8 +1,11 @@
+#include "audio.hpp"
 #include "camera.hpp"
 #include "input_component_mirror.hpp"
 #include "level_state.hpp"
 #include "ghost_player_sprite.hpp"
 #include "sprite_graphics.hpp"
+
+static constexpr int DISAPPEAR_SPEED = 16;
 
 GhostPlayerSprite::GhostPlayerSprite()
 :
@@ -15,11 +18,12 @@ GhostPlayerSprite::GhostPlayerSprite()
 		std::unique_ptr<InputComponent> ( new InputComponentMirror( &player_sequence_ ) ),
 		std::make_unique<SpriteGraphics> ( "sprites/autumn-skirt-ghost.png", 0, 0, false, false, 0, -1, -2, 2, 4 )
 	),
-    timer_ ( 0 )
+    timer_ ( 0 ),
+    death_continue_ ( false )
 {
     camera_movement_ = CameraMovement::PERMANENT;
     despawn_when_dead_ = false;
-    types_ = {};
+    types_ = { SpriteType::GHOST_PLAYER };
     changeMovement( SpriteMovement::Type::FLOATING );
 };
 
@@ -97,5 +101,30 @@ void GhostPlayerSprite::customInteract( Collision& my_collision, Collision& thei
                 }
             );
         }
+    }
+};
+
+void GhostPlayerSprite::deathAction( LevelState& level_state )
+{
+    if ( death_continue_ )
+    {
+        if ( graphics_->alpha_ > DISAPPEAR_SPEED )
+        {
+            graphics_->alpha_ -= DISAPPEAR_SPEED;
+        }
+        else
+        {
+            graphics_->alpha_ = 0;
+            death_finished_ = true;
+        }
+    }
+    else
+    {
+		Audio::playSound( Audio::SoundType::GHOST );
+        changeMovement( SpriteMovement::Type::FLOATING );
+        fullStopX();
+        fullStopY();
+        graphics_->alpha_ -= DISAPPEAR_SPEED;
+        death_continue_ = true;
     }
 };

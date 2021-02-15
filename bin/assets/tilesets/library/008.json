@@ -11,7 +11,13 @@
 			"component":
 			{
 				"type": "solid"
-			}
+			},
+			"conditions":
+			[
+				{
+					"type": "collide_bottom"
+				}
+			]
 		}
 	]
 }

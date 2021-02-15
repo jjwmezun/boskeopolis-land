@@ -88,13 +88,6 @@
 		}
 	],
 
-
-	"goal":
-	{
-		"type": "collect",
-		"amount": 10000
-	},
-
 	"entrance_x": 17,
 	"entrance_y": 11,
 	"camera_x": 10,

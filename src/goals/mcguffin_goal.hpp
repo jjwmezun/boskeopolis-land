@@ -13,4 +13,5 @@ class McGuffinGoal final : public Goal
 
 	private:
 		const int amount_needed_;
+		int amount_;
 };

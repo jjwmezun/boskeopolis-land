@@ -21,6 +21,7 @@ InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_u
 	mcguffins_ ( 0 ),
 	bops_ ( 0 ),
 	ghost_kills_ ( 0 ),
+	suits_ ( { false, false, false, false } ),
 	funds_ (),
 	funds_shown_ (),
 	clock_ (),
@@ -36,9 +37,9 @@ void InventoryLevel::update( EventSystem& events, const Health& health )
 	graphics_.update( events, health, *this, funds_changed, time_changed );
 };
 
-void InventoryLevel::init( const Map& lvmap )
+void InventoryLevel::init( const Level& level )
 {
-	graphics_.init( lvmap, *this );
+	graphics_.init( level, *this );
 };
 
 void InventoryLevel::render( const EventSystem& events, const Sprite& hero, const Camera& camera )
@@ -51,14 +52,14 @@ void InventoryLevel::renderBops( const Sprite& hero, const Camera& camera ) cons
 	graphics_.renderBops( hero, camera, *this );
 };
 
-void InventoryLevel::setShowMcGuffins()
+void InventoryLevel::setShowCounter( InventoryLevelGraphics::Icon icon, int start_count )
 {
-	graphics_.setShowMcGuffins();
+	graphics_.setShowCounter( icon, start_count );
 };
 
-void InventoryLevel::changeKillCounter( int count )
+void InventoryLevel::changeCounter( int count )
 {
-	graphics_.changeKillCounter( count );
+	graphics_.changeCounter( count );
 };
 
 void InventoryLevel::forceRerender()
@@ -188,4 +189,15 @@ Clock& InventoryLevel::clock()
 void InventoryLevel::setDiamondGotten()
 {
 	graphics_.reRenderDiamond();
+};
+
+bool InventoryLevel::haveSuit( CardSuit suit ) const
+{
+	return suits_[ ( int )( suit ) ];
+};
+
+void InventoryLevel::getSuit( CardSuit suit )
+{
+	suits_[ ( int )( suit ) ] = true;
+	graphics_.setSuitGotten( suit );
 };

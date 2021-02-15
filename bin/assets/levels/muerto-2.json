@@ -10,6 +10,21 @@
 					"img": "books.png",
 					"width": 16,
 					"height": 16
+				},
+				{
+					"type": "image",
+					"img": "spotlight.png",
+					"width": 360,
+					"height": 224,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 20,
+					"lighten": true,
+					"alpha": 64,
+					"switch": true,
+					"layer": 16
 				}
 			],
 			"warps":
@@ -30,6 +45,30 @@
 		},
 		{
 			"slug": "library-1-2",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "books.png",
+					"width": 16,
+					"height": 16
+				},
+				{
+					"type": "image",
+					"img": "spotlight.png",
+					"width": 360,
+					"height": 224,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 20,
+					"lighten": true,
+					"alpha": 64,
+					"switch": true,
+					"layer": 16
+				}
+			],
 			"warps":
 			[
 				{
@@ -42,6 +81,30 @@
 		},
 		{
 			"slug": "library-1-3",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "books.png",
+					"width": 16,
+					"height": 16
+				},
+				{
+					"type": "image",
+					"img": "spotlight.png",
+					"width": 360,
+					"height": 224,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"x_offset": 20,
+					"lighten": true,
+					"alpha": 64,
+					"switch": true,
+					"layer": 16
+				}
+			],
 			"warps":
 			[
 				{

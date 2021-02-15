@@ -132,7 +132,7 @@ void LevelState::init()
 	sprites_.reset( *this );
 	level_.init( *this );
 	camera_.setPosition( level_.cameraX(), level_.cameraY() );
-	inventory_screen_.init( level_.currentMap() );
+	inventory_screen_.init( level_ );
 };
 
 void LevelState::testPause()

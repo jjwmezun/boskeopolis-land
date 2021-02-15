@@ -7,6 +7,8 @@
 #include "time_start_state.hpp"
 #include "wtext_obj.hpp"
 
+static constexpr int CLOCK_X = 200;
+
 static constexpr int MOVE_SPEED = 4;
 static constexpr int SIZE_SPEED = 1;
 static constexpr int NUM_O_CHAR = 4;
@@ -24,7 +26,7 @@ static constexpr int STOPPING_POINT = ( ( Unit::WINDOW_HEIGHT_PIXELS - Inventory
 static constexpr int BUMP_LENGTH = 4;
 static constexpr int MOVEMENT_FRAMES = SIZE_SPEED * START_SIZE;
 static constexpr int MOVEMENT_PER_FRAME_Y = ( int )( ceil( ( ( double )( InventoryLevelGraphics::Y ) - ( double )( STOPPING_POINT ) ) / ( double )( MOVEMENT_FRAMES ) ) );
-static constexpr int MOVEMENT_PER_FRAME_X = ( int )( ceil( ( ( double )( InventoryLevelGraphics::CLOCK_X ) - ( double )( DEST_X ) ) / ( double )( MOVEMENT_FRAMES ) ) );
+static constexpr int MOVEMENT_PER_FRAME_X = ( int )( ceil( ( ( double )( CLOCK_X ) - ( double )( DEST_X ) ) / ( double )( MOVEMENT_FRAMES ) ) );
 static constexpr int BLINK_SPEED = 8;
 static constexpr int NUM_O_BLINKS = 3;
 
@@ -112,9 +114,9 @@ void TimeStartState::stateUpdate()
 			}
 
 			x_ -= MOVEMENT_PER_FRAME_X;
-			if ( x_ < InventoryLevelGraphics::CLOCK_X )
+			if ( x_ < CLOCK_X )
 			{
-				x_ = InventoryLevelGraphics::CLOCK_X;
+				x_ = CLOCK_X;
 			}
 
 			dest_.x = x_;

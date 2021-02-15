@@ -40,7 +40,7 @@ class PlayerSprite : public Sprite
 		virtual bool canJump() const override;
 		void render( const Camera& camera ) const override;
 
-		void deathAction( LevelState& level_state ) override;
+		virtual void deathAction( LevelState& level_state ) override;
 		void actions( const BlockSystem& blocks, EventSystem& events );
 		void heroActions( LevelState& level_state );
 		bool isLookingUp() const;

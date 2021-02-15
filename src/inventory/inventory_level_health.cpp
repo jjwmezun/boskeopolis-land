@@ -2,22 +2,19 @@
 #include "inventory_level_health.hpp"
 #include "render.hpp"
 
-static constexpr int X = 90;
-static constexpr int Y = 10;
-
 static constexpr int calculateGraphicsWidth( int number_of_hearts )
 {
 	return 9 * number_of_hearts - 1;
 };
 
-InventoryLevelHealth::InventoryLevelHealth( int y, int max )
+InventoryLevelHealth::InventoryLevelHealth( int x, int y, int max )
 :
 	hearts_shown_ ( 0 ),
 	image_ ( "bg/level-select-characters.png" ),
 	empty_heart_src_ ( 0, 168, calculateGraphicsWidth( max ), 8 ),
-	empty_heart_dest_ ( X, Y, calculateGraphicsWidth( max ), 8 ),
+	empty_heart_dest_ ( x, y, calculateGraphicsWidth( max ), 8 ),
 	full_heart_src_ ( 0, 176, calculateGraphicsWidth( max ), 8 ),
-	full_heart_dest_ ( X, Y, calculateGraphicsWidth( max ), 8 )
+	full_heart_dest_ ( x, y, calculateGraphicsWidth( max ), 8 )
 {};
 
 bool InventoryLevelHealth::update( const Health& health )
@@ -40,4 +37,9 @@ void InventoryLevelHealth::render()
 	Render::renderObject( image_, empty_heart_src_, empty_heart_dest_ );
 	full_heart_dest_.w = full_heart_src_.w = calculateGraphicsWidth( hearts_shown_ );
 	Render::renderObject( image_, full_heart_src_, full_heart_dest_ );
+};
+
+int InventoryLevelHealth::width() const
+{
+	return empty_heart_src_.w;
 };

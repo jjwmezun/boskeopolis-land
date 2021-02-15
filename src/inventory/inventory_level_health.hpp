@@ -8,9 +8,10 @@ class Health;
 class InventoryLevelHealth final
 {
 	public:
-		InventoryLevelHealth( int y, int max );
+		InventoryLevelHealth( int x, int y, int max );
 		bool update( const Health& health );
 		void render();
+		int width() const;
 
 	private:
 		int hearts_shown_;
