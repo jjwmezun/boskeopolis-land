@@ -166,6 +166,7 @@
 #include "snowboulder_sprite.hpp"
 #include "snowman_sprite.hpp"
 #include "space_lizard_sprite.hpp"
+#include "space_spark_sprite.hpp"
 #include "spark_sprite.hpp"
 #include "spawn_anchor_missile_sprite.hpp"
 #include "spawn_fist_missile_sprite.hpp"
@@ -1016,6 +1017,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 258 ):
 			return std::unique_ptr<Sprite> ( new SpringSprite( x, y, 13, 8, "sprites/mattress-spring.png" ) );
+		break;
+		case ( SPRITE_INDEX_START + 259 ):
+			return std::unique_ptr<Sprite> ( new SpaceSparkSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

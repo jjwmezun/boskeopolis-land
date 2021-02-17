@@ -6,10 +6,10 @@
 		}
 	],
 
-	"entrance_x": 31,
-	"entrance_y": 75,
-	"gem_challenge": 9000,
-	"time_challenge": 2,
+	"entrance_x": 26,
+	"entrance_y": 73,
+	"gem_challenge": 0,
+	"time_challenge": 0,
 	"cycle": 3,
 	"theme": 8
 }
