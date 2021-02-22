@@ -310,8 +310,6 @@ void Camera::moveXNormal( const Sprite& o )
 
 void Camera::moveYNormal( const Sprite& o )
 {
-	const int top_boundary = ( !o.onGround() ) ? boundaryTopWeaker() : boundaryTop();
-
 	if ( o.yPixels() < boundaryTop() )
 	{
 		y_ -= boundaryTop() - o.yPixels();
@@ -319,7 +317,7 @@ void Camera::moveYNormal( const Sprite& o )
 
 	if ( o. bottomPixels() > boundaryBottom() )
 	{
-		y_ += o. bottomPixels() - boundaryBottom();
+		y_ += o.bottomPixels() - boundaryBottom();
 	}
 };
 

@@ -68,7 +68,11 @@ void GroundedSpriteMovement::bounce( Sprite& sprite, int amount ) const
 
 	sprite.top_speed_upward_ = sprite.bounce_height_;
 
-	if ( sprite.vy_ <= -sprite.bounce_height_ )
+	if
+	(
+		( sprite.isUpsideDown() && sprite.vy_ >= -sprite.bounce_height_) ||
+		( !sprite.isUpsideDown() && sprite.vy_ <= -sprite.bounce_height_ )
+	)
 	{
 		sprite.is_bouncing_ = false;
 		sprite.bounce_height_ = 0;

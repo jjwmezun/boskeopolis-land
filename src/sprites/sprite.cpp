@@ -419,7 +419,7 @@ void Sprite::jump()
 void Sprite::bounce( int amount )
 {
 	if ( movement_ != nullptr )
-		movement_->bounce( *this, amount );
+		movement_->bounce( *this, ( isUpsideDown() ) ? -amount : amount );
 };
 
 void Sprite::slowFall()

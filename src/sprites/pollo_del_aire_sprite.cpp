@@ -34,6 +34,14 @@ void PolloDelAireSprite::customUpdate( LevelState& level_state )
 		moveLeft();
 	}
 
+	if ( isUpsideDown() )
+	{
+		acceleration_y_ = 0;
+		vy_ = 0;
+		hit_box_.y = original_hit_box_.y;
+	}
+	else
+	{
 	if ( direction_y_ == Direction::Vertical::UP )
 	{
 		moveUp();
@@ -51,6 +59,7 @@ void PolloDelAireSprite::customUpdate( LevelState& level_state )
 	else if ( hit_box_.y > original_hit_box_.y + limit || collide_top_ )
 	{
 		direction_y_ = Direction::Vertical::UP;
+	}
 	}
 
 	if ( ( graphics_->current_frame_x_ == 48 || graphics_->current_frame_x_ == 72 ) && switch_from_ != Direction::Horizontal::__NULL )
@@ -111,7 +120,11 @@ void PolloDelAireSprite::polloInteract( const Collision& my_collision, const Col
 	{
 		if ( them.hasType( SpriteType::HERO ) && their_collision.collideAny() )
 		{
-			if ( them.bottomSubPixels() < me.ySubPixels() + 8000 )
+			if 
+			(
+				( !them.isUpsideDown() && them.bottomSubPixels() < me.ySubPixels() + 8000 ) ||
+				( them.isUpsideDown() && them.topSubPixels() > me.bottomSubPixels() - 8000 )
+			)
 			{
 				me.kill();
 				them.bounce();
