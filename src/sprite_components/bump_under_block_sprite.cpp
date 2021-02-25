@@ -27,14 +27,27 @@ void BumpUnderBlockSprite::update( Sprite& sprite )
 		}
 	}
 
-	if ( sprite.hit_box_.y < sprite.original_hit_box_.y )
+	if ( sprite.isUpsideDown() )
 	{
-		sprite.hit_box_.y += 500;
+		if ( sprite.hit_box_.y > sprite.original_hit_box_.y )
+		{
+			sprite.hit_box_.y -= 500;
+		}
+		if ( sprite.hit_box_.y < sprite.original_hit_box_.y )
+		{
+			sprite.hit_box_.y = sprite.original_hit_box_.y;
+		}
 	}
-
-	if ( sprite.hit_box_.y > sprite.original_hit_box_.y )
+	else
 	{
-		sprite.hit_box_.y = sprite.original_hit_box_.y;
+		if ( sprite.hit_box_.y < sprite.original_hit_box_.y )
+		{
+			sprite.hit_box_.y += 500;
+		}
+		if ( sprite.hit_box_.y > sprite.original_hit_box_.y )
+		{
+			sprite.hit_box_.y = sprite.original_hit_box_.y;
+		}
 	}
 };
 
@@ -44,7 +57,19 @@ bool BumpUnderBlockSprite::testHit( Sprite& me, Sprite& them, const Collision& c
 	if ( collision.collideAny() )
 	{
 		them.collideStopAny( collision );
-		if ( collision.collideTop() )
+		if ( me.isUpsideDown() )
+		{
+			if ( collision.collideBottom() )
+			{
+				if ( ready_ )
+				{
+					hit = true;
+					ready_ = false;
+				}
+				me.hit_box_.y += collision.overlapYBottom() / 2;
+			}
+		}
+		else if ( collision.collideTop() )
 		{
 			if ( ready_ )
 			{

@@ -110,7 +110,7 @@ void Sprite::setGravityModifier( double gravity )
 		jump_top_speed_normal_ = jump_top_speed_ = ( int )( std::floor( ( double )( base_jump_top_speed_ ) * gravity ) );
 		fall_start_speed_ = ( int )( std::floor( ( double )( gravity_start_speed_ ) * gravity ) );
 		fall_top_speed_ = ( int )( std::floor( ( double )( gravity_top_speed_ ) * gravity ) );
-		top_speed_upward_ = 0;
+		top_speed_upward_ = top_speed_downward_ = 0;
 		if ( graphics_ )
 		{
 			graphics_->flip_y_ = isUpsideDown();
@@ -129,7 +129,7 @@ void Sprite::setGravity( int gravity )
 
 bool Sprite::fellInBottomlessPit( const Map& lvmap ) const
 {
-	return topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
+	return ( isUpsideDown() ) ? bottomSubPixels() < 0 : topSubPixels() > Unit::PixelsToSubPixels( lvmap.heightPixels() );
 };
 
 void Sprite::update( LevelState& level_state )

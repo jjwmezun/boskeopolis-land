@@ -83,6 +83,7 @@
 #include "hopping_clock_sprite.hpp"
 #include "hopping_zombie_sprite.hpp"
 #include "horizontal_pike_sprite.hpp"
+#include "horizontal_space_beam_sprite.hpp"
 #include "horizontal_spark_sprite.hpp"
 #include "hydrant_sprite.hpp"
 #include "ice_box_rock_solid_hack_sprite.hpp"
@@ -1019,7 +1020,13 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new SpringSprite( x, y, 13, 8, "sprites/mattress-spring.png" ) );
 		break;
 		case ( SPRITE_INDEX_START + 259 ):
-			return std::unique_ptr<Sprite> ( new SpaceSparkSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new SpaceSparkSprite( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 260 ):
+			return std::unique_ptr<Sprite> ( new HorizontalSpaceBeamSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 261 ):
+			return std::unique_ptr<Sprite> ( new SpaceSparkSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

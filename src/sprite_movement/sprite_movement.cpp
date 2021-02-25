@@ -53,14 +53,17 @@ void SpriteMovement::bounce( Sprite& sprite, int amount ) const
 
 void SpriteMovement::position( Sprite& sprite ) const
 {
-	sprite.top_speed_upward_ = sprite.top_speed_;
-	sprite.top_speed_downward_ = sprite.top_speed_;
+	sprite.top_speed_upward_ = sprite.top_speed_downward_ = ( sprite.isUpsideDown() ) ? -sprite.top_speed_ : sprite.top_speed_;
 
 	// If not moving anymo', start slowing down.
 	if ( sprite.acceleration_x_ == 0 )
+	{
 		sprite.vx_ /= sprite.traction_;
+	}
 	if ( sprite.acceleration_y_ == 0 )
+	{
 		sprite.vy_ /= sprite.traction_;
+	}
 };
 
 void SpriteMovement::collideStopXLeft( Sprite& sprite, int overlap ) const

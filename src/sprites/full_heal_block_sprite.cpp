@@ -15,6 +15,7 @@ FullHealBlockSprite::~FullHealBlockSprite() {};
 void FullHealBlockSprite::customUpdate( LevelState& level_state )
 {
 	hit_box_.x = original_hit_box_.x; // Undo wind.
+	graphics_->flip_y_ = isUpsideDown();
 	bump_under_block_component.update( *this );
 };
 

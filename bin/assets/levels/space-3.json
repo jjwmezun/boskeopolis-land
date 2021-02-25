@@ -6,10 +6,11 @@
 		}
 	],
 
-	"entrance_x": 26,
-	"entrance_y": 73,
-	"gem_challenge": 0,
-	"time_challenge": 0,
+	"entrance_x": 36,
+	"entrance_y": 70,
+	"gem_challenge": 30000,
+	"time_challenge": 50,
 	"cycle": 3,
-	"theme": 8
+	"theme": 8,
+	"camera_x": 115
 }
