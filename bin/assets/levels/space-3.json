@@ -2,14 +2,22 @@
 	"maps":
 	[
 		{
-			"slug": "space-9"
+			"slug": "space-9",
+            "layers":
+            [
+				{
+					"type": "constellation",
+					"width": 256,
+					"height": 16
+				}
+            ]
 		}
 	],
 
 	"entrance_x": 36,
 	"entrance_y": 70,
-	"gem_challenge": 30000,
-	"time_challenge": 50,
+	"gem_challenge": 35000,
+	"time_challenge": 60,
 	"cycle": 3,
 	"theme": 8,
 	"camera_x": 115

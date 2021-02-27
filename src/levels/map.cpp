@@ -84,78 +84,34 @@ Map::LayerInfo Map::getLayerInfo( const std::string& layer_name )
 	}
 	catch ( std::invalid_argument& e )
 	{
-		switch ( type )
+		const auto substr = layer_name.substr( number_start, 3 );
+		if ( substr == "BG1" )
 		{
-			case ( LayerType::BLOCKS_TEXTURE ):
+			layer_position = Unit::Layer::BG_1;
+		}
+		else if ( substr == "FG1" )
+		{
+			layer_position = Unit::Layer::FG_1;
+		}
+		else if ( substr == "FG2" )
+		{
+			layer_position = Unit::Layer::FG_2;
+		}
+		else if ( substr == "BG2" )
+		{
+			layer_position = Unit::Layer::BG_2;
+		}
+		else
+		{
+			const auto substr = layer_name.substr( number_start, 2 );
+			if ( substr == "BG" )
 			{
+				layer_position = Unit::Layer::BG_1;
 			}
-			// Fallthru
-			case ( LayerType::BLOCKS ):
+			else if ( substr == "FG" )
 			{
-				const auto substr = layer_name.substr( number_start, 2 );
-				if ( substr == "BG1" )
-				{
-					layer_position = Unit::Layer::BLOCKS_1;
-				}
-				else if ( substr == "FG1" )
-				{
-					layer_position = Unit::Layer::BLOCKS_2;
-				}
-				else if ( substr == "FG2" )
-				{
-					layer_position = Unit::Layer::FG_2;
-				}
-				else if ( substr == "BG2" )
-				{
-					layer_position = Unit::Layer::BG_2;
-				}
-				else
-				{
-					const auto substr = layer_name.substr( number_start, 2 );
-					if ( substr == "BG" )
-					{
-						layer_position = Unit::Layer::BLOCKS_1;
-					}
-					else if ( substr == "FG" )
-					{
-						layer_position = Unit::Layer::BLOCKS_2;
-					}
-				}
+				layer_position = Unit::Layer::FG_1;
 			}
-			break;
-			default:
-			{
-				const auto substr = layer_name.substr( number_start, 3 );
-				if ( substr == "BG1" )
-				{
-					layer_position = Unit::Layer::BG_1;
-				}
-				else if ( substr == "FG1" )
-				{
-					layer_position = Unit::Layer::FG_1;
-				}
-				else if ( substr == "FG2" )
-				{
-					layer_position = Unit::Layer::FG_2;
-				}
-				else if ( substr == "BG2" )
-				{
-					layer_position = Unit::Layer::BG_2;
-				}
-				else
-				{
-					const auto substr = layer_name.substr( number_start, 2 );
-					if ( substr == "BG" )
-					{
-						layer_position = Unit::Layer::BG_1;
-					}
-					else if ( substr == "FG" )
-					{
-						layer_position = Unit::Layer::FG_1;
-					}
-				}
-			}
-			break;
 		}
 	}
 	return { type, layer_position };
