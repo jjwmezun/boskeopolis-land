@@ -13,6 +13,7 @@ SpaceSparkSprite::~SpaceSparkSprite() {};
 
 void SpaceSparkSprite::customUpdate( LevelState& level_state )
 {
+    graphics_->rotation_ += 5.0;
     switch ( direction_x_ )
     {
         case ( Direction::Horizontal::LEFT ):

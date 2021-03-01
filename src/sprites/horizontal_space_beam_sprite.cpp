@@ -11,7 +11,9 @@ HorizontalSpaceBeamSprite::HorizontalSpaceBeamSprite( int x, int y )
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/space-beam.png" ), x - Unit::BlocksToPixels( 100 ), y, Unit::BlocksToPixels( 100 ), 0, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::UP, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
     beam_state_ ( BeamState::INACTIVE ),
     timer_ ( 0 )
-{};
+{
+    graphics_->alpha_ = 200;
+};
 
 HorizontalSpaceBeamSprite::~HorizontalSpaceBeamSprite() {};
 
@@ -25,7 +27,6 @@ void HorizontalSpaceBeamSprite::updateHeight( int height )
 
 void HorizontalSpaceBeamSprite::customUpdate( LevelState& level_state )
 {
-    graphics_->alpha_ = 128;
     switch ( beam_state_ )
     {
         case ( BeamState::INACTIVE ):
