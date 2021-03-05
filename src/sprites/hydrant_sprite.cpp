@@ -61,7 +61,7 @@ void HydrantSprite::customInteract( Collision& my_collision, Collision& their_co
 				else
 					moveLeft();
 
-				if ( their_collision.collideAny() && them.bottomSubPixels() < ySubPixels() + 12000 )
+				if ( their_collision.collideAny() && them.bottomSubPixels() < ySubPixels() + Unit::PixelsToSubPixels( 12 ) )
 				{
 					kill();
 					them.bounce();
@@ -80,7 +80,13 @@ void HydrantSprite::customInteract( Collision& my_collision, Collision& their_co
 		}
 		else
 		{
-			if ( them.rightSubPixels() > xSubPixels() - 40000 && them.xSubPixels() < rightSubPixels() + 40000 )
+			if
+			(
+				them.rightSubPixels() > xSubPixels() - Unit::BlocksToSubPixels( 5 ) &&
+				them.xSubPixels() < rightSubPixels() + Unit::BlocksToSubPixels( 5 ) &&
+				them.bottomSubPixels() > ySubPixels() - Unit::BlocksToSubPixels( 3 ) &&
+				them.ySubPixels() < bottomSubPixels() + Unit::BlocksToSubPixels( 1 )
+			)
 			{
 				awake_ = true;
 				delay_.start();

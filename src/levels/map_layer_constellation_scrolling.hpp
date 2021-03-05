@@ -18,9 +18,10 @@ class MapLayerConstellationScrolling final : public MapLayer
 		void render( const Camera& camera ) override;
 
 	private:
-		const sdl2::SDLRect src_;
+		sdl2::SDLRect src_;
 		sdl2::SDLRect dest_;
 		std::string image_;
-		const double scroll_speed_;
+		double scroll_speed_x_;
+		double scroll_speed_y_;
 		SDL_Texture* texture_;
 };

@@ -3,16 +3,19 @@
 	{
 		"type": "sprite",
 		"x": 4,
-		"y": 14,
-		"priority": true
+		"y": 14
 	},
 	"behavior":
 	[
 		{
 			"component":
 			{
-				"type": "solid"
-			}
+				"type": "force_rightward"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
 		}
 	]
 }

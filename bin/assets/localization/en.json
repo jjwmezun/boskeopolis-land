@@ -278,7 +278,7 @@
     {
         "names":
         {
-            "city-1": "Blueberry Burroughs",
+            "city-1": "1st We Take Manhattan…",
             "domestic-1": "All in All You’re Just ’Nother ₧ in the Wall",
             "woods-1": "Wasabi Woods",
             "mines-1": "Blind Mice Mines",
@@ -347,7 +347,7 @@
         },
         "messages":
         {
-            "city-1": "Gem values by brightness:\n\n* Medium: 100\t\n* Bright: 250\t\n* Dark:   500\t",
+            "city-1": "To jump press the jump button.",
             "domestic-3": "This house is ramshackle & has faulty electricity, so these switches last only 30 seconds before shutting off ’gain.",
             "ice-1": "You can bop fish from ’bove while underwater.",
             "city-2": "Paper planes are o’erly protective & will keep dropping you back @ the beginning. Try shaking a lot to struggle out o’ their gluish grasp.",

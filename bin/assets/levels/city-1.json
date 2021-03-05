@@ -11,12 +11,14 @@
 					"width": 8,
 					"height": 160,
 					"x_scroll": 0,
-					"y_scroll": 0.0
+					"y_scroll": 0.0,
+					"y_offset": 8,
+					"y_repeat": false
 				},
 				{
 					"type": "constellation",
-					"width": 224,
-					"height": 8
+					"width": 320,
+					"height": 3
 				},
 				{
 					"type": "image",
@@ -24,18 +26,10 @@
 					"width": 264,
 					"height": 224,
 					"x_scroll": 0.5,
-					"y_scroll": 0.25,
+					"y_scroll": 0.1,
 					"frames": 5,
 					"animation_speed": 32,
 					"animation_flip": true
-				},
-				{
-					"type": "image",
-					"img": "fence.png",
-					"width": 384,
-					"height": 32,
-					"y_offset": 176,
-					"y_repeat": false
 				}
 			],
 			"warps":
@@ -44,13 +38,13 @@
 					"map": 1,
 					"entrance_x": 2,
 					"entrance_y": 2,
-					"location": [ 142, 162, 0, 16 ]
+					"location": [ 190, 210, 0, 38 ]
 				},
 				{
 					"map": 1,
 					"entrance_x": 22,
 					"entrance_y": 2,
-					"location": [ 172, 202, 0, 16 ]
+					"location": [ 220, 240, 0, 38 ]
 				}
 			]
 		},
@@ -73,26 +67,26 @@
 			[
 				{
 					"map": 0,
-					"entrance_x": 158,
-					"entrance_y": 12,
+					"entrance_x": 200,
+					"entrance_y": 33,
 					"location": [ 0, 5, -64, 16 ]
 				},
 				{
 					"map": 0,
-					"entrance_x": 186,
-					"entrance_y": 12,
+					"entrance_x": 230,
+					"entrance_y": 33,
 					"location": [ 20, 25, -64, 16 ],
-					"camera_x": 2816
+					"camera_x": 3440
 				}
 			]
 		}
 	],
 
-	"entrance_x": 17,
-	"entrance_y": 11,
-	"camera_x": 10,
-	"gem_challenge": 10000,
-	"time_challenge": 40,
+	"entrance_x": 37,
+	"entrance_y": 31,
+	"camera_x": 30,
+	"gem_challenge": 40000,
+	"time_challenge": 25,
 	"cycle": 1,
 	"theme": 1
 }

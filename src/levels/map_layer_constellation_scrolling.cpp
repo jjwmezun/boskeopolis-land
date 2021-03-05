@@ -16,7 +16,6 @@ static constexpr int WIDTH_PIXELS = Unit::MiniBlocksToPixels( WIDTH );
 //=============================================================
 
 static double scrollSpeedX( int map_width_blocks );
-static int calculateHeight( int map_width_blocks, int map_height_blocks );
 
 // MEMBER FUNCTIONS
 //=============================================================
@@ -30,9 +29,10 @@ MapLayerConstellationScrolling::MapLayerConstellationScrolling
 )
 :
 	MapLayer( layer_position ),
-	src_ ( 0, 0, Unit::BlocksToPixels( map_width_blocks ), calculateHeight( map_width_blocks, map_height_blocks ) ),
+	src_ ( 0, 0, Unit::BlocksToPixels( map_width_blocks ), Unit::BlocksToPixels( map_height_blocks ) ),
 	image_ ( image ),
-	scroll_speed_ ( scrollSpeedX( map_width_blocks ) ),
+	scroll_speed_x_ ( scrollSpeedX( map_width_blocks ) ),
+	scroll_speed_y_ ( 0.0 ),
 	texture_ ( nullptr )
 {
 	dest_ = src_;
@@ -48,12 +48,19 @@ void MapLayerConstellationScrolling::update( LevelState& level_state )
 	const Camera& camera = level_state.camera();
 	if ( texture_ == nullptr )
 	{
+		const int height = level_state.currentMap().heightPixels();
+		scroll_speed_y_ = ( height == dest_.h ) ? 0.0 : ( double )( dest_.h ) / ( double )( height );
+		if ( src_.h < Unit::WINDOW_HEIGHT_PIXELS )
+		{
+			src_.h = dest_.h = Unit::WINDOW_HEIGHT_PIXELS;
+		}
+
 		texture_ = MapLayerConstellation::formTexture( src_, image_ );
 	}
 	else
 	{
-		dest_.x = -( ( int )( ( double )( camera.x() ) * scroll_speed_ ) );
-		dest_.y = -( ( int )( ( double )( camera.y() ) * scroll_speed_ ) );
+		dest_.x = -( ( int )( ( double )( camera.x() ) * scroll_speed_x_ ) );
+		dest_.y = -( ( int )( ( double )( camera.y() ) * scroll_speed_y_ ) );
 	}
 };
 
@@ -71,9 +78,4 @@ void MapLayerConstellationScrolling::render( const Camera& camera )
 double scrollSpeedX( int map_width_blocks )
 {
 	return ( double )( WIDTH ) / ( double )( map_width_blocks * 4 );
-};
-
-int calculateHeight( int map_width_blocks, int map_height_blocks )
-{
-	return Unit::MiniBlocksToPixels( ( int )( ( double )( Unit::BlocksToMiniBlocks( map_height_blocks ) ) / scrollSpeedX( map_width_blocks ) ) );
 };

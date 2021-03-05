@@ -2,21 +2,7 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 15,
-		"y": 6,
-		"priority": true
-	},
-	"behavior":
-	[
-		{
-			"component":
-			{
-				"type": "force_upward"
-			},
-			"conditions":
-			[
-				{ "type": "collide_any" }
-			]
-		}
-	]
+		"x": 10,
+		"y": 15
+	}
 }

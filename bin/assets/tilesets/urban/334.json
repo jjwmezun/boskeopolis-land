@@ -2,7 +2,7 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 3,
+		"x": 8,
 		"y": 14
 	},
 	"behavior":
@@ -10,8 +10,12 @@
 		{
 			"component":
 			{
-				"type": "solid"
-			}
+				"type": "force_leftward"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
 		}
 	]
 }
