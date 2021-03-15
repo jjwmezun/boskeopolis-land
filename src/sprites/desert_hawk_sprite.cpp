@@ -61,7 +61,8 @@ void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-		if ( their_collision.collideBottom() )
+		const Collision collision = them.testBlockCollision( *this );
+		if ( collision.collideBottom() )
 		{
 			BlockSystem& blocks = level_state.blocks();
 			if
@@ -90,9 +91,9 @@ void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their
 			{
 				them.hit_box_.x += vx_;
 			}
-			them.collideStopAny( their_collision );
+			them.collideStopAny( collision );
 		}
-		else if ( their_collision.collideAny() )
+		else if ( collision.collideAny() )
 		{
 			level_state.health().hurt();
 		}

@@ -18,8 +18,8 @@ void MapLayerLava::update( LevelState& level_state )
     ++animation_timer_;
     if ( animation_timer_ == 8 )
     {
-        animation_frame_ += 800;
-        if ( animation_frame_ > 800 )
+        animation_frame_ += 16;
+        if ( animation_frame_ > 112 )
         {
             animation_frame_ = 0;
         }
@@ -29,10 +29,13 @@ void MapLayerLava::update( LevelState& level_state )
 
 void MapLayerLava::render( const Camera& camera )
 {
-    const int x = -( camera.x() % 256 );
     const int y = camera.relativeY( Unit::SubPixelsToPixels( y_ ) );
-    sdl2::SDLRect r = { x, y, 800, 272 };
-    Render::renderObject( "bg/fire.png", { animation_frame_, 0, 800, 272 }, r );
+    sdl2::SDLRect r = { -( camera.x() % 16 ), y, 16, 272 };
+    while ( r.x < 416 )
+    {
+        Render::renderObject( "bg/fire.png", { animation_frame_, 0, 16, 272 }, r );
+        r.x += 16;
+    }
 };
 
 void MapLayerLava::interact( Sprite& sprite, LevelState& level_state )

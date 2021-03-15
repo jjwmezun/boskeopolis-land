@@ -99,7 +99,7 @@ void LogRaftsSprite::customInteract( Collision& my_collision, Collision& their_c
         
         for ( int i = 0; i < MAX_RAFTS; ++i )
         {
-            const Collision collision = movement_->testCollision( them, rafts_[ i ] );
+            const Collision collision = movement_->testBlockCollision( them, rafts_[ i ] );
             if ( collision.collideAny() )
             {
                 if ( !blocks_in_the_way && collision.collideBottom() )
