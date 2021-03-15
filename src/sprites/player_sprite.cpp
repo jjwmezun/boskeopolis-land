@@ -123,7 +123,12 @@ void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health
 	{
 		if ( them.hasType( SpriteType::BOPPABLE ) )
 		{
-			if ( collideBottomOnly( my_collision, them ) )
+			if ( events.testIsSlidingPreviously() && my_collision.collideAny() )
+			{
+				them.kill();
+				Audio::playSound( Audio::SoundType::BOP );
+			}
+			else if ( collideBottomOnly( my_collision, them ) )
 			{
 				them.kill();
 				bounce();
@@ -131,11 +136,6 @@ void PlayerSprite::playerInteract( Collision& my_collision, Sprite& them, Health
 				{
 					inventory.bop();
 				}
-				Audio::playSound( Audio::SoundType::BOP );
-			}
-			else if ( my_collision.collideAny() && events.testIsSlidingPreviously() )
-			{
-				them.kill();
 				Audio::playSound( Audio::SoundType::BOP );
 			}
 			else if ( my_collision.collideAny() && !them.isDead() )

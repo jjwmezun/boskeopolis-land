@@ -209,7 +209,7 @@
 #include "window_monster_sprite.hpp"
 #include "zombie_generator_sprite.hpp"
 
-static constexpr int SPRITES_LIMIT = 50;
+static constexpr int SPRITES_LIMIT = 80;
 static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
 static constexpr int SPRITE_INDEX_START = 400;
 
@@ -281,10 +281,10 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ) ) );
 		break;
 		case ( SPRITE_INDEX_START + 13 ):
-			return std::unique_ptr<Sprite> ( new RopeSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new RopeSprite( x, y, 24 ) );
 		break;
 		case ( SPRITE_INDEX_START + 14 ):
-			return std::unique_ptr<Sprite> ( new RopeSprite( x, y, 10, 52, 1600 ) );
+			return std::unique_ptr<Sprite> ( new RopeSprite( x, y, 19, 52, 1600 ) );
 		break;
 		case ( SPRITE_INDEX_START + 15 ):
 			return std::unique_ptr<Sprite> ( new SpawnFistMissileSprite( x, y ) );
@@ -1036,14 +1036,16 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 
 void SpriteSystem::spawn( std::unique_ptr<Sprite>&& sprite )
 {
-	if ( sprites_.size() < SPRITES_LIMIT - 1 )
-	{
-		addSprite( std::move( sprite ) );
-	}
+	addSprite( std::move( sprite ) );
 };
 
 void SpriteSystem::addSprite( std::unique_ptr<Sprite>&& sprite )
 {
+	if ( sprites_.size() >= SPRITES_LIMIT )
+	{
+		printf( "Sprites #: %d\n", sprites_.size() );
+	}
+
 	const int id = id_;
 	sprites_map_.insert( std::pair<int, Sprite*> ( id, sprite.get() ) );
 	sprite->system_id_ = id;
@@ -1072,17 +1074,14 @@ void SpriteSystem::spritesFromMap( LevelState& level_state )
 	const Map& lvmap = level_state.currentMap();
 	for ( int i = 0; i < lvmap.spritesSize(); ++i )
 	{
-		if ( sprites_.size() < SPRITES_LIMIT - 1 )
-		{
-			const int x = Unit::BlocksToSubPixels( lvmap.mapX( i ) );
-			const int y = Unit::BlocksToSubPixels( lvmap.mapY( i ) );
-			const int type = lvmap.sprite( i ) - 1;
+		const int x = Unit::BlocksToSubPixels( lvmap.mapX( i ) );
+		const int y = Unit::BlocksToSubPixels( lvmap.mapY( i ) );
+		const int type = lvmap.sprite( i ) - 1;
 
-			if ( type != -1 )
-			{
-				std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, level_state ) );
-				addSprite( std::move( new_sprite ) );
-			}
+		if ( type != -1 )
+		{
+			std::unique_ptr<Sprite> new_sprite = std::move( spriteType( type, x, y, i, level_state ) );
+			addSprite( std::move( new_sprite ) );
 		}
 	}
 };

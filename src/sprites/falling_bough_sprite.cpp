@@ -1,6 +1,10 @@
+#include "block_system.hpp"
+#include "camera.hpp"
 #include "collision.hpp"
 #include "falling_bough_sprite.hpp"
+#include "level_state.hpp"
 #include "sprite_graphics.hpp"
+#include "sprite_system.hpp"
 
 FallingBoughSprite::FallingBoughSprite( int x, int y, Direction::Horizontal direction, bool fall )
 :
@@ -27,10 +31,38 @@ void FallingBoughSprite::customInteract( Collision& my_collision, Collision& the
 {
 	if ( them.hasType( Sprite::SpriteType::HERO ) )
 	{
-		if ( their_collision.collideBottom() && them.prevBottomSubPixels() <= topSubPixels() + 1000  )
+		const Collision collision = them.testBlockCollision( *this );
+		if ( collision.collideBottom() && them.prevBottomSubPixels() <= topSubPixels() + 1000  )
 		{
-			them.collideStopYBottom( their_collision.overlapYBottom() );
-			them.addToY( vy_ );
+			them.collideStopYBottom( collision.overlapYBottom() );
+
+			// Keep player on platform ( so it doesn’t fall under player & cause them to be unable to jump )
+			// but only if not colliding with any solid blocks or other sprites, so it doesn’t force
+			// player thru other sprites.
+			if ( !level_state.blocks().blocksInTheWay( hit_box_, BlockComponent::Type::SOLID ) )
+			{
+				bool collide = false;
+				for ( auto& sprite : level_state.sprites().getSpritesList() )
+				{
+					// Skip self.
+					if ( sprite.get() == this )
+					{
+						continue;
+					}
+
+					const Collision scol = sprite->testCollision( *this );
+					if ( scol.collideAny() )
+					{
+						collide = true;
+						break;
+					}
+				}
+
+				if ( !collide )
+				{
+					them.addToY( vy_ );
+				}
+			}
 
 			if ( fall_ && !falling_timer_.on() )
 			{
@@ -47,4 +79,12 @@ void FallingBoughSprite::reset()
 	vy_ = 0;
 	acceleration_y_ = 0;
 	falling_timer_.stop();
+};
+
+void FallingBoughSprite::render( const Camera& camera ) const
+{
+	if ( graphics_ != nullptr )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+	}
 };
