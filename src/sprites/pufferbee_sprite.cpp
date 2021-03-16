@@ -1,5 +1,3 @@
-#include "collision.hpp"
-#include "map.hpp"
 #include "pufferbee_sprite.hpp"
 #include "pufferbee_graphics.hpp"
 
@@ -24,12 +22,13 @@ PufferbeeSprite::PufferbeeSprite
 		0,
 		Direction::Horizontal::__NULL,
 		Direction::Vertical::__NULL,
-		std::move( component ),
+		nullptr,
 		SpriteMovement::Type::FLOATING,
 		CameraMovement::RESET_OFFSCREEN_AND_AWAY,
 		false,
 		false
-	)
+	),
+    component_ ( std::move( component ) )
 {};
 
 PufferbeeSprite::~PufferbeeSprite() {};
@@ -77,12 +76,24 @@ void PufferbeeSprite::customUpdate( LevelState& level_state )
                 hit_box_.x = original_hit_box_.x;
         }
     }
+    else
+    {
+        component_->update( *this, level_state );
+    }
 };
 
-void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
-{};
+void PufferbeeSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) {};
 
 Direction::Rotation PufferbeeSprite::randomDirection() const
 {
-    return (Direction::Rotation)( rand() % 9 );
+    return ( Direction::Rotation )( rand() % 9 );
+};
+
+void PufferbeeSprite::reset()
+{
+	resetPosition();
+    if ( component_ != nullptr )
+    {
+        component_->reset();
+    }
 };

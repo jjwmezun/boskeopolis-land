@@ -8,7 +8,7 @@ RopeSprite::RopeSprite( int x, int y, int height, int distance, int speed )
 :
     Sprite( std::make_unique<SpriteGraphics> ( "sprites/rope-sprite.png", 0, 384 - Unit::BlocksToPixels( height ) ), x, y, 8, Unit::BlocksToPixels( height ), {}, speed, speed, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false, true, true ),
     on_ ( false ),
-    action_ ( distance )
+    action_ ( distance, Direction::Simple::RIGHT )
 {};
 
 RopeSprite::~RopeSprite() {};
@@ -17,7 +17,7 @@ void RopeSprite::customUpdate( LevelState& level_state )
 {
     if ( on_ )
     {
-        action_.update( *this, *graphics_ );
+        action_.update( *this, level_state );
     }
     else
     {

@@ -6,55 +6,46 @@
 #include "sprite_graphics.hpp"
 
 static constexpr int FRAME_SPEED = 16;
-
 static int setDesertHawkGraphics( int frame )
 {
 	switch ( frame )
 	{
-		case ( 0 ):
-			return 0;
-		break;
-		case ( 2 ):
-			return 48;
-		break;
-		default:
-			return 24;
-		break;
+		case ( 0 ): return 0; break;
+		case ( 2 ): return 48; break;
+		default: return 24;
 	}
 }
 
-DesertHawkSprite::DesertHawkSprite( int x, int y, Direction::Horizontal direction )
+DesertHawkSprite::DesertHawkSprite( int x, int y, Direction::Horizontal direction, std::unique_ptr<SpriteComponent>&& component, CameraMovement camera_movement )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/desert-hawk.png", 0, 0, false, false, 0, 0, -5, 0, 5 ), x, y, 24, 11, {}, 700, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false )
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/desert-hawk.png", 0, 0, false, false, 0, 0, -5, 0, 5 ), x, y, 24, 11, {}, 700, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, camera_movement, true, false ),
+	animation_frame_ (),
+	animation_timer_ (),
+	component_ ( std::move( component ) )
 {
 	layer_ = Unit::Layer::SPRITES_2;
-	if ( direction == Direction::Horizontal::RIGHT )
-	{
-		graphics_->flip_x_ = true;
-	}
 };
 
 DesertHawkSprite::~DesertHawkSprite() {};
 
 void DesertHawkSprite::customUpdate( LevelState& level_state )
 {
-	moveInDirectionX();
-
-	if ( timer_ >= FRAME_SPEED - 1 )
+	// Behavior
+	if ( component_ != nullptr )
 	{
-		++frame_;
-		if ( frame_ >= 4 )
-		{
-			frame_ = 0;
-		}
-		graphics_->current_frame_x_ = setDesertHawkGraphics( frame_ );
-
-		timer_ = 0;
+		component_->update( *this, level_state );
 	}
 	else
 	{
-		++timer_;
+		moveInDirectionX();
 	}
+
+	// Graphics
+	if ( animation_timer_.update() )
+	{
+		graphics_->current_frame_x_ = setDesertHawkGraphics( ( ++animation_frame_ )() );
+	}
+	flipGraphicsOnRight();
 };
 
 void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
@@ -67,25 +58,31 @@ void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their
 			BlockSystem& blocks = level_state.blocks();
 			if
 			(
-				!blocks.blocksInTheWay
 				(
-					{
-						them.rightSubPixels(),
-						them.topSubPixels(),
-						1000,
-						them.heightSubPixels()
-					},
-					BlockComponent::Type::SOLID
-				) &&
-				!blocks.blocksInTheWay
+					direction_x_ == Direction::Horizontal::RIGHT &&
+					!blocks.blocksInTheWay
+					(
+						{
+							them.rightSubPixels(),
+							them.topSubPixels(),
+							1000,
+							them.heightSubPixels()
+						},
+						BlockComponent::Type::SOLID
+					)
+				) ||
 				(
-					{
-						them.leftSubPixels() - 1000,
-						them.topSubPixels(),
-						1000,
-						them.heightSubPixels()
-					},
-					BlockComponent::Type::SOLID
+					direction_x_ == Direction::Horizontal::LEFT &&
+					!blocks.blocksInTheWay
+					(
+						{
+							them.leftSubPixels() - 1000,
+							them.topSubPixels(),
+							1000,
+							them.heightSubPixels()
+						},
+						BlockComponent::Type::SOLID
+					)
 				)
 			)
 			{
@@ -97,5 +94,14 @@ void DesertHawkSprite::customInteract( Collision& my_collision, Collision& their
 		{
 			level_state.health().hurt();
 		}
+	}
+};
+
+void DesertHawkSprite::reset()
+{
+	resetPosition();
+	if ( component_ != nullptr )
+	{
+		component_->reset();
 	}
 };

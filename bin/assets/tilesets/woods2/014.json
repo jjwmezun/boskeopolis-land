@@ -1,0 +1,43 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 14,
+		"y": 0
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "climb"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" },
+				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{ "type": "not_on_ladder" },
+				{ "type": "collide_bottom" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "climb_down"
+			},
+			"conditions":
+			[
+				{ "type": "collide_bottom" }
+			]
+		}
+	]
+}

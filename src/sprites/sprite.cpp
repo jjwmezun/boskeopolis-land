@@ -68,7 +68,6 @@ Sprite::Sprite
 	direction_x_orig_ ( direction_x ),
 	direction_y_ ( direction_y ),
 	direction_y_orig_ ( direction_y ),
-	component_ ( std::move( component ) ),
 	movement_ ( getMovement( physics_state ) ),
 	camera_movement_ ( camera_movement ),
 	despawn_when_dead_ ( despawn_when_dead ),
@@ -136,10 +135,6 @@ void Sprite::update( LevelState& level_state )
 {
 	if ( !isDead() )
 	{
-		if ( component_ )
-		{
-			component_->update( *this, *graphics_ );
-		}
 		customUpdate( level_state );
 	}
 	else
@@ -150,11 +145,8 @@ void Sprite::update( LevelState& level_state )
 		}
 		else
 		{
-			//changeMovement( SpriteMovement::Type::FLOATING );
 			acceleration_x_ = 0;
-			//acceleration_y_ = 0;
 			vx_ = 0;
-			//vy_ = 0;
 
 			if ( death_timer_.done() )
 			{

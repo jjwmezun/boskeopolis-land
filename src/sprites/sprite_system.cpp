@@ -124,7 +124,6 @@
 #include "penguin_sprite.hpp"
 #include "pike_sprite.hpp"
 #include "pipe_eel_sprite.hpp"
-#include "platform_sprite.hpp"
 #include "player_car_sprite.hpp"
 #include "player_cart_sprite.hpp"
 #include "player_doom_sprite.hpp"
@@ -178,8 +177,7 @@
 #include "spring_enemy_sprite.hpp"
 #include "spring_sprite.hpp"
 #include "sprite_component_circle.hpp"
-#include "sprite_component_right_and_left.hpp"
-#include "sprite_component_up_and_down.hpp"
+#include "sprite_component_side_to_side.hpp"
 #include "sprite_renderable.hpp"
 #include "sprite_system.hpp"
 #include "statue_laser_sprite.hpp"
@@ -248,7 +246,8 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new GuardSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 2 ):
-			return std::unique_ptr<Sprite> ( new PlatformSprite( x, y, Direction::Simple::RIGHT ) );
+			printf( "INVALID SPRITE\n" );
+			return nullptr;
 		break;
 		case ( SPRITE_INDEX_START + 3 ):
 			return std::unique_ptr<Sprite> ( new RisingPlatformSprite( x, y ) );
@@ -272,10 +271,10 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 10 ):
-			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentUpAndDown( 4 ) ) ) );
+			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentSideToSide( 4, Direction::Simple::UP ) ) ) );
 		break;
 		case ( SPRITE_INDEX_START + 11 ):
-			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentRightAndLeft( 6 ) ) ) );
+			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentSideToSide( 6, Direction::Simple::RIGHT ) ) ) );
 		break;
 		case ( SPRITE_INDEX_START + 12 ):
 			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ) ) );
@@ -1027,6 +1026,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 261 ):
 			return std::unique_ptr<Sprite> ( new SpaceSparkSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 262 ):
+			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentSideToSide( 6, Direction::Simple::LEFT ) ) ) );
+		break;
+		case ( SPRITE_INDEX_START + 263 ):
+			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y, Direction::Horizontal::LEFT, std::unique_ptr<SpriteComponent> ( new SpriteComponentSideToSide( 6, Direction::Simple::LEFT ) ), Sprite::CameraMovement::PERMANENT ) );
+		break;
+		case ( SPRITE_INDEX_START + 264 ):
+			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y, Direction::Horizontal::RIGHT, std::unique_ptr<SpriteComponent> ( new SpriteComponentSideToSide( 6, Direction::Simple::RIGHT ) ), Sprite::CameraMovement::PERMANENT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

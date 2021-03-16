@@ -5,8 +5,6 @@
 #include "render.hpp"
 #include "sprite.hpp"
 
-#include <iostream>
-
 static constexpr int MOVE_DOWN_SPEED = 2000;
 static constexpr int MOVE_UP_SPEED = 800;
 

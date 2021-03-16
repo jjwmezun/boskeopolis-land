@@ -2,9 +2,8 @@
 
 class Block;
 
-#include "counter_t.hpp"
 #include "sprite.hpp"
-#include "timer_repeat_t.hpp"
+#include "timer_repeat_t2.hpp"
 
 class BadAppleSprite final : public Sprite
 {
@@ -15,8 +14,5 @@ class BadAppleSprite final : public Sprite
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 
 	private:
-		void updateGraphics();
-
-		CounterT<1, 0, 0, true> animation_frame_;
-		TimerRepeatT<> animation_timer_;
+		TimerRepeatT2<> animation_timer_;
 };

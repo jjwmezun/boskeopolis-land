@@ -1,46 +1,18 @@
+#pragma once
 
+#include "direction.hpp"
+#include "sprite_component.hpp"
 
-// Name
-//===================================
-//
-// SpriteComponentCircle
-//
+class SpriteComponentCircle final : public SpriteComponent
+{
 
-#ifndef SPRITE_COMPONENT_CIRCLE_H
-#define SPRITE_COMPONENT_CIRCLE_H
+    public:
+        SpriteComponentCircle( int radius = 50, int speed = 50, double start_angle = 0.0 );
+        ~SpriteComponentCircle();
+        void update( Sprite& sprite, LevelState& state ) override;
 
-
-// FORWARD DECLARATIONS
-//===================================
-
-
-// DEPENDENCIES
-//===================================
-
-    #include "direction.hpp"
-    #include "sprite_component.hpp"
-
-
-// CLASS
-//===================================
-
-    class SpriteComponentCircle final : public SpriteComponent
-    {
-
-        public:
-            SpriteComponentCircle( int radius = 50, int speed = 50, bool before_update = false );
-            ~SpriteComponentCircle();
-
-            void update( Sprite& sprite, SpriteGraphics& graphics );
-
-        private:
-            static const int ANGLE_SPEED_CONVERSION = 1000;
-            const int radius_;
-            const int speed_;
-            int angle_;
-
-            double angle() const;
-            int radius() const;
-    };
-
-#endif // SPRITE_COMPONENT_CIRCLE_H
+    private:
+        const double radius_;
+        const double speed_;
+        double angle_;
+};

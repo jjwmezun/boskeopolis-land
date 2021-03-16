@@ -6,6 +6,7 @@
 #include "mezun_helpers.hpp"
 #include "map.hpp"
 #include "map_layer_lava.hpp"
+#include "map_layer_lava_rise.hpp"
 #include "map_layer_lava_switch.hpp"
 #include "map_layer_tilemap.hpp"
 #include "map_layer_tilemap_image.hpp"
@@ -161,6 +162,7 @@ Map Map::mapFromPath
 		int lava_y = -1;
 		int lava_y_alt = -1;
 		int x_block_when_lava_rises_forever = -1;
+		int lava_rise_speed = -1;
 		Camera::Type camera_type = Camera::Type::NORMAL;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
@@ -584,19 +586,24 @@ Map Map::mapFromPath
 					hide = value.IsBool() && value.GetBool();
 				}
 
-				if ( mezun::areStringsEqual( name, "lava_y" ) && value.IsInt() )
+				else if ( mezun::areStringsEqual( name, "lava_y" ) && value.IsInt() )
 				{
 					lava_y = value.GetInt();
 				}
 
-				if ( mezun::areStringsEqual( name, "lava_y_switch_off" ) && value.IsInt() )
+				else if ( mezun::areStringsEqual( name, "lava_y_switch_off" ) && value.IsInt() )
 				{
 					lava_y_alt = value.GetInt();
 				}
 
-				if ( mezun::areStringsEqual( name, "x_block_when_lava_rises_forever" ) && value.IsInt() )
+				else if ( mezun::areStringsEqual( name, "x_block_when_lava_rises_forever" ) && value.IsInt() )
 				{
 					x_block_when_lava_rises_forever = value.GetInt();
+				}
+
+				else if ( mezun::areStringsEqual( name, "lava_rise_speed" ) && value.IsInt() )
+				{
+					lava_rise_speed = value.GetInt();
 				}
 			}
 		}
@@ -606,6 +613,10 @@ Map Map::mapFromPath
 			if ( lava_y_alt > -1 )
 			{
 				layers.emplace_back( new MapLayerLavaSwitch( lava_y, lava_y_alt, x_block_when_lava_rises_forever, Unit::Layer::AFTER_FG_2 ) );
+			}
+			else if ( lava_rise_speed > -1 )
+			{
+				layers.emplace_back( new MapLayerLavaRise( lava_y, lava_rise_speed, Unit::Layer::AFTER_FG_2 ) );
 			}
 			else
 			{

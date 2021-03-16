@@ -3,7 +3,7 @@
 class Block;
 
 #include "sprite.hpp"
-#include "sprite_component_right_and_left.hpp"
+#include "sprite_component_side_to_side.hpp"
 
 class RopeSprite final : public Sprite
 {
@@ -15,6 +15,6 @@ class RopeSprite final : public Sprite
         void reset();
 
     private:
-        SpriteComponentRightAndLeft action_;
+        SpriteComponentSideToSide action_;
         bool on_;
 };

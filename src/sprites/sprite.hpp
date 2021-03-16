@@ -352,7 +352,6 @@ class Sprite : public Object
 		CameraMovement camera_movement_;
 		const SpriteMovement* movement_;
 		std::unique_ptr<SpriteGraphics> graphics_;
-		std::unique_ptr<SpriteComponent> component_;
 		std::vector<SpriteType> types_;
 		double bounce_;
 		double gravity_modifier_;

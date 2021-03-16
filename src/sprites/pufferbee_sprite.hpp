@@ -1,9 +1,7 @@
-#ifndef PUFFERBEE_SPRITE_H
-#define PUFFERBEE_SPRITE_H
-
-class Block;
+#pragma once
 
 #include "sprite.hpp"
+#include "sprite_component.hpp"
 
 class PufferbeeSprite final : public Sprite
 {
@@ -15,11 +13,12 @@ class PufferbeeSprite final : public Sprite
 			std::unique_ptr<SpriteComponent> component = nullptr
 		);
         ~PufferbeeSprite();
-        void customUpdate( LevelState& level_state );
-        void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state );
+        void customUpdate( LevelState& level_state ) override;
+        void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
+        void reset() override;
 
     private:
         Direction::Rotation randomDirection() const;
-};
 
-#endif // PUFFERBEE_SPRITE_H
+        std::unique_ptr<SpriteComponent> component_;
+};
