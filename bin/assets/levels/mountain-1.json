@@ -48,16 +48,16 @@
 		}
 	],
 
-	"entrance_x": 43,
-	"entrance_y": 37,
-	"camera_x": 31,
+	"entrance_x": 48,
+	"entrance_y": 40,
+	"camera_x": 36,
 
 	"goal":
 	{
 		"type": "kill_all"
 	},
 
-	"gem_challenge": 14000,
+	"gem_challenge": 25000,
 	"time_challenge": 30,
 	"cycle": 1,
 	"theme": 6
