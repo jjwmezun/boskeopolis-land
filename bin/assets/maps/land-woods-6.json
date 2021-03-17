@@ -3,7 +3,8 @@
     {
      "export":
         {
-         "format":"json"
+         "format":"json",
+         "target":"."
         }
     },
  "height":107,
@@ -74,7 +75,7 @@
         {
          "name":"lava_rise_speed",
          "type":"int",
-         "value":800
+         "value":700
         }, 
         {
          "name":"lava_y",
