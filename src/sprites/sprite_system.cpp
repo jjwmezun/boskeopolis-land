@@ -77,6 +77,7 @@
 #include "harpoon_sprite.hpp"
 #include "health.hpp"
 #include "heat_beam_sprite.hpp"
+#include "helicopter_friedman_sprite.hpp"
 #include "hero_renderable.hpp"
 #include "hieroglyph_pusher_sprite.hpp"
 #include "hook_sprite.hpp"
@@ -1035,6 +1036,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 264 ):
 			return std::unique_ptr<Sprite> ( new DesertHawkSprite( x, y, Direction::Horizontal::RIGHT, std::unique_ptr<SpriteComponent> ( new SpriteComponentSideToSide( 6, Direction::Simple::RIGHT ) ), Sprite::CameraMovement::PERMANENT ) );
+		break;
+		case ( SPRITE_INDEX_START + 265 ):
+			return std::unique_ptr<Sprite> ( new HelicopterFriedmanSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

@@ -33,8 +33,8 @@
 			[
 				{
 					"map": 1,
-					"entrance_x": 0,
-					"entrance_y": 47,
+					"entrance_x": 65,
+					"entrance_y": 53,
 					"location": [ 0, 90, 0, 12 ]
 				}
 			]
@@ -68,7 +68,7 @@
 		}
 	],
 
-	"entrance_x": 6,
+	"entrance_x": 82,
 	"entrance_y": 0,
 
 	"gem_challenge": 11000,

@@ -21,18 +21,18 @@ void StatueLaserSprite::customUpdate( LevelState& level_state )
     {
         case ( LaserState::START_CHARGING ):
         {
-            changeStateAfterDelay( 8, LaserState::CHARGING );
+            changeStateAfterDelay( 16, LaserState::CHARGING );
         }
         break;
         case ( LaserState::CHARGING ):
         {
-            changeStateAfterDelay( 8, LaserState::CHARGING2 );
+            changeStateAfterDelay( 16, LaserState::CHARGING2 );
         }
         break;
         case ( LaserState::CHARGING2 ):
         {
             ++timer_;
-            if ( timer_ == 8 )
+            if ( timer_ == 16 )
             {
                 timer_ = 0;
                 laser_state_ = LaserState::SHOOTING;
@@ -42,17 +42,17 @@ void StatueLaserSprite::customUpdate( LevelState& level_state )
         break;
         case ( LaserState::START_FADING ):
         {
-            changeStateAfterDelay( 8, LaserState::FADING );
+            changeStateAfterDelay( 16, LaserState::FADING );
         }
         break;
         case ( LaserState::FADING ):
         {
-            changeStateAfterDelay( 8, LaserState::FADING2 );
+            changeStateAfterDelay( 16, LaserState::FADING2 );
         }
         break;
         case ( LaserState::FADING2 ):
         {
-            changeStateAfterDelay( 8, LaserState::DORMANT );
+            changeStateAfterDelay( 16, LaserState::DORMANT );
         }
         break;
     }
