@@ -30,6 +30,16 @@
 					"frames": 5,
 					"animation_speed": 32,
 					"animation_flip": true
+				},
+				{
+					"type": "image",
+					"img": "rain.png",
+					"width": 480,
+					"height": 320,
+					"frames": 16,
+					"animation_speed": 4,
+					"alpha": 128,
+					"layer": 16
 				}
 			],
 			"warps":
@@ -88,5 +98,12 @@
 	"gem_challenge": 40000,
 	"time_challenge": 25,
 	"cycle": 1,
-	"theme": 1
+	"theme": 1,
+	"palette_transition":
+	{
+		"from": { "type": "Midnight Blue", "bg": 6 },
+		"to": { "type": "Classic Green", "bg": 6 },
+		"start": 50,
+		"end": 290
+	}
 }

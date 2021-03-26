@@ -10,6 +10,7 @@
 #include <map>
 #include <memory>
 #include "sprite.hpp"
+#include "palette_transition.hpp"
 #include "player_graphics.hpp"
 #include "renderable.hpp"
 #include "sprite_system.hpp"
@@ -54,6 +55,7 @@ class LevelState final : public GameState
 		bool trainerPaletteChanged() const;
 		Palette getNewPalette();
 		void reRenderInventory();
+		void changePaletteTransition( const PaletteTransition& palette_transition );
 
 	private:
 		void testPause();
@@ -68,4 +70,5 @@ class LevelState final : public GameState
 		EventSystem events_;
 		Level level_;
 		InventoryLevel inventory_screen_;
+		PaletteTransition palette_transition_;
 };

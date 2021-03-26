@@ -127,6 +127,9 @@ void Level::warp( LevelState& level_state )
 
 		EventSystem& events = level_state.events();
 		events.changePalette( currentMap().palette_ );
+
+		level_state.changePaletteTransition( currentMap().palette_transition_ ); 
+
 		if ( currentMap().auto_message_ )
 		{
 			events.showMessage();

@@ -301,6 +301,18 @@ namespace Main
 		Render::clearScreen();
 		renderStates();
 		Input::renderQuitText();
+		Render::renderTarget();
+
+		if ( Render::hasTransPalette() )
+		{
+			Render::swapTransPalette();
+			Render::setTargetToCurrent();
+			renderStates();
+			Input::renderQuitText();
+			Render::renderTarget();
+			Render::swapTransPalette();
+		}
+
 		if ( getPalette().type() == "Neon" )
 		{
 			neon.render();

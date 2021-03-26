@@ -20,7 +20,8 @@ LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades,
 	sprites_ ( *this ),
 	blocks_ (),
 	level_ ( LevelList::getLevel( level_id ) ),
-	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade )
+	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade, level_.currentMap().palette_transition_.set ),
+	palette_transition_ ( level_.currentMap().palette_transition_ )
 {
 	blocks_.init( level_.currentMap() );
 }
@@ -29,6 +30,11 @@ LevelState::~LevelState() {};
 
 void LevelState::stateUpdate()
 {
+	if ( palette_transition_.set && !Render::hasTransPalette() )
+	{
+		Render::turnOnTransitionPalette( palette_transition_.from, palette_transition_.to );
+	}
+
 	blocks_.blocksFromMap( *this );
 	blocks_.update( events_ );
 
@@ -74,6 +80,14 @@ void LevelState::stateUpdate()
 	}
 
 	testPause();
+
+	if ( Render::hasTransPalette() )
+	{
+		const double relative = ( double )( std::min( palette_transition_.max, std::max( 0, Unit::SubPixelsToBlocks( sprites_.hero().hit_box_.x ) - palette_transition_.start ) ) );
+		const double percent = relative / ( double )( palette_transition_.max );
+		const Uint8 alpha = ( Uint8 )( std::max( 0.0, std::min( 255.0, percent * 255.0 ) ) );
+		Render::setPaletteTransAlpha( alpha );
+	}
 };
 
 void LevelState::updateForTrainer()
@@ -319,4 +333,9 @@ void LevelState::changeRenderableLayer( int id, Unit::Layer layer )
 			}
 		}
 	}
+};
+
+void LevelState::changePaletteTransition( const PaletteTransition& palette_transition )
+{
+	palette_transition_ = palette_transition;
 };

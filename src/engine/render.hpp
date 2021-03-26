@@ -69,9 +69,12 @@ namespace Render
 	void colorCanvas();
 	void colorCanvasForceColor( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha );
 	void colorCanvasMultiply( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha );
+	void colorCanvasBlend( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha, SDL_BlendMode blend_mode );
 	void clearScreen();
 	void clearScreenTransparency();
 	void tintScreen( const SDL_Color& color );
+	void setTargetToCurrent();
+	void renderTarget();
 	void presentScreen();
 
 	void newPalette( Palette palette );
@@ -95,4 +98,9 @@ namespace Render
 	void setWindowed();
 	void setFullscreen();
 	void setMagnification( int magnification );
+
+	void turnOnTransitionPalette( Palette pal1, Palette pal2 );
+	void setPaletteTransAlpha( Uint8 alpha );
+	bool hasTransPalette();
+	void swapTransPalette();
 };

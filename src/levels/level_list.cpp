@@ -18,6 +18,7 @@
 #include "map_layer_image_switch.hpp"
 #include "map_layer_lightning.hpp"
 #include "map_layer_neon.hpp"
+#include "map_layer_overlay.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
 
@@ -456,6 +457,17 @@ Level LevelList::getLevel( int id )
                                 layers.emplace_back
                                 (
                                     std::make_shared<MapLayerDoom> ( layer_position )
+                                );
+                            }
+                            else if ( mezun::areStringsEqual( layer_type, "overlay" ) )
+                            {
+                                const Uint8 red = ( Uint8 )( ( layer.HasMember( "red" ) && layer[ "red" ].IsInt() ) ? layer[ "red" ].GetInt() : 255 );
+                                const Uint8 green = ( Uint8 )( ( layer.HasMember( "green" ) && layer[ "green" ].IsInt() ) ? layer[ "green" ].GetInt() : 255 );
+                                const Uint8 blue = ( Uint8 )( ( layer.HasMember( "blue" ) && layer[ "blue" ].IsInt() ) ? layer[ "blue" ].GetInt() : 255 );
+                                const Uint8 alpha = ( Uint8 )( ( layer.HasMember( "alpha" ) && layer[ "alpha" ].IsInt() ) ? layer[ "alpha" ].GetInt() : 255 );
+                                layers.emplace_back
+                                (
+                                    std::make_shared<MapLayerOverlay> ( red, green, blue, alpha, layer_position )
                                 );
                             }
                         }

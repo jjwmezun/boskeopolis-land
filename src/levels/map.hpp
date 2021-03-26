@@ -8,6 +8,7 @@ class SpriteSystem;
 #include "map_layer.hpp"
 #include "camera.hpp"
 #include "palette.hpp"
+#include "palette_transition.hpp"
 #include "sprite_system.hpp"
 #include <vector>
 #include "warp.hpp"
@@ -74,6 +75,7 @@ class Map final
 		const bool hide_;
 		const bool auto_message_;
 		bool changed_;
+		const PaletteTransition palette_transition_;
 
 		static Map mapFromPath
 		(
@@ -153,7 +155,8 @@ class Map final
 			bool watery,
 			bool oxygen,
 			bool hide,
-			bool auto_message
+			bool auto_message,
+			PaletteTransition palette_transition
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( LevelState& level_state );

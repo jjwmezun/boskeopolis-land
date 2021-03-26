@@ -164,6 +164,7 @@ Map Map::mapFromPath
 		int x_block_when_lava_rises_forever = -1;
 		int lava_rise_speed = -1;
 		Camera::Type camera_type = Camera::Type::NORMAL;
+		PaletteTransition palette_transition = { false, -1, -1, { "Grayscale", 1 }, { "Grayscale", 1 } };
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -331,12 +332,9 @@ Map Map::mapFromPath
 					}
 				}
 
-				else if ( mezun::areStringsEqual( name, "palette" ) )
+				else if ( mezun::areStringsEqual( name, "palette" ) && value.IsString() )
 				{
-					if ( value.IsString() )
-					{
-						palette = value.GetString();
-					}
+					palette = palette_transition.from.type_ = value.GetString();
 				}
 
 				else if ( mezun::areStringsEqual( name, "bg_color" ) )
@@ -349,6 +347,8 @@ Map Map::mapFromPath
 					{
 						bg_color = std::stoi( value.GetString() );
 					}
+
+					palette_transition.from.bg_ = palette_transition.to.bg_ = bg_color;
 				}
 
 				else if ( mezun::areStringsEqual( name, "music" ) )
@@ -605,6 +605,12 @@ Map Map::mapFromPath
 				{
 					lava_rise_speed = value.GetInt();
 				}
+
+				else if ( mezun::areStringsEqual( name, "trans_palette" ) && value.IsString() )
+				{
+					palette_transition.set = true;
+					palette_transition.to.type_ = value.GetString();
+				}
 			}
 		}
 
@@ -644,6 +650,19 @@ Map Map::mapFromPath
 			layers.emplace_back( water_ptr );
 		}
 
+		if ( palette_transition.set )
+		{
+			if ( palette_transition.start == -1 )
+			{
+				palette_transition.start = 0;
+			}
+
+			if ( palette_transition.max == -1 )
+			{
+				palette_transition.max = width - palette_transition.start;
+			}
+		}
+
 
 	// Send all data
 	//=============================================
@@ -679,7 +698,8 @@ Map Map::mapFromPath
 			watery,
 			oxygen,
 			hide,
-			auto_message
+			auto_message,
+			palette_transition
 		);
 };
 
@@ -714,7 +734,8 @@ Map::Map
 	bool watery,
 	bool oxygen,
 	bool hide,
-	bool auto_message
+	bool auto_message,
+	PaletteTransition palette_transition
 )
 :
 	blocks_layers_ ( blocks_layers ),
@@ -749,7 +770,8 @@ Map::Map
 	oxygen_ ( oxygen ),
 	hide_ ( hide ),
 	other_layers_ ( other_layers ),
-	auto_message_ ( auto_message )
+	auto_message_ ( auto_message ),
+	palette_transition_ ( palette_transition )
 {};
 
 Map::~Map() noexcept {};
@@ -788,7 +810,8 @@ Map::Map( Map&& m ) noexcept
 	watery_ ( m.watery_ ),
 	oxygen_ ( m.oxygen_ ),
 	hide_ ( m.hide_ ),
-	auto_message_ ( m.auto_message_ )
+	auto_message_ ( m.auto_message_ ),
+	palette_transition_ ( m.palette_transition_ )
 {};
 
 Map::Map( const Map& c )
@@ -825,7 +848,8 @@ Map::Map( const Map& c )
 	watery_ ( c.watery_ ),
 	oxygen_ ( c.oxygen_ ),
 	hide_ ( c.hide_ ),
-	auto_message_ ( c.auto_message_ )
+	auto_message_ ( c.auto_message_ ),
+	palette_transition_ ( c.palette_transition_ )
 {};
 
 int Map::widthBlocks() const

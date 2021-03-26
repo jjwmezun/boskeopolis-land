@@ -22,7 +22,6 @@ class PaletteChanger
 class Palette final
 {
 	public:
-		friend class PaletteChanger;
 		static constexpr int COLOR_LIMIT = 7;
 		Palette( std::string type, int bg );
 		bool operator!= ( const Palette& p ) const;
@@ -38,9 +37,9 @@ class Palette final
 		Uint8 bgA() const;
 		static void init();
 
-	private:
-		unsigned int testColor( unsigned int n ) const;
-
 		std::string type_;
 		int bg_;
+
+	private:
+		unsigned int testColor( unsigned int n ) const;
 };

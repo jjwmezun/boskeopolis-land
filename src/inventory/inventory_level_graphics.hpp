@@ -9,6 +9,7 @@ class Sprite;
 
 #include "card_suit.hpp"
 #include "counter_t.hpp"
+#include "frame.hpp"
 #include "inventory_level_health.hpp"
 #include "mezun_sdl2.hpp"
 #include "news_ticker.hpp"
@@ -32,7 +33,7 @@ class InventoryLevelGraphics final
 			PRESENT
 		};
 
-		InventoryLevelGraphics( int max_hp );
+		InventoryLevelGraphics( int max_hp, bool live_update );
 		~InventoryLevelGraphics();
 		InventoryLevelGraphics( const InventoryLevelGraphics& ) = delete;
 		InventoryLevelGraphics( InventoryLevelGraphics&& ) = delete;
@@ -65,6 +66,7 @@ class InventoryLevelGraphics final
 			Icon icon;
 		};
 
+		void rerender( const InventoryLevel& inventory );
 		void updateHealthGraphics();
 		void updatePtsGraphics( const InventoryLevel& inventory );
 		void renderPtsGraphics( const InventoryLevel& inventory );
@@ -94,5 +96,8 @@ class InventoryLevelGraphics final
 		InventoryLevelHealth health_gfx_;
 		NewsTicker ticker_;
 		OxygenMeter oxygen_meter_;
-		char scratch_[3000];
+		Frame bg_frame_;
+		bool live_;
+		int y_;
+		char scratch_[2000];
 };

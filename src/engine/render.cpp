@@ -25,20 +25,28 @@ namespace Render
 
 	static std::string img_path_;
 	static std::map<std::string, SDL_Texture*> textures_ = {};
+	static std::map<std::string, SDL_Texture*> trans_textures_ = {};
 	static std::map<std::string, SDL_Surface*> surfaces_ = {};
 
 	static SDL_Renderer* renderer_ = nullptr;
 	static SDL_Window* window_ = nullptr;
 	static sdl2::SDLRect screen_;
-	static std::unique_ptr<const Palette> palette_ = std::make_unique<Palette> ( "Grayscale", 1 );
+	static Palette palette_ { "Grayscale", 1 };
+	static Palette main_palette_ { "Grayscale", 1 };
+	static Palette trans_palette_ { "Grayscale", 1 };
 
 	static int magnification_ = 1;
 	static int max_magnification_ = 1;
 	static int monitor_width_ = 0;
 	static int monitor_height_ = 0;
 
+	static SDL_Texture* current_target_ = nullptr;
 	static SDL_Texture* target_ = nullptr;
+	static SDL_Texture* trans_target_ = nullptr;
 	static SDL_Texture* final_target_ = nullptr;
+
+	static bool trans_ = false;
+	static Uint8 trans_alpha_ = 0;
 
 
 	// Private Function Declarations
@@ -60,6 +68,8 @@ namespace Render
 	bool cameraAdjust( sdl2::SDLRect& dest, const Camera* camera );
 	void checkTexture( const std::string& sheet );
 	void setColor( int color, Uint8 alpha = 255 );
+
+	std::map<std::string, SDL_Texture*>& getCurrentTexture();
 
 
 	// Function Implementations
@@ -92,7 +102,9 @@ namespace Render
 		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
 		final_target_ = SDL_GetRenderTarget( renderer_ );
 		target_ = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS );
-		SDL_SetRenderTarget( renderer_, target_ );
+		trans_target_ = SDL_CreateTexture( renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS );
+		current_target_ = target_;
+		SDL_SetRenderTarget( renderer_, current_target_ );
 	};
 
 	void createWindow()
@@ -227,12 +239,9 @@ namespace Render
 
 		if ( surfaces_.at( sheet ) != nullptr )
 		{
-			if ( palette_ )
-			{
-				palette_->applyPalette( surfaces_.at( sheet ) );
-			}
+			palette_.applyPalette( surfaces_.at( sheet ) );
 
-			textures_.insert
+			getCurrentTexture().insert
 			(
 				std::make_pair
 				(
@@ -241,7 +250,7 @@ namespace Render
 				)
 			);
 
-			if ( textures_.at( sheet ) == nullptr )
+			if ( getCurrentTexture().at( sheet ) == nullptr )
 			{
 				SDL_Log( "SDL_CreateTextureFromSurface failed: %s", SDL_GetError() );
 			}
@@ -259,7 +268,17 @@ namespace Render
 			}
 		}
 
+		for ( auto& t : trans_textures_ )
+		{
+			if ( t.second != nullptr )
+			{
+				SDL_DestroyTexture( t.second );
+				t.second = nullptr;
+			}
+		}
+
 		textures_.clear();
+		trans_textures_.clear();
 	};
 
 	void clearSurfaces()
@@ -277,13 +296,27 @@ namespace Render
 		surfaces_.clear();
 	};
 
-	void presentScreen()
+	void renderTarget()
 	{
 		SDL_SetRenderTarget( renderer_, final_target_ );
-		if ( SDL_RenderCopy( renderer_, target_, &WINDOW_BOX, &screen_ ) != 0 )
+		if ( current_target_ == trans_target_ )
+		{
+			SDL_SetTextureBlendMode( current_target_, SDL_BLENDMODE_BLEND );
+			SDL_SetTextureAlphaMod( current_target_, trans_alpha_ );
+		}
+		if ( SDL_RenderCopy( renderer_, current_target_, &WINDOW_BOX, &screen_ ) != 0 )
 		{
 			printf( "Failed to render final texture: %s\n", SDL_GetError() );
 		}
+	}
+
+	void setTargetToCurrent()
+	{
+		SDL_SetRenderTarget( renderer_, current_target_ );
+	}
+
+	void presentScreen()
+	{
 		SDL_RenderPresent( renderer_ );
 	};
 
@@ -292,19 +325,18 @@ namespace Render
 	void stateChangeFade( int alpha )
 	{
 		SDL_SetRenderDrawColor( renderer_, 255, 255, 255, alpha );
-		SDL_RenderFillRect( renderer_, &WINDOW_BOX );
+		SDL_RenderFillRect( renderer_, &screen_ );
 	};
 
 	void colorCanvas( int color, int alpha )
 	{
-		assert( palette_ );
-		const SDL_Color color_obj = palette_->color( color );
+		const SDL_Color color_obj = palette_.color( color );
 		colorCanvasForceColor( color_obj.r, color_obj.g, color_obj.b, alpha );
 	};
 
 	void colorCanvas()
 	{
-		colorCanvas( palette_->bgN() );
+		colorCanvas( palette_.bgN() );
 	};
 
 	void colorCanvasForceColor( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha )
@@ -320,12 +352,19 @@ namespace Render
 		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
 	}
 
+	void colorCanvasBlend( Uint8 r, Uint8 g, Uint8 b, Uint8 alpha, SDL_BlendMode blend_mode )
+	{
+		SDL_SetRenderDrawBlendMode( renderer_, blend_mode );
+		colorCanvasForceColor( r, g, b, alpha );
+		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
+	}
+
 	void clearScreen()
 	{
 		SDL_SetRenderTarget( renderer_, final_target_ );
 		SDL_SetRenderDrawColor( renderer_, 0, 0, 0, FULL_OPACITY );
 		SDL_RenderClear( renderer_ );
-		SDL_SetRenderTarget( renderer_, target_ );
+		SDL_SetRenderTarget( renderer_, current_target_ );
 	};
 
 	void clearRenderBox( SDL_Texture* texture )
@@ -394,7 +433,7 @@ namespace Render
 	)
 	{
 		checkTexture( sheet );
-		renderObject( textures_.at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode, alt_texture, rotation_center );
+		renderObject( getCurrentTexture().at( sheet ), source, dest, flip, rotation, alpha, camera, blend_mode, alt_texture, rotation_center );
 	}
 
 	void renderObject
@@ -418,7 +457,7 @@ namespace Render
 			{
 				printf( "Render failure: %s\n", SDL_GetError() );
 			}
-			SDL_SetRenderTarget( renderer_, target_ );
+			SDL_SetRenderTarget( renderer_, current_target_ );
 		}
 		else
 		{
@@ -449,7 +488,7 @@ namespace Render
 
 	void checkTexture( const std::string& sheet )
 	{
-		if ( textures_.find( sheet ) == textures_.end() )
+		if ( getCurrentTexture().find( sheet ) == getCurrentTexture().end() )
 		{
 			loadTexture( sheet );
 		}
@@ -478,7 +517,7 @@ namespace Render
 
 	void setColor( int c, Uint8 alpha )
 	{
-		const sdl2::SDLColor color = palette_->color( c );
+		const sdl2::SDLColor color = palette_.color( c );
 		const Uint8 r = color.r;
 		const Uint8 g = color.g;
 		const Uint8 b = color.b;
@@ -529,12 +568,19 @@ namespace Render
 
 	void newPalette( Palette palette )
 	{
-		palette_ = std::make_unique<Palette> ( palette );
-		clearTextures();
+		if ( main_palette_ != palette )
+		{
+			palette_ = main_palette_ = palette;
+			trans_ = false;
+			current_target_ = target_;
+			clearTextures();
+		}
 	};
 
 	void quit()
 	{
+		SDL_DestroyTexture( target_ );
+		SDL_DestroyTexture( trans_target_ );
 		clearSurfaces();
 		IMG_Quit();
 		SDL_DestroyRenderer( renderer_ );
@@ -565,7 +611,7 @@ namespace Render
 	// & the custom texture will be corrupted by all other game graphics.
 	void releaseRenderTarget()
 	{
-		SDL_SetRenderTarget( renderer_, target_ );
+		SDL_SetRenderTarget( renderer_, current_target_ );
 	};
 
 	void renderRenderBox( SDL_Texture* texture )
@@ -643,5 +689,34 @@ namespace Render
 		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_ADD );
 		colorCanvasForceColor( color.r, color.g, color.b, color.a );		
 		SDL_SetRenderDrawBlendMode( renderer_, SDL_BLENDMODE_BLEND );
+	};
+
+	void turnOnTransitionPalette( Palette pal1, Palette pal2 )
+	{
+		clearTextures();
+		trans_ = true;
+		palette_ = main_palette_ = pal1;
+		trans_palette_ = pal2;
+	};
+
+	void setPaletteTransAlpha( Uint8 alpha )
+	{
+		trans_alpha_ = alpha;
+	};
+
+	bool hasTransPalette()
+	{
+		return trans_;
+	};
+
+	void swapTransPalette()
+	{
+		current_target_ = ( current_target_ == target_ ) ? trans_target_ : target_;
+		palette_ = ( current_target_ == target_ ) ? main_palette_ : trans_palette_;
+	}
+
+	std::map<std::string, SDL_Texture*>& getCurrentTexture()
+	{
+		return ( current_target_ == target_ ) ? textures_ : trans_textures_;
 	};
 };

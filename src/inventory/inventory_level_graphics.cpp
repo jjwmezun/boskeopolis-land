@@ -1,7 +1,6 @@
 #include "camera.hpp"
 #include "clock.hpp"
 #include "event_system.hpp"
-#include "frame.hpp"
 #include "inventory.hpp"
 #include "inventory_level.hpp"
 #include "inventory_level_graphics.hpp"
@@ -51,7 +50,7 @@ static constexpr WTextCharacter::Color FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHA
 };
 static constexpr int FLASHING_TIMER_SPEED = 8;
 
-InventoryLevelGraphics::InventoryLevelGraphics( int max_hp )
+InventoryLevelGraphics::InventoryLevelGraphics( int max_hp, bool live_update )
 :
 	flashing_timer_ ( 0 ),
 	flashing_time_shade_ ( 0 ),
@@ -59,9 +58,12 @@ InventoryLevelGraphics::InventoryLevelGraphics( int max_hp )
 	misc_end_x_ ( 0 ),
 	text_color_ ( WTextCharacter::Color::BLACK ),
 	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
-	health_gfx_ ( HP_X, 10, max_hp ),
+	health_gfx_ ( HP_X, ( ( live_update ) ? Y : 0 ) + 10, max_hp ),
 	ticker_ ( BOTTOM_ROW_Y ),
-	oxygen_meter_ ( OXYGEN_RIGHT, TOP_ROW_Y )
+	oxygen_meter_ ( OXYGEN_RIGHT, TOP_ROW_Y ),
+	bg_frame_ ( 0, ( live_update ) ? Y : 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT ),
+	live_ ( live_update ),
+	y_ ( ( live_update ) ? Y : 0 )
 {
 	misc_end_x_ = MISC_FROM_HP + getXFromHP();
 };
@@ -140,7 +142,7 @@ void InventoryLevelGraphics::init( const Level& level, const InventoryLevel& inv
 			{
 				InventoryCounterType::KEY,
 				0,
-				{ misc_end_x_, TOP_ROW_Y_RELATIVE, KEY_WIDTH, 8 }
+				{ misc_end_x_, y_ + TOP_ROW_Y_RELATIVE, KEY_WIDTH, 8 }
 			}
 		);
 		misc_end_x_ += KEY_WIDTH + 8;
@@ -154,7 +156,7 @@ void InventoryLevelGraphics::init( const Level& level, const InventoryLevel& inv
 			{
 				InventoryCounterType::ON_OFF,
 				0,
-				{ misc_end_x_, TOP_ROW_Y_RELATIVE, ON_OFF_WIDTH, 8 }
+				{ misc_end_x_, y_ + TOP_ROW_Y_RELATIVE, ON_OFF_WIDTH, 8 }
 			}
 		);
 		misc_end_x_ += ON_OFF_WIDTH + 8;
@@ -166,7 +168,14 @@ void InventoryLevelGraphics::init( const Level& level, const InventoryLevel& inv
 
 void InventoryLevelGraphics::render( const EventSystem& events, const Sprite& hero, const Camera& camera, const InventoryLevel& inventory )
 {
-	main_texture_.render();
+	if ( live_ )
+	{
+		rerender( inventory );
+	}
+	else
+	{
+		main_texture_.render();
+	}
 
 	// OXYGEN
 	oxygen_meter_.render();
@@ -207,7 +216,7 @@ void InventoryLevelGraphics::setShowCounter( Icon icon, int start_count )
 		{
 			InventoryCounterType::COUNT,
 			start_count,
-			{ misc_end_x_, TOP_ROW_Y_RELATIVE, COUNT_WIDTH, 8 },
+			{ misc_end_x_, y_ + TOP_ROW_Y_RELATIVE, COUNT_WIDTH, 8 },
 			icon
 		}
 	);
@@ -231,13 +240,18 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 {
 	main_texture_.startDrawing();
 	Render::clearScreenTransparency();
+	rerender( inventory );
+	main_texture_.endDrawing();
+	ticker_.forceRedraw();
+};
 
+void InventoryLevelGraphics::rerender( const InventoryLevel& inventory )
+{
 	// Render BG Frame.
-	Frame frame { 0, 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT };
-	frame.render();
+	bg_frame_.render();
 
 	// Render ₧
-	WTextObj pts_icon{ mezun::charToChar32String( "₧" ), PTS_X, TOP_ROW_Y_RELATIVE, text_color_ };
+	WTextObj pts_icon{ mezun::charToChar32String( "₧" ), PTS_X, y_ + TOP_ROW_Y_RELATIVE, text_color_ };
 	pts_icon.render();
 	renderPtsGraphics( inventory );
 
@@ -245,7 +259,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	health_gfx_.render();
 
 	// Render time.
-	Render::renderObject( "bg/level-select-characters.png", { colorX(), 8, 8, 8 }, { CLOCK_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { colorX(), 8, 8, 8 }, { CLOCK_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 	renderTimerGraphics( inventory );
 
 	// Render card.
@@ -255,7 +269,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	}
 	else
 	{
-		Render::renderObject( "bg/level-select-characters.png", { colorX(), 24, 8, 8 }, { CARD_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { colorX(), 24, 8, 8 }, { CARD_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 
 	// Render suits.
@@ -265,7 +279,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	}
 	else
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 0, 208, 8, 8 }, { SUIT_CLUB_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { 0, 208, 8, 8 }, { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	if ( inventory.haveSuit( CardSuit::DIAMOND ) )
 	{
@@ -273,7 +287,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	}
 	else
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 0, 216, 8, 8 }, { SUIT_DIAMOND_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { 0, 216, 8, 8 }, { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	if ( inventory.haveSuit( CardSuit::HEART ) )
 	{
@@ -281,7 +295,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	}
 	else
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 0, 224, 8, 8 }, { SUIT_HEART_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { 0, 224, 8, 8 }, { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 	if ( inventory.haveSuit( CardSuit::SPADE ) )
 	{
@@ -289,7 +303,7 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 	}
 	else
 	{
-		Render::renderObject( "bg/level-select-characters.png", { 0, 232, 8, 8 }, { SUIT_SPADE_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+		Render::renderObject( "bg/level-select-characters.png", { 0, 232, 8, 8 }, { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 	}
 
 	for ( auto& extra_counter : extra_counters_ )
@@ -313,36 +327,33 @@ void InventoryLevelGraphics::forceRerender( const InventoryLevel& inventory )
 			break;
 		}
 	}
-
-	main_texture_.endDrawing();
-	ticker_.forceRedraw();
 };
 
 void InventoryLevelGraphics::updatePtsGraphics( const InventoryLevel& inventory )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( { PTS_COUNTER_X, TOP_ROW_Y_RELATIVE, PTS_COUNTER_WIDTH, 8 }, 1 );
+	Render::renderRect( { PTS_COUNTER_X, y_ + TOP_ROW_Y_RELATIVE, PTS_COUNTER_WIDTH, 8 }, 1 );
 	renderPtsGraphics( inventory );
 	main_texture_.endDrawing();
 };
 
 void InventoryLevelGraphics::renderPtsGraphics( const InventoryLevel& inventory )
 {
-	WTextObj text{ inventory.fundsString(), PTS_COUNTER_X, TOP_ROW_Y_RELATIVE, text_color_ };
+	WTextObj text{ inventory.fundsString(), PTS_COUNTER_X, y_ + TOP_ROW_Y_RELATIVE, text_color_ };
 	text.render();
 };
 
 void InventoryLevelGraphics::updateTimerGraphics( const InventoryLevel& inventory )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( { timeX(), TOP_ROW_Y_RELATIVE, TIME_WIDTH, 8 }, 1 );
+	Render::renderRect( { timeX(), y_ + TOP_ROW_Y_RELATIVE, TIME_WIDTH, 8 }, 1 );
 	renderTimerGraphics( inventory );
 	main_texture_.endDrawing();
 };
 
 void InventoryLevelGraphics::renderTimerGraphics( const InventoryLevel& inventory )
 {
-	WTextObj text{ inventory.clock().getTimeString(), timeX(), TOP_ROW_Y_RELATIVE, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] };
+	WTextObj text{ inventory.clock().getTimeString(), timeX(), y_ + TOP_ROW_Y_RELATIVE, FLASHING_TIMER_SHADES[ flashing_time_shade_ ] };
 	text.render();
 };
 
@@ -356,8 +367,8 @@ void InventoryLevelGraphics::updateCountGraphics( const InventoryCounter& counte
 
 void InventoryLevelGraphics::renderCountGraphics( const InventoryCounter& counter )
 {
-	Render::renderObject( "bg/level-select-characters.png", { ( int )( counter.icon ) * 8, 184, 8, 8 }, { counter.position.x, TOP_ROW_Y_RELATIVE, 8, 8 } );
-	WTextObj text{ mezun::intToChar32StringWithPadding( counter.number, 2 ), counter.position.x + 8, TOP_ROW_Y_RELATIVE, text_color_ };
+	Render::renderObject( "bg/level-select-characters.png", { ( int )( counter.icon ) * 8, 184, 8, 8 }, { counter.position.x, y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
+	WTextObj text{ mezun::intToChar32StringWithPadding( counter.number, 2 ), counter.position.x + 8, y_ + TOP_ROW_Y_RELATIVE, text_color_ };
 	text.render();
 };
 
@@ -386,7 +397,7 @@ void InventoryLevelGraphics::updateSwitchGraphics( const InventoryCounter& count
 void InventoryLevelGraphics::renderSwitchGraphics( const InventoryCounter& counter )
 {
 	const std::u32string string = ( counter.number ) ? U"ON" : U"OFF";
-	WTextObj text( string, counter.position.x, TOP_ROW_Y_RELATIVE, text_color_ );
+	WTextObj text( string, counter.position.x, y_ + TOP_ROW_Y_RELATIVE, text_color_ );
 	text.render();
 };
 
@@ -399,7 +410,7 @@ void InventoryLevelGraphics::reRenderDiamond()
 
 void InventoryLevelGraphics::renderDiamond()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { CARD_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 16, 32, 8, 8 }, { CARD_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 int InventoryLevelGraphics::getXFromHP() const
@@ -424,25 +435,25 @@ void InventoryLevelGraphics::setSuitGotten( CardSuit suit )
 	{
 		case ( CardSuit::CLUB ):
 		{
-			Render::renderRect( { SUIT_CLUB_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
 			renderClubSuit();
 		}
 		break;
 		case ( CardSuit::DIAMOND ):
 		{
-			Render::renderRect( { SUIT_DIAMOND_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
 			renderDiamondSuit();
 		}
 		break;
 		case ( CardSuit::HEART ):
 		{
-			Render::renderRect( { SUIT_HEART_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
 			renderHeartSuit();
 		}
 		break;
 		case ( CardSuit::SPADE ):
 		{
-			Render::renderRect( { SUIT_SPADE_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
 			renderSpadeSuit();
 		}
 		break;
@@ -452,20 +463,20 @@ void InventoryLevelGraphics::setSuitGotten( CardSuit suit )
 
 void InventoryLevelGraphics::renderClubSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 208, 8, 8 }, { SUIT_CLUB_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 8, 208, 8, 8 }, { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 void InventoryLevelGraphics::renderDiamondSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 216, 8, 8 }, { SUIT_DIAMOND_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 8, 216, 8, 8 }, { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 void InventoryLevelGraphics::renderHeartSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 224, 8, 8 }, { SUIT_HEART_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 8, 224, 8, 8 }, { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 void InventoryLevelGraphics::renderSpadeSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 232, 8, 8 }, { SUIT_SPADE_FROM_HP + getXFromHP(), TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 8, 232, 8, 8 }, { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };

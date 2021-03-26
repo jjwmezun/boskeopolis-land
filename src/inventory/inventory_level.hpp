@@ -15,7 +15,7 @@ class Sprite;
 class InventoryLevel final
 {
 	public:
-		InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade );
+		InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade, bool live_update_gfx );
 		~InventoryLevel();
 		InventoryLevel( const InventoryLevel& ) = delete;
 		InventoryLevel( InventoryLevel&& ) = delete;

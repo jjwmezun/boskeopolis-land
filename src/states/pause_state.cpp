@@ -107,12 +107,17 @@ void PauseState::init()
 		highlighted_text_[ i ].init();
 	}
 	generateTextures();
+	if ( Render::hasTransPalette() )
+	{
+		Render::swapTransPalette();
+		generateTextures();
+		Render::swapTransPalette();
+	}
 };
 
 void PauseState::generateTextures()
 {
 	bg_.startDrawing();
-	//Render::renderObject( "bg/pause-frame.png", { 0, 0, WIDTH, HEIGHT }, { 0, 0, WIDTH, HEIGHT } );
 	Frame frame = { 0, 0, WIDTH, ROW_HEIGHT * NUMBER_OF_OPTIONS + 12 };
 	frame.render();
 	for ( int i = 0; i < NUMBER_OF_OPTIONS; ++i )
