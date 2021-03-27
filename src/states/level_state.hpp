@@ -60,6 +60,7 @@ class LevelState final : public GameState
 	private:
 		void testPause();
 
+		Uint8 palette_transition_alpha_;
 		int id_;
 		std::vector<std::unique_ptr<Renderable>> layers_[ NUMBER_OF_LAYERS ];
 		std::map<int, Renderable*> renderable_map_;

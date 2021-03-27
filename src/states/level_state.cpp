@@ -85,8 +85,8 @@ void LevelState::stateUpdate()
 	{
 		const double relative = ( double )( std::min( palette_transition_.max, std::max( 0, Unit::SubPixelsToBlocks( sprites_.hero().hit_box_.x ) - palette_transition_.start ) ) );
 		const double percent = relative / ( double )( palette_transition_.max );
-		const Uint8 alpha = ( Uint8 )( std::max( 0.0, std::min( 255.0, percent * 255.0 ) ) );
-		Render::setPaletteTransAlpha( alpha );
+		palette_transition_alpha_ = ( Uint8 )( std::max( 0.0, std::min( 255.0, percent * 255.0 ) ) );
+		Render::setPaletteTransAlpha( palette_transition_alpha_ );
 	}
 };
 
@@ -157,7 +157,7 @@ void LevelState::testPause()
 		(
 			std::unique_ptr<GameState>
 			(
-				new PauseState( palette(), events_, inventory_screen_ )
+				new PauseState( palette(), events_, inventory_screen_, palette_transition_, palette_transition_alpha_ )
 			)
 		);
 	}

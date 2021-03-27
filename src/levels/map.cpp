@@ -611,6 +611,17 @@ Map Map::mapFromPath
 					palette_transition.set = true;
 					palette_transition.to.type_ = value.GetString();
 				}
+
+				else if ( mezun::areStringsEqual( name, "trans_palette_start" ) && value.IsInt() )
+				{
+					palette_transition.start = value.GetInt();
+				}
+
+				else if ( mezun::areStringsEqual( name, "trans_palette_end" ) && value.IsInt() )
+				{
+					// Since we can’t be sure start has been set yet, set this as end temporarily.
+					palette_transition.max = value.GetInt();
+				}
 			}
 		}
 
@@ -657,10 +668,8 @@ Map Map::mapFromPath
 				palette_transition.start = 0;
 			}
 
-			if ( palette_transition.max == -1 )
-			{
-				palette_transition.max = width - palette_transition.start;
-			}
+			const int end = ( palette_transition.max == -1 ) ? width : palette_transition.max;
+			palette_transition.max = end - palette_transition.start;
 		}
 
 

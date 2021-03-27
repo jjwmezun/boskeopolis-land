@@ -74,7 +74,7 @@ namespace MapLayerConstellation
 		if ( draw_star )
 		{
 			const int star_type_percent = mezun::randPercent();
-			const bool bright_star = mezun::testRandomWithinPercentage( BRIGHT_STAR_CHANCE );
+			const bool bright_star = true;//mezun::testRandomWithinPercentage( BRIGHT_STAR_CHANCE );
 			int star_type = -1;
 
 			if ( BIG_STAR_CHANCE > star_type_percent )
