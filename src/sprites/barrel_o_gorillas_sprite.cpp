@@ -46,8 +46,8 @@ void BarrelOGorillasSprite::customInteract( Collision& my_collision, Collision& 
 {
 	if ( !them.hasType( SpriteType::PHASE_THROUGH ) )
 	{
-		Collision top_collision = movement_->testCollision( them, top_hit_box_ );
-		Collision right_collision = movement_->testCollision( them, right_hit_box_ );
+		Collision top_collision = movement_->testBlockCollision( them, top_hit_box_ );
+		Collision right_collision = movement_->testBlockCollision( them, right_hit_box_ );
 		them.collideStopAny( their_collision );
 		them.collideStopAny( top_collision );
 		them.collideStopAny( right_collision );

@@ -81,8 +81,8 @@ void WeightPlatformSprite::customInteract( Collision& my_collision, Collision& t
 	if ( !them.hasType( SpriteType::PHASE_THROUGH ) )
 	{
 		bool neither_is_pressed_on = true;
-		Collision left_collision = movement_->testCollision( them, left_ );
-		Collision right_collision = movement_->testCollision( them, right_ );
+		Collision left_collision = movement_->testBlockCollision( them, left_ );
+		Collision right_collision = movement_->testBlockCollision( them, right_ );
 
 		if ( left_collision.collideAny() )
 		{
