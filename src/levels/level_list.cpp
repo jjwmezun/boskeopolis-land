@@ -19,6 +19,8 @@
 #include "map_layer_lightning.hpp"
 #include "map_layer_neon.hpp"
 #include "map_layer_overlay.hpp"
+#include "map_layer_rain.hpp"
+#include "map_layer_rain_gradual.hpp"
 #include "map_layer_shade.hpp"
 #include "map_layer_water.hpp"
 
@@ -468,6 +470,22 @@ Level LevelList::getLevel( int id )
                                 layers.emplace_back
                                 (
                                     std::make_shared<MapLayerOverlay> ( red, green, blue, alpha, layer_position )
+                                );
+                            }
+                            else if ( mezun::areStringsEqual( layer_type, "rain" ) )
+                            {
+                                layers.emplace_back
+                                (
+                                    std::make_shared<MapLayerRain> ( layer_position )
+                                );
+                            }
+                            else if ( mezun::areStringsEqual( layer_type, "rain_gradual" ) )
+                            {
+                                const int start = ( layer.HasMember( "start" ) && layer[ "start" ].IsInt() ) ? layer[ "start" ].GetInt() : -1;
+                                const int end = ( layer.HasMember( "end" ) && layer[ "end" ].IsInt() ) ? layer[ "end" ].GetInt() : -1;
+                                layers.emplace_back
+                                (
+                                    std::make_shared<MapLayerRainGradual> ( start, end, layer_position )
                                 );
                             }
                         }

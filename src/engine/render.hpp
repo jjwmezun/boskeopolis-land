@@ -17,8 +17,8 @@ namespace Render
 	void quit();
 
 	void renderRect( const sdl2::SDLRect& box, int color = 1, int alpha = 255 );
-	void renderLine( Line line, int color = 1 );
-	void renderLine( int x1, int y1, int x2, int y2, int color = 1 );
+	void renderLine( Line line, int color = 1, int alpha = 255 );
+	void renderLine( int x1, int y1, int x2, int y2, int color = 1, int alpha = 255 );
 	void renderLineDebug( Line line, SDL_Color color );
 	void renderRectDebug( const sdl2::SDLRect& box, SDL_Color color );
 	void renderRectCamera( sdl2::SDLRect box, const Camera& camera, int color, int alpha );

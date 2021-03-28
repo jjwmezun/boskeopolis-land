@@ -530,15 +530,15 @@ namespace Render
 		SDL_RenderFillRect( renderer_, &box );
 	};
 
-	void renderLine( int x1, int y1, int x2, int y2, int color )
+	void renderLine( int x1, int y1, int x2, int y2, int color, int alpha )
 	{
-		setColor( color );
+		setColor( color, alpha );
 		SDL_RenderDrawLine( renderer_, x1, y1, x2, y2 );
 	};
 
-	void renderLine( Line line, int color )
+	void renderLine( Line line, int color, int alpha )
 	{
-		renderLine( line.p1.x, line.p1.y, line.p2.x, line.p2.y, color );
+		renderLine( line.p1.x, line.p1.y, line.p2.x, line.p2.y, color, alpha );
 	}
 
 	void renderLineDebug( Line line, SDL_Color color )
