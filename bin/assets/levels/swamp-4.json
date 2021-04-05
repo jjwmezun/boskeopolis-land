@@ -2,25 +2,31 @@
 	"maps":
 	[
 		{
-			"slug": "swamp-2",
+			"slug": "cascades-2",
 			"layers":
 			[
 				{
 					"type": "image",
-					"img": "swamp-bg.png",
-					"width": 400,
-					"height": 224,
-					"x_scroll": 0.25,
-					"y_scroll": 0.0
+					"img": "waterfalls-1.png",
+					"width": 8,
+					"height": 8,
+					"y_speed": 100
+				},
+				{
+					"type": "image",
+					"img": "waterfalls-2.png",
+					"width": 8,
+					"height": 8,
+					"y_speed": 300
 				}
 			]
 		}
 	],
 
-	"entrance_x": 1,
-	"entrance_y": 25,
-	"gem_challenge": 0,
-	"time_challenge": 0,
+	"entrance_x": 17,
+	"entrance_y": 107,
+	"gem_challenge": 16000,
+	"time_challenge": 30,
 	"cycle": 4,
 	"theme": 11
 }

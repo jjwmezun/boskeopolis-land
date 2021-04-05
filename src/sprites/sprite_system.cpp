@@ -203,6 +203,7 @@
 #include "volcano_monster_sprite.hpp"
 #include "wall_crawler_sprite.hpp"
 #include "waterdrop_spawner_sprite.hpp"
+#include "waterfall_platforms_sprite.hpp"
 #include "water_spout_sprite.hpp"
 #include "weight_platform_sprite.hpp"
 #include "window_monster_sprite.hpp"
@@ -1039,6 +1040,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 265 ):
 			return std::unique_ptr<Sprite> ( new HelicopterFriedmanSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 266 ):
+			return std::unique_ptr<Sprite> ( new WaterfallPlatformsSprite( x, y, Direction::Vertical::DOWN, 10, 1000 ) );
+		break;
+		case ( SPRITE_INDEX_START + 267 ):
+			return std::unique_ptr<Sprite> ( new WaterfallPlatformsSprite( x, y, Direction::Vertical::UP, 3, 1000 ) );
+		break;
+		case ( SPRITE_INDEX_START + 268 ):
+			return std::unique_ptr<Sprite> ( new WaterfallPlatformsSprite( x, y, Direction::Vertical::DOWN, 4, 1000 ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

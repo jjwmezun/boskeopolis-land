@@ -957,13 +957,27 @@ void Sprite::moveInDirectionX()
 		case ( Direction::Horizontal::__NULL ):
 			stopX();
 		break;
-
 		case ( Direction::Horizontal::LEFT ):
 			moveLeft();
 		break;
-
 		case ( Direction::Horizontal::RIGHT ):
 			moveRight();
+		break;
+	}
+};
+
+void Sprite::moveInDirectionY()
+{
+	switch ( direction_y_ )
+	{
+		case ( Direction::Vertical::__NULL ):
+			stopY();
+		break;
+		case ( Direction::Vertical::UP ):
+			moveUp();
+		break;
+		case ( Direction::Vertical::DOWN ):
+			moveDown();
 		break;
 	}
 };
