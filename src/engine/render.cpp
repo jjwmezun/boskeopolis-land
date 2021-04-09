@@ -463,10 +463,7 @@ namespace Render
 		{
 			SDL_SetTextureAlphaMod( texture, alpha );
 
-			if ( !cameraAdjust( dest, camera ) )
-			{
-				return;
-			};
+			cameraAdjust( dest, camera );
 
 			if ( blend_mode != SDL_BLENDMODE_BLEND && blend_mode != SDL_BLENDMODE_NONE )
 			{
@@ -498,16 +495,9 @@ namespace Render
 	{
 		if ( camera != nullptr )
 		{
-			if ( camera->onscreenPixels( dest ) )
-			{
-				dest.x = camera->relativeX( dest );
-				dest.y = camera->relativeY( dest );
-				return true;
-			}
-			else
-			{
-				return false; // If not onscreen, don't draw; just quit function now.
-			}
+			dest.x = camera->relativeX( dest );
+			dest.y = camera->relativeY( dest );
+			return camera->onscreenPixels( dest );
 		}
 		else
 		{

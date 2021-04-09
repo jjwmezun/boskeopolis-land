@@ -28,7 +28,7 @@
 					"animation_speed": 32,
 					"animation_flip": true
 				},
-				{ "type": "rain" }
+				{ "type": "rain", "layer": 16 }
 			]
 		}
 	],

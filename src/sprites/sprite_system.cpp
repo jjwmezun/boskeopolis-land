@@ -1,3 +1,4 @@
+#include "alarm_clock_sprite.hpp"
 #include "angry_truck_sprite.hpp"
 #include "angry_truck_generator_sprite.hpp"
 #include "ant_sprite.hpp"
@@ -1049,6 +1050,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 268 ):
 			return std::unique_ptr<Sprite> ( new WaterfallPlatformsSprite( x, y, Direction::Vertical::DOWN, 4, 1000 ) );
+		break;
+		case ( SPRITE_INDEX_START + 269 ):
+			return std::unique_ptr<Sprite> ( new AlarmClockSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

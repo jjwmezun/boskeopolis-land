@@ -2,12 +2,12 @@
 	"maps":
 	[
 		{
-			"slug": "factory-5"
+			"slug": "factory-6"
 		}
 	],
 
-	"entrance_x": 137,
-	"entrance_y": 6,
+	"entrance_x": 5,
+	"entrance_y": 392,
 
 	"gem_challenge": 99999,
 	"time_challenge": 1,

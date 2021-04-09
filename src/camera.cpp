@@ -229,12 +229,12 @@ void Camera::contain( const Map& m )
 
 bool Camera::onscreen( sdl2::SDLRect r, int padding ) const
 {
-	return !offscreen( r, padding );
+	return !offscreenTop( r, padding ) && !offscreenRight( r, padding ) && !offscreenBottom( r, padding ) && !offscreenLeft( r, padding );
 };
 
 bool Camera::onscreenPixels( sdl2::SDLRect r, int padding ) const
 {
-	return !offscreen( Unit::PixelsToSubPixels( r ), padding );
+	return onscreen( Unit::PixelsToSubPixels( r ), padding );
 };
 
 bool Camera::offscreen( sdl2::SDLRect r, int padding, Direction::Simple dir ) const

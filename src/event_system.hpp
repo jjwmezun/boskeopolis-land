@@ -93,6 +93,8 @@ class EventSystem final
 		void setSwitchLock( const LevelState& level_state );
 		bool isSwitch( int value ) const;
 		int getSwitchValue() const;
+		void setStunned();
+		bool isStunned() const;
 
 	private:
 		enum class LevelCompleteStatus
@@ -214,4 +216,5 @@ class EventSystem final
 		int switch_last_hit_;
 		Palette new_palette_;
 		EMisc misc_;
+		int stun_counter_;
 };

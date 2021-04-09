@@ -73,10 +73,18 @@ bool InventoryLevel::updateFunds()
 	if ( funds_shown_ < funds_.value() )
 	{
 		funds_shown_ += FUNDS_SPEED;
+		if ( funds_shown_ > funds_.value() )
+		{
+			funds_shown_ = funds_.value();
+		}
 	}
 	else if ( funds_shown_ > funds_.value() )
 	{
 		funds_shown_ -= FUNDS_SPEED;
+		if ( funds_shown_ < funds_.value() )
+		{
+			funds_shown_ = funds_.value();
+		}
 	}
 	return funds_shown_momento != funds_shown_.value();
 }
@@ -139,6 +147,11 @@ void InventoryLevel::loseFunds( int n )
 void InventoryLevel::setFunds( int n )
 {
 	funds_ = n;
+};
+
+void InventoryLevel::setFundsImmediatelyShown( int n )
+{
+	funds_ = funds_shown_ = n;
 };
 
 void InventoryLevel::addMcGuffin()

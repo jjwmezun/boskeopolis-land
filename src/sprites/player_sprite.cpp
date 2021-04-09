@@ -88,6 +88,19 @@ void PlayerSprite::heroActions( LevelState& level_state )
 	EventSystem& events = level_state.events();
 	resetBopsOnLanding( level_state.inventory() );
 	actions( level_state.blocks(), events );
+	if ( level_state.events().isStunned() )
+	{
+		fullStopX();
+		jump_start_ = false;
+		if ( acceleration_y_ < 0 )
+		{
+			acceleration_y_ = 0;
+		}
+		if ( vy_ < 0 )
+		{
+			vy_ = 0;
+		}
+	}
 	handleLookingUp();
 	handleCameraMovement( camera );
 	handleWaterEnteringAndExiting( lvmap );

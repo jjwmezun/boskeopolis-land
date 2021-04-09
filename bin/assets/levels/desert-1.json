@@ -2,7 +2,7 @@
 	"maps":
 	[
 		{
-			"slug": "desert-1",
+			"slug": "desert-2",
 			"layers":
 			[
 				{
@@ -11,7 +11,8 @@
 					"width": 32,
 					"height": 144,
 					"x_scroll": 0.25,
-					"y_scroll": 0.0
+					"y_scroll": 0.0,
+					"y_repeat": false
 				},
 				{
 					"type": "image",
@@ -28,14 +29,16 @@
 	],
 	
 	"entrance_x": 1,
-	"entrance_y": 22,
+	"entrance_y": 27,
 	"goal":
 	{
-		"type": "starving"
+		"type": "starving",
+		"amount_lost_per_frame": 5,
+		"starting_amount": 1000
 	},
 	
-	"gem_challenge": 1000,
-	"time_challenge": 20,
+	"gem_challenge": 7500,
+	"time_challenge": 27,
 	"cycle": 1,
 	"theme": 5
 }

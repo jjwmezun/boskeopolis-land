@@ -43,6 +43,7 @@ class InventoryLevel final
 		void addFunds( int n );
 		void loseFunds( int n );
 		void setFunds( int n );
+		void setFundsImmediatelyShown( int n );
 		void addMcGuffin();
 		void bop();
 		void clearBops();

@@ -58,6 +58,7 @@ EventSystem::EventSystem()
 	message_ ( false ),
 	message_lock_ ( false ),
 	change_map_ ( 0 ),
+	stun_counter_ ( 0 ),
 	switch_ ( 0 ),
 	switch_changed_ ( false ),
 	palette_changed_ ( false ),
@@ -115,6 +116,7 @@ void EventSystem::reset()
 	is_sliding_prev_ = false;
 	pause_hero_ = false;
 	level_complete_status_ = LevelCompleteStatus::STILL_PLAYING;
+	stun_counter_ = 0;
 	resetPalette();
 	resetMisc();
 };
@@ -225,6 +227,10 @@ void EventSystem::updateTrainer( LevelState& level_state )
 
 void EventSystem::update( LevelState& level_state )
 {
+	if ( stun_counter_ > 0 )
+	{
+		--stun_counter_;
+	}
 	updateTrainer( level_state );
 	testMessage( level_state.level() );
 	testLevelCompleteStatus( level_state.inventory() );
@@ -796,4 +802,17 @@ bool EventSystem::isSwitch( int value ) const
 int EventSystem::getSwitchValue() const
 {
 	return switch_;
+};
+
+void EventSystem::setStunned()
+{
+	if ( stun_counter_ == 0 )
+	{
+		stun_counter_ = 30;
+	}
+};
+
+bool EventSystem::isStunned() const
+{
+	return stun_counter_ > 0;
 };
