@@ -165,6 +165,7 @@ Map Map::mapFromPath
 		int lava_rise_speed = -1;
 		Camera::Type camera_type = Camera::Type::NORMAL;
 		PaletteTransition palette_transition = { false, -1, -1, { "Grayscale", 1 }, { "Grayscale", 1 } };
+		int player_layer = -1;
 
 		const std::string MAPS_DIR = Main::resourcePath() + "maps" + Main::pathDivider();
 		const std::string MAP_PATH = MAPS_DIR + "land-" + path +".json";
@@ -622,6 +623,11 @@ Map Map::mapFromPath
 					// Since we can’t be sure start has been set yet, set this as end temporarily.
 					palette_transition.max = value.GetInt();
 				}
+
+				else if ( mezun::areStringsEqual( name, "player_layer" ) && value.IsInt() )
+				{
+					player_layer = value.GetInt();
+				}
 			}
 		}
 
@@ -708,7 +714,8 @@ Map Map::mapFromPath
 			oxygen,
 			hide,
 			auto_message,
-			palette_transition
+			palette_transition,
+			player_layer
 		);
 };
 
@@ -744,7 +751,8 @@ Map::Map
 	bool oxygen,
 	bool hide,
 	bool auto_message,
-	PaletteTransition palette_transition
+	PaletteTransition palette_transition,
+	int player_layer
 )
 :
 	blocks_layers_ ( blocks_layers ),
@@ -780,7 +788,8 @@ Map::Map
 	hide_ ( hide ),
 	other_layers_ ( other_layers ),
 	auto_message_ ( auto_message ),
-	palette_transition_ ( palette_transition )
+	palette_transition_ ( palette_transition ),
+	player_layer_ ( player_layer )
 {};
 
 Map::~Map() noexcept {};
@@ -820,7 +829,8 @@ Map::Map( Map&& m ) noexcept
 	oxygen_ ( m.oxygen_ ),
 	hide_ ( m.hide_ ),
 	auto_message_ ( m.auto_message_ ),
-	palette_transition_ ( m.palette_transition_ )
+	palette_transition_ ( m.palette_transition_ ),
+	player_layer_ ( m.player_layer_ )
 {};
 
 Map::Map( const Map& c )
@@ -858,7 +868,8 @@ Map::Map( const Map& c )
 	oxygen_ ( c.oxygen_ ),
 	hide_ ( c.hide_ ),
 	auto_message_ ( c.auto_message_ ),
-	palette_transition_ ( c.palette_transition_ )
+	palette_transition_ ( c.palette_transition_ ),
+	player_layer_ ( c.player_layer_ )
 {};
 
 int Map::widthBlocks() const

@@ -269,10 +269,10 @@
         "SHIP",
         "SWAMP",
         "MUERTO",
-        "SWAMP",
         "SEWER",
         "FACTORY",
-        "PALACE"
+        "PALACE",
+        "$"
     ],
     "levels":
     {

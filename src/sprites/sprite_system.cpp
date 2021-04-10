@@ -1216,6 +1216,10 @@ void SpriteSystem::resetInternal( LevelState& level_state, bool trainer )
 		break;
 	}
 
+	if ( level_state.currentMap().player_layer_ >= 0 && level_state.currentMap().player_layer_ < Unit::NUMBER_OF_LAYERS )
+	{
+		hero_->layer_ = ( Unit::Layer )( level_state.currentMap().player_layer_ );
+	}
 	if ( needs_renderable )
 	{
 		hero_->renderable_id_ = level_state.addRenderable( std::unique_ptr<HeroRenderable>( new HeroRenderable() ), hero_->layer_ );

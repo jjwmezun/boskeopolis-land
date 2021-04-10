@@ -22,13 +22,14 @@
 		}
 	],
 
-	"entrance_x": 85,
+	"entrance_x": 76,
 	"entrance_y": 17,
-	"camera_x": 90,
+	"camera_x": 81,
 
-	"gem_challenge": 23500,
+	"gem_challenge": 22000,
 	"time_challenge": 25,
 	"secret_goal": true,
+	"has_suits": true,
 	"cycle": 1,
 	"theme": 4
 }

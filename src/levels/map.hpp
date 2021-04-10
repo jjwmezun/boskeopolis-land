@@ -76,6 +76,7 @@ class Map final
 		const bool auto_message_;
 		bool changed_;
 		const PaletteTransition palette_transition_;
+		const int player_layer_;
 
 		static Map mapFromPath
 		(
@@ -156,7 +157,8 @@ class Map final
 			bool oxygen,
 			bool hide,
 			bool auto_message,
-			PaletteTransition palette_transition
+			PaletteTransition palette_transition,
+			int player_layer
 		);
 		static LayerInfo getLayerInfo( const std::string& layer_name );
 		void updateLayers( LevelState& level_state );
