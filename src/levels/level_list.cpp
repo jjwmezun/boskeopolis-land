@@ -841,6 +841,11 @@ bool LevelList::hasHardMode( unsigned int level )
     return levels_[ level ].has_crown_;
 };
 
+bool LevelList::hasSuits( unsigned int level )
+{
+    return levels_[ level ].has_suits_;
+};
+
 void loadListFunction( const rapidjson::GenericObject<false, rapidjson::GenericValue<rapidjson::UTF8<> > >& root )
 {
     if ( root.HasMember( "levels" ) & root[ "levels" ].IsArray() )
@@ -872,10 +877,10 @@ void loadLevelDataFunction( const rapidjson::GenericObject<false, rapidjson::Gen
     level.time_challenge_ = mezun::JSONTryInt( root, "time_challenge", 0 );
     level.gem_challenge_ = mezun::JSONTryInt( root, "gem_challenge", 0 );
     level.has_card_ = mezun::JSONTryBool( root, "has_card", true );
-    level.has_crown_ = mezun::JSONTryBool( root, "has_crown", true );
+    level.has_crown_ = mezun::JSONTryBool( root, "has_crown", false );
     level.show_cycle_ = mezun::JSONTryBool( root, "show_cycle", true );
     level.show_theme_ = mezun::JSONTryBool( root, "show_theme", true );
-    level.has_suits_ = false;
+    level.has_suits_ = mezun::JSONTryBool( root, "has_suits", true );
     level.has_secret_goal_ = mezun::JSONTryBool( root, "secret_goal", false );
     levels_.emplace_back( level );
 };

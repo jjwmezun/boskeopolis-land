@@ -16,6 +16,7 @@ class Inventory final
 		static bool levelComplete( int level );
 		static bool haveDiamond();
 		static bool haveDiamond( int level );
+		static bool hasSuits( int level );
 		static void getDiamond();
 		static std::u32string gemScore( int level );
 		static bool gemChallengeBeaten( int level );

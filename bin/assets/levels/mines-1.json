@@ -29,7 +29,6 @@
 	"gem_challenge": 22000,
 	"time_challenge": 25,
 	"secret_goal": true,
-	"has_suits": true,
 	"cycle": 1,
 	"theme": 4
 }

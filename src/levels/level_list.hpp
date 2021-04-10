@@ -33,4 +33,5 @@ class LevelList final
 		static bool hasTimeScore( unsigned int level );
 		static bool hasCard( unsigned int level );
 		static bool hasHardMode( unsigned int level );
+		static bool hasSuits( unsigned int level );
 };

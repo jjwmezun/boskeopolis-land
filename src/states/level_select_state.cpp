@@ -389,10 +389,17 @@ void LevelSelectState::renderPage( const LevelSelectPage& page, bool render_sele
 			}
 		}
 
+		// Render suit.
+		if ( level.has_suits_ )
+		{
+			const int color_offset = ( render_select && Inventory::hasSuits( level.id_ ) ) ? ( ( Inventory::levelComplete( level.id_ ) ) ? FLASH_FRAMES[ flash_frame_ ] : 4 ) : 0;
+			Render::renderObject( "bg/level-select-characters.png", { color_offset * 8, 232, 8, 8 }, { 16, y + 4, 8, 8 } );
+		}
+
 		// Render secret exit.
 		if ( level.has_secret_goal_ )
 		{
-			const int color_offset = ( render_select && Inventory::getSecretGoal( level.id_ ) ) ? ( ( Inventory::levelComplete( level.id_ ) ) ? FLASH_FRAMES[ flash_frame_ ] : 3 ) : 1;
+			const int color_offset = ( render_select && Inventory::getSecretGoal( level.id_ ) ) ? ( ( Inventory::levelComplete( level.id_ ) ) ? FLASH_FRAMES[ flash_frame_ ] : 5 ) : 1;
 			Render::renderObject( "bg/level-select-characters.png", { color_offset * 8, 200, 8, 8 }, { 16, y + 12, 8, 8 } );
 		}
 

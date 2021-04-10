@@ -209,6 +209,18 @@ bool InventoryLevel::haveSuit( CardSuit suit ) const
 	return suits_[ ( int )( suit ) ];
 };
 
+bool InventoryLevel::haveAllSuits() const
+{
+	for ( int i = 0; i < NUMBER_OF_CARD_SUITS; ++i )
+	{
+		if ( !suits_[ i ] )
+		{
+			return false;
+		}
+	}
+	return true;
+};
+
 void InventoryLevel::getSuit( CardSuit suit )
 {
 	suits_[ ( int )( suit ) ] = true;

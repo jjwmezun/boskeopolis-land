@@ -39,6 +39,7 @@ class InventoryLevel final
 		bool multipleGhostKills() const;
 		bool isHardMode() const;
 		bool haveSuit( CardSuit suit ) const;
+		bool haveAllSuits() const;
 	
 		void addFunds( int n );
 		void loseFunds( int n );

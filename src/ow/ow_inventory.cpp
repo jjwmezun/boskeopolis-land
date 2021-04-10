@@ -44,7 +44,7 @@ OWInventory::OWInventory()
 	diamond_icon_ ( "bg/level-select-characters.png", { 0, 24, 8, 8 }, { LEFT_EDGE, ROW_2, 8, 8 } ),
 	gem_score_icon_ ( "bg/level-select-characters.png", { 0, 0, 8, 8 }, { SCORE_X - 8, ROW_1, 8, 8 } ),
 	time_score_icon_ ( "bg/level-select-characters.png", { 0, 8, 8, 8 }, { SCORE_X, ROW_2, 8, 8 } ),
-	crown_icon_ ( "bg/level-select-characters.png", { 0, 192, 8, 8 }, { LEFT_EDGE + 8, ROW_1, 8, 8 } ),
+	suits_icon_ ( "bg/level-select-characters.png", { 0, 232, 8, 8 }, { LEFT_EDGE + 8, ROW_1, 8, 8 } ),
 	secret_goal_icon_ ( "bg/level-select-characters.png", { 0, 200, 8, 8 }, { LEFT_EDGE + 8, ROW_2, 8, 8 } ),
 	level_icon_ ( "bg/level-select-characters.png", { 0, 48, 8, 8 }, { LEVEL_NAME_X + 8, ROW_1, 8, 8 } )
 {};
@@ -114,9 +114,9 @@ void OWInventory::renderLevelInfo()
 	{
 		diamond_icon_.render();
 	}
-	if ( LevelList::hasHardMode( space_.getLevelNumber() ) )
+	if ( LevelList::hasSuits( space_.getLevelNumber() ) )
 	{
-		crown_icon_.render();
+		suits_icon_.render();
 	}
 	if ( LevelList::hasGemScore( space_.getLevelNumber() ) )
 	{
@@ -166,7 +166,7 @@ void OWInventory::updateTextFlashColor()
 		{
 			win_icon_.src_.x = getFlashColor() * 8;
 			diamond_icon_.src_.x = getFlashColor() * 8;
-			crown_icon_.src_.x = getFlashColor() * 8;
+			suits_icon_.src_.x = getFlashColor() * 8;
 			secret_goal_icon_.src_.x = getFlashColor() * 8;
 		}
 
@@ -217,7 +217,7 @@ void OWInventory::regenerateLevelGraphics()
 		diamond_icon_.src_.x = 8;
 		diamond_icon_.src_.y = 24;
 	}
-	crown_icon_.src_.x = ( Inventory::hasCrown( space_.getLevelNumber() ) ) ? 24 : 0;
+	suits_icon_.src_.x = ( Inventory::hasSuits( space_.getLevelNumber() ) ) ? 32 : 0;
 
 	if ( LevelList::hasSecretGoal( space_.getLevelNumber() ) )
 	{

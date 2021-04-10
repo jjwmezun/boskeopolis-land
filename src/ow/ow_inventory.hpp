@@ -71,7 +71,7 @@ class OWInventory final
 		ImageGraphics diamond_icon_;
 		ImageGraphics gem_score_icon_;
 		ImageGraphics time_score_icon_;
-		ImageGraphics crown_icon_;
+		ImageGraphics suits_icon_;
 		ImageGraphics secret_goal_icon_;
 		ImageGraphics level_icon_;
 };

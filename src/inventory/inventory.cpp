@@ -24,12 +24,14 @@ int Inventory::currentLevel() { return ( save_.data_.current_space_.isLevel() ) 
 
 bool Inventory::levelComplete( int level )
 {
-	return haveDiamond( level ) &&
+	return
 		victory( level ) &&
-		hasCrown( level ) &&
+		( !LevelList::hasCard( level ) || haveDiamond( level ) ) &&
+		( !LevelList::hasHardMode( level ) || hasCrown( level ) ) &&
+		( !LevelList::hasSuits( level ) || hasSuits( level ) ) &&
 		( !LevelList::hasSecretGoal( level ) || getSecretGoal( level ) ) &&
-		gemChallengeBeaten( level ) &&
-		timeChallengeBeaten( level );
+		( !LevelList::hasGemScore( level ) || gemChallengeBeaten( level ) ) &&
+		( !LevelList::hasTimeScore( level ) || timeChallengeBeaten( level ) );
 };
 
 bool Inventory::haveDiamond()
@@ -40,6 +42,11 @@ bool Inventory::haveDiamond()
 bool Inventory::haveDiamond( int level )
 {
 	return save_.data_.diamonds_[ level ];
+};
+
+bool Inventory::hasSuits( int level )
+{
+	return save_.data_.suits_[ level ];
 };
 
 void Inventory::getDiamond()
@@ -358,6 +365,10 @@ void Inventory::generalVictory( const InventoryLevel& level_inventory )
 	if ( level_inventory.isHardMode() )
 	{
 		save_.data_.crowns_[ currentLevel() ] = true;
+	}
+	if ( level_inventory.haveAllSuits() )
+	{
+		save_.data_.suits_[ currentLevel() ] = true;
 	}
 	winGemScore( level_inventory.funds() );
 	winTimeScore( level_inventory.clock() );
