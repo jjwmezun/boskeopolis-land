@@ -2,7 +2,7 @@
 	"maps":
 	[
 		{
-			"slug": "space-1",
+			"slug": "space-13",
 			"layers":
 			[
 				{
@@ -14,8 +14,8 @@
 		}
 	],
 
-	"entrance_x": 2,
-	"entrance_y": 13,
+	"entrance_x": 3,
+	"entrance_y": 282,
 
 	"gem_challenge": 8000,
 	"time_challenge": 50,
