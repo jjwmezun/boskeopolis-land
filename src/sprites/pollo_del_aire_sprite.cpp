@@ -168,7 +168,7 @@ void PolloDelAireSprite::polloReset( Sprite& me )
 	me.movement_ = me.getMovement( SpriteMovement::Type::FLOATING );
 	me.resetPosition();
 
-	me.hit_box_.h = 22000;
+	me.hit_box_ = me.original_hit_box_;
 	me.graphics_->x_adjustment_ = -1;
 	me.graphics_->y_adjustment_ = -6;
 	me.graphics_->w_adjustment_ = 2;

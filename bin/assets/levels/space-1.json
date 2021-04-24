@@ -14,11 +14,11 @@
 		}
 	],
 
-	"entrance_x": 3,
-	"entrance_y": 282,
+	"entrance_x": 4,
+	"entrance_y": 79,
 
-	"gem_challenge": 8000,
-	"time_challenge": 50,
+	"gem_challenge": 38000,
+	"time_challenge": 35,
 	"cycle": 1,
 	"theme": 8
 }
