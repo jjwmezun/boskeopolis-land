@@ -1054,6 +1054,15 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		case ( SPRITE_INDEX_START + 269 ):
 			return std::unique_ptr<Sprite> ( new AlarmClockSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
+		case ( SPRITE_INDEX_START + 270 ):
+			return std::unique_ptr<Sprite> ( new AlarmClockSprite( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 271 ):
+			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y, Direction::Clockwise::CLOCKWISE, 0.08 ) );
+		break;
+		case ( SPRITE_INDEX_START + 272 ):
+			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y, Direction::Clockwise::COUNTERCLOCKWISE, 0.08 ) );
+		break;
 		default:
 			throw mezun::InvalidSprite( type );
 		break;

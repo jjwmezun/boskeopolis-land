@@ -9,8 +9,8 @@ static constexpr double RIGHTMOST_ANGLE = 0.8;
 
 PendulumSprite::PendulumSprite( int x, int y, Direction::Horizontal start )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x - 54, y - 49, 168, 65, {}, 0, 0, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
-    movement_( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 32 ), Unit::PixelsToSubPixels( 32 ) }, Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 96 ), 0.025, ( start == Direction::Horizontal::RIGHT ) ? RIGHTMOST_ANGLE : LEFTMOST_ANGLE ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x - 54, y - 49, 168, 65, {}, 0, 0, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+    movement_( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 32 ), Unit::PixelsToSubPixels( 32 ) }, Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 96 ), 0.025, ( start == Direction::Horizontal::RIGHT ) ? LEFTMOST_ANGLE : RIGHTMOST_ANGLE ),
     keep_player_ ( false ),
     prev_x_ ( 0 ),
     keep_player_x_ ( false ),

@@ -6,7 +6,7 @@
 class ClockHandSprite final : public Sprite
 {
 	public:
-		ClockHandSprite( int x, int y, Direction::Clockwise direction );
+		ClockHandSprite( int x, int y, Direction::Clockwise direction, double speed = 0.1 );
 		~ClockHandSprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
