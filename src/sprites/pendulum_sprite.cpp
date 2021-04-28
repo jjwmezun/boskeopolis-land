@@ -9,7 +9,7 @@ static constexpr double RIGHTMOST_ANGLE = 0.8;
 
 PendulumSprite::PendulumSprite( int x, int y, Direction::Horizontal start )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x - 54, y - 49, 168, 65, {}, 0, 0, 0, 0, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x - 54, y - 49, 168, 65, {}, 0, 0, 0, 0, start, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
     movement_( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 32 ), Unit::PixelsToSubPixels( 32 ) }, Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 96 ), 0.025, ( start == Direction::Horizontal::RIGHT ) ? LEFTMOST_ANGLE : RIGHTMOST_ANGLE ),
     keep_player_ ( false ),
     prev_x_ ( 0 ),
@@ -32,6 +32,7 @@ void PendulumSprite::customUpdate( LevelState& level_state )
             movement_.updateAngleClockwise();
             if ( movement_.getAngle() >= LEFTMOST_ANGLE )
             {
+                movement_.angle_ = LEFTMOST_ANGLE;
                 direction_x_ = Direction::Horizontal::RIGHT;
             }
         }
@@ -41,11 +42,13 @@ void PendulumSprite::customUpdate( LevelState& level_state )
             movement_.updateAngleCounterClockwise();
             if ( movement_.getAngle() <= RIGHTMOST_ANGLE )
             {
+                movement_.angle_ = RIGHTMOST_ANGLE;
                 direction_x_ = Direction::Horizontal::LEFT;
             }
         }
         break;
     }
+
     movement_.updatePosition();
     solid_ball_ = movement_.getPosition();
 };

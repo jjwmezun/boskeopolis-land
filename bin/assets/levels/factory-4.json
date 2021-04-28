@@ -7,10 +7,10 @@
 	],
 
 	"entrance_x": 5,
-	"entrance_y": 392,
+	"entrance_y": 77,
 
-	"gem_challenge": 99999,
-	"time_challenge": 1,
+	"gem_challenge": 45000,
+	"time_challenge": 50,
 	"cycle": 4,
 	"theme": 14
 }
