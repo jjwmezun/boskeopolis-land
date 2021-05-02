@@ -2,7 +2,16 @@
 	"maps":
 	[
 		{
-			"slug": "factory-6"
+			"slug": "factory-6",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "factory-blocks.png",
+					"width": 48,
+					"height": 48
+				}
+			]
 		}
 	],
 
