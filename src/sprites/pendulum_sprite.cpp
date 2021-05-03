@@ -10,7 +10,7 @@ static constexpr double RIGHTMOST_ANGLE = 0.8;
 
 PendulumSprite::PendulumSprite( int x, int y, Direction::Horizontal start )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pendulum.png", 12, 0, false, false, 0.0, 0, -8, 0, 8 ), x - 54, y - 57, 168, 65, {}, 0, 0, 0, 0, start, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/pendulum.png", 12, 0, false, false, 0.0, 0, -8, 0, 8 ), x - 54, y - 57, 168, 65, {}, 0, 0, 0, 0, start, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
     movement_( { Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 32 ), Unit::PixelsToSubPixels( 32 ) }, Unit::PixelsToSubPixels( x ), Unit::PixelsToSubPixels( y - 128 ), Unit::PixelsToSubPixels( 96 ), 0.025, ( start == Direction::Horizontal::RIGHT ) ? LEFTMOST_ANGLE : RIGHTMOST_ANGLE ),
     keep_player_ ( false ),
     prev_x_ ( 0 ),

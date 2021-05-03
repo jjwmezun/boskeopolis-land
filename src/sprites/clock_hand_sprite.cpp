@@ -52,7 +52,6 @@ void ClockHandSprite::customInteract( Collision& my_collision, Collision& their_
 
 void ClockHandSprite::render( const Camera& camera ) const
 {
-    drawHitBox( camera );
     graphics_->render( image_box_, &camera );
     const Line left_line = camera.relativeLine(Unit::SubPixelsToPixels({{ inner_left_.position_.x, inner_left_.position_.y }, { outer_left_.position_.x, outer_left_.position_.y }}));
     const Line right_line = camera.relativeLine(Unit::SubPixelsToPixels({{ inner_right_.position_.x, inner_right_.position_.y }, { outer_right_.position_.x, outer_right_.position_.y }}));

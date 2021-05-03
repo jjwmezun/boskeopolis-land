@@ -22,7 +22,6 @@ class Clock final
 
 		bool update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
-		void startMoonCountdown( int start_time );
 		void stop();
 		std::u32string getTimeString() const;
 		static std::u32string timeToString( int total_seconds );

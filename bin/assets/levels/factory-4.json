@@ -15,11 +15,17 @@
 		}
 	],
 
-	"entrance_x": 5,
-	"entrance_y": 77,
+	"entrance_x": 31,
+	"entrance_y": 44,
 
 	"gem_challenge": 45000,
 	"time_challenge": 50,
 	"cycle": 4,
-	"theme": 14
+	"theme": 14,
+
+	"goal":
+	{
+		"type": "timed",
+		"time_limit": 90
+	}
 }

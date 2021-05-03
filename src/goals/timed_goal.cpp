@@ -14,8 +14,13 @@ TimedGoal::~TimedGoal() {};
 
 void TimedGoal::update( LevelState& level_state )
 {
-	if ( level_state.inventory().clock().totalSeconds() >= time_limit_ )
+	if ( level_state.inventory().clock().countdownHit0() )
 	{
 		level_state.events().fail();
 	}
 };
+
+void TimedGoal::customInit( LevelState& level_state )
+{
+	level_state.inventory().clock().reset( Direction::Vertical::DOWN, time_limit_ );
+}
