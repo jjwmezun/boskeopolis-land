@@ -210,7 +210,7 @@
 #include "window_monster_sprite.hpp"
 #include "zombie_generator_sprite.hpp"
 
-static constexpr int SPRITES_LIMIT = 80;
+static constexpr int SPRITES_LIMIT = 100;
 static constexpr int OFFSCREEN_PADDING = Unit::BlocksToPixels( 2 );
 static constexpr int SPRITE_INDEX_START = 400;
 

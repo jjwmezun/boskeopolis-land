@@ -1,3 +1,4 @@
+#include "block_component_add_time.hpp"
 #include "block_component_bouncy.hpp"
 #include "block_component_change_block.hpp"
 #include "block_component_change_direction.hpp"
@@ -659,6 +660,17 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 						)
 						{
 							components.emplace_back( std::make_unique<BlockComponentSetGravity> ( comp_obj[ "value" ].GetDouble() ) );
+						}
+					}
+					else if ( mezun::areStringsEqual( comp_type, "add_time" ) )
+					{
+						if
+						(
+							comp_obj.HasMember( "amount" ) &&
+							comp_obj[ "amount" ].IsInt()
+						)
+						{
+							components.emplace_back( std::make_unique<BlockComponentAddTime> ( comp_obj[ "amount" ].GetInt() ) );
 						}
 					}
 					else if ( mezun::areStringsEqual( comp_type, "hole" ) )

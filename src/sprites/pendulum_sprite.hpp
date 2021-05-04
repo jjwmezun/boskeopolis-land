@@ -20,5 +20,8 @@ class PendulumSprite final : public Sprite
         bool keep_player_x2_;
         sdl2::SDLRect solid_ball_;
         double rotation_;
+        double r2_;
+        double r3_;
+        double r4_;
         char scratch_[3000];
 };

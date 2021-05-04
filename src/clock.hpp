@@ -17,12 +17,14 @@ class Clock final
 			total_seconds_ ( start_time ),
 			limit_ ( limit ),
 			direction_ ( direction ),
-			on_ ( true )
+			on_ ( true ),
+			changed_ ( true )
 		{};
 
 		bool update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
 		void stop();
+		void addTime( int seconds );
 		std::u32string getTimeString() const;
 		static std::u32string timeToString( int total_seconds );
 
@@ -81,4 +83,5 @@ class Clock final
 		int limit_;
 		Direction::Vertical direction_;
 		bool on_;
+		bool changed_;
 };

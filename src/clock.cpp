@@ -5,6 +5,8 @@
 
 bool Clock::update()
 {
+	bool local_changed = changed_;
+	changed_ = false;
 	if ( on_ )
 	{
 		++frames_timer_;
@@ -18,7 +20,7 @@ bool Clock::update()
 			}
 		}
 	}
-	return false;
+	return local_changed;
 };
 
 std::u32string Clock::timeToString( int total_seconds )
@@ -35,11 +37,29 @@ void Clock::reset( Direction::Vertical direction, int limit )
 	limit_ = limit;
 	direction_ = direction;
 	on_ = true;
+	changed_ = true;
 };
 
 void Clock::stop()
 {
 	on_ = false;
+};
+
+void Clock::addTime( int seconds )
+{
+	if ( direction_ == Direction::Vertical::DOWN )
+	{
+		limit_ += seconds;
+	}
+	else
+	{
+		total_seconds_ -= seconds;
+		if ( total_seconds_ < 0 )
+		{
+			total_seconds_ = 0;
+		}
+	}
+	changed_ = true;
 };
 
 std::u32string Clock::getTimeString() const
