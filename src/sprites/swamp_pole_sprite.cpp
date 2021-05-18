@@ -50,20 +50,24 @@ void SwampPoleSprite::customUpdate( LevelState& level_state )
 
 void SwampPoleSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( pair_ != nullptr && them.hasType( SpriteType::HERO ) && their_collision.overlapYBottom() > 0 && their_collision.overlapYBottom() < 8000 )
-	{
-        them.collideStopAny( their_collision );
-        if ( hit_box_.y < bottomLimit() || pair_->hit_box_.y > pair_->original_hit_box_.y - Unit::BlocksToSubPixels( 3 ) )
+    if ( pair_ != nullptr && them.hasType( SpriteType::HERO ) )
+    {
+        const Collision collision = them.testBlockCollision( *this );
+        if ( collision.overlapYBottom() > 0 && collision.overlapYBottom() < 8000 )
         {
-            moveDown();
-            collide_bottom_ = true;
-            if ( pair_ != nullptr )
+            them.collideStopAny( collision );
+            if ( hit_box_.y < bottomLimit() || pair_->hit_box_.y > pair_->original_hit_box_.y - Unit::BlocksToSubPixels( 3 ) )
             {
-                pair_->moveUp();
-                pair_->collide_bottom_ = true;
+                moveDown();
+                collide_bottom_ = true;
+                if ( pair_ != nullptr )
+                {
+                    pair_->moveUp();
+                    pair_->collide_bottom_ = true;
+                }
             }
         }
-	}
+    }
 };
 
 int SwampPoleSprite::bottomLimit() const

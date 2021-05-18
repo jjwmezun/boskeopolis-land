@@ -14,11 +14,4 @@ class SwampPoleSprite final : public Sprite
         int bottomLimit() const;
 
         Sprite* pair_;
-        double ajfkndsjknfk;
-        double akjdfnaskjdnf;
-        double nflkmsdlfkamns;
-        double alkfdmnlksdmfl;
-        double alkfmddlksmfal;
-        double alkfnsldknf;
-        double lkmewrlkmwelkrmwelk;
 };
