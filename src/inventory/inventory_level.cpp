@@ -14,7 +14,7 @@ constexpr bool testMultiples( int value )
 	return value > 1;
 };
 
-InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade, bool live_update_gfx )
+InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_upgrade, bool live_update_gfx, int bg_color )
 :
 	oxygen_upgrade_ ( oxygen_upgrade ),
 	difficulty_ ( difficulty ),
@@ -25,7 +25,7 @@ InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_u
 	funds_ (),
 	funds_shown_ (),
 	clock_ (),
-	graphics_ ( max_hp, live_update_gfx )
+	graphics_ ( max_hp, live_update_gfx, bg_color )
 {};
 
 InventoryLevel::~InventoryLevel() {};

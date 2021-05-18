@@ -8,13 +8,14 @@ class Health;
 class InventoryLevelHealth final
 {
 	public:
-		InventoryLevelHealth( int x, int y, int max );
+		InventoryLevelHealth( int x, int y, int max, int bg_color );
 		bool update( const Health& health );
 		void render();
 		int width() const;
 
 	private:
 		int hearts_shown_;
+		int bg_color_;
 		std::string image_;
 		sdl2::SDLRect empty_heart_src_;
 		sdl2::SDLRect empty_heart_dest_;

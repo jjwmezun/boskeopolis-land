@@ -20,7 +20,7 @@ LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades,
 	sprites_ ( *this ),
 	blocks_ (),
 	level_ ( LevelList::getLevel( level_id ) ),
-	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade, level_.currentMap().palette_transition_.set ),
+	inventory_screen_ ( difficulty, health_.maxHP(), has_oxygen_upgrade, level_.currentMap().palette_transition_.set, level_.currentMap().ui_bg_color_ ),
 	palette_transition_ ( level_.currentMap().palette_transition_ )
 {
 	blocks_.init( level_.currentMap() );

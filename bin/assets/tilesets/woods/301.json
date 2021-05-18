@@ -1,0 +1,42 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 0, "y": 22 },
+			{ "x": 1, "y": 22 },
+			{ "x": 2, "y": 22 },
+			{ "x": 3, "y": 22 },
+			{ "x": 4, "y": 22 },
+			{ "x": 5, "y": 22 },
+			{ "x": 6, "y": 22 },
+			{ "x": 7, "y": 22 }
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "suit",
+				"suit": "heart"
+			},
+			"conditions":
+			[
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}

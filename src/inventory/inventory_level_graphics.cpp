@@ -50,7 +50,7 @@ static constexpr WTextCharacter::Color FLASHING_TIMER_SHADES[ FLASHING_TIMER_SHA
 };
 static constexpr int FLASHING_TIMER_SPEED = 8;
 
-InventoryLevelGraphics::InventoryLevelGraphics( int max_hp, bool live_update )
+InventoryLevelGraphics::InventoryLevelGraphics( int max_hp, bool live_update, int bg_color )
 :
 	flashing_timer_ ( 0 ),
 	flashing_time_shade_ ( 0 ),
@@ -58,12 +58,13 @@ InventoryLevelGraphics::InventoryLevelGraphics( int max_hp, bool live_update )
 	misc_end_x_ ( 0 ),
 	text_color_ ( WTextCharacter::Color::BLACK ),
 	main_texture_ ( Unit::WINDOW_WIDTH_PIXELS, HEIGHT, 0, Y ),
-	health_gfx_ ( HP_X, ( ( live_update ) ? Y : 0 ) + 10, max_hp ),
+	health_gfx_ ( HP_X, ( ( live_update ) ? Y : 0 ) + 10, max_hp, bg_color ),
 	ticker_ ( BOTTOM_ROW_Y ),
 	oxygen_meter_ ( OXYGEN_RIGHT, TOP_ROW_Y ),
-	bg_frame_ ( 0, ( live_update ) ? Y : 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT ),
+	bg_frame_ ( 0, ( live_update ) ? Y : 0, Unit::WINDOW_WIDTH_PIXELS, HEIGHT, bg_color ),
 	live_ ( live_update ),
-	y_ ( ( live_update ) ? Y : 0 )
+	y_ ( ( live_update ) ? Y : 0 ),
+	bg_color_ ( bg_color )
 {
 	misc_end_x_ = MISC_FROM_HP + getXFromHP();
 };
@@ -332,7 +333,7 @@ void InventoryLevelGraphics::rerender( const InventoryLevel& inventory )
 void InventoryLevelGraphics::updatePtsGraphics( const InventoryLevel& inventory )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( { PTS_COUNTER_X, y_ + TOP_ROW_Y_RELATIVE, PTS_COUNTER_WIDTH, 8 }, 1 );
+	Render::renderRect( { PTS_COUNTER_X, y_ + TOP_ROW_Y_RELATIVE, PTS_COUNTER_WIDTH, 8 }, bg_color_ );
 	renderPtsGraphics( inventory );
 	main_texture_.endDrawing();
 };
@@ -346,7 +347,7 @@ void InventoryLevelGraphics::renderPtsGraphics( const InventoryLevel& inventory 
 void InventoryLevelGraphics::updateTimerGraphics( const InventoryLevel& inventory )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( { timeX(), y_ + TOP_ROW_Y_RELATIVE, TIME_WIDTH, 8 }, 1 );
+	Render::renderRect( { timeX(), y_ + TOP_ROW_Y_RELATIVE, TIME_WIDTH, 8 }, bg_color_ );
 	renderTimerGraphics( inventory );
 	main_texture_.endDrawing();
 };
@@ -360,7 +361,7 @@ void InventoryLevelGraphics::renderTimerGraphics( const InventoryLevel& inventor
 void InventoryLevelGraphics::updateCountGraphics( const InventoryCounter& counter )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( counter.position, 1 );
+	Render::renderRect( counter.position, bg_color_ );
 	renderCountGraphics( counter );
 	main_texture_.endDrawing();
 };
@@ -375,7 +376,7 @@ void InventoryLevelGraphics::renderCountGraphics( const InventoryCounter& counte
 void InventoryLevelGraphics::updateKeyGraphics( const InventoryCounter& counter )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( counter.position, 1 );
+	Render::renderRect( counter.position, bg_color_ );
 	renderKeyGraphics( counter );
 	main_texture_.endDrawing();
 };
@@ -389,7 +390,7 @@ void InventoryLevelGraphics::renderKeyGraphics( const InventoryCounter& counter 
 void InventoryLevelGraphics::updateSwitchGraphics( const InventoryCounter& counter )
 {
 	main_texture_.startDrawing();
-	Render::renderRect( counter.position, 1 );
+	Render::renderRect( counter.position, bg_color_ );
 	renderSwitchGraphics( counter );
 	main_texture_.endDrawing();
 };
@@ -435,25 +436,25 @@ void InventoryLevelGraphics::setSuitGotten( CardSuit suit )
 	{
 		case ( CardSuit::CLUB ):
 		{
-			Render::renderRect( { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, bg_color_ );
 			renderClubSuit();
 		}
 		break;
 		case ( CardSuit::DIAMOND ):
 		{
-			Render::renderRect( { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, bg_color_ );
 			renderDiamondSuit();
 		}
 		break;
 		case ( CardSuit::HEART ):
 		{
-			Render::renderRect( { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, bg_color_ );
 			renderHeartSuit();
 		}
 		break;
 		case ( CardSuit::SPADE ):
 		{
-			Render::renderRect( { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, 1 );
+			Render::renderRect( { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 }, bg_color_ );
 			renderSpadeSuit();
 		}
 		break;

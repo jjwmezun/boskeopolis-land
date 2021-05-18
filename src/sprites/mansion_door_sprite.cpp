@@ -37,11 +37,12 @@ void MansionDoorSprite::customInteract( Collision& my_collision, Collision& thei
 {
 	if ( them.hasType( SpriteType::HERO ) )
     {
+	    const Collision collision = them.testBlockCollision( *this );
         switch ( state_ )
         {
             case ( MansionDoorState::CLOSED ):
             {
-                if ( their_collision.collideRight() )
+                if ( collision.collideRight() )
                 {
                     state_ = MansionDoorState::OPENING;
                     Audio::playSound( Audio::SoundType::CHEST_OPEN );
@@ -50,9 +51,9 @@ void MansionDoorSprite::customInteract( Collision& my_collision, Collision& thei
             // ¡FALLTHROUGH!
             case ( MansionDoorState::OPENING ):
             {
-                if ( their_collision.collideAny() )
+                if ( collision.collideAny() )
                 {
-                    them.collideStopAny( their_collision );
+                    them.collideStopAny( collision );
                 }
             }
             break;

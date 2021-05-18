@@ -33,7 +33,7 @@ class InventoryLevelGraphics final
 			PRESENT
 		};
 
-		InventoryLevelGraphics( int max_hp, bool live_update );
+		InventoryLevelGraphics( int max_hp, bool live_update, int bg_color );
 		~InventoryLevelGraphics();
 		InventoryLevelGraphics( const InventoryLevelGraphics& ) = delete;
 		InventoryLevelGraphics( InventoryLevelGraphics&& ) = delete;
@@ -99,5 +99,6 @@ class InventoryLevelGraphics final
 		Frame bg_frame_;
 		bool live_;
 		int y_;
+		int bg_color_;
 		char scratch_[2000];
 };
