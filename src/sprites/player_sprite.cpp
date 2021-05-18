@@ -72,11 +72,8 @@ PlayerSprite::~PlayerSprite() {};
 
 void PlayerSprite::customUpdate( LevelState& level_state )
 {
-	if ( !level_state.events().testPauseHero() )
-	{
-		heroActions( level_state );
-		player_gfx_.update( *this, graphics_.get(), level_state.health(), &level_state.events() );
-	}
+	heroActions( level_state );
+	player_gfx_.update( *this, graphics_.get(), level_state.health(), &level_state.events() );
 };
 
 // Actions only performed by hero version.
@@ -88,7 +85,7 @@ void PlayerSprite::heroActions( LevelState& level_state )
 	EventSystem& events = level_state.events();
 	resetBopsOnLanding( level_state.inventory() );
 	actions( level_state.blocks(), events );
-	if ( level_state.events().isStunned() )
+	if ( level_state.events().isStunned() || level_state.events().testPauseHero() )
 	{
 		fullStopX();
 		jump_start_ = false;

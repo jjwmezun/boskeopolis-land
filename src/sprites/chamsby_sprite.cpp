@@ -15,14 +15,15 @@ static constexpr int MAX_HP = NUMBER_OF_HITS * HEALTH_PER_HIT;
 
 ChamsbySprite::ChamsbySprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/chamsby.png", 0, 0, false, false, 0.0, 2, 1, 5, 1 ), x, y, 14, 25, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/chamsby.png", 0, 0, false, false, 0.0, -2, -1, 5, 1 ), x, y, 14, 25, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
 	health_ ( 0 ),
 	invincibility_ ( 0 ),
 	walk_timer_ (),
 	shoot_timer_ (),
 	name ( "Lance Chamsby", 0, 0, Text::FontColor::DARK_GRAY ),
 	health_timer_ ( 0 ),
-	state_ ( ChamsbyState::INTRO )
+	state_ ( ChamsbyState::INTRO ),
+	head_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 2, y, 18, 8 } ))
 {};
 
 ChamsbySprite::~ChamsbySprite() {};
@@ -35,6 +36,9 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 	{
 		case ( ChamsbyState::INTRO ):
 		{
+			health_ = MAX_HP;
+			state_ = ChamsbyState::ATTACK;
+			/*
 			events.setPauseHeroOn();
 			if ( health_timer_ >= 4 )
 			{
@@ -52,7 +56,7 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 			{
 				++health_timer_;
 			}
-			events.changeBossUI( name, health_ );
+			events.changeBossUI( name, health_ );*/
 		}
 		break;
 
@@ -101,6 +105,7 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 				if ( health_ <= 0 )
 				{
 					state_ = ChamsbyState::DEFEATED;
+					events.setPauseHeroOn();
 				}
 				else
 				{
@@ -114,6 +119,10 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 		{
 			direction_x_ = Direction::Horizontal::RIGHT;
 			moveRight();
+			if ( xPixels() >= level_state.camera().right() )
+			{
+				printf( "GONE\n" );
+			}
 		}
 		break;
 	}
@@ -122,9 +131,14 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 
 void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
+	EventSystem& events = level_state.events();
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-		EventSystem& events = level_state.events();
+		head_box_.x = hit_box_.x - Unit::PixelsToSubPixels( 2 );
+		head_box_.y = hit_box_.y;
+
+		Collision head_collision = them.testCollision( head_box_ );
+
 		switch ( state_ )
 		{
 			case ( ChamsbyState::ATTACK ):
@@ -144,7 +158,8 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 
 				if ( invincibility_ == 0 )
 				{
-					if ( them.collideBottomOnly( their_collision, *this ) )
+					//if ( !them.on_ground_ && head_collision.collideAny() )
+					if ( false )
 					{
 						them.bounce();
 						Audio::playSound( Audio::SoundType::BOP );
@@ -161,10 +176,21 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 			}
 			break;
 		}
-
-		if ( health_ <= 0 && them.on_ground_ )
-		{
-			events.setPauseHeroOn();
-		}
 	}
+	else if ( them.hasType( SpriteType::ENEMY ) && invincibility_ == 0 && their_collision.collideAny() )
+	{
+		health_ -= HEALTH_PER_HIT;
+		events.changeBossUI( name, health_ );
+		invincibility_ = 48;
+		state_ = ChamsbyState::HIT;
+	}
+};
+
+void ChamsbySprite::render( const Camera& camera ) const
+{
+	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+	auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );
+	Render::renderRectDebug( r, { 255, 0, 0, 128 } );
+	auto hr = camera.relativeRect( Unit::SubPixelsToPixels( head_box_ ) );
+	Render::renderRectDebug( hr, { 0, 255, 0, 128 } );
 };

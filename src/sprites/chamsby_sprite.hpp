@@ -11,6 +11,7 @@ class ChamsbySprite final : public Sprite
 		~ChamsbySprite();
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
+		void render( const Camera& camera ) const;
 
 	private:
 		enum class ChamsbyState
@@ -29,7 +30,6 @@ class ChamsbySprite final : public Sprite
 		TextObj name;
 		int health_timer_;
 		ChamsbyState state_;
-		int saflkjsadlkfj;
-		int kjfjklkj;
-		int sdfakljaslfkdj;
+		sdl2::SDLRect head_box_;
+		char scratch_[3000];
 };
