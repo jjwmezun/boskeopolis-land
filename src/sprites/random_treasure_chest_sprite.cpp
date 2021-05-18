@@ -9,7 +9,7 @@
 
 RandomTreasureChestSprite::RandomTreasureChestSprite( int x, int y, EventSystem& events )
 :
-	TreasureChestSprite( x, y, ItemType::RANDOM_GEMS ),
+	TreasureChestSprite( x, y, ItemType::RANDOM_GEMS, "sprites/treasure-chest-up.png" ),
 	state_ ( State::INIT )
 {
 	id_ = events.addRandomTreasure();

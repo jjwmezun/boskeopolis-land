@@ -72,7 +72,7 @@ class OverworldState final : public GameState
 		TextureBox bg_textures_[ NUMBER_OF_LAYERS ][ MAX_ANIMATION_FRAMES ];
 		TextureBox fg_textures_[ NUMBER_OF_LAYERS ][ MAX_ANIMATION_FRAMES ];
 		Frame main_frame_;
-		ImageGraphics water_background_;
+		ImageGraphics water_backgrounds_[ 2 ];
 		ScrollingBackground background_;
 		OWCamera camera_;
 		OWEvent event_;

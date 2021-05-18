@@ -5,7 +5,7 @@
 static constexpr int NUMBER_OF_FRAMES = 9;
 static constexpr int FRAME_WIDTH = 64;
 static constexpr int FRAME_SPEED = 4;
-static constexpr int DELAY_SPEED = 1;
+static constexpr int DELAY_SPEED = 4;
 static constexpr int DISTANCE_TO_COME_BACK = Unit::BlocksToSubPixels( 8 );
 static constexpr int GOING_AWAY_DURATION = ( NUMBER_OF_FRAMES - 1 ) * FRAME_SPEED;
 static constexpr int STAND_PADDING = GOING_AWAY_DURATION / 2;

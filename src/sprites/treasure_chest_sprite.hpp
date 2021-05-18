@@ -13,7 +13,7 @@ class TreasureChestSprite : public Sprite
 			RANDOM_KEYCANE,
 			RANDOM_GEMS
 		};
-		TreasureChestSprite( int x, int y, ItemType item_type = ItemType::KEY_KEYCANE );
+		TreasureChestSprite( int x, int y, ItemType item_type = ItemType::KEY_KEYCANE, std::string&& texture = "sprites/treasure-chest.png" );
 		~TreasureChestSprite();
 		virtual void customUpdate( LevelState& level_state ) override;
 		virtual void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;

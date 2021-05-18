@@ -10,13 +10,13 @@
 #include "renderable.hpp"
 #include "time_start_state.hpp"
 
-LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, Camera camera )
+LevelState::LevelState( int level_id, Difficulty difficulty, int heart_upgrades, bool has_oxygen_upgrade, int rand_seed, Camera camera )
 :
 	GameState ( StateID::LEVEL_STATE ),
 	id_ ( 0 ),
 	health_ ( difficulty, heart_upgrades, has_oxygen_upgrade ),
 	camera_ ( camera ),
-	events_ (),
+	events_ ( rand_seed ),
 	sprites_ ( *this ),
 	blocks_ (),
 	level_ ( LevelList::getLevel( level_id ) ),

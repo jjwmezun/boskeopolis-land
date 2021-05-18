@@ -32,11 +32,12 @@ static constexpr int calculateXFromWidth( int width )
 	return ( int )( ( double )( Unit::WINDOW_WIDTH_PIXELS - width ) / 2.0 );
 };
 
-LevelTileMenuState::LevelTileMenuState( const Palette& palette, int level )
+LevelTileMenuState::LevelTileMenuState( const Palette& palette, int level, int rand_seed )
 :
 	GameState( StateID::LEVEL_TILE_MENU, palette ),
     level_ ( level ),
     selection_ ( 0 ),
+	rand_seed_ ( rand_seed ),
 	options_ (),
     bg_ (),
     highlighted_text_ ()
@@ -86,13 +87,13 @@ void LevelTileMenuState::stateUpdate()
 			case ( OptionType::PLAY ):
 			{
 		        Audio::playSound( Audio::SoundType::CONFIRM );
-				Main::changeState( std::make_unique<LevelState> ( level_, Difficulty::NORMAL, Inventory::heartUpgrades(), Inventory::haveOxygenUpgrade() ) );
+				Main::changeState( std::make_unique<LevelState> ( level_, Difficulty::NORMAL, Inventory::heartUpgrades(), Inventory::haveOxygenUpgrade(), rand_seed_ ) );
 			}
 			break;
 			case ( OptionType::HARD_MODE ):
 			{
 		        Audio::playSound( Audio::SoundType::CONFIRM );
-				Main::changeState( std::make_unique<LevelState> ( level_, Difficulty::HARD, Inventory::heartUpgrades(), Inventory::haveOxygenUpgrade() ) );
+				Main::changeState( std::make_unique<LevelState> ( level_, Difficulty::HARD, Inventory::heartUpgrades(), Inventory::haveOxygenUpgrade(), rand_seed_ ) );
 			}
 			break;
 			case ( OptionType::CANCEL ):

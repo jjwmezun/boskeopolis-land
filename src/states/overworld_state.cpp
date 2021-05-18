@@ -90,7 +90,7 @@ OverworldState::OverworldState( OWTile previous_space, ShowEventType show_event 
 	bg_textures_ (),
 	fg_textures_ (),
 	main_frame_ ( 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS, -1 ),
-	water_background_ ( "bg/overworld-water.png", { 0, 0, 400, 224 } ),
+	water_backgrounds_ ( { { "bg/overworld-water-1.png", { 0, 0, 400, 224 } }, { "bg/overworld-water-2.png", { 0, 0, 400, 224 } } } ),
 	background_ ( "bg/ow-bg.png", 16, 16 ),
 	camera_ ( 800, 448 ),
 	event_ (),
@@ -169,7 +169,7 @@ void OverworldState::stateUpdate()
 						case ( OWObject::Type::LEVEL ):
 						{
 							Audio::playSound( Audio::SoundType::CONFIRM );
-							Main::pushState( std::make_unique<LevelTileMenuState> ( palette_, object_on_->getLevelValue() ) );
+							Main::pushState( std::make_unique<LevelTileMenuState> ( palette_, object_on_->getLevelValue(), background_animation_frame_ ) );
 						}
 						break;
 						case ( OWObject::Type::SHOP ):
@@ -323,7 +323,8 @@ void OverworldState::stateRender()
 	background_.render();
 	screen_.startDrawing();
 	Render::clearScreenTransparency();
-		water_background_.render();
+		water_backgrounds_[ 0 ].render();
+		water_backgrounds_[ 1 ].render();
 		for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
 		{
 			bg_textures_[ i ][ current_animation_frame_.value() ].render();
@@ -469,7 +470,7 @@ void OverworldState::updateBackgroundAnimation()
 	if ( background_animation_timer_ == 7 )
 	{
 		background_animation_timer_ = 0;
-		if ( background_animation_frame_ == 15 )
+		if ( background_animation_frame_ == 7 )
 		{
 			background_animation_frame_ = 0;
 		}
@@ -486,8 +487,9 @@ void OverworldState::updateBackgroundAnimation()
 
 void OverworldState::updateBackgroundPosition()
 {
-	water_background_.src_.x = ( camera_.x() + background_animation_frame_ ) % 16;
-	water_background_.src_.y = camera_.y() % 16;
+	water_backgrounds_[ 0 ].src_.x = ( camera_.x() + background_animation_frame_ ) % 8;
+	water_backgrounds_[ 1 ].src_.x = ( camera_.x() + ( 7 - background_animation_frame_ ) ) % 8;
+	water_backgrounds_[ 0 ].src_.y = water_backgrounds_[ 1 ].src_.y = camera_.y() % 8;
 };
 
 void OverworldState::generateSprites()

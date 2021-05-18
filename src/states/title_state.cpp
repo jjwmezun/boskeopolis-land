@@ -61,7 +61,7 @@ TitleState::TitleState()
 	light_gradient_bg_ ( "bg/light_gradient.png", 400, 80, 0, Unit::WINDOW_HEIGHT_PIXELS - 100, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0 ),
 	skyline_bg_ ( "bg/title-skyline.png", 224, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -500 ),
 	cloud_bg_ ( "bg/city_clouds.png", 400, 72, 0, 0, 1, 1, 1, MapLayerImage::REPEAT_INFINITE, 0, -250, 0, 1, false, 128 ),
-    level_ ( LevelList::getIDFromCodeName( getRandomTrainerLevel() ), Difficulty::NORMAL, Health::START_MAX_HP, false, { Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT, 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT } )
+    level_ ( LevelList::getIDFromCodeName( getRandomTrainerLevel() ), Difficulty::NORMAL, Health::START_MAX_HP, false, 0, { Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT, 0, 0, Unit::WINDOW_WIDTH_PIXELS, CAMERA_HEIGHT } )
 {
 };
 

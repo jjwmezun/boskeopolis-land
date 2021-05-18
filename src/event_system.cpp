@@ -52,7 +52,7 @@ EventSystem::EMisc::EMisc()
 	data_ ()
 {};
 
-EventSystem::EventSystem()
+EventSystem::EventSystem( int rand_seed )
 :
 	key_ ( false ),
 	message_ ( false ),
@@ -78,7 +78,8 @@ EventSystem::EventSystem()
 	is_sliding_prev_ ( false ),
 	pause_hero_ ( false ),
 	misc_ (),
-	level_complete_status_ ( LevelCompleteStatus::STILL_PLAYING )
+	level_complete_status_ ( LevelCompleteStatus::STILL_PLAYING ),
+	rand_seed_ ( rand_seed )
 {
 	resetMisc();
 };
@@ -504,7 +505,7 @@ void EventSystem::setRandomTreasureIfNotAlreadySet()
 	assert( misc_.type_ == MiscType::RAND_TREASURE );
 	if ( misc_.data_.rand_treasure_.keycane_chest_ == 0 )
 	{
-		misc_.data_.rand_treasure_.keycane_chest_ = mezun::randInt( misc_.data_.rand_treasure_.count_, 1 );
+		misc_.data_.rand_treasure_.keycane_chest_ = ( rand_seed_ % 4 ) + 1;
 	}
 }
 

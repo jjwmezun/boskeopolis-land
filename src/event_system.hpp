@@ -13,7 +13,7 @@ class TextObj;
 class EventSystem final
 {
 	public:
-		EventSystem();
+		EventSystem( int rand_seed );
 		~EventSystem();
 		void init( const Level& level );
 		void update( LevelState& level_state );
@@ -217,4 +217,5 @@ class EventSystem final
 		Palette new_palette_;
 		EMisc misc_;
 		int stun_counter_;
+		int rand_seed_;
 };

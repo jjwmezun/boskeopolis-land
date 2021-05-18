@@ -16,9 +16,9 @@ static constexpr int KEY_CANE_MAIN_X_FRAME = 28;
 static constexpr int RANDOM_KEYCANE_MAX_Y = 32;
 static constexpr int GEM_FRAME_X = KEY_CANE_MAIN_X_FRAME + 32;
 
-TreasureChestSprite::TreasureChestSprite( int x, int y, ItemType item_type )
+TreasureChestSprite::TreasureChestSprite( int x, int y, ItemType item_type, std::string&& texture )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/treasure-chest.png", 0, 0, false, false, 0.0, 0, 0, 0, -14 ), x + 2, y + 4, 28, 28, { SpriteType::TREASURE_CHEST }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( std::move( texture ), 0, 0, false, false, 0.0, 0, 0, 0, -14 ), x + 2, y + 4, 28, 28, { SpriteType::TREASURE_CHEST }, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	BOTTOM ( { x + 2, y + 18, 28, 14 } ),
 	item_type_ ( item_type ),
 	key_cane_height_ ( 0 ),

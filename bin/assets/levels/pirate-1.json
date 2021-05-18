@@ -7,22 +7,21 @@
 			[
 				{
 					"type": "image",
-					"img": "beach-sunset-sky.png",
-					"width": 591,
+					"img": "clouds.png",
+					"width": 512,
 					"height": 256,
-					"y_scroll": 0.0,
-					"x_speed": -50,
-					"y_offset": -112,
-					"y_repeat": false
+					"x_scroll": 0.25,
+					"y_scroll": 0.15,
+					"x_speed": -80
 				},
 				{
 					"type": "image",
-					"img": "beach-sunset-sea.png",
-					"width": 500,
-					"height": 144,
-					"y_scroll": 0.0,
-					"x_speed": -200,
-					"y_offset": 128,
+					"img": "bridge.png",
+					"width": 256,
+					"height": 294,
+					"x_scroll": 0.5,
+					"y_scroll": 0.25,
+					"y_offset": 96,
 					"y_repeat": false
 				}
 			]
@@ -32,8 +31,8 @@
 	"entrance_x": 22,
 	"entrance_y": 32,
 
-	"gem_challenge": 18000,
-	"time_challenge": 5,
+	"gem_challenge": 30000,
+	"time_challenge": 8,
 	"cycle": 1,
 	"theme": 10
 }

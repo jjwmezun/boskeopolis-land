@@ -7,7 +7,7 @@
 class LevelTileMenuState final : public GameState
 {
 	public:
-		LevelTileMenuState( const Palette& palette, int level );
+		LevelTileMenuState( const Palette& palette, int level, int rand_seed );
 		~LevelTileMenuState();
         LevelTileMenuState( const LevelTileMenuState& ) = delete;
         LevelTileMenuState& operator=( const LevelTileMenuState& ) = delete;
@@ -30,6 +30,7 @@ class LevelTileMenuState final : public GameState
 
         int level_;
         int selection_;
+        int rand_seed_;
         std::vector<OptionType> options_;
         TextureBox bg_;
         TextureBox highlighted_text_[ MAX_OPTIONS ];
