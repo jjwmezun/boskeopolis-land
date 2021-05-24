@@ -11,7 +11,7 @@
 #include "sprite_system.hpp"
 #include "sprite.hpp"
 
-static constexpr int TEXTURE_WIDTH = 352;
+static constexpr int TEXTURE_WIDTH = 960;
 static constexpr int FLOOR_TEXTURE_X_OFFSET = 32;
 static constexpr int CEILING_TEXTURE_X_OFFSET = 48;
 static constexpr int MAP_WIDTH = Unit::WINDOW_WIDTH_PIXELS / 4;
@@ -19,6 +19,22 @@ static constexpr int MAP_HEIGHT = ( Unit::WINDOW_HEIGHT_PIXELS - 32 ) / 4;
 static constexpr int MAP_PADDING = 8;
 static constexpr int MAP_X = Unit::WINDOW_WIDTH_PIXELS - MAP_WIDTH - MAP_PADDING;
 static constexpr int MAP_Y = Unit::WINDOW_HEIGHT_PIXELS - MAP_HEIGHT - MAP_PADDING - 32;
+
+static constexpr int CARD_FRAMES[ 12 ] =
+{
+	336,
+	352,
+	368,
+	384,
+	400,
+	416,
+	432,
+	416,
+	400,
+	384,
+	368,
+	352
+};
 
 static constexpr double subPixelsToBlocksDouble( int sp )
 {
@@ -78,7 +94,7 @@ MapLayerDoom::MapLayerDoom( Unit::Layer layer_position )
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	item_info_ (),
 	items_ (),
-	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272, 336 } ),
+	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272, 336, 448, 576, 704, 832 } ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
 	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
 	map_src_ ( 0, 0, MAP_WIDTH, MAP_HEIGHT ),
@@ -227,7 +243,7 @@ void MapLayerDoom::update( LevelState& level_state )
 					block_types[ ray_x ] = block;
 					break;
 				}
-				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 || block == 5 || block == 2 || block == 11 ) )
+				else if ( !items_caught[ block_index ] && ( block == 1 || block == 6 || block == 5 || block == 2 || block == 11 || block == 15 || block == 16 || block == 31 || block == 32 ) )
 				{
 					int type = 0;
 					switch ( block )
@@ -250,6 +266,26 @@ void MapLayerDoom::update( LevelState& level_state )
 						case ( 11 ):
 						{
 							type = 6;
+						}
+						break;
+						case ( 15 ):
+						{
+							type = 7;
+						}
+						break;
+						case ( 16 ):
+						{
+							type = 8;
+						}
+						break;
+						case ( 31 ):
+						{
+							type = 9;
+						}
+						break;
+						case ( 32 ):
+						{
+							type = 10;
 						}
 						break;
 					}
@@ -540,6 +576,12 @@ void MapLayerDoom::updateAnimation()
 		item_frames_[ 0 ] += 16;
 		item_frames_[ 1 ] += 16;
 		item_frames_[ 4 ] += 16;
+		++card_frame_;
+		item_frames_[ 6 ] = CARD_FRAMES[ card_frame_() ];
+		item_frames_[ 7 ] += 16;
+		item_frames_[ 8 ] += 16;
+		item_frames_[ 9 ] += 16;
+		item_frames_[ 10 ] += 16;
 		if ( item_frames_[ 0 ] >= 6 * 16 )
 		{
 			item_frames_[ 0 ] = 0;
@@ -548,6 +590,13 @@ void MapLayerDoom::updateAnimation()
 		if ( item_frames_[ 1 ] >= 288 + 48 )
 		{
 			item_frames_[ 1 ] = 288;
+		}
+		if ( item_frames_[ 7 ] >= 576 )
+		{
+			item_frames_[ 7 ] = 448;
+			item_frames_[ 8 ] = 576;
+			item_frames_[ 9 ] = 704;
+			item_frames_[ 10 ] = 832;
 		}
 	}
 	animation_timer_.update();

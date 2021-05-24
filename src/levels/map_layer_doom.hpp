@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include "counter_t.hpp"
 #include "map_layer.hpp"
 #include "mezun_sdl2.hpp"
 #include "player_doom_sprite.hpp"
@@ -27,7 +28,7 @@ class MapLayerDoom final : public MapLayer
 		static constexpr double RAY_MAX_D = ( double )( RAY_MAX );
 		static constexpr int SCREEN_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 32;
 		static constexpr double SCREEN_HEIGHT_D = ( double )( SCREEN_HEIGHT );
-		static constexpr int NUMBER_OF_ITEM_TYPES = 7;
+		static constexpr int NUMBER_OF_ITEM_TYPES = 11;
 
 		struct TextureSlice
 		{
@@ -51,6 +52,7 @@ class MapLayerDoom final : public MapLayer
 		};
 
 		bool hero_shooting_;
+		CounterT<11, 0, 0, true> card_frame_;
 		TimerRepeatT<32> animation_timer_;
 		const PlayerDoomSprite* hero_;
 		SDL_Texture* floor_and_ceiling_;
@@ -71,6 +73,7 @@ class MapLayerDoom final : public MapLayer
 		Uint8 floor_and_ceiling_pixels_[ SCREEN_HEIGHT ][ RAY_MAX * NUMBER_OF_COLOR_CHANNELS ];
 		Uint8 floor_graphics_[ Unit::PIXELS_PER_BLOCK ][ Unit::PIXELS_PER_BLOCK * NUMBER_OF_COLOR_CHANNELS ];
 		Uint8 ceiling_graphics_[ Unit::PIXELS_PER_BLOCK ][ Unit::PIXELS_PER_BLOCK * NUMBER_OF_COLOR_CHANNELS ];
+		char scratch_[ 3000 ];
 
 		inline bool testFloorAndCeilingNotSetup() const;
 		inline void setupFloorAndCeiling();

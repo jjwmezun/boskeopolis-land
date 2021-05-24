@@ -72,6 +72,10 @@ void BlockSystem::reset( LevelState& level_state )
 
 void BlockSystem::renderLayer( const LevelState& level_state, int layer ) const
 {	
+	if ( level_state.currentMap().hide_ )
+	{
+		return;
+	}
 	const Camera& camera = level_state.camera();
 	if ( layer >= 0 && layer < layers_.size() )
 	{
