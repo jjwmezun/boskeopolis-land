@@ -7,7 +7,7 @@
 
 SwampPoleSprite::SwampPoleSprite( int x, int y, int id )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/swamp-pole.png" ), x, y, 16, 448, { SpriteType::SWAMP_POLE }, 25, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/swamp-pole.png" ), x, y, 16, 448, { SpriteType::SWAMP_POLE }, 25, 1000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
     pair_ ( nullptr )
 {
     misc_.id = id;
@@ -38,7 +38,9 @@ void SwampPoleSprite::customUpdate( LevelState& level_state )
                 break;
             }
         }
-
+    }
+    else
+    {
         const Camera& camera = level_state.camera();
         if ( camera.offscreen( hit_box_ ) && camera.offscreen( pair_->hit_box_ ) )
         {
@@ -56,7 +58,7 @@ void SwampPoleSprite::customInteract( Collision& my_collision, Collision& their_
         if ( collision.overlapYBottom() > 0 && collision.overlapYBottom() < 8000 )
         {
             them.collideStopAny( collision );
-            if ( hit_box_.y < bottomLimit() || pair_->hit_box_.y > pair_->original_hit_box_.y - Unit::BlocksToSubPixels( 3 ) )
+            if ( hit_box_.y < bottomLimit() )
             {
                 moveDown();
                 collide_bottom_ = true;
@@ -72,5 +74,8 @@ void SwampPoleSprite::customInteract( Collision& my_collision, Collision& their_
 
 int SwampPoleSprite::bottomLimit() const
 {
-    return std::min( original_hit_box_.y + Unit::BlocksToSubPixels( 3 ), Unit::BlocksToSubPixels( 24 ) );
+    return original_hit_box_.y + Unit::BlocksToSubPixels( 2 );
+    return ( pair_ == nullptr )
+        ? original_hit_box_.y + Unit::BlocksToSubPixels( 2 )
+        : std::min( original_hit_box_.y + Unit::BlocksToSubPixels( 2 ), pair_->original_hit_box_.y + Unit::BlocksToSubPixels( 2 ) );
 };

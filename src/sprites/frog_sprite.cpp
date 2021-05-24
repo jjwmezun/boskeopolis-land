@@ -1,6 +1,8 @@
+#include "audio.hpp"
 #include "frog_sprite.hpp"
 #include "collision.hpp"
 #include "health.hpp"
+#include "inventory.hpp"
 #include "level_state.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
@@ -9,7 +11,7 @@ static constexpr int TONGUE_RELATIVE_Y = Unit::PixelsToSubPixels( 7 );
 
 FrogSprite::FrogSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/frog.png", 0, 0, false, false, 0.0, -1, -8, 2, 9 ), x, y, 26, 20, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 250, 2000, 250, 2000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/frog.png", 0, 0, false, false, 0.0, -1, -8, 2, 9 ), x, y, 26, 20, {}, 250, 2000, 250, 2000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr ),
     jump_timer_ (),
     tongue_ ( 0, 0, 0, Unit::PixelsToSubPixels( 4 ) ),
     state_ ( FrogState::STATIONARY )
@@ -109,6 +111,24 @@ void FrogSprite::customInteract( Collision& my_collision, Collision& their_colli
                 }
             }
             break;
+        }
+
+        if ( their_collision.collideAny() )
+        {
+            if ( !them.on_ground_prev_ )
+            {
+                kill();
+                them.bounce();
+				if ( them.movementType() != SpriteMovement::Type::SWIMMING )
+				{
+					level_state.inventory().bop();
+				}
+				Audio::playSound( Audio::SoundType::BOP );
+            }
+            else
+            {
+                level_state.health().hurt();
+            }
         }
     }
 };

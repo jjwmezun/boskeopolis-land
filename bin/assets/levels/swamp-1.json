@@ -18,10 +18,10 @@
 	],
 
 	"entrance_x": 8,
-	"entrance_y": 22,
+	"entrance_y": 38,
 	
-	"gem_challenge": 9000,
-	"time_challenge": 25,
+	"gem_challenge": 32000,
+	"time_challenge": 30,
 	"cycle": 1,
 	"theme": 11
 }
