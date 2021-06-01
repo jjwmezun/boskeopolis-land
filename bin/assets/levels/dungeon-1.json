@@ -2,7 +2,7 @@
 	"maps":
 	[
 		{
-			"slug": "dungeon-4",
+			"slug": "dungeon-5",
 			"layers":
 			[
 				{ "type": "doom" }
@@ -10,10 +10,10 @@
 		}
 	],
 
-	"entrance_x": 21,
-	"entrance_y": 34,
-	"gem_challenge": 23300,
-	"time_challenge": 25,
+	"entrance_x": 29,
+	"entrance_y": 33,
+	"gem_challenge": 30000,
+	"time_challenge": 20,
 	"cycle": 1,
 	"theme": 15
 }

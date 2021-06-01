@@ -479,7 +479,7 @@ void MapLayerDoom::update( LevelState& level_state )
 			const std::vector<Block>& block_obj_list = level_state.blocks().getBlocksList();
 			for ( const Block& b : block_obj_list )
 			{
-				if ( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 || b.typeID() == 10 )
+				if ( b.typeID() == 9 || b.typeID() == 18 || b.typeID() == 19 || b.typeID() == 0 || b.typeID() == 1 || b.typeID() == 4 || b.typeID() == 10 || b.typeID() == 11 || b.typeID() == 14 || b.typeID() == 15 || b.typeID() == 30 || b.typeID() == 31 )
 				{
 					Render::renderRect
 					(
