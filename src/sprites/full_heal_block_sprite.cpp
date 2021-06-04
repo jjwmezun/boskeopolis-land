@@ -21,26 +21,29 @@ void FullHealBlockSprite::customUpdate( LevelState& level_state )
 
 void FullHealBlockSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	const Collision collision = them.testBlockCollision( *this );
-	const bool hit = bump_under_block_component.testHit( *this, them, collision );
-	if ( hit )
+	if ( them.block_interact_ )
 	{
-		if ( them.hasType( Sprite::SpriteType::HERO ) )
+		const Collision collision = them.testBlockCollision( *this );
+		const bool hit = bump_under_block_component.testHit( *this, them, collision );
+		if ( hit )
 		{
-			Health& health = level_state.health();
-			if ( health.hasFullHealth() )
+			if ( them.hasType( Sprite::SpriteType::HERO ) )
 			{
-				Audio::playSound( Audio::SoundType::BUMP );
+				Health& health = level_state.health();
+				if ( health.hasFullHealth() )
+				{
+					Audio::playSound( Audio::SoundType::BUMP );
+				}
+				else
+				{
+					health.fullHeal();
+					Audio::playSound( Audio::SoundType::HEAL );
+				}
 			}
 			else
 			{
-				health.fullHeal();
-				Audio::playSound( Audio::SoundType::HEAL );
+				Audio::playSound( Audio::SoundType::BUMP );
 			}
-		}
-		else
-		{
-			Audio::playSound( Audio::SoundType::BUMP );
 		}
 	}
 };
