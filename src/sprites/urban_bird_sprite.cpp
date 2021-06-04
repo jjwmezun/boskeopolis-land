@@ -15,7 +15,7 @@ static int getRandomDelay()
 
 UrbanBirdSprite::UrbanBirdSprite( int x, int y, Sprite* hero_address )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0 ), x, y, 16, 16, { SpriteType::PHASE_THROUGH }, 200, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/urban-bird.png", 0, 0, false, false, 0.0, -5, -5, 9, 9 ), x, y, 7, 7, { SpriteType::PHASE_THROUGH }, 200, 3000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT, false, false ),
 	left_pressed_before_ ( false ),
 	right_pressed_before_ ( false ),
 	jump_pressed_before_ ( false ),
