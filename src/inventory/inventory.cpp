@@ -67,7 +67,7 @@ std::u32string Inventory::gemScore( int level )
 
 void Inventory::setGemScore( int level, int value )
 {
-	if ( value > -1 && value < InventoryLevel::FUNDS_MAX )
+	if ( value > -1 && value <= InventoryLevel::FUNDS_MAX )
 	{
 		save_.data_.gem_scores_[ level ] = value;
 	}
