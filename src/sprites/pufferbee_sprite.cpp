@@ -5,7 +5,8 @@ PufferbeeSprite::PufferbeeSprite
 (
 	int x,
 	int y,
-	std::unique_ptr<SpriteComponent> component
+	std::unique_ptr<SpriteComponent> component,
+    Unit::Layer layer
 )
 :
     Sprite
@@ -29,7 +30,9 @@ PufferbeeSprite::PufferbeeSprite
 		false
 	),
     component_ ( std::move( component ) )
-{};
+{
+    layer_ = layer;
+};
 
 PufferbeeSprite::~PufferbeeSprite() {};
 

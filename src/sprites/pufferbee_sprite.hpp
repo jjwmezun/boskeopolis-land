@@ -10,7 +10,8 @@ class PufferbeeSprite final : public Sprite
 		(
 			int x,
 			int y,
-			std::unique_ptr<SpriteComponent> component = nullptr
+			std::unique_ptr<SpriteComponent> component = nullptr,
+            Unit::Layer layer = Unit::Layer::SPRITES_1
 		);
         ~PufferbeeSprite();
         void customUpdate( LevelState& level_state ) override;

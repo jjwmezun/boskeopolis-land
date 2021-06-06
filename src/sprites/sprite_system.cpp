@@ -230,7 +230,7 @@ SpriteSystem::SpriteSystem( LevelState& level_state )
 {
 	// Minimize chances o' sprite # going past space
 	// & forcing slow vector relocation.
-	sprites_.reserve( SPRITES_LIMIT );
+	sprites_.reserve( 25 );
 };
 
 SpriteSystem::~SpriteSystem() {};
@@ -1062,6 +1062,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 272 ):
 			return std::unique_ptr<Sprite> ( new ClockHandSprite( x, y, Direction::Clockwise::COUNTERCLOCKWISE, 0.08 ) );
+		break;
+		case ( SPRITE_INDEX_START + 273 ):
+			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ), Unit::Layer::BEFORE_FG_2 ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
