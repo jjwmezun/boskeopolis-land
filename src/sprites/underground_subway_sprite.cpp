@@ -10,6 +10,7 @@ UndergroundSubwaySprite::UndergroundSubwaySprite( int x, int y )
 	activated_ ( false )
 {
 	hit_box_.x = Unit::BlocksToSubPixels( 150 );
+	layer_ = Unit::Layer::SPRITES_2;
 };
 
 UndergroundSubwaySprite::~UndergroundSubwaySprite() {};

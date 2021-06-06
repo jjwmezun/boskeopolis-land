@@ -230,7 +230,7 @@ SpriteSystem::SpriteSystem( LevelState& level_state )
 {
 	// Minimize chances o' sprite # going past space
 	// & forcing slow vector relocation.
-	sprites_.reserve( 25 );
+	sprites_.reserve( SPRITES_LIMIT );
 };
 
 SpriteSystem::~SpriteSystem() {};
