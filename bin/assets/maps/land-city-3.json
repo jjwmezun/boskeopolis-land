@@ -64,7 +64,7 @@
         {
          "name":"bg_color",
          "type":"int",
-         "value":6
+         "value":2
         }, 
         {
          "name":"blocks_work_offscreen",

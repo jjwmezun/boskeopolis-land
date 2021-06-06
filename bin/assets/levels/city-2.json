@@ -7,13 +7,12 @@
 			[
 				{
 					"type": "image",
-					"img": "gradient.png",
-					"width": 8,
-					"height": 160,
-					"x_scroll": 0.0,
-					"y_scroll": 0.0,
-					"y_offset": 32,
-					"y_repeat": false
+					"img": "clouds2.png",
+					"width": 512,
+					"height": 256,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": -80
 				},
 				{
 					"type": "image",
@@ -21,8 +20,8 @@
 					"width": 264,
 					"height": 224,
 					"x_scroll": 0.5,
-					"y_scroll": 0.0,
-					"y_offset": 32,
+					"y_scroll": 0.2,
+					"y_offset": 96,
 					"y_repeat": false,
 					"frames": 5,
 					"animation_speed": 32,
