@@ -53,6 +53,7 @@ class InventoryLevel final
 		Clock& clock();
 		void setDiamondGotten();
 		void getSuit( CardSuit suit );
+		const InventoryLevelGraphics& getGraphics() const;
 
 		static constexpr int  FUNDS_MAX              = 99999;
 		static constexpr int  TIME_MAX               = ( 60 * 9 ) + 59;

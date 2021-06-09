@@ -59,6 +59,7 @@ void MoonSprite::customUpdate( LevelState& level_state )
 		break;
 
 		case ( MoonState::BEFORE_FREEZE ):
+			level_state.events().changePalette( { "Volcano Red", 4 } );
 			events.forceSwitchOn();
 			graphics_->current_frame_x_ = Unit::BlocksToPixels( 5 );
 			moon_state_ = MoonState::FREEZE;

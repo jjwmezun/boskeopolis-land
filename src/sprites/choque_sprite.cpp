@@ -61,6 +61,7 @@ void ChoqueSprite::customUpdate( LevelState& level_state )
 
 void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
+	const Collision collision = them.testBlockCollision( *this );
 	if ( them.hasType( SpriteType::HERO ) )
 	{
 		if
@@ -103,11 +104,11 @@ void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_col
 		}
 	}
 
-	if ( their_collision.collideAny() )
+	if ( collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
+		them.collideStopAny( collision );
 
-		if ( their_collision.collideBottom() )
+		if ( collision.collideBottom() )
 		{
 			them.hit_box_.y += vy_;
 		}
@@ -115,8 +116,8 @@ void ChoqueSprite::customInteract( Collision& my_collision, Collision& their_col
 		if
 		(
 			them.hasType( SpriteType::HERO ) &&
-			( ( their_collision.collideBottom() && them.collide_bottom_ ) ||
-			( their_collision.collideTop() && them.collide_top_ ) )
+			( ( collision.collideBottom() && them.collide_bottom_ ) ||
+			( collision.collideTop() && them.collide_top_ ) )
 		)
 		{
 			them.kill();

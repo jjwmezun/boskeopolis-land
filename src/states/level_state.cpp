@@ -73,7 +73,7 @@ void LevelState::stateUpdate()
 			(
 				std::unique_ptr<GameState>
 				(
-					new TimeStartState( palette(), inventory_screen_.clock().getTimeString() )
+					new TimeStartState( palette(), inventory_screen_.clock().getTimeString(), inventory_screen_.getGraphics().timeX() )
 				)
 			);
 		}

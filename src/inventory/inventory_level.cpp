@@ -226,3 +226,8 @@ void InventoryLevel::getSuit( CardSuit suit )
 	suits_[ ( int )( suit ) ] = true;
 	graphics_.setSuitGotten( suit );
 };
+
+const InventoryLevelGraphics& InventoryLevel::getGraphics() const
+{
+	return graphics_;
+};

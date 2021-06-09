@@ -7,7 +7,7 @@
 class TimeStartState final : public GameState
 {
 	public:
-		TimeStartState( const Palette& palette, std::u32string text );
+		TimeStartState( const Palette& palette, std::u32string text, int inventory_time_x );
 		~TimeStartState();
 		TimeStartState( const TimeStartState& ) = delete;
 		TimeStartState( TimeStartState&& ) = delete;
@@ -35,6 +35,8 @@ class TimeStartState final : public GameState
 		int size_;
 		int timer_;
 		int color_;
+		int inventory_time_x_;
+		int movement_per_frame_x_;
 		State state_;
 		SDL_Texture* textures_[ NUMBER_OF_COLORS ];
 		sdl2::SDLRect src_;

@@ -7,8 +7,6 @@
 #include "time_start_state.hpp"
 #include "wtext_obj.hpp"
 
-static constexpr int CLOCK_X = 200;
-
 static constexpr int MOVE_SPEED = 4;
 static constexpr int SIZE_SPEED = 1;
 static constexpr int NUM_O_CHAR = 4;
@@ -26,11 +24,15 @@ static constexpr int STOPPING_POINT = ( ( Unit::WINDOW_HEIGHT_PIXELS - Inventory
 static constexpr int BUMP_LENGTH = 4;
 static constexpr int MOVEMENT_FRAMES = SIZE_SPEED * START_SIZE;
 static constexpr int MOVEMENT_PER_FRAME_Y = ( int )( ceil( ( ( double )( InventoryLevelGraphics::Y ) - ( double )( STOPPING_POINT ) ) / ( double )( MOVEMENT_FRAMES ) ) );
-static constexpr int MOVEMENT_PER_FRAME_X = ( int )( ceil( ( ( double )( CLOCK_X ) - ( double )( DEST_X ) ) / ( double )( MOVEMENT_FRAMES ) ) );
 static constexpr int BLINK_SPEED = 8;
 static constexpr int NUM_O_BLINKS = 3;
 
-TimeStartState::TimeStartState( const Palette& palette, std::u32string text )
+static constexpr int generateMovementPerFrameX( int target_x )
+{
+	return ( int )( ceil( ( ( double )( target_x ) - ( double )( DEST_X ) ) / ( double )( MOVEMENT_FRAMES ) ) );
+};
+
+TimeStartState::TimeStartState( const Palette& palette, std::u32string text, int inventory_time_x )
 :
 	GameState( StateID::TIME_START_STATE, palette ),
 	y_ ( DEST_Y ),
@@ -38,6 +40,8 @@ TimeStartState::TimeStartState( const Palette& palette, std::u32string text )
 	size_ ( START_SIZE ),
 	timer_ ( 0 ),
 	color_ ( 1 ),
+	inventory_time_x_ ( inventory_time_x ),
+	movement_per_frame_x_ ( generateMovementPerFrameX( inventory_time_x ) ),
 	state_ ( State::GOING_DOWN ),
 	textures_ (),
 	src_ ( 0, 0, SRC_WIDTH, SRC_HEIGHT ),
@@ -113,10 +117,10 @@ void TimeStartState::stateUpdate()
 				y_ = InventoryLevelGraphics::TOP_ROW_Y;
 			}
 
-			x_ -= MOVEMENT_PER_FRAME_X;
-			if ( x_ < CLOCK_X )
+			x_ -= movement_per_frame_x_;
+			if ( x_ < inventory_time_x_ )
 			{
-				x_ = CLOCK_X;
+				x_ = inventory_time_x_;
 			}
 
 			dest_.x = x_;
