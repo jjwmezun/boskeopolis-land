@@ -34,7 +34,7 @@ PipeEelSprite::PipeEelSprite( int x, int y, Direction::Vertical dir_y )
 		( ( dir_y == Direction::Vertical::DOWN ) ? y - 38 : y ),
 		12,
 		38,
-		{ SpriteType::ENEMY }, 1000, 1000, 0, 0, Direction::Horizontal::__NULL, dir_y, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false
+		{ SpriteType::ENEMY }, 2000, 2000, 0, 0, Direction::Horizontal::__NULL, dir_y, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, false, false
 	)
 {
 };
