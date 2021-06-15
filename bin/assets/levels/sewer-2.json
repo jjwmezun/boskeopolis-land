@@ -7,17 +7,23 @@
 			[
 				{
 					"type": "image",
-					"img": "bright_clouds.png",
-					"width": 128,
-					"height": 128,
-					"x_speed": -50
+					"img": "clouds.png",
+					"width": 512,
+					"height": 256,
+					"x_scroll": 0.25,
+					"y_scroll": 0.15,
+					"x_speed": -80
 				},
 				{
 					"type": "image",
 					"img": "skyline.png",
 					"width": 264,
 					"height": 224,
-					"x_scroll": 0.5
+					"x_scroll": 0.5,
+					"y_scroll": 0.1,
+					"frames": 5,
+					"animation_speed": 32,
+					"animation_flip": true
 				}
 			],
 			"warps":
@@ -31,7 +37,7 @@
 			]
 		},
 		{
-			"slug": "sewer-1",
+			"slug": "sewer-1-4",
 			"layers":
 			[
 				{
@@ -49,7 +55,7 @@
 					"map": 2,
 					"entrance_x": 5,
 					"entrance_y": 10,
-					"location": [ 0, 300, 0, 64 ]
+					"location": [ 0, 138, 0, 64 ]
 				}
 			]
 		},
@@ -84,8 +90,8 @@
 	
 	"entrance_x": 6,
 	"entrance_y": 7,
-	"gem_challenge": 52500,
-	"time_challenge": 50,
+	"gem_challenge": 50000,
+	"time_challenge": 30,
 	"cycle": 2,
 	"theme": 13
 }
