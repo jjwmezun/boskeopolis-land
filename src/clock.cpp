@@ -1,7 +1,6 @@
 #include "clock.hpp"
 #include <cmath>
 #include "mezun_helpers.hpp"
-#include "unit.hpp"
 
 bool Clock::update()
 {
@@ -9,15 +8,10 @@ bool Clock::update()
 	changed_ = false;
 	if ( on_ )
 	{
-		++frames_timer_;
-		if ( frames_timer_ == Unit::FPS )
+		++frames_;
+		if ( frames_ % Unit::FPS == 0 )
 		{
-			frames_timer_ = 0;
-			if ( total_seconds_ < limit_ )
-			{
-				++total_seconds_;
-				return true;
-			}
+			return changed_ = true;
 		}
 	}
 	return local_changed;
@@ -32,12 +26,17 @@ std::u32string Clock::timeToString( int total_seconds )
 
 void Clock::reset( Direction::Vertical direction, int limit )
 {
-	frames_timer_ = 0;
-	total_seconds_ = 0;
-	limit_ = limit;
+	frames_ = 0;
+	limit_ = limit * Unit::FPS;
 	direction_ = direction;
-	on_ = true;
-	changed_ = true;
+	on_ = changed_ = true;
+};
+
+void Clock::setCountdown( int limit )
+{
+	limit_ = frames_ + limit * Unit::FPS;
+	direction_ = Direction::Vertical::DOWN;
+	on_ = changed_ = true;
 };
 
 void Clock::stop()
@@ -49,14 +48,14 @@ void Clock::addTime( int seconds )
 {
 	if ( direction_ == Direction::Vertical::DOWN )
 	{
-		limit_ += seconds;
+		limit_ += seconds * Unit::FPS;
 	}
 	else
 	{
-		total_seconds_ -= seconds;
-		if ( total_seconds_ < 0 )
+		frames_ -= seconds * Unit::FPS;
+		if ( frames_ < 0 )
 		{
-			total_seconds_ = 0;
+			frames_ = 0;
 		}
 	}
 	changed_ = true;
@@ -65,6 +64,6 @@ void Clock::addTime( int seconds )
 std::u32string Clock::getTimeString() const
 {
 	return ( direction_ == Direction::Vertical::DOWN ) 
-		? mezun::intToChar32String( minutesFromTotalSeconds( timeRemaining() ) ) + U":" + mezun::intToChar32StringWithPadding( secondsFromTotal( timeRemaining() ), 2 )
-		: timeToString( total_seconds_ );
+		? mezun::intToChar32String( minutesFromTotalSeconds( secondsRemaining() ) ) + U":" + mezun::intToChar32StringWithPadding( secondsFromTotal( secondsRemaining() ), 2 )
+		: timeToString( totalSeconds() );
 };

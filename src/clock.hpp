@@ -2,6 +2,7 @@
 
 #include "direction.hpp"
 #include <string>
+#include "unit.hpp"
 
 class Clock final
 {
@@ -13,9 +14,8 @@ class Clock final
 			int limit = DEFAULT_LIMIT
 		)
 		:
-			frames_timer_ ( 0 ),
-			total_seconds_ ( start_time ),
-			limit_ ( limit ),
+			frames_ ( start_time * Unit::FPS ),
+			limit_ ( limit * Unit::FPS ),
 			direction_ ( direction ),
 			on_ ( true ),
 			changed_ ( true )
@@ -23,6 +23,7 @@ class Clock final
 
 		bool update();
 		void reset( Direction::Vertical direction = DEFAULT_DIRECTION, int limit = DEFAULT_LIMIT );
+		void setCountdown( int limit );
 		void stop();
 		void addTime( int seconds );
 		std::u32string getTimeString() const;
@@ -30,12 +31,17 @@ class Clock final
 
 		constexpr int secondsFromTotal() const
 		{
-			return secondsFromTotal( total_seconds_ );
+			return secondsFromTotal( totalSeconds() );
 		};
 
 		constexpr int minutesFromTotalSeconds() const
 		{
-			return minutesFromTotalSeconds( total_seconds_ );
+			return minutesFromTotalSeconds( totalSeconds() );
+		};
+
+		constexpr int totalSeconds( int frames ) const
+		{
+			return floor( frames / Unit::FPS );
 		};
 
 		static constexpr int secondsFromTotal( int total_seconds )
@@ -50,27 +56,27 @@ class Clock final
 
 		constexpr int totalSeconds() const
 		{
-			return total_seconds_;
+			return totalSeconds( frames_ );
 		};
 
 		constexpr bool hitLimit() const
 		{
-			return total_seconds_ >= limit_;
+			return frames_ >= limit_;
 		};
 
 		constexpr bool lowOnTime() const
 		{
-			return direction_ == Direction::Vertical::DOWN && timeRemaining() < 5;
+			return direction_ == Direction::Vertical::DOWN && secondsRemaining() < 5;
 		};
 
-		constexpr int timeRemaining() const
+		constexpr int secondsRemaining() const
 		{
-			return limit_ - total_seconds_;
+			return ( int )( ceil( ( double )( limit_ - frames_ ) / ( double )( Unit::FPS ) ) );
 		};
 		
 		constexpr int countdownHit0() const
 		{
-			return timeRemaining() <= 0;
+			return frames_ >= limit_;
 		};
 
 	private:
@@ -78,8 +84,7 @@ class Clock final
 		static constexpr Direction::Vertical DEFAULT_DIRECTION = Direction::Vertical::UP;
 		static constexpr int SECONDS_PER_MINUTE = 60;
 
-		int frames_timer_;
-		int total_seconds_;
+		int frames_;
 		int limit_;
 		Direction::Vertical direction_;
 		bool on_;

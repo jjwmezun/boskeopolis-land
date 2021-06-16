@@ -66,7 +66,7 @@ void MoonSprite::customUpdate( LevelState& level_state )
 		break;
 
 		case ( MoonState::FREEZE ):
-			level_state.inventory().clock().reset( Direction::Vertical::DOWN, TIME_LIMIT );
+			level_state.inventory().clock().setCountdown( TIME_LIMIT );
 			events.startTimer();
 			moon_state_ = MoonState::AFTER_FREEZE;
 		break;

@@ -93,7 +93,7 @@ void InventoryLevelGraphics::update( const EventSystem& events, const Health& he
 	if ( inventory.clock().lowOnTime() )
 	{
 		++flashing_timer_;
-		if ( flashing_timer_ >= inventory.clock().timeRemaining() )
+		if ( flashing_timer_ >= inventory.clock().secondsRemaining() )
 		{
 			flashing_timer_ = 0;
 			++flashing_time_shade_;
