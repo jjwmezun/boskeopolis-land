@@ -6,6 +6,7 @@
 #include "bad_apple_sprite.hpp"
 #include "barrel_o_gorillas_sprite.hpp"
 #include "bat_sprite.hpp"
+#include "belligerant_citizen_sprite.hpp"
 #include "bird_sprite.hpp"
 #include "block_system.hpp"
 #include "bouncy_cloud_block_sprite.hpp"
@@ -195,6 +196,7 @@
 #include "top_down_player_sprite.hpp"
 #include "top_down_moveable_block_sprite.hpp"
 #include "toy_soldier_sprite.hpp"
+#include "traffic_spawner_sprite.hpp"
 #include "treasure_chest_sprite.hpp"
 #include "truck_platform_sprite.hpp"
 #include "underground_subway_sprite.hpp"
@@ -1078,6 +1080,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 277 ):
 			return std::unique_ptr<Sprite> ( BullSprite::generateSuper( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 278 ):
+			return std::unique_ptr<Sprite> ( new TrafficSpawnerSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 279 ):
+			return std::unique_ptr<Sprite> ( new BelligerantCitizenSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
