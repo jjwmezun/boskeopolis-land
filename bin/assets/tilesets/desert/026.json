@@ -23,6 +23,17 @@
 				{ "type": "collide_any" },
 				{ "type": "hero" }
 			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "bull" },
+				{ "type": "collide_any" }
+			]
 		}
 	]
 }

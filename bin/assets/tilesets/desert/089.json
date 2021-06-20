@@ -3,19 +3,15 @@
 	{
 		"type": "sprite",
 		"x": 0,
-		"y": 0
+		"y": 8
 	},
 	"behavior":
 	[
 		{
 			"component":
 			{
-				"type": "force_upward"
-			},
-			"conditions":
-			[
-				{ "type": "collide_any" }
-			]
+				"type": "slope_bottom_steep_right"
+			}
 		}
 	]
 }

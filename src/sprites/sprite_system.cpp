@@ -13,6 +13,7 @@
 #include "bouncing_spike_fruit_sprite.hpp"
 #include "bridge_monster_sprite.hpp"
 #include "bubble_sprite.hpp"
+#include "bull_sprite.hpp"
 #include "bullet_sprite.hpp"
 #include "buzz_saw_sprite.hpp"
 #include "cactooie_sprite.hpp"
@@ -1065,6 +1066,18 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 273 ):
 			return std::unique_ptr<Sprite> ( new PufferbeeSprite( x, y, std::unique_ptr<SpriteComponent> ( new SpriteComponentCircle() ), Unit::Layer::BEFORE_FG_2 ) );
+		break;
+		case ( SPRITE_INDEX_START + 274 ):
+			return std::unique_ptr<Sprite> ( BullSprite::generateRegular( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 275 ):
+			return std::unique_ptr<Sprite> ( BullSprite::generateWaking( x, y, Direction::Horizontal::LEFT ) );
+		break;
+		case ( SPRITE_INDEX_START + 276 ):
+			return std::unique_ptr<Sprite> ( BullSprite::generateWaking( x, y, Direction::Horizontal::RIGHT ) );
+		break;
+		case ( SPRITE_INDEX_START + 277 ):
+			return std::unique_ptr<Sprite> ( BullSprite::generateSuper( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

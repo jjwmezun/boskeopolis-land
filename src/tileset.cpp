@@ -47,6 +47,7 @@
 #include "block_component_switch_on.hpp"
 #include "block_component_switch_sound.hpp"
 #include "block_component_warp.hpp"
+#include "block_condition_bull.hpp"
 #include "block_condition_collide_any.hpp"
 #include "block_condition_collide_bottom.hpp"
 #include "block_condition_collide_left.hpp"
@@ -777,6 +778,10 @@ std::unique_ptr<BlockType> Tileset::makeType( const rapidjson::Document& block, 
 								{
 									this_condition.emplace_back( std::make_unique<BlockConditionLayer> ( Unit::IntToLayer( cond[ "layer" ].GetInt() ) ) );
 								}
+							}
+							else if ( mezun::areStringsEqual( cond_type, "bull" ) )
+							{
+								this_condition.emplace_back( std::make_unique<BlockConditionBull> () );
 							}
 							else if ( mezun::areStringsEqual( cond_type, "rival" ) )
 							{

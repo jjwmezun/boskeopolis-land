@@ -2,8 +2,8 @@
 	"graphics":
 	{
 		"type": "sprite",
-		"x": 8,
-		"y": 1
+		"x": 0,
+		"y": 5
 	},
 	"behavior":
 	[
@@ -11,7 +11,11 @@
 			"component":
 			{
 				"type": "solid"
-			}
+			},
+			"conditions":
+			[
+				{ "type": "hero" }
+			]
 		},
 		{
 			"component":
@@ -22,6 +26,17 @@
 			[
 				{ "type": "collide_any" },
 				{ "type": "hero" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "bull" },
+				{ "type": "collide_any" }
 			]
 		}
 	]
