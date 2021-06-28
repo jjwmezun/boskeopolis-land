@@ -79,7 +79,8 @@ EventSystem::EventSystem( int rand_seed )
 	pause_hero_ ( false ),
 	misc_ (),
 	level_complete_status_ ( LevelCompleteStatus::STILL_PLAYING ),
-	rand_seed_ ( rand_seed )
+	rand_seed_ ( rand_seed ),
+	player_holding_id_ ( -1 )
 {
 	resetMisc();
 };
@@ -118,6 +119,7 @@ void EventSystem::reset()
 	pause_hero_ = false;
 	level_complete_status_ = LevelCompleteStatus::STILL_PLAYING;
 	stun_counter_ = 0;
+	player_holding_id_ = -1;
 	resetPalette();
 	resetMisc();
 };

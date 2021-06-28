@@ -218,4 +218,5 @@ class EventSystem final
 		EMisc misc_;
 		int stun_counter_;
 		int rand_seed_;
+		int player_holding_id_;
 };

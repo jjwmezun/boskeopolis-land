@@ -55,8 +55,9 @@ PlayerSprite::PlayerSprite
 		false,
 		.2
 	),
-	input_ ( std::move( input ) ),
 	door_lock_ ( true ),
+	is_looking_up_ ( false ),
+	input_ ( std::move( input ) ),
 	duck_data_ ( duck_data ),
 	unduck_data_ ( unduck_data )
 {

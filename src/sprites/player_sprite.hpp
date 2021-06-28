@@ -71,4 +71,5 @@ class PlayerSprite : public Sprite
 		const DuckData duck_data_;
 		const UnDuckData unduck_data_;
 		PlayerGraphics player_gfx_;
+		char scratch_[3000];
 };

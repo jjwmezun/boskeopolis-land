@@ -3,6 +3,7 @@
 #include "angry_truck_generator_sprite.hpp"
 #include "ant_sprite.hpp"
 #include "attic_monster_sprite.hpp"
+#include "baby_moses_sprite.hpp"
 #include "bad_apple_sprite.hpp"
 #include "barrel_o_gorillas_sprite.hpp"
 #include "bat_sprite.hpp"
@@ -1086,6 +1087,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 279 ):
 			return std::unique_ptr<Sprite> ( new BelligerantCitizenSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 280 ):
+			return std::unique_ptr<Sprite> ( new BabyMosesSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

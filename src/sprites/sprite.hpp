@@ -77,7 +77,8 @@ class Sprite : public Object
 			ZOMBIE,
 			SOLID,
 			GHOST_PLAYER,
-			BULL
+			BULL,
+			BABY_MOSES
 		};
 
 		enum class CameraMovement
