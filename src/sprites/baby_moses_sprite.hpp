@@ -12,6 +12,8 @@ class BabyMosesSprite final : public Sprite
 
     private:
         bool held_;
-		int throw_;
+		bool throw_;
+		int throw_speed_;
+		Direction::Horizontal throw_dir_;
         char scratch_[3000];
 };

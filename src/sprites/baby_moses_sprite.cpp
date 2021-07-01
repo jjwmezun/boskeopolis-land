@@ -9,25 +9,54 @@ BabyMosesSprite::BabyMosesSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 16, 16, { SpriteType::BABY_MOSES }, 0, 5000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     held_ ( false ),
-    throw_ ( 0 )
+    throw_ ( false ),
+    throw_speed_ ( 0 ),
+    throw_dir_ ( Direction::Horizontal::__NULL )
 {};
 
 BabyMosesSprite::~BabyMosesSprite() {};
 
 void BabyMosesSprite::customUpdate( LevelState& level_state )
 {
-    if ( vx_ > 0 )
+    if ( vx_ > 0 || vx_ < 0 )
     {
         vx_ /= 1.001;
     }
-    if ( acceleration_x_ > 0 )
+    if ( acceleration_x_ > 0 || acceleration_x_ < 0 )
     {
         acceleration_x_ = 0;
     }
-    if ( throw_ != 0 )
+    if ( throw_ )
     {
-        top_speed_walk_ = acceleration_x_ = std::max( -16000, std::min( 16000, 100 * throw_ ) );
-        throw_ = 0;
+        switch ( throw_dir_ )
+        {
+            case ( Direction::Horizontal::LEFT ):
+            {
+                if ( throw_speed_ < -2000 )
+                {
+                    acceleration_x_ = -2000;
+                }
+                else
+                {
+                    acceleration_x_ = -1000;
+                }
+            }
+            break;
+            case ( Direction::Horizontal::RIGHT ):
+            {
+                if ( throw_speed_ > 2000 )
+                {
+                    acceleration_x_ = 2000;
+                }
+                else
+                {
+                    acceleration_x_ = 1000;
+                }
+            }
+            break;
+        }
+        top_speed_walk_ = acceleration_x_;
+        throw_ = false;
     }
 };
 
@@ -43,8 +72,9 @@ void BabyMosesSprite::customInteract( Collision& my_collision, Collision& their_
             {
                 held_ = false;
                 changeMovement( SpriteMovement::Type::GROUNDED );
-                throw_ = them.vx_;
-                printf( "%d\n", throw_ );
+                throw_ = true;
+                throw_speed_ = them.vx_;
+                throw_dir_ = them.direction_x_;
             }
         }
         else if
