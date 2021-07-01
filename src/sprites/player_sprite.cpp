@@ -286,6 +286,7 @@ void PlayerSprite::handleLadderBehavior( EventSystem& events )
 
 		if ( on_ladder_ && hasMovementType( SpriteMovement::Type::GROUNDED ) )
 		{
+			top_speed_upward_ = 2000;
 			if ( isJumping() )
 			{
 				acceleration_y_ = ( ( isUpsideDown() ) ? LADDER_SPEED : -LADDER_SPEED ) * 2;

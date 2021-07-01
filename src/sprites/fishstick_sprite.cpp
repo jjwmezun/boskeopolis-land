@@ -3,53 +3,23 @@
 #include "health.hpp"
 #include "sprite_graphics.hpp"
 
-FishstickSprite::FishstickSprite( int x, int y )
+FishstickSprite::FishstickSprite( int x, int y, Direction::Horizontal direction )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fishstick.png", 0, 0, false, false, 0, -2, -2, 4, 4 ), x, y, 20, 12, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 600, 1400, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING ),
-	move_timer_ (),
-	pause_timer_ ()
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/fishstick.png", 0, 0, false, false, 0.0, -2, -3, 3, 4 ), x, y, 20, 12, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 1400, 1400, 0, 0, direction, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	animation_timer_ (),
+	animation_frame_ ( 0 )
 {};
 
 FishstickSprite::~FishstickSprite() {};
 
 void FishstickSprite::customUpdate( LevelState& level_state )
 {
-	if ( move_timer_.hit() )
-	{
-		pause_timer_.start();
-		move_timer_.stop();
-	}
-	else if ( pause_timer_.hit() )
-	{
-		move_timer_.start();
-		direction_x_ = Direction::randomHorizontal();
-		pause_timer_.stop();
-	}
+	moveInDirectionX();
 
-	if ( move_timer_.on() )
+	flipGraphicsOnRight();
+	if ( animation_timer_.update() )
 	{
-		move_timer_.update();
-		switch( directionX() )
-		{
-			case ( Direction::Horizontal::LEFT ):
-			{
-				moveLeft();
-				graphics_->flip_x_ = false;
-			}
-			break;
-			case ( Direction::Horizontal::RIGHT ):
-			{
-				moveRight();
-				graphics_->flip_x_ = true;
-			}
-			break;
-		}
-	}
-	else
-	{
-		pause_timer_.update();
-		stopX();
-		vx_ /= 1.2;
+		graphics_->current_frame_x_ = ( graphics_->current_frame_x_ == 0 ) ? 23 : 0;
 	}
 };
 

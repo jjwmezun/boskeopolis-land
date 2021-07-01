@@ -317,13 +317,13 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new PenguinSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 23 ):
-			return std::unique_ptr<Sprite> ( new FishstickSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( new FishstickSprite( x, y, Direction::Horizontal::LEFT ) );
 		break;
 		case ( SPRITE_INDEX_START + 24 ):
 			return std::unique_ptr<Sprite> ( new SillyfishSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 25 ):
-			return nullptr;
+			return std::unique_ptr<Sprite> ( new FishstickSprite( x, y, Direction::Horizontal::RIGHT ) );
 		break;
 		case ( SPRITE_INDEX_START + 26 ):
 			return std::unique_ptr<Sprite> ( new MazeChaserSprite( x, y, MazeChaserSprite::Type::SHADOW ) );
