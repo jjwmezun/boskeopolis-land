@@ -43,16 +43,28 @@
 					"x_scroll": 0.5,
 					"y_scroll": 0.15,
 					"y_offset": 72
+				},
+				{
+					"type": "image",
+					"img": "fog_2.png",
+					"alpha": 32,
+					"width": 128,
+					"height": 128,
+					"x_scroll": 0.1,
+					"y_scroll": 0.1,
+					"x_speed": -40,
+					"y_speed": -20,
+					"layer": 16
 				}
 			]
 		}
 	],
 
-	"entrance_x": 164,
+	"entrance_x": 196,
 	"entrance_y": 20,
-	"camera_x": 162,
+	"camera_x": 188,
 
-	"gem_challenge": 10000,
+	"gem_challenge": 27500,
 	"time_challenge": 25,
 	"cycle": 2,
 	"theme": 6
