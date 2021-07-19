@@ -1,0 +1,43 @@
+{
+	"graphics":
+	{
+		"type": "animated",
+		"frames":
+		[
+			{ "x": 8, "y": 3 },
+			{ "x": 9, "y": 3 },
+			{ "x": 10, "y": 3 },
+			{ "x": 11, "y": 3 },
+			{ "x": 12, "y": 3 },
+			{ "x": 13, "y": 3 },
+			{ "x": 14, "y": 3 },
+			{ "x": 15, "y": 3 }
+		]
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "suit",
+				"suit": "diamond"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		},
+		{
+			"component":
+			{
+				"type": "single"
+			},
+			"conditions":
+			[
+				{ "type": "hero" },
+				{ "type": "collide_any" }
+			]
+		}
+	]
+}
