@@ -20,6 +20,7 @@ void RisingIceCubeSprite::customUpdate( LevelState& level_state )
 	switch ( state_ )
 	{
 		case ( State::PAUSED ):
+		{
 			if ( collide_top_prev_ )
 			{
 				fullStopY();
@@ -28,9 +29,11 @@ void RisingIceCubeSprite::customUpdate( LevelState& level_state )
 			{
 				state_ = State::FALLING;
 			}
+		}
 		break;
 
 		case ( State::RISING ):
+		{
 			if ( hit_box_.y <= original_hit_box_.y - height_limit_ )
 			{
 				fullStopY();
@@ -40,9 +43,11 @@ void RisingIceCubeSprite::customUpdate( LevelState& level_state )
 			{
 				moveUp();
 			}
+		}
 		break;
 		
 		case ( State::FALLING ):
+		{
 			if ( collide_top_prev_ )
 			{
 			}
@@ -56,10 +61,7 @@ void RisingIceCubeSprite::customUpdate( LevelState& level_state )
 			{
 				moveDown();
 			}
-			else
-			{
-				//vy_ /= traction_;
-			}
+		}
 		break;
 	}
 };
@@ -68,23 +70,23 @@ void RisingIceCubeSprite::customInteract( Collision& my_collision, Collision& th
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-		if ( their_collision.collideAny() && !their_collision.collideTop() )
+		const Collision collision = them.testBlockCollision( *this );
+		if ( collision.collideAny() && !collision.collideTop() )
 		{	
-			them.collideStopAny( their_collision );
+			them.collideStopAny( collision );
 		}
 
-		if ( their_collision.collideBottom() )
+		if ( collision.collideBottom() )
 		{
 			them.hit_box_.y += vy_;
 		}
-		else if ( their_collision.collideTop() )
+		else if ( collision.collideTop() )
 		{
 			collideStopAny( my_collision );
-			//state_ = State::RISING;
 
 			if ( them.vy_ < 0 )
 			{
-				them.collideStopAny( their_collision );
+				them.collideStopAny( collision );
 			}
 			state_ = State::RISING;
 		}

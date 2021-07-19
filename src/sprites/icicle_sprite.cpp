@@ -31,9 +31,10 @@ void IcicleSprite::customInteract( Collision& my_collision, Collision& their_col
 {
 	if ( them.hasType( SpriteType::HERO ) )
 	{
-		if ( their_collision.collideAny() )
+		const Collision collision = them.testBlockCollision( *this );
+		if ( collision.collideAny() )
 		{
-			them.collideStopAny( their_collision );
+			them.collideStopAny( collision );
 		}
 	}
 };
