@@ -42,14 +42,14 @@
 	"goal":
 	{
 		"type": "collect",
-		"amount": 15000
+		"amount": 30000
 	},
 	
-	"entrance_x": 10,
+	"entrance_x": 12,
 	"entrance_y": 4,
 	
-	"gem_challenge": 15000,
-	"time_challenge": 50,
+	"gem_challenge": 30000,
+	"time_challenge": 45,
 	"cycle": 2,
 	"theme": 7
 }

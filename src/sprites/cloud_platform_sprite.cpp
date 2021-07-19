@@ -3,6 +3,7 @@
 #include "level_state.hpp"
 #include "map.hpp"
 #include "sprite_graphics.hpp"
+#include "sprite_system.hpp"
 
 CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal direction )
 :
@@ -19,7 +20,7 @@ CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal di
 			0,
 			-6,
 			0,
-			10
+			8
 		),
 		x,
 		y,
@@ -27,7 +28,7 @@ CloudPlatformSprite::CloudPlatformSprite( int x, int y, Direction::Horizontal di
 		8,
 	   { SpriteType::CLOUD_PLATFORM },
 	   100,
-	   1800,
+	   2400,
 	   0,
 	   0,
 	   direction,
@@ -47,6 +48,19 @@ CloudPlatformSprite::~CloudPlatformSprite() {};
 
 void CloudPlatformSprite::customUpdate( LevelState& level_state )
 {
+	if ( level_state.sprites().hero().rightSubPixels() < hit_box_.x )
+	{
+		top_speed_ = 1600;
+	}
+	else if ( level_state.sprites().hero().hit_box_.x > rightSubPixels() )
+	{
+		top_speed_ = 3200;
+	}
+	else
+	{
+		top_speed_ = 2400;
+	}
+
 	switch( direction_x_ )
 	{
 		case ( Direction::Horizontal::LEFT ):

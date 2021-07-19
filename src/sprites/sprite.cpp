@@ -325,26 +325,29 @@ void Sprite::boundaries( Camera& camera, Map& lvmap )
 {
 	if ( lvmap.camera_type_ != Camera::Type::SCROLL_LOCK )
 	{
-		if ( lvmap.loop_sides_ )
+		if ( !lvmap.scrollLoop() )
 		{
-			if ( hit_box_.x + hit_box_.w < Unit::PixelsToSubPixels( camera.x() ) )
+			if ( lvmap.loop_sides_ )
 			{
-				hit_box_.x = Unit::PixelsToSubPixels( camera.right() );
+				if ( hit_box_.x + hit_box_.w < Unit::PixelsToSubPixels( camera.x() ) )
+				{
+					hit_box_.x = Unit::PixelsToSubPixels( camera.right() );
+				}
+				if ( hit_box_.x > Unit::PixelsToSubPixels( camera.right() ) )
+				{
+					hit_box_.x = Unit::PixelsToSubPixels( camera.x() ) - hit_box_.w;
+				}
 			}
-			if ( hit_box_.x > Unit::PixelsToSubPixels( camera.right() ) )
+			else
 			{
-				hit_box_.x = Unit::PixelsToSubPixels( camera.x() ) - hit_box_.w;
-			}
-		}
-		else
-		{
-			if ( hit_box_.x < 0 )
-			{
-				collideStopXLeft( abs ( -hit_box_.x ) );
-			}
-			else if ( rightSubPixels() > Unit::PixelsToSubPixels( lvmap.widthPixels() ) )
-			{
-				collideStopXRight( rightSubPixels() - Unit::PixelsToSubPixels( lvmap.widthPixels() ) );
+				if ( hit_box_.x < 0 )
+				{
+					collideStopXLeft( abs ( -hit_box_.x ) );
+				}
+				else if ( rightSubPixels() > Unit::PixelsToSubPixels( lvmap.widthPixels() ) )
+				{
+					collideStopXRight( rightSubPixels() - Unit::PixelsToSubPixels( lvmap.widthPixels() ) );
+				}
 			}
 		}
 

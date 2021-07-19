@@ -17,7 +17,7 @@
 #include "rapidjson/istreamwrapper.h"
 #include "unit.hpp"
 
-static constexpr int LOOP_CHANGE = 3;
+static constexpr int LOOP_CHANGE = 2;
 static constexpr int FLASH_INTERVAL = 200;
 static constexpr int FLASH_DURATION = 8;
 static constexpr int INNER_FLASH_DURATION = 2;
@@ -1004,13 +1004,31 @@ void Map::updateLayers( LevelState& level_state )
 
 void Map::updateLoop( const SpriteSystem& sprites )
 {
-	if ( sprites.hero().rightPixels() > rightEdgeOfLoop() )
+	if ( scrollLoop() && sprites.hero().rightPixels() > rightEdgeOfLoop() )
 	{
+		const int increase = Unit::PixelsToSubPixels( scrollLoopWidthPixels() );
+		for ( const std::unique_ptr<Sprite>& sprite : sprites.getSpritesList() )
+		{
+			if ( sprite != nullptr && !sprite->hasType( Sprite::SpriteType::CLOUD_PLATFORM ) )
+			{
+				sprite->hit_box_.x += increase;
+				sprite->original_hit_box_.x += increase;
+			}
+		}
 		++current_loop_;
 	}
 	else if ( sprites.hero().xPixels() < leftEdgeOfLoop() )
 	{
 		--current_loop_;
+		const int decrease = Unit::PixelsToSubPixels( scrollLoopWidthPixels() );
+		for ( const std::unique_ptr<Sprite>& sprite : sprites.getSpritesList() )
+		{
+			if ( sprite != nullptr && !sprite->hasType( Sprite::SpriteType::CLOUD_PLATFORM ) )
+			{
+				sprite->hit_box_.x -= decrease;
+				sprite->original_hit_box_.x -= decrease;
+			}
+		}
 	}
 };
 
@@ -1117,18 +1135,6 @@ void Map::interact( Sprite& sprite, LevelState& level_state )
 		for ( auto& layer : other_layers_ )
 		{
 			layer->interact( sprite, level_state );
-		}
-	}
-
-	if ( scrollLoop() )
-	{
-		if
-		(
-			!sprite.hasType( Sprite::SpriteType::HERO ) &&
-			!sprite.hasType( Sprite::SpriteType::CLOUD_PLATFORM )
-		)
-		{
-			sprite.changeX( spriteLoopPosition( sprite.xSubPixels() ) );
 		}
 	}
 };
