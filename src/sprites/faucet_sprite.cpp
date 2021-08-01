@@ -46,9 +46,10 @@ void FaucetSprite::customUpdate( LevelState& level_state )
 
 void FaucetSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( their_collision.collideAny() )
+	const Collision collision = them.testBlockCollision( *this );
+	if ( collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
+		them.collideStopAny( collision );
 
 		if ( them.hasType( SpriteType::HERO ) )
 		{

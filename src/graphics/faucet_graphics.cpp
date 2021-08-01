@@ -31,5 +31,5 @@ void FaucetGraphics::update( const FaucetSprite& sprite, SpriteGraphics* graphic
 void FaucetGraphics::render( const SpriteGraphics* graphics, const Camera* camera, int x, int y ) const
 {
 	graphics->masterRender( { x -= ( 16 * 3 ), y + 16, 16, 80 }, graphics->current_frame_x_, graphics->current_frame_y_, camera );
-	graphics->masterRender( { x, y, 16, 16 }, 256, 0, camera );
+	graphics->masterRender( { x + 48, y, 16, 16 }, 256, 0, camera );
 }
