@@ -11,60 +11,51 @@ BabyMosesSprite::BabyMosesSprite( int x, int y )
     held_ ( false ),
     throw_ ( false ),
     throw_speed_ ( 0 ),
-    throw_dir_ ( Direction::Horizontal::__NULL )
+    throw_dir_ ( Direction::Horizontal::__NULL ),
+    acc2_ ( 0 ),
+    vx2_ ( 0 )
 {};
 
 BabyMosesSprite::~BabyMosesSprite() {};
 
 void BabyMosesSprite::customUpdate( LevelState& level_state )
 {
-    if ( vx_ > 0 || vx_ < 0 )
-    {
-        vx_ /= 1.001;
-    }
-    if ( acceleration_x_ > 0 || acceleration_x_ < 0 )
-    {
-        acceleration_x_ = 0;
-    }
+    acc2_ = 0;
     if ( throw_ )
     {
         switch ( throw_dir_ )
         {
             case ( Direction::Horizontal::LEFT ):
             {
-                if ( throw_speed_ < -2000 )
-                {
-                    acceleration_x_ = -2000;
-                }
-                else
-                {
-                    acceleration_x_ = -1000;
-                }
+                acc2_ = -2000;
             }
             break;
             case ( Direction::Horizontal::RIGHT ):
             {
-                if ( throw_speed_ > 2000 )
-                {
-                    acceleration_x_ = 2000;
-                }
-                else
-                {
-                    acceleration_x_ = 1000;
-                }
+                acc2_ = 2000;
             }
             break;
         }
-        top_speed_walk_ = acceleration_x_;
+        acc2_ += ( throw_speed_ * 4 );
         throw_ = false;
     }
+    vx2_ += acc2_;
+    if ( acc2_ == 0 )
+    {
+        vx2_ /= ( ( on_ground_ ) ? 1.15 : 1.05 );
+    }
+    hit_box_.x += vx2_;
 };
 
 void BabyMosesSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) )
     {
-        if ( held_ )
+        if ( in_water_ )
+        {
+            them.kill();
+        }
+        else if ( held_ )
         {
             hit_box_.x = them.hit_box_.x;
             hit_box_.y = them.hit_box_.y - Unit::PixelsToSubPixels( 16 );
