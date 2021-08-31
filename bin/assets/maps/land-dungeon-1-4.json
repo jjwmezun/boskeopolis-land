@@ -50,6 +50,26 @@
  "orientation":"orthogonal",
  "properties":[
         {
+         "name":"bg_color",
+         "type":"int",
+         "value":6
+        }, 
+        {
+         "name":"camera_limit_left",
+         "type":"int",
+         "value":32
+        }, 
+        {
+         "name":"music",
+         "type":"string",
+         "value":"castle"
+        }, 
+        {
+         "name":"palette",
+         "type":"string",
+         "value":"Red Gold"
+        }, 
+        {
          "name":"tileset",
          "type":"string",
          "value":"dungeon"

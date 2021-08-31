@@ -33,8 +33,8 @@
 			[
 				{
 					"map": 1,
-					"entrance_x": 65,
-					"entrance_y": 53,
+					"entrance_x": 0,
+					"entrance_y": 77,
 					"location": [ 0, 90, 0, 12 ]
 				}
 			]
@@ -59,16 +59,40 @@
 					"map": 2,
 					"entrance_x": 3,
 					"entrance_y": 8,
-					"location": [ 71, 73, 22, 24 ]
+					"location": [ 0, 80, 0, 92 ]
 				}
 			]
 		},
 		{
-			"slug": "dungeon-1-3"
+			"slug": "dungeon-1-3",
+			"warps":
+			[
+				{
+					"map": 3,
+					"entrance_x": 18,
+					"entrance_y": 9,
+					"location": [ 0, 110, 0, 92 ]
+				}
+			]
+		},
+		{
+			"slug": "dungeon-1-5",
+			"warps":
+			[
+				{
+					"map": 4,
+					"entrance_x": 0,
+					"entrance_y": 181,
+					"location": [ 0, 200, 0, 92 ]
+				}
+			]
+		},
+		{
+			"slug": "dungeon-1-4"
 		}
 	],
 
-	"entrance_x": 82,
+	"entrance_x": 1,
 	"entrance_y": 0,
 
 	"gem_challenge": 11000,

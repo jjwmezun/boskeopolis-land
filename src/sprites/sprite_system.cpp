@@ -62,6 +62,7 @@
 #include "falling_fist_sprite.hpp"
 #include "falling_gem_sprite.hpp"
 #include "falling_star_generator_sprite.hpp"
+#include "falling_weight_sprite.hpp"
 #include "firebar_sprite.hpp"
 #include "fishstick_sprite.hpp"
 #include "flashlight_player_sprite.hpp"
@@ -891,7 +892,7 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 			return std::unique_ptr<Sprite> ( new JumpingCrockSprite( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 214 ):
-			return std::unique_ptr<Sprite> ( new VacuumSprite( x, y ) );
+			return std::unique_ptr<Sprite> ( VacuumSprite::generateNormal( x, y ) );
 		break;
 		case ( SPRITE_INDEX_START + 215 ):
 			return std::unique_ptr<Sprite> ( new BouncingBallSprite( x, y ) );
@@ -1090,6 +1091,12 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 280 ):
 			return std::unique_ptr<Sprite> ( new BabyMosesSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 281 ):
+			return std::unique_ptr<Sprite> ( new FallingWeightSprite( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 282 ):
+			return std::unique_ptr<Sprite> ( VacuumSprite::generateFast( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );
