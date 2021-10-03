@@ -69,7 +69,7 @@ void Camera::adjust( const Sprite& o, const Map& m )
 	// Temporarily undo shake before updating position.
 	x_ -= shake_amount_;
 	setPrev();
-	move( o, m.camera_type_ );
+	move( o, type_ );
 	contain( m );
 	updateShaking();
 };
@@ -362,4 +362,10 @@ void Camera::updateShaking()
 		break;
 	}
 	x_ += shake_amount_;
+};
+
+void Camera::init( int x, int y, Type type )
+{
+	setPosition( x, y );
+	type_ = type;
 };

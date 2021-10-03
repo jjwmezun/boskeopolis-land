@@ -255,7 +255,7 @@ Level LevelList::getLevel( int id )
                                 int bganimspeed = 1;
                                 bool bganimflip = false;
                                 Uint8 alpha = 255;
-                                SDL_BlendMode blend_mode = SDL_BLENDMODE_NONE;
+                                SDL_BlendMode blend_mode = SDL_BLENDMODE_BLEND;
 
                                 if ( layer.HasMember( "img" ) && layer[ "img" ].IsString() )
                                 {
@@ -467,9 +467,21 @@ Level LevelList::getLevel( int id )
                                 const Uint8 green = ( Uint8 )( ( layer.HasMember( "green" ) && layer[ "green" ].IsInt() ) ? layer[ "green" ].GetInt() : 255 );
                                 const Uint8 blue = ( Uint8 )( ( layer.HasMember( "blue" ) && layer[ "blue" ].IsInt() ) ? layer[ "blue" ].GetInt() : 255 );
                                 const Uint8 alpha = ( Uint8 )( ( layer.HasMember( "alpha" ) && layer[ "alpha" ].IsInt() ) ? layer[ "alpha" ].GetInt() : 255 );
+                                MapLayerOverlay::OverlayType type = MapLayerOverlay::OverlayType::NORMAL;
+                                if ( layer.HasMember( "type" ) && layer[ "type" ].IsString() )
+                                {
+                                    if ( mezun::areStringsEqual( layer[ "type" ].GetString(), "multiply" ) )
+                                    {
+                                        type = MapLayerOverlay::OverlayType::MULTIPLY;
+                                    }
+                                    else if ( mezun::areStringsEqual( layer[ "type" ].GetString(), "lighten" ) )
+                                    {
+                                        type = MapLayerOverlay::OverlayType::LIGHTEN;
+                                    }
+                                }
                                 layers.emplace_back
                                 (
-                                    std::make_shared<MapLayerOverlay> ( red, green, blue, alpha, layer_position )
+                                    std::make_shared<MapLayerOverlay> ( red, green, blue, alpha, type, layer_position )
                                 );
                             }
                             else if ( mezun::areStringsEqual( layer_type, "rain" ) )

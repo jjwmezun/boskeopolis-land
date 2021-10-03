@@ -32,10 +32,16 @@
 			"warps":
 			[
 				{
+					"map": 5,
+					"entrance_x": 0,
+					"entrance_y": 181,
+					"location": [ 0, 200, 0, 92 ]
+				},
+				{
 					"map": 1,
 					"entrance_x": 0,
 					"entrance_y": 77,
-					"location": [ 0, 90, 0, 12 ]
+					"location": [ 888888, 90, 0, 12 ]
 				}
 			]
 		},
@@ -89,10 +95,45 @@
 		},
 		{
 			"slug": "dungeon-1-4"
+		},
+		{
+			"slug": "dungeon-1-6",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "castle-chamsby.png",
+					"width": 320,
+					"height": 192,
+					"x_scroll": 0.1,
+					"y_scroll": 0.25,
+					"y_offset": -96
+				},
+				{
+					"type": "overlay",
+					"red": 0,
+					"green": 0,
+					"blue": 0,
+					"alpha": 128,
+					"layer": 15
+				},
+				{
+					"type": "image",
+					"img": "spotlight2.png",
+					"width": 400,
+					"height": 224,
+					"x_scroll": 0.0,
+					"y_scroll": 0.0,
+					"y_repeat": false,
+					"x_repeat": false,
+					"alpha": 224,
+					"layer": 16
+				}
+			]
 		}
 	],
 
-	"entrance_x": 1,
+	"entrance_x": 81,
 	"entrance_y": 0,
 
 	"gem_challenge": 11000,

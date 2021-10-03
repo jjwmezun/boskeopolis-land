@@ -5,6 +5,12 @@
 			"slug": "chamsby"
 		}
 	],
+	
+	"goal":
+	{
+		"type": "mcguffin",
+		"amount": 5
+	},
 	"entrance_x": 4,
 	"entrance_y": 8,
 	"has_card": false,

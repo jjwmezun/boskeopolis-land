@@ -16,6 +16,7 @@ class ChamsbySprite final : public Sprite
 	private:
 		enum class ChamsbyState
 		{
+			PRE,
 			INTRO,
 			ATTACK,
 			HIT,
@@ -31,5 +32,6 @@ class ChamsbySprite final : public Sprite
 		int health_timer_;
 		ChamsbyState state_;
 		sdl2::SDLRect head_box_;
+		bool spiky_headed_;
 		char scratch_[3000];
 };

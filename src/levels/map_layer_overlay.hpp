@@ -6,7 +6,13 @@
 class MapLayerOverlay final : public MapLayer
 {
 	public:
-		MapLayerOverlay( Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha = 255, Unit::Layer layer_position = DEFAULT_POSITION );
+		enum class OverlayType
+		{
+			NORMAL,
+			MULTIPLY,
+			LIGHTEN
+		};
+		MapLayerOverlay( Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha = 255, OverlayType type = OverlayType::NORMAL, Unit::Layer layer_position = DEFAULT_POSITION );
 		~MapLayerOverlay();
 		void render( const Camera& camera ) override;
 		void update( LevelState& level_state ) override;
@@ -16,4 +22,5 @@ class MapLayerOverlay final : public MapLayer
 		Uint8 green_;
 		Uint8 blue_;
 		Uint8 alpha_;
+		OverlayType type_;
 };

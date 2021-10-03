@@ -1,10 +1,12 @@
 #include "audio.hpp"
 #include "bullet_sprite.hpp"
+#include "camera.hpp"
 #include "chamsby_sprite.hpp"
 #include "collision.hpp"
 #include "event_system.hpp"
 #include "health.hpp"
 #include "level_state.hpp"
+#include "map.hpp"
 #include "mezun_math.hpp"
 #include "sprite_graphics.hpp"
 #include "sprite_system.hpp"
@@ -15,15 +17,16 @@ static constexpr int MAX_HP = NUMBER_OF_HITS * HEALTH_PER_HIT;
 
 ChamsbySprite::ChamsbySprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/chamsby.png", 0, 0, false, false, 0.0, -2, -1, 5, 1 ), x, y, 14, 25, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PERMANENT ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/chamsby.png", 0, 0, false, false, 0.0, -2, -1, 5, 1 ), x, y, 14, 25, {}, 500, 3000, 500, 4000, Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::PAUSE_OFFSCREEN ),
 	health_ ( 0 ),
 	invincibility_ ( 0 ),
 	walk_timer_ (),
 	shoot_timer_ (),
 	name ( "Lance Chamsby", 0, 0, Text::FontColor::DARK_GRAY ),
 	health_timer_ ( 0 ),
-	state_ ( ChamsbyState::INTRO ),
-	head_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 2, y, 18, 8 } ))
+	state_ ( ChamsbyState::PRE ),
+	head_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 2, y, 18, 8 } )),
+	spiky_headed_ ( ( x > Unit::BlocksToPixels( 50 ) ) )
 {};
 
 ChamsbySprite::~ChamsbySprite() {};
@@ -36,8 +39,19 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 	{
 		case ( ChamsbyState::INTRO ):
 		{
-			health_ = MAX_HP;
-			state_ = ChamsbyState::ATTACK;
+			events.setPauseHeroOn();
+			if ( level_state.camera().x() < xPixels() - Unit::BlocksToPixels( 20 ) )
+			{
+				level_state.camera().moveRight();
+			}
+			else
+			{
+				events.setPauseHeroOff();
+				health_ = MAX_HP;
+				state_ = ChamsbyState::ATTACK;
+				level_state.camera().setPosition( xPixels() - Unit::BlocksToPixels( 20 ), level_state.camera().y() );
+				level_state.camera().setType( Camera::Type::NONE );
+			}
 			/*
 			events.setPauseHeroOn();
 			if ( health_timer_ >= 4 )
@@ -121,7 +135,9 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 			moveRight();
 			if ( xPixels() >= level_state.camera().right() )
 			{
-				printf( "GONE\n" );
+				events.setPauseHeroOff();
+				level_state.camera().setType( Camera::Type::NORMAL );
+				killNoAnimation();
 			}
 		}
 		break;
@@ -131,6 +147,15 @@ void ChamsbySprite::customUpdate( LevelState& level_state )
 
 void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
+	if ( state_ == ChamsbyState::PRE && them.hasType( SpriteType::HERO ) )
+	{
+		if ( them.hit_box_.x >= original_hit_box_.x - Unit::BlocksToSubPixels( 17 ) )
+		{
+			state_ = ChamsbyState::INTRO;
+		}
+		return;
+	}
+
 	EventSystem& events = level_state.events();
 	if ( them.hasType( SpriteType::HERO ) )
 	{
@@ -158,8 +183,7 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 
 				if ( invincibility_ == 0 )
 				{
-					//if ( !them.on_ground_ && head_collision.collideAny() )
-					if ( false )
+					if ( !spiky_headed_ && !them.on_ground_ && head_collision.collideAny() )
 					{
 						them.bounce();
 						Audio::playSound( Audio::SoundType::BOP );
@@ -188,9 +212,12 @@ void ChamsbySprite::customInteract( Collision& my_collision, Collision& their_co
 
 void ChamsbySprite::render( const Camera& camera ) const
 {
-	graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
-	auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );
-	Render::renderRectDebug( r, { 255, 0, 0, 128 } );
-	auto hr = camera.relativeRect( Unit::SubPixelsToPixels( head_box_ ) );
-	Render::renderRectDebug( hr, { 0, 255, 0, 128 } );
+	if ( !isDead() )
+	{
+		graphics_->render( Unit::SubPixelsToPixels( hit_box_ ), &camera );
+		auto r = camera.relativeRect( Unit::SubPixelsToPixels( hit_box_ ) );
+		Render::renderRectDebug( r, { 255, 0, 0, 128 } );
+		auto hr = camera.relativeRect( Unit::SubPixelsToPixels( head_box_ ) );
+		Render::renderRectDebug( hr, { 0, 255, 0, 128 } );
+	}
 };

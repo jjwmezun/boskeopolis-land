@@ -145,7 +145,7 @@ void LevelState::init()
 	events_.init( level_ );
 	sprites_.reset( *this );
 	level_.init( *this );
-	camera_.setPosition( level_.cameraX(), level_.cameraY() );
+	camera_.init( level_.cameraX(), level_.cameraY(), level_.currentMap().camera_type_ );
 	inventory_screen_.init( level_ );
 };
 

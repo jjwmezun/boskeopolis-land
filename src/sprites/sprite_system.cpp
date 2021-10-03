@@ -153,6 +153,7 @@
 #include "raft_sprite.hpp"
 #include "random_treasure_chest_sprite.hpp"
 #include "regular_guard_sprite.hpp"
+#include "reticle_sprite.hpp"
 #include "rising_package_sprite.hpp"
 #include "rising_ice_cube_sprite.hpp"
 #include "rising_platform_sprite.hpp"
@@ -1097,6 +1098,9 @@ std::unique_ptr<Sprite> SpriteSystem::spriteType( int type, int x, int y, int i,
 		break;
 		case ( SPRITE_INDEX_START + 282 ):
 			return std::unique_ptr<Sprite> ( VacuumSprite::generateFast( x, y ) );
+		break;
+		case ( SPRITE_INDEX_START + 283 ):
+			return std::unique_ptr<Sprite> ( new ReticleSprite( x, y ) );
 		break;
 		default:
 			throw mezun::InvalidSprite( type );

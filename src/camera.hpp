@@ -18,7 +18,8 @@ class Camera final
 			CENTER_Y,
 			CENTER_BOTH,
 			SCROLL_LOCK,
-			PRIORITIZE_TOP
+			PRIORITIZE_TOP,
+			NONE
 		};
 
 		constexpr Camera
@@ -45,7 +46,8 @@ class Camera final
 			prev_x_ ( -87654 ),
 			prev_y_ ( -87654 ),
 			shake_amount_ ( 0 ),
-			shake_dir_ ( Direction::Horizontal::__NULL )
+			shake_dir_ ( Direction::Horizontal::__NULL ),
+			type_ ( Type::NORMAL )
 		{};
 
 		constexpr sdl2::SDLRect rect() const
@@ -248,6 +250,13 @@ class Camera final
 			return scroll_dir_ != Direction::Simple::__NULL;
 		};
 
+		constexpr void setType( Type type )
+		{
+			type_ = type;
+		};
+
+		void init( int x, int y, Type type );
+
 		bool onscreen( sdl2::SDLRect r, int padding = 0 )  const;
 		bool onscreenPixels( sdl2::SDLRect r, int padding = 0 )  const;
 		bool offscreen( sdl2::SDLRect r, int padding = 0, Direction::Simple direction = Direction::Simple::__NULL ) const;
@@ -279,6 +288,7 @@ class Camera final
 		int prev_y_;
 		int shake_amount_;
 		int position_before_scroll_;
+		Type type_;
 
 		void move( const Sprite& o, const Type type );
 		void contain( const Map& m );
