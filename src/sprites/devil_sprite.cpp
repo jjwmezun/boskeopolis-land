@@ -13,7 +13,7 @@ static int generateTimerTarget()
 
 DevilSprite::DevilSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 32, 32, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 32, 1600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 32, 32, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 32, 1600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
     timer_ ( 0 ),
     timer_target_ ( generateTimerTarget() )
 {};

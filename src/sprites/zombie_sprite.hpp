@@ -10,6 +10,7 @@ class ZombieSprite final : public Sprite
 		void customUpdate( LevelState& level_state ) override;
 		void customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state ) override;
 		void render( const Camera& camera ) const override;
+		void deathAction( LevelState& level_state ) override;
 
     private:
 		enum class ZState
@@ -26,5 +27,6 @@ class ZombieSprite final : public Sprite
 		int head_acceleration_x_;
 		int head_vx_;
 		sdl2::SDLRect head_;
+		SpriteGraphics head_gfx_;
         char scatch_[ 3000 ];
 };

@@ -1,0 +1,23 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 15,
+		"y": 16
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			},
+			"conditions":
+			[
+				{
+					"type": "collide_bottom"
+				}
+			]
+		}
+	]
+}

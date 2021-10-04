@@ -20,9 +20,11 @@ static int generateRandomJumpHeight()
 
 HoppingZombieSprite::HoppingZombieSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/zombie.png", 0, 0, false, false, 0.0, -2, -1, 5, 2 ), x, y, 10, 26, {}, 100, 1000, 1000, generateRandomJumpHeight(), Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/zombie.png", 0, 0, false, false, 0.0, 0, 0, 0, 0 ), x, y, 18, 31, {}, 100, 1000, 1000, generateRandomJumpHeight(), Direction::Horizontal::LEFT, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::GROUNDED, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
     timer_ ( 0 ),
-    target_time_ ( generateRandomTargetTime() )
+    target_time_ ( generateRandomTargetTime() ),
+	head_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 2, y + 3, 16, 13 } )),
+	hurt_box_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 5, y + 17, 9, 13 } ))
 {
     jump_lock_ = false;
 };
@@ -36,6 +38,7 @@ void HoppingZombieSprite::customUpdate( LevelState& level_state )
         jump();
         moveInDirectionX();
         turnOnCollide();
+        graphics_->current_frame_x_ = 36;
     }
     else if ( on_ground_ )
     {
@@ -51,14 +54,22 @@ void HoppingZombieSprite::customUpdate( LevelState& level_state )
         {
             ++timer_;
         }
+        graphics_->current_frame_x_ = 0;
     }
+
+    head_box_.x = hit_box_.x + Unit::PixelsToSubPixels( 2 );
+    head_box_.y = hit_box_.y + Unit::PixelsToSubPixels( 3 );
+    hurt_box_.x = hit_box_.x + Unit::PixelsToSubPixels( 5 );
+    hurt_box_.y = hit_box_.y + Unit::PixelsToSubPixels( 17 );
+    flipGraphicsOnRight();
 };
 
 void HoppingZombieSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
     if ( them.hasType( SpriteType::HERO ) )
     {
-        if ( their_collision.collideBottom() && them.vy_ > 0 )
+		const Collision head_collision = them.testCollision( head_box_ );
+        if ( !them.on_ground_ && head_collision.collideAny() )
         {
             kill();
             them.bounce();
@@ -73,9 +84,13 @@ void HoppingZombieSprite::customInteract( Collision& my_collision, Collision& th
             kill();
             Audio::playSound( Audio::SoundType::BOP );
         }
-        else if ( !isDead() && their_collision.collideAny() )
+        else
         {
-            level_state.health().hurt();
+            const Collision hurt_collision = them.testCollision( hurt_box_ );
+            if ( hurt_collision.collideAny() )
+            {
+                level_state.health().hurt();
+            }
         }
     }
 };

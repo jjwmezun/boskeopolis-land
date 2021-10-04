@@ -13,5 +13,7 @@ class HoppingZombieSprite final : public Sprite
     private:
         int timer_;
         int target_time_;
+		sdl2::SDLRect head_box_;
+		sdl2::SDLRect hurt_box_;
         char scatch_[ 3000 ];
 };

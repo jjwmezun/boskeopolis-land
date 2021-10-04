@@ -1,0 +1,17 @@
+{
+	"graphics":
+	{
+		"type": "sprite",
+		"x": 10,
+		"y": 21
+	},
+	"behavior":
+	[
+		{
+			"component":
+			{
+				"type": "solid"
+			}
+		}
+	]
+}

@@ -79,7 +79,7 @@ void VanishingForestGroundSprite::customUpdate( LevelState& level_state )
                 texture_created_ = true;
             }
 
-            if ( timer_ >= 8 )
+            if ( timer_ >= 2 )
             {
                 timer_ = 0;
                 ground_state_ = GroundState::FLASHING;
@@ -177,7 +177,7 @@ bool VanishingForestGroundSprite::doHeroCollision( Sprite& them ) const
     const Collision collision = them.testBlockCollision( *this );
     if ( collision.collideAny() )
     {
-        them.collideStopAny( collision );
+        them.collideStopYBottom( collision.overlapYBottom() );
         return true;
     }
     return false;
