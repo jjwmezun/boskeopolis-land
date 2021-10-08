@@ -7,7 +7,7 @@
 #include "sprite_graphics.hpp"
 #include "zombie_sprite.hpp"
 
-static constexpr int HEAD_ACCELERATION_X = 25;
+static constexpr int HEAD_ACCELERATION_X = 50;
 static constexpr int HEAD_MAX_SPEED = 2000;
 
 static constexpr int MAX_HEIGHT = 13;
@@ -43,10 +43,11 @@ void ZombieSprite::customUpdate( LevelState& level_state )
 			{
 				if ( graphics_->y_adjustment_ == -1 )
 				{
-					hit_box_.h += Unit::PixelsToSubPixels( 1 );
-					hit_box_.y -= Unit::PixelsToSubPixels( 1 );
-					if ( hit_box_.h == Unit::PixelsToSubPixels( 13 ) )
+					hit_box_.h += Unit::PixelsToSubPixels( 2 );
+					hit_box_.y -= Unit::PixelsToSubPixels( 2 );
+					if ( hit_box_.h >= Unit::PixelsToSubPixels( 13 ) )
 					{
+						hit_box_.h = Unit::PixelsToSubPixels( 13 );
 						sprite_interact_ = true;
 						state_ = ZState::MOVING;
 					}
@@ -80,7 +81,7 @@ void ZombieSprite::customUpdate( LevelState& level_state )
 		break;
 		case ( ZState::BEFORE_THROW ):
 		{
-			if ( timer_ == 16 )
+			if ( timer_ >= 8 )
 			{
 				timer_ = 0;
 				state_ = ZState::THROWING;
@@ -97,8 +98,8 @@ void ZombieSprite::customUpdate( LevelState& level_state )
 			head_vx_ = std::max( -HEAD_MAX_SPEED, std::min( HEAD_MAX_SPEED, head_vx_ + head_acceleration_x_ ) );
 			head_.x += head_vx_;
 			const bool head_reached_end = ( direction_x_ == Direction::Horizontal::RIGHT )
-				? head_.x > hit_box_.x - Unit::BlocksToSubPixels( 3 )
-				: head_.x < hit_box_.x - Unit::BlocksToSubPixels( 3 );
+				? head_.x > hit_box_.x + Unit::BlocksToSubPixels( 4 )
+				: head_.x < hit_box_.x - Unit::BlocksToSubPixels( 4 );
 			if ( head_reached_end )
 			{
 				state_ = ZState::PULLING;
@@ -110,8 +111,8 @@ void ZombieSprite::customUpdate( LevelState& level_state )
 			head_vx_ = std::max( -HEAD_MAX_SPEED, std::min( HEAD_MAX_SPEED, head_vx_ - head_acceleration_x_ ) );
 			head_.x += head_vx_;
 			const bool head_is_back = ( direction_x_ == Direction::Horizontal::RIGHT )
-				? head_.x <= hit_box_.x - Unit::PixelsToSubPixels( 3 )
-				: head_.x >= hit_box_.x - Unit::PixelsToSubPixels( 3 );
+				? head_.x <= hit_box_.x - Unit::PixelsToSubPixels( 4 )
+				: head_.x >= hit_box_.x - Unit::PixelsToSubPixels( 4 );
 			if ( head_is_back )
 			{
 				head_.x = hit_box_.x - Unit::PixelsToSubPixels( 3 );
@@ -135,8 +136,8 @@ void ZombieSprite::customInteract( Collision& my_collision, Collision& their_col
 			if ( on_ground_ )
 			{
 				const bool near_player = ( direction_x_ == Direction::Horizontal::RIGHT )
-					? them.hit_box_.x < rightSubPixels() + Unit::BlocksToSubPixels( 6 )
-					: them.rightSubPixels() > hit_box_.x - Unit::BlocksToSubPixels( 6 );
+					? them.hit_box_.x < rightSubPixels() + Unit::BlocksToSubPixels( 7 )
+					: them.rightSubPixels() > hit_box_.x - Unit::BlocksToSubPixels( 7 );
 				if ( near_player )
 				{
 					state_ = ZState::BEFORE_THROW;

@@ -217,7 +217,7 @@ void OWInventory::regenerateLevelGraphics()
 		diamond_icon_.src_.x = 8;
 		diamond_icon_.src_.y = 24;
 	}
-	suits_icon_.src_.x = ( Inventory::hasSuits( space_.getLevelNumber() ) ) ? 32 : 0;
+	suits_icon_.src_.x = ( Inventory::hasSuits( space_.getLevelNumber() ) ) ? 16 : 0;
 
 	if ( LevelList::hasSecretGoal( space_.getLevelNumber() ) )
 	{

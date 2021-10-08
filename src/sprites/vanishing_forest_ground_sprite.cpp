@@ -88,7 +88,7 @@ void VanishingForestGroundSprite::customUpdate( LevelState& level_state )
         break;
         case ( GroundState::FLASHING ):
         {
-            if ( timer_ >= 18 * 3 + 10 )
+            if ( timer_ >= 18 + 10 )
             {
                 sprite_interact_ = false;
                 ground_state_ = GroundState::GONE;

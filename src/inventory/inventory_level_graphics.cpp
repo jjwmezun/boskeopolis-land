@@ -464,20 +464,20 @@ void InventoryLevelGraphics::setSuitGotten( CardSuit suit )
 
 void InventoryLevelGraphics::renderClubSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 208, 8, 8 }, { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 16, 208, 8, 8 }, { SUIT_CLUB_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 void InventoryLevelGraphics::renderDiamondSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 216, 8, 8 }, { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 16, 216, 8, 8 }, { SUIT_DIAMOND_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 void InventoryLevelGraphics::renderHeartSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 224, 8, 8 }, { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 16, 224, 8, 8 }, { SUIT_HEART_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };
 
 void InventoryLevelGraphics::renderSpadeSuit()
 {
-	Render::renderObject( "bg/level-select-characters.png", { 8, 232, 8, 8 }, { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
+	Render::renderObject( "bg/level-select-characters.png", { 16, 232, 8, 8 }, { SUIT_SPADE_FROM_HP + getXFromHP(), y_ + TOP_ROW_Y_RELATIVE, 8, 8 } );
 };

@@ -13,4 +13,7 @@ class DevilFireSprite final : public Sprite
 	private:
 		const double angle_;
         double speed_;
+		double rotation_;
+		int timer_;
+		int animation_frame_;
 };

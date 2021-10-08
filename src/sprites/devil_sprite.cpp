@@ -1,3 +1,4 @@
+#include "audio.hpp"
 #include "devil_fire_sprite.hpp"
 #include "devil_sprite.hpp"
 #include "collision.hpp"
@@ -13,7 +14,7 @@ static int generateTimerTarget()
 
 DevilSprite::DevilSprite( int x, int y )
 :
-	Sprite( std::make_unique<SpriteGraphics> ( "sprites/box.png" ), x, y, 32, 32, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 32, 1600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
+	Sprite( std::make_unique<SpriteGraphics> ( "sprites/moon-monster.png" ), x, y, 32, 32, { SpriteType::ENEMY, SpriteType::BOPPABLE }, 32, 1600, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY, true, false ),
     timer_ ( 0 ),
     timer_target_ ( generateTimerTarget() )
 {};
@@ -29,6 +30,7 @@ void DevilSprite::customUpdate( LevelState& level_state )
         const double dx = ( double )( level_state.sprites().hero().centerXSubPixels() - centerXSubPixels() );
         const double dy = ( double )( level_state.sprites().hero().centerYSubPixels() - centerYSubPixels() );
         level_state.sprites().spawn( std::unique_ptr<DevilFireSprite> ( new DevilFireSprite( centerXPixels(), centerYPixels(), dy, dx, std::abs( ( double )( vx_ ) ) ) ) );
+        Audio::playSound( Audio::SoundType::LIGHTNING );
     }
     else
     {
@@ -42,25 +44,11 @@ void DevilSprite::customInteract( Collision& my_collision, Collision& their_coll
     {
         if ( them.rightSubPixels() < hit_box_.x )
         {
-            if ( hit_box_.x < original_hit_box_.x - Unit::BlocksToSubPixels( 10 ) )
-            {
-                moveRight();
-            }
-            else
-            {
-                moveLeft();
-            }
+            moveLeft();
         }
         else
         {
-            if ( hit_box_.x > original_hit_box_.x + Unit::BlocksToSubPixels( 10 ) )
-            {
-                moveLeft();
-            }
-            else
-            {
-                moveRight();
-            }
+            moveRight();
         }
     }
 };
