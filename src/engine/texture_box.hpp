@@ -9,7 +9,7 @@ class TextureBox final
     public:
         TextureBox( int width = Unit::WINDOW_WIDTH_PIXELS, int height = Unit::WINDOW_HEIGHT_PIXELS, int x = 0, int y = 0 );
         ~TextureBox();
-        TextureBox( TextureBox&& t ) = delete;
+        TextureBox( TextureBox&& t );
         TextureBox& operator=( TextureBox&& t );
         TextureBox( const TextureBox& ) = delete;
         TextureBox& operator=( const TextureBox& ) = delete;

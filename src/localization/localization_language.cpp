@@ -532,12 +532,18 @@ void LocalizationLanguage::loadLevelText( const rapidjson::GenericObject<false, 
         assert( item.name.IsString() && item.value.IsObject() );
         const auto& card = item.value.GetObject();
         assert( card.HasMember( "title" ) && card[ "title" ].IsString() && card.HasMember( "description" ) && card[ "description" ].IsString() );
+        std::u32string episode = U"";
+        if ( card.HasMember( "episode" ) && card[ "episode" ].IsString() )
+        {
+            episode = mezun::charToChar32String( card[ "episode" ].GetString() );
+        }
         trading_cards_.insert
         ({
             item.name.GetString(),
             {
                 mezun::charToChar32String( card[ "title" ].GetString() ),
-                mezun::charToChar32String( card[ "description" ].GetString() )
+                mezun::charToChar32String( card[ "description" ].GetString() ),
+                episode
             }
         });  
     }
@@ -1125,7 +1131,7 @@ std::u32string LocalizationLanguage::getUnlockSpecialLevelName( const std::u32st
 
 TradingCard LocalizationLanguage::getLevelTradingCard( const std::string& level_name ) const
 {
-    return mezun::findInMap( trading_cards_, level_name, TradingCard( U"MISSING CARD NAME", U"MISSING CARD DESCRIPTION" ) );
+    return mezun::findInMap( trading_cards_, level_name, TradingCard( U"MISSING CARD NAME", U"MISSING CARD DESCRIPTION", U"" ) );
 };
 
 std::u32string LocalizationLanguage::getThemeCode( int theme ) const

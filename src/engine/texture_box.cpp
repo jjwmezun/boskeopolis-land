@@ -24,6 +24,14 @@ TextureBox& TextureBox::operator=( TextureBox&& t )
     return *this;
 };
 
+TextureBox::TextureBox( TextureBox&& t )
+:
+    texture_ ( t.texture_ ),
+    dest_ ( t.dest_ ),
+    src_ ( t.src_ ),
+    token_ ( t.token_ )
+{};
+
 void TextureBox::init()
 {
     texture_ = Render::createRenderBox( dest_.w, dest_.h );

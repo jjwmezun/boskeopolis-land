@@ -14,6 +14,7 @@ static constexpr int CARD_WIDTH = 20;
 static constexpr int CARD_PADDING = 4;
 static constexpr int MESSAGE_HEIGHT = 64;
 static constexpr int INPUT_DELAY_LENGTH = 8;
+static constexpr int SCROLL_SPEED = 8;
 
 static constexpr int generateCardX( int x )
 {
@@ -37,8 +38,17 @@ CardsMenuState::CardsMenuState()
     selection_y_ ( 0 ),
     bg_ (),
     input_delay_ ( INPUT_DELAY_LENGTH ),
-    number_of_rows_ ( 0 )
+    selection_ ( 0 ),
+    pages_ ( ( int )( std::ceil( ( double )( LevelList::getNumberOfLevels() ) / ( double )( CARDS_PER_PAGE ) ) ) ),
+    current_page_ ( 0 ),
+    cards_ ({}),
+    src_ ( 0, 0, CARD_WIDTH, CARD_HEIGHT ),
+    cols_on_last_page_ ( 0 ),
+    rows_on_last_page_ ( 0 ),
+    pages_gfx_ ( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
+    next_page_ ( 0 )
 {
+    /*
     for ( int i = 0; i < LevelList::getNumberOfLevels(); ++i )
     {
         if ( LevelList::hasCard( i ) )
@@ -61,7 +71,57 @@ CardsMenuState::CardsMenuState()
             card_level_ids_.emplace_back( i );
         }
     }
-    number_of_rows_ = ( int )( std::ceil( ( double )( card_text_.size() ) / ( double )( CARDS_PER_COLUMN ) ) );
+    number_of_rows_ = ;*/
+
+    int page = 0;
+    int cardnum = 0;
+    for ( int i = 0; i < LevelList::getNumberOfLevels(); ++i )
+    {
+        // Skip levels without
+        if ( !LevelList::hasCard( i ) )
+        {
+            continue;
+        }
+
+        if ( cardnum % CARDS_PER_PAGE == 0 )
+        {
+            cardnum = 0;
+            cards_.push_back({});
+            ++page;
+        }
+
+        const TradingCard& card = Localization::getCurrentLanguage().getLevelTradingCard( LevelList::getCodeNameFromID( i ) );
+
+        cards_.at( page - 1 ).push_back
+        ({
+            i,
+            WTextObj
+            {
+                mezun::merge32Strings( mezun::merge32Strings( mezun::merge32Strings( card.name_, U"\n" ), mezun::merge32Strings( card.description_, U"\n" ) ), card.episode_ ),
+                40,
+                Unit::WINDOW_HEIGHT_PIXELS - MESSAGE_HEIGHT,
+                WTextCharacter::Color::BLACK,
+                Unit::WINDOW_WIDTH_PIXELS - 40,
+                WTextObj::Align::LEFT,
+                WTextCharacter::Color::__NULL,
+                8,
+                8,
+                WTextObj::VAlign::TOP,
+                MESSAGE_HEIGHT
+            }
+        });
+        ++cardnum;
+    }
+
+    pages_gfx_.setWidth( Unit::WINDOW_WIDTH_PIXELS * cards_.size() );
+
+    const auto& last_page = cards_.at( cards_.size() - 1 );
+    cols_on_last_page_ = last_page.size() % CARDS_PER_COLUMN;
+    if ( cols_on_last_page_ == 0 )
+    {
+        cols_on_last_page_ = CARDS_PER_COLUMN;
+    }
+    rows_on_last_page_ = ( int )( std::ceil( ( double )( last_page.size() ) / ( double )( CARDS_PER_COLUMN ) ) );
 };
 
 CardsMenuState::~CardsMenuState() {};
@@ -75,62 +135,103 @@ void CardsMenuState::stateUpdate()
 	}
     title_.update();
 
-    if ( input_delay_ == INPUT_DELAY_LENGTH )
+    if ( next_page_ > current_page_ )
     {
-        if ( Input::held( Input::Action::MOVE_RIGHT ) )
+        if ( pages_gfx_.getX() <= next_page_ * -Unit::WINDOW_WIDTH_PIXELS )
         {
-            ++selection_x_;
-            if ( selection_x_ == CARDS_PER_COLUMN || ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_y_ == number_of_rows_ - 1 && selection_x_ == card_text_.size() % CARDS_PER_COLUMN ) )
-            {
-                selection_x_ = 0;
-            }
-            doGeneralSelection();
+            current_page_ = next_page_;
         }
-        else if ( Input::held( Input::Action::MOVE_LEFT ) )
+        else
         {
-            --selection_x_;
-            if ( selection_x_ < 0 )
-            {
-                selection_x_ = ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_y_ == number_of_rows_ - 1 )
-                    ? ( card_text_.size() % CARDS_PER_COLUMN ) - 1
-                    : CARDS_PER_COLUMN - 1;
-            }
-            doGeneralSelection();
+            pages_gfx_.setX( pages_gfx_.getX() - SCROLL_SPEED );
         }
-
-        if ( Input::held( Input::Action::MOVE_DOWN ) )
+    }
+    else if ( next_page_ < current_page_ )
+    {
+        if ( pages_gfx_.getX() >= next_page_ * -Unit::WINDOW_WIDTH_PIXELS )
         {
-            ++selection_y_;
-            if ( selection_y_ == number_of_rows_ )
-            {
-                selection_y_ = 0;
-            }
-            else if ( selection_y_ == number_of_rows_ - 1 )
-            {
-                if ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_x_ >= card_text_.size() % CARDS_PER_COLUMN )
-                {
-                    selection_x_ = ( card_text_.size() % CARDS_PER_COLUMN ) - 1;
-                }
-            }
-            doGeneralSelection();
+            current_page_ = next_page_;
         }
-        else if ( Input::held( Input::Action::MOVE_UP ) )
+        else
         {
-            --selection_y_;
-            if ( selection_y_ < 0 )
-            {
-                selection_y_ = number_of_rows_ - 1;
-                if ( card_text_.size() % CARDS_PER_COLUMN != 0 && selection_x_ >= card_text_.size() % CARDS_PER_COLUMN )
-                {
-                    selection_x_ = ( card_text_.size() % CARDS_PER_COLUMN ) - 1;
-                }
-            }
-            doGeneralSelection();
+            pages_gfx_.setX( pages_gfx_.getX() + SCROLL_SPEED );
         }
     }
     else
     {
-        ++input_delay_;
+        if ( input_delay_ == INPUT_DELAY_LENGTH )
+        {
+            if ( Input::held( Input::Action::MOVE_RIGHT ) )
+            {
+                ++selection_x_;
+                if ( selection_x_ == CARDS_PER_COLUMN )
+                {
+                    if ( current_page_ < cards_.size() - 1 )
+                    {
+                        selection_x_ = 0;
+                        next_page_ = current_page_ + 1;
+                    }
+                    else
+                    {
+                        selection_x_ = CARDS_PER_COLUMN - 1;
+                    }
+                }
+                doGeneralSelection();
+            }
+            else if ( Input::held( Input::Action::MOVE_LEFT ) )
+            {
+                --selection_x_;
+                if ( selection_x_ < 0 )
+                {
+                    if ( current_page_ > 0 )
+                    {
+                        selection_x_ = CARDS_PER_COLUMN - 1;
+                        next_page_ = current_page_ - 1;
+                    }
+                    else
+                    {
+                        selection_x_ = 0;
+                    }
+                }
+                doGeneralSelection();
+            }
+
+            if ( Input::held( Input::Action::MOVE_DOWN ) )
+            {
+                ++selection_y_;
+                if ( selection_y_ == CARDS_PER_ROW )
+                {
+                    selection_y_ = CARDS_PER_ROW - 1;
+                }
+                doGeneralSelection();
+            }
+            else if ( Input::held( Input::Action::MOVE_UP ) )
+            {
+                --selection_y_;
+                if ( selection_y_ < 0 )
+                {
+                    selection_y_ = 0;
+                }
+                doGeneralSelection();
+            }
+
+            if ( next_page_ == cards_.size() - 1 )
+            {
+                if ( selection_y_ >= rows_on_last_page_ )
+                {
+                    selection_y_ = rows_on_last_page_ - 1;
+                }
+                else if ( selection_y_ == rows_on_last_page_ - 1 && selection_x_ >= cols_on_last_page_ )
+                {
+                    selection_x_ = cols_on_last_page_ - 1;
+                }
+            }
+            selection_ = ( CARDS_PER_COLUMN * selection_y_ ) + selection_x_;
+        }
+        else
+        {
+            ++input_delay_;
+        }
     }
 
     bg_.update();
@@ -140,27 +241,14 @@ void CardsMenuState::stateRender()
 {
     bg_.render();
     message_frame_.render();
-    for ( int i = 0; i < card_text_.size(); ++i )
+    pages_gfx_.render();
+    if ( next_page_ == current_page_ )
     {
-        const int xi = mezun::xOfN( i, CARDS_PER_COLUMN );
-        const int yi = mezun::yOfN( i, CARDS_PER_COLUMN );
-        const int x = generateCardX( xi );
-        const int y = generateCardY( yi );
-        Render::renderObject( "bg/card-select-card-2.png", { 0, 0, CARD_WIDTH, CARD_HEIGHT }, { x, y, CARD_WIDTH, CARD_HEIGHT } );
-        Render::renderObject( "bg/card-select-card-2.png", { 40, 0, 13, 22 }, { x + 4, y + 4, 13, 22 } );
-        if ( Inventory::haveDiamond( card_level_ids_[ i ] ) )
+        Render::renderObject( "bg/card-select-card-2.png", { 20, 0, CARD_WIDTH, CARD_HEIGHT }, { generateCardX( selection_x_ ), generateCardY( selection_y_ ), CARD_WIDTH, CARD_HEIGHT } );
+        if ( selection_ < cards_[ current_page_ ].size() )
         {
-            Render::renderRect( { x + 4, y + 4, 13, 22 }, 1 );
-            Render::renderObject( "bg/trading-card-items-small.png", { 13 * xi, 22 * yi, 13, 22 }, { x + 4, y + 4, 13, 22 } );
+            cards_[ current_page_ ][ selection_ ].text.render();
         }
-    }
-    Render::renderObject( "bg/card-select-card-2.png", { 20, 0, CARD_WIDTH, CARD_HEIGHT }, { generateCardX( selection_x_ ), generateCardY( selection_y_ ), CARD_WIDTH, CARD_HEIGHT } );
-
-    const int selection = selection_y_ * CARDS_PER_COLUMN + selection_x_;
-    if ( Inventory::haveDiamond( card_level_ids_[ selection ] ) )
-    {
-        Render::renderObject( "bg/trading-card-items-large.png", { 39 * selection_x_, 48 * selection_y_, 39, 48 }, { 8, 168, 39, 48 } );
-        card_text_[ selection ].render();
     }
     title_.render();
 };
@@ -168,6 +256,28 @@ void CardsMenuState::stateRender()
 void CardsMenuState::init()
 {
     Audio::changeSong( "level-select" );
+
+    pages_gfx_.init();
+    pages_gfx_.startDrawing();
+    sdl2::SDLRect src = { 0, 0, CARD_WIDTH, CARD_HEIGHT };
+    for ( int li = 0; li < cards_.size(); ++li )
+    {
+        for ( int i = 0; i < cards_[ li ].size(); ++i )
+        {
+            const int xi = mezun::xOfN( i, CARDS_PER_COLUMN );
+            const int yi = mezun::yOfN( i, CARDS_PER_COLUMN );
+            const int x = generateCardX( xi ) + Unit::WINDOW_WIDTH_PIXELS * li;
+            const int y = generateCardY( yi );
+            Render::renderObject( "bg/card-select-card-2.png", src, { x, y, CARD_WIDTH, CARD_HEIGHT } );
+            Render::renderObject( "bg/card-select-card-2.png", { 40, 0, 13, 22 }, { x + 4, y + 4, 13, 22 } );
+            if ( Inventory::haveDiamond( cards_[ li ][ i ].id ) )
+            {
+                Render::renderRect( { x + 4, y + 4, 13, 22 }, 1 );
+                Render::renderObject( "bg/trading-card-items-small.png", { 13 * xi, 22 * yi, 13, 22 }, { x + 4, y + 4, 13, 22 } );
+            }
+        }
+    }
+    pages_gfx_.endDrawing();
 };
 
 void CardsMenuState::doGeneralSelection()
