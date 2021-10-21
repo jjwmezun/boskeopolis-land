@@ -1,6 +1,5 @@
 #include "audio.hpp"
 #include "cards_menu_state.hpp"
-#include "input.hpp"
 #include "inventory.hpp"
 #include "level_list.hpp"
 #include "localization.hpp"
@@ -8,12 +7,13 @@
 #include "main.hpp"
 #include "mezun_helpers.hpp"
 #include "render.hpp"
+#include "wtext_obj.hpp"
 
 static constexpr int CARD_HEIGHT = 29;
 static constexpr int CARD_WIDTH = 20;
 static constexpr int CARD_PADDING = 4;
 static constexpr int MESSAGE_HEIGHT = 136;
-static constexpr int INPUT_DELAY_LENGTH = 4;
+static constexpr int MAX_DELAY = 8;
 static constexpr int SCROLL_SPEED = 16;
 static constexpr int FRAME_Y = Unit::WINDOW_HEIGHT_PIXELS - MESSAGE_HEIGHT;
 static constexpr int BIG_IMAGE_Y = FRAME_Y + 8;
@@ -45,9 +45,12 @@ CardsMenuState::CardsMenuState()
     rows_on_last_page_ ( 0 ),
     arrow_timer_ ( 0 ),
     bg_ (),
-    input_delay_ ( INPUT_DELAY_LENGTH ),
+    input_delay_ ( MAX_DELAY ),
     card_pages_ ({}),
-    pages_gfx_ ( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS )
+    pages_gfx_ ( Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS ),
+    prev_selection_ ( 0 ),
+    prev_input_ ( Input::Action::CANCEL ),
+    move_timer_ ( 0 )
 {
     int page = 0;
     int cardnum = 0;
@@ -71,9 +74,27 @@ CardsMenuState::CardsMenuState()
         card_pages_.at( page - 1 ).push_back
         ({
             i,
-            WTextObj
+            { WTextObj
             {
-                mezun::merge32Strings( mezun::merge32Strings( mezun::merge32Strings( card.name_, U"\n" ), mezun::merge32Strings( card.description_, U"\n" ) ), card.episode_ ),
+                mezun::merge32Strings
+                (
+                    mezun::merge32Strings
+                    (
+                        mezun::merge32Strings
+                        (
+                            card.name_, U"\n\n"
+                        ),
+                        mezun::merge32Strings
+                        (
+                            card.description_, U"\n\n"
+                        )
+                    ),
+                    mezun::merge32Strings
+                    (
+                        U"Episode: ",
+                        card.episode_
+                    )
+                ),
                 40,
                 Unit::WINDOW_HEIGHT_PIXELS - MESSAGE_HEIGHT,
                 WTextCharacter::Color::BLACK,
@@ -85,7 +106,7 @@ CardsMenuState::CardsMenuState()
                 WTextObj::VAlign::TOP,
                 MESSAGE_HEIGHT
             }
-        });
+        }});
         ++cardnum;
     }
 
@@ -138,7 +159,9 @@ void CardsMenuState::stateUpdate()
     }
     else
     {
-        if ( input_delay_ == INPUT_DELAY_LENGTH )
+        const int delay_length = ( move_timer_ >= 8 ) ? 2 : ( ( move_timer_ >= 4 ) ? 4 : MAX_DELAY );
+        Input::Action current_input = Input::Action::CANCEL;
+        if ( input_delay_ >= delay_length )
         {
             if ( Input::held( Input::Action::MOVE_RIGHT ) )
             {
@@ -156,6 +179,7 @@ void CardsMenuState::stateUpdate()
                     }
                 }
                 doGeneralSelection();
+                current_input = Input::Action::MOVE_RIGHT;
             }
             else if ( Input::held( Input::Action::MOVE_LEFT ) )
             {
@@ -173,7 +197,19 @@ void CardsMenuState::stateUpdate()
                     }
                 }
                 doGeneralSelection();
+                current_input = Input::Action::MOVE_LEFT;
             }
+            else
+            {
+                current_input = Input::Action::CANCEL;
+            }
+
+            ++move_timer_;
+            if ( current_input != prev_input_ || current_input == Input::Action::CANCEL )
+            {
+                move_timer_ = 0;
+            }
+            prev_input_ = current_input;
 
             if ( Input::held( Input::Action::MOVE_DOWN ) )
             {
@@ -205,7 +241,12 @@ void CardsMenuState::stateUpdate()
                     selection_x_ = cols_on_last_page_ - 1;
                 }
             }
+            prev_selection_ = selection_;
             selection_ = ( CARDS_PER_COLUMN * selection_y_ ) + selection_x_;
+            if ( prev_selection_ != selection_ )
+            {
+                card_pages_[ current_page_ ][ selection_ ].text.reset();
+            }
         }
         else
         {
@@ -213,6 +254,7 @@ void CardsMenuState::stateUpdate()
         }
     }
 
+    card_pages_[ current_page_ ][ selection_ ].text.update();
     bg_.update();
     ++arrow_timer_;
     if ( arrow_timer_ >= 32 )

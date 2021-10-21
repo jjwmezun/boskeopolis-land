@@ -40,6 +40,11 @@ class WTextGradual final
             }
         };
 
+        void reset()
+        {
+            characters_in_view_ = 0;
+        };
+
         bool finishedAppearing() const
         {
             return characters_in_view_ >= limit_;

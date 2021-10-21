@@ -4,14 +4,15 @@
 #include "counter_flip.hpp"
 #include "frame.hpp"
 #include "game_state.hpp"
+#include "input.hpp"
 #include "texture_box.hpp"
 #include "wtext_highlight.hpp"
-#include "wtext_obj.hpp"
+#include "wtext_gradual.hpp"
 
 struct TradingCardGFX
 {
 	int id;
-	WTextObj text;
+	WTextGradual<false> text;
 };
 
 class CardsMenuState final : public GameState
@@ -48,5 +49,8 @@ class CardsMenuState final : public GameState
 		WTextHighlight<> title_;
 		std::vector<std::vector<TradingCardGFX>> card_pages_;
 		TextureBox pages_gfx_;
+		int prev_selection_;
+		Input::Action prev_input_;
+		int move_timer_;
 		char scratch_[3000];
 };
