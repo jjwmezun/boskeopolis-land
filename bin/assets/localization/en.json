@@ -268,9 +268,9 @@
         "ICE",
         "SHIP",
         "SWAMP",
-        "MUERTO",
         "SEWER",
         "FACTORY",
+        "MUERTO",
         "PALACE",
         "$"
     ],
