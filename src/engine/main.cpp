@@ -42,6 +42,7 @@ namespace Main
 
 	static constexpr int TRANSITION_SPEED = 16;
 	static constexpr int TRANSITION_LIMIT = 255;
+	constexpr double FPS_MILLISECONDS = 1000 / ( double )( Unit::FPS );
 
 	static StateChangeType state_change_type_ = StateChangeType::__NULL;
 
@@ -70,7 +71,6 @@ namespace Main
 	void init( int argc, char** argv );
 	void execute();
 	void end();
-	int fpsMilliseconds();
 	void initSDL();
 	void setResourcePaths();
 	void render();
@@ -88,6 +88,14 @@ namespace Main
 	void renderStates();
 	void renderTransition();
 
+
+	static double next_time;
+
+	double timeLeft()
+	{
+		double now = ( double )( SDL_GetTicks() );
+		return ( next_time <= now ) ? 0.0 : next_time - now;
+	};
 
 	// Function Implementations
 	TransitionState transitionState()
@@ -167,127 +175,120 @@ namespace Main
 		{
 			try
 			{
-				int new_time = SDL_GetTicks();
-				int frame_time = new_time - ticks_;
-				ticks_ = new_time;
-				accumulator_ += frame_time;
-				while ( accumulator_ >= 17 )
+				next_time = ( double )( SDL_GetTicks() ) + FPS_MILLISECONDS;
+				while ( SDL_PollEvent( &event ) != 0 )
 				{
-					while ( SDL_PollEvent( &event ) != 0 )
+					switch ( event.type )
 					{
-						switch ( event.type )
+						case ( SDL_QUIT ):
+							quit();
+						break;
+						case ( SDL_KEYDOWN ):
 						{
-							case ( SDL_QUIT ):
-								quit();
-							break;
-							case ( SDL_KEYDOWN ):
+							const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
+							if ( CHANGE_PALETTE )
 							{
-								const auto code = SDL_GetKeyFromScancode( event.key.keysym.scancode );
-								if ( CHANGE_PALETTE )
+								if ( code == 93 )
 								{
-									if ( code == 93 )
-									{
-										auto* state = states_[ states_.size() - 1 ].get();
-										palette_changer_.setNextPalette( state, state->palette().bgN() );
-									}
-									else if ( code == 91 )
-									{
-										auto* state = states_[ states_.size() - 1 ].get();
-										palette_changer_.setPreviousPalette( state, state->palette().bgN() );
-									}
+									auto* state = states_[ states_.size() - 1 ].get();
+									palette_changer_.setNextPalette( state, state->palette().bgN() );
 								}
-								Input::keyPress( code );
-								Input::keyHold( code );
+								else if ( code == 91 )
+								{
+									auto* state = states_[ states_.size() - 1 ].get();
+									palette_changer_.setPreviousPalette( state, state->palette().bgN() );
+								}
 							}
-							break;
-							case ( SDL_KEYUP ):
-								Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
-							break;
-							case ( SDL_JOYAXISMOTION ):
-								Input::axis( event.jaxis );
-							break;
-							case ( SDL_JOYBUTTONDOWN ):
-								Input::buttonPress( event.jbutton.button );
-								Input::buttonHold( event.jbutton.button );
-							break;
-							case ( SDL_JOYBUTTONUP ):
-								Input::buttonRelease( event.jbutton.button );
-							break;
+							Input::keyPress( code );
+							Input::keyHold( code );
 						}
-					}
-
-
-					if ( Input::exitButtonHeldLongEnough() )
-					{
-						quit();
-					}
-
-					switch ( state_change_type_ )
-					{
-						case ( StateChangeType::CHANGE ):
-							changeStateSafe();
 						break;
-						case ( StateChangeType::POP ):
-							popStateSafe();
+						case ( SDL_KEYUP ):
+							Input::keyRelease( SDL_GetKeyFromScancode( event.key.keysym.scancode ) );
 						break;
-						case ( StateChangeType::PUSH ):
-							pushStateSafe();
+						case ( SDL_JOYAXISMOTION ):
+							Input::axis( event.jaxis );
+						break;
+						case ( SDL_JOYBUTTONDOWN ):
+							Input::buttonPress( event.jbutton.button );
+							Input::buttonHold( event.jbutton.button );
+						break;
+						case ( SDL_JOYBUTTONUP ):
+							Input::buttonRelease( event.jbutton.button );
 						break;
 					}
-
-					if ( states_.empty() )
-					{
-						quit();
-						return;
-					}
-
-					switch ( transition_state_ )
-					{
-						case ( TransitionState::__NULL ):
-							states_.back()->update();
-							if ( getPalette().type() == "Neon" )
-							{
-								neon.update();
-							}
-						break;
-
-						case ( TransitionState::FADE_OUT ):
-							if ( transition_level_ < TRANSITION_LIMIT )
-							{
-								transition_level_ += TRANSITION_SPEED;
-								if ( transition_level_ > TRANSITION_LIMIT )
-								{
-									transition_level_ = TRANSITION_LIMIT;
-								}
-							}
-							else
-							{
-								transition_state_ = TransitionState::FADE_IN;
-							}
-						break;
-
-						case ( TransitionState::FADE_IN ):
-							states_.back()->update();
-							if ( transition_level_ > 0 )
-							{
-								transition_level_ -= TRANSITION_SPEED;
-								if ( transition_level_ < 0 )
-								{
-									transition_level_ = 0;
-								}
-							}
-							else
-							{
-								transition_state_ = TransitionState::__NULL;
-							}
-						break;
-					}
-					Input::update();
-
-            		accumulator_ -= 17;
 				}
 
+				if ( Input::exitButtonHeldLongEnough() )
+				{
+					quit();
+				}
+
+				switch ( state_change_type_ )
+				{
+					case ( StateChangeType::CHANGE ):
+						changeStateSafe();
+					break;
+					case ( StateChangeType::POP ):
+						popStateSafe();
+					break;
+					case ( StateChangeType::PUSH ):
+						pushStateSafe();
+					break;
+				}
+
+				if ( states_.empty() )
+				{
+					quit();
+					return;
+				}
+
+				switch ( transition_state_ )
+				{
+					case ( TransitionState::__NULL ):
+						states_.back()->update();
+						if ( getPalette().type() == "Neon" )
+						{
+							neon.update();
+						}
+					break;
+
+					case ( TransitionState::FADE_OUT ):
+						if ( transition_level_ < TRANSITION_LIMIT )
+						{
+							transition_level_ += TRANSITION_SPEED;
+							if ( transition_level_ > TRANSITION_LIMIT )
+							{
+								transition_level_ = TRANSITION_LIMIT;
+							}
+						}
+						else
+						{
+							transition_state_ = TransitionState::FADE_IN;
+						}
+					break;
+
+					case ( TransitionState::FADE_IN ):
+						states_.back()->update();
+						if ( transition_level_ > 0 )
+						{
+							transition_level_ -= TRANSITION_SPEED;
+							if ( transition_level_ < 0 )
+							{
+								transition_level_ = 0;
+							}
+						}
+						else
+						{
+							transition_state_ = TransitionState::__NULL;
+						}
+					break;
+				}
+				Input::update();
+
 				render();
+				SDL_Delay( ( Uint32 )( std::round( timeLeft() ) ) );
+				next_time += FPS_MILLISECONDS;
 			}
 			catch ( const mezun::Exception& exception )
 			{
@@ -436,11 +437,6 @@ namespace Main
 			states_.back()->backFromPop();
 			stateReset();
 		}
-	};
-
-	int fpsMilliseconds()
-	{
-		return floor( 1000 / Unit::FPS );
 	};
 
 	void firstState()
