@@ -11,12 +11,8 @@
 		{
 			"component":
 			{
-				"type": "force_leftward"
-			},
-			"conditions":
-			[
-				{ "type": "collide_any" }
-			]
+				"type": "solid"
+			}
 		}
 	]
 }

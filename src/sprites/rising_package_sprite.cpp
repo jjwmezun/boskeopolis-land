@@ -20,10 +20,11 @@ void RisingPackageSprite::customUpdate( LevelState& level_state )
 
 void RisingPackageSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( their_collision.collideAny() )
+	const Collision collision = them.testBlockCollision( *this );
+	if ( collision.collideAny() )
 	{
-		them.collideStopAny( their_collision );
-		if ( their_collision.collideBottom() )
+		them.collideStopAny( collision );
+		if ( collision.collideBottom() )
 		{
 			rise_ = true;
 		}

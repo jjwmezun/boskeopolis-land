@@ -34,7 +34,8 @@ void AngryTruckSprite::customUpdate( LevelState& level_state )
 
 void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their_collision, Sprite& them, LevelState& level_state )
 {
-	if ( them.hasType( SpriteType::TRUCK_PLATFORM ) && their_collision.collideAny() )
+	const Collision collision = them.testBlockCollision( *this );
+	if ( them.hasType( SpriteType::TRUCK_PLATFORM ) && collision.collideAny() )
 	{
 		if ( hit_box_.x > them.hit_box_.x + 16000 )
 		{
@@ -46,7 +47,7 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 	{
 		if ( them.hasType( SpriteType::HERO ) )
 		{
-			if ( their_collision.collideBottom() )
+			if ( collision.collideBottom() )
 			{
 				if
 				(
@@ -74,9 +75,9 @@ void AngryTruckSprite::customInteract( Collision& my_collision, Collision& their
 				{
 					them.hit_box_.x += vx_;
 				}
-				them.collideStopAny( their_collision );
+				them.collideStopAny( collision );
 			}
-			else if ( their_collision.collideAny() )
+			else if ( collision.collideAny() )
 			{
 				level_state.health().hurt();
 			}
