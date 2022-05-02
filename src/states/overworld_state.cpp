@@ -33,7 +33,7 @@ static constexpr int MOVE_PLAYER_FRAME_HEIGHT = Unit::WINDOW_HEIGHT_PIXELS - 40;
 static constexpr int NUMBER_OF_PALETTES = 9;
 static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 {
-	"Overworld Red",
+	"Overworld Gold",
 	"Overworld Green",
 	"Overworld Yellow",
 	"Overworld Brown",
