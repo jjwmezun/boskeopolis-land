@@ -1,5 +1,8 @@
+#include "config.hpp"
+#include "map.hpp"
 #include "nasringine/nasr.h"
 #include "sprite.hpp"
+#include "controller.hpp"
 
 #include <iostream>
 
@@ -14,17 +17,17 @@ constexpr float JUMP_MAX = 6.5f;
 namespace BSL
 {
     Sprite::Sprite() :
+        pos_ ( 64.0f, 64.0f, 16.0f, 25.0f ),
         accx_ ( 0.0f ),
         vx_ ( 0.0f ),
-        x_ ( 64.0f ),
         prevx_ ( 0.0f ),
         accy_ ( 0.0f ),
         vy_ ( 0.0f ),
-        y_ ( 64.0f ),
         prevy_ ( 0.0f ),
-        jump_start_ ( 0.0f ),
         is_jumping_ ( false ),
-        jump_lock_ ( false )
+        jump_lock_ ( false ),
+        on_ground_ ( false ),
+        jump_padding_ ( 0.0f )
     {
         int autumntexture = NasrLoadFileAsTexture( "assets/graphics/sprites/autumn.png" );
         NasrRect autumnsrc { 0.0f, 0.0f, 16.0f, 25.0f };
@@ -48,13 +51,27 @@ namespace BSL
         );
     };
 
-    void Sprite::update( float dt, Controller & controller )
+    void Sprite::update( float dt, const Controller & controller, Map & map )
     {
-        const float gravity = controller.heldJump() ? GRAVITY / 1.5f : GRAVITY;
+        if ( controller.heldMenu() )
+        {
+            pos_.x = 64.0f;
+            pos_.y = 64.0f;
+            accx_ = 0.0f;
+            vx_ = 0.0f;
+            prevx_ = 0.0f;
+            accy_ = 0.0f;
+            vy_ = 0.0f;
+            prevy_ = 0.0f;
+            is_jumping_ = false;
+            jump_lock_ = false;
+            on_ground_ = false;
+        }
+
+
+        // Horizontal Movement
         const float start_speed = controller.heldRun() ? START_SPEED * 2.0f : START_SPEED;
         const float max_speed = controller.heldRun() ? MAX_SPEED * 2.0f : MAX_SPEED;
-        const float max_jump = std::abs( vx_ ) >= MAX_SPEED * 1.5f ? JUMP_MAX * 1.1f : JUMP_MAX;
-
         if ( controller.heldRight() )
         {
             accx_ = start_speed;
@@ -81,19 +98,18 @@ namespace BSL
         {
             vx_ /= ( 1.0f + 0.2f * dt );
         }
-        x_ += vx_ * dt;
-        if ( x_ != prevx_ )
-        {
-            NasrGraphicsSpriteSetDestX( graphic_, x_ );
-        }
-        prevx_ = x_;
+        pos_.x += vx_ * dt;
         
-        if ( isOnGround() )
+
+        // Falling & Jumping
+        const bool going_fast = std::abs( vx_ ) >= MAX_SPEED * 1.5f;
+        const float gravity = controller.heldJump() ? GRAVITY / 1.5f : GRAVITY;
+        const float max_jump = going_fast ? JUMP_MAX * 1.1f : JUMP_MAX;
+        if ( jump_padding_ > 0.0f )
         {
             if ( !jump_lock_ && controller.heldJump() )
             {
                 is_jumping_ = true;
-                jump_start_ = y_;
                 vy_ = -JUMP_INIT;
                 accy_ = -JUMP_ACC;
             }
@@ -130,23 +146,101 @@ namespace BSL
             accy_ = 0.0f;
         }
 
-        y_ += vy_ * dt;
+        pos_.y += vy_ * dt;
 
+
+
+
+
+
+        // Collision
+        /*
         if ( isOnGround() )
         {
-            y_ = 320.0f - 25.0f;
+            pos_.y = 320.0f - 25.0f;
+        }
+        */
+        on_ground_ = false;
+        jump_padding_ = std::max( 0.0f, jump_padding_ - 1.0f * dt);
+
+        // Handle downward collision.
+        const int yl = pixelsToBlocks( pos_.x + 2.0f );
+        const int yr = pixelsToBlocks( pos_.right() - 2.0f );
+        if ( vy_ > 0.0f )
+        {
+            const int by = pixelsToBlocks( pos_.bottom() - 1.0f );
+            const bool blc = map.testCollision( yl, by );
+            const bool brc = map.testCollision( yr, by );
+            if ( blc || brc )
+            {
+                pos_.y -= pos_.bottom() - 1.0f - blocksToPixels( by );
+                on_ground_ = true;
+                jump_padding_ = going_fast ? 8.0f : 2.0f;
+            }
         }
 
-        if ( y_ != prevy_ )
+        // Handle upward collision.
+        const int ty = pixelsToBlocks( pos_.y );
+        const bool tlc = map.testCollision( yl, ty );
+        const bool trc = map.testCollision( yr, ty );
+        if ( tlc || trc )
         {
-            NasrGraphicsSpriteSetDestY( graphic_, y_ );
+            pos_.y = blocksToPixels( ty + 1 );
+            vy_ *= -0.25f;
+            accy_ = 0.0f;
+            is_jumping_ = false;
         }
-        prevy_ = y_;
+
+        // Handle right collision.
+        const int rx = pixelsToBlocks( pos_.right() );
+        const int xt = pixelsToBlocks( pos_.y + 2.0f );
+        const int xb = pixelsToBlocks( pos_.bottom() - 4.0f );
+        const bool rtc = map.testCollision( rx, xt );
+        const bool rbc = map.testCollision( rx, xb );
+        if ( rtc || rbc )
+        {
+            pos_.x -= pos_.right() - blocksToPixels( rx );
+            vx_ *= -0.25f;
+            accx_ = 0.0f;
+        }
+        const int lx = pixelsToBlocks( pos_.x );
+        const bool ltc = map.testCollision( lx, xt );
+        const bool lbc = map.testCollision( lx, xb );
+        if ( ltc || lbc )
+        {
+            pos_.x = blocksToPixels( lx + 1 );
+            vx_ *= -0.25f;
+            accx_ = 0.0f;
+        }
+
+
+
+
+
+
+
+
+
+        // Graphics
+        if ( pos_.x != prevx_ )
+        {
+            NasrGraphicsSpriteSetDestX( graphic_, pos_.x );
+        }
+        if ( pos_.y != prevy_ )
+        {
+            NasrGraphicsSpriteSetDestY( graphic_, pos_.y );
+        }
+
+
+        // End
+        prevx_ = pos_.x;
+        prevy_ = pos_.y;
         jump_lock_ = controller.heldJump();
+
     };
 
     bool Sprite::isOnGround() const
     {
-        return y_ >= 320.f - 25.0f;
+        return on_ground_;
     };
 }

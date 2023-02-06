@@ -10,9 +10,10 @@ namespace BSL
             { static_cast<unsigned int>( Keys::RIGHT ), NASR_KEY_RIGHT },
             { static_cast<unsigned int>( Keys::LEFT ), NASR_KEY_LEFT },
             { static_cast<unsigned int>( Keys::JUMP ), NASR_KEY_Z },
-            { static_cast<unsigned int>( Keys::RUN ), NASR_KEY_X }
+            { static_cast<unsigned int>( Keys::RUN ), NASR_KEY_X },
+            { static_cast<unsigned int>( Keys::MENU ), NASR_KEY_C }
         };
-        NasrRegisterInputs( inputs, 4 );
+        NasrRegisterInputs( inputs, 5 );
     };
 
     bool Input::heldRight()
@@ -33,5 +34,10 @@ namespace BSL
     bool Input::heldRun()
     {
         return NasrHeld( static_cast<unsigned int>( Keys::RUN ) );
+    };
+
+    bool Input::heldMenu()
+    {
+        return NasrHeld( static_cast<unsigned int>( Keys::MENU ) );
     };
 }

@@ -11,13 +11,15 @@ namespace BSL
             static bool heldLeft();
             static bool heldJump();
             static bool heldRun();
+            static bool heldMenu();
 
             enum class Keys
             {
                 RIGHT,
                 LEFT,
                 JUMP,
-                RUN
+                RUN,
+                MENU
             };
     };
 }

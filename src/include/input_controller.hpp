@@ -9,10 +9,11 @@ namespace BSL
     {
         public:
             ~InputController();
-            bool heldRight() override;
-            bool heldLeft() override;
-            bool heldJump() override;
-            bool heldRun() override;
+            bool heldRight() const override;
+            bool heldLeft() const override;
+            bool heldJump() const override;
+            bool heldRun() const override;
+            bool heldMenu() const override;
     };
 }
 

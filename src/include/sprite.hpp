@@ -1,30 +1,33 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "controller.hpp"
+#include "rect.hpp"
 
 namespace BSL
 {
+    class Controller;
+    class Map;
+
     class Sprite
     {
         public:
             Sprite();
-            void update( float dt, Controller & controller );
+            void update( float dt, const Controller & controller, Map & map );
             bool isOnGround() const;
 
         private:
             unsigned int graphic_;
+            Rect pos_;
             float accx_;
             float vx_;
-            float x_;
             float prevx_;
             float accy_;
             float vy_;
-            float y_;
             float prevy_;
-            float jump_start_;
             bool is_jumping_;
             bool jump_lock_;
+            bool on_ground_;
+            float jump_padding_;
     };
 }
 

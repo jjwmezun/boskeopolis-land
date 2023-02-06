@@ -7,10 +7,11 @@ namespace BSL
     {
         public:
             virtual ~Controller();
-            virtual bool heldRight() = 0;
-            virtual bool heldLeft() = 0;
-            virtual bool heldJump() = 0;
-            virtual bool heldRun() = 0;
+            virtual bool heldRight() const = 0;
+            virtual bool heldLeft() const = 0;
+            virtual bool heldJump() const = 0;
+            virtual bool heldRun() const = 0;
+            virtual bool heldMenu() const = 0;
     };
 }
 
