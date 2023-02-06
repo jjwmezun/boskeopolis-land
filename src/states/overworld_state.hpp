@@ -26,7 +26,7 @@ class OverworldState final : public GameState
 {
 	public:
 		static constexpr int NUMBER_OF_LAYERS = 2;
-		OverworldState( OWTile previous_level, ShowEventType show_event = ShowEventType::NONE );
+		OverworldState( OWTile previous_level, ShowEventType show_event = ShowEventType::NONE, int map = 0 );
 		~OverworldState();
 
 		void stateUpdate() override;
@@ -48,8 +48,17 @@ class OverworldState final : public GameState
 		bool testLanguageHasChanged() const;
 		void updateSolids( int tile, int i );
 		void setLevelSprite( int level_id, int i, const sdl2::SDLRect& dest );
+		void dowarp();
 
 		static constexpr int MAX_ANIMATION_FRAMES = 2;
+
+		struct OverworldWarp
+		{
+			int destx;
+			int desty;
+			int destmap;
+			int palette;
+		};
 
 		OWState state_;
 		int width_blocks_;
@@ -58,12 +67,14 @@ class OverworldState final : public GameState
 		int background_animation_frame_;
 		int language_id_;
 		int current_palette_;
+		int current_map_;
 		CounterFlip<MAX_ANIMATION_FRAMES - 1> current_animation_frame_;
 		TimerRepeatT2<32> animation_timer_;
 		OWObject* object_on_;
 		OWTile current_space_;
 		OWTile previous_space_;
 		std::vector<int> sprites_tiles_;
+		std::vector<OverworldWarp> warps_;
 		std::unordered_map<int, OWObject> objects_;
 		OWTileMap tilemap_;
 		std::vector<int> bg_tiles_[ NUMBER_OF_LAYERS ];

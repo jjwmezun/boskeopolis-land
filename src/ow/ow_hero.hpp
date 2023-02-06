@@ -19,6 +19,7 @@ class OWHero final
 		void updateGraphics( const sdl2::SDLRect& bounds );
 		void setPosition( int x, int y, const sdl2::SDLRect& bounds );
 		void updateAnimation();
+		void reset( int x = 0, int y = 0 );
 
 		int x() const;
 		int y() const;

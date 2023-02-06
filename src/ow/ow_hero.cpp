@@ -197,3 +197,13 @@ void OWHero::updateAnimation()
 		graphics_.src_.x = ( graphics_.src_.x == 0 ) ? 16 : 0;
 	}
 };
+
+void OWHero::reset( int x, int y )
+{
+	x_speed_ = 0.0;
+	y_speed_ = 0.0;
+	animation_timer_.reset();
+	graphics_.src_.x = 0;
+	position_.x = x;
+	position_.y = y;
+};

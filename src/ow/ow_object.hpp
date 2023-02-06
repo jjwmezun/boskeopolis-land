@@ -10,13 +10,15 @@ class OWObject final
         {
             LEVEL,
             SHOP,
-            PALETTE
+            PALETTE,
+            WARP
         };
         union Value
         {
             int level;
             int shop;
             int palette;
+            int warp;
         };
 
         constexpr static OWObject createLevel( int level )
@@ -32,6 +34,11 @@ class OWObject final
         constexpr static OWObject createPaletteChanger( int n )
         {
             return { Type::PALETTE, Value{ n } };
+        };
+
+        constexpr static OWObject createWarp( int n )
+        {
+            return { Type::WARP, Value{ n } };
         };
 
         constexpr Type getType() const
@@ -55,6 +62,12 @@ class OWObject final
         {
             jassert( type_ == Type::PALETTE );
             return value_.palette;
+        };
+
+        constexpr int getWarpValue() const
+        {
+            jassert( type_ == Type::WARP );
+            return value_.warp;
         };
 
     private:

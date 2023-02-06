@@ -43,6 +43,7 @@ static constexpr char PALETTES[ NUMBER_OF_PALETTES ][ 17 ] =
 	"Overworld Olive",
 	"Overworld Black"
 };
+static constexpr int WARP_TILES_START = PALETTE_TILES_START + 16;
 
 static const std::unordered_map<int, std::array<int, 2>> animated_frames_
 {
@@ -69,7 +70,10 @@ static constexpr OWState determineBeginningState( ShowEventType event_type )
 static const char* getSpacePaletteName( OWTile space );
 static int getSpacePalette( OWTile space );
 
-OverworldState::OverworldState( OWTile previous_space, ShowEventType show_event )
+static int fade_amount_ = 0;
+static int current_warp_ = 0;
+
+OverworldState::OverworldState( OWTile previous_space, ShowEventType show_event, int map )
 :
 	GameState( StateID::OVERWORLD_STATE, { getSpacePaletteName( previous_space ), 2 } ),
 	state_ ( determineBeginningState( show_event ) ),
@@ -97,8 +101,11 @@ OverworldState::OverworldState( OWTile previous_space, ShowEventType show_event 
 	camera_arrows_ (),
 	hero_ ( 300, 300 ),
 	level_tile_graphics_ (),
-	inventory_ ()
-{};
+	inventory_ (),
+	current_map_ ( map )
+{
+	warps_.push_back({ 2, 2, 1, 8 });
+};
 
 OverworldState::~OverworldState()
 {
@@ -154,6 +161,16 @@ void OverworldState::stateUpdate()
 					case ( OWObject::Type::SHOP ):
 					{
 						current_space_ = OWTile::createShop( 1 );
+					}
+					break;
+					case ( OWObject::Type::WARP ):
+					{
+						const int warp_id = seek->second.getWarpValue();
+						if ( warp_id < warps_.size() )
+						{
+							current_warp_ = warp_id;
+							state_ = OWState::FADING_TO_WARP;
+						}
 					}
 					break;
 				}
@@ -277,6 +294,28 @@ void OverworldState::stateUpdate()
 			}
 		}
 		break;
+
+		case( OWState::FADING_TO_WARP ):
+		{
+			fade_amount_ += 8;
+			if ( fade_amount_ >= 255 )
+			{
+				fade_amount_ = 255;
+				dowarp();
+			}
+		}
+		break;
+
+		case( OWState::FADING_FROM_WARP ):
+		{
+			fade_amount_ -= 8;
+			if ( fade_amount_ <= 0 )
+			{
+				fade_amount_ = 0;
+				state_ = OWState::MOVE_PLAYER;
+			}
+		}
+		break;
 	}
 
 	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
@@ -300,20 +339,27 @@ void OverworldState::stateUpdate()
 	}
 	background_.update();
 
-	if ( state_ == OWState::MOVE_PLAYER )
+	switch ( state_ )
 	{
-		if ( main_frame_.getHeight() > MOVE_PLAYER_FRAME_HEIGHT )
+		case ( OWState::MOVE_PLAYER ):
+		case ( OWState::FADING_TO_WARP ):
+		case ( OWState::FADING_FROM_WARP ):
 		{
-			main_frame_.changeHeight( -2 );
-			screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
+			if ( main_frame_.getHeight() > MOVE_PLAYER_FRAME_HEIGHT )
+			{
+				main_frame_.changeHeight( -2 );
+				screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
+			}
 		}
-	}
-	else
-	{
-		if ( main_frame_.getHeight() < Unit::WINDOW_HEIGHT_PIXELS )
+		break;
+
+		default:
 		{
-			main_frame_.changeHeight( 2 );
-			screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
+			if ( main_frame_.getHeight() < Unit::WINDOW_HEIGHT_PIXELS )
+			{
+				main_frame_.changeHeight( 2 );
+				screen_.setHeight( frameToScreenSize( main_frame_.getHeight() ) );
+			}
 		}
 	}
 };
@@ -341,6 +387,8 @@ void OverworldState::stateRender()
 	switch ( state_ )
 	{
 		case ( OWState::MOVE_PLAYER ):
+		case( OWState::FADING_TO_WARP ):
+		case( OWState::FADING_FROM_WARP ):
 		{
 			if ( main_frame_.getHeight() == MOVE_PLAYER_FRAME_HEIGHT )
 			{
@@ -353,8 +401,10 @@ void OverworldState::stateRender()
 		{
 			camera_arrows_.render();
 		}
+		break;
 	}
 	main_frame_.render();
+	Render::renderRectDebug({ 0, 0, Unit::WINDOW_WIDTH_PIXELS, Unit::WINDOW_HEIGHT_PIXELS }, { 255, 255, 255, fade_amount_ });
 };
 
 void OverworldState::init()
@@ -503,22 +553,22 @@ void OverworldState::generateSprites()
 		dest.y = Unit::BlocksToPixels( ( int )( std::floor( ( double )( i ) / ( double )( width_blocks_ ) ) ) );
 		if ( sprite_tile > -1 )
 		{
-			if ( sprite_tile < TILES_BEFORE_SPRITES )
+			if ( sprite_tile < TILES_BEFORE_SPRITES ) // Is invalid regular tile.
 			{
 				throw mezun::Exception( mezun::charToChar32String( "Invalid sprite in o’erworld map." ) );
 			}
-			if ( sprite_tile == TILES_BEFORE_SPRITES )
+			if ( sprite_tile == TILES_BEFORE_SPRITES ) // Is hero.
 			{
 				if ( previous_space_.isNull() )
 				{
 					hero_.setPosition( dest.x + 8, dest.y + 8, camera_.getBox() );
 				}
 			}
-			else if ( sprite_tile >= LEVEL_TILES_START && sprite_tile < SHOP_TILES_START )
+			else if ( sprite_tile >= LEVEL_TILES_START && sprite_tile < SHOP_TILES_START ) // Is level tile.
 			{
 				setLevelSprite( sprite_tile - LEVEL_TILES_START, i, dest );
 			}
-			else if ( sprite_tile >= SHOP_TILES_START && sprite_tile < PALETTE_TILES_START )
+			else if ( sprite_tile >= SHOP_TILES_START && sprite_tile < PALETTE_TILES_START ) // Is shop tile.
 			{
 				const int shop_number = sprite_tile - SHOP_TILES_START + 1;
 				if ( previous_space_.isShop() )
@@ -528,10 +578,15 @@ void OverworldState::generateSprites()
 				objects_.insert( std::pair<int, OWObject>( i, OWObject::createShop( shop_number ) ) );
 				level_tile_graphics_.add( dest, -2, true );
 			}
-			else if ( sprite_tile >= PALETTE_TILES_START && sprite_tile < PALETTE_TILES_START + NUMBER_OF_PALETTES )
+			else if ( sprite_tile >= PALETTE_TILES_START && sprite_tile < PALETTE_TILES_START + NUMBER_OF_PALETTES ) // Is palette-change tile.
 			{
 				const int palette_id = sprite_tile - PALETTE_TILES_START;
 				objects_.insert( std::pair<int, OWObject> ( i, OWObject::createPaletteChanger( palette_id ) ) );
+			}
+			else if ( sprite_tile >= WARP_TILES_START ) // Is warp tile.
+			{
+				const int warp_id = sprite_tile - WARP_TILES_START;
+				objects_.insert( std::pair<int, OWObject> ( i, OWObject::createWarp( warp_id ) ) );
 			}
 		}
 	}
@@ -603,7 +658,7 @@ void OverworldState::generateFGMapTexture( int n )
 
 void OverworldState::generateMap()
 {
-	const std::string path = Main::resourcePath() + "maps/land-ow.json";
+	const std::string path = Main::resourcePath() + "maps/land-ow-" + std::to_string( current_map_ ) + ".json";
 	std::ifstream ifs( path );
 	if( !ifs.is_open() )
 	{
@@ -713,6 +768,42 @@ void OverworldState::generateMap()
 	{
 		throw std::runtime_error( "Missing sprite layer for o’erworld map." );
 	}
+};
+
+void OverworldState::dowarp()
+{
+	const OverworldWarp warpdata = warps_[ current_warp_ ];
+	current_map_ = warpdata.destmap;
+	sprites_tiles_.clear();
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		bg_tiles_[ i ].clear();
+		fg_tiles_[ i ].clear();
+	}
+	generateMap();
+	tilemap_ = {};
+	tilemap_.init( width_blocks_, height_blocks_ );
+	const int width = Unit::BlocksToPixels( width_blocks_ );
+	const int height = Unit::BlocksToPixels( height_blocks_ );
+	for ( int i = 0; i < NUMBER_OF_LAYERS; ++i )
+	{
+		for ( int j = 0; j < MAX_ANIMATION_FRAMES; ++j )
+		{
+			bg_textures_[ i ][ j ].changeSize( width, height );
+			fg_textures_[ i ][ j ].changeSize( width, height );
+			bg_textures_[ i ][ j ].init();
+			fg_textures_[ i ][ j ].init();
+		}
+	}
+	camera_.setBounds( width, height );
+	generateSprites();
+	hero_.reset( Unit::BlocksToPixels( warpdata.destx ) + 8, Unit::BlocksToPixels( warpdata.desty ) + 8 );
+	current_palette_ = warpdata.palette;
+	newPalette( PALETTES[ current_palette_ ] );
+	generateMapTextures();
+	camera_.center( hero_.getPosition() );
+	hero_.updateGraphics( camera_.getBox() );
+	state_ = OWState::FADING_FROM_WARP;
 };
 
 bool OverworldState::testLanguageHasChanged() const
