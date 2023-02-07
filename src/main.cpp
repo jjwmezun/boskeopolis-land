@@ -15,6 +15,7 @@ int main( int argc, char ** argv )
     double current_time = 0;
 
     NasrSetPalette( "assets/palettes/palette.png" );
+    NasrSetGlobalPalette( 1 );
     NasrMoveCamera( 0, 0, BSL::WINDOW_WIDTH_PIXELS, BSL::WINDOW_HEIGHT_PIXELS );
 
     BSL::Input::init();

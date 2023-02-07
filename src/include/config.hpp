@@ -4,8 +4,8 @@
 namespace BSL
 {
     constexpr int BLOCK_SIZE = 16;
-    constexpr int WINDOW_WIDTH_BLOCKS = 32;
-    constexpr int WINDOW_HEIGHT_BLOCKS = 20;
+    constexpr int WINDOW_WIDTH_BLOCKS = 30;
+    constexpr int WINDOW_HEIGHT_BLOCKS = 17;
     constexpr int WINDOW_WIDTH_PIXELS = WINDOW_WIDTH_BLOCKS * BLOCK_SIZE;
     constexpr int WINDOW_HEIGHT_PIXELS = WINDOW_HEIGHT_BLOCKS * BLOCK_SIZE;
 

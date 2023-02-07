@@ -1,7 +1,10 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
+#include "counter.hpp"
+#include "dir.hpp"
 #include "rect.hpp"
+#include "timer.hpp"
 
 namespace BSL
 {
@@ -28,6 +31,10 @@ namespace BSL
             bool jump_lock_;
             bool on_ground_;
             float jump_padding_;
+            Dir::X dir_x_;
+            bool is_moving_;
+            Counter<int, 3, 0, true> walk_frame_;
+            float animation_timer_;
     };
 }
 

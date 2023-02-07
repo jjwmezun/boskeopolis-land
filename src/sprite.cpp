@@ -27,7 +27,10 @@ namespace BSL
         is_jumping_ ( false ),
         jump_lock_ ( false ),
         on_ground_ ( false ),
-        jump_padding_ ( 0.0f )
+        jump_padding_ ( 0.0f ),
+        dir_x_ ( Dir::X::RIGHT ),
+        is_moving_ ( false ),
+        animation_timer_ ( 0.0f )
     {
         int autumntexture = NasrLoadFileAsTexture( "assets/graphics/sprites/autumn.png" );
         NasrRect autumnsrc { 0.0f, 0.0f, 16.0f, 25.0f };
@@ -47,7 +50,7 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            0
+            1
         );
     };
 
@@ -74,15 +77,20 @@ namespace BSL
         const float max_speed = controller.heldRun() ? MAX_SPEED * 2.0f : MAX_SPEED;
         if ( controller.heldRight() )
         {
+            dir_x_ = Dir::X::RIGHT;
             accx_ = start_speed;
+            is_moving_ = true;
         }
         else if ( controller.heldLeft() )
         {
+            dir_x_ = Dir::X::LEFT;
             accx_ = -start_speed;
+            is_moving_ = true;
         }
         else
         {
             accx_ = 0.0f;
+            is_moving_ = false;
         }
 
         vx_ += accx_ * dt;
@@ -164,13 +172,13 @@ namespace BSL
         jump_padding_ = std::max( 0.0f, jump_padding_ - 1.0f * dt);
 
         // Handle downward collision.
-        const int yl = pixelsToBlocks( pos_.x + 2.0f );
-        const int yr = pixelsToBlocks( pos_.right() - 2.0f );
         if ( vy_ > 0.0f )
         {
+            const int bl = pixelsToBlocks( pos_.x + 2.0f );
+            const int br = pixelsToBlocks( pos_.right() - 2.0f );
             const int by = pixelsToBlocks( pos_.bottom() - 1.0f );
-            const bool blc = map.testCollision( yl, by );
-            const bool brc = map.testCollision( yr, by );
+            const bool blc = map.testCollision( bl, by );
+            const bool brc = map.testCollision( br, by );
             if ( blc || brc )
             {
                 pos_.y -= pos_.bottom() - 1.0f - blocksToPixels( by );
@@ -180,15 +188,20 @@ namespace BSL
         }
 
         // Handle upward collision.
-        const int ty = pixelsToBlocks( pos_.y );
-        const bool tlc = map.testCollision( yl, ty );
-        const bool trc = map.testCollision( yr, ty );
-        if ( tlc || trc )
+        if ( vy_ < 0.0f )
         {
-            pos_.y = blocksToPixels( ty + 1 );
-            vy_ *= -0.25f;
-            accy_ = 0.0f;
-            is_jumping_ = false;
+            const int tl = pixelsToBlocks( pos_.x + 4.0f );
+            const int tr = pixelsToBlocks( pos_.right() - 4.0f );
+            const int ty = pixelsToBlocks( pos_.y );
+            const bool tlc = map.testCollision( tl, ty );
+            const bool trc = map.testCollision( tr, ty );
+            if ( tlc || trc )
+            {
+                pos_.y = blocksToPixels( ty + 1 );
+                vy_ *= -0.25f;
+                accy_ = 0.0f;
+                is_jumping_ = false;
+            }
         }
 
         // Handle right collision.
@@ -229,6 +242,52 @@ namespace BSL
         if ( pos_.y != prevy_ )
         {
             NasrGraphicsSpriteSetDestY( graphic_, pos_.y );
+        }
+        float rotx = NasrGraphicsSpriteGetRotationX( graphic_ );
+        switch ( dir_x_ )
+        {
+            case ( Dir::X::LEFT ):
+            {
+                if ( rotx > 0.0f )
+                {
+                    rotx = std::max( rotx - 3.0f, 0.0f );
+                    NasrGraphicsSpriteSetRotationX( graphic_, rotx );
+                }
+            }
+            break;
+            case ( Dir::X::RIGHT ):
+            {
+                if ( rotx < 180.0f )
+                {
+                    rotx = std::min( rotx + 3.0f, 180.0f );
+                    NasrGraphicsSpriteSetRotationX( graphic_, rotx );
+                }
+            }
+            break;
+        }
+        if ( !isOnGround() )
+        {
+            NasrGraphicsSpriteSetSrcX( graphic_, 48.0f );
+            NasrGraphicsSpriteSetSrcY( graphic_, 0.0f );
+        }
+        else
+        {
+            if ( is_moving_ )
+            {
+                static float frames[ 4 ] = { 0.0f, 16.0f, 0.0f, 32.0f };
+                if ( ( animation_timer_ += dt ) >= 8.0f )
+                {
+                    animation_timer_ -= 8.0f;
+                    ++walk_frame_;
+                }
+                NasrGraphicsSpriteSetSrcX( graphic_, frames[ walk_frame_.get() ] );
+                NasrGraphicsSpriteSetSrcY( graphic_, 0.0f );
+            }
+            else
+            {
+                NasrGraphicsSpriteSetSrcX( graphic_, 0.0f );
+                NasrGraphicsSpriteSetSrcY( graphic_, 0.0f );
+            }
         }
 
 
