@@ -22,15 +22,21 @@ int main( int argc, char ** argv )
     BSL::InputController input;
 
     NasrColor bg { 128.0f, 32.0f, 255.0f, 255.0f };
-    NasrGraphicsAddCanvas
+    NasrRect r { 0.0f, 0.0f, BSL::WINDOW_WIDTH_PIXELS, BSL::WINDOW_HEIGHT_PIXELS };
+    NasrGraphicsAddRectGradientPalette
     (
+        1,
         0,
         0,
+        r,
         0,
-        bg
+        NASR_DIR_DOWN,
+        1,
+        254,
+        1
     );
 
-    BSL::Map map;
+    BSL::Map map { "city-1" };
     BSL::Sprite autumn;
 
     while ( running )

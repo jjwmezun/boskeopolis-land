@@ -177,8 +177,9 @@ namespace BSL
             const int bl = pixelsToBlocks( pos_.x + 2.0f );
             const int br = pixelsToBlocks( pos_.right() - 2.0f );
             const int by = pixelsToBlocks( pos_.bottom() - 1.0f );
-            const bool blc = map.testCollision( bl, by );
-            const bool brc = map.testCollision( br, by );
+            const std::vector<Map::CollisionType> ctypes { Map::CollisionType::SOLID, Map::CollisionType::SOLID_ABOVE };
+            const bool blc = map.testCollision( bl, by, ctypes );
+            const bool brc = map.testCollision( br, by, ctypes );
             if ( blc || brc )
             {
                 pos_.y -= pos_.bottom() - 1.0f - blocksToPixels( by );
@@ -290,6 +291,8 @@ namespace BSL
             }
         }
 
+        NasrRect r = NasrGraphicsSpriteGetDest( graphic_ );
+        NasrAdjustCamera( &r, map.getWidthPixels(), map.getHeightPixels() );
 
         // End
         prevx_ = pos_.x;
