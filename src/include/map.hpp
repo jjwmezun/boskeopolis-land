@@ -6,6 +6,8 @@
 
 namespace BSL
 {
+    class Game;
+
     class Map
     {
         public:
@@ -17,6 +19,8 @@ namespace BSL
             };
 
             Map( std::string && slug );
+            void init( Game & game );
+
             unsigned int getWidthPixels() const;
             unsigned int getHeightPixels() const;
             bool testCollision( unsigned int x, unsigned int y, std::vector<CollisionType> types = { CollisionType::SOLID } ) const;
@@ -26,9 +30,10 @@ namespace BSL
             };
 
         private:
+            std::vector<std::vector<int>> collision_;
+            std::string slug_;
             unsigned int width_;
             unsigned int height_;
-            std::vector<std::vector<int>> collision_;
     };
 }
 

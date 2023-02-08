@@ -9,12 +9,15 @@
 namespace BSL
 {
     class Controller;
+    class Game;
     class Map;
 
     class Sprite
     {
         public:
             Sprite();
+            void init( Game & game );
+
             void update( float dt, const Controller & controller, Map & map );
             bool isOnGround() const;
 

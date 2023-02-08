@@ -1,6 +1,7 @@
 #include <cmath>
 #include "config.hpp"
 #include <cstring>
+#include "game.hpp"
 #include "map.hpp"
 #include "nasringine/json/json.h"
 #include "nasringine/nasr.h"
@@ -27,16 +28,14 @@ namespace BSL
 
     Map::Map( std::string && slug )
     :
+        slug_ ( slug ),
         width_ ( 0 ),
         height_ ( 0 )
+    {};
+
+    void Map::init( Game & game )
     {
-
-        // Tileset.
-        std::string tileset_file = "assets/graphics/tilesets/urban.png";
-        int tileset = NasrLoadFileAsTexture( tileset_file.c_str() );
-
-
-        std::string filename = "assets/maps/" + slug + ".json";
+        std::string filename = "assets/maps/" + slug_ + ".json";
         char * map_data = NasrReadFile( filename.c_str() );
         if ( !map_data )
         {
@@ -186,16 +185,13 @@ namespace BSL
 
                         tiles.push_back( t );
                     }
-                    NasrGraphicsAddTilemap
+
+                    game.render().addTilemap
                     (
-                        0,
-                        0,
-                        0,
-                        tileset,
-                        &tiles[ 0 ],
+                        "urban",
+                        tiles,
                         width_,
-                        height_,
-                        1
+                        height_
                     );
                 }
                 break;

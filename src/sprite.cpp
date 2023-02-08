@@ -1,4 +1,5 @@
 #include "config.hpp"
+#include "game.hpp"
 #include "map.hpp"
 #include "nasringine/nasr.h"
 #include "sprite.hpp"
@@ -31,47 +32,15 @@ namespace BSL
         dir_x_ ( Dir::X::RIGHT ),
         is_moving_ ( false ),
         animation_timer_ ( 0.0f )
+    {};
+
+    void Sprite::init( Game & game )
     {
-        int autumntexture = NasrLoadFileAsTexture( "assets/graphics/sprites/autumn.png" );
-        NasrRect autumnsrc { 0.0f, 0.0f, 16.0f, 25.0f };
-        NasrRect autumndest { 64.0f, 64.0f, 16.0f, 25.0f };
-        graphic_ = NasrGraphicsAddSprite
-        (
-            0,
-            0,
-            0,
-            autumntexture,
-            autumnsrc,
-            autumndest,
-            0,
-            0,
-            0.0f,
-            0.0f,
-            0.0f,
-            1.0f,
-            0,
-            1
-        );
+        graphic_ = game.render().addSprite( "sprites/autumn.png", 0.0f, 0.0f, 16.0f, 25.0f, 64.0f, 64.0f );
     };
 
     void Sprite::update( float dt, const Controller & controller, Map & map )
     {
-        if ( controller.heldMenu() )
-        {
-            pos_.x = 64.0f;
-            pos_.y = 64.0f;
-            accx_ = 0.0f;
-            vx_ = 0.0f;
-            prevx_ = 0.0f;
-            accy_ = 0.0f;
-            vy_ = 0.0f;
-            prevy_ = 0.0f;
-            is_jumping_ = false;
-            jump_lock_ = false;
-            on_ground_ = false;
-        }
-
-
         // Horizontal Movement
         const float start_speed = controller.heldRun() ? START_SPEED * 2.0f : START_SPEED;
         const float max_speed = controller.heldRun() ? MAX_SPEED * 2.0f : MAX_SPEED;
