@@ -5,6 +5,17 @@
 
 namespace BSL
 {
+    Renderer::Renderer()
+    {
+        int charset = NasrAddCharset( "assets/graphics/charset/latin.png", "assets/charset/latin.json" );
+        if ( charset < 0 )
+        {
+            // TODO: Throw exception
+            std::cout << "NO CHARSET" << std::endl;
+        }
+        charset_ = charset;
+    };
+
     unsigned int Renderer::addSprite
     (
         std::string texture,
@@ -141,7 +152,6 @@ namespace BSL
         ArgList args
     ) const
     {
-
         // Tileset.
         std::string tileset_file = "assets/graphics/tilesets/" + tileset + ".png";
         int tileset_id = NasrLoadFileAsTexture( tileset_file.c_str() );
@@ -165,6 +175,133 @@ namespace BSL
             width,
             height,
             1
+        );
+
+        if ( graphic < 0 )
+        {
+            // TODO: throw exception.
+            std::cout << "NO GRAPH" << std::endl;
+        }
+
+        return graphic;
+    };
+
+    unsigned int Renderer::addText
+    (
+        std::string && text,
+        uint_fast8_t color,
+        float x,
+        float y,
+        float w,
+        float h,
+        ArgList args
+    ) const
+    {
+        uint_fast8_t abs = 1;
+        unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
+        std::vector<char> cstring( text.c_str(), text.c_str() + text.size() + 1 );
+        NasrRect coords { x, y, w, h };
+        uint_fast8_t align = GetArgConvert<uint_fast8_t, Text::Align> ( "align", args, NASR_ALIGN_DEFAULT );
+        uint_fast8_t valign = GetArgConvert<uint_fast8_t, Text::Valign> ( "valign", args, NASR_VALIGN_DEFAULT );
+        float padding_left = GetArg<float> ( "leftPadding", args, 0.0f );
+        float padding_right = GetArg<float> ( "rightPadding", args, 0.0f );
+        float padding_top = GetArg<float> ( "topPadding", args, 0.0f );
+        float padding_bottom = GetArg<float> ( "bottomPadding", args, 0.0f );
+        float xoffset = GetArg<float> ( "xOffset", args, 0.0f );
+        float yoffset = GetArg<float> ( "yPadding", args, 0.0f );
+        float shadow = GetArg<float> ( "shadow", args, 0.0f );
+
+        NasrText t
+        {
+            &cstring[ 0 ],
+            charset_,
+            coords,
+            align,
+            valign,
+            padding_left,
+            padding_right,
+            padding_top,
+            padding_bottom,
+            xoffset,
+            yoffset,
+            shadow
+        };
+
+        int graphic = NasrGraphicAddTextPalette
+        (
+            abs,
+            current_state_,
+            layer,
+            t,
+            0,
+            1,
+            color
+        );
+
+        if ( graphic < 0 )
+        {
+            // TODO: throw exception.
+            std::cout << "NO GRAPH" << std::endl;
+        }
+
+        return graphic;
+    };
+
+    unsigned int Renderer::addTextGradient
+    (
+        std::string && text,
+        Dir::XY dir,
+        uint_fast8_t color1,
+        uint_fast8_t color2,
+        float x,
+        float y,
+        float w,
+        float h,
+        ArgList args
+    ) const
+    {
+        uint_fast8_t abs = 1;
+        unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
+        std::vector<char> cstring( text.c_str(), text.c_str() + text.size() + 1 );
+        NasrRect coords { x, y, w, h };
+        uint_fast8_t align = GetArgConvert<uint_fast8_t, Text::Align> ( "align", args, NASR_ALIGN_DEFAULT );
+        uint_fast8_t valign = GetArgConvert<uint_fast8_t, Text::Valign> ( "valign", args, NASR_VALIGN_DEFAULT );
+        float padding_left = GetArg<float> ( "leftPadding", args, 0.0f );
+        float padding_right = GetArg<float> ( "rightPadding", args, 0.0f );
+        float padding_top = GetArg<float> ( "topPadding", args, 0.0f );
+        float padding_bottom = GetArg<float> ( "bottomPadding", args, 0.0f );
+        float xoffset = GetArg<float> ( "xOffset", args, 0.0f );
+        float yoffset = GetArg<float> ( "yPadding", args, 0.0f );
+        float shadow = GetArg<float> ( "shadow", args, 0.0f );
+        uint_fast8_t dirval = static_cast<uint_fast8_t> ( dir );
+
+        NasrText t
+        {
+            &cstring[ 0 ],
+            charset_,
+            coords,
+            align,
+            valign,
+            padding_left,
+            padding_right,
+            padding_top,
+            padding_bottom,
+            xoffset,
+            yoffset,
+            shadow
+        };
+
+        int graphic = NasrGraphicAddTextGradientPalette
+        (
+            abs,
+            current_state_,
+            layer,
+            t,
+            0,
+            1,
+            dirval,
+            color1,
+            color2
         );
 
         if ( graphic < 0 )

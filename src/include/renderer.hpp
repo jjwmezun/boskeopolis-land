@@ -13,27 +13,7 @@ namespace BSL
         friend class Game;
 
         public:
-            enum class Layer
-            {
-                BEFORE_BG_1 = 0,
-                BG_1 = 1,
-                BEFORE_BG_2 = 2,
-                BG_2 = 3,
-                BEFORE_BLOCKS_1 = 4,
-                BLOCKS_1 = 5,
-                BEFORE_SPRITES_1 = 6,
-                SPRITES_1 = 7,
-                BEFORE_BLOCKS_2 = 8,
-                BLOCKS_2 = 9,
-                BEFORE_SPRITES_2 = 10,
-                SPRITES_2 = 11,
-                BEFORE_FG_1 = 12,
-                FG_1 = 13,
-                BEFORE_FG_2 = 14,
-                FG_2 = 15,
-                AFTER_FG_2 = 16,
-                SUPER = 17
-            };
+            Renderer();
 
             unsigned int addSprite
             (
@@ -80,8 +60,33 @@ namespace BSL
                 ArgList args = {}
             ) const;
 
+            unsigned int addText
+            (
+                std::string && text,
+                uint_fast8_t color,
+                float x,
+                float y,
+                float w,
+                float h,
+                ArgList args = {}
+            ) const;
+
+            unsigned int addTextGradient
+            (
+                std::string && text,
+                Dir::XY dir,
+                uint_fast8_t color1,
+                uint_fast8_t color2,
+                float x,
+                float y,
+                float w,
+                float h,
+                ArgList args = {}
+            ) const;
+
         private:
             unsigned int current_state_;
+            unsigned int charset_;
     };
 }
 
