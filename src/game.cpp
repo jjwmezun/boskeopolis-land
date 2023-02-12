@@ -32,4 +32,20 @@ namespace BSL
         number_of_states_ = 1;
         states_[ current_state_ ]->init( *this );
     };
+
+    void Game::pushState( std::unique_ptr<GameState> && state )
+    {
+        states_.push_back( std::unique_ptr<GameState>( state.release() ) );
+        renderer_.current_state_ = ++current_state_;
+        ++number_of_states_;
+        states_[ current_state_ ]->init( *this );
+    };
+
+    void Game::popState()
+    {
+        states_.pop_back();
+        NasrGraphicsClearState( current_state_ );
+        renderer_.current_state_ = --current_state_;
+        --number_of_states_;
+    };
 }

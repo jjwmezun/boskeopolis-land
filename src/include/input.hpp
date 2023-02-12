@@ -13,6 +13,12 @@ namespace BSL
             static bool heldRun();
             static bool heldMenu();
 
+            static bool pressedRight();
+            static bool pressedLeft();
+            static bool pressedJump();
+            static bool pressedRun();
+            static bool pressedMenu();
+
             enum class Keys
             {
                 RIGHT,

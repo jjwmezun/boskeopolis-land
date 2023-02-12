@@ -8,6 +8,19 @@
 
 namespace BSL
 {
+    class SpriteGraphic
+    {
+        public:
+            constexpr SpriteGraphic( unsigned int gfx ) : gfx_ ( gfx ) {};
+            inline void setOpacity( float v ) const
+            {
+                NasrGraphicsSpriteSetOpacity( gfx_, v );
+            };
+
+        private:
+            unsigned int gfx_;
+    };
+
     class Renderer
     {
         friend class Game;
@@ -79,6 +92,15 @@ namespace BSL
                 uint_fast8_t color2,
                 float x,
                 float y,
+                float w,
+                float h,
+                ArgList args = {}
+            ) const;
+
+            SpriteGraphic addMenuBox
+            (
+                Text::Align align,
+                Text::Valign valign,
                 float w,
                 float h,
                 ArgList args = {}

@@ -4,7 +4,7 @@
 #include "input.hpp"
 #include "level_state.hpp"
 #include "nasringine/nasr.h"
-#include "title_state.hpp"
+#include "pause_state.hpp"
 
 namespace BSL
 {
@@ -13,12 +13,13 @@ namespace BSL
         map_ ( "city-1" ),
         autumn_ ()
     {};
+
     void LevelState::update( Game & game, float dt )
     {
         autumn_.update( dt, input_, map_ );
-        if ( Input::heldMenu() )
+        if ( Input::pressedMenu() )
         {
-            game.changeState( std::make_unique<TitleState>() );
+            game.pushState( std::make_unique<PauseState>() );
         }
     };
 

@@ -3,6 +3,8 @@
 #include "input.hpp"
 #include "title_state.hpp"
 #include "nasringine/nasr.h"
+#include "nasringine/nasr_input.h"
+#include "nasringine/nasr_localization.h"
 
 static constexpr unsigned int MAX_STATES = 5;
 
@@ -28,6 +30,7 @@ int main( int argc, char ** argv )
     double prev_time = NasrGetTime();
     double current_time = 0;
 
+    NasrSetLanguage( "assets/localization/es.json", "boskeopolis-land" );
     NasrSetPalette( "assets/palettes/palette.png" );
     BSL::Input::init();
 
@@ -42,6 +45,7 @@ int main( int argc, char ** argv )
         }
         else
         {
+            NasrHandleEvents();
             current_time = NasrGetTime();
             double timechange = current_time - prev_time;
             double fps = 1.0 / timechange;
@@ -54,6 +58,7 @@ int main( int argc, char ** argv )
             dt = 60.0f / ( float )( fps );
             prev_time = current_time;
             NasrUpdate( dt );
+            NasrInputUpdate();
         }
     }
     NasrClose();

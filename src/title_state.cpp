@@ -8,7 +8,7 @@ namespace BSL
 {
     void TitleState::update( Game & game, float dt )
     {
-        if ( Input::heldJump() )
+        if ( Input::pressedJump() )
         {
             game.changeState( std::make_unique<LevelState>() );
         }

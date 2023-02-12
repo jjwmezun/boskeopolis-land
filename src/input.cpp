@@ -40,4 +40,29 @@ namespace BSL
     {
         return NasrHeld( static_cast<unsigned int>( Keys::MENU ) );
     };
+
+    bool Input::pressedRight()
+    {
+        return NasrPressed( static_cast<unsigned int>( Keys::RIGHT ) );
+    };
+
+    bool Input::pressedLeft()
+    {
+        return NasrPressed( static_cast<unsigned int>( Keys::LEFT ) );
+    };
+
+    bool Input::pressedJump()
+    {
+        return NasrPressed( static_cast<unsigned int>( Keys::JUMP ) );
+    };
+
+    bool Input::pressedRun()
+    {
+        return NasrPressed( static_cast<unsigned int>( Keys::RUN ) );
+    };
+
+    bool Input::pressedMenu()
+    {
+        return NasrPressed( static_cast<unsigned int>( Keys::MENU ) );
+    };
 }

@@ -1,3 +1,4 @@
+#include "config.hpp"
 #include "nasringine/nasr.h"
 #include "renderer.hpp"
 
@@ -36,8 +37,8 @@ namespace BSL
             std::cout << "NO TEXT" << std::endl;
         }
 
-        unsigned int abs = 0;
-        unsigned int layer = static_cast<int>( Layer::SPRITES_1 );
+        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, false );
+        unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::SPRITES_1 );
         uint_fast8_t flip_x = 0;
         uint_fast8_t flip_y = 0;
         float rotation_x = 0.0f;
@@ -197,7 +198,7 @@ namespace BSL
         ArgList args
     ) const
     {
-        uint_fast8_t abs = 1;
+        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
         std::vector<char> cstring( text.c_str(), text.c_str() + text.size() + 1 );
         NasrRect coords { x, y, w, h };
@@ -311,5 +312,201 @@ namespace BSL
         }
 
         return graphic;
+    };
+    
+    SpriteGraphic Renderer::addMenuBox
+    (
+        Text::Align align,
+        Text::Valign valign,
+        float w,
+        float h,
+        ArgList args
+    ) const
+    {
+        int texture = NasrAddTextureBlank( static_cast<unsigned int>( w ), static_cast<unsigned int>( h ) );
+        if ( texture < 0 )
+        {
+            // TODO: Throw exception.
+            std::cout << "NO MENU" << std::endl;
+        }
+        int menu_texture = NasrLoadFileAsTexture( "assets/graphics/misc/menu.png" );
+        if ( menu_texture < 0 )
+        {
+            // TODO: Throw exception.
+            std::cout << "NO MENU" << std::endl;
+        }
+
+        NasrSetTextureAsTarget( texture );
+        NasrRect bg { 1.0f, 1.0f, w - 3.0f, h - 3.0f };
+        NasrDrawGradientRectToTexture(
+            bg,
+            NASR_DIR_DOWN,
+            { 224.0f, 0.0f, 0.0f, 255.0f },
+            { 255.0f, 0.0f, 0.0f, 255.0f }
+        );
+
+        // Draw top side
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 6.0f, 0.0f, 1.0f, 5.0f },
+            { 6.0f, 0.0f, w - 12.0f, 5.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw left side
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 0.0f, 6.0f, 5.0f, 1.0f },
+            { 0.0f, 6.0f, 5.0f, h - 12.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw right side
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 8.0f, 6.0f, 5.0f, 1.0f },
+            { w - 5.0f, 6.0f, 5.0f, h - 12.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw bottom side
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 6.0f, 8.0f, 1.0f, 5.0f },
+            { 6.0f, h - 5.0f, w - 12.0f, 5.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw top-left corner
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 0.0f, 0.0f, 6.0f, 6.0f },
+            { 0.0f, 0.0f, 6.0f, 6.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw top-right corner
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 7.0f, 0.0f, 6.0f, 6.0f },
+            { w - 6.0f, 0.0f, 6.0f, 6.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw bottom-left corner
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 0.0f, 7.0f, 6.0f, 6.0f },
+            { 0.0f, h - 6.0f, 6.0f, 6.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+
+        // Draw bottom-right corner
+        NasrDrawSpriteToTexture
+        (
+            menu_texture,
+            { 7.0f, 7.0f, 6.0f, 6.0f },
+            { w - 6.0f, h - 6.0f, 6.0f, 6.0f },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            1.0f,
+            0,
+            1
+        );
+        NasrReleaseTextureTarget();
+
+        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
+        unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
+        float opacity = GetArg( "opacity", args, 1.0f );
+
+        int graphic = NasrGraphicsAddSprite
+        (
+            abs,
+            current_state_,
+            static_cast<unsigned int>( layer ),
+            texture,
+            { 0.0f, 0.0f, w, h },
+            {
+                ( static_cast<float> ( WINDOW_WIDTH_PIXELS ) - w ) / 2.0f,
+                ( static_cast<float> ( WINDOW_HEIGHT_PIXELS ) - h ) / 2.0f,
+                w,
+                h
+            },
+            0,
+            0,
+            0.0f,
+            0.0f,
+            0.0f,
+            opacity,
+            0,
+            1
+        );
+
+        if ( graphic < 0 )
+        {
+            // TODO: throw exception.
+            std::cout << "NO MENU SPRITE" << std::endl;
+        }
+
+        return { graphic };
     };
 }
