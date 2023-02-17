@@ -12,6 +12,15 @@ namespace BSL
 
     void PauseState::update( Game & game, float dt )
     {
+        if ( opacity_ < 1.0f )
+        {
+            opacity_ += 0.1f * dt;
+            boxgfx_.setOpacity( opacity_ );
+            for ( const auto & tg : textgfx_ )
+            {
+                tg.setOpacity( opacity_ );
+            }
+        }
         if ( Input::pressedJump() )
         {
             game.changeState( std::make_unique<TitleState>() );
@@ -19,11 +28,6 @@ namespace BSL
         else if ( Input::pressedMenu() )
         {
             game.popState();
-        }
-        if ( opacity_ < 1.0f )
-        {
-            opacity_ += 0.1f * dt;
-            boxgfx_.setOpacity( opacity_ );
         }
     };
 

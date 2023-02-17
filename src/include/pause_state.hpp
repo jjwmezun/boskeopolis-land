@@ -49,7 +49,7 @@ namespace BSL
             };
 
             SpriteGraphic boxgfx_;
-            std::array<unsigned int, NUM_O_OPTIONS> textgfx_;
+            std::array<TextGraphic, NUM_O_OPTIONS> textgfx_;
             float opacity_;
     };
 }

@@ -14,7 +14,7 @@ namespace BSL
             // TODO: Throw exception
             std::cout << "NO CHARSET" << std::endl;
         }
-        charset_ = charset;
+        charset_ = static_cast<unsigned int>( charset );
     };
 
     unsigned int Renderer::addSprite
@@ -73,7 +73,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return graphic;
+        return static_cast<unsigned int>( graphic );
     };
 
     unsigned int Renderer::addRect
@@ -105,7 +105,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return graphic;
+        return static_cast<unsigned int>( graphic );
     };
 
     unsigned int Renderer::addRectGradient
@@ -141,7 +141,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return graphic;
+        return static_cast<unsigned int>( graphic );
     };
 
     unsigned int Renderer::addTilemap
@@ -184,10 +184,10 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return graphic;
+        return static_cast<unsigned int>( graphic );
     };
 
-    unsigned int Renderer::addText
+    TextGraphic Renderer::addText
     (
         std::string && text,
         uint_fast8_t color,
@@ -211,6 +211,7 @@ namespace BSL
         float xoffset = GetArg<float> ( "xOffset", args, 0.0f );
         float yoffset = GetArg<float> ( "yPadding", args, 0.0f );
         float shadow = GetArg<float> ( "shadow", args, 0.0f );
+        float opacity = GetArg( "opacity", args, 1.0f );
 
         NasrText t
         {
@@ -225,10 +226,11 @@ namespace BSL
             padding_bottom,
             xoffset,
             yoffset,
-            shadow
+            shadow,
+            opacity
         };
 
-        int graphic = NasrGraphicAddTextPalette
+        int graphic = NasrGraphicsAddTextPalette
         (
             abs,
             current_state_,
@@ -245,10 +247,10 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return graphic;
+        return { static_cast<unsigned int>( graphic ) };
     };
 
-    unsigned int Renderer::addTextGradient
+    TextGraphic Renderer::addTextGradient
     (
         std::string && text,
         Dir::XY dir,
@@ -275,6 +277,7 @@ namespace BSL
         float yoffset = GetArg<float> ( "yPadding", args, 0.0f );
         float shadow = GetArg<float> ( "shadow", args, 0.0f );
         uint_fast8_t dirval = static_cast<uint_fast8_t> ( dir );
+        float opacity = GetArg( "opacity", args, 1.0f );
 
         NasrText t
         {
@@ -289,10 +292,11 @@ namespace BSL
             padding_bottom,
             xoffset,
             yoffset,
-            shadow
+            shadow,
+            opacity
         };
 
-        int graphic = NasrGraphicAddTextGradientPalette
+        int graphic = NasrGraphicsAddTextGradientPalette
         (
             abs,
             current_state_,
@@ -311,7 +315,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return graphic;
+        return { static_cast<unsigned int>( graphic ) };
     };
     
     SpriteGraphic Renderer::addMenuBox
@@ -507,6 +511,6 @@ namespace BSL
             std::cout << "NO MENU SPRITE" << std::endl;
         }
 
-        return { graphic };
+        return { static_cast<unsigned int>( graphic ) };
     };
 }

@@ -11,10 +11,23 @@ namespace BSL
     class SpriteGraphic
     {
         public:
-            constexpr SpriteGraphic( unsigned int gfx ) : gfx_ ( gfx ) {};
+            constexpr SpriteGraphic( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
             inline void setOpacity( float v ) const
             {
                 NasrGraphicsSpriteSetOpacity( gfx_, v );
+            };
+
+        private:
+            unsigned int gfx_;
+    };
+
+    class TextGraphic
+    {
+        public:
+            constexpr TextGraphic( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
+            inline void setOpacity( float v ) const
+            {
+                NasrSetTextOpacity( gfx_, v );
             };
 
         private:
@@ -73,7 +86,7 @@ namespace BSL
                 ArgList args = {}
             ) const;
 
-            unsigned int addText
+            TextGraphic addText
             (
                 std::string && text,
                 uint_fast8_t color,
@@ -84,7 +97,7 @@ namespace BSL
                 ArgList args = {}
             ) const;
 
-            unsigned int addTextGradient
+            TextGraphic addTextGradient
             (
                 std::string && text,
                 Dir::XY dir,

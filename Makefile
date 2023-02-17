@@ -3,9 +3,9 @@
 ########################################################################
 
 # Compiler settings - Can be customized.
-CC = g++
-CXXFLAGS = -std=c++2a -Wall -fconcepts
-LDFLAGS = -Llib -lnasringine01 -lglfw3 -lGL -lX11 -lXrandr -lXi -ldl -lm -pthread -lopenal -lalut
+CC = g++-11
+CXXFLAGS = -std=c++2a -Wall
+LDFLAGS = -Llib -lnasringine01 -lglfw -lGL -lX11 -lXrandr -ldl -lm -lopenal -lalut
 
 # Makefile settings - Can be customized.
 APPNAME = bin/BoskeopolisLand
