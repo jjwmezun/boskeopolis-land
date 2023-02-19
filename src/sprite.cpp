@@ -8,12 +8,12 @@
 #include <iostream>
 
 constexpr float START_SPEED = 0.25f;
-constexpr float MAX_SPEED = 2.5f;
+constexpr float MAX_SPEED = 2.0f;
 constexpr float FALL_SPEED = 0.5f;
 constexpr float GRAVITY = 6.0f;
-constexpr float JUMP_ACC = 0.5f;
-constexpr float JUMP_INIT = 1.0f;
-constexpr float JUMP_MAX = 6.5f;
+constexpr float JUMP_ACC = 0.1f;
+constexpr float JUMP_INIT = 4.0f;
+constexpr float JUMP_MAX = 5.0f;
 
 namespace BSL
 {
@@ -75,7 +75,7 @@ namespace BSL
         {
             vx_ /= ( 1.0f + 0.2f * dt );
         }
-        pos_.x += vx_ * dt;
+        float xchange = vx_ * dt;
         
 
         // Falling & Jumping
@@ -123,56 +123,71 @@ namespace BSL
             accy_ = 0.0f;
         }
 
-        pos_.y += vy_ * dt;
+        float ychange = vy_ * dt;
 
 
 
 
 
 
-        // Collision
-        /*
-        if ( isOnGround() )
-        {
-            pos_.y = 320.0f - 25.0f;
-        }
-        */
+        
         on_ground_ = false;
         jump_padding_ = std::max( 0.0f, jump_padding_ - 1.0f * dt);
 
+        // Collision
+
         // Handle downward collision.
-        if ( vy_ > 0.0f )
+        if ( ychange > 0.0f )
         {
-            const int bl = pixelsToBlocks( pos_.x + 2.0f );
-            const int br = pixelsToBlocks( pos_.right() - 2.0f );
-            const int by = pixelsToBlocks( pos_.bottom() - 1.0f );
-            const std::vector<Map::CollisionType> ctypes { Map::CollisionType::SOLID, Map::CollisionType::SOLID_ABOVE };
-            const bool blc = map.testCollision( bl, by, ctypes );
-            const bool brc = map.testCollision( br, by, ctypes );
-            if ( blc || brc )
+            const float ystep = 4.0f;
+            while ( ychange != 0.0f )
             {
-                pos_.y -= pos_.bottom() - 1.0f - blocksToPixels( by );
-                on_ground_ = true;
-                jump_padding_ = going_fast ? 8.0f : 2.0f;
+                pos_.y += std::min( ystep, ychange );
+                ychange = std::max( 0.0f, ychange - ystep );
+
+                const int bl = pixelsToBlocks( pos_.x + 2.0f );
+                const int br = pixelsToBlocks( pos_.right() - 2.0f );
+                const int by = pixelsToBlocks( pos_.bottom() - 1.0f );
+                const std::vector<Map::CollisionType> ctypes { Map::CollisionType::SOLID_ABOVE };
+                const bool blc = map.testCollision( bl, by );
+                const bool brc = map.testCollision( br, by );
+                const bool blc2 = map.testCollision( bl, by, ctypes );
+                const bool brc2 = map.testCollision( br, by, ctypes );
+                const float bydiff = pos_.bottom() - 1.0f - static_cast<float>( blocksToPixels( by ) );
+                const bool flat_top_coll = ( blc2 || brc2 ) && bydiff <= 4.0f;
+                if ( blc || brc || flat_top_coll )
+                {
+                    pos_.y -= pos_.bottom() - 1.0f - blocksToPixels( by );
+                    on_ground_ = true;
+                    jump_padding_ = going_fast ? 8.0f : 2.0f;
+                }
+            }
+        }
+        // Handle upward collision.
+        else if ( ychange < 0.0f )
+        {
+            const float ystep = -12.0f;
+            while ( ychange != 0.0f )
+            {
+                pos_.y += std::max( ystep, ychange );
+                ychange = std::min( 0.0f, ychange - ystep );
+
+                const int tl = pixelsToBlocks( pos_.x + 4.0f );
+                const int tr = pixelsToBlocks( pos_.right() - 4.0f );
+                const int ty = pixelsToBlocks( pos_.y );
+                const bool tlc = map.testCollision( tl, ty );
+                const bool trc = map.testCollision( tr, ty );
+                if ( tlc || trc )
+                {
+                    pos_.y = blocksToPixels( ty + 1 );
+                    vy_ *= -0.25f;
+                    accy_ = 0.0f;
+                    is_jumping_ = false;
+                }
             }
         }
 
-        // Handle upward collision.
-        if ( vy_ < 0.0f )
-        {
-            const int tl = pixelsToBlocks( pos_.x + 4.0f );
-            const int tr = pixelsToBlocks( pos_.right() - 4.0f );
-            const int ty = pixelsToBlocks( pos_.y );
-            const bool tlc = map.testCollision( tl, ty );
-            const bool trc = map.testCollision( tr, ty );
-            if ( tlc || trc )
-            {
-                pos_.y = blocksToPixels( ty + 1 );
-                vy_ *= -0.25f;
-                accy_ = 0.0f;
-                is_jumping_ = false;
-            }
-        }
+        pos_.x += xchange;
 
         // Handle right collision.
         const int rx = pixelsToBlocks( pos_.right() );

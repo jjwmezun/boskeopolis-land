@@ -1,6 +1,7 @@
 #ifndef LEVEL_STATE_H
 #define LEVEL_STATE_H
 
+#include "clock.hpp"
 #include "game_state.hpp"
 #include "input_controller.hpp"
 #include "map.hpp"
@@ -19,6 +20,7 @@ namespace BSL
             Map map_;
             Sprite autumn_;
             InputController input_;
+            Clock clock_;
     };
 }
 

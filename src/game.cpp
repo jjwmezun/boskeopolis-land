@@ -14,6 +14,7 @@ namespace BSL
     void Game::update( float dt )
     {
         states_[ current_state_ ]->update( *this, dt );
+        fps_.setNumber( 60.0f / dt );
     };
 
     const Renderer & Game::render() const
@@ -31,6 +32,19 @@ namespace BSL
         renderer_.current_state_ = current_state_ = 0;
         number_of_states_ = 1;
         states_[ current_state_ ]->init( *this );
+
+        fps_ = renderer_.addCounter
+        (
+            0.0f,
+            4,
+            0,
+            128,
+            16.0f,
+            16.0f,
+            {
+                { "shadow", 0.5f }
+            }
+        );
     };
 
     void Game::pushState( std::unique_ptr<GameState> && state )

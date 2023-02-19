@@ -25,6 +25,7 @@ namespace BSL
             unsigned int max_states_;
             unsigned int current_state_;
             unsigned int number_of_states_;
+            CounterGraphic fps_;
     };
 }
 

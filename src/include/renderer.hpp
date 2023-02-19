@@ -34,6 +34,19 @@ namespace BSL
             unsigned int gfx_;
     };
 
+    class CounterGraphic
+    {
+        public:
+            constexpr CounterGraphic( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
+            inline void setNumber( float v ) const
+            {
+                NasrGraphicsCounterSetNumber( gfx_, v );
+            }
+
+        private:
+            unsigned int gfx_;
+    };
+
     class Renderer
     {
         friend class Game;
@@ -116,6 +129,29 @@ namespace BSL
                 Text::Valign valign,
                 float w,
                 float h,
+                ArgList args = {}
+            ) const;
+
+            CounterGraphic addCounter
+            (
+                float num,
+                unsigned int maxdigits,
+                uint_fast8_t palette,
+                uint_fast8_t color,
+                float x,
+                float y,
+                ArgList args = {}
+            ) const;
+
+            CounterGraphic addCounterGradient
+            (
+                float num,
+                unsigned int maxdigits,
+                Dir::XY dir,
+                uint_fast8_t color1,
+                uint_fast8_t color2,
+                float x,
+                float y,
                 ArgList args = {}
             ) const;
 

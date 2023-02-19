@@ -11,12 +11,14 @@ namespace BSL
     LevelState::LevelState()
     :
         map_ ( "city-1" ),
-        autumn_ ()
+        autumn_ (),
+        clock_ ( 0 )
     {};
 
     void LevelState::update( Game & game, float dt )
     {
         autumn_.update( dt, input_, map_ );
+        clock_.addSeconds( 1.0f / 60.0f * dt );
         if ( Input::pressedMenu() )
         {
             game.pushState( std::make_unique<PauseState>() );
@@ -41,5 +43,19 @@ namespace BSL
 
         map_.init( game );
         autumn_.init( game );
+
+        game.render().addMenuBox
+        (
+            Text::Align::LEFT,
+            Text::Valign::TOP,
+            static_cast<float>( WINDOW_WIDTH_PIXELS - 16 ),
+            32.0f,
+            {
+                { "x", 8.0f },
+                { "y", static_cast<float>( WINDOW_HEIGHT_PIXELS - 40 ) }
+            }
+        );
+
+        clock_.init( game );
     };
 }
