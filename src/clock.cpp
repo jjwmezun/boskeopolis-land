@@ -4,53 +4,32 @@
 
 namespace BSL
 {
-    void Clock::init( Game & game )
+    void Clock::init( Game & game, ArgList args )
     {
-        const float y = WINDOW_HEIGHT_PIXELS - 32.0f;
-        const float shadow = 0.25f;
+        float x = GetArg( "x", args, 0.0f );
+        float y = GetArg( "y", args, 0.0f );
+        Dir::XY dir = GetArg( "dir", args, Dir::XY::DOWN );
 
-        minute_gfx_ = game.render().addCounterGradient
-        (
-            minutes_,
-            1,
-            Dir::XY::DOWN,
-            64,
-            16,
-            24.0f,
-            y,
-            {
-                { "shadow", shadow }
-            }
-        );
+        args[ "text" ] = "🕑";
+        args[ "w" ] = 9.0f;
+        args[ "h" ] = 9.0f;
+        game.render().addText( args );
 
-        game.render().addTextGradient
-        (
-            "🕑 :",
-            Dir::XY::DOWN,
-            64,
-            16,
-            16.0f,
-            y,
-            32.0f,
-            32.0f,
-            {
-                { "shadow", shadow }
-            }
-        );
+        args[ "num" ] = minutes_;
+        args[ "maxdigits" ] = 1;
+        args[ "x" ] = x + 8.0f;
 
-        second_gfx_ = game.render().addCounterGradient
-        (
-            seconds_,
-            2,
-            Dir::XY::DOWN,
-            64,
-            16,
-            40.0f,
-            y,
-            {
-                { "shadow", shadow }
-            }
-        );
+        minute_gfx_ = game.render().addCounter( args );
+
+        args[ "text" ] = ":";
+        args[ "x" ] = x + 16.0f;
+        game.render().addText( args );
+
+        args[ "num" ] = seconds_;
+        args[ "maxdigits" ] = 2;
+        args[ "x" ] = x + 24.0f;
+
+        second_gfx_ = game.render().addCounter( args );
     };
 
     void Clock::addSeconds( float amount )

@@ -33,18 +33,17 @@ namespace BSL
         number_of_states_ = 1;
         states_[ current_state_ ]->init( *this );
 
-        fps_ = renderer_.addCounter
-        (
-            0.0f,
-            4,
-            0,
-            128,
-            16.0f,
-            16.0f,
-            {
-                { "shadow", 0.5f }
-            }
-        );
+        const ArgList fps_args =
+        {
+            { "num", 0.0f },
+            { "maxdigits", 4 },
+            { "color", 128 },
+            { "x", 16.0f },
+            { "y", 16.0f },
+            { "shadow", 0.5f }
+        };
+
+        fps_ = renderer_.addCounter( fps_args );
     };
 
     void Game::pushState( std::unique_ptr<GameState> && state )

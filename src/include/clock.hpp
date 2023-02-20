@@ -18,7 +18,7 @@ namespace BSL
                 minute_gfx_ ( 0 ),
                 second_gfx_ ( 0 )
             {};
-            void init( Game & game );
+            void init( Game & game, ArgList args );
             void addSeconds( float amount );
 
         private:

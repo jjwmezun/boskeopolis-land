@@ -25,7 +25,7 @@ namespace BSL
         private:
             T value_;
 
-            constexpr int testIncrease( T n ) const
+            constexpr T testIncrease( T n ) const
             {
                 return n > max ? ( loop ? min : max ) : n;
             };

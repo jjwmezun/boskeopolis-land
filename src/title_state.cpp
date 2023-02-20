@@ -26,17 +26,14 @@ namespace BSL
             true
         );
 
-        game.render().addTextGradient
+        game.render().addText
         (
-            "Boskeopolis Land",
-            Dir::XY::DOWN,
-            224,
-            64,
-            0.0f,
-            0.0f,
-            WINDOW_WIDTH_PIXELS,
-            WINDOW_HEIGHT_PIXELS,
             {
+                { "text", std::string( "Boskeopolis Land" ) },
+                { "dir", Dir::XY::DOWN },
+                { "type", "gradient" },
+                { "color1", 224 },
+                { "color2", 64 },
                 { "leftPadding", 16.0f },
                 { "rightPadding", 16.0f },
                 { "topPadding", 16.0f },

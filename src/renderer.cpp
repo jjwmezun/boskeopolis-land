@@ -187,20 +187,18 @@ namespace BSL
         return static_cast<unsigned int>( graphic );
     };
 
-    TextGraphic Renderer::addText
-    (
-        std::string && text,
-        uint_fast8_t color,
-        float x,
-        float y,
-        float w,
-        float h,
-        ArgList args
-    ) const
+    TextGraphic Renderer::addText( ArgList args ) const
     {
+        std::string type = GetArg( "type", args, std::string( "normal" ) );
+        std::string text = GetArg( "text", args, std::string( "" ) );
         uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
         std::vector<char> cstring( text.c_str(), text.c_str() + text.size() + 1 );
+        float x = GetArg( "x", args, 0.0f );
+        float y = GetArg( "y", args, 0.0f );
+        float w = GetArg( "w", args, static_cast<float>( WINDOW_WIDTH_PIXELS ) );
+        float h = GetArg( "h", args, static_cast<float>( WINDOW_HEIGHT_PIXELS ) );
+        uint_fast8_t palette = GetArg( "palette", args, 0 );
         NasrRect coords { x, y, w, h };
         uint_fast8_t align = GetArgConvert<uint_fast8_t, Text::Align> ( "align", args, NASR_ALIGN_DEFAULT );
         uint_fast8_t valign = GetArgConvert<uint_fast8_t, Text::Valign> ( "valign", args, NASR_VALIGN_DEFAULT );
@@ -230,16 +228,39 @@ namespace BSL
             opacity
         };
 
-        int graphic = NasrGraphicsAddTextPalette
-        (
-            abs,
-            current_state_,
-            layer,
-            t,
-            0,
-            1,
-            color
-        );
+        int graphic = -1;
+        if ( type == "gradient" )
+        {
+            uint_fast8_t dir = GetArgConvert<uint_fast8_t, Dir::XY>( "dir", args, Dir::XY::DOWN );
+            uint_fast8_t color1 = GetArg( "color1", args, 0 );
+            uint_fast8_t color2 = GetArg( "color2", args, 0 );
+            graphic = NasrGraphicsAddTextGradientPalette
+            (
+                abs,
+                current_state_,
+                layer,
+                t,
+                0,
+                1,
+                dir,
+                color1,
+                color2
+            );
+        }
+        else
+        {
+            uint_fast8_t color = GetArg( "color", args, 0 );
+            graphic = NasrGraphicsAddTextPalette
+            (
+                abs,
+                current_state_,
+                layer,
+                t,
+                0,
+                1,
+                color
+            );
+        }
 
         if ( graphic < 0 )
         {
@@ -250,69 +271,81 @@ namespace BSL
         return { static_cast<unsigned int>( graphic ) };
     };
 
-    TextGraphic Renderer::addTextGradient
+    CounterGraphic Renderer::addCounter
     (
-        std::string && text,
-        Dir::XY dir,
-        uint_fast8_t color1,
-        uint_fast8_t color2,
-        float x,
-        float y,
-        float w,
-        float h,
         ArgList args
     ) const
     {
-        uint_fast8_t abs = 1;
+        std::string type = GetArg( "type", args, std::string( "normal" ) );
+        float num = GetArg( "num", args, 0.0f );
+        unsigned int maxdigits = GetArg( "maxdigits", args, 0 );
+        float x = GetArg( "x", args, 0.0f );
+        float y = GetArg( "y", args, 0.0f );
+        uint_fast8_t palette = GetArg( "palette", args, 0 );
+        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
-        std::vector<char> cstring( text.c_str(), text.c_str() + text.size() + 1 );
-        NasrRect coords { x, y, w, h };
-        uint_fast8_t align = GetArgConvert<uint_fast8_t, Text::Align> ( "align", args, NASR_ALIGN_DEFAULT );
-        uint_fast8_t valign = GetArgConvert<uint_fast8_t, Text::Valign> ( "valign", args, NASR_VALIGN_DEFAULT );
-        float padding_left = GetArg<float> ( "leftPadding", args, 0.0f );
-        float padding_right = GetArg<float> ( "rightPadding", args, 0.0f );
-        float padding_top = GetArg<float> ( "topPadding", args, 0.0f );
-        float padding_bottom = GetArg<float> ( "bottomPadding", args, 0.0f );
-        float xoffset = GetArg<float> ( "xOffset", args, 0.0f );
-        float yoffset = GetArg<float> ( "yPadding", args, 0.0f );
         float shadow = GetArg<float> ( "shadow", args, 0.0f );
-        uint_fast8_t dirval = static_cast<uint_fast8_t> ( dir );
         float opacity = GetArg( "opacity", args, 1.0f );
+        unsigned int maxdecimals = GetArg( "maxdecimals", args, 0 );
+        uint_fast8_t numpadding = GetArg( "numpadding", args, 0 );
+        uint_fast8_t decimalpadding = GetArg( "decimalpadding", args, 0 );
 
-        NasrText t
+        int graphic = -1;
+        if ( type == "gradient" )
         {
-            &cstring[ 0 ],
-            charset_,
-            coords,
-            align,
-            valign,
-            padding_left,
-            padding_right,
-            padding_top,
-            padding_bottom,
-            xoffset,
-            yoffset,
-            shadow,
-            opacity
-        };
-
-        int graphic = NasrGraphicsAddTextGradientPalette
-        (
-            abs,
-            current_state_,
-            layer,
-            t,
-            0,
-            1,
-            dirval,
-            color1,
-            color2
-        );
+            uint_fast8_t dir = GetArgConvert<uint_fast8_t, Dir::XY>( "dir", args, Dir::XY::DOWN );
+            uint_fast8_t color1 = GetArg( "color1", args, 0 );
+            uint_fast8_t color2 = GetArg( "color2", args, 0 );
+            graphic = NasrGraphicsAddCounterPaletteGradient
+            (
+                abs,
+                current_state_,
+                layer,
+                charset_,
+                num,
+                maxdigits,
+                maxdecimals,
+                numpadding,
+                decimalpadding,
+                0,
+                dir,
+                color1,
+                color2,
+                1,
+                x,
+                y,
+                shadow,
+                opacity
+            );
+        }
+        else
+        {
+            uint_fast8_t color = GetArg( "color", args, 0 );
+            graphic = NasrGraphicsAddCounterPalette
+            (
+                abs,
+                current_state_,
+                layer,
+                charset_,
+                num,
+                maxdigits,
+                maxdecimals,
+                numpadding,
+                decimalpadding,
+                palette,
+                color,
+                1,
+                x,
+                y,
+                shadow,
+                opacity
+            );
+        }
 
         if ( graphic < 0 )
         {
             // TODO: throw exception.
-            std::cout << "NO GRAPH" << std::endl;
+            std::cout << "NO COUNT" << std::endl;
         }
 
         return { static_cast<unsigned int>( graphic ) };
@@ -514,104 +547,5 @@ namespace BSL
         }
 
         return { static_cast<unsigned int>( graphic ) };
-    };
-
-    CounterGraphic Renderer::addCounter
-    (
-        float num,
-        unsigned int maxdigits,
-        uint_fast8_t palette,
-        uint_fast8_t color,
-        float x,
-        float y,
-        ArgList args
-    ) const
-    {
-        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
-        unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
-        float shadow = GetArg<float> ( "shadow", args, 0.0f );
-        float opacity = GetArg( "opacity", args, 1.0f );
-        unsigned int maxdecimals = GetArg( "maxdecimals", args, 0 );
-        uint_fast8_t numpadding = GetArg( "numpadding", args, 0 );
-        uint_fast8_t decimalpadding = GetArg( "decimalpadding", args, 0 );
-
-        int graphic = NasrGraphicsAddCounterPalette
-        (
-            abs,
-            current_state_,
-            layer,
-            charset_,
-            num,
-            maxdigits,
-            maxdecimals,
-            numpadding,
-            decimalpadding,
-            palette,
-            color,
-            1,
-            x,
-            y,
-            shadow,
-            opacity
-        );
-
-        if ( graphic < 0 )
-        {
-            // TODO: throw exception.
-            std::cout << "NO COUNT" << std::endl;
-        }
-
-        return { static_cast<unsigned int>( graphic ) };
-    };
-
-    CounterGraphic Renderer::addCounterGradient
-    (
-        float num,
-        unsigned int maxdigits,
-        Dir::XY dir,
-        uint_fast8_t color1,
-        uint_fast8_t color2,
-        float x,
-        float y,
-        ArgList args
-    ) const
-    {
-        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
-        unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
-        float shadow = GetArg<float> ( "shadow", args, 0.0f );
-        float opacity = GetArg( "opacity", args, 1.0f );
-        unsigned int maxdecimals = GetArg( "maxdecimals", args, 0 );
-        uint_fast8_t numpadding = GetArg( "numpadding", args, 0 );
-        uint_fast8_t decimalpadding = GetArg( "decimalpadding", args, 0 );
-
-        int graphic = NasrGraphicsAddCounterPaletteGradient
-        (
-            abs,
-            current_state_,
-            layer,
-            charset_,
-            num,
-            maxdigits,
-            maxdecimals,
-            numpadding,
-            decimalpadding,
-            0,
-            static_cast<uint_fast8_t>( dir ),
-            color1,
-            color2,
-            1,
-            x,
-            y,
-            shadow,
-            opacity
-        );
-
-        if ( graphic < 0 )
-        {
-            // TODO: throw exception.
-            std::cout << "NO COUNT" << std::endl;
-        }
-
-        return { static_cast<unsigned int>( graphic ) };     
     };
 }

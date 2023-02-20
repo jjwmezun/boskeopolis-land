@@ -6,9 +6,34 @@
  "name":"objects",
  "spacing":0,
  "tilecount":2976,
- "tiledversion":"1.7.2",
+ "tiledversion":"1.9.2",
  "tileheight":16,
+ "tiles":[
+        {
+         "id":0,
+         "properties":[
+                {
+                 "name":"animation",
+                 "type":"int",
+                 "value":6
+                }, 
+                {
+                 "name":"obj",
+                 "type":"string",
+                 "value":"lowest_gem"
+                }, 
+                {
+                 "name":"x",
+                 "type":"int",
+                 "value":0
+                }, 
+                {
+                 "name":"y",
+                 "type":"int",
+                 "value":0
+                }]
+        }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.6"
+ "version":"1.9"
 }

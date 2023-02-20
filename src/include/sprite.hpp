@@ -10,7 +10,7 @@ namespace BSL
 {
     class Controller;
     class Game;
-    class Map;
+    class Level;
 
     class Sprite
     {
@@ -18,7 +18,7 @@ namespace BSL
             Sprite();
             void init( Game & game );
 
-            void update( float dt, const Controller & controller, Map & map );
+            void update( float dt, const Controller & controller, Level & level );
             bool isOnGround() const;
 
         private:

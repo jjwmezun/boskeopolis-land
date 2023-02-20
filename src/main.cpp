@@ -25,7 +25,7 @@ int main( int argc, char ** argv )
         18,
         NASR_SAMPLING_NEAREST,
         NASR_INDEXED_YES,
-        0,
+        1,
         8
     );
 

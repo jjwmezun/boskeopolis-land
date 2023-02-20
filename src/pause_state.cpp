@@ -64,22 +64,22 @@ namespace BSL
 
         float y = ( static_cast<float>( WINDOW_HEIGHT_PIXELS ) - text_height ) / 2.0f;
         const float x = ( static_cast<float>( WINDOW_WIDTH_PIXELS ) - text_width ) / 2.0f;
+        ArgList args =
+        {
+            { "type", "gradient" },
+            { "dir", Dir::XY::DOWN },
+            { "color1", 96 },
+            { "color2", 64 },
+            { "x", x },
+            { "w", text_width },
+            { "h", 12.0f },
+            { "opacity", 0.0f }
+        };
         for ( unsigned int i = 0; i < NUM_O_OPTIONS; ++i )
         {
-            textgfx_[ i ] = game.render().addTextGradient
-            (
-                std::string( option_text.at( i ) ),
-                Dir::XY::DOWN,
-                96,
-                64,
-                x,
-                y,
-                text_width,
-                12.0f,
-            {
-                { "opacity", 0.0f }
-            }
-            );
+            args[ "y" ] = y;
+            args[ "text" ] = std::string( option_text.at( i ) );
+            textgfx_[ i ] = game.render().addText( args );
             y += 12.0f;
         }
     };

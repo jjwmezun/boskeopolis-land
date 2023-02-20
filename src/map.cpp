@@ -35,6 +35,20 @@ namespace BSL
 
     void Map::init( Game & game )
     {
+        // Backgrounds.
+        game.render().addRectGradient
+        (
+            0.0f,
+            0.0f,
+            BSL::WINDOW_WIDTH_PIXELS,
+            BSL::WINDOW_HEIGHT_PIXELS,
+            Dir::XY::DOWN,
+            1,
+            254,
+            true
+        );
+
+        // Tiles
         std::string filename = "assets/maps/" + slug_ + ".json";
         char * map_data = NasrReadFile( filename.c_str() );
         if ( !map_data )
@@ -193,6 +207,26 @@ namespace BSL
                         width_,
                         height_
                     );
+                }
+                break;
+                case ( MapLayerType::OBJECT ):
+                {
+                    for ( int tile : layer.tiles )
+                    {
+                        if ( tile == 0 )
+                        {
+                            continue;
+                        }
+
+                        int objtype = tile - 1121;
+                        if ( objtype < 0 )
+                        {
+                            printf( "Invalid object.\n" );
+                        }
+                        else
+                        {
+                        }
+                    }
                 }
                 break;
             }

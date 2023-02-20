@@ -101,26 +101,12 @@ namespace BSL
 
             TextGraphic addText
             (
-                std::string && text,
-                uint_fast8_t color,
-                float x,
-                float y,
-                float w,
-                float h,
-                ArgList args = {}
+                ArgList args
             ) const;
 
-            TextGraphic addTextGradient
+            CounterGraphic addCounter
             (
-                std::string && text,
-                Dir::XY dir,
-                uint_fast8_t color1,
-                uint_fast8_t color2,
-                float x,
-                float y,
-                float w,
-                float h,
-                ArgList args = {}
+                ArgList args
             ) const;
 
             SpriteGraphic addMenuBox
@@ -129,29 +115,6 @@ namespace BSL
                 Text::Valign valign,
                 float w,
                 float h,
-                ArgList args = {}
-            ) const;
-
-            CounterGraphic addCounter
-            (
-                float num,
-                unsigned int maxdigits,
-                uint_fast8_t palette,
-                uint_fast8_t color,
-                float x,
-                float y,
-                ArgList args = {}
-            ) const;
-
-            CounterGraphic addCounterGradient
-            (
-                float num,
-                unsigned int maxdigits,
-                Dir::XY dir,
-                uint_fast8_t color1,
-                uint_fast8_t color2,
-                float x,
-                float y,
                 ArgList args = {}
             ) const;
 

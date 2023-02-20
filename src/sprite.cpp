@@ -1,5 +1,6 @@
 #include "config.hpp"
 #include "game.hpp"
+#include "level.hpp"
 #include "map.hpp"
 #include "nasringine/nasr.h"
 #include "sprite.hpp"
@@ -39,7 +40,7 @@ namespace BSL
         graphic_ = game.render().addSprite( "sprites/autumn.png", 0.0f, 0.0f, 16.0f, 25.0f, 64.0f, 64.0f );
     };
 
-    void Sprite::update( float dt, const Controller & controller, Map & map )
+    void Sprite::update( float dt, const Controller & controller, Level & level )
     {
         // Horizontal Movement
         const float start_speed = controller.heldRun() ? START_SPEED * 2.0f : START_SPEED;
@@ -135,6 +136,7 @@ namespace BSL
         jump_padding_ = std::max( 0.0f, jump_padding_ - 1.0f * dt);
 
         // Collision
+        const Map & map = level.map();
 
         // Handle downward collision.
         if ( ychange > 0.0f )

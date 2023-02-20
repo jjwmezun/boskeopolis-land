@@ -1,11 +1,9 @@
 #ifndef LEVEL_STATE_H
 #define LEVEL_STATE_H
 
-#include "clock.hpp"
 #include "game_state.hpp"
 #include "input_controller.hpp"
-#include "map.hpp"
-#include "sprite.hpp"
+#include "level.hpp"
 
 namespace BSL
 {
@@ -17,10 +15,8 @@ namespace BSL
             void init( Game & game ) override;
 
         private:
-            Map map_;
-            Sprite autumn_;
             InputController input_;
-            Clock clock_;
+            Level level_;
     };
 }
 
