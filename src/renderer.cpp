@@ -76,7 +76,7 @@ namespace BSL
         return static_cast<unsigned int>( graphic );
     };
 
-    unsigned int Renderer::addRect
+    RectGraphic Renderer::addRect
     (
         float x,
         float y,
@@ -84,7 +84,8 @@ namespace BSL
         float h,
         uint_fast8_t color,
         bool abs,
-        Layer layer
+        Layer layer,
+        float opacity
     ) const
     {
         NasrRect r { x, y, w, h };
@@ -96,7 +97,8 @@ namespace BSL
             r,
             0,
             color,
-            1
+            1,
+            opacity
         );
 
         if ( graphic < 0 )
@@ -105,7 +107,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return static_cast<unsigned int>( graphic );
+        return { static_cast<unsigned int>( graphic ) };
     };
 
     unsigned int Renderer::addRectGradient
@@ -118,7 +120,8 @@ namespace BSL
         uint_fast8_t color1,
         uint_fast8_t color2,
         bool abs,
-        Layer layer
+        Layer layer,
+        float opacity
     ) const
     {
         NasrRect r { x, y, w, h };
@@ -132,7 +135,8 @@ namespace BSL
             static_cast<uint_fast8_t>( dir ),
             color1,
             color2,
-            1
+            1,
+            opacity
         );
 
         if ( graphic < 0 )

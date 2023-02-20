@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "input.hpp"
 #include "title_state.hpp"
+#include "math.hpp"
 #include "nasringine/nasr.h"
 #include "nasringine/nasr_input.h"
 #include "nasringine/nasr_localization.h"
@@ -32,6 +33,7 @@ int main( int argc, char ** argv )
     double prev_time = NasrGetTime();
     double accumulated_time = prev_time;
 
+    BSL::Math::init();
     NasrSetLanguage( "assets/localization/es.json", "boskeopolis-land" );
     NasrSetPalette( "assets/palettes/palette.png" );
     BSL::Input::init();

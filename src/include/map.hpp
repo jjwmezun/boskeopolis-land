@@ -1,12 +1,15 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "map_layer.hpp"
+#include <memory>
 #include <string>
 #include <vector>
 
 namespace BSL
 {
     class Game;
+    class Level;
 
     class Map
     {
@@ -20,6 +23,7 @@ namespace BSL
 
             Map( std::string && slug );
             void init( Game & game );
+            void update( Level & level, float dt );
 
             unsigned int getWidthPixels() const;
             unsigned int getHeightPixels() const;
@@ -31,6 +35,7 @@ namespace BSL
 
         private:
             std::vector<std::vector<int>> collision_;
+            std::vector<std::unique_ptr<MapLayer>> layers_;
             std::string slug_;
             unsigned int width_;
             unsigned int height_;

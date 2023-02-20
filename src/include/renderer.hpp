@@ -8,6 +8,39 @@
 
 namespace BSL
 {
+    class RectGraphic
+    {
+        public:
+            constexpr RectGraphic( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
+            inline float getX() const
+            {
+                return NasrGraphicsRectGetX( gfx_ );
+            };
+            inline void setX( float v ) const
+            {
+                NasrGraphicsRectSetX( gfx_, v );
+            };
+            inline float getY() const
+            {
+                return NasrGraphicsRectGetY( gfx_ );
+            };
+            inline void setY( float v ) const
+            {
+                NasrGraphicsRectSetY( gfx_, v );
+            };
+            inline void addToY( float v ) const
+            {
+                NasrGraphicsRectAddToY( gfx_, v );
+            };
+            inline void setH( float v ) const
+            {
+                NasrGraphicsRectSetH( gfx_, v );
+            };
+
+        private:
+            unsigned int gfx_;
+    };
+
     class SpriteGraphic
     {
         public:
@@ -66,7 +99,7 @@ namespace BSL
                 ArgList args = {}
             ) const;
 
-            unsigned int addRect
+            RectGraphic addRect
             (
                 float x,
                 float y,
@@ -74,7 +107,8 @@ namespace BSL
                 float h,
                 uint_fast8_t color,
                 bool abs = false,
-                Layer layer = Layer::BG_1
+                Layer layer = Layer::BG_1,
+                float opacity = 1.0f
             ) const;
 
             unsigned int addRectGradient
@@ -87,7 +121,8 @@ namespace BSL
                 uint_fast8_t color1,
                 uint_fast8_t color2,
                 bool abs = false,
-                Layer layer = Layer::BG_1
+                Layer layer = Layer::BG_1,
+                float opacity = 1.0f
             ) const;
 
             unsigned int addTilemap

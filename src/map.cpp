@@ -3,6 +3,7 @@
 #include <cstring>
 #include "game.hpp"
 #include "map.hpp"
+#include "map_layer_rain.hpp"
 #include "nasringine/json/json.h"
 #include "nasringine/nasr.h"
 #include "nasringine/nasr_io.h"
@@ -11,19 +12,19 @@
 
 namespace BSL
 {
-    enum class MapLayerType
+    struct MapTileLayer
     {
-        COLLISION,
-        TILE,
-        OBJECT
-    };
+        enum class Type
+        {
+            COLLISION,
+            TILE,
+            OBJECT
+        };
 
-    struct MapLayer
-    {
         std::vector<int> tiles;
         unsigned int width;
         unsigned height;
-        MapLayerType type;
+        MapTileLayer::Type type;
     };
 
     Map::Map( std::string && slug )
@@ -48,6 +49,12 @@ namespace BSL
             true
         );
 
+        layers_.emplace_back( std::make_unique<MapLayerRain>( 32, 128 ) );
+        for ( auto & layer : layers_ )
+        {
+            layer->init( game );
+        }
+
         // Tiles
         std::string filename = "assets/maps/" + slug_ + ".json";
         char * map_data = NasrReadFile( filename.c_str() );
@@ -65,7 +72,7 @@ namespace BSL
             std::cout << "NO FILE" << std::endl;
         }
 
-        std::vector<MapLayer> layers;
+        std::vector<MapTileLayer> layers;
 
         for ( unsigned int i = 0; i < root->u.object.length; ++i )
         {
@@ -107,7 +114,7 @@ namespace BSL
                         std::cout << "NO FILE" << std::endl;
                     }
 
-                    MapLayer layer;
+                    MapTileLayer layer;
 
                     for ( unsigned int k = 0; k < layer_item->u.object.length; ++k )
                     {
@@ -142,15 +149,15 @@ namespace BSL
 
                             if ( std::strcmp( "collision", layer_entry.value->u.string.ptr ) == 0 )
                             {
-                                layer.type = MapLayerType::COLLISION;
+                                layer.type = MapTileLayer::Type::COLLISION;
                             }
                             else if ( std::strcmp( "tile", layer_entry.value->u.string.ptr ) == 0 )
                             {
-                                layer.type = MapLayerType::TILE;
+                                layer.type = MapTileLayer::Type::TILE;
                             }
                             else if ( std::strcmp( "object", layer_entry.value->u.string.ptr ) == 0 )
                             {
-                                layer.type = MapLayerType::OBJECT;
+                                layer.type = MapTileLayer::Type::OBJECT;
                             }
                             else
                             {
@@ -166,16 +173,16 @@ namespace BSL
         }
         json_value_free( root );
 
-        for ( const MapLayer & layer : layers )
+        for ( const MapTileLayer & layer : layers )
         {
             switch ( layer.type )
             {
-                case ( MapLayerType::COLLISION ):
+                case ( MapTileLayer::Type::COLLISION ):
                 {
                     collision_.push_back( layer.tiles );
                 }
                 break;
-                case ( MapLayerType::TILE ):
+                case ( MapTileLayer::Type::TILE ):
                 {
                     std::vector<NasrTile> tiles;
                     for ( int tile : layer.tiles )
@@ -209,7 +216,7 @@ namespace BSL
                     );
                 }
                 break;
-                case ( MapLayerType::OBJECT ):
+                case ( MapTileLayer::Type::OBJECT ):
                 {
                     for ( int tile : layer.tiles )
                     {
@@ -230,6 +237,14 @@ namespace BSL
                 }
                 break;
             }
+        }
+    };
+
+    void Map::update( Level & level, float dt )
+    {
+        for ( auto & layer : layers_ )
+        {
+            layer->update( level, dt );
         }
     };
 
