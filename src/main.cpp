@@ -34,11 +34,11 @@ int main( int argc, char ** argv )
     double accumulated_time = prev_time;
 
     BSL::Math::init();
+    BSL::Game game { MAX_STATES };
     NasrSetLanguage( "assets/localization/es.json", "boskeopolis-land" );
     NasrSetPalette( "assets/palettes/palette.png" );
     BSL::Input::init();
 
-    BSL::Game game { MAX_STATES };
     game.changeState( std::make_unique<BSL::TitleState>() );
 
     while ( running )

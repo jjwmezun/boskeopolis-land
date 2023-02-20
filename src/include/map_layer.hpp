@@ -9,7 +9,7 @@ namespace BSL
     class MapLayer
     {
         public:
-            virtual void update( Level & level, float dt ) = 0;
+            virtual void update( Level & level, const Game & game, float dt ) = 0;
             virtual void init( const Game & game ) = 0;
     };
 }

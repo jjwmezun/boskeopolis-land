@@ -16,6 +16,6 @@ namespace BSL
     {
         sprites_.update( dt, controller, *this );
         inventory_.update( dt );
-        map_.update( *this, dt );
+        map_.update( *this, game, dt );
     };
 }

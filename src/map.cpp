@@ -3,6 +3,7 @@
 #include <cstring>
 #include "game.hpp"
 #include "map.hpp"
+#include "map_layer_palette_change.hpp"
 #include "map_layer_rain.hpp"
 #include "nasringine/json/json.h"
 #include "nasringine/nasr.h"
@@ -50,6 +51,7 @@ namespace BSL
         );
 
         layers_.emplace_back( std::make_unique<MapLayerRain>( 32, 128 ) );
+        layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( 32, 128 ) );
         for ( auto & layer : layers_ )
         {
             layer->init( game );
@@ -240,11 +242,11 @@ namespace BSL
         }
     };
 
-    void Map::update( Level & level, float dt )
+    void Map::update( Level & level, const Game & game, float dt )
     {
         for ( auto & layer : layers_ )
         {
-            layer->update( level, dt );
+            layer->update( level, game, dt );
         }
     };
 

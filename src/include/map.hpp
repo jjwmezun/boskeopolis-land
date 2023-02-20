@@ -23,7 +23,7 @@ namespace BSL
 
             Map( std::string && slug );
             void init( Game & game );
-            void update( Level & level, float dt );
+            void update( Level & level, const Game & game, float dt );
 
             unsigned int getWidthPixels() const;
             unsigned int getHeightPixels() const;

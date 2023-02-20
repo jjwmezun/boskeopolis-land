@@ -13,7 +13,7 @@ namespace BSL
     {
         public:
             MapLayerRain( unsigned int rain_start, unsigned int rain_max );
-            void update( Level & level, float dt ) override;
+            void update( Level & level, const Game & game, float dt ) override;
             void init( const Game & game ) override;
 
         private:

@@ -153,6 +153,11 @@ namespace BSL
                 ArgList args = {}
             ) const;
 
+            inline void setPalette( uint_fast8_t palette ) const
+            {
+                NasrSetGlobalPalette( palette );
+            };
+
         private:
             unsigned int current_state_;
             unsigned int charset_;
