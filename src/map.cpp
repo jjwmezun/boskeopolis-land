@@ -1,13 +1,14 @@
 #include <cmath>
 #include "config.hpp"
-#include <cstring>
 #include "game.hpp"
+#include "json.hpp"
 #include "map.hpp"
 #include "map_layer_palette_change.hpp"
 #include "map_layer_rain.hpp"
-#include "nasringine/json/json.h"
 #include "nasringine/nasr.h"
-#include "nasringine/nasr_io.h"
+#include <unordered_map>
+
+#include "tileset.hpp"
 
 #include <iostream>
 
@@ -23,8 +24,6 @@ namespace BSL
         };
 
         std::vector<int> tiles;
-        unsigned int width;
-        unsigned height;
         MapTileLayer::Type type;
     };
 
@@ -37,6 +36,10 @@ namespace BSL
 
     void Map::init( Game & game )
     {
+        // Init objects tileset.
+        Tileset objects { "objects" };
+        objects.init();
+
         // Backgrounds.
         game.render().addRectGradient
         (
@@ -49,7 +52,6 @@ namespace BSL
             254,
             true
         );
-
         layers_.emplace_back( std::make_unique<MapLayerRain>( 32, 128 ) );
         layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( 32, 128 ) );
         for ( auto & layer : layers_ )
@@ -57,124 +59,49 @@ namespace BSL
             layer->init( game );
         }
 
-        // Tiles
-        std::string filename = "assets/maps/" + slug_ + ".json";
-        char * map_data = NasrReadFile( filename.c_str() );
-        if ( !map_data )
-        {
-            // TODO: Throw exception.
-            std::cout << "NO FILE" << std::endl;
-        }
-        json_char * json = ( json_char * )( map_data );
-        json_value * root = json_parse( json, strlen( map_data ) + 1 );
-        free( map_data );
-        if ( !root || root->type != json_object || !root->u.object.length )
-        {
-            // TODO: Throw exception.
-            std::cout << "NO FILE" << std::endl;
-        }
-
-        std::vector<MapTileLayer> layers;
-
-        for ( unsigned int i = 0; i < root->u.object.length; ++i )
-        {
-            const json_object_entry root_entry = root->u.object.values[ i ];
-            if ( std::strcmp( "width", root_entry.name ) == 0 )
+        // Get tile data from JSON file.
+        JSON json { "assets/maps/" + slug_ + ".json" };
+        width_ = json.getInt( "width" );
+        height_ = json.getInt( "height" );
+        JSONArray l = json.getArray( "layers" );
+        std::vector<MapTileLayer> layers = JSONMap<MapTileLayer>
+        (
+            l,
+            [&]( const JSONItem & i )
             {
-                if ( root_entry.value->type != json_integer )
+                JSONObject o = i.asObject();
+
+                JSONArray tiles = o.getArray( "data" );
+
+                std::string name = o.getString( "name" );
+                std::unordered_map<std::string, MapTileLayer::Type> t
                 {
-                    // TODO: Throw exception.
-                    std::cout << "NO FILE" << std::endl;
+                    { "collision", MapTileLayer::Type::COLLISION },
+                    { "tile", MapTileLayer::Type::TILE },
+                    { "object", MapTileLayer::Type::OBJECT }
+                };
+                auto it = t.find( name );
+                if ( it == t.end() )
+                {
+                    throw std::runtime_error( "Map " + slug_ + " has invalid layer type " + name );
                 }
 
-                width_ = root_entry.value->u.integer;
-            }
-            else if ( std::strcmp( "height", root_entry.name ) == 0 )
-            {
-                if ( root_entry.value->type != json_integer )
+                return MapTileLayer
                 {
-                    // TODO: Throw exception.
-                    std::cout << "NO FILE" << std::endl;
-                }
-
-                height_ = root_entry.value->u.integer;
-            }
-            else if ( std::strcmp( "layers", root_entry.name ) == 0 )
-            {
-                if ( root_entry.value->type != json_array )
-                {
-                    // TODO: Throw exception.
-                    std::cout << "NO FILE" << std::endl;
-                }
-
-                for ( unsigned int j = 0; j < root_entry.value->u.array.length; ++j )
-                {
-                    const json_value * layer_item = root_entry.value->u.array.values[ j ];
-                    if ( layer_item->type != json_object )
-                    {
-                        // TODO: Throw exception.
-                        std::cout << "NO FILE" << std::endl;
-                    }
-
-                    MapTileLayer layer;
-
-                    for ( unsigned int k = 0; k < layer_item->u.object.length; ++k )
-                    {
-                        const json_object_entry layer_entry = layer_item->u.object.values[ k ];
-                        if ( std::strcmp( "data", layer_entry.name ) == 0 )
+                    JSONMap<int>
+                    (
+                        tiles,
+                        []( const JSONItem & di )
                         {
-                            if ( layer_entry.value->type != json_array )
-                            {
-                                // TODO: Throw exception.
-                                std::cout << "NO FILE" << std::endl;
-                            }
-
-                            for ( unsigned int l = 0; l < layer_entry.value->u.array.length; ++l )
-                            {
-                                const json_value * data_item = layer_entry.value->u.array.values[ l ];
-                                if ( data_item->type != json_integer )
-                                {
-                                    // TODO: Throw exception.
-                                    std::cout << "NO FILE" << std::endl;
-                                }
-
-                                layer.tiles.push_back( data_item->u.integer );
-                            }
+                            return di.asInt();
                         }
-                        else if ( std::strcmp( "name", layer_entry.name ) == 0 )
-                        {
-                            if ( layer_entry.value->type != json_string )
-                            {
-                                // TODO: Throw exception.
-                                std::cout << "NO FILE" << std::endl;
-                            }
+                    ),
+                    it->second
+                };
+            }   
+        );
 
-                            if ( std::strcmp( "collision", layer_entry.value->u.string.ptr ) == 0 )
-                            {
-                                layer.type = MapTileLayer::Type::COLLISION;
-                            }
-                            else if ( std::strcmp( "tile", layer_entry.value->u.string.ptr ) == 0 )
-                            {
-                                layer.type = MapTileLayer::Type::TILE;
-                            }
-                            else if ( std::strcmp( "object", layer_entry.value->u.string.ptr ) == 0 )
-                            {
-                                layer.type = MapTileLayer::Type::OBJECT;
-                            }
-                            else
-                            {
-                                // TODO: Throw exception.
-                                std::cout << "NO FILE" << std::endl;
-                            }
-                        }
-                    }
-
-                    layers.push_back( layer );
-                }
-            }
-        }
-        json_value_free( root );
-
+        // Generate map data from tile data.
         for ( const MapTileLayer & layer : layers )
         {
             switch ( layer.type )
@@ -199,8 +126,8 @@ namespace BSL
                             const int i = tile - 7073;
                             t =
                             {
-                                i % 16,
-                                std::floor( i / 16 ),
+                                static_cast<unsigned char>( i % 16 ),
+                                static_cast<unsigned char>( std::floor( i / 16 ) ),
                                 0,
                                 0
                             };
@@ -220,22 +147,47 @@ namespace BSL
                 break;
                 case ( MapTileLayer::Type::OBJECT ):
                 {
+                    blocks_.push_back({});
+                    std::vector<NasrTile> tiles;
                     for ( int tile : layer.tiles )
                     {
-                        if ( tile == 0 )
+                        NasrTile t { 0, 0, 0, 255 };
+                        const BlockType * type = nullptr;
+                        if ( tile > 0 )
                         {
-                            continue;
+                            int objtype = tile - 1121;
+                            if ( objtype < 0 )
+                            {
+                                printf( "Invalid object.\n" );
+                            }
+                            else
+                            {
+                                type = objects.getBlockType( objtype );
+                                if ( type )
+                                {
+                                    t =
+                                    {
+                                        type->getX(),
+                                        type->getY(),
+                                        0,
+                                        type->getAnimation()
+                                    };
+                                }
+                            }
                         }
-
-                        int objtype = tile - 1121;
-                        if ( objtype < 0 )
-                        {
-                            printf( "Invalid object.\n" );
-                        }
-                        else
-                        {
-                        }
+                        blocks_[ blocks_.size() - 1 ].push_back( type );
+                        tiles.push_back( t );
                     }
+                    block_layers_.push_back
+                    (
+                        game.render().addTilemap
+                        (
+                            "objects",
+                            tiles,
+                            width_,
+                            height_
+                        )
+                    );
                 }
                 break;
             }

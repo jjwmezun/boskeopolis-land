@@ -80,6 +80,15 @@ namespace BSL
             unsigned int gfx_;
     };
 
+    class TilemapGraphics
+    {
+        public:
+            constexpr TilemapGraphics( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
+
+        private:
+            unsigned int gfx_;
+    };
+
     class Renderer
     {
         friend class Game;
@@ -125,7 +134,7 @@ namespace BSL
                 float opacity = 1.0f
             ) const;
 
-            unsigned int addTilemap
+            TilemapGraphics addTilemap
             (
                 const std::string & tileset,
                 const std::vector<NasrTile> & tiles,

@@ -8,6 +8,7 @@
 
 namespace BSL
 {
+    class BlockType;
     class Game;
     class Level;
 
@@ -36,6 +37,8 @@ namespace BSL
         private:
             std::vector<std::vector<int>> collision_;
             std::vector<std::unique_ptr<MapLayer>> layers_;
+            std::vector<std::vector<const BlockType *>> blocks_;
+            std::vector<TilemapGraphics> block_layers_;
             std::string slug_;
             unsigned int width_;
             unsigned int height_;

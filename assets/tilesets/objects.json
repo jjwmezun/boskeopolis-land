@@ -18,10 +18,15 @@
                  "value":6
                 }, 
                 {
-                 "name":"obj",
+                 "name":"type",
                  "type":"string",
-                 "value":"lowest_gem"
+                 "value":"gem"
                 }, 
+                {
+                 "name":"amount",
+                 "type":"int",
+                 "value":100
+                },
                 {
                  "name":"x",
                  "type":"int",

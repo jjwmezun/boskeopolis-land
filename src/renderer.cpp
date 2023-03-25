@@ -148,7 +148,7 @@ namespace BSL
         return static_cast<unsigned int>( graphic );
     };
 
-    unsigned int Renderer::addTilemap
+    TilemapGraphics Renderer::addTilemap
     (
         const std::string & tileset,
         const std::vector<NasrTile> & tiles,
@@ -188,7 +188,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return static_cast<unsigned int>( graphic );
+        return { static_cast<unsigned int>( graphic ) };
     };
 
     TextGraphic Renderer::addText( ArgList args ) const
