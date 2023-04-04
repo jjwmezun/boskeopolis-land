@@ -5,8 +5,20 @@ namespace BSL
     BlockType::BlockType()
         : is_null_ ( true ), x_ ( 0 ), y_ ( 0 ), animation_ ( 0 ) {};
 
-    BlockType::BlockType( unsigned char x, unsigned char y, unsigned char animation )
-        : is_null_ ( false ), x_ ( x ), y_ ( y ), animation_ ( animation ) {};
+    BlockType::BlockType
+    (
+        unsigned char x,
+        unsigned char y,
+        unsigned char animation,
+        const std::vector<BlockBehavior> & behaviors
+    )
+    :
+        is_null_ ( false ),
+        x_ ( x ),
+        y_ ( y ),
+        animation_ ( animation ),
+        behaviors_ ( behaviors )
+    {};
 
     bool BlockType::isNull() const
     {
@@ -16,4 +28,12 @@ namespace BSL
     unsigned char BlockType::getX() const { return x_; };
     unsigned char BlockType::getY() const { return y_; };
     unsigned char BlockType::getAnimation() const { return animation_; };
+
+    void BlockType::interact( Sprite & sprite, Level & level, Game & game, Map & map, Block & block ) const
+    {
+        for ( const BlockBehavior & behavior : behaviors_ )
+        {
+            behavior.interact( sprite, level, game, map, block );
+        }
+    };
 }

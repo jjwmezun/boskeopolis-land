@@ -6,9 +6,11 @@ namespace BSL
     :
         max_states_ ( max_states ),
         current_state_ ( 0 ),
-        number_of_states_ ( 0 )
+        number_of_states_ ( 0 ),
+        objects_ ( "objects" )
     {
         states_.reserve( max_states );
+        objects_.init();
     };
 
     void Game::update( float dt )
@@ -20,6 +22,11 @@ namespace BSL
     const Renderer & Game::render() const
     {
         return renderer_;
+    };
+
+    const Tileset & Game::getObjects() const
+    {
+        return objects_;
     };
 
     void Game::changeState( std::unique_ptr<GameState> && state )

@@ -11,7 +11,7 @@ namespace BSL
         public:
             inline Tileset( std::string&& name ) : name_ ( name ) {};
             void init();
-            const BlockType * getBlockType( unsigned int type ) const;
+            const BlockType & getBlockType( unsigned int type ) const;
 
         private:
             std::vector<BlockType> data_;

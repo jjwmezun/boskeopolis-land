@@ -14,7 +14,7 @@ namespace BSL
 
     void Level::update( Game & game, const Controller & controller, float dt )
     {
-        sprites_.update( dt, controller, *this );
+        sprites_.update( dt, controller, *this, game );
         inventory_.update( dt );
         map_.update( *this, game, dt );
     };

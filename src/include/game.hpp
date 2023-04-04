@@ -5,6 +5,7 @@
 #include "renderer.hpp"
 #include <vector>
 #include <memory>
+#include "tileset.hpp"
 
 namespace BSL
 {
@@ -18,10 +19,12 @@ namespace BSL
 
             void update( float dt );
             const Renderer & render() const;
+            const Tileset & getObjects() const;
 
         private:
             std::vector<std::unique_ptr<GameState>> states_;
             Renderer renderer_;
+            Tileset objects_;
             unsigned int max_states_;
             unsigned int current_state_;
             unsigned int number_of_states_;

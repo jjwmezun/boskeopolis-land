@@ -6,6 +6,7 @@
 #include "map_layer_palette_change.hpp"
 #include "map_layer_rain.hpp"
 #include "nasringine/nasr.h"
+#include "sprite.hpp"
 #include <unordered_map>
 
 #include "tileset.hpp"
@@ -31,14 +32,14 @@ namespace BSL
     :
         slug_ ( slug ),
         width_ ( 0 ),
-        height_ ( 0 )
+        height_ ( 0 ),
+        i_ ( 0 ),
+        remove_block_ ( false )
     {};
 
     void Map::init( Game & game )
     {
-        // Init objects tileset.
-        Tileset objects { "objects" };
-        objects.init();
+        const Tileset & objects = game.getObjects();
 
         // Backgrounds.
         game.render().addRectGradient
@@ -102,6 +103,11 @@ namespace BSL
         );
 
         // Generate map data from tile data.
+        for ( unsigned int i = 0; i < width_ * height_; ++i )
+        {
+            blocks_.push_back({});
+        }
+
         for ( const MapTileLayer & layer : layers )
         {
             switch ( layer.type )
@@ -147,36 +153,27 @@ namespace BSL
                 break;
                 case ( MapTileLayer::Type::OBJECT ):
                 {
-                    blocks_.push_back({});
                     std::vector<NasrTile> tiles;
-                    for ( int tile : layer.tiles )
+                    int i = 0;
+                    for ( unsigned int i = 0; i < layer.tiles.size(); ++i )
                     {
-                        NasrTile t { 0, 0, 0, 255 };
-                        const BlockType * type = nullptr;
-                        if ( tile > 0 )
+                        tiles.push_back({ 0, 0, 0, 255 });
+                        const int tile = layer.tiles[ i ];
+                        const int objtype = tile - 1121;
+                        if ( objtype < 0 )
                         {
-                            int objtype = tile - 1121;
-                            if ( objtype < 0 )
-                            {
-                                printf( "Invalid object.\n" );
-                            }
-                            else
-                            {
-                                type = objects.getBlockType( objtype );
-                                if ( type )
-                                {
-                                    t =
-                                    {
-                                        type->getX(),
-                                        type->getY(),
-                                        0,
-                                        type->getAnimation()
-                                    };
-                                }
-                            }
+                            continue;
                         }
-                        blocks_[ blocks_.size() - 1 ].push_back( type );
-                        tiles.push_back( t );
+
+                        const BlockType & type = objects.getBlockType( objtype );
+                        tiles[ i ] =
+                        {
+                            type.getX(),
+                            type.getY(),
+                            0,
+                            type.getAnimation()
+                        };
+                        blocks_[ i ].emplace_back( block_layers_.size(), type );
                     }
                     block_layers_.push_back
                     (
@@ -199,6 +196,49 @@ namespace BSL
         for ( auto & layer : layers_ )
         {
             layer->update( level, game, dt );
+        }
+    };
+
+    void Map::interact( Sprite & sprite, Level & level, Game & game )
+    {
+        const int y1 = pixelsToBlocks( sprite.getPos().y );
+        const int y2 = pixelsToBlocks( sprite.getPos().bottom() );
+        const int x1 = pixelsToBlocks( sprite.getPos().x );
+        const int x2 = pixelsToBlocks( sprite.getPos().right() );
+
+        if
+        (
+            y1 < 0 ||
+            x1 < 0 ||
+            y2 >= height_ ||
+            x2 >= width_
+        )
+        {
+            return;
+        }
+
+        for ( unsigned int y = y1; y <= y2; ++y )
+        {
+            for ( unsigned int x = x1; x <= x2; ++x )
+            {
+                i_ = 0;
+                const unsigned int n = getIFromXAndY( x, y );
+                while ( i_ < blocks_[ n ].size() )
+                {
+                    Block & block = blocks_[ n ][ i_ ];
+                    block.interact( sprite, level, game, *this );
+                    if ( remove_block_ )
+                    {
+                        block_layers_[ block.getLayer() ].clearTile( x, y );
+                        blocks_[ n ].erase( blocks_[ n ].begin() + i_ );
+                        remove_block_ = false;
+                    }
+                    else
+                    {
+                        ++i_;
+                    }
+                }
+            }
         }
     };
 

@@ -8,13 +8,13 @@
 
 #include <iostream>
 
-constexpr float START_SPEED = 0.25f;
+constexpr float START_SPEED = 0.15f;
 constexpr float MAX_SPEED = 2.0f;
 constexpr float FALL_SPEED = 0.5f;
 constexpr float GRAVITY = 6.0f;
-constexpr float JUMP_ACC = 0.1f;
-constexpr float JUMP_INIT = 4.0f;
-constexpr float JUMP_MAX = 5.0f;
+constexpr float JUMP_ACC = 0.2f;
+constexpr float JUMP_INIT = 2.0f;
+constexpr float JUMP_MAX = 4.75f;
 
 namespace BSL
 {
@@ -40,7 +40,7 @@ namespace BSL
         graphic_ = game.render().addSprite( "sprites/autumn.png", 0.0f, 0.0f, 16.0f, 25.0f, 64.0f, 64.0f );
     };
 
-    void Sprite::update( float dt, const Controller & controller, Level & level )
+    void Sprite::update( float dt, const Controller & controller, Level & level, Game & game )
     {
         // Horizontal Movement
         const float start_speed = controller.heldRun() ? START_SPEED * 2.0f : START_SPEED;
@@ -136,7 +136,10 @@ namespace BSL
         jump_padding_ = std::max( 0.0f, jump_padding_ - 1.0f * dt);
 
         // Collision
-        const Map & map = level.map();
+        Map & map = level.map();
+
+        // General block collision.
+        map.interact( *this, level, game );
 
         // Handle downward collision.
         if ( ychange > 0.0f )
@@ -237,7 +240,7 @@ namespace BSL
             {
                 if ( rotx > 0.0f )
                 {
-                    rotx = std::max( rotx - 3.0f, 0.0f );
+                    rotx = std::max( rotx - ( 4.0f * dt ), 0.0f );
                     NasrGraphicsSpriteSetRotationX( graphic_, rotx );
                 }
             }
@@ -246,7 +249,7 @@ namespace BSL
             {
                 if ( rotx < 180.0f )
                 {
-                    rotx = std::min( rotx + 3.0f, 180.0f );
+                    rotx = std::min( rotx + ( 4.0f * dt ), 180.0f );
                     NasrGraphicsSpriteSetRotationX( graphic_, rotx );
                 }
             }

@@ -84,6 +84,10 @@ namespace BSL
     {
         public:
             constexpr TilemapGraphics( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
+            inline void clearTile( unsigned int x, unsigned int y ) const
+            {
+                NasrGraphicsTilemapClearTile( gfx_, x, y );
+            }
 
         private:
             unsigned int gfx_;

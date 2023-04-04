@@ -7,8 +7,8 @@ namespace BSL
         autumn_.init( game );
     };
 
-    void SpriteSystem::update( float dt, const Controller & controller, Level & level )
+    void SpriteSystem::update( float dt, const Controller & controller, Level & level, Game & game )
     {
-        autumn_.update( dt, controller, level );
+        autumn_.update( dt, controller, level, game );
     };
 }

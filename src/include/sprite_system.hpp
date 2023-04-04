@@ -13,7 +13,7 @@ namespace BSL
     {
         public:
             void init( Game & game );
-            void update( float dt, const Controller & controller, Level & level );
+            void update( float dt, const Controller & controller, Level & level, Game & game );
             inline Sprite & getHero() { return autumn_; };
 
         private:

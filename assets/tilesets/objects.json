@@ -20,7 +20,7 @@
                 {
                  "name":"type",
                  "type":"string",
-                 "value":"gem"
+                 "value":"money"
                 }, 
                 {
                  "name":"amount",

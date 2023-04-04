@@ -6,6 +6,8 @@
 
 namespace BSL
 {
+    typedef std::function<std::vector<BlockBehavior>( const ArgList & args )> BlockBehaviorGenerator;
+
     void Tileset::init()
     {
         const JSON json { "assets/tilesets/" + name_ + ".json" };
@@ -70,16 +72,36 @@ namespace BSL
                     }
                 }
             });
+
             while ( data_.size() <= static_cast<size_t>( id ) )
             {
                 data_.push_back({});
             }
-            data_[ id ] = { x, y, animation };
+
+            std::unordered_map<std::string, BlockBehaviorGenerator> generators;
+            generators.insert( { "money", [&]( const ArgList & args ) {
+                BlockComponent c1 { BlockComponent::Type::MONEY, args };
+                BlockComponent c2 { BlockComponent::Type::REMOVE, args };
+                BlockBehavior bh1 { c1 };
+                BlockBehavior bh2 { c2 };
+                return std::vector<BlockBehavior>{ bh1, bh2 };
+            }});
+
+            auto it = generators.find( blocktype );
+            const std::vector<BlockBehavior> behaviors = ( it != generators.end() )
+                ? it->second( args )
+                : std::vector<BlockBehavior>{};
+
+            data_[ id ] = { x, y, animation, behaviors };
         });
     }
 
-    const BlockType * Tileset::getBlockType( unsigned int type ) const
+    const BlockType & Tileset::getBlockType( unsigned int type ) const
     {
-        return data_.at( type ).isNull() ? nullptr : &data_.at( type );
+        if ( data_.at( type ).isNull() )
+        {
+            throw std::runtime_error( "Invalid block type #" + std::to_string( type ) );
+        }
+        return data_.at( type );
     };
 }

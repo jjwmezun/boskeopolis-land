@@ -17,7 +17,7 @@ namespace BSL
         public:
             Sprite();
             void init( Game & game );
-            void update( float dt, const Controller & controller, Level & level );
+            void update( float dt, const Controller & controller, Level & level, Game & game );
             bool isOnGround() const;
             inline const Rect & getPos() const { return pos_; };
 
