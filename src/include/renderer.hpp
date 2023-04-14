@@ -49,7 +49,62 @@ namespace BSL
             {
                 NasrGraphicsSpriteSetOpacity( gfx_, v );
             };
-
+            inline void setDestX( float v ) const
+            {
+                NasrGraphicsSpriteSetDestX( gfx_, v );
+            };
+            inline void setDestY( float v ) const
+            {
+                NasrGraphicsSpriteSetDestY( gfx_, v );
+            };
+            inline float getRotationX() const
+            {
+                return NasrGraphicsSpriteGetRotationX( gfx_ );
+            };
+            inline float getRotationY() const
+            {
+                return NasrGraphicsSpriteGetRotationY( gfx_ );
+            };
+            inline float getRotationZ() const
+            {
+                return NasrGraphicsSpriteGetRotationZ( gfx_ );
+            };
+            inline void setRotationX( float v ) const
+            {
+                NasrGraphicsSpriteSetRotationX( gfx_, v );
+            };
+            inline void setRotationY( float v ) const
+            {
+                NasrGraphicsSpriteSetRotationY( gfx_, v );
+            };
+            inline void setRotationZ( float v ) const
+            {
+                NasrGraphicsSpriteSetRotationZ( gfx_, v );
+            };
+            inline void setSrcX( float v ) const
+            {
+                NasrGraphicsSpriteSetSrcX( gfx_, v );
+            };
+            inline void setSrcY( float v ) const
+            {
+                NasrGraphicsSpriteSetSrcY( gfx_, v );
+            };
+            inline void setSrcW( float v ) const
+            {
+                NasrGraphicsSpriteSetSrcW( gfx_, v );
+            };
+            inline void setSrcH( float v ) const
+            {
+                NasrGraphicsSpriteSetSrcH( gfx_, v );
+            };
+            inline NasrRect getDest() const
+            {
+                return NasrGraphicsSpriteGetDest( gfx_ );
+            };
+            inline void flipX() const
+            {
+                NasrGraphicsSpriteFlipX( gfx_ );
+            };
         private:
             unsigned int gfx_;
     };

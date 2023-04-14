@@ -8,7 +8,7 @@ namespace BSL
         NasrSetGlobalPalette( 1 );
         NasrMoveCamera( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS );
         map_.init( game );
-        sprites_.init( game );
+        sprites_.init( game, map_ );
         inventory_.init( game );
     };
 

@@ -1,5 +1,4 @@
 #include <cmath>
-#include "config.hpp"
 #include "game.hpp"
 #include "json.hpp"
 #include "map.hpp"
@@ -21,7 +20,8 @@ namespace BSL
         {
             COLLISION,
             TILE,
-            OBJECT
+            OBJECT,
+            SPRITE
         };
 
         std::vector<int> tiles;
@@ -79,7 +79,8 @@ namespace BSL
                 {
                     { "collision", MapTileLayer::Type::COLLISION },
                     { "tile", MapTileLayer::Type::TILE },
-                    { "object", MapTileLayer::Type::OBJECT }
+                    { "object", MapTileLayer::Type::OBJECT },
+                    { "sprite", MapTileLayer::Type::SPRITE }
                 };
                 auto it = t.find( name );
                 if ( it == t.end() )
@@ -106,6 +107,7 @@ namespace BSL
         for ( unsigned int i = 0; i < width_ * height_; ++i )
         {
             blocks_.push_back({});
+            sprites_.push_back({});
         }
 
         for ( const MapTileLayer & layer : layers )
@@ -159,10 +161,15 @@ namespace BSL
                     {
                         tiles.push_back({ 0, 0, 0, 255 });
                         const int tile = layer.tiles[ i ];
+                        if ( tile == 0 )
+                        {
+                            continue;
+                        }
+
                         const int objtype = tile - 1121;
                         if ( objtype < 0 )
                         {
-                            continue;
+                            throw std::runtime_error( "Invalid object #" + tile );
                         }
 
                         const BlockType & type = objects.getBlockType( objtype );
@@ -185,6 +192,25 @@ namespace BSL
                             height_
                         )
                     );
+                }
+                break;
+                case ( MapTileLayer::Type::SPRITE ):
+                {
+                    int i = 0;
+                    for ( unsigned int i = 0; i < layer.tiles.size(); ++i )
+                    {
+                        const int tile = layer.tiles[ i ];
+                        if ( tile == 0 )
+                        {
+                            continue;
+                        }
+                        const int spritetype = tile - 4096;
+                        if ( spritetype < 0 )
+                        {
+                            throw std::runtime_error( "Invalid sprite #" + tile );
+                        }
+                        sprites_[ i ].emplace_back( spritetype, false );
+                    }
                 }
                 break;
             }
@@ -260,7 +286,4 @@ namespace BSL
 
         return false;
     };
-
-    unsigned int Map::getWidthPixels() const { return blocksToPixels( width_ ); };
-    unsigned int Map::getHeightPixels() const { return blocksToPixels( height_ ); };
 }
