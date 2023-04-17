@@ -44,7 +44,6 @@ namespace BSL
     class SpriteGraphic
     {
         public:
-            constexpr SpriteGraphic( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
             inline void setOpacity( float v ) const
             {
                 NasrGraphicsSpriteSetOpacity( gfx_, v );
@@ -97,6 +96,22 @@ namespace BSL
             {
                 NasrGraphicsSpriteSetSrcH( gfx_, v );
             };
+            inline float getSrcX() const
+            {
+                return NasrGraphicsSpriteGetSrcX( gfx_ );
+            };
+            inline float getSrcY() const
+            {
+                return NasrGraphicsSpriteGetSrcY( gfx_ );
+            };
+            inline float getSrcW() const
+            {
+                return NasrGraphicsSpriteGetSrcW( gfx_ );
+            };
+            inline float getSrcH() const
+            {
+                return NasrGraphicsSpriteGetSrcH( gfx_ );
+            };
             inline NasrRect getDest() const
             {
                 return NasrGraphicsSpriteGetDest( gfx_ );
@@ -105,7 +120,6 @@ namespace BSL
             {
                 NasrGraphicsSpriteFlipX( gfx_ );
             };
-        private:
             unsigned int gfx_;
     };
 
@@ -155,7 +169,7 @@ namespace BSL
         public:
             Renderer();
 
-            unsigned int addSprite
+            SpriteGraphic addSprite
             (
                 std::string texture,
                 float srcx,

@@ -17,11 +17,14 @@ namespace BSL
             SpriteSystem();
             void init( Game & game, Map & map );
             void update( float dt, const Controller & controller, Level & level, Game & game );
-            inline Sprite & getHero() { return autumn_; };
 
         private:
-            Sprite autumn_;
             std::vector<Sprite> sprites_;
+
+            Sprite createAutumnSprite();
+            Sprite createCrabSprite( float x, float y );
+            Sprite createBadAppleSprite( float x, float y, Dir::X dir );
+            Sprite createGrumpTruckSprite( float x, float y, Dir::X dir );
     };
 }
 

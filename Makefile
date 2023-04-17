@@ -4,7 +4,7 @@
 
 # Compiler settings - Can be customized.
 CC = g++-11
-CXXFLAGS = -std=c++2a -Wall
+CXXFLAGS = -std=c++2a -Wall -g
 LDFLAGS = -Llib -lnasringine01 -lglfw -lGL -lX11 -lXrandr -ldl -lm -lopenal -lalut
 
 # Makefile settings - Can be customized.

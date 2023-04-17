@@ -17,7 +17,7 @@ namespace BSL
         charset_ = static_cast<unsigned int>( charset );
     };
 
-    unsigned int Renderer::addSprite
+    SpriteGraphic Renderer::addSprite
     (
         std::string texture,
         float srcx,
@@ -73,7 +73,7 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        return static_cast<unsigned int>( graphic );
+        return { static_cast<unsigned int>( graphic ) };
     };
 
     RectGraphic Renderer::addRect

@@ -10,9 +10,10 @@ namespace BSL
         float w;
         float h;
 
-        Rect( float _x, float _y, float _w, float _h );
-        float right() const;
-        float bottom() const;
+        constexpr float right() const { return x + w; };
+        constexpr float bottom() const { return y + h; };
+        constexpr float centerX() const { return x + w / 2.0f; };
+        constexpr float centerY() const { return y + h / 2.0f; };
     };
 }
 

@@ -7,12 +7,13 @@ namespace BSL
 {
     void LevelInventory::init( Game & game )
     {
+        const float y = WINDOW_HEIGHT_PIXELS - 32.0f;
         ArgList text_args = 
         {
             { "num", 0.0f },
             { "maxdigits", 5 },
             { "x", 16.0f },
-            { "y", WINDOW_HEIGHT_PIXELS - 32.0f },
+            { "y", y},
             { "type", "gradient" },
             { "dir", Dir::XY::DOWN },
             { "color1", 64 },
@@ -34,7 +35,16 @@ namespace BSL
             }
         );
 
+        // Render HP
+        for ( unsigned int i = 0; i < hp_; ++i )
+        {
+            hp_gfx_.emplace_back( game.render().addSprite( "misc/inventory.png", 0.0f, 0.0f, 8.0f, 8.0f, x, y, { { "abs", true }, { "layer", Layer::AFTER_FG_2 } } ) );
+            x += 8.0f;
+        }
+        x += 8.0f;
+
         // Render funds.
+        text_args[ "x" ] = x;
         text_args[ "text" ] = "₧";
         game.render().addText( text_args );
         x += 8.0f;
@@ -45,6 +55,8 @@ namespace BSL
         x += ( 8.0f * 6 );
         text_args[ "x" ] = x;
         clock_.init( game, text_args );
+
+        x += ( 8.0f * 6 );
     };
 
     void LevelInventory::update( float dt )
@@ -62,4 +74,15 @@ namespace BSL
     {
         funds_ += amount;
     };
+
+    void LevelInventory::hurt()
+    {
+        if ( hp_ > 0 )
+        {
+            --hp_;
+            hp_gfx_[ hp_ ].setSrcX( 8.0f );
+        }
+    };
+
+    bool LevelInventory::isDead() const { return hp_ == 0; };
 }

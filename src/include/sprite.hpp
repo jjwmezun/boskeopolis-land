@@ -18,27 +18,46 @@ namespace BSL
     class Sprite
     {
         public:
+            friend class SpriteSystem;
+
             enum class Type
             {
                 AUTUMN,
-                CRAB
+                CRAB,
+                BADAPPLE,
+                TRUCK,
+                SCALE_LIFT
             };
 
             enum class Attribute
             {
                 PROTAG,
-                ENEMY
+                ENEMY,
+                BOPPABLE
             };
 
-            Sprite( Type type, Rect pos, ArgList args = {} );
+            enum class LivingState
+            {
+                ALIVE,
+                DYING,
+                DEAD
+            };
+
+            Sprite( Type type, Rect pos, std::set<Attribute> atts = {}, ArgList args = {} );
             void init( Game & game );
-            void update( float dt, const Controller & controller, Level & level, Game & game );
-            void interact( Sprite & other, Level & level, Game & game );
+            void update( float dt, const Controller & controller, Level & level, Game & game, std::vector<Sprite> & sprites );
             bool isOnGround() const;
             inline const Rect & getPos() const { return pos_; };
             bool hasAttribute( Attribute att ) const;
 
-        private:
+            struct Collision
+            {
+                float top;
+                float bottom;
+                float left;
+                float right;
+            };
+
             Type type_;
             std::set<Attribute> attributes_;
             SpriteGraphic graphic_;
@@ -50,19 +69,50 @@ namespace BSL
             float vy_;
             float prevy_;
             bool is_jumping_;
-            bool jump_lock_;
             bool on_ground_;
-            float jump_padding_;
             Dir::X dir_x_;
             bool is_moving_;
-            Counter<int, 3, 0, true> walk_frame_;
             float animation_timer_;
             float start_speed_;
             float max_speed_;
+            Collision collision_;
+            LivingState living_;
+            bool block_interact_;
+            union
+            {
+                struct
+                {
+                    float jump_padding;
+                    float invincibility_;
+                    uint_fast8_t walk_frame;
+                    bool jump_lock;
+                } autumn;
+                struct
+                {
+                    Rect left;
+                    Rect right;
+                    float broken_timer;
+                    float wheel_rotation;
+                    SpriteGraphic left_gfx;
+                    SpriteGraphic right_gfx;
+                    SpriteGraphic top_bar_gfx;
+                    SpriteGraphic left_bar_gfx;
+                    SpriteGraphic right_bar_gfx;
+                    SpriteGraphic left_wheel_gfx;
+                    SpriteGraphic right_wheel_gfx;
+                } scale_lift;
+            } misc_;
+            float max_jump_;
 
             void updatePositionGraphics();
             void goLeft();
             void goRight();
+            void moveInDirectionX();
+            void handleGeneralCollision( float dt, Level & level, Game & game );
+            void rotateOnDirectionChange( float dt );
+            void flipXOnCollision();
+            bool isAutumnGoingFast() const;
+            void autumnLanding();
     };
 }
 

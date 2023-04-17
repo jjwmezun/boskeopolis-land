@@ -22,7 +22,7 @@ namespace BSL
 
     void MapLayerRain::update( Level & level, const Game & game, float dt )
     {
-        const unsigned int show_drops = static_cast<unsigned int> ( std::min( rain_range_, std::max( 0.0f, level.sprites().getHero().getPos().x - rain_start_ ) ) / rain_range_ * static_cast<float> ( NUM_O_DROPS ) );
+        const unsigned int show_drops = static_cast<unsigned int> ( std::min( rain_range_, std::max( 0.0f, level.getPos().x - rain_start_ ) ) / rain_range_ * static_cast<float> ( NUM_O_DROPS ) );
 
         const float bottom = static_cast<float>( WINDOW_HEIGHT_PIXELS );
         for ( unsigned int i = 0; i < drops_.size(); ++i )

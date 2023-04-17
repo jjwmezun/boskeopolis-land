@@ -17,7 +17,7 @@ namespace BSL
 
     void MapLayerPaletteChange::update( Level & level, const Game & game, float dt )
     {
-        game.render().setPalette( static_cast<uint_fast8_t> ( std::floor( std::min( range_, std::max( 0.0f, level.sprites().getHero().getPos().x - start_ ) ) / range_ * 255.0f ) ) );
+        game.render().setPalette( static_cast<uint_fast8_t> ( std::floor( std::min( range_, std::max( 0.0f, level.getPos().x - start_ ) ) / range_ * 255.0f ) ) );
     };
 
     void MapLayerPaletteChange::init( const Game & game )
