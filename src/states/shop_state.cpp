@@ -24,16 +24,16 @@ ShopState::ShopState( int shop_number )
     cart_total_shown_ ( 0 ),
     item_selection_ ( 0 ),
     confirm_selection_ ( 0 ),
-    cart_ ( { false, false } ),
+    cart_ ( false, false ),
     player_ (),
     dialogue_ ( generateDialogue( Localization::getCurrentLanguage().getShopGreeting() ) ),
     item_description_ ( {} ),
     items_
-    ({
+    (
         { ShopItem::Type::HP_UPGRADE, Localization::getCurrentLanguage().getShopItemHPUpgradeName(), Localization::getCurrentLanguage().getShopItemHPUpgradeDescription(), 250000 },
         { ShopItem::Type::OXYGEN_UPGRADE, Localization::getCurrentLanguage().getShopItemOxygenUpgradeName(), Localization::getCurrentLanguage().getShopItemOxygenUpgradeDescription(), 500000 },
         { ShopItem::Type::SPECIAL_LEVEL_1, Localization::getCurrentLanguage().getUnlockSpecialLevelName( Localization::getCurrentLanguage().getLevelName( LevelList::getCodeNameFromID( LevelList::getSpecialLevelID( 1 ) ) ) ), Localization::getCurrentLanguage().getUnlockSpecialLevelDescription(), 100000 }
-    })
+    )
 {
     Inventory::setSpaceAsShop( shop_number );
     Inventory::save();

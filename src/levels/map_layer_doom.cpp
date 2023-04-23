@@ -94,7 +94,7 @@ MapLayerDoom::MapLayerDoom( Unit::Layer layer_position )
 	map_ ( Render::createRenderBox( MAP_WIDTH, MAP_HEIGHT ) ),
 	item_info_ (),
 	items_ (),
-	item_frames_ ( { 0, 288, 7 * 16, 9 * 16, 176, 272, 336, 448, 576, 704, 832 } ),
+	item_frames_ ( 0, 288, 7 * 16, 9 * 16, 176, 272, 336, 448, 576, 704, 832 ),
 	texture_source_ ( 0, 0, 1, Unit::PIXELS_PER_BLOCK ),
 	render_screen_ ( 0, 0, RAY_MAX, SCREEN_HEIGHT ),
 	map_src_ ( 0, 0, MAP_WIDTH, MAP_HEIGHT ),
@@ -102,13 +102,13 @@ MapLayerDoom::MapLayerDoom( Unit::Layer layer_position )
 	hand_src_ ( 0, 0, 55, 24 ),
 	hand_dest_ ( ( Unit::WINDOW_WIDTH_PIXELS / 2 - ( 24 * 4 ) ), Unit::WINDOW_HEIGHT_PIXELS - 32 - ( 24 * 4 ), 55 * 4, 24 * 4 ),
 	map_bars_
-	({
+	(
 		{ 0, MAP_HEIGHT - 2, MAP_WIDTH, 2 },
 		{ MAP_WIDTH - 2, 0, 2, MAP_HEIGHT },
 		{ 0, 0, MAP_WIDTH, 2 },
 		{ 0, 0, 2, MAP_HEIGHT }
-	}),
-	hand_frames_ ({ 0, 24, 48, 72, 96, 120, 120, 144, 144, 168, 168, 168, 168, 192, 192, 192, 192, 168, 168, 144, 120, 96, 72, 48, 24 }),
+	),
+	hand_frames_ ( 0, 24, 48, 72, 96, 120, 120, 144, 144, 168, 168, 168, 168, 192, 192, 192, 192, 168, 168, 144, 120, 96, 72, 48, 24 ),
 	wall_distances_ (),
 	wall_items_ (),
 	floor_and_ceiling_pixels_ { 255 },

@@ -13,7 +13,7 @@ FallingStarGeneratorSprite::FallingStarGeneratorSprite( int x, int y )
 	Sprite( nullptr, x, y, 16, 16, {}, 0, 0, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::PERMANENT ),
     timer_ ( 0 ),
     start_ ( false ),
-    prev_x_ ({ -999999, -9999999, -99999999 })
+    prev_x_ ( -999999, -9999999, -99999999 )
 {};
 
 FallingStarGeneratorSprite::~FallingStarGeneratorSprite() {};

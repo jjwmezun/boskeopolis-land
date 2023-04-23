@@ -16,7 +16,7 @@ HarpoonSprite::HarpoonSprite( int x, int y )
 	right_harpoon_original_ ( Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 18, y + 2, 12, 12 } ) ),
 	left_harpoon_gfx_ ( "sprites/pike2.png", 0, 0 ),
 	right_harpoon_gfx_ ( "sprites/pike2.png", 0, 0, true ),
-	frames_ ({ 0, 0, 0, 0, 32, 64, 96, 96, 96, 96, 64, 32 })
+	frames_ ( 0, 0, 0, 0, 32, 64, 96, 96, 96, 96, 64, 32 )
 {};
 
 HarpoonSprite::~HarpoonSprite() {};

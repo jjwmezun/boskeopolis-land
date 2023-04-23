@@ -21,7 +21,7 @@ InventoryLevel::InventoryLevel( Difficulty difficulty, int max_hp, bool oxygen_u
 	mcguffins_ ( 0 ),
 	bops_ ( 0 ),
 	ghost_kills_ ( 0 ),
-	suits_ ( { false, false, false, false } ),
+	suits_ ( false, false, false, false ),
 	funds_ (),
 	funds_shown_ (),
 	clock_ (),

@@ -14,7 +14,7 @@ DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/nut-monk.png", 0, 0, false, false, 0.0 ), x, y, 16, 16, { SpriteType::ENEMY }, 500, 500, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
 	spikes_
-	({
+	(
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y - 16, 16, 16 } ),
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x, y - 16, 16, 16 } ),
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x + 16, y - 16, 16, 16 } ),
@@ -23,9 +23,9 @@ DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x, y + 16, 16, 16 } ),
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y + 16, 16, 16 } ),
 		Unit::PixelsToSubPixels( sdl2::SDLRect{ x - 16, y, 16, 16 } )
-	}),
+	),
 	spike_angles_
-	({
+	(
 		0.0,
 		BASE_RADIANS * 1.0,
 		BASE_RADIANS * 2.0,
@@ -34,7 +34,7 @@ DungeonEnemySpreaderSprite::DungeonEnemySpreaderSprite( int x, int y )
 		BASE_RADIANS * 5.0,
 		BASE_RADIANS * 6.0,
 		BASE_RADIANS * 7.0
-	}),
+	),
 	spike_radius_ ( 25000.0 ),
 	spread_speed_ ( 500.0 ),
 	spike_rotation_ ( 0.0 ),

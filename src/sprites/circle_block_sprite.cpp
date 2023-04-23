@@ -8,7 +8,7 @@
 CircleBlockSprite::CircleBlockSprite( int x, int y )
 :
 	Sprite( std::make_unique<SpriteGraphics> ( "sprites/killer-choque.png" ), x, y, 24, 24, {}, 8000, 8000, 0, 0, Direction::Horizontal::__NULL, Direction::Vertical::__NULL, nullptr, SpriteMovement::Type::FLOATING, CameraMovement::RESET_OFFSCREEN_AND_AWAY ),
-	frames_ ( { 0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0 } ),
+	frames_ ( 0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0 ),
 	direction_ ( Direction::Simple::LEFT ),
 	animation_timer_ ( 0 )
 {};
