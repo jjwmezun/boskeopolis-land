@@ -4,6 +4,7 @@
 #include "arg.hpp"
 #include "dir.hpp"
 #include "nasringine/nasr.h"
+#include "rect.hpp"
 #include <vector>
 
 namespace BSL
@@ -55,6 +56,14 @@ namespace BSL
             inline void setDestY( float v ) const
             {
                 NasrGraphicsSpriteSetDestY( gfx_, v );
+            };
+            inline void setDestW( float v ) const
+            {
+                NasrGraphicsSpriteSetDestW( gfx_, v );
+            };
+            inline void setDestH( float v ) const
+            {
+                NasrGraphicsSpriteSetDestH( gfx_, v );
             };
             inline float getRotationX() const
             {
@@ -115,6 +124,11 @@ namespace BSL
             inline NasrRect getDest() const
             {
                 return NasrGraphicsSpriteGetDest( gfx_ );
+            };
+            inline void setDest( const Rect & rect ) const
+            {
+                NasrRect r = { rect.x, rect.y, rect.w, rect.h };
+                return NasrGraphicsSpriteSetDest( gfx_, r );
             };
             inline void flipX() const
             {

@@ -214,6 +214,11 @@ namespace BSL
                                 pos_.y -= pos_.bottom() - 1.0f - blocksToPixels( by );
                                 autumnLanding();
                             }
+
+                            for ( Sprite & sprite : sprites )
+                            {
+                                sprite.collideDown( *this, dt, level, game );
+                            }
                         }
                     }
                     // Handle upward collision.
@@ -236,6 +241,11 @@ namespace BSL
                                 vy_ *= -0.25f;
                                 accy_ = 0.0f;
                                 is_jumping_ = false;
+                            }
+
+                            for ( Sprite & sprite : sprites )
+                            {
+                                sprite.collideUp( *this, dt, level, game );
                             }
                         }
                     }
@@ -265,7 +275,10 @@ namespace BSL
                         accx_ = 0.0f;
                     }
 
-
+                    for ( Sprite & sprite : sprites )
+                    {
+                        sprite.collideX( *this, dt, level, game );
+                    }
 
 
                     // Handle invincibility.
@@ -453,42 +466,6 @@ namespace BSL
                 handleGeneralCollision( dt, level, game );
                 flipXOnCollision();
 
-
-                // Handle interaction.
-                for ( Sprite & other : sprites )
-                {
-                    // Skip if not autumn.
-                    if ( other.type_ != Type::AUTUMN ) continue;
-
-                    if
-                    (
-                        other.pos_.bottom() - 1.0f > pos_.y &&
-                        other.pos_.bottom() - 1.0f < pos_.y + 8.0f &&
-                        other.pos_.right() > pos_.x &&
-                        other.pos_.x < pos_.right()
-                    )
-                    {
-                        other.collision_.bottom = other.pos_.bottom() - 1.0f - pos_.y;
-                        other.pos_.y -= other.collision_.bottom;
-                        other.vy_ = 0.0f;
-                        other.accy_ = 0.0f;
-                        other.autumnLanding();
-                        other.pos_.x += ( vx_ * dt );
-                        if ( other.is_moving_ )
-                        {
-                            other.graphic_.setSrcX( autumn_walk_frames[ other.misc_.autumn.walk_frame ] );
-                            other.graphic_.setSrcY( 0.0f );
-                        }
-                        else
-                        {
-                            other.graphic_.setSrcX( 0.0f );
-                            other.graphic_.setSrcY( 0.0f );
-                        }
-                        other.updatePositionGraphics();
-                    }
-                }
-
-
                 // Graphics
                 rotateOnDirectionChange( dt );
                 updatePositionGraphics();
@@ -498,6 +475,73 @@ namespace BSL
             case ( Type::SCALE_LIFT ):
             {
                 updateScaleLiftSprite( dt, level, sprites, *this );
+            }
+            break;
+        }
+    };
+
+    void Sprite::collideDown( Sprite & other, float dt, Level & level, Game & game )
+    {
+        switch ( type_ )
+        {
+            case ( Type::TRUCK ):
+            {
+                if
+                (
+                    other.pos_.bottom() - 1.0f > pos_.y &&
+                    other.pos_.bottom() - 1.0f < pos_.y + 8.0f &&
+                    other.pos_.right() > pos_.x &&
+                    other.pos_.x < pos_.right()
+                )
+                {
+                    other.collision_.bottom = other.pos_.bottom() - 1.0f - pos_.y;
+                    other.pos_.y -= other.collision_.bottom;
+                    other.vy_ = 0.0f;
+                    other.accy_ = 0.0f;
+                    other.autumnLanding();
+                    other.pos_.x += ( vx_ * dt );
+                    if ( other.is_moving_ )
+                    {
+                        other.graphic_.setSrcX( autumn_walk_frames[ other.misc_.autumn.walk_frame ] );
+                        other.graphic_.setSrcY( 0.0f );
+                    }
+                    else
+                    {
+                        other.graphic_.setSrcX( 0.0f );
+                        other.graphic_.setSrcY( 0.0f );
+                    }
+                    other.updatePositionGraphics();
+                }
+            }
+            break;
+
+            case ( Type::SCALE_LIFT ):
+            {
+                collideDownScaleLiftSprite( *this, other, dt, level, game );
+            }
+            break;
+        }
+    };
+
+    void Sprite::collideUp( Sprite & other, float dt, Level & level, Game & game )
+    {
+        switch ( type_ )
+        {
+            case ( Type::SCALE_LIFT ):
+            {
+                collideUpScaleLiftSprite( *this, other, dt, level, game );
+            }
+            break;
+        }
+    };
+
+    void Sprite::collideX( Sprite & other, float dt, Level & level, Game & game )
+    {
+        switch ( type_ )
+        {
+            case ( Type::SCALE_LIFT ):
+            {
+                collideXScaleLiftSprite( *this, other, dt, level, game );
             }
             break;
         }
@@ -735,5 +779,75 @@ namespace BSL
         on_ground_ = true;
         misc_.autumn.jump_padding = isAutumnGoingFast() ? 8.0f : 2.0f;
         max_jump_ = JUMP_MAX;
+    };
+
+    bool Sprite::collideSolidDown( const Rect & rect, float dt )
+    {
+        if
+        (
+            pos_.right() - 2.0f <= rect.x ||
+            pos_.x + 2.0f >= rect.right() ||
+            pos_.bottom() - 1.0f <= rect.y ||
+            pos_.bottom() - 1.0f >= rect.y + 6.0f
+        )
+        {
+            return false;
+        }
+
+        collision_.bottom = pos_.bottom() - 1.0f - rect.y;
+        pos_.y -= collision_.bottom;
+        vy_ = 0.0f;
+        accy_ = 0.0f;
+        autumnLanding();
+
+        return true;
+    };
+
+    bool Sprite::collideSolidUp( const Rect & rect, float dt )
+    {
+        if
+        (
+            pos_.right() - 2.0f <= rect.x ||
+            pos_.x + 2.0f >= rect.right() ||
+            pos_.y >= rect.bottom() ||
+            pos_.y < rect.y
+        )
+        {
+            return false;
+        }
+
+        pos_.y = rect.bottom() + 1.0f;
+        vy_ *= -0.25f;
+        accy_ = 0.0f;
+        is_jumping_ = false;
+
+        return true;
+    };
+
+    bool Sprite::collideSolidX( const Rect & rect, float dt )
+    {
+        if
+        (
+            pos_.y + 2.0f >= rect.bottom() ||
+            pos_.bottom() - 3.0f <= rect.y ||
+            pos_.right() <= rect.x ||
+            pos_.x >= rect.right()
+        )
+        {
+            return false;
+        }
+
+        if ( pos_.centerX() > rect.centerX() )
+        {
+            pos_.x += rect.right() - pos_.x + 1.0f;
+        }
+        else
+        {
+            pos_.x -= pos_.right() - rect.x + 1.0f;
+        }
+        vx_ = 0.0f;
+        accx_ = 0.0f;
+
+        return true;
     };
 }

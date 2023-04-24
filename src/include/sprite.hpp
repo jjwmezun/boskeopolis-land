@@ -46,6 +46,9 @@ namespace BSL
             Sprite( Type type, Rect pos, std::set<Attribute> atts = {}, ArgList args = {} );
             void init( Game & game );
             void update( float dt, const Controller & controller, Level & level, Game & game, std::vector<Sprite> & sprites );
+            void collideDown( Sprite & other, float dt, Level & level, Game & game );
+            void collideUp( Sprite & other, float dt, Level & level, Game & game );
+            void collideX( Sprite & other, float dt, Level & level, Game & game );
             bool isOnGround() const;
             inline const Rect & getPos() const { return pos_; };
             bool hasAttribute( Attribute att ) const;
@@ -100,6 +103,7 @@ namespace BSL
                     SpriteGraphic right_bar_gfx;
                     SpriteGraphic left_wheel_gfx;
                     SpriteGraphic right_wheel_gfx;
+                    bool neither_is_pressed_on;
                 } scale_lift;
             } misc_;
             float max_jump_;
@@ -113,6 +117,9 @@ namespace BSL
             void flipXOnCollision();
             bool isAutumnGoingFast() const;
             void autumnLanding();
+            bool collideSolidDown( const Rect & rect, float dt );
+            bool collideSolidUp( const Rect & rect, float dt );
+            bool collideSolidX( const Rect & rect, float dt );
     };
 }
 
