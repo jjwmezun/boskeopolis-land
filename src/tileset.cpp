@@ -78,14 +78,20 @@ namespace BSL
                 data_.push_back({});
             }
 
-            std::unordered_map<std::string, BlockBehaviorGenerator> generators;
-            generators.insert( { "money", [&]( const ArgList & args ) {
-                BlockComponent c1 { BlockComponent::Type::MONEY, args };
-                BlockComponent c2 { BlockComponent::Type::REMOVE, args };
-                BlockBehavior bh1 { c1 };
-                BlockBehavior bh2 { c2 };
-                return std::vector<BlockBehavior>{ bh1, bh2 };
-            }});
+            std::unordered_map<std::string, BlockBehaviorGenerator> generators =
+            {
+                {
+                    "money",
+                    [&]( const ArgList & args )
+                    {
+                        BlockCondition cond { BlockCondition::Type::PROTAG, args };
+                        return std::vector<BlockBehavior>{
+                            { { BlockComponent::Type::MONEY, args }, { cond } },
+                            { { BlockComponent::Type::REMOVE, args }, { cond } }
+                        };
+                    }
+                }
+            };
 
             auto it = generators.find( blocktype );
             const std::vector<BlockBehavior> behaviors = ( it != generators.end() )
