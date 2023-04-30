@@ -121,7 +121,7 @@ namespace BSL
                     }
                     if ( accx_ == 0.0f )
                     {
-                        vx_ /= ( 1.0f + 0.2f * dt );
+                        vx_ /= ( 1.0f + 0.5f * dt );
                     }
                     float xchange = vx_ * dt;
                     
@@ -740,7 +740,7 @@ namespace BSL
             {
                 if ( rotx > 0.0f )
                 {
-                    rotx = std::max( rotx - ( 4.0f * dt ), 0.0f );
+                    rotx = std::max( rotx - ( 16.0f * dt ), 0.0f );
                     graphic_.setRotationX( rotx );
                 }
             }
@@ -749,7 +749,7 @@ namespace BSL
             {
                 if ( rotx < 180.0f )
                 {
-                    rotx = std::min( rotx + ( 4.0f * dt ), 180.0f );
+                    rotx = std::min( rotx + ( 16.0f * dt ), 180.0f );
                     graphic_.setRotationX( rotx );
                 }
             }

@@ -134,6 +134,10 @@ namespace BSL
             {
                 NasrGraphicsSpriteFlipX( gfx_ );
             };
+            inline void setFlipX( bool flip ) const
+            {
+                NasrGraphicsSpriteSetFlipX( gfx_, flip );
+            };
             unsigned int gfx_;
     };
 

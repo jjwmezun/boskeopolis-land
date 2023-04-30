@@ -96,7 +96,7 @@ namespace BSL
         {
             Sprite::Type::CRAB,
             Rect{ blocksToPixels( x ), blocksToPixels( y ), 16.0f, 16.0f },
-            {},
+            { Sprite::Attribute::ENEMY },
             ArgList{
                 { "startspeed", 0.1f },
                 { "maxspeed", 0.8f }
@@ -110,7 +110,7 @@ namespace BSL
         {
             Sprite::Type::BADAPPLE,
             Rect{ blocksToPixels( x ), blocksToPixels( y ) - 2.0f, 16.0f, 16.0f },
-            {},
+            { Sprite::Attribute::ENEMY, Sprite::Attribute::BOPPABLE },
             ArgList{
                 { "startspeed", 0.1f },
                 { "maxspeed", 0.8f },
