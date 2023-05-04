@@ -9,7 +9,7 @@ namespace BSL
 
     Sprite createScaleLiftSprite( float x, float y, Dir::X dir );
     void initScaleLiftSprite( Game & game, Sprite & sprite );
-    void updateScaleLiftSprite( float dt, Level & level, std::vector<Sprite> & sprites, Sprite & sprite );
+    void updateScaleLiftSprite( float dt, Level & level, std::vector<Sprite> & sprites, Sprite & sprite, const Game & game );
     void collideDownScaleLiftSprite( Sprite & sprite, Sprite & other, float dt, Level & level, Game & game );
     void collideUpScaleLiftSprite( Sprite & sprite, Sprite & other, float dt, Level & level, Game & game );
     void collideXScaleLiftSprite( Sprite & sprite, Sprite & other, float dt, Level & level, Game & game );

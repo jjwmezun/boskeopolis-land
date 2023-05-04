@@ -1,7 +1,7 @@
 #include "config.hpp"
-#include "level_inventory.hpp"
-
 #include "game.hpp"
+#include "level.hpp"
+#include "level_inventory.hpp"
 
 namespace BSL
 {
@@ -59,7 +59,7 @@ namespace BSL
         x += ( 8.0f * 6 );
     };
 
-    void LevelInventory::update( float dt )
+    void LevelInventory::update( float dt, const Level & level )
     {
         clock_.addSeconds( 1.0f / 60.0f * dt );
 
@@ -67,6 +67,24 @@ namespace BSL
         {
             funds_show_ = std::min( funds_.get(), funds_show_ + ( 10.0f * dt ) );
             funds_gfx_.setNumber( funds_show_ );
+        }
+
+        for ( auto & popup : score_pop_ups_ )
+        {
+            popup.update( dt, level );
+        }
+
+        int i = 0;
+        while ( i < score_pop_ups_.size() )
+        {
+            if ( score_pop_ups_[ i ].isDone() )
+            {
+                score_pop_ups_.erase( score_pop_ups_.begin() + i );
+            }
+            else
+            {
+                ++i;
+            }
         }
     };
 
@@ -84,5 +102,102 @@ namespace BSL
         }
     };
 
+    void LevelInventory::showPtsPopUp( const std::string & text, const Game & game )
+    {
+        for ( auto & popup : score_pop_ups_ )
+        {
+            popup.deactivate();
+        }
+        score_pop_ups_.emplace_back( text, game );
+    };
+
     bool LevelInventory::isDead() const { return hp_ == 0; };
+
+    ScorePopUp::ScorePopUp( const std::string & text, const Game & game )
+    :
+        state_ ( State::FADING_IN ),
+        gfx_ ( 0 ),
+        opacity_ ( 0.0f ),
+        y_ ( 0.0f ),
+        accy_ ( 0.0f ),
+        vy_ ( 0.0f ),
+        timer_ ( 0.0f )
+    {
+        ArgList text_args = 
+        {
+            { "text", text },
+            { "abs", false },
+            { "width", 16.0f * 6.0f },
+            { "type", "gradient" },
+            { "dir", Dir::XY::DOWN },
+            { "color1", 64 },
+            { "color2", 16 },
+            { "shadow", 0.25f },
+            { "opacity", 0.0f }
+        };
+        gfx_ = game.render().addText( text_args );
+    };
+
+    void ScorePopUp::update( float dt, const Level & level )
+    {
+        switch ( state_ )
+        {
+            case ( State::FADING_IN ):
+            {
+                if ( opacity_ < 1.0f )
+                {
+                    opacity_ += 0.05f * dt;
+                }
+                accy_ = ( y_ > -8.0f ) ? -0.25f : 0.0f;
+                vy_ += accy_;
+                if ( vy_ < -2.0f )
+                {
+                    vy_ = -2.0f;
+                }
+
+                if ( accy_ == 0.0f )
+                {
+                    vy_ /= 1.0f + 0.5 * dt;
+                }
+
+                y_ += vy_;
+
+                gfx_.setOpacity( opacity_ );
+
+                if ( opacity_ >= 1.0f && y_ <= -8.0f && vy_ < 0.0001f )
+                {
+                    state_ = State::SHOWING;
+                }
+            }
+            break;
+            case ( State::SHOWING ):
+            {
+                if ( timer_ >= 30.0f )
+                {
+                    state_ = State::FADING_OUT;
+                }
+                else
+                {
+                    timer_ += dt;
+                }
+            }
+            break;
+            case ( State::FADING_OUT ):
+            {
+                if ( opacity_ > 0.0f )
+                {
+                    opacity_ -= 0.05f * dt;
+                }
+                gfx_.setOpacity( opacity_ );
+
+                if ( opacity_ <= 0.0f )
+                {
+                    state_ = State::DONE;
+                }
+            }
+            break;
+        }
+        gfx_.setXOffset( level.getPos().x );
+        gfx_.setYOffset( level.getPos().y + y_ );
+    }
 }

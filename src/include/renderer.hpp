@@ -149,8 +149,14 @@ namespace BSL
             {
                 NasrSetTextOpacity( gfx_, v );
             };
-
-        private:
+            inline void setXOffset( float v ) const
+            {
+                NasrGraphicsTextSetXOffset( gfx_, v );
+            };
+            inline void setYOffset( float v ) const
+            {
+                NasrGraphicsTextSetYOffset( gfx_, v );
+            };
             unsigned int gfx_;
     };
 

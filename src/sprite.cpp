@@ -474,7 +474,7 @@ namespace BSL
 
             case ( Type::SCALE_LIFT ):
             {
-                updateScaleLiftSprite( dt, level, sprites, *this );
+                updateScaleLiftSprite( dt, level, sprites, *this, game );
             }
             break;
         }

@@ -1,5 +1,7 @@
 #include "config.hpp"
 #include "game.hpp"
+#include "level.hpp"
+#include "level_inventory.hpp"
 #include "rect.hpp"
 #include "scale_lift_sprite.hpp"
 
@@ -83,7 +85,7 @@ namespace BSL
         }
     };
 
-    void updateScaleLiftSprite( float dt, Level & level, std::vector<Sprite> & sprites, Sprite & sprite )
+    void updateScaleLiftSprite( float dt, Level & level, std::vector<Sprite> & sprites, Sprite & sprite, const Game & game )
     {
         if ( isScaleLiftBroken( sprite ) )
         {
@@ -95,6 +97,8 @@ namespace BSL
             else
             {
                 makeScaleLiftFall( sprite );
+                level.inventory().addFunds( 500.0f );
+                level.inventory().showPtsPopUp( "500", game );
             }
         }
         else
