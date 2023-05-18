@@ -25,6 +25,7 @@ namespace BSL
             Sprite createCrabSprite( float x, float y );
             Sprite createBadAppleSprite( float x, float y, Dir::X dir );
             Sprite createGrumpTruckSprite( float x, float y, Dir::X dir );
+            Sprite createPufferBeeSprite( float x, float y, Dir::X dir, SpriteComponent c1, SpriteComponent c2 );
     };
 }
 

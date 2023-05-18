@@ -39,12 +39,12 @@ namespace BSL
 
         uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, false );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::SPRITES_1 );
-        uint_fast8_t flip_x = 0;
-        uint_fast8_t flip_y = 0;
-        float rotation_x = 0.0f;
-        float rotation_y = 0.0f;
-        float rotation_z = 0.0f;
-        float opacity = 1.0f;
+        uint_fast8_t flip_x = GetArgConvert<uint_fast8_t, bool> ( "flipx", args, false );
+        uint_fast8_t flip_y = GetArgConvert<uint_fast8_t, bool> ( "flipy", args, false );
+        float rotation_x = GetArg( "rotx", args, 0.0f );
+        float rotation_y = GetArg( "roty", args, 0.0f );
+        float rotation_z = GetArg( "rotz", args, 0.0f );
+        float opacity = GetArg( "opacity", args, 1.0f );
 
         NasrRect src { srcx, srcy, w, h };
         NasrRect dest { x, y, w, h };

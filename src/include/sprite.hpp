@@ -6,6 +6,7 @@
 #include "dir.hpp"
 #include "rect.hpp"
 #include "renderer.hpp"
+#include "sprite_component.hpp"
 #include "timer.hpp"
 #include <set>
 
@@ -26,7 +27,9 @@ namespace BSL
                 CRAB,
                 BADAPPLE,
                 TRUCK,
-                SCALE_LIFT
+                SCALE_LIFT,
+                PUFFERBEE,
+                POLLO
             };
 
             enum class Attribute
@@ -65,6 +68,8 @@ namespace BSL
             std::set<Attribute> attributes_;
             SpriteGraphic graphic_;
             Rect pos_;
+            float startx_;
+            float starty_;
             float accx_;
             float vx_;
             float prevx_;
@@ -74,6 +79,7 @@ namespace BSL
             bool is_jumping_;
             bool on_ground_;
             Dir::X dir_x_;
+            Dir::Y dir_y_;
             bool is_moving_;
             float animation_timer_;
             float start_speed_;
@@ -105,10 +111,15 @@ namespace BSL
                     SpriteGraphic right_wheel_gfx;
                     bool neither_is_pressed_on;
                 } scale_lift;
+                struct
+                {
+                    SpriteComponent component1;
+                    SpriteComponent component2;
+                } pufferbee;
             } misc_;
             float max_jump_;
 
-            void updatePositionGraphics();
+            void updatePositionGraphics( float xoffset = 0, float yoffset = 0 );
             void goLeft();
             void goRight();
             void moveInDirectionX();
@@ -120,6 +131,7 @@ namespace BSL
             bool collideSolidDown( const Rect & rect, float dt );
             bool collideSolidUp( const Rect & rect, float dt );
             bool collideSolidX( const Rect & rect, float dt );
+            bool updateAnimationTimer( float dt, float time = 8.0f );
     };
 }
 

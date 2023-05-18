@@ -10,7 +10,7 @@
 static constexpr unsigned int MAX_STATES = 5;
 
 static bool running = 1;
-static double fixed_timestep = 0.0f;
+static double fixed_timestep = 60.0f;
 static double fixed_timestep_update = 1.0f / fixed_timestep;
 
 int main( int argc, char ** argv )

@@ -1,5 +1,6 @@
 #include "map.hpp"
 #include "scale_lift_sprite.hpp"
+#include "sprite_component.hpp"
 #include "sprite_system.hpp"
 
 namespace BSL
@@ -50,6 +51,138 @@ namespace BSL
                             case ( 16 ):
                             {
                                 sprites_.emplace_back( createScaleLiftSprite( x, y, Dir::X::RIGHT ) );
+                            }
+                            break;
+                            case ( 33 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "acc", 0.3f }, { "maxspeed", 0.3f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 34 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::RIGHT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "acc", 0.3f }, { "maxspeed", 0.3f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 35 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "dir", Dir::X::LEFT }, { "width", 32.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 36 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::RIGHT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "dir", Dir::X::RIGHT }, { "width", 32.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 37 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "dir", Dir::Y::UP }, { "height", 32.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 38 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "dir", Dir::Y::DOWN }, { "height", 32.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 39 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::CIRCLE, { { "x", static_cast<float>( blocksToPixels( x ) ) }, { "y", static_cast<float>( blocksToPixels( y ) ) }, { "speed", -0.05f }, { "radius", 75.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::__NULL )
+                                ) );
+                            }
+                            break;
+                            case ( 40 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::RIGHT,
+                                    SpriteComponent::create( SpriteComponent::Type::CIRCLE, { { "x", static_cast<float>( blocksToPixels( x ) ) }, { "y", static_cast<float>( blocksToPixels( y ) ) }, { "speed", 0.05f }, { "radius", 75.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::__NULL )
+                                ) );
+                            }
+                            break;
+                            case ( 41 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "dir", Dir::X::LEFT }, { "width", 64.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 42 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::RIGHT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "dir", Dir::X::RIGHT }, { "width", 64.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 43 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "dir", Dir::Y::UP }, { "height", 64.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
+                            }
+                            break;
+                            case ( 44 ):
+                            {
+                                sprites_.emplace_back( createPufferBeeSprite(
+                                    x,
+                                    y,
+                                    Dir::X::LEFT,
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEY, { { "dir", Dir::Y::DOWN }, { "height", 64.0f }, { "acc", 0.1f }, { "maxspeed", 2.0f } } ),
+                                    SpriteComponent::create( SpriteComponent::Type::MOVEX, { { "acc", 0.1f }, { "maxspeed", 0.1f } } )
+                                ) );
                             }
                             break;
                             default:
@@ -132,5 +265,20 @@ namespace BSL
                 { "dirx", dir }
             }
         };
+    };
+
+    Sprite SpriteSystem::createPufferBeeSprite( float x, float y, Dir::X dir, SpriteComponent c1, SpriteComponent c2 )
+    {
+        Sprite s
+        {
+            Sprite::Type::PUFFERBEE,
+            Rect{ blocksToPixels( x ), blocksToPixels( y ) - 16.0f, 20.0f, 20.0f },
+            { Sprite::Attribute::ENEMY },
+            { { "dirx", dir } }
+        };
+
+        s.misc_.pufferbee.component1 = c1;
+        s.misc_.pufferbee.component2 = c2;
+        return s;
     };
 }

@@ -31,6 +31,8 @@ namespace BSL
         pos_ ( pos ),
         accx_ ( 0.0f ),
         vx_ ( 0.0f ),
+        startx_ ( pos.x ),
+        starty_ ( pos.y ),
         prevx_ ( 0.0f ),
         accy_ ( 0.0f ),
         vy_ ( 0.0f ),
@@ -80,6 +82,11 @@ namespace BSL
             case ( Type::SCALE_LIFT ):
             {
                 initScaleLiftSprite( game, *this );
+            }
+            break;
+            case ( Type::PUFFERBEE ):
+            {
+                graphic_ = game.render().addSprite( "sprites/pufferbee.png", 0.0f, 0.0f, 24.0f, 24.0f, pos_.x - 2.0f, pos_.y - 2.0f, { { "flipx", dir_x_ == Dir::X::RIGHT } } );
             }
             break;
         }
@@ -358,9 +365,8 @@ namespace BSL
                     {
                         if ( is_moving_ )
                         {
-                            if ( ( animation_timer_ += dt ) >= 8.0f )
+                            if ( updateAnimationTimer( dt ) )
                             {
-                                animation_timer_ -= 8.0f;
                                 ++misc_.autumn.walk_frame;
                                 if ( misc_.autumn.walk_frame > 3 )
                                 {
@@ -477,6 +483,19 @@ namespace BSL
                 updateScaleLiftSprite( dt, level, sprites, *this, game );
             }
             break;
+
+            case ( Type::PUFFERBEE ):
+            {
+                misc_.pufferbee.component1.update( *this, dt, level, game, sprites );
+                misc_.pufferbee.component2.update( *this, dt, level, game, sprites );
+
+                updatePositionGraphics( 2.0f, 2.0f );
+                if ( updateAnimationTimer( dt ) )
+                {
+                    graphic_.setSrcX( graphic_.getSrcX() == 0.0f ? 24.0f : 0.0f );
+                }
+            }
+            break;
         }
     };
 
@@ -552,15 +571,15 @@ namespace BSL
         return on_ground_;
     };
 
-    void Sprite::updatePositionGraphics()
+    void Sprite::updatePositionGraphics( float xoffset, float yoffset )
     {
         if ( pos_.x != prevx_ )
         {
-            graphic_.setDestX( pos_.x );
+            graphic_.setDestX( pos_.x - xoffset );
         }
         if ( pos_.y != prevy_ )
         {
-            graphic_.setDestY( pos_.y );
+            graphic_.setDestY( pos_.y - yoffset );
         }
         prevx_ = pos_.x;
         prevy_ = pos_.y;
@@ -849,5 +868,15 @@ namespace BSL
         accx_ = 0.0f;
 
         return true;
+    };
+
+    bool Sprite::updateAnimationTimer( float dt, float time )
+    {
+        if ( ( animation_timer_ += dt ) >= time )
+        {
+            animation_timer_ -= time;
+            return true;
+        }
+        return false;
     };
 }
