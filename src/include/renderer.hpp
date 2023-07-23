@@ -205,6 +205,18 @@ namespace BSL
                 ArgList args = {}
             ) const;
 
+            SpriteGraphic addTextureSprite
+            (
+                unsigned int texture,
+                float srcx,
+                float srcy,
+                float w,
+                float h,
+                float x,
+                float y,
+                ArgList args = {}
+            ) const;
+
             RectGraphic addRect
             (
                 float x,

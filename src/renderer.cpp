@@ -37,6 +37,21 @@ namespace BSL
             std::cout << "NO TEXT" << std::endl;
         }
 
+        return addTextureSprite( static_cast<unsigned int> ( texture_id ), srcx, srcy, w, h, x, y, args );
+    };
+
+    SpriteGraphic Renderer::addTextureSprite
+    (
+        unsigned int texture,
+        float srcx,
+        float srcy,
+        float w,
+        float h,
+        float x,
+        float y,
+        ArgList args
+    ) const
+    {
         uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, false );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::SPRITES_1 );
         uint_fast8_t flip_x = GetArgConvert<uint_fast8_t, bool> ( "flipx", args, false );
@@ -54,7 +69,7 @@ namespace BSL
             abs,
             current_state_,
             static_cast<unsigned int>( layer ),
-            texture_id,
+            texture,
             src,
             dest,
             flip_x,

@@ -121,6 +121,7 @@ namespace BSL
                 break;
                 case ( MapTileLayer::Type::TILE ):
                 {
+                    /*
                     std::vector<NasrTile> tiles;
                     for ( int tile : layer.tiles )
                     {
@@ -150,6 +151,56 @@ namespace BSL
                         tiles,
                         width_,
                         height_
+                    );*/
+
+                    int texture = NasrAddTextureBlank( getWidthPixels(), getHeightPixels() );
+                    int menu_texture = NasrLoadFileAsTexture( "assets/graphics/tilesets/urban.png" );
+                    if ( menu_texture < 0 )
+                    {
+                        // TODO: Throw exception.
+                        std::cout << "NO MENU" << std::endl;
+                    }
+                    NasrRect src = { 0.0f, 0.0f, 16.0f, 16.0f };
+                    NasrRect dest = src;
+                    NasrSetTextureAsTarget( texture );
+                    
+                    for ( int i = 0; i < layer.tiles.size(); ++i )
+                    {
+                        const int tile = layer.tiles[ i ];
+                        if ( tile > 0 )
+                        {
+                            const int ti = tile - 7073;
+                            src.x = static_cast<float> ( ti % 16 ) * 16.0f;
+                            src.y = std::floor( static_cast<float> ( ti ) / 16.0f ) * 16.0f;
+                            dest.x = static_cast<float> ( i % width_ ) * 16.0f;
+                            dest.y = std::floor( i / width_ ) * 16.0f;
+                            NasrDrawSpriteToTexture
+                            (
+                                menu_texture,
+                                src,
+                                dest,
+                                0,
+                                0,
+                                0.0f,
+                                0.0f,
+                                0.0f,
+                                1.0f,
+                                1,
+                                1
+                            );
+                        }
+                    }
+                    NasrReleaseTextureTarget();
+
+                    game.render().addTextureSprite
+                    (
+                        texture,
+                        0.0f,
+                        0.0f,
+                        static_cast<float> ( getWidthPixels() ),
+                        static_cast<float> ( getHeightPixels() ),
+                        0.0f,
+                        0.0f
                     );
                 }
                 break;
