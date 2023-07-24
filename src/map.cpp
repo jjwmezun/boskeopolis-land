@@ -4,6 +4,7 @@
 #include "map.hpp"
 #include "map_layer_palette_change.hpp"
 #include "map_layer_rain.hpp"
+#include "math.hpp"
 #include "nasringine/nasr.h"
 #include "sprite.hpp"
 #include <unordered_map>
@@ -41,6 +42,12 @@ namespace BSL
     {
         const Tileset & objects = game.getObjects();
 
+        // Get tile data from JSON file.
+        JSON json { "assets/maps/" + slug_ + ".json" };
+        width_ = json.getInt( "width" );
+        height_ = json.getInt( "height" );
+        JSONArray l = json.getArray( "layers" );
+
         // Backgrounds.
         game.render().addRectGradient
         (
@@ -53,6 +60,42 @@ namespace BSL
             254,
             true
         );
+
+        std::vector<NasrTile> stars;
+
+        for ( unsigned int i = 0; i < width_ * height_; ++i )
+        {
+            NasrTile tile
+            {
+                255,
+                255,
+                255,
+                255
+            };
+
+            unsigned int out = static_cast<unsigned int> ( Math::randInt( 11, 0 ) );
+            if ( out > 7 )
+            {
+                tile =
+                {
+                    0,
+                    out == 11 ? 1 : 0,
+                    0,
+                    out > 9 ? 10 : 0
+                };
+            }
+
+            stars.push_back( tile );
+        }
+
+        game.render().addTilemap
+        (
+            "constellation",
+            stars,
+            width_,
+            height_
+        );
+
         layers_.emplace_back( std::make_unique<MapLayerRain>( 32, 128 ) );
         layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( 32, 128 ) );
         for ( auto & layer : layers_ )
@@ -60,11 +103,7 @@ namespace BSL
             layer->init( game );
         }
 
-        // Get tile data from JSON file.
-        JSON json { "assets/maps/" + slug_ + ".json" };
-        width_ = json.getInt( "width" );
-        height_ = json.getInt( "height" );
-        JSONArray l = json.getArray( "layers" );
+        // Get map tile layers from JSON file.
         std::vector<MapTileLayer> layers = JSONMap<MapTileLayer>
         (
             l,
