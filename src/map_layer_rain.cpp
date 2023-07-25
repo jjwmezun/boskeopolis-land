@@ -77,7 +77,8 @@ namespace BSL
                 Dir::XY::DOWN,
                 64,
                 32,
-                true,
+                1.0f,
+                1.0f,
                 Layer::FG_1,
                 0.5f
             );

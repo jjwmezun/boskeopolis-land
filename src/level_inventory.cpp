@@ -38,7 +38,20 @@ namespace BSL
         // Render HP
         for ( unsigned int i = 0; i < hp_; ++i )
         {
-            hp_gfx_.emplace_back( game.render().addSprite( "misc/inventory.png", 0.0f, 0.0f, 8.0f, 8.0f, x, y, { { "abs", true }, { "layer", Layer::AFTER_FG_2 } } ) );
+            hp_gfx_.emplace_back
+            (
+                game.render().addSprite
+                (
+                    "misc/inventory.png",
+                    0.0f,
+                    0.0f,
+                    8.0f,
+                    8.0f,
+                    x,
+                    y,
+                    { { "scrollx", 1.0f }, { "scrolly", 1.0f }, { "layer", Layer::AFTER_FG_2 } }
+                )
+            );
             x += 8.0f;
         }
         x += 8.0f;
@@ -126,7 +139,8 @@ namespace BSL
         ArgList text_args = 
         {
             { "text", text },
-            { "abs", false },
+            { "scrollx", 0.0f },
+            { "scrolly", 0.0f },
             { "width", 16.0f * 6.0f },
             { "type", "gradient" },
             { "dir", Dir::XY::DOWN },

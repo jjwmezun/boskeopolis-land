@@ -45,8 +45,10 @@ namespace BSL
         public:
             inline JSONObject( const json_value * data ) : data_ ( data ) {};
             int getInt( const std::string & name ) const;
+            float getFloat( const std::string & name ) const;
             std::string getString( const std::string & name ) const;
             JSONArray getArray( const std::string & name ) const;
+            bool hasArray( const std::string & name ) const;
 
         private:
             const json_value * data_;

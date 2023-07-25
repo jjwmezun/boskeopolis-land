@@ -2,9 +2,9 @@
 #include "game.hpp"
 #include "json.hpp"
 #include "map.hpp"
+#include "map_layer_constellation.hpp"
 #include "map_layer_palette_change.hpp"
 #include "map_layer_rain.hpp"
-#include "math.hpp"
 #include "nasringine/nasr.h"
 #include "sprite.hpp"
 #include <unordered_map>
@@ -27,6 +27,8 @@ namespace BSL
 
         std::vector<int> tiles;
         MapTileLayer::Type type;
+        float scrollx;
+        float scrolly;
     };
 
     Map::Map( std::string && slug )
@@ -58,44 +60,13 @@ namespace BSL
             Dir::XY::DOWN,
             1,
             254,
-            true
+            1.0f,
+            1.0f
         );
 
-        std::vector<NasrTile> stars;
+        
 
-        for ( unsigned int i = 0; i < width_ * height_; ++i )
-        {
-            NasrTile tile
-            {
-                255,
-                255,
-                255,
-                255
-            };
-
-            unsigned int out = static_cast<unsigned int> ( Math::randInt( 11, 0 ) );
-            if ( out > 7 )
-            {
-                tile =
-                {
-                    0,
-                    out == 11 ? 1 : 0,
-                    0,
-                    out > 9 ? 10 : 0
-                };
-            }
-
-            stars.push_back( tile );
-        }
-
-        game.render().addTilemap
-        (
-            "constellation",
-            stars,
-            width_,
-            height_
-        );
-
+        layers_.emplace_back( std::make_unique<MapLayerConstellation>( width_, height_, 0.5f ) );
         layers_.emplace_back( std::make_unique<MapLayerRain>( 32, 128 ) );
         layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( 32, 128 ) );
         for ( auto & layer : layers_ )
@@ -127,6 +98,30 @@ namespace BSL
                     throw std::runtime_error( "Map " + slug_ + " has invalid layer type " + name );
                 }
 
+                float scrollx = 0.0f;
+                float scrolly = 0.0f;
+
+                if ( o.hasArray( "properties" ) )
+                {
+                    const JSONArray props = o.getArray( "properties" );
+                    props.forEach
+                    (
+                        [ &scrollx, &scrolly ]( const JSONItem & di )
+                        {
+                            const JSONObject io = di.asObject();
+                            const std::string name = io.getString( "name" );
+                            if ( name == "scrollx" )
+                            {
+                                scrollx = io.getFloat( "value" );
+                            }
+                            else if ( name == "scrolly" )
+                            {
+                                scrolly = io.getFloat( "value" );
+                            }
+                        }
+                    );
+                }
+
                 return MapTileLayer
                 {
                     JSONMap<int>
@@ -137,7 +132,9 @@ namespace BSL
                             return di.asInt();
                         }
                     ),
-                    it->second
+                    it->second,
+                    scrollx,
+                    scrolly
                 };
             }   
         );
@@ -239,7 +236,8 @@ namespace BSL
                         static_cast<float> ( getWidthPixels() ),
                         static_cast<float> ( getHeightPixels() ),
                         0.0f,
-                        0.0f
+                        0.0f,
+                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 } }
                     );
                 }
                 break;

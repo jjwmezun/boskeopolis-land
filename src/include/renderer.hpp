@@ -224,7 +224,8 @@ namespace BSL
                 float w,
                 float h,
                 uint_fast8_t color,
-                bool abs = false,
+                float scrollx = 0.0f,
+                float scrolly = 0.0f,
                 Layer layer = Layer::BG_1,
                 float opacity = 1.0f
             ) const;
@@ -238,7 +239,8 @@ namespace BSL
                 Dir::XY dir,
                 uint_fast8_t color1,
                 uint_fast8_t color2,
-                bool abs = false,
+                float scrollx = 0.0f,
+                float scrolly = 0.0f,
                 Layer layer = Layer::BG_1,
                 float opacity = 1.0f
             ) const;

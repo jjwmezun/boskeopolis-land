@@ -49,6 +49,23 @@ namespace BSL
         throw std::runtime_error( "JSON file missing “" + name + "”." );
     };
 
+    float JSONObject::getFloat( const std::string & name ) const
+    {
+        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_double )
+                {
+                    throw std::runtime_error( "JSON file missing “" + name + "”." );
+                }
+                return entry.value->u.dbl;
+            }
+        }
+        throw std::runtime_error( "JSON file missing “" + name + "”." );
+    };
+
     std::string JSONObject::getString( const std::string & name ) const
     {
         for ( unsigned int i = 0; i < data_->u.object.length; ++i )
@@ -81,6 +98,19 @@ namespace BSL
             }
         }
         throw std::runtime_error( "JSON file missing “" + name + "”." );
+    };
+
+    bool JSONObject::hasArray( const std::string & name ) const
+    {
+        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                return entry.value->type == json_array;
+            }
+        }
+        return false;
     };
 
     JSON::JSON( std::string&& filename ) : filename_ ( std::move( filename ) )

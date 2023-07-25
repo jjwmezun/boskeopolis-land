@@ -52,7 +52,8 @@ namespace BSL
         ArgList args
     ) const
     {
-        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, false );
+        float scrollx = GetArg( "scrollx", args, 0.0f );
+        float scrolly = GetArg( "scrolly", args, 0.0f );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::SPRITES_1 );
         uint_fast8_t flip_x = GetArgConvert<uint_fast8_t, bool> ( "flipx", args, false );
         uint_fast8_t flip_y = GetArgConvert<uint_fast8_t, bool> ( "flipy", args, false );
@@ -66,7 +67,8 @@ namespace BSL
 
         int graphic = NasrGraphicsAddSprite
         (
-            abs,
+            scrollx,
+            scrolly,
             current_state_,
             static_cast<unsigned int>( layer ),
             texture,
@@ -98,7 +100,8 @@ namespace BSL
         float w,
         float h,
         uint_fast8_t color,
-        bool abs,
+        float scrollx,
+        float scrolly,
         Layer layer,
         float opacity
     ) const
@@ -106,7 +109,8 @@ namespace BSL
         NasrRect r { x, y, w, h };
         int graphic = NasrGraphicsAddRectPalette
         (
-            static_cast<uint_fast8_t>( abs ),
+            scrollx,
+            scrolly,
             current_state_,
             static_cast<unsigned int>( layer ),
             r,
@@ -134,7 +138,8 @@ namespace BSL
         Dir::XY dir,
         uint_fast8_t color1,
         uint_fast8_t color2,
-        bool abs,
+        float scrollx,
+        float scrolly,
         Layer layer,
         float opacity
     ) const
@@ -142,7 +147,8 @@ namespace BSL
         NasrRect r { x, y, w, h };
         int graphic = NasrGraphicsAddRectGradientPalette
         (
-            static_cast<uint_fast8_t>( abs ),
+            scrollx,
+            scrolly,
             current_state_,
             static_cast<unsigned int>( layer ),
             r,
@@ -182,19 +188,23 @@ namespace BSL
             std::cout << "NO GRAPH" << std::endl;
         }
 
-        unsigned int abs = 0;
+        float scrollx = GetArg( "scrollx", args, 0.0f );
+        float scrolly = GetArg( "scrolly", args, 0.0f );
         unsigned int layer = static_cast<int>( Layer::BLOCKS_1 );
+        float opacity = GetArg( "opacity", args, 1.0f );
 
         int graphic = NasrGraphicsAddTilemap
         (
-            abs,
+            scrollx,
+            scrolly,
             current_state_,
             layer,
             tileset_id,
             &tiles[ 0 ],
             width,
             height,
-            1
+            1,
+            opacity
         );
 
         if ( graphic < 0 )
@@ -210,7 +220,8 @@ namespace BSL
     {
         std::string type = GetArg( "type", args, std::string( "normal" ) );
         std::string text = GetArg( "text", args, std::string( "" ) );
-        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
+        float scrollx = GetArg( "scrollx", args, 1.0f );
+        float scrolly = GetArg( "scrolly", args, 1.0f );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
         std::vector<char> cstring( text.c_str(), text.c_str() + text.size() + 1 );
         float x = GetArg( "x", args, 0.0f );
@@ -255,7 +266,8 @@ namespace BSL
             uint_fast8_t color2 = GetArg( "color2", args, 0 );
             graphic = NasrGraphicsAddTextGradientPalette
             (
-                abs,
+                scrollx,
+                scrolly,
                 current_state_,
                 layer,
                 t,
@@ -271,7 +283,8 @@ namespace BSL
             uint_fast8_t color = GetArg( "color", args, 0 );
             graphic = NasrGraphicsAddTextPalette
             (
-                abs,
+                scrollx,
+                scrolly,
                 current_state_,
                 layer,
                 t,
@@ -301,7 +314,8 @@ namespace BSL
         float x = GetArg( "x", args, 0.0f );
         float y = GetArg( "y", args, 0.0f );
         uint_fast8_t palette = GetArg( "palette", args, 0 );
-        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
+        float scrollx = GetArg( "scrollx", args, 1.0f );
+        float scrolly = GetArg( "scrolly", args, 1.0f );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
         float shadow = GetArg<float> ( "shadow", args, 0.0f );
         float opacity = GetArg( "opacity", args, 1.0f );
@@ -317,7 +331,8 @@ namespace BSL
             uint_fast8_t color2 = GetArg( "color2", args, 0 );
             graphic = NasrGraphicsAddCounterPaletteGradient
             (
-                abs,
+                scrollx,
+                scrolly,
                 current_state_,
                 layer,
                 charset_,
@@ -342,7 +357,8 @@ namespace BSL
             uint_fast8_t color = GetArg( "color", args, 0 );
             graphic = NasrGraphicsAddCounterPalette
             (
-                abs,
+                scrollx,
+                scrolly,
                 current_state_,
                 layer,
                 charset_,
@@ -530,7 +546,8 @@ namespace BSL
         );
         NasrReleaseTextureTarget();
 
-        uint_fast8_t abs = GetArgConvert<uint_fast8_t, bool> ( "abs", args, true );
+        float scrollx = GetArg( "scrollx", args, 1.0f );
+        float scrolly = GetArg( "scrolly", args, 1.0f );
         unsigned int layer = GetArgConvert<unsigned int, Layer> ( "layer", args, Layer::AFTER_FG_2 );
         float opacity = GetArg( "opacity", args, 1.0f );
         float x = GetArg( "x", args, 0.0f );
@@ -538,7 +555,8 @@ namespace BSL
 
         int graphic = NasrGraphicsAddSprite
         (
-            abs,
+            scrollx,
+            scrolly,
             current_state_,
             static_cast<unsigned int>( layer ),
             texture,
