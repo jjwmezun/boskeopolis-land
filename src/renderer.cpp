@@ -61,8 +61,12 @@ namespace BSL
         float rotation_y = GetArg( "roty", args, 0.0f );
         float rotation_z = GetArg( "rotz", args, 0.0f );
         float opacity = GetArg( "opacity", args, 1.0f );
+        float tilingx = GetArg( "tilingx", args, 1.0f );
+        float tilingy = GetArg( "tilingy", args, 1.0f );
+        float srcw = GetArg( "srcw", args, w );
+        float srch = GetArg( "srch", args, h );
 
-        NasrRect src { srcx, srcy, w, h };
+        NasrRect src { srcx, srcy, srcw, srch };
         NasrRect dest { x, y, w, h };
 
         int graphic = NasrGraphicsAddSprite
@@ -81,7 +85,9 @@ namespace BSL
             rotation_z,
             opacity,
             0,
-            1
+            1,
+            tilingx,
+            tilingy
         );
 
         if ( graphic < 0 )
@@ -204,7 +210,9 @@ namespace BSL
             width,
             height,
             1,
-            opacity
+            opacity,
+            1.0f,
+            1.0f
         );
 
         if ( graphic < 0 )
@@ -430,7 +438,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw left side
@@ -446,7 +456,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw right side
@@ -462,7 +474,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw bottom side
@@ -478,7 +492,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw top-left corner
@@ -494,7 +510,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw top-right corner
@@ -510,7 +528,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw bottom-left corner
@@ -526,7 +546,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         // Draw bottom-right corner
@@ -542,7 +564,9 @@ namespace BSL
             0.0f,
             1.0f,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
         NasrReleaseTextureTarget();
 
@@ -574,7 +598,9 @@ namespace BSL
             0.0f,
             opacity,
             0,
-            1
+            1,
+            1.0f,
+            1.0f
         );
 
         if ( graphic < 0 )

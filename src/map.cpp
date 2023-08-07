@@ -29,6 +29,7 @@ namespace BSL
         MapTileLayer::Type type;
         float scrollx;
         float scrolly;
+        float tilex;
     };
 
     Map::Map( std::string && slug )
@@ -100,23 +101,42 @@ namespace BSL
 
                 float scrollx = 0.0f;
                 float scrolly = 0.0f;
+                unsigned int tilex = 0;
 
                 if ( o.hasArray( "properties" ) )
                 {
                     const JSONArray props = o.getArray( "properties" );
                     props.forEach
                     (
-                        [ &scrollx, &scrolly ]( const JSONItem & di )
+                        [ &scrollx, &scrolly, &tilex ]( const JSONItem & di )
                         {
                             const JSONObject io = di.asObject();
                             const std::string name = io.getString( "name" );
                             if ( name == "scrollx" )
                             {
-                                scrollx = io.getFloat( "value" );
+                                if ( io.hasInt( "value" ) )
+                                {
+                                    scrollx = static_cast<float> ( io.getInt( "value" ) );
+                                }
+                                else
+                                {
+                                    scrollx = io.getFloat( "value" );
+                                }
                             }
                             else if ( name == "scrolly" )
                             {
-                                scrolly = io.getFloat( "value" );
+                                if ( io.hasInt( "value" ) )
+                                {
+                                    scrolly = static_cast<float> ( io.getInt( "value" ) );
+                                }
+                                else
+                                {
+                                    scrolly = io.getFloat( "value" );
+                                }
+                            }
+                            else if ( name == "tilex" )
+                            {
+                                tilex = io.getInt( "value" );
                             }
                         }
                     );
@@ -134,7 +154,8 @@ namespace BSL
                     ),
                     it->second,
                     scrollx,
-                    scrolly
+                    scrolly,
+                    tilex
                 };
             }   
         );
@@ -189,7 +210,11 @@ namespace BSL
                         height_
                     );*/
 
-                    int texture = NasrAddTextureBlank( getWidthPixels(), getHeightPixels() );
+                    unsigned int w = layer.tilex == 0 ? width_ : layer.tilex;
+                    unsigned int wx = blocksToPixels( w );
+                    float tilingx = layer.tilex == 0 ? 1.0f : std::ceil( getWidthPixels() / wx );
+                    float fullw = tilingx * wx;
+                    int texture = NasrAddTextureBlank( wx, getHeightPixels() );
                     int menu_texture = NasrLoadFileAsTexture( "assets/graphics/tilesets/urban.png" );
                     if ( menu_texture < 0 )
                     {
@@ -200,32 +225,39 @@ namespace BSL
                     NasrRect dest = src;
                     NasrSetTextureAsTarget( texture );
                     
-                    for ( int i = 0; i < layer.tiles.size(); ++i )
+                    for ( int y = 0; y < height_; ++y )
                     {
-                        const int tile = layer.tiles[ i ];
-                        if ( tile > 0 )
+                        for ( int x = 0; x < w; ++x )
                         {
-                            const int ti = tile - 7073;
-                            src.x = static_cast<float> ( ti % 16 ) * 16.0f;
-                            src.y = std::floor( static_cast<float> ( ti ) / 16.0f ) * 16.0f;
-                            dest.x = static_cast<float> ( i % width_ ) * 16.0f;
-                            dest.y = std::floor( i / width_ ) * 16.0f;
-                            NasrDrawSpriteToTexture
-                            (
-                                menu_texture,
-                                src,
-                                dest,
-                                0,
-                                0,
-                                0.0f,
-                                0.0f,
-                                0.0f,
-                                1.0f,
-                                1,
-                                1
-                            );
+                            unsigned int i = y * width_ + x % width_;
+                            const int tile = layer.tiles[ i ];
+                            if ( tile > 0 )
+                            {
+                                const int ti = tile - 7073;
+                                src.x = static_cast<float> ( ti % 16 ) * 16.0f;
+                                src.y = std::floor( static_cast<float> ( ti ) / 16.0f ) * 16.0f;
+                                dest.x = static_cast<float> ( i % width_ ) * 16.0f;
+                                dest.y = std::floor( i / width_ ) * 16.0f;
+                                NasrDrawSpriteToTexture
+                                (
+                                    menu_texture,
+                                    src,
+                                    dest,
+                                    0,
+                                    0,
+                                    0.0f,
+                                    0.0f,
+                                    0.0f,
+                                    1.0f,
+                                    1,
+                                    1,
+                                    1.0f,
+                                    1.0f
+                                );
+                            }
                         }
                     }
+
                     NasrReleaseTextureTarget();
 
                     game.render().addTextureSprite
@@ -233,11 +265,11 @@ namespace BSL
                         texture,
                         0.0f,
                         0.0f,
-                        static_cast<float> ( getWidthPixels() ),
+                        static_cast<float> ( fullw ),
                         static_cast<float> ( getHeightPixels() ),
                         0.0f,
                         0.0f,
-                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 } }
+                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 }, { "tilingx", tilingx }, { "srcw", static_cast<float>( wx ) } }
                     );
                 }
                 break;

@@ -41,7 +41,7 @@ namespace BSL
             {
                 if ( entry.value->type != json_integer )
                 {
-                    throw std::runtime_error( "JSON file missing “" + name + "”." );
+                    throw std::runtime_error( "JSON value “" + name + "” is not an integer." );
                 }
                 return entry.value->u.integer;
             }
@@ -58,7 +58,7 @@ namespace BSL
             {
                 if ( entry.value->type != json_double )
                 {
-                    throw std::runtime_error( "JSON file missing “" + name + "”." );
+                    throw std::runtime_error( "JSON value “" + name + "” is not a float, but is a " + std::to_string( entry.value->type ) + "." );
                 }
                 return entry.value->u.dbl;
             }
@@ -108,6 +108,19 @@ namespace BSL
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
             {
                 return entry.value->type == json_array;
+            }
+        }
+        return false;
+    };
+
+    bool JSONObject::hasInt( const std::string & name ) const
+    {
+        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                return entry.value->type == json_integer;
             }
         }
         return false;

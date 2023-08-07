@@ -7,11 +7,19 @@
 #include "nasringine/nasr_input.h"
 #include "nasringine/nasr_localization.h"
 
+#include <nasringine/glad/glad.h>
+#include "nasringine/GLFW/glfw3.h"
+
 static constexpr unsigned int MAX_STATES = 5;
 
 static bool running = 1;
-static double fixed_timestep = 60.0f;
+static double fixed_timestep = 0.0f;
 static double fixed_timestep_update = 1.0f / fixed_timestep;
+
+float total_dt = 0.0f;
+unsigned int dtcount = 0;
+
+std::vector<double> timechanges;
 
 int main( int argc, char ** argv )
 {
@@ -68,18 +76,25 @@ int main( int argc, char ** argv )
                 double current_time = NasrGetTime();
                 double timechange = current_time - prev_time;
                 double fps = 1.0 / timechange;
+                timechanges.push_back( timechange );
                 float dt = 60.0f / ( float )( fps );
 
-                game.update( dt );
+                total_dt += ( 60.0f / dt );
+                ++dtcount;
 
-                timechange = current_time - prev_time;
-                fps = 1.0 / timechange;
-                dt = 60.0f / ( float )( fps );
-                prev_time = current_time;
+                game.update( dt );
                 NasrUpdate( dt );
+                prev_time = current_time;
             }
             NasrInputUpdate();
         }
     }
+    //printf( "%f\n", total_dt / dtcount );
+    double tot = 0.0f;
+    for ( double t : timechanges )
+    {
+        tot += t;
+    }
+    printf( "%f\n", tot / timechanges.size() );
     NasrClose();
 }
