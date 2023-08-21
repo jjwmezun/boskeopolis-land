@@ -250,7 +250,7 @@ namespace BSL
                 const std::string & tileset,
                 const std::vector<NasrTile> & tiles,
                 unsigned int width,
-                unsigned height,
+                unsigned int height,
                 ArgList args = {}
             ) const;
 

@@ -95,6 +95,6 @@ int main( int argc, char ** argv )
     {
         tot += t;
     }
-    printf( "%f\n", tot / timechanges.size() );
+    //printf( "%f\n", tot / timechanges.size() );
     NasrClose();
 }

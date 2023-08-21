@@ -180,7 +180,7 @@ namespace BSL
         const std::string & tileset,
         const std::vector<NasrTile> & tiles,
         unsigned int width,
-        unsigned height,
+        unsigned int height,
         ArgList args
     ) const
     {
@@ -198,6 +198,8 @@ namespace BSL
         float scrolly = GetArg( "scrolly", args, 0.0f );
         unsigned int layer = static_cast<int>( Layer::BLOCKS_1 );
         float opacity = GetArg( "opacity", args, 1.0f );
+        float tilingx = GetArg( "tilingx", args, 1.0f );
+        float tilingy = GetArg( "tilingy", args, 1.0f );
 
         int graphic = NasrGraphicsAddTilemap
         (
@@ -211,8 +213,8 @@ namespace BSL
             height,
             1,
             opacity,
-            1.0f,
-            1.0f
+            tilingx,
+            tilingy
         );
 
         if ( graphic < 0 )

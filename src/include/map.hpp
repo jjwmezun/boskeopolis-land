@@ -32,7 +32,7 @@ namespace BSL
             };
 
             Map( std::string && slug );
-            void init( Game & game );
+            void init( Game & game, Level & level );
             void update( Level & level, const Game & game, float dt );
             void interact( Sprite & sprite, Level & level, Game & game );
 

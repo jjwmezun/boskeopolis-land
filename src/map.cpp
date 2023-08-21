@@ -1,6 +1,7 @@
 #include <cmath>
 #include "game.hpp"
 #include "json.hpp"
+#include "level.hpp"
 #include "map.hpp"
 #include "map_layer_constellation.hpp"
 #include "map_layer_palette_change.hpp"
@@ -41,7 +42,7 @@ namespace BSL
         remove_block_ ( false )
     {};
 
-    void Map::init( Game & game )
+    void Map::init( Game & game, Level & level )
     {
         const Tileset & objects = game.getObjects();
 
@@ -179,7 +180,6 @@ namespace BSL
                 case ( MapTileLayer::Type::TILE ):
                 {
                     /*
-                    std::vector<NasrTile> tiles;
                     for ( int tile : layer.tiles )
                     {
                         NasrTile t;
@@ -212,7 +212,7 @@ namespace BSL
 
                     unsigned int w = layer.tilex == 0 ? width_ : layer.tilex;
                     unsigned int wx = blocksToPixels( w );
-                    float tilingx = layer.tilex == 0 ? 1.0f : std::ceil( getWidthPixels() / wx );
+                    float tilingx = layer.tilex == 0 ? 1.0f : std::ceil( static_cast<float> ( getWidthPixels() ) / static_cast<float> ( wx ) );
                     float fullw = tilingx * wx;
                     int texture = NasrAddTextureBlank( wx, getHeightPixels() );
                     int menu_texture = NasrLoadFileAsTexture( "assets/graphics/tilesets/urban.png" );
@@ -224,6 +224,10 @@ namespace BSL
                     NasrRect src = { 0.0f, 0.0f, 16.0f, 16.0f };
                     NasrRect dest = src;
                     NasrSetTextureAsTarget( texture );
+
+                    Tileset & tileset = level.getTileset( "urban" );
+                    bool has_dynamic_tiles = false;
+                    std::vector<NasrTile> tiles;
                     
                     for ( int y = 0; y < height_; ++y )
                     {
@@ -231,30 +235,61 @@ namespace BSL
                         {
                             unsigned int i = y * width_ + x % width_;
                             const int tile = layer.tiles[ i ];
+                            NasrTile nasrtile { 0, 0, 0, 255 };
                             if ( tile > 0 )
                             {
+                                bool is_dynamic_tile = false;
                                 const int ti = tile - 7073;
-                                src.x = static_cast<float> ( ti % 16 ) * 16.0f;
-                                src.y = std::floor( static_cast<float> ( ti ) / 16.0f ) * 16.0f;
+                                const unsigned char src_x = ti % 16;
+                                const unsigned char src_y = static_cast<unsigned char> ( ti / 16.0f );
+                                unsigned char animation = 0;
+                                src.x = static_cast<float> ( src_x ) * 16.0f;
+                                src.y = std::floor( static_cast<float> ( src_y ) * 16.0f );
                                 dest.x = static_cast<float> ( i % width_ ) * 16.0f;
                                 dest.y = std::floor( i / width_ ) * 16.0f;
-                                NasrDrawSpriteToTexture
-                                (
-                                    menu_texture,
-                                    src,
-                                    dest,
-                                    0,
-                                    0,
-                                    0.0f,
-                                    0.0f,
-                                    0.0f,
-                                    1.0f,
-                                    1,
-                                    1,
-                                    1.0f,
-                                    1.0f
-                                );
+
+                                try
+                                {
+                                    BlockType bt = tileset.getBlockType( ti );
+                                    animation = bt.getAnimation();
+                                    if ( animation > 1 )
+                                    {
+                                        has_dynamic_tiles = true;
+                                        is_dynamic_tile = true;
+                                    }
+                                }
+                                catch ( std::runtime_error & error )
+                                {
+
+                                }
+
+                                if ( is_dynamic_tile )
+                                {
+                                    nasrtile = { src_x, src_y, 0, animation };
+                                }
+                                else
+                                {
+                                    NasrDrawSpriteToTexture
+                                    (
+                                        menu_texture,
+                                        src,
+                                        dest,
+                                        0,
+                                        0,
+                                        0.0f,
+                                        0.0f,
+                                        0.0f,
+                                        1.0f,
+                                        1,
+                                        1,
+                                        1.0f,
+                                        1.0f
+                                    ); 
+                                }
+
                             }
+
+                            tiles.push_back( nasrtile );
                         }
                     }
 
@@ -271,6 +306,18 @@ namespace BSL
                         0.0f,
                         { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 }, { "tilingx", tilingx }, { "srcw", static_cast<float>( wx ) } }
                     );
+
+                    if ( has_dynamic_tiles )
+                    {
+                        game.render().addTilemap
+                        (
+                            "urban",
+                            tiles,
+                            w,
+                            height_,
+                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 }, { "tilingx", tilingx } }
+                        );
+                    }
                 }
                 break;
                 case ( MapTileLayer::Type::OBJECT ):
