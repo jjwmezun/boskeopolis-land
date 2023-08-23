@@ -196,7 +196,7 @@ namespace BSL
 
         float scrollx = GetArg( "scrollx", args, 0.0f );
         float scrolly = GetArg( "scrolly", args, 0.0f );
-        unsigned int layer = static_cast<int>( Layer::BLOCKS_1 );
+        unsigned int layer = static_cast<unsigned int>( GetArg( "layer", args, Layer::BLOCKS_1 ) );
         float opacity = GetArg( "opacity", args, 1.0f );
         float tilingx = GetArg( "tilingx", args, 1.0f );
         float tilingy = GetArg( "tilingy", args, 1.0f );

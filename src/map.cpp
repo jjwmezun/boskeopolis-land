@@ -76,6 +76,23 @@ namespace BSL
             layer->init( game );
         }
 
+        const float bgtilex = std::ceil( static_cast<float> ( getWidthPixels() ) / 403.0f );
+        const float bgtotalw = bgtilex * 403.0f;
+
+        printf( "%f, %f, %f\n", bgtilex, bgtotalw, static_cast<float> ( getWidthPixels() ) );
+
+        game.render().addSprite
+        (
+            "bg/firs.png",
+            0.0f,
+            0.0f,
+            bgtotalw,
+            300.0f,
+            0.0f,
+            96.0f,
+            { { "layer", Layer::BG_1 }, { "scrolly", 0.8f }, { "scrollx", 0.75f }, { "tilingx", bgtilex }, { "srcw", 403.0f } }
+        );
+
         // Get map tile layers from JSON file.
         std::vector<MapTileLayer> layers = JSONMap<MapTileLayer>
         (

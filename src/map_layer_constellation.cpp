@@ -39,9 +39,9 @@ namespace BSL
                 tile =
                 {
                     0,
-                    out == 11 ? 1 : 0,
+                    static_cast<unsigned char>( out == 11 ? 1 : 0 ),
                     0,
-                    out > 9 ? 10 : 0
+                    static_cast<unsigned char>( out > 9 ? 10 : 0 )
                 };
             }
 
@@ -54,7 +54,7 @@ namespace BSL
             stars,
             width_,
             height_,
-            { { "opacity", 0.5f }, { "scrollx", 0.9f } }
+            { { "layer", Layer::BG_1 }, { "opacity", 0.5f }, { "scrollx", 0.9f }, { "scrolly", 0.9f } }
         );
     };
 }
