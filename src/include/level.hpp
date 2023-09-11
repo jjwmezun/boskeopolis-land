@@ -18,6 +18,7 @@ namespace BSL
         public:
             inline Level()
             :
+                slug_ ( "city-1" ),
                 map_ ( "city-1" ),
                 pos_ ( 0.0f, 0.0f, 0.0f, 0.0f )
             {};
@@ -33,6 +34,7 @@ namespace BSL
             Tileset & getTileset( std::string name );
 
         private:
+            std::string slug_;
             Map map_;
             SpriteSystem sprites_;
             LevelInventory inventory_;

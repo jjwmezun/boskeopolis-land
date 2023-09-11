@@ -1,0 +1,38 @@
+{
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/tilesets/collision.json": {
+            "scaleInDock": 1
+        },
+        "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/tilesets/objects.json": {
+            "scaleInDock": 1
+        },
+        "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/tilesets/sprites.json": {
+            "scaleInDock": 1
+        },
+        "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/tilesets/urban.json": {
+            "scaleInDock": 1
+        },
+        "city-1.json": {
+            "scale": 0.329296875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2432.455516014235,
+                "y": 305.19572953736656
+            }
+        }
+    },
+    "last.worldFilePath": "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/maps",
+    "loadedWorlds": [
+        "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/maps/city-1.world"
+    ],
+    "openFiles": [
+    ],
+    "project": "bs.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "city-1.json"
+    ]
+}

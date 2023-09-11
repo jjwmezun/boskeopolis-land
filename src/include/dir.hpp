@@ -1,6 +1,8 @@
 #ifndef DIR_H
 #define DIR_H
 
+#include <string>
+
 namespace BSL
 {
     namespace Dir
@@ -31,6 +33,8 @@ namespace BSL
             DOWN = static_cast<int>( XY::DOWN ),
             NONE = static_cast<int>( XY::NONE )
         };
+
+        XY getXYFromString( std::string key );
     }
 }
 

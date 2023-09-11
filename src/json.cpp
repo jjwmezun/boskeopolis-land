@@ -66,6 +66,23 @@ namespace BSL
         throw std::runtime_error( "JSON file missing “" + name + "”." );
     };
 
+    bool JSONObject::getBool( const std::string & name ) const
+    {
+        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_boolean )
+                {
+                    throw std::runtime_error( "JSON value “" + name + "” is not a boolean, but is a " + std::to_string( entry.value->type ) + "." );
+                }
+                return entry.value->u.boolean;
+            }
+        }
+        throw std::runtime_error( "JSON file missing “" + name + "”." );
+    };
+
     std::string JSONObject::getString( const std::string & name ) const
     {
         for ( unsigned int i = 0; i < data_->u.object.length; ++i )
@@ -121,6 +138,32 @@ namespace BSL
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
             {
                 return entry.value->type == json_integer;
+            }
+        }
+        return false;
+    };
+
+    bool JSONObject::hasFloat( const std::string & name ) const
+    {
+        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                return entry.value->type == json_double;
+            }
+        }
+        return false;
+    };
+
+    bool JSONObject::hasBool( const std::string & name ) const
+    {
+        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                return entry.value->type == json_boolean;
             }
         }
         return false;

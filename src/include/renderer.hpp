@@ -193,6 +193,8 @@ namespace BSL
         public:
             Renderer();
 
+            unsigned int getTextureId( const std::string & texture ) const;
+
             SpriteGraphic addSprite
             (
                 std::string texture,

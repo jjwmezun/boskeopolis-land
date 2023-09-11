@@ -7,8 +7,10 @@
 #include "map_layer_palette_change.hpp"
 #include "map_layer_rain.hpp"
 #include "nasringine/nasr.h"
+#include <regex>
 #include "sprite.hpp"
 #include <unordered_map>
+#include "utility.hpp"
 
 #include "tileset.hpp"
 
@@ -20,17 +22,62 @@ namespace BSL
     {
         enum class Type
         {
+            __NULL,
             COLLISION,
             TILE,
             OBJECT,
-            SPRITE
+            SPRITE,
+            IMAGE,
+            GRADIENT,
+            RAIN,
+            CONSTELLATION,
+            PALCHANGE
+        };
+
+        struct Image
+        {
+            char * texture;
+            unsigned int width;
+            unsigned int height;
+            bool tilex;
+            bool tiley;
+        };
+
+        struct Gradient
+        {
+            Dir::XY dir;
+            unsigned int start;
+            unsigned int end;
+        };
+
+        struct Rain
+        {
+            unsigned int start;
+            unsigned int end;
+        };
+
+        struct PalChange
+        {
+            unsigned int start;
+            unsigned int end;
+        };
+
+        union Misc
+        {
+            Image image;
+            Gradient gradient;
+            Rain rain;
+            PalChange palchange;
         };
 
         std::vector<int> tiles;
         MapTileLayer::Type type;
         float scrollx;
         float scrolly;
+        float offsetx;
+        float offsety;
         float tilex;
+        Misc misc;
     };
 
     Map::Map( std::string && slug )
@@ -52,6 +99,7 @@ namespace BSL
         height_ = json.getInt( "height" );
         JSONArray l = json.getArray( "layers" );
 
+        /*
         // Backgrounds.
         game.render().addRectGradient
         (
@@ -91,7 +139,7 @@ namespace BSL
             0.0f,
             96.0f,
             { { "layer", Layer::BG_1 }, { "scrolly", 0.8f }, { "scrollx", 0.75f }, { "tilingx", bgtilex }, { "srcw", 403.0f } }
-        );
+        );*/
 
         // Get map tile layers from JSON file.
         std::vector<MapTileLayer> layers = JSONMap<MapTileLayer>
@@ -99,83 +147,353 @@ namespace BSL
             l,
             [&]( const JSONItem & i )
             {
+                MapTileLayer layer;
+                layer.type = MapTileLayer::Type::__NULL;
+                layer.scrollx = 0.0f;
+                layer.scrolly = 0.0f;
+                layer.offsetx = 0.0f;
+                layer.offsety = 0.0f;
                 JSONObject o = i.asObject();
 
-                JSONArray tiles = o.getArray( "data" );
+                std::string type = o.getString( "type" );
 
-                std::string name = o.getString( "name" );
-                std::unordered_map<std::string, MapTileLayer::Type> t
+                if ( type == "imagelayer" )
                 {
-                    { "collision", MapTileLayer::Type::COLLISION },
-                    { "tile", MapTileLayer::Type::TILE },
-                    { "object", MapTileLayer::Type::OBJECT },
-                    { "sprite", MapTileLayer::Type::SPRITE }
-                };
-                auto it = t.find( name );
-                if ( it == t.end() )
-                {
-                    throw std::runtime_error( "Map " + slug_ + " has invalid layer type " + name );
+                    layer.type = MapTileLayer::Type::IMAGE;
+                    layer.misc.image.texture = nullptr;
+                    layer.misc.image.width = 0;
+                    layer.misc.image.height = 0;
+                    layer.misc.image.tilex = false;
+                    layer.misc.image.tiley = false;
+
+                    std::string image = strReplace( o.getString( "image" ), "..\/graphics\/", "" );
+                    layer.misc.image.texture = static_cast<char *>( calloc( strlen( image.c_str() ) + 1, sizeof( char ) ) );
+                    strcpy( layer.misc.image.texture, image.c_str() );
+
+                    unsigned int texture_id = game.render().getTextureId( image );
+                    layer.misc.image.width = NasrTextureGetWidth( texture_id );
+                    layer.misc.image.height = NasrTextureGetHeight( texture_id );
+
+                    if ( o.hasBool( "repeatx" ) )
+                    {
+                        layer.misc.image.tilex = o.getBool( "repeatx" );
+                    }
+
+                    if ( o.hasBool( "repeaty" ) )
+                    {
+                        layer.misc.image.tiley = o.getBool( "repeaty" );
+                    }
+
+                    if ( o.hasFloat( "parallaxx" ) )
+                    {
+                        layer.scrollx = o.getFloat( "parallaxx" );
+                    }
+                    else if ( o.hasInt( "parallaxx" ) )
+                    {
+                        layer.scrollx = static_cast<float> ( o.getInt( "parallaxx" ) );
+                    }
+
+                    if ( o.hasFloat( "parallaxy" ) )
+                    {
+                        layer.scrolly = o.getFloat( "parallaxy" );
+                    }
+                    else if ( o.hasInt( "parallaxy" ) )
+                    {
+                        layer.scrolly = static_cast<float> ( o.getInt( "parallaxy" ) );
+                    }
+
+                    if ( o.hasFloat( "offsetx" ) )
+                    {
+                        layer.offsetx = o.getFloat( "offsetx" );
+                    }
+                    else if ( o.hasInt( "offsetx" ) )
+                    {
+                        layer.offsetx = static_cast<float> ( o.getInt( "offsetx" ) );
+                    }
+
+                    if ( o.hasFloat( "offsety" ) )
+                    {
+                        layer.offsety = o.getFloat( "offsety" );
+                    }
+                    else if ( o.hasInt( "offsety" ) )
+                    {
+                        layer.offsety = static_cast<float> ( o.getInt( "offsety" ) );
+                    }
                 }
-
-                float scrollx = 0.0f;
-                float scrolly = 0.0f;
-                unsigned int tilex = 0;
-
-                if ( o.hasArray( "properties" ) )
+                else if ( type == "objectgroup" )
                 {
-                    const JSONArray props = o.getArray( "properties" );
-                    props.forEach
+                    std::string name = o.getString( "name" );
+                    layer.type = BSL::findInMap<MapTileLayer::Type>
                     (
-                        [ &scrollx, &scrolly, &tilex ]( const JSONItem & di )
                         {
-                            const JSONObject io = di.asObject();
-                            const std::string name = io.getString( "name" );
-                            if ( name == "scrollx" )
-                            {
-                                if ( io.hasInt( "value" ) )
-                                {
-                                    scrollx = static_cast<float> ( io.getInt( "value" ) );
-                                }
-                                else
-                                {
-                                    scrollx = io.getFloat( "value" );
-                                }
-                            }
-                            else if ( name == "scrolly" )
-                            {
-                                if ( io.hasInt( "value" ) )
-                                {
-                                    scrolly = static_cast<float> ( io.getInt( "value" ) );
-                                }
-                                else
-                                {
-                                    scrolly = io.getFloat( "value" );
-                                }
-                            }
-                            else if ( name == "tilex" )
-                            {
-                                tilex = io.getInt( "value" );
-                            }
-                        }
+                            { "gradient", MapTileLayer::Type::GRADIENT },
+                            { "rain", MapTileLayer::Type::RAIN },
+                            { "constellation", MapTileLayer::Type::CONSTELLATION },
+                            { "palchange", MapTileLayer::Type::PALCHANGE }
+                        },
+                        name,
+                        "Map " + slug_ + " has invalid layer type " + name
                     );
+
+                    switch ( layer.type )
+                    {
+                        case ( MapTileLayer::Type::GRADIENT ):
+                        {
+                            layer.misc.gradient.dir = Dir::XY::UP;
+                            layer.misc.gradient.start = 0;
+                            layer.misc.gradient.end = 0;
+
+                            if ( o.hasArray( "properties" ) )
+                            {
+                                const JSONArray props = o.getArray( "properties" );
+                                props.forEach
+                                (
+                                    [ &layer ]( const JSONItem & di )
+                                    {
+                                        const JSONObject io = di.asObject();
+                                        const std::string name = io.getString( "name" );
+                                        if ( name == "direction" )
+                                        {
+                                            std::string dir = io.getString( "value" );
+                                            layer.misc.gradient.dir = Dir::getXYFromString( dir );
+                                        }
+                                        else if ( name == "start" )
+                                        {
+                                            if ( io.hasFloat( "value" ) )
+                                            {
+                                                layer.misc.gradient.start = static_cast<unsigned int> ( io.getFloat( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.misc.gradient.start = static_cast<unsigned int> ( io.getInt( "value" ) );
+                                            }
+                                        }
+                                        else if ( name == "end" )
+                                        {
+                                            if ( io.hasFloat( "value" ) )
+                                            {
+                                                layer.misc.gradient.end = static_cast<unsigned int> ( io.getFloat( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.misc.gradient.end = static_cast<unsigned int> ( io.getInt( "value" ) );
+                                            }
+                                        }
+                                    }
+                                );
+                            }
+
+                        }
+                        break;
+                        case ( MapTileLayer::Type::RAIN ):
+                        {
+                            layer.misc.rain.start = 0;
+                            layer.misc.rain.end = 0;
+
+                            if ( o.hasArray( "properties" ) )
+                            {
+                                const JSONArray props = o.getArray( "properties" );
+                                props.forEach
+                                (
+                                    [ &layer ]( const JSONItem & di )
+                                    {
+                                        const JSONObject io = di.asObject();
+                                        const std::string name = io.getString( "name" );
+                                        if ( name == "start" )
+                                        {
+                                            if ( io.hasFloat( "value" ) )
+                                            {
+                                                layer.misc.rain.start = static_cast<unsigned int> ( io.getFloat( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.misc.rain.start = static_cast<unsigned int> ( io.getInt( "value" ) );
+                                            }
+                                        }
+                                        else if ( name == "end" )
+                                        {
+                                            if ( io.hasFloat( "value" ) )
+                                            {
+                                                layer.misc.rain.end = static_cast<unsigned int> ( io.getFloat( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.misc.rain.end = static_cast<unsigned int> ( io.getInt( "value" ) );
+                                            }
+                                        }
+                                    }
+                                );
+                            }
+
+                        }
+                        break;
+                        case ( MapTileLayer::Type::CONSTELLATION ):
+                        {
+                            layer.scrollx = 0.0f;
+                            layer.scrolly = 0.0f;
+
+                            if ( o.hasArray( "properties" ) )
+                            {
+                                const JSONArray props = o.getArray( "properties" );
+                                props.forEach
+                                (
+                                    [ &layer ]( const JSONItem & di )
+                                    {
+                                        const JSONObject io = di.asObject();
+                                        const std::string name = io.getString( "name" );
+                                        if ( name == "scrollx" )
+                                        {
+                                            if ( io.hasInt( "value" ) )
+                                            {
+                                                layer.scrollx = static_cast<float> ( io.getInt( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.scrollx = io.getFloat( "value" );
+                                            }
+                                        }
+                                        else if ( name == "scrolly" )
+                                        {
+                                            if ( io.hasInt( "value" ) )
+                                            {
+                                                layer.scrolly = static_cast<float> ( io.getInt( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.scrolly = io.getFloat( "value" );
+                                            }
+                                        }
+                                    }
+                                );
+                            }
+
+                        }
+                        break;
+                        case ( MapTileLayer::Type::PALCHANGE ):
+                        {
+                            layer.misc.palchange.start = 0;
+                            layer.misc.palchange.end = 0;
+
+                            if ( o.hasArray( "properties" ) )
+                            {
+                                const JSONArray props = o.getArray( "properties" );
+                                props.forEach
+                                (
+                                    [ &layer ]( const JSONItem & di )
+                                    {
+                                        const JSONObject io = di.asObject();
+                                        const std::string name = io.getString( "name" );
+                                        if ( name == "start" )
+                                        {
+                                            if ( io.hasFloat( "value" ) )
+                                            {
+                                                layer.misc.palchange.start = static_cast<unsigned int> ( io.getFloat( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.misc.palchange.start = static_cast<unsigned int> ( io.getInt( "value" ) );
+                                            }
+                                        }
+                                        else if ( name == "end" )
+                                        {
+                                            if ( io.hasFloat( "value" ) )
+                                            {
+                                                layer.misc.palchange.end = static_cast<unsigned int> ( io.getFloat( "value" ) );
+                                            }
+                                            else
+                                            {
+                                                layer.misc.palchange.end = static_cast<unsigned int> ( io.getInt( "value" ) );
+                                            }
+                                        }
+                                    }
+                                );
+                            }
+
+                        }
+                        break;
+                    }
+                }
+                else if ( type == "tilelayer" )
+                {
+                    JSONArray tiles = o.getArray( "data" );
+
+                    std::string name = o.getString( "name" );
+                    const MapTileLayer::Type type = BSL::findInMap<MapTileLayer::Type>
+                    (
+                        {
+                            { "collision", MapTileLayer::Type::COLLISION },
+                            { "tile", MapTileLayer::Type::TILE },
+                            { "object", MapTileLayer::Type::OBJECT },
+                            { "sprite", MapTileLayer::Type::SPRITE }
+                        },
+                        name,
+                        "Map " + slug_ + " has invalid layer type " + name
+                    );
+
+                    float scrollx = 0.0f;
+                    float scrolly = 0.0f;
+                    unsigned int tilex = 0;
+
+                    if ( o.hasArray( "properties" ) )
+                    {
+                        const JSONArray props = o.getArray( "properties" );
+                        props.forEach
+                        (
+                            [ &scrollx, &scrolly, &tilex ]( const JSONItem & di )
+                            {
+                                const JSONObject io = di.asObject();
+                                const std::string name = io.getString( "name" );
+                                if ( name == "scrollx" )
+                                {
+                                    if ( io.hasInt( "value" ) )
+                                    {
+                                        scrollx = static_cast<float> ( io.getInt( "value" ) );
+                                    }
+                                    else
+                                    {
+                                        scrollx = io.getFloat( "value" );
+                                    }
+                                }
+                                else if ( name == "scrolly" )
+                                {
+                                    if ( io.hasInt( "value" ) )
+                                    {
+                                        scrolly = static_cast<float> ( io.getInt( "value" ) );
+                                    }
+                                    else
+                                    {
+                                        scrolly = io.getFloat( "value" );
+                                    }
+                                }
+                                else if ( name == "tilex" )
+                                {
+                                    tilex = io.getInt( "value" );
+                                }
+                            }
+                        );
+                    }
+
+                    layer =
+                    {
+                        JSONMap<int>
+                        (
+                            tiles,
+                            []( const JSONItem & di )
+                            {
+                                return di.asInt();
+                            }
+                        ),
+                        type,
+                        scrollx,
+                        scrolly,
+                        0.0f,
+                        0.0f,
+                        tilex
+                    };
                 }
 
-                return MapTileLayer
-                {
-                    JSONMap<int>
-                    (
-                        tiles,
-                        []( const JSONItem & di )
-                        {
-                            return di.asInt();
-                        }
-                    ),
-                    it->second,
-                    scrollx,
-                    scrolly,
-                    tilex
-                };
-            }   
+                return layer;
+            }
         );
 
         // Generate map data from tile data.
@@ -397,7 +715,76 @@ namespace BSL
                     }
                 }
                 break;
+                case ( MapTileLayer::Type::IMAGE ):
+                {
+                    const float width = static_cast<float> ( layer.misc.image.width );
+                    const float height = static_cast<float> ( layer.misc.image.height );
+                    const float bgtilex = layer.misc.image.tilex ? std::ceil( static_cast<float> ( getWidthPixels() ) / width ) : 1.0f;
+                    const float bgtotalw = bgtilex * width;
+                    const float bgtiley = layer.misc.image.tiley ? std::ceil( static_cast<float> ( getHeightPixels() ) / height ) : 1.0f;
+                    const float bgtotalh = bgtiley * height;
+                    game.render().addSprite
+                    (
+                        layer.misc.image.texture,
+                        0.0f,
+                        0.0f,
+                        bgtotalw,
+                        bgtotalh,
+                        layer.offsetx,
+                        layer.offsety,
+                        {
+                            { "layer", Layer::BG_1 },
+                            { "scrolly", layer.scrolly },
+                            { "scrollx", layer.scrollx },
+                            { "tilingx", bgtilex },
+                            { "tilingx", bgtiley },
+                            { "srcw", width }
+                        }
+                    );
+                    free( layer.misc.image.texture );
+                }
+                break;
+                case ( MapTileLayer::Type::GRADIENT ):
+                {
+                    game.render().addRectGradient
+                    (
+                        0.0f,
+                        0.0f,
+                        BSL::WINDOW_WIDTH_PIXELS,
+                        BSL::WINDOW_HEIGHT_PIXELS,
+                        layer.misc.gradient.dir,
+                        layer.misc.gradient.start,
+                        layer.misc.gradient.end,
+                        1.0f,
+                        1.0f
+                    );
+                }
+                break;
+                case ( MapTileLayer::Type::RAIN ):
+                {
+                    layers_.emplace_back( std::make_unique<MapLayerRain>( layer.misc.rain.start, layer.misc.rain.end ) );
+                }
+                break;
+                case ( MapTileLayer::Type::CONSTELLATION ):
+                {
+                    layers_.emplace_back( std::make_unique<MapLayerConstellation>( width_, height_, layer.scrollx ) );
+                }
+                break;
+                case ( MapTileLayer::Type::PALCHANGE ):
+                {
+                    layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( layer.misc.palchange.start, layer.misc.palchange.end ) );
+                }
+                break;
+                default:
+                {
+                    //throw std::runtime_error( "Invalid map layer type." );
+                }
             }
+        }
+
+        for ( auto & layer : layers_ )
+        {
+            layer->init( game );
         }
     };
 

@@ -17,6 +17,19 @@ namespace BSL
         charset_ = static_cast<unsigned int>( charset );
     };
 
+    unsigned int Renderer::getTextureId( const std::string & texture ) const
+    {
+        std::string filename = "assets/graphics/" + texture;
+        int texture_id = NasrLoadFileAsTexture( filename.c_str() );
+        if ( texture_id < 0 )
+        {
+            // TODO: throw exception.
+            std::cout << "NO TEXT" << std::endl;
+        }
+
+        return static_cast<unsigned int> ( texture_id );
+    };
+
     SpriteGraphic Renderer::addSprite
     (
         std::string texture,
@@ -29,15 +42,7 @@ namespace BSL
         ArgList args
     ) const
     {
-        std::string filename = "assets/graphics/" + texture;
-        int texture_id = NasrLoadFileAsTexture( filename.c_str() );
-        if ( texture_id < 0 )
-        {
-            // TODO: throw exception.
-            std::cout << "NO TEXT" << std::endl;
-        }
-
-        return addTextureSprite( static_cast<unsigned int> ( texture_id ), srcx, srcy, w, h, x, y, args );
+        return addTextureSprite( getTextureId( texture ), srcx, srcy, w, h, x, y, args );
     };
 
     SpriteGraphic Renderer::addTextureSprite

@@ -1,10 +1,14 @@
 #include "config.hpp"
+#include "json.hpp"
 #include "level.hpp"
 
 namespace BSL
 {
     void Level::init( Game & game )
     {
+        JSON json { "assets/levels/" + slug_ + ".json" };
+        JSONArray map_list = json.getArray( "maps" );
+
         NasrSetGlobalPalette( 1 );
         NasrMoveCamera( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS );
         map_.init( game, *this );
