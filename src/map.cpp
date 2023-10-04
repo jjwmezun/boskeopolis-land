@@ -763,16 +763,19 @@ namespace BSL
                 case ( MapTileLayer::Type::RAIN ):
                 {
                     layers_.emplace_back( std::make_unique<MapLayerRain>( layer.misc.rain.start, layer.misc.rain.end ) );
+                    layers_[ layers_.size() - 1 ]->init( game );
                 }
                 break;
                 case ( MapTileLayer::Type::CONSTELLATION ):
                 {
                     layers_.emplace_back( std::make_unique<MapLayerConstellation>( width_, height_, layer.scrollx ) );
+                    layers_[ layers_.size() - 1 ]->init( game );
                 }
                 break;
                 case ( MapTileLayer::Type::PALCHANGE ):
                 {
                     layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( layer.misc.palchange.start, layer.misc.palchange.end ) );
+                    layers_[ layers_.size() - 1 ]->init( game );
                 }
                 break;
                 default:
@@ -780,11 +783,6 @@ namespace BSL
                     //throw std::runtime_error( "Invalid map layer type." );
                 }
             }
-        }
-
-        for ( auto & layer : layers_ )
-        {
-            layer->init( game );
         }
     };
 
