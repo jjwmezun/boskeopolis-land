@@ -1,6 +1,9 @@
 #ifndef LAYER_H
 #define LAYER_H
 
+#include <optional>
+#include <string>
+
 namespace BSL
 {
     enum class Layer
@@ -24,6 +27,8 @@ namespace BSL
         AFTER_FG_2 = 16,
         SUPER = 17
     };
+
+    std::optional<Layer> getLayerFromString( const std::string & string );
 }
 
 #endif // LAYER_H

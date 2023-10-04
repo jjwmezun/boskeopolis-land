@@ -22,7 +22,9 @@ namespace BSL
             {
                 NONE = 0,
                 SOLID = 1,
-                SOLID_ABOVE = 2
+                SOLID_ABOVE = 2,
+                CLIMB = 3,
+                WARP = 4
             };
 
             struct SpriteData

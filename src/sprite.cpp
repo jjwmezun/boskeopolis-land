@@ -194,6 +194,13 @@ namespace BSL
                     // Collision
                     Map & map = level.map();
 
+                    // Test for warp
+                    const bool warp = map.testCollision( pixelsToBlocks( pos_.centerX() ), pixelsToBlocks( pos_.centerY() ), { Map::CollisionType::WARP } );
+                    if ( warp )
+                    {
+                        printf( "¡WARP!\n" );
+                    }
+
                     // General block collision.
                     map.interact( *this, level, game );
 

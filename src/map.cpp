@@ -78,6 +78,7 @@ namespace BSL
         float offsety;
         float tilex;
         Misc misc;
+        Layer layer;
     };
 
     Map::Map( std::string && slug )
@@ -433,13 +434,14 @@ namespace BSL
                     float scrollx = 0.0f;
                     float scrolly = 0.0f;
                     unsigned int tilex = 0;
+                    Layer lnum = Layer::BLOCKS_1;
 
                     if ( o.hasArray( "properties" ) )
                     {
                         const JSONArray props = o.getArray( "properties" );
                         props.forEach
                         (
-                            [ &scrollx, &scrolly, &tilex ]( const JSONItem & di )
+                            [ &scrollx, &scrolly, &tilex, &lnum ]( const JSONItem & di )
                             {
                                 const JSONObject io = di.asObject();
                                 const std::string name = io.getString( "name" );
@@ -469,6 +471,18 @@ namespace BSL
                                 {
                                     tilex = io.getInt( "value" );
                                 }
+                                else if ( name == "layer" )
+                                {
+                                    if ( io.hasString( "value" ) )
+                                    {
+                                        const std::string lval = io.getString( "value" );
+                                        lnum = getLayerFromString( lval ).value_or( lnum );
+                                    }
+                                    else if ( io.hasInt( "value" ) )
+                                    {
+                                        lnum = static_cast<Layer> ( io.getInt( "value" ) );
+                                    }
+                                }
                             }
                         );
                     }
@@ -488,7 +502,9 @@ namespace BSL
                         scrolly,
                         0.0f,
                         0.0f,
-                        tilex
+                        tilex,
+                        {},
+                        lnum
                     };
                 }
 
@@ -639,7 +655,7 @@ namespace BSL
                         static_cast<float> ( getHeightPixels() ),
                         0.0f,
                         0.0f,
-                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 }, { "tilingx", tilingx }, { "srcw", static_cast<float>( wx ) } }
+                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", layer.layer }, { "tilingx", tilingx }, { "srcw", static_cast<float>( wx ) } }
                     );
 
                     if ( has_dynamic_tiles )
@@ -650,7 +666,7 @@ namespace BSL
                             tiles,
                             w,
                             height_,
-                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", Layer::BLOCKS_1 }, { "tilingx", tilingx } }
+                        { { "scrollx", layer.scrollx }, { "scrolly", layer.scrolly }, { "layer", layer.layer }, { "tilingx", tilingx } }
                         );
                     }
                 }

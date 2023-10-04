@@ -53,9 +53,11 @@ namespace BSL
             bool hasInt( const std::string & name ) const;
             bool hasFloat( const std::string & name ) const;
             bool hasBool( const std::string & name ) const;
+            bool hasString( const std::string & name ) const;
 
         private:
             const json_value * data_;
+            bool hasType( const std::string & name, json_type type ) const;
     };
 
     class JSON

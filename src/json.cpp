@@ -119,51 +119,37 @@ namespace BSL
 
     bool JSONObject::hasArray( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
-        {
-            const json_object_entry entry = data_->u.object.values[ i ];
-            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
-            {
-                return entry.value->type == json_array;
-            }
-        }
-        return false;
+        return hasType( name, json_array );
     };
 
     bool JSONObject::hasInt( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
-        {
-            const json_object_entry entry = data_->u.object.values[ i ];
-            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
-            {
-                return entry.value->type == json_integer;
-            }
-        }
-        return false;
+        return hasType( name, json_integer );
     };
 
     bool JSONObject::hasFloat( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
-        {
-            const json_object_entry entry = data_->u.object.values[ i ];
-            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
-            {
-                return entry.value->type == json_double;
-            }
-        }
-        return false;
+        return hasType( name, json_double );
     };
 
     bool JSONObject::hasBool( const std::string & name ) const
+    {
+        return hasType( name, json_boolean );
+    };
+
+    bool JSONObject::hasString( const std::string & name ) const
+    {
+        return hasType( name, json_string );
+    };
+
+    bool JSONObject::hasType( const std::string & name, json_type type ) const
     {
         for ( unsigned int i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
             {
-                return entry.value->type == json_boolean;
+                return entry.value->type == type;
             }
         }
         return false;

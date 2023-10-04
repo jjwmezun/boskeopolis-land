@@ -1,0 +1,63 @@
+{
+	"maps":
+	[
+		{
+			"slug": "city-1",
+			"warps":
+			[
+				{
+					"map": 1,
+					"entrance_x": 2,
+					"entrance_y": 2,
+					"location": [ 190, 210, 0, 38 ]
+				},
+				{
+					"map": 1,
+					"entrance_x": 22,
+					"entrance_y": 2,
+					"location": [ 220, 240, 0, 38 ]
+				}
+			]
+		},
+		{
+			"slug": "city-1-2",
+			"layers":
+			[
+				{
+					"type": "image",
+					"img": "tunnel_pipe.png",
+					"width": 360,
+					"height": 229,
+					"y_offset": 8,
+					"x_offset": 48,
+					"x_scroll": 0,
+					"y_scroll": 0
+				}
+			],
+			"warps":
+			[
+				{
+					"map": 0,
+					"entrance_x": 200,
+					"entrance_y": 33,
+					"location": [ 0, 5, -64, 16 ]
+				},
+				{
+					"map": 0,
+					"entrance_x": 230,
+					"entrance_y": 33,
+					"location": [ 20, 25, -64, 16 ],
+					"camera_x": 3440
+				}
+			]
+		}
+	],
+
+	"entrance_x": 37,
+	"entrance_y": 31,
+	"camera_x": 30,
+	"gem_challenge": 40000,
+	"time_challenge": 25,
+	"cycle": 1,
+	"theme": 1
+}

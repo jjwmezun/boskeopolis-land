@@ -1,5 +1,5 @@
 {
-    "activeFile": "",
+    "activeFile": "city-1.json",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -16,11 +16,11 @@
             "scaleInDock": 1
         },
         "city-1.json": {
-            "scale": 0.329296875,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 11,
             "viewCenter": {
-                "x": 2432.455516014235,
-                "y": 305.19572953736656
+                "x": 432,
+                "y": 527.6666666666666
             }
         }
     },
@@ -29,9 +29,10 @@
         "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/maps/city-1.world"
     ],
     "openFiles": [
+        "city-1.json"
     ],
     "project": "bs.tiled-project",
-    "property.type": "int",
+    "property.type": "string",
     "recentFiles": [
         "city-1.json"
     ]
