@@ -3,6 +3,7 @@
 #include "input.hpp"
 #include "level_state.hpp"
 #include "title_state.hpp"
+#include "transition_out_state.hpp"
 
 namespace BSL
 {
@@ -10,7 +11,7 @@ namespace BSL
     {
         if ( Input::pressedJump() )
         {
-            game.changeState( std::make_unique<LevelState>() );
+            game.pushState( std::make_unique<TransitionOutState> ( std::make_unique<LevelState> () ) );
         }
     };
 
@@ -23,7 +24,8 @@ namespace BSL
             WINDOW_WIDTH_PIXELS,
             WINDOW_HEIGHT_PIXELS,
             255,
-            true
+            1.0f,
+            1.0f
         );
 
         game.render().addText

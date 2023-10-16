@@ -1,6 +1,8 @@
 #include "config.hpp"
+#include "game.hpp"
 #include "json.hpp"
 #include "level.hpp"
+#include "transition_out_message_state.hpp"
 
 namespace BSL
 {
@@ -8,11 +10,34 @@ namespace BSL
     {
         JSON json { "assets/levels/" + slug_ + ".json" };
         JSONArray map_list = json.getArray( "maps" );
+        maps_ = JSONMap<std::string>( map_list, [&]( const JSONItem & i )
+        {
+            return i.asString();
+        });
+        current_map_ = { maps_[ 0 ] };
+        float entrance_x = 0.0f;
+        float entrance_y = 0.0f;
+        if ( json.hasFloat( "entrance_x" ) )
+        {
+            entrance_x = static_cast<float>( blocksToPixels( json.getInt( "entrance_x" ) ) );
+        }
+        else if ( json.hasInt( "entrance_x" ) )
+        {
+            entrance_x = static_cast<float>( blocksToPixels( json.getInt( "entrance_x" ) ) );
+        }
+        if ( json.hasFloat( "entrance_y" ) )
+        {
+            entrance_y = static_cast<float>( blocksToPixels( json.getInt( "entrance_y" ) ) );
+        }
+        else if ( json.hasInt( "entrance_y" ) )
+        {
+            entrance_y = static_cast<float>( blocksToPixels( json.getInt( "entrance_y" ) ) );
+        }
 
         NasrSetGlobalPalette( 1 );
         NasrMoveCamera( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS );
-        map_.init( game, *this );
-        sprites_.init( game, map_ );
+        current_map_.init( game, *this );
+        sprites_.init( game, current_map_, entrance_x, entrance_y );
         inventory_.init( game );
     };
 
@@ -20,7 +45,7 @@ namespace BSL
     {
         sprites_.update( dt, controller, *this, game );
         inventory_.update( dt, *this );
-        map_.update( *this, game, dt );
+        current_map_.update( *this, game, dt );
     };
 
     Tileset & Level::getTileset( std::string name )
@@ -34,5 +59,30 @@ namespace BSL
             it = tilesets_.find( name );
         }
         return it->second;
+    };
+
+    void Level::startWarp( Game & game )
+    {
+        const auto warp = current_map_.getWarp( pos_ );
+        if ( warp.has_value() )
+        {
+            game.pushState( std::make_unique<TransitionOutMessageState> ( 1 ) );
+        }
+    };
+
+    void Level::doWarp( Game & game, const Controller & controller )
+    {
+        const auto warp = current_map_.getWarp( pos_ );
+        if ( warp.has_value() )
+        {
+            game.clearGraphics();
+            current_map_ = { maps_[ warp.value().map ] };
+            current_map_.init( game, *this );
+            sprites_.init( game, current_map_, warp.value().entrance_x, warp.value().entrance_y );
+            inventory_.init( game );
+            sprites_.update( 0.0f, controller, *this, game );
+            inventory_.update( 0.0f, *this );
+            current_map_.update( *this, game, 0.0f );
+        }
     };
 }

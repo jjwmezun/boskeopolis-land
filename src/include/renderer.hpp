@@ -15,27 +15,39 @@ namespace BSL
             constexpr RectGraphic( unsigned int gfx = 0 ) : gfx_ ( gfx ) {};
             inline float getX() const
             {
-                return NasrGraphicsRectGetX( gfx_ );
+                return NasrGraphicsRectPaletteGetX( gfx_ );
             };
             inline void setX( float v ) const
             {
-                NasrGraphicsRectSetX( gfx_, v );
+                NasrGraphicsRectPaletteSetX( gfx_, v );
             };
             inline float getY() const
             {
-                return NasrGraphicsRectGetY( gfx_ );
+                return NasrGraphicsRectPaletteGetY( gfx_ );
             };
             inline void setY( float v ) const
             {
-                NasrGraphicsRectSetY( gfx_, v );
+                NasrGraphicsRectPaletteSetY( gfx_, v );
             };
             inline void addToY( float v ) const
             {
-                NasrGraphicsRectAddToY( gfx_, v );
+                NasrGraphicsRectPaletteAddToY( gfx_, v );
             };
             inline void setH( float v ) const
             {
-                NasrGraphicsRectSetH( gfx_, v );
+                NasrGraphicsRectPaletteSetH( gfx_, v );
+            };
+            inline float setOpacity() const
+            {
+                return NasrGraphicsRectPaletteGetOpacity( gfx_ );
+            };
+            inline void setOpacity( float v ) const
+            {
+                NasrGraphicsRectPaletteSetOpacity( gfx_, v );
+            };
+            inline void addToOpacity( float v ) const
+            {
+                NasrGraphicsRectPaletteAddToOpacity( gfx_, v );
             };
 
         private:
@@ -225,6 +237,15 @@ namespace BSL
                 float y,
                 float w,
                 float h,
+                uint_fast8_t color,
+                float scrollx = 0.0f,
+                float scrolly = 0.0f,
+                Layer layer = Layer::BG_1,
+                float opacity = 1.0f
+            ) const;
+
+            RectGraphic addScreen
+            (
                 uint_fast8_t color,
                 float scrollx = 0.0f,
                 float scrolly = 0.0f,

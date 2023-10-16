@@ -1,7 +1,8 @@
 {
-    "activeFile": "city-1.json",
+    "activeFile": "city-1-1.json",
     "expandedProjectPaths": [
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/tilesets/collision.json": {
             "scaleInDock": 1
@@ -14,6 +15,28 @@
         },
         "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/tilesets/urban.json": {
             "scaleInDock": 1
+        },
+        "city-1-1.json": {
+            "expandedObjectLayers": [
+                16
+            ],
+            "scale": 2,
+            "selectedLayer": 13,
+            "viewCenter": {
+                "x": 291.5,
+                "y": 383.75
+            }
+        },
+        "city-1-2.json": {
+            "expandedObjectLayers": [
+                18
+            ],
+            "scale": 1.9640625,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 256.10182975338114,
+                "y": 304.2163882259348
+            }
         },
         "city-1.json": {
             "scale": 1.5,
@@ -28,12 +51,16 @@
     "loadedWorlds": [
         "/home/jjwmezun/Documents/programming/boskeopolis-land/assets/maps/city-1.world"
     ],
+    "map.lastUsedFormat": "json",
     "openFiles": [
-        "city-1.json"
+        "city-1-1.json",
+        "city-1-2.json"
     ],
     "project": "bs.tiled-project",
-    "property.type": "string",
+    "property.type": "float",
     "recentFiles": [
+        "city-1-2.json",
+        "city-1-1.json",
         "city-1.json"
     ]
 }

@@ -19,14 +19,16 @@ namespace BSL
             inline Level()
             :
                 slug_ ( "city-1" ),
-                map_ ( "city-1" ),
+                current_map_ ( "" ),
                 pos_ ( 0.0f, 0.0f, 0.0f, 0.0f )
             {};
             void init( Game & game );
             void update( Game & game, const Controller & controller, float dt );
             inline void setPos( const Rect & pos ) { pos_ = pos; };
+            void startWarp( Game & game );
+            void doWarp( Game & game, const Controller & controller );
 
-            inline Map & map() { return map_; };
+            inline Map & currentMap() { return current_map_; };
             inline LevelInventory & inventory() { return inventory_; };
             inline SpriteSystem & sprites() { return sprites_; };
             inline const Rect & getPos() const { return pos_; };
@@ -35,11 +37,12 @@ namespace BSL
 
         private:
             std::string slug_;
-            Map map_;
+            Map current_map_;
             SpriteSystem sprites_;
             LevelInventory inventory_;
             Rect pos_;
             std::unordered_map<std::string, Tileset> tilesets_;
+            std::vector<std::string> maps_;
     };
 }
 

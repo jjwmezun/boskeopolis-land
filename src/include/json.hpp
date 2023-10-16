@@ -34,6 +34,7 @@ namespace BSL
         public:
             inline JSONItem( const json_value * value ) : value_ ( value ) {};
             int asInt() const;
+            std::string asString() const;
             JSONObject asObject() const;
 
         private:
@@ -65,7 +66,10 @@ namespace BSL
         public:
             JSON( std::string&& filename );
             ~JSON();
+            bool hasInt( const std::string & name ) const;
+            bool hasFloat( const std::string & name ) const;
             int getInt( const std::string & name ) const;
+            float getFloat( const std::string & name ) const;
             std::string getString( const std::string & name ) const;
             JSONArray getArray( const std::string & name ) const;
 

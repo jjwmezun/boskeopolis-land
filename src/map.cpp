@@ -28,6 +28,7 @@ namespace BSL
             OBJECT,
             SPRITE,
             IMAGE,
+            WARP,
             GRADIENT,
             RAIN,
             CONSTELLATION,
@@ -81,7 +82,7 @@ namespace BSL
         Layer layer;
     };
 
-    Map::Map( std::string && slug )
+    Map::Map( const std::string & slug )
     :
         slug_ ( slug ),
         width_ ( 0 ),
@@ -99,48 +100,6 @@ namespace BSL
         width_ = json.getInt( "width" );
         height_ = json.getInt( "height" );
         JSONArray l = json.getArray( "layers" );
-
-        /*
-        // Backgrounds.
-        game.render().addRectGradient
-        (
-            0.0f,
-            0.0f,
-            BSL::WINDOW_WIDTH_PIXELS,
-            BSL::WINDOW_HEIGHT_PIXELS,
-            Dir::XY::DOWN,
-            1,
-            254,
-            1.0f,
-            1.0f
-        );
-
-        
-
-        layers_.emplace_back( std::make_unique<MapLayerConstellation>( width_, height_, 0.5f ) );
-        layers_.emplace_back( std::make_unique<MapLayerRain>( 32, 128 ) );
-        layers_.emplace_back( std::make_unique<MapLayerPaletteChange>( 32, 128 ) );
-        for ( auto & layer : layers_ )
-        {
-            layer->init( game );
-        }
-
-        const float bgtilex = std::ceil( static_cast<float> ( getWidthPixels() ) / 403.0f );
-        const float bgtotalw = bgtilex * 403.0f;
-
-        printf( "%f, %f, %f\n", bgtilex, bgtotalw, static_cast<float> ( getWidthPixels() ) );
-
-        game.render().addSprite
-        (
-            "bg/firs.png",
-            0.0f,
-            0.0f,
-            bgtotalw,
-            300.0f,
-            0.0f,
-            96.0f,
-            { { "layer", Layer::BG_1 }, { "scrolly", 0.8f }, { "scrollx", 0.75f }, { "tilingx", bgtilex }, { "srcw", 403.0f } }
-        );*/
 
         // Get map tile layers from JSON file.
         std::vector<MapTileLayer> layers = JSONMap<MapTileLayer>
@@ -227,6 +186,7 @@ namespace BSL
                     layer.type = BSL::findInMap<MapTileLayer::Type>
                     (
                         {
+                            { "warp", MapTileLayer::Type::WARP },
                             { "gradient", MapTileLayer::Type::GRADIENT },
                             { "rain", MapTileLayer::Type::RAIN },
                             { "constellation", MapTileLayer::Type::CONSTELLATION },
@@ -238,6 +198,127 @@ namespace BSL
 
                     switch ( layer.type )
                     {
+                        case ( MapTileLayer::Type::WARP ):
+                        {
+                            if ( !o.hasArray( "objects" ) )
+                            {
+                                break;
+                            }
+                            const JSONArray objs = o.getArray( "objects" );
+                            objs.forEach
+                            (
+                                [ & ]( const JSONItem & oi )
+                                {
+                                    Warp w;
+                                    const auto oo = oi.asObject();
+                                    if ( oo.hasFloat( "x" ) )
+                                    {
+                                        w.coords.x = oo.getFloat( "x" );
+                                    }
+                                    else if ( oo.hasInt( "x" ) )
+                                    {
+                                        w.coords.x = static_cast<float> ( oo.getInt( "x" ) );
+                                    }
+                                    if ( oo.hasFloat( "y" ) )
+                                    {
+                                        w.coords.y = oo.getFloat( "y" );
+                                    }
+                                    else if ( oo.hasInt( "y" ) )
+                                    {
+                                        w.coords.y = static_cast<float> ( oo.getInt( "y" ) );
+                                    }
+                                    if ( oo.hasFloat( "width" ) )
+                                    {
+                                        w.coords.w = oo.getFloat( "width" );
+                                    }
+                                    else if ( oo.hasInt( "width" ) )
+                                    {
+                                        w.coords.w = static_cast<float> ( oo.getInt( "width" ) );
+                                    }
+                                    if ( oo.hasFloat( "height" ) )
+                                    {
+                                        w.coords.h = oo.getFloat( "height" );
+                                    }
+                                    else if ( oo.hasInt( "height" ) )
+                                    {
+                                        w.coords.h = static_cast<float> ( oo.getInt( "height" ) );
+                                    }
+                                    if ( oo.hasArray( "properties" ) )
+                                    {
+                                        const JSONArray props = oo.getArray( "properties" );
+                                        props.forEach
+                                        (
+                                            [ &w ]( const JSONItem & pi )
+                                            {
+                                                const auto po = pi.asObject();
+                                                if ( !po.hasString( "name" ) )
+                                                {
+                                                    return;
+                                                }
+                                                const std::string name = po.getString( "name" );
+                                                if ( name == "map" )
+                                                {
+                                                    if ( po.hasInt( "value" ) )
+                                                    {
+                                                        w.map = static_cast<unsigned int> ( po.getInt( "value" ) );
+                                                    }
+                                                    else if ( po.hasFloat( "value" ) )
+                                                    {
+                                                        w.map = static_cast<unsigned int> ( po.getFloat( "value" ) );
+                                                    }
+                                                }
+                                                else if ( name == "entrance_x" )
+                                                {
+                                                    if ( po.hasFloat( "value" ) )
+                                                    {
+                                                        w.entrance_x = static_cast<float>( blocksToPixels( po.getFloat( "value" ) ) );
+                                                    }
+                                                    else if ( po.hasInt( "value" ) )
+                                                    {
+                                                        w.entrance_x = static_cast<float>( blocksToPixels( po.getInt( "value" ) ) );
+                                                    }
+                                                }
+                                                else if ( name == "entrance_y" )
+                                                {
+                                                    if ( po.hasFloat( "value" ) )
+                                                    {
+                                                        w.entrance_y = static_cast<float>( blocksToPixels( po.getFloat( "value" ) ) );
+                                                    }
+                                                    else if ( po.hasInt( "value" ) )
+                                                    {
+                                                        w.entrance_y = static_cast<float>( blocksToPixels( po.getInt( "value" ) ) );
+                                                    }
+                                                }
+                                                else if ( name == "camera_x" )
+                                                {
+                                                    if ( po.hasFloat( "value" ) )
+                                                    {
+                                                        w.camera_x = po.getFloat( "value" );
+                                                    }
+                                                    else if ( po.hasInt( "value" ) )
+                                                    {
+                                                        w.camera_x = static_cast<float> ( po.getInt( "value" ) );
+                                                    }
+                                                }
+                                                else if ( name == "camera_y" )
+                                                {
+                                                    if ( po.hasFloat( "value" ) )
+                                                    {
+                                                        w.camera_y = po.getFloat( "value" );
+                                                    }
+                                                    else if ( po.hasInt( "value" ) )
+                                                    {
+                                                        w.camera_y = static_cast<float> ( po.getInt( "value" ) );
+                                                    }
+                                                }
+                                            }
+                                        );
+                                    }
+                                    warps_.push_back( w );
+                                }
+                            );
+                        }
+                        break;
                         case ( MapTileLayer::Type::GRADIENT ):
                         {
                             layer.misc.gradient.dir = Dir::XY::UP;
@@ -530,37 +611,6 @@ namespace BSL
                 break;
                 case ( MapTileLayer::Type::TILE ):
                 {
-                    /*
-                    for ( int tile : layer.tiles )
-                    {
-                        NasrTile t;
-                        if ( tile == 0 )
-                        {
-                            t = { 0, 0, 0, 255 };
-                        }
-                        else
-                        {
-                            const int i = tile - 7073;
-                            t =
-                            {
-                                static_cast<unsigned char>( i % 16 ),
-                                static_cast<unsigned char>( std::floor( i / 16 ) ),
-                                0,
-                                0
-                            };
-                        }
-
-                        tiles.push_back( t );
-                    }
-
-                    game.render().addTilemap
-                    (
-                        "urban",
-                        tiles,
-                        width_,
-                        height_
-                    );*/
-
                     unsigned int w = layer.tilex == 0 ? width_ : layer.tilex;
                     unsigned int wx = blocksToPixels( w );
                     float tilingx = layer.tilex == 0 ? 1.0f : std::ceil( static_cast<float> ( getWidthPixels() ) / static_cast<float> ( wx ) );
@@ -794,10 +844,6 @@ namespace BSL
                     layers_[ layers_.size() - 1 ]->init( game );
                 }
                 break;
-                default:
-                {
-                    //throw std::runtime_error( "Invalid map layer type." );
-                }
             }
         }
     };
@@ -808,6 +854,19 @@ namespace BSL
         {
             layer->update( level, game, dt );
         }
+    };
+
+    std::optional<Warp> Map::getWarp( const Rect & pos ) const
+    {
+        for ( auto & warp : warps_ )
+        {
+            if ( warp.coords.testCollision( pos ) )
+            {
+                return warp;
+            }
+        }
+
+        return {};
     };
 
     void Map::interact( Sprite & sprite, Level & level, Game & game )

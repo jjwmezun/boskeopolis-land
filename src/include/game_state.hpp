@@ -11,6 +11,7 @@ namespace BSL
             virtual ~GameState() {};
             virtual void update( Game & game, float dt ) = 0;
             virtual void init( Game & game ) = 0;
+            virtual inline void backToState( Game & game, int message = 0 ) {};
     };
 }
 

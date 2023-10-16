@@ -15,7 +15,8 @@ namespace BSL
             Game( unsigned int max_states );
             void changeState( std::unique_ptr<GameState> && state );
             void pushState( std::unique_ptr<GameState> && state );
-            void popState();
+            void popState( int message = 0 );
+            void clearGraphics();
 
             void update( float dt );
             const Renderer & render() const;

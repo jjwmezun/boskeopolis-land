@@ -16,6 +16,10 @@ namespace BSL
         constexpr float centerY() const { return y + h / 2.0f; };
         constexpr float halfWidth() const { return w / 2.0f; };
         constexpr float halfHeight() const { return h / 2.0f; };
+        constexpr bool testCollision( const Rect & o ) const
+        {
+            return o.right() > x && o.x < right() && o.bottom() > y && o.y < bottom();
+        };
     };
 }
 

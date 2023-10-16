@@ -538,9 +538,74 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":16,
+         "name":"warp",
+         "objects":[
+                {
+                 "class":"warp",
+                 "height":326.666666666667,
+                 "id":1,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"entrance_x",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"entrance_y",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"map",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":141.333333333333,
+                 "x":343.333333333333,
+                 "y":280.666666666667
+                }, 
+                {
+                 "class":"warp",
+                 "height":262,
+                 "id":2,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"entrance_x",
+                         "type":"float",
+                         "value":22
+                        }, 
+                        {
+                         "name":"entrance_y",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"map",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":284,
+                 "x":2356,
+                 "y":362
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":16,
- "nextobjectid":1,
+ "nextlayerid":17,
+ "nextobjectid":3,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

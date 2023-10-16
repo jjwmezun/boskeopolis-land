@@ -15,13 +15,13 @@ namespace BSL
     {
         public:
             SpriteSystem();
-            void init( Game & game, Map & map );
+            void init( Game & game, Map & map, float x, float y );
             void update( float dt, const Controller & controller, Level & level, Game & game );
 
         private:
             std::vector<Sprite> sprites_;
 
-            Sprite createAutumnSprite();
+            Sprite createAutumnSprite( float x, float y );
             Sprite createCrabSprite( float x, float y );
             Sprite createBadAppleSprite( float x, float y, Dir::X dir );
             Sprite createGrumpTruckSprite( float x, float y, Dir::X dir );

@@ -13,6 +13,7 @@ namespace BSL
             LevelState();
             void update( Game & game, float dt ) override;
             void init( Game & game ) override;
+            void backToState( Game & game, int message ) override;
 
         private:
             InputController input_;

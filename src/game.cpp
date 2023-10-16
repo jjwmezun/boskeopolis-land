@@ -47,9 +47,9 @@ namespace BSL
             { "color", 128 },
             { "x", 16.0f },
             { "y", 16.0f },
-            { "shadow", 0.5f }
+            { "shadow", 0.5f },
+            { "layer", Layer::SUPER }
         };
-
         fps_ = renderer_.addCounter( fps_args );
     };
 
@@ -61,11 +61,32 @@ namespace BSL
         states_[ current_state_ ]->init( *this );
     };
 
-    void Game::popState()
+    void Game::popState( int message )
     {
         states_.pop_back();
         NasrGraphicsClearState( current_state_ );
         renderer_.current_state_ = --current_state_;
         --number_of_states_;
+        if ( current_state_ >= 0 )
+        {
+            states_[ current_state_ ]->backToState( *this, message );
+        }
+    };
+
+    void Game::clearGraphics()
+    {
+        NasrClearGraphics();
+        NasrClearTextures();
+        const ArgList fps_args =
+        {
+            { "num", 0.0f },
+            { "maxdigits", 4 },
+            { "color", 128 },
+            { "x", 16.0f },
+            { "y", 16.0f },
+            { "shadow", 0.5f },
+            { "layer", Layer::SUPER }
+        };
+        fps_ = renderer_.addCounter( fps_args );
     };
 }

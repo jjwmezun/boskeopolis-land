@@ -22,5 +22,14 @@ namespace BSL
     void LevelState::init( Game & game )
     {
         level_.init( game );
+        update( game, 0.0f );
+    };
+
+    void LevelState::backToState( Game & game, int message )
+    {
+        if ( message == 1 )
+        {
+            level_.doWarp( game, input_ );
+        }
     };
 }

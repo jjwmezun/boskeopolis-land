@@ -7,9 +7,10 @@ namespace BSL
 {
     SpriteSystem::SpriteSystem() {};
 
-    void SpriteSystem::init( Game & game, Map & map )
+    void SpriteSystem::init( Game & game, Map & map, float x, float y )
     {
-        sprites_.emplace_back( createAutumnSprite() );
+        sprites_.clear();
+        sprites_.emplace_back( createAutumnSprite( x, y ) );
         sprites_[ sprites_.size() - 1 ].init( game );
         std::vector<std::vector<Map::SpriteData>> sprites_list = map.getSprites();
         for ( int y = 0; y < map.getHeightBlocks(); ++y )
@@ -208,12 +209,12 @@ namespace BSL
     };
 
 
-    Sprite SpriteSystem::createAutumnSprite()
+    Sprite SpriteSystem::createAutumnSprite( float x, float y )
     {
         Sprite autumn
         {
             Sprite::Type::AUTUMN,
-            { 64.0f, 64.0f, 16.0f, 25.0f },
+            { x, y, 16.0f, 25.0f },
             { Sprite::Attribute::PROTAG }
         };
         autumn.misc_.autumn.jump_padding = 0.0f;

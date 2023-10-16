@@ -140,6 +140,29 @@ namespace BSL
         return { static_cast<unsigned int>( graphic ) };
     };
 
+    RectGraphic Renderer::addScreen
+    (
+        uint_fast8_t color,
+        float scrollx,
+        float scrolly,
+        Layer layer,
+        float opacity
+    ) const
+    {
+        return addRect
+        (
+            0.0f,
+            0.0f,
+            static_cast<float> ( WINDOW_WIDTH_PIXELS ),
+            static_cast<float> ( WINDOW_HEIGHT_PIXELS ),
+            color,
+            scrollx,
+            scrolly,
+            layer,
+            opacity
+        );
+    };
+
     unsigned int Renderer::addRectGradient
     (
         float x,

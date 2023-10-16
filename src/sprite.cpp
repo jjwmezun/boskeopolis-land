@@ -192,13 +192,15 @@ namespace BSL
                     misc_.autumn.jump_padding = std::max( 0.0f, misc_.autumn.jump_padding - 1.0f * dt);
 
                     // Collision
-                    Map & map = level.map();
+                    Map & map = level.currentMap();
 
                     // Test for warp
                     const bool warp = map.testCollision( pixelsToBlocks( pos_.centerX() ), pixelsToBlocks( pos_.centerY() ), { Map::CollisionType::WARP } );
                     if ( warp )
                     {
-                        printf( "¡WARP!\n" );
+                        level.startWarp( game );
+                        level.setPos( pos_ );
+                        return;
                     }
 
                     // General block collision.
@@ -667,7 +669,7 @@ namespace BSL
         if ( block_interact_ )
         {
             // Collision
-            Map & map = level.map();
+            Map & map = level.currentMap();
 
             // General block collision.
             map.interact( *this, level, game );

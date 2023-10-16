@@ -4,6 +4,7 @@
 #include "nasringine/nasr_localization.h"
 #include "pause_state.hpp"
 #include "title_state.hpp"
+#include "transition_out_state.hpp"
 #include <cstring>
 
 namespace BSL
@@ -23,7 +24,7 @@ namespace BSL
         }
         if ( Input::pressedJump() )
         {
-            game.changeState( std::make_unique<TitleState>() );
+            game.pushState( std::make_unique<TransitionOutState> ( std::make_unique<TitleState> () ) );
         }
         else if ( Input::pressedMenu() )
         {

@@ -23,6 +23,15 @@ namespace BSL
         return value_->u.integer;
     };
 
+    std::string JSONItem::asString() const
+    {
+        if ( value_->type != json_string )
+        {
+            throw std::runtime_error( "JSON Item not expected type string." );
+        }
+        return std::string( value_->u.string.ptr );
+    };
+
     JSONObject JSONItem::asObject() const
     {
         if ( value_->type != json_object )
@@ -185,10 +194,28 @@ namespace BSL
         }
     };
 
+    bool JSON::hasInt( const std::string & name ) const
+    {
+        JSONObject o { data_ };
+        return o.hasInt( name );
+    };
+
     int JSON::getInt( const std::string & name ) const
     {
         JSONObject o { data_ };
         return o.getInt( name );
+    };
+
+    bool JSON::hasFloat( const std::string & name ) const
+    {
+        JSONObject o { data_ };
+        return o.hasFloat( name );
+    };
+
+    float JSON::getFloat( const std::string & name ) const
+    {
+        JSONObject o { data_ };
+        return o.getFloat( name );
     };
 
     std::string JSON::getString( const std::string & name ) const
