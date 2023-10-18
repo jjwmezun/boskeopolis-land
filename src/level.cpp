@@ -10,11 +10,14 @@ namespace BSL
     {
         JSON json { "assets/levels/" + slug_ + ".json" };
         JSONArray map_list = json.getArray( "maps" );
-        maps_ = JSONMap<std::string>( map_list, [&]( const JSONItem & i )
+        maps_ = JSONMap<MapData>( map_list, [&]( const JSONItem & i )
         {
-            return i.asString();
+            return MapData{ i.asString() };
         });
-        current_map_ = { maps_[ 0 ] };
+        for ( auto & map : maps_ )
+        {
+            map.init( game );
+        }
         float entrance_x = 0.0f;
         float entrance_y = 0.0f;
         if ( json.hasFloat( "entrance_x" ) )
@@ -36,9 +39,17 @@ namespace BSL
 
         NasrSetGlobalPalette( 1 );
         NasrMoveCamera( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS );
-        current_map_.init( game, *this );
+        current_map_.init( game, *this, maps_[ 0 ] );
         sprites_.init( game, current_map_, entrance_x, entrance_y );
         inventory_.init( game );
+    };
+
+    Level::~Level()
+    {
+        for ( auto & map : maps_ )
+        {
+            map.clear();
+        }
     };
 
     void Level::update( Game & game, const Controller & controller, float dt )
@@ -63,7 +74,7 @@ namespace BSL
 
     void Level::startWarp( Game & game )
     {
-        const auto warp = current_map_.getWarp( pos_ );
+        const auto warp = maps_[ current_map_.id() ].getWarp( pos_ );
         if ( warp.has_value() )
         {
             game.pushState( std::make_unique<TransitionOutMessageState> ( 1 ) );
@@ -72,12 +83,12 @@ namespace BSL
 
     void Level::doWarp( Game & game, const Controller & controller )
     {
-        const auto warp = current_map_.getWarp( pos_ );
+        const auto warp = maps_[ current_map_.id() ].getWarp( pos_ );
         if ( warp.has_value() )
         {
             game.clearGraphics();
-            current_map_ = { maps_[ warp.value().map ] };
-            current_map_.init( game, *this );
+            current_map_ = { warp.value().map };
+            current_map_.init( game, *this, maps_[ warp.value().map ] );
             sprites_.init( game, current_map_, warp.value().entrance_x, warp.value().entrance_y );
             inventory_.init( game );
             sprites_.update( 0.0f, controller, *this, game );

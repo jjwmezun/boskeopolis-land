@@ -1,6 +1,7 @@
 #include "config.hpp"
 #include "nasringine/nasr.h"
 #include "renderer.hpp"
+#include <stdexcept>
 
 #include <iostream>
 
@@ -23,8 +24,7 @@ namespace BSL
         int texture_id = NasrLoadFileAsTexture( filename.c_str() );
         if ( texture_id < 0 )
         {
-            // TODO: throw exception.
-            std::cout << "NO TEXT" << std::endl;
+            throw std::runtime_error( "Invalid texture: " + texture );
         }
 
         return static_cast<unsigned int> ( texture_id );
@@ -97,8 +97,7 @@ namespace BSL
 
         if ( graphic < 0 )
         {
-            // TODO: throw exception.
-            std::cout << "NO GRAPH" << std::endl;
+            throw std::runtime_error( "Invalid graphic for texture ID: " + std::to_string( texture ) );
         }
 
         return { static_cast<unsigned int>( graphic ) };

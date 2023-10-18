@@ -3,9 +3,9 @@
 
 #include "block.hpp"
 #include "config.hpp"
+#include "map_data.hpp"
 #include "map_layer.hpp"
 #include <memory>
-#include <optional>
 #include "renderer.hpp"
 #include <string>
 #include <vector>
@@ -14,24 +14,8 @@ namespace BSL
 {
     class Game;
     class Level;
+    class MapData;
     class Sprite;
-
-    enum class WarpType
-    {
-        NORMAL,
-        CLIMB
-    };
-
-    struct Warp
-    {
-        WarpType type = WarpType::NORMAL;
-        unsigned int map = 0;
-        Rect coords = { 0.0f, 0.0f, 0.0f, 0.0f };
-        float entrance_x = 0.0f;
-        float entrance_y = 0.0f;
-        float camera_x = 0.0f;
-        float camera_y = 0.0f;
-    };
 
     class Map
     {
@@ -51,17 +35,16 @@ namespace BSL
                 bool activated;
             };
 
-            Map( const std::string & slug );
-            void init( Game & game, Level & level );
+            Map( unsigned int id );
+            void init( Game & game, Level & level, MapData & data );
             void update( Level & level, const Game & game, float dt );
             void interact( Sprite & sprite, Level & level, Game & game );
-
-            std::optional<Warp> getWarp( const Rect & pos ) const;
 
             constexpr unsigned int getWidthBlocks() const { return width_; };
             constexpr unsigned int getHeightBlocks() const { return height_; };
             constexpr unsigned int getWidthPixels() const { return blocksToPixels( width_ ); };
             constexpr unsigned int getHeightPixels() const { return blocksToPixels( height_ ); };
+            constexpr unsigned int id() const { return id_; };
             bool testCollision( unsigned int x, unsigned int y, std::vector<CollisionType> types = { CollisionType::SOLID } ) const;
             constexpr unsigned int getIFromXAndY( unsigned int x, unsigned int y ) const
             {
@@ -82,8 +65,7 @@ namespace BSL
             std::vector<std::vector<Block>> blocks_;
             std::vector<TilemapGraphics> block_layers_;
             std::vector<std::vector<SpriteData>> sprites_;
-            std::vector<Warp> warps_;
-            std::string slug_;
+            unsigned int id_;
             unsigned int width_;
             unsigned int height_;
             int i_;

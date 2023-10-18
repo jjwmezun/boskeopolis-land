@@ -22,6 +22,7 @@ namespace BSL
     void LevelState::init( Game & game )
     {
         level_.init( game );
+        NasrResetCamera();
         update( game, 0.0f );
     };
 

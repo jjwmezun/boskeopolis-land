@@ -63,6 +63,7 @@ namespace BSL
         x += 8.0f;
         text_args[ "x" ] = x;
         funds_gfx_ = game.render().addCounter( text_args );
+        funds_gfx_.setNumber( funds_show_ );
 
         // Render clock.
         x += ( 8.0f * 6 );
