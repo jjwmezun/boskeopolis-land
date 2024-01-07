@@ -17,12 +17,17 @@ namespace BSL::GFX
     void registerInputHandler( input_handle_t handler );
     void setPalette( unsigned char p );
 
-    struct Sprite
+    struct Graphic
+    {
+        void setLayer( BSL::Layer layer );
+        unsigned int id_;
+    };
+
+    struct Sprite : public Graphic
     {
         void setX( int v );
         void setY( int v );
         void setSrcX( int v );
-        unsigned int id_;
     };
 
     struct Tilemap

@@ -5,6 +5,7 @@
 #include "gfx.hpp"
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
+#include "layer.hpp"
 #include "log.hpp"
 #include <string>
 #include <unordered_map>
@@ -26,7 +27,6 @@ namespace BSL::GFX
 
     static constexpr unsigned int VERTEX_SIZE = 4;
     static constexpr unsigned int GL_TEXTURE_COUNT = 3;
-    static constexpr unsigned int MAX_GRAPHICS = 1000;
     static constexpr unsigned int MAX_TEXTURES = 1000;
 
     enum class GraphicCharType
@@ -91,9 +91,10 @@ namespace BSL::GFX
         unsigned char * data;
     };
 
-    struct Graphic
+    struct RawGraphic
     {
         bool abs;
+        BSL::Layer layer;
         float opacity;
         GraphicType type;
         union
@@ -162,8 +163,9 @@ namespace BSL::GFX
         GLint palette_texture;
         GLfloat palette_no;
     } uniforms;
+    static unsigned int max_graphics = 100;
     static unsigned int gl_textures[ GL_TEXTURE_COUNT ];
-    static Graphic graphics[ MAX_GRAPHICS ];
+    static RawGraphic * graphics;
     static unsigned int graphics_count = 0;
     static unsigned char gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * BSL::WINDOW_HEIGHT_PIXELS ];
     static Texture textures[ MAX_TEXTURES ];
@@ -196,30 +198,52 @@ namespace BSL::GFX
         GLint h;
     }
     border_viewport;
-    Texture border_texture;
+    static Texture border_texture;
+    static int * layer_pos;
+    static int * gfx_ptrs_id_to_pos;
+    static int * gfx_ptrs_pos_to_id;
+    static int * state_for_gfx;
+    static int * layer_for_gfx;
+    static unsigned int state = 0;
 
     static void FramebufferSizeCallback( GLFWwindow * window, int width, int height );
     static unsigned int GenerateShaderProgram( const Shader * shaders, int shadersnum );
     static void setMVP( unsigned int shader );
+    static RawGraphic & getGraphic( unsigned int id );
+    static unsigned int addGraphic
+    (
+        unsigned int state,
+        BSL::Layer layer,
+        RawGraphic graphic
+    );
+    static void changeGraphicLayer( unsigned int id, unsigned int layer );
+    static unsigned int getStateLayerIndex( unsigned int layer );
+    static bool growGraphics();
+
+    void Graphic::setLayer( BSL::Layer layer )
+    {
+        getGraphic( id_ ).layer = layer;
+        changeGraphicLayer( id_, static_cast<unsigned int> ( layer ) );
+    };
 
     void Sprite::setX( int v )
     {
-        graphics[ id_ ].data.sprite.x = v;
+        getGraphic( id_ ).data.sprite.x = v;
     };
 
     void Sprite::setY( int v )
     {
-        graphics[ id_ ].data.sprite.y = v;
+        getGraphic( id_ ).data.sprite.y = v;
     };
 
     void Sprite::setSrcX( int v )
     {
-        graphics[ id_ ].data.sprite.srcx = v;
+        getGraphic( id_ ).data.sprite.srcx = v;
     };
 
     void Tilemap::setY( int v )
     {
-        graphics[ id_ ].data.tilemap.y = v;
+        getGraphic( id_ ).data.tilemap.y = v;
     };
 
     int init()
@@ -261,6 +285,20 @@ namespace BSL::GFX
 
         // Allocate textures.
         glGenTextures( GL_TEXTURE_COUNT, gl_textures );
+
+        // Init graphics.
+        graphics = static_cast<RawGraphic *> ( calloc( max_graphics, sizeof( RawGraphic ) ) );
+        gfx_ptrs_id_to_pos = static_cast<int *> ( calloc( max_graphics, sizeof( int ) ) );
+        gfx_ptrs_pos_to_id = static_cast<int *> ( calloc( max_graphics, sizeof( int ) ) );
+        state_for_gfx = static_cast<int *> ( calloc( max_graphics, sizeof( int ) ) );
+        layer_for_gfx = static_cast<int *> ( calloc( max_graphics, sizeof( int ) ) );
+        layer_pos = static_cast<int *> ( calloc( BSL::MAX_STATES * BSL::MAX_LAYERS, sizeof( int ) ) );
+
+        // Initialize these to null values ( since 0 is a valid value, we use -1 ).
+        for ( int i = 0; i < max_graphics; ++i )
+        {
+            gfx_ptrs_id_to_pos[ i ] = gfx_ptrs_pos_to_id[ i ] = state_for_gfx[ i ] = layer_for_gfx[ i ] = -1;
+        }
 
         // Load palette texture.
         std::string palette_filename = std::string( "assets/palettes/city-sunrise-palette.png" );
@@ -822,21 +860,17 @@ namespace BSL::GFX
         BSL::ArgList args
     )
     {
-        if ( graphics_count >= MAX_GRAPHICS )
-        {
-            // TODO: Throw error.
-            return -1;
-        }
-
-        graphics[ graphics_count ].type = GraphicType::RECT;
-        graphics[ graphics_count ].abs = BSL::GetArg( "abs", args, false );
-        graphics[ graphics_count ].data.rect.coords.x = x;
-        graphics[ graphics_count ].data.rect.coords.y = y;
-        graphics[ graphics_count ].data.rect.coords.w = w;
-        graphics[ graphics_count ].data.rect.coords.h = h;
-        graphics[ graphics_count ].data.rect.color1 = color1;
-        graphics[ graphics_count ].data.rect.color2 = color2;
-        return graphics_count++;
+        RawGraphic g;
+        g.type = GraphicType::RECT;
+        g.abs = BSL::GetArg( "abs", args, false );
+        g.data.rect.coords.x = x;
+        g.data.rect.coords.y = y;
+        g.data.rect.coords.w = w;
+        g.data.rect.coords.h = h;
+        g.data.rect.color1 = color1;
+        g.data.rect.color2 = color2;
+        BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::BG_1 );
+        return addGraphic( state, layer, g );
     };
 
     Sprite addGraphicSprite
@@ -849,25 +883,21 @@ namespace BSL::GFX
         BSL::ArgList args
     )
     {
-        if ( graphics_count >= MAX_GRAPHICS )
-        {
-            // TODO: Throw error.
-            return { 0 };
-        }
-
-        graphics[ graphics_count ].type = GraphicType::SPRITE;
-        graphics[ graphics_count ].abs = BSL::GetArg( "abs", args, false );
-        graphics[ graphics_count ].opacity = BSL::GetArg( "opacity", args, 1.0f );
-        graphics[ graphics_count ].data.sprite.texture = texture;
-        graphics[ graphics_count ].data.sprite.srcx = BSL::GetArg( "srcx", args, 0u );
-        graphics[ graphics_count ].data.sprite.srcy = BSL::GetArg( "srcy", args, 0u );
-        graphics[ graphics_count ].data.sprite.w = w;
-        graphics[ graphics_count ].data.sprite.h = h;
-        graphics[ graphics_count ].data.sprite.x = x;
-        graphics[ graphics_count ].data.sprite.y = y;
-        graphics[ graphics_count ].data.sprite.flipx = BSL::GetArg( "flipx", args, false );
-        graphics[ graphics_count ].data.sprite.flipy = BSL::GetArg( "flipy", args, false );
-        return { graphics_count++ };
+        RawGraphic g;
+        g.type = GraphicType::SPRITE;
+        g.abs = BSL::GetArg( "abs", args, false );
+        g.opacity = BSL::GetArg( "opacity", args, 1.0f );
+        g.data.sprite.texture = texture;
+        g.data.sprite.srcx = BSL::GetArg( "srcx", args, 0u );
+        g.data.sprite.srcy = BSL::GetArg( "srcy", args, 0u );
+        g.data.sprite.w = w;
+        g.data.sprite.h = h;
+        g.data.sprite.x = x;
+        g.data.sprite.y = y;
+        g.data.sprite.flipx = BSL::GetArg( "flipx", args, false );
+        g.data.sprite.flipy = BSL::GetArg( "flipy", args, false );
+        BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::SPRITES_1 );
+        return { addGraphic( state, layer, g ) };
     };
 
     Tilemap addGraphicTilemap
@@ -881,23 +911,19 @@ namespace BSL::GFX
         BSL::ArgList args
     )
     {
-        if ( graphics_count >= MAX_GRAPHICS )
-        {
-            // TODO: Throw error.
-            return { 0 };
-        }
-
-        graphics[ graphics_count ].type = GraphicType::TILEMAP;
-        graphics[ graphics_count ].abs = BSL::GetArg( "abs", args, false );
-        graphics[ graphics_count ].opacity = 1.0f;
-        graphics[ graphics_count ].data.tilemap.texture = texture;
-        graphics[ graphics_count ].data.tilemap.tiles = static_cast<Tile *> ( malloc( w * h * sizeof( Tile ) ) );
-        memcpy( graphics[ graphics_count ].data.tilemap.tiles, tiles, w * h * sizeof( Tile ) );
-        graphics[ graphics_count ].data.tilemap.w = w;
-        graphics[ graphics_count ].data.tilemap.h = h;
-        graphics[ graphics_count ].data.tilemap.x = x;
-        graphics[ graphics_count ].data.tilemap.y = y;
-        return { graphics_count++ };
+        RawGraphic g;
+        g.type = GraphicType::TILEMAP;
+        g.abs = BSL::GetArg( "abs", args, false );
+        g.opacity = 1.0f;
+        g.data.tilemap.texture = texture;
+        g.data.tilemap.tiles = static_cast<Tile *> ( malloc( w * h * sizeof( Tile ) ) );
+        memcpy( g.data.tilemap.tiles, tiles, w * h * sizeof( Tile ) );
+        g.data.tilemap.w = w;
+        g.data.tilemap.h = h;
+        g.data.tilemap.x = x;
+        g.data.tilemap.y = y;
+        BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::BLOCKS_1 );
+        return { addGraphic( state, layer, g ) };
     };
 
     void setPalette( unsigned char p )
@@ -910,12 +936,6 @@ namespace BSL::GFX
         const char * text
     )
     {
-        if ( graphics_count >= MAX_GRAPHICS )
-        {
-            // TODO: Throw error.
-            return -1;
-        }
-
     /*
         graphics[ graphics_count ].type = GraphicType::TEXT;
         graphics[ graphics_count ].abs = 1;
@@ -941,10 +961,11 @@ namespace BSL::GFX
 
         unsigned int dw = 80;
         unsigned int dh = 8;
-        graphics[ graphics_count ].type = GraphicType::SPRITE_RAW;
-        graphics[ graphics_count ].abs = 1;
-        graphics[ graphics_count ].opacity = 1.0f;
-        auto & rawsprite = graphics[ graphics_count ].data.rawsprite;
+        RawGraphic g;
+        g.type = GraphicType::SPRITE_RAW;
+        g.abs = 1;
+        g.opacity = 1.0f;
+        auto & rawsprite = g.data.rawsprite;
         rawsprite.data = ( unsigned char * )( calloc( dw * dh, 1 ) );
         rawsprite.dataw = dw;
         rawsprite.datah = dh;
@@ -993,7 +1014,8 @@ namespace BSL::GFX
             }
         }
 
-        return graphics_count++;
+        BSL::Layer layer = BSL::Layer::BG_1;
+        return addGraphic( state, layer, g );
     };
 
     int addGraphicSpriteRaw
@@ -1010,25 +1032,21 @@ namespace BSL::GFX
         int y
     )
     {
-        if ( graphics_count >= MAX_GRAPHICS )
-        {
-            // TODO: Throw error.
-            return -1;
-        }
-
-        graphics[ graphics_count ].type = GraphicType::SPRITE_RAW;
-        graphics[ graphics_count ].abs = abs;
-        graphics[ graphics_count ].data.rawsprite.data = ( unsigned char * )( malloc( dataw * datah ) );
-        memcpy( graphics[ graphics_count ].data.rawsprite.data, data, dataw * datah );
-        graphics[ graphics_count ].data.rawsprite.dataw = dataw;
-        graphics[ graphics_count ].data.rawsprite.datah = datah;
-        graphics[ graphics_count ].data.rawsprite.srcx = srcx;
-        graphics[ graphics_count ].data.rawsprite.srcy = srcy;
-        graphics[ graphics_count ].data.rawsprite.w = w;
-        graphics[ graphics_count ].data.rawsprite.h = h;
-        graphics[ graphics_count ].data.rawsprite.x = x;
-        graphics[ graphics_count ].data.rawsprite.y = y;
-        return graphics_count++;
+        RawGraphic g;
+        g.type = GraphicType::SPRITE_RAW;
+        g.abs = abs;
+        g.data.rawsprite.data = ( unsigned char * )( malloc( dataw * datah ) );
+        memcpy( g.data.rawsprite.data, data, dataw * datah );
+        g.data.rawsprite.dataw = dataw;
+        g.data.rawsprite.datah = datah;
+        g.data.rawsprite.srcx = srcx;
+        g.data.rawsprite.srcy = srcy;
+        g.data.rawsprite.w = w;
+        g.data.rawsprite.h = h;
+        g.data.rawsprite.x = x;
+        g.data.rawsprite.y = y;
+        BSL::Layer layer = BSL::Layer::BG_1;
+        return addGraphic( state, layer, g );
     };
 
     int loadFileAsTexture( const char * filename )
@@ -1183,5 +1201,196 @@ namespace BSL::GFX
         glm_ortho_rh_no( 0.0f, BSL::WINDOW_WIDTH_PIXELS, BSL::WINDOW_HEIGHT_PIXELS, 0.0f, -1.0f, 1.0f, ortho );
         unsigned int ortho_location = glGetUniformLocation( shader, "ortho" );
         glUniformMatrix4fv( ortho_location, 1, GL_FALSE, ( float * )( ortho ) );
+    };
+
+    static RawGraphic & getGraphic( unsigned int id )
+    {
+        return graphics[ gfx_ptrs_id_to_pos[ id ] ];
+        //return graphics[ id ];
+    };
+
+    static unsigned int addGraphic
+    (
+        unsigned int state,
+        BSL::Layer layer,
+        RawGraphic graphic
+    )
+    {
+        if ( graphics_count >= max_graphics )
+        {
+            if ( !growGraphics() )
+            {
+                // TODO: Throw error.
+                return 0;
+            }
+        }
+
+        // Find last graphic of current layer.
+        unsigned int layern = static_cast<unsigned int> ( layer );
+        const unsigned int pp = getStateLayerIndex( layern );
+        const unsigned int p = layer_pos[ pp ];
+
+        // Push forward this & following positions.
+        for ( unsigned int i = pp; i < BSL::MAX_LAYERS * BSL::MAX_STATES; ++i )
+        {
+            ++layer_pos[ i ];
+        }
+
+        // Push forward all following graphics.
+        for ( unsigned int i = graphics_count++; i > p; --i )
+        {
+            graphics[ i ] = graphics[ i - 1 ];
+
+            // Update pointers so they still point to correct graphics.
+            const unsigned int t = gfx_ptrs_pos_to_id[ i - 1 ];
+            ++gfx_ptrs_id_to_pos[ t ];
+            gfx_ptrs_pos_to_id[ gfx_ptrs_id_to_pos[ t ] ] = t;
+        }
+
+        // Find 1st free graphic ID.
+        int current_graphic_id = -1;
+        for ( int i = 0; i < max_graphics; ++i )
+        {
+            if ( gfx_ptrs_id_to_pos[ i ] == -1 )
+            {
+                current_graphic_id = i;
+                break;
+            }
+        }
+
+        if ( current_graphic_id < 0 )
+        {
+            BSL::log( "¡Strange error! ¡All graphics IDs filled e’en tho we’re apparently below max graphics!" );
+        }
+
+        // Add current graphic & pointer.
+        graphics[ p ] = graphic;
+        gfx_ptrs_id_to_pos[ current_graphic_id ] = p;
+        gfx_ptrs_pos_to_id[ p ] = current_graphic_id;
+        state_for_gfx[ current_graphic_id ] = state;
+        layer_for_gfx[ current_graphic_id ] = layern;
+
+        return static_cast<unsigned int> ( current_graphic_id );
+    };
+
+    static void changeGraphicLayer( unsigned int id, unsigned int layer )
+    {
+        // Skip if already on layer.
+        if ( layer_for_gfx[ id ] == static_cast<int> ( layer ) )
+        {
+            return;
+        }
+
+        // Make copy o’ graphic.
+        RawGraphic gfx = graphics[ gfx_ptrs_id_to_pos[ id ] ];
+
+        const unsigned int state = state_for_gfx[ id ];
+        const unsigned int current_layer_index = getStateLayerIndex( layer_for_gfx[ id ] );
+        const unsigned int target_layer_index = getStateLayerIndex( layer );
+        const unsigned int target_layer_pos = layer_pos[ target_layer_index ];
+
+        if ( layer < layer_for_gfx[ id ] )
+        {
+            // Push forward all following graphics.
+            for ( unsigned int i = gfx_ptrs_id_to_pos[ id ]; i > target_layer_pos; --i )
+            {
+                graphics[ i ] = graphics[ i - 1 ];
+
+                // Update pointers so they still point to correct graphics.
+                const unsigned int t = gfx_ptrs_pos_to_id[ i - 1 ];
+                ++gfx_ptrs_id_to_pos[ t ];            
+                gfx_ptrs_pos_to_id[ gfx_ptrs_id_to_pos[ t ] ] = t;
+            }
+
+            graphics[ target_layer_pos ] = gfx;
+            gfx_ptrs_id_to_pos[ id ] = target_layer_pos;
+            gfx_ptrs_pos_to_id[ target_layer_pos ] = id;
+
+            // Push up all layers from original point to selected layer.
+            for ( unsigned int i = target_layer_index; i < current_layer_index; ++i )
+            {
+                ++layer_pos[ i ];
+            }
+        }
+        else
+        {
+            // Push down all graphics between them.
+            for ( unsigned int i = gfx_ptrs_id_to_pos[ id ]; i < target_layer_pos - 1; ++i )
+            {
+                graphics[ i ] = graphics[ i + 1 ];
+
+                // Update pointers so they still point to correct graphics.
+                const unsigned int t = gfx_ptrs_pos_to_id[ i + 1 ];
+                --gfx_ptrs_id_to_pos[ t ];
+                gfx_ptrs_pos_to_id[ gfx_ptrs_id_to_pos[ t ] ] = t;
+            }
+
+            // Move copied graphic to end of target layer & update pointers.
+            graphics[ target_layer_pos - 1 ] = gfx;
+            gfx_ptrs_id_to_pos[ id ] = target_layer_pos - 1;
+            gfx_ptrs_pos_to_id[ target_layer_pos - 1 ] = id;
+
+            // Push down all layers from original point to selected layer.
+            for ( unsigned int i = current_layer_index; i < target_layer_index; ++i )
+            {
+                --layer_pos[ i ];
+            }
+        }
+        layer_for_gfx[ id ] = layer;
+    };
+
+    static unsigned int getStateLayerIndex( unsigned int layer )
+    {
+        return state * BSL::MAX_LAYERS + layer;
+    };
+
+    static bool growGraphics()
+    {
+        const unsigned int new_max_graphics = max_graphics * 2;
+
+        RawGraphic * new_graphics = static_cast<RawGraphic *>( calloc( new_max_graphics, sizeof( RawGraphic ) ) );
+        int * new_gfx_ptrs_id_to_pos = static_cast<int *>( calloc( new_max_graphics, sizeof( int ) ) );
+        int * new_gfx_ptrs_pos_to_id = static_cast<int *>( calloc( new_max_graphics, sizeof( int ) ) );
+        int * new_state_for_gfx = static_cast<int *>( calloc( new_max_graphics, sizeof( int ) ) );
+        int * new_layer_for_gfx = static_cast<int *>( calloc( new_max_graphics, sizeof( int ) ) );
+        if
+        (
+            !new_graphics ||
+            !new_gfx_ptrs_id_to_pos ||
+            !new_gfx_ptrs_pos_to_id ||
+            !new_state_for_gfx ||
+            !new_layer_for_gfx
+        )
+        {
+            BSL::log( "AddGraphic Error: ¡Not ’nough memory for graphics!" );
+            return false;
+        }
+
+        memcpy( new_graphics, graphics, max_graphics * sizeof( RawGraphic ) );
+        memcpy( new_gfx_ptrs_id_to_pos, gfx_ptrs_id_to_pos, max_graphics * sizeof( int ) );
+        memcpy( new_gfx_ptrs_pos_to_id, gfx_ptrs_pos_to_id, max_graphics * sizeof( int ) );
+        memcpy( new_state_for_gfx, state_for_gfx, max_graphics * sizeof( int ) );
+        memcpy( new_layer_for_gfx, layer_for_gfx, max_graphics * sizeof( int ) );
+
+        free( graphics );
+        free( gfx_ptrs_id_to_pos );
+        free( gfx_ptrs_pos_to_id );
+        free( state_for_gfx );
+        free( layer_for_gfx );
+
+        graphics = new_graphics;
+        gfx_ptrs_id_to_pos = new_gfx_ptrs_id_to_pos;
+        gfx_ptrs_pos_to_id = new_gfx_ptrs_pos_to_id;
+        state_for_gfx = new_state_for_gfx;
+        layer_for_gfx = new_layer_for_gfx;
+
+        // Initialize these to null values ( since 0 is a valid value, we use -1 ).
+        for ( int i = max_graphics; i < new_max_graphics; ++i )
+        {
+            gfx_ptrs_id_to_pos[ i ] = gfx_ptrs_pos_to_id[ i ] = state_for_gfx[ i ] = layer_for_gfx[ i ] = -1;
+        }
+
+        max_graphics = new_max_graphics;
+        return true;
     };
 }

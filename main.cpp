@@ -15,6 +15,35 @@ int main( int argc, char ** argv )
     BSL::GFX::init();
     BSL::Controls::init();
 
+    float accx = 0.0f;
+    float vx = 0.0f;
+    float prevx = -8.0f;
+    float x = -8.0f;
+    float accy = 0.0f;
+    float vy = 0.0f;
+    float prevy = -8.0f;
+    float y = -8.0f;
+    float camerax = 0.0f;
+    float cameray = 0.0f;
+    float animation = 0.0f;
+    unsigned int animation_frame = 0;
+    unsigned int animation_frames[ 4 ] = { 0, 16, 0, 32 };
+
+    int autumn_texture = BSL::GFX::loadFileAsTexture( "sprites/autumn.png" );
+    if ( autumn_texture < 0 )
+    {
+        return -1;
+    }
+    BSL::GFX::Sprite autumn_sprite = BSL::GFX::addGraphicSprite
+    (
+        static_cast<unsigned int> ( autumn_texture ),
+        static_cast<int> ( x ),
+        static_cast<int> ( y ),
+        16,
+        26
+    );
+    autumn_sprite.setLayer( BSL::Layer::BEFORE_BLOCKS_1 );
+
     BSL::GFX::addGraphicRectGradient( 0, 0, BSL::WINDOW_WIDTH_PIXELS, BSL::WINDOW_HEIGHT_PIXELS, 224, 48, { { "abs", true } } );
 
     int tileset_texture = BSL::GFX::loadFileAsTexture( "tilesets/urban.png" );
@@ -79,34 +108,6 @@ int main( int argc, char ** argv )
     BSL::GFX::addGraphicText
     (
         "¡BAM! ¡LOOK @ THAT BACON SIZZLE!"
-    );
-
-    float accx = 0.0f;
-    float vx = 0.0f;
-    float prevx = -8.0f;
-    float x = -8.0f;
-    float accy = 0.0f;
-    float vy = 0.0f;
-    float prevy = -8.0f;
-    float y = -8.0f;
-    float camerax = 0.0f;
-    float cameray = 0.0f;
-    float animation = 0.0f;
-    unsigned int animation_frame = 0;
-    unsigned int animation_frames[ 4 ] = { 0, 16, 0, 32 };
-
-    int autumn_texture = BSL::GFX::loadFileAsTexture( "sprites/autumn.png" );
-    if ( autumn_texture < 0 )
-    {
-        return -1;
-    }
-    BSL::GFX::Sprite autumn_sprite = BSL::GFX::addGraphicSprite
-    (
-        static_cast<unsigned int> ( autumn_texture ),
-        static_cast<int> ( x ),
-        static_cast<int> ( y ),
-        16,
-        26
     );
 
     unsigned char palette = 0;
