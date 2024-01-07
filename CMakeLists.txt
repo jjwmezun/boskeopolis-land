@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.2)
+
+project(BoskeopolisLand)
+add_executable(BoskeopolisLand
+    controls.cpp
+    gfx.cpp
+    glad.c
+    json.c
+    log.cpp
+    main.cpp
+)
+set_property(TARGET BoskeopolisLand PROPERTY CXX_STANDARD 23)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(include include)
+target_link_libraries(BoskeopolisLand ${OPENGL_LIBRARIES} glfw)
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -ggdb")

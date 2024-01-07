@@ -1,0 +1,24 @@
+{ "columns":16,
+ "image":"..\/..\/dev\/tilemap-images\/urban.png",
+ "imageheight":320,
+ "imagewidth":256,
+ "margin":0,
+ "name":"urban",
+ "spacing":0,
+ "tilecount":320,
+ "tiledversion":"1.9.2",
+ "tileheight":16,
+ "tiles":[
+        {
+         "id":304,
+         "properties":[
+                {
+                 "name":"animation",
+                 "type":"int",
+                 "value":16
+                }]
+        }],
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.9"
+}

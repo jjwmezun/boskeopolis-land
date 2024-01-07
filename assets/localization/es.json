@@ -1,0 +1,11 @@
+{
+    "charset": "latin",
+    "charsize": 8,
+    "localization": [
+        {
+            "original": "Continue Level",
+            "context": "Pause Menu",
+            "translation": "Continua Nivel"
+        }
+    ]
+}

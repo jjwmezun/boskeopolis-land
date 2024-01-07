@@ -1,0 +1,14 @@
+{
+	"maps":
+	[
+		"city-1-1",
+		"city-1-2"
+	],
+	"entrance_x": 37,
+	"entrance_y": 31,
+	"camera_x": 30,
+	"gem_challenge": 40000,
+	"time_challenge": 25,
+	"cycle": 1,
+	"theme": 1
+}
