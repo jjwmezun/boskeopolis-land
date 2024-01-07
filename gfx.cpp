@@ -55,14 +55,6 @@ namespace BSL::GFX
         uint_fast8_t srcy;
     };
 
-    struct Rect
-    {
-        int x;
-        int y;
-        unsigned int w;
-        unsigned int h;
-    };
-
     enum class ShaderType
     {
         VERTEX,
@@ -101,7 +93,14 @@ namespace BSL::GFX
         {
             struct
             {
-                Rect coords;
+                struct
+                {
+                    int x;
+                    int y;
+                    unsigned int w;
+                    unsigned int h;
+                }
+                coords;
                 unsigned char color1;
                 unsigned char color2;
             }
@@ -162,6 +161,7 @@ namespace BSL::GFX
         GLint texture;
         GLint palette_texture;
         GLfloat palette_no;
+        GLfloat canvas_opacity;
     } uniforms;
     static unsigned int max_graphics = 100;
     static unsigned int gl_textures[ GL_TEXTURE_COUNT ];
@@ -205,6 +205,7 @@ namespace BSL::GFX
     static int * state_for_gfx;
     static int * layer_for_gfx;
     static unsigned int state = 0;
+    static float canvas_opacity = 1.0f;
 
     static void FramebufferSizeCallback( GLFWwindow * window, int width, int height );
     static unsigned int GenerateShaderProgram( const Shader * shaders, int shadersnum );
@@ -224,6 +225,11 @@ namespace BSL::GFX
     {
         getGraphic( id_ ).layer = layer;
         changeGraphicLayer( id_, static_cast<unsigned int> ( layer ) );
+    };
+
+    void Graphic::setOpacity( float opacity )
+    {
+        getGraphic( id_ ).opacity = opacity;
     };
 
     void Sprite::setX( int v )
@@ -301,7 +307,7 @@ namespace BSL::GFX
         }
 
         // Load palette texture.
-        std::string palette_filename = std::string( "assets/palettes/city-sunrise-palette.png" );
+        std::string palette_filename = std::string( "assets/palettes/main.png" );
         palette_texture.data = stbi_load
         (
             palette_filename.c_str(),
@@ -402,7 +408,7 @@ namespace BSL::GFX
             },
             {
                 ShaderType::FRAGMENT,
-                "#version 330 core\nout vec4 final_color;\n\nin vec2 out_position;\n\nin vec2 texture_coords;\n\nuniform sampler2D texture_data;\nuniform sampler2D palette_data;\nuniform float palette_no;\nvoid main()\n{\n    float color = ( texture( texture_data, texture_coords ).r * 256.0 - 1.0 ) / 256.0;\n    final_color = texture( palette_data, vec2( color, palette_no ) );\n}"
+                "#version 330 core\nout vec4 final_color;\n\nin vec2 out_position;\n\nin vec2 texture_coords;\n\nuniform sampler2D texture_data;\nuniform sampler2D palette_data;\nuniform float palette_no;\nuniform float canvas_opacity;\nvoid main()\n{\n    float color = ( texture( texture_data, texture_coords ).r * 256.0 - 1.0 ) / 256.0;\n    final_color = vec4( texture( palette_data, vec2( color, palette_no ) ).rgb, canvas_opacity );\n}"
             }
         };
         Shader border_shaders[] =
@@ -429,6 +435,7 @@ namespace BSL::GFX
         uniforms.texture = glGetUniformLocation( main_shader, "texture_data" );
         uniforms.palette_texture = glGetUniformLocation( main_shader, "palette_data" );
         uniforms.palette_no = glGetUniformLocation( main_shader, "palette_no" );
+        uniforms.canvas_opacity = glGetUniformLocation( main_shader, "canvas_opacity" );
         setMVP( main_shader );
 
         // Setup viewports
@@ -514,13 +521,18 @@ namespace BSL::GFX
 
                     const float colordiff = graphics[ i ].data.rect.color2 - graphics[ i ].data.rect.color1;
 
-                    for ( unsigned int j = 0; j < h; ++j )
+                    for ( unsigned int yi = 0; yi < h; ++yi )
                     {
-                        const float percent = ( float )( j + 1 ) / h;
+                        const float percent = ( float )( yi + 1 ) / h;
                         const float diff = colordiff * percent;
                         const unsigned char color = graphics[ i ].data.rect.color1 + diff;
-                        const unsigned int k = y + j;
-                        memset( &gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * k + x ], color, w );
+                        const unsigned int desty = y + yi;
+                        for ( unsigned int xi = 0; xi < w; ++xi )
+                        {
+                            const unsigned int destx = x + xi;
+                            const int alphadiff = ( ( int )( color ) - ( int )( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * desty + destx ] ) ) * graphics[ i ].opacity;
+                            gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * desty + destx ] += alphadiff;
+                        }
                     }
                 }
                 break;
@@ -772,7 +784,7 @@ namespace BSL::GFX
             memset( &gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * ( 8 + i ) + 8 ], v, ( unsigned int )( fps ) );
         }
 
-        glClearColor( 0.976f, 0.847f, 0.545f, 1.0f );
+        glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
         glClear( GL_COLOR_BUFFER_BIT );
 
         glViewport( main_viewport.x, main_viewport.y, main_viewport.w, main_viewport.h );
@@ -827,7 +839,7 @@ namespace BSL::GFX
         glfwSetKeyCallback( window, ( GLFWkeyfun )( handler ) );
     };
 
-    int addGraphicRect
+    Rect addGraphicRect
     (
         int x,
         int y,
@@ -837,7 +849,7 @@ namespace BSL::GFX
         BSL::ArgList args
     )
     {
-        return addGraphicRectGradient
+        return { addGraphicRectGradient
         (
             x,
             y,
@@ -846,10 +858,10 @@ namespace BSL::GFX
             color,
             color,
             args
-        );
+        ).id_ };
     };
 
-    int addGraphicRectGradient
+    RectGradient addGraphicRectGradient
     (
         int x,
         int y,
@@ -863,6 +875,7 @@ namespace BSL::GFX
         RawGraphic g;
         g.type = GraphicType::RECT;
         g.abs = BSL::GetArg( "abs", args, false );
+        g.opacity = BSL::GetArg( "opacity", args, 1.0f );
         g.data.rect.coords.x = x;
         g.data.rect.coords.y = y;
         g.data.rect.coords.w = w;
@@ -870,7 +883,7 @@ namespace BSL::GFX
         g.data.rect.color1 = color1;
         g.data.rect.color2 = color2;
         BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::BG_1 );
-        return addGraphic( state, layer, g );
+        return { addGraphic( state, layer, g ) };
     };
 
     Sprite addGraphicSprite
@@ -929,6 +942,40 @@ namespace BSL::GFX
     void setPalette( unsigned char p )
     {
         palette = static_cast<float> ( static_cast<double> ( p ) / 256.0 );
+    };
+
+    void setCanvasOpacity( float o )
+    {
+        canvas_opacity = o;
+        glUseProgram( main_shader );
+        glUniform1f( uniforms.canvas_opacity, canvas_opacity );
+    };
+
+    void setState( uint_fast8_t s )
+    {
+        state = s;
+    };
+
+    void clearGraphics()
+    {
+        // Destroy specific graphic objects.
+        for ( unsigned int i = 0; i < graphics_count; ++i )
+        {
+            //DestroyGraphic( &graphics[ i ] );
+        }
+
+        // Reset maps to null values ( since 0 is a valid value, we use -1 ).
+        for ( unsigned int i = 0; i < max_graphics; ++i )
+        {
+            gfx_ptrs_id_to_pos[ i ] = gfx_ptrs_pos_to_id[ i ] = state_for_gfx[ i ] = layer_for_gfx[ i ] = -1;
+        }
+
+        for ( unsigned int i = 0; i < BSL::MAX_STATES * BSL::MAX_LAYERS; ++i )
+        {
+            layer_pos[ i ] = 0;
+        }
+
+        graphics_count = 0;
     };
 
     int addGraphicText
@@ -1049,7 +1096,7 @@ namespace BSL::GFX
         return addGraphic( state, layer, g );
     };
 
-    int loadFileAsTexture( const char * filename )
+    unsigned int loadFileAsTexture( const char * filename )
     {
         const auto it = texture_map.find( filename );
         if ( it != texture_map.end() )
@@ -1070,7 +1117,7 @@ namespace BSL::GFX
         if ( !textures[ texture_count ].data )
         {
             BSL::log( "loadFileAsTexture Error: could not load data from “%s”.", charset_filename.c_str() );
-            return -1;
+            return 0;
         }
 
         return texture_count++;

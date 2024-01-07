@@ -4,10 +4,12 @@
 namespace BSL::Controls
 {
     void update();
+    int heldConfirm();
     int heldUp();
     int heldRight();
     int heldDown();
     int heldLeft();
+    int pressedConfirm();
     void init();
     void close();
 }

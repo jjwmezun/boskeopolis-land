@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 project(BoskeopolisLand)
 add_executable(BoskeopolisLand
     controls.cpp
+    game.cpp
     gfx.cpp
     glad.c
     json.c

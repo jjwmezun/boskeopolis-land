@@ -16,10 +16,14 @@ namespace BSL::GFX
     double getTime();
     void registerInputHandler( input_handle_t handler );
     void setPalette( unsigned char p );
+    void setCanvasOpacity( float o );
+    void setState( uint_fast8_t s );
+    void clearGraphics();
 
     struct Graphic
     {
         void setLayer( BSL::Layer layer );
+        void setOpacity( float opacity );
         unsigned int id_;
     };
 
@@ -36,6 +40,16 @@ namespace BSL::GFX
         unsigned int id_;
     };
 
+    struct Rect : public Graphic
+    {
+
+    };
+
+    struct RectGradient : public Graphic
+    {
+
+    };
+
     struct Tile
     {
         bool set;
@@ -45,7 +59,7 @@ namespace BSL::GFX
         uint_fast8_t frame;
     };
 
-    int addGraphicRect
+    Rect addGraphicRect
     (
         int x,
         int y,
@@ -55,7 +69,7 @@ namespace BSL::GFX
         BSL::ArgList args = {}
     );
 
-    int addGraphicRectGradient
+    RectGradient addGraphicRectGradient
     (
         int x,
         int y,
@@ -106,7 +120,7 @@ namespace BSL::GFX
         const char * text
     );
 
-    int loadFileAsTexture( const char * filename );
+    unsigned int loadFileAsTexture( const char * filename );
 
     void setCameraX( unsigned int v );
     void setCameraY( unsigned int v );

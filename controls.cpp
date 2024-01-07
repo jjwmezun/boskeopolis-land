@@ -276,6 +276,16 @@ namespace BSL::Controls
         memset( &keydata[ pressed_keys_start ], 0, pressed_size );
     };
 
+    int pressedConfirm()
+    {
+        return pressed( 4 );
+    };
+
+    int heldConfirm()
+    {
+        return held( 4 );
+    };
+
     int heldUp()
     {
         return held( 0 );
@@ -304,12 +314,9 @@ namespace BSL::Controls
             { 1, KEY_RIGHT },
             { 2, KEY_DOWN },
             { 3, KEY_LEFT },
-            { 4, KEY_W },
-            { 5, KEY_D },
-            { 6, KEY_S },
-            { 7, KEY_A }
+            { 4, KEY_Z },
         };
-        unsigned int num_o_inputs = 8;
+        unsigned int num_o_inputs = 5;
 
         BSL::GFX::registerInputHandler( HandleInput );
 
