@@ -93,7 +93,7 @@ namespace BSL::GFX
 
     struct Graphic
     {
-        uint_fast8_t abs;
+        bool abs;
         float opacity;
         GraphicType type;
         union
@@ -791,35 +791,35 @@ namespace BSL::GFX
 
     int addGraphicRect
     (
-        uint_fast8_t abs,
         int x,
         int y,
         unsigned int w,
         unsigned int h,
-        unsigned char color
+        unsigned char color,
+        BSL::ArgList args
     )
     {
         return addGraphicRectGradient
         (
-            abs,
             x,
             y,
             w,
             h,
             color,
-            color
+            color,
+            args
         );
     };
 
     int addGraphicRectGradient
     (
-        uint_fast8_t abs,
         int x,
         int y,
         unsigned int w,
         unsigned int h,
         unsigned char color1,
-        unsigned char color2
+        unsigned char color2,
+        BSL::ArgList args
     )
     {
         if ( graphics_count >= MAX_GRAPHICS )
@@ -829,7 +829,7 @@ namespace BSL::GFX
         }
 
         graphics[ graphics_count ].type = GraphicType::RECT;
-        graphics[ graphics_count ].abs = abs;
+        graphics[ graphics_count ].abs = BSL::GetArg( "abs", args, false );
         graphics[ graphics_count ].data.rect.coords.x = x;
         graphics[ graphics_count ].data.rect.coords.y = y;
         graphics[ graphics_count ].data.rect.coords.w = w;
@@ -841,15 +841,12 @@ namespace BSL::GFX
 
     Sprite addGraphicSprite
     (
-        uint_fast8_t abs,
         unsigned int texture,
-        unsigned int srcx,
-        unsigned int srcy,
-        unsigned int w,
-        unsigned int h,
         int x,
         int y,
-        float opacity
+        unsigned int w,
+        unsigned int h,
+        BSL::ArgList args
     )
     {
         if ( graphics_count >= MAX_GRAPHICS )
@@ -859,29 +856,29 @@ namespace BSL::GFX
         }
 
         graphics[ graphics_count ].type = GraphicType::SPRITE;
-        graphics[ graphics_count ].abs = abs;
-        graphics[ graphics_count ].opacity = opacity;
+        graphics[ graphics_count ].abs = BSL::GetArg( "abs", args, false );
+        graphics[ graphics_count ].opacity = BSL::GetArg( "opacity", args, 1.0f );
         graphics[ graphics_count ].data.sprite.texture = texture;
-        graphics[ graphics_count ].data.sprite.srcx = srcx;
-        graphics[ graphics_count ].data.sprite.srcy = srcy;
+        graphics[ graphics_count ].data.sprite.srcx = BSL::GetArg( "srcx", args, 0u );
+        graphics[ graphics_count ].data.sprite.srcy = BSL::GetArg( "srcy", args, 0u );
         graphics[ graphics_count ].data.sprite.w = w;
         graphics[ graphics_count ].data.sprite.h = h;
         graphics[ graphics_count ].data.sprite.x = x;
         graphics[ graphics_count ].data.sprite.y = y;
-        graphics[ graphics_count ].data.sprite.flipx = false;
-        graphics[ graphics_count ].data.sprite.flipy = false;
+        graphics[ graphics_count ].data.sprite.flipx = BSL::GetArg( "flipx", args, false );
+        graphics[ graphics_count ].data.sprite.flipy = BSL::GetArg( "flipy", args, false );
         return { graphics_count++ };
     };
 
     Tilemap addGraphicTilemap
     (
-        uint_fast8_t abs,
         unsigned int texture,
         Tile * tiles,
         unsigned int w,
         unsigned int h,
         int x,
-        int y
+        int y,
+        BSL::ArgList args
     )
     {
         if ( graphics_count >= MAX_GRAPHICS )
@@ -891,7 +888,7 @@ namespace BSL::GFX
         }
 
         graphics[ graphics_count ].type = GraphicType::TILEMAP;
-        graphics[ graphics_count ].abs = abs;
+        graphics[ graphics_count ].abs = BSL::GetArg( "abs", args, false );
         graphics[ graphics_count ].opacity = 1.0f;
         graphics[ graphics_count ].data.tilemap.texture = texture;
         graphics[ graphics_count ].data.tilemap.tiles = static_cast<Tile *> ( malloc( w * h * sizeof( Tile ) ) );

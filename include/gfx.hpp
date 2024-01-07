@@ -1,6 +1,7 @@
 #ifndef GFX_H
 #define GFX_H
 
+#include "arg.hpp"
 #include <cstdint>
 
 namespace BSL::GFX
@@ -41,47 +42,44 @@ namespace BSL::GFX
 
     int addGraphicRect
     (
-        uint_fast8_t abs,
         int x,
         int y,
         unsigned int w,
         unsigned int h,
-        unsigned char color
+        unsigned char color,
+        BSL::ArgList args = {}
     );
 
     int addGraphicRectGradient
     (
-        uint_fast8_t abs,
         int x,
         int y,
         unsigned int w,
         unsigned int h,
         unsigned char color1,
-        unsigned char color2
+        unsigned char color2,
+        BSL::ArgList args = {}
     );
 
     Sprite addGraphicSprite
     (
-        uint_fast8_t abs,
         unsigned int texture,
-        unsigned int srcx,
-        unsigned int srcy,
-        unsigned int w,
-        unsigned int h,
         int x,
         int y,
-        float opacity
+        unsigned int w,
+        unsigned int h,
+        BSL::ArgList args = {}
     );
 
     Tilemap addGraphicTilemap
     (
-        uint_fast8_t abs,
         unsigned int texture,
         Tile * tiles,
         unsigned int w,
         unsigned int h,
         int x,
-        int y
+        int y,
+        BSL::ArgList args = {}
     );
 
     int addGraphicSpriteRaw

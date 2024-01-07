@@ -15,7 +15,7 @@ int main( int argc, char ** argv )
     BSL::GFX::init();
     BSL::Controls::init();
 
-    BSL::GFX::addGraphicRectGradient( 1, 0, 0, BSL::WINDOW_WIDTH_PIXELS, BSL::WINDOW_HEIGHT_PIXELS, 224, 48 );
+    BSL::GFX::addGraphicRectGradient( 0, 0, BSL::WINDOW_WIDTH_PIXELS, BSL::WINDOW_HEIGHT_PIXELS, 224, 48, { { "abs", true } } );
 
     int tileset_texture = BSL::GFX::loadFileAsTexture( "tilesets/urban.png" );
     BSL::GFX::Tile tiles[ BSL::WINDOW_WIDTH_BLOCKS * 2 * BSL::WINDOW_HEIGHT_BLOCKS ];
@@ -37,7 +37,6 @@ int main( int argc, char ** argv )
     }
     BSL::GFX::Tilemap tilemap = BSL::GFX::addGraphicTilemap
     (
-        0,
         tileset_texture,
         tiles,
         BSL::WINDOW_WIDTH_BLOCKS * 2,
@@ -69,7 +68,6 @@ int main( int argc, char ** argv )
     }
     addGraphicTilemap
     (
-        0,
         objects_texture,
         objtiles,
         BSL::WINDOW_WIDTH_BLOCKS * 2,
@@ -104,15 +102,11 @@ int main( int argc, char ** argv )
     }
     BSL::GFX::Sprite autumn_sprite = BSL::GFX::addGraphicSprite
     (
-        0,
         static_cast<unsigned int> ( autumn_texture ),
+        static_cast<int> ( x ),
+        static_cast<int> ( y ),
         16,
-        0,
-        16,
-        26,
-        x,
-        y,
-        1.0f
+        26
     );
 
     unsigned char palette = 0;
