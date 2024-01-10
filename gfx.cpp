@@ -38,6 +38,12 @@ namespace BSL::GFX
         NEWLINE
     };
 
+    struct CharPixel
+    {
+        uint_fast8_t x : 4;
+        uint_fast8_t y : 4;
+    };
+
     struct GraphicCharTemplate
     {
         GraphicCharType type;
@@ -45,6 +51,10 @@ namespace BSL::GFX
         uint_fast8_t y;
         uint_fast8_t w;
         uint_fast8_t h;
+        uint_fast8_t pixel_count;
+        CharPixel * pixels;
+        uint_fast8_t shadow_count;
+        CharPixel * shadow;
     };
 
     struct GraphicChar
@@ -55,6 +65,10 @@ namespace BSL::GFX
         uint_fast8_t h;
         uint_fast8_t srcx;
         uint_fast8_t srcy;
+        uint_fast8_t pixel_count;
+        CharPixel * pixels;
+        uint_fast8_t shadow_count;
+        CharPixel * shadow;
     };
 
     enum class ShaderType
@@ -184,7 +198,6 @@ namespace BSL::GFX
     static float animation_timer = 0.0f;
     static unsigned int animation_counter = 0;
     static std::unordered_map<std::string, GraphicCharTemplate> charset;
-    static Texture charset_texture;
     static Texture palette_texture;
     static float palette;
     static struct
@@ -218,7 +231,9 @@ namespace BSL::GFX
         0,
         0,
         8,
-        8
+        8,
+        0,
+        nullptr
     };
 
     static void FramebufferSizeCallback( GLFWwindow * window, int width, int height );
@@ -471,6 +486,7 @@ namespace BSL::GFX
 
         // Init charset.
         std::string charset_filename = std::string( "assets/graphics/charset/latin.png" );
+        Texture charset_texture;
         charset_texture.data = stbi_load
         (
             charset_filename.c_str(),
@@ -519,6 +535,43 @@ namespace BSL::GFX
                     data.h = o.getInt( "h" );
                 }
 
+                // Get character pixels.
+                std::vector<CharPixel> pixels;
+                std::vector<CharPixel> shadow;
+                for ( unsigned int y = 0; y < data.h; ++y )
+                {
+                    for ( unsigned int x = 0; x < data.w; ++x )
+                    {
+                        const unsigned int dx = data.x + x;
+                        const unsigned int dy = data.y + y;
+                        const unsigned int i = dy * charset_texture.w + dx;
+                        if ( charset_texture.data[ i ] == 0xFF )
+                        {
+                            pixels.push_back
+                            ({
+                                static_cast<uint_fast8_t> ( x ),
+                                static_cast<uint_fast8_t> ( y )
+                            });
+                        }
+                        else if ( charset_texture.data[ i ] == 0x01 )
+                        {
+                            shadow.push_back
+                            ({
+                                static_cast<uint_fast8_t> ( x ),
+                                static_cast<uint_fast8_t> ( y )
+                            });
+                        }
+                    }
+                }
+                data.pixel_count = pixels.size();
+                const size_t size = data.pixel_count * sizeof( CharPixel );
+                data.pixels = static_cast<CharPixel *> ( malloc( size ) );
+                memcpy( data.pixels, &pixels[ 0 ], size );
+                data.shadow_count = shadow.size();
+                const size_t shadow_size = data.shadow_count * sizeof( CharPixel );
+                data.shadow = static_cast<CharPixel *> ( malloc( shadow_size ) );
+                memcpy( data.shadow, &shadow[ 0 ], shadow_size );
+
                 if ( o.hasString( "type" ) )
                 {
                     const auto type = o.getString( "type" );
@@ -542,6 +595,8 @@ namespace BSL::GFX
                 }
             }
         );
+
+        free( charset_texture.data );
 
         return 0;
     };
@@ -665,60 +720,65 @@ namespace BSL::GFX
                 case ( GraphicType::TEXT ):
                 {
                     const auto & t = graphics[ i ].data.text;
+                    // For each character.
                     for ( unsigned int j = 0; j < t.char_count; ++j )
                     {
                         const auto & chr = t.chars[ j ];
-                        const int relativex = graphics[ i ].abs ? chr.x : chr.x - camera.x;
-                        const int relativey = graphics[ i ].abs ? chr.y : chr.y - camera.y;
-                        const int xsub = relativex < 0 ? relativex : 0;
-                        const int ysub = relativey < 0 ? relativey : 0;
-                        const unsigned int x = relativex < 0 ? 0 : relativex;
-                        const unsigned int y = relativey < 0 ? 0 : relativey;
-                        int w = std::min( static_cast<unsigned int>( chr.w ), charset_texture.w ) + std::min( 0, relativex );
-                        int h = std::min( static_cast<unsigned int>( chr.h ), charset_texture.h ) + std::min( 0, relativey );
-                        const int right = w + ( int )( x );
-                        if ( right > ( int )( BSL::WINDOW_WIDTH_PIXELS ) )
-                        {
-                            w -= right - BSL::WINDOW_WIDTH_PIXELS;
-                        }
-                        const int bottom = h + ( int )( y );
-                        if ( bottom > ( int )( BSL::WINDOW_HEIGHT_PIXELS ) )
-                        {
-                            h -= bottom - BSL::WINDOW_HEIGHT_PIXELS;
-                        }
 
-                        if ( w < 0 || h < 0 )
+                        // Set coords relative to camera if not set to abs.
+                        const int x = graphics[ i ].abs ? chr.x : chr.x - camera.x;
+                        const int y = graphics[ i ].abs ? chr.y : chr.y - camera.y;
+
+                        // Skip character if completely offscreen.
+                        if ( x > BSL::WINDOW_WIDTH_PIXELS || y > BSL::WINDOW_HEIGHT_PIXELS || x + chr.w < 0 || y + chr.h < 0 )
                         {
                             continue;
                         }
 
-                        for ( unsigned int yi = 0; yi < h; ++yi )
+                        // Loop thru character pixels.
+                        for ( unsigned int k = 0; k < chr.pixel_count; ++k )
                         {
-                            const unsigned int sy = y + yi;
-                            for ( unsigned int xi = 0; xi < w; ++xi )
+                            const auto & c = chr.pixels[ k ];
+                            const int dy = c.y + y;
+                            const int dx = c.x + x;
+
+                            // Skip if pixel is offscreen.
+                            if ( dx < 0 || dy < 0 || dx >= BSL::WINDOW_WIDTH_PIXELS || dy >= BSL::WINDOW_HEIGHT_PIXELS )
                             {
-                                const unsigned char v = charset_texture.data
-                                [
-                                    ( chr.srcy - ysub + yi ) * charset_texture.w + chr.srcx - xsub + xi
-                                ];
+                                continue;
+                            }
 
-                                // Skip transparent.
-                                if ( v == 0x00 )
+                            // Get gradient color.
+                            const float hdiff = static_cast<float> ( static_cast<double> ( c.y ) / static_cast<double> ( chr.h ) );
+                            const int colordiff = static_cast<int> ( t.color1 ) - static_cast<int> ( ( static_cast<float> ( t.color1 - t.color2 ) * hdiff ) );
+
+                            // Apply opacity.
+                            const int diff = ( colordiff - static_cast<int> ( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * dy + dx ] ) ) * graphics[ i ].opacity;
+
+                            // Apply pixel to canvas.
+                            gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * dy + dx ] += diff;
+                        }
+
+                        // If shadow is set, loop thru shadow pixels.
+                        if ( t.shadow )
+                        {
+                            for ( unsigned int k = 0; k < chr.shadow_count; ++k )
+                            {
+                                const auto & c = chr.shadow[ k ];
+                                const int dy = c.y + y;
+                                const int dx = c.x + x;
+
+                                // Skip if pixel is offscreen.
+                                if ( dx < 0 || dy < 0 || dx >= BSL::WINDOW_WIDTH_PIXELS || dy >= BSL::WINDOW_HEIGHT_PIXELS )
                                 {
                                     continue;
                                 }
-                                else if ( v == 0x01 && !t.shadow )
-                                {
-                                    continue;
-                                }
 
-                                const unsigned int sx = x + xi;
-                                const float hdiff = static_cast<float> ( static_cast<double> ( yi ) / static_cast<double> ( h ) );
-                                const int colordiff = v == 0xFF
-                                    ? static_cast<int> ( t.color1 ) - static_cast<int> ( ( static_cast<float> ( t.color1 - t.color2 ) * hdiff ) )
-                                    : v;
-                                const int diff = ( colordiff - static_cast<int> ( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] ) ) * graphics[ i ].opacity;
-                                gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] += diff;
+                                // Apply opacity.
+                                const int diff = ( 1 - static_cast<int> ( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * dy + dx ] ) ) * graphics[ i ].opacity;
+
+                                // Apply pixel to canvas.
+                                gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * dy + dx ] += diff;
                             }
                         }
                     }
@@ -1244,6 +1304,10 @@ namespace BSL::GFX
                     chars[ count ].h = lines[ l ][ c ].h;
                     chars[ count ].x = dx;
                     chars[ count ].y = dy + static_cast<int> ( ( maxh[ l ] - lines[ l ][ c ].h ) / 2.0 );
+                    chars[ count ].pixel_count = lines[ l ][ c ].pixel_count;
+                    chars[ count ].pixels = lines[ l ][ c ].pixels;
+                    chars[ count ].shadow_count = lines[ l ][ c ].shadow_count;
+                    chars[ count ].shadow = lines[ l ][ c ].shadow;
                     ++count;
                 }
                 if ( lines[ l ][ c ].w > 0 ) {
