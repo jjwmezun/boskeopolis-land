@@ -22,6 +22,7 @@ namespace BSL::Game
     struct TitleState
     {
         BSL::GFX::RectGradient bg;
+        BSL::GFX::Text title;
     };
 
     struct LevelState
@@ -53,6 +54,15 @@ namespace BSL::Game
         BSL::GFX::setState( 0 );
         states_[ 0 ].type = StateType::TITLE;
         states_[ 0 ].data.title.bg = BSL::GFX::addGraphicRectGradient( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS, 32, 200 );
+        states_[ 0 ].data.title.title = BSL::GFX::addGraphicText
+        (
+            "Boskeopolis Land",
+            {
+                { "align", BSL::Align::CENTER },
+                { "padding_top", 8u },
+                { "shadow", true }
+            }
+        );
         BSL::GFX::setState( 1 );
         states_[ 1 ].type = StateType::FADE_IN;
         states_[ 1 ].data.fade.speed = 0.0f;

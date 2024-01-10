@@ -2,9 +2,9 @@
 #include <cstring>
 #include "json.hpp"
 #include <stdexcept>
-#include "nasr_io.h"
+#include "io.hpp"
 
-namespace BSW
+namespace BSL
 {
     void JSONArray::forEach( const std::function<void( JSONItem )> & callable ) const
     {
@@ -166,7 +166,7 @@ namespace BSW
 
     JSON::JSON( std::string&& filename ) : filename_ ( std::move( filename ) )
     {
-        char * content = NasrReadFile( filename_.c_str() );
+        char * content = openFile( filename_.c_str() );
         if ( !content )
         {
             throw std::runtime_error( "JSON file " + filename_ + " not found." );

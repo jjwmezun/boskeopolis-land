@@ -6,7 +6,9 @@ add_executable(BoskeopolisLand
     game.cpp
     gfx.cpp
     glad.c
+    io.cpp
     json.c
+    json.cpp
     layer.cpp
     log.cpp
     main.cpp

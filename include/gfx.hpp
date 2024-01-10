@@ -50,6 +50,11 @@ namespace BSL::GFX
 
     };
 
+    struct Text : Graphic
+    {
+
+    };
+
     struct Tile
     {
         bool set;
@@ -115,9 +120,10 @@ namespace BSL::GFX
         int y
     );
 
-    int addGraphicText
+    Text addGraphicText
     (
-        const char * text
+        const char * text,
+        BSL::ArgList args = {}
     );
 
     unsigned int loadFileAsTexture( const char * filename );

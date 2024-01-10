@@ -5,9 +5,11 @@
 #include "gfx.hpp"
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
+#include "json.hpp"
 #include "layer.hpp"
 #include "log.hpp"
 #include <string>
+#include "text.hpp"
 #include <unordered_map>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -47,8 +49,8 @@ namespace BSL::GFX
 
     struct GraphicChar
     {
-        uint_fast8_t x;
-        uint_fast8_t y;
+        int x;
+        int y;
         uint_fast8_t w;
         uint_fast8_t h;
         uint_fast8_t srcx;
@@ -132,6 +134,9 @@ namespace BSL::GFX
             {
                 unsigned int char_count;
                 GraphicChar * chars;
+                bool shadow;
+                uint_fast8_t color1;
+                uint_fast8_t color2;
             }
             text;
             struct
@@ -206,6 +211,15 @@ namespace BSL::GFX
     static int * layer_for_gfx;
     static unsigned int state = 0;
     static float canvas_opacity = 1.0f;
+    static std::unordered_map<std::string, GraphicCharTemplate> charmap;
+    static GraphicCharTemplate fallback =
+    {
+        GraphicCharType::NORMAL,
+        0,
+        0,
+        8,
+        8
+    };
 
     static void FramebufferSizeCallback( GLFWwindow * window, int width, int height );
     static unsigned int GenerateShaderProgram( const Shader * shaders, int shadersnum );
@@ -220,6 +234,7 @@ namespace BSL::GFX
     static void changeGraphicLayer( unsigned int id, unsigned int layer );
     static unsigned int getStateLayerIndex( unsigned int layer );
     static bool growGraphics();
+    static int GetCharacterSize( const char * s );
 
     void Graphic::setLayer( BSL::Layer layer )
     {
@@ -470,6 +485,64 @@ namespace BSL::GFX
             return -1;
         }
 
+        BSL::JSON json { "assets/charset/latin.json" };
+        auto chars = json.getArray( "characters" );
+        chars.forEach
+        (
+            [ & ]( const JSONItem & c )
+            {
+                auto o = c.asObject();
+                const auto key = o.getString( "key" );
+                GraphicCharTemplate data
+                {
+                    GraphicCharType::NORMAL,
+                    0,
+                    0,
+                    8,
+                    8
+                };
+
+                if ( o.hasInt( "x" ) )
+                {
+                    data.x = o.getInt( "x" );
+                }
+                if ( o.hasInt( "y" ) )
+                {
+                    data.y = o.getInt( "y" );
+                }
+                if ( o.hasInt( "w" ) )
+                {
+                    data.w = o.getInt( "w" );
+                }
+                if ( o.hasInt( "h" ) )
+                {
+                    data.h = o.getInt( "h" );
+                }
+
+                if ( o.hasString( "type" ) )
+                {
+                    const auto type = o.getString( "type" );
+                    if ( type == "whitespace" )
+                    {
+                        data.type = GraphicCharType::WHITESPACE;
+                    }
+                    else if ( type == "newline" )
+                    {
+                        data.type = GraphicCharType::NEWLINE;
+                    }
+                }
+
+                if ( std::string( key ) == "fallback" )
+                {
+                    fallback = data;
+                }
+                else
+                {
+                    charmap.insert( { key, data } );
+                }
+            }
+        );
+
         return 0;
     };
 
@@ -634,9 +707,17 @@ namespace BSL::GFX
                                 {
                                     continue;
                                 }
+                                else if ( v == 0x01 && !t.shadow )
+                                {
+                                    continue;
+                                }
 
                                 const unsigned int sx = x + xi;
-                                const int diff = ( ( int )( v ) - ( int )( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] ) ) * graphics[ i ].opacity;
+                                const float hdiff = static_cast<float> ( static_cast<double> ( yi ) / static_cast<double> ( h ) );
+                                const int colordiff = v == 0xFF
+                                    ? static_cast<int> ( t.color1 ) - static_cast<int> ( ( static_cast<float> ( t.color1 - t.color2 ) * hdiff ) )
+                                    : v;
+                                const int diff = ( colordiff - static_cast<int> ( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] ) ) * graphics[ i ].opacity;
                                 gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] += diff;
                             }
                         }
@@ -978,91 +1059,211 @@ namespace BSL::GFX
         graphics_count = 0;
     };
 
-    int addGraphicText
+    Text addGraphicText
     (
-        const char * text
+        const char * text,
+        BSL::ArgList args
     )
     {
-    /*
-        graphics[ graphics_count ].type = GraphicType::TEXT;
-        graphics[ graphics_count ].abs = 1;
-        graphics[ graphics_count ].opacity = 1.0f;
-        graphics[ graphics_count ].data.text.char_count = 10;
-        graphics[ graphics_count ].data.text.chars = static_cast<GraphicChar *> ( malloc
-        (
-            graphics[ graphics_count ].data.text.char_count * sizeof( GraphicChar )
-        ));
+        int x = GetArg( "x", args, 0 );
+        int y = GetArg( "y", args, 0 );
+        unsigned int w = GetArg( "w", args, BSL::WINDOW_WIDTH_PIXELS );
+        unsigned int h = GetArg( "h", args, BSL::WINDOW_HEIGHT_PIXELS );
+        unsigned int padding_left = GetArg( "padding_left", args, 0u );
+        unsigned int padding_top = GetArg( "padding_top", args, 0u );
+        unsigned int padding_right = GetArg( "padding_right", args, 0u );
+        unsigned int padding_bottom = GetArg( "padding_bottom", args, 0u );
+        BSL::Align align = GetArg( "align", args, BSL::Align::LEFT );
+        BSL::Valign valign = GetArg( "valign", args, BSL::Valign::TOP );
 
-        for ( unsigned int i = 0; i < graphics[ graphics_count ].data.text.char_count; ++i )
-        {
-            graphics[ graphics_count ].data.text.chars[ i ] =
-            {
-                i * 8,
-                0,
-                8,
-                8,
-                i * 8,
-                0
-            };
-        }*/
+        // Generate char list from string.
+        int charw = w - padding_left - padding_right;
+        int charh = h - padding_top - padding_bottom;
+        int charx = x + padding_left;
+        int chary = y + padding_top;
+        const int lnend = charx + charw;
 
-        unsigned int dw = 80;
-        unsigned int dh = 8;
-        RawGraphic g;
-        g.type = GraphicType::SPRITE_RAW;
-        g.abs = 1;
-        g.opacity = 1.0f;
-        auto & rawsprite = g.data.rawsprite;
-        rawsprite.data = ( unsigned char * )( calloc( dw * dh, 1 ) );
-        rawsprite.dataw = dw;
-        rawsprite.datah = dh;
-        rawsprite.srcx = 0;
-        rawsprite.srcy = 0;
-        rawsprite.w = dw;
-        rawsprite.h = dh;
-        rawsprite.x = 0;
-        rawsprite.y = 0;
-        unsigned int count = 10;
-        GraphicChar chars[ count ];
-        for ( unsigned int i = 0; i < count; ++i )
+        const char * string = text;
+        GraphicCharTemplate letters[ strlen( string ) ];
+        int lettercount = 0;
+        while ( *string )
         {
-            chars[ i ] =
+            const int charlen = GetCharacterSize( string );
+
+            // Generate letter string
+            char letter[ charlen + 1 ];
+            strncpy( letter, string, charlen );
+            letter[ charlen ] = 0;
+            std::string letstr = std::string( letter );
+
+            // Find character
+            auto it = charmap.find( std::string( letter ) );
+            if ( it != charmap.end() )
             {
-                static_cast<uint_fast8_t> ( i * 8 ),
-                0,
-                8,
-                8,
-                static_cast<uint_fast8_t> ( i * 8 ),
-                0
-            };
+                letters[ lettercount ] = it->second;
+            }
+            else
+            {
+                letters[ lettercount ] = fallback;
+            }
+
+            ++lettercount;
+            string += charlen;
         }
-        for ( unsigned int j = 0; j < count; ++j )
+        int maxlines = ( int )( charh );
+        int maxperline = ( int )( charw );
+        GraphicCharTemplate lines[ maxlines ][ maxperline ];
+        float line_widths[ maxlines ];
+        line_widths[ 0 ] = 0;
+        int line_character_counts[ maxlines ];
+        int line_count = 0;
+        int line_character = 0;
+        long unsigned int i = 0;
+        int lx = ( int )( charx );
+        int endswithnewline[ maxlines ];
+        while ( i < lettercount )
         {
-            const auto & chr = chars[ j ];
-            for ( unsigned int yi = 0; yi < chr.h; ++yi )
+            long unsigned int ib = i;
+            float xb = lx;
+            int look_ahead = 1;
+
+            // Look ahead so we can know ahead o’ time whether we need to add a new line.
+            // This autobreaks text without cutting midword.
+            while ( look_ahead )
             {
-                const unsigned int sy = chr.y + yi;
-                for ( unsigned int xi = 0; xi < chr.w; ++xi )
+                if ( ib >= lettercount )
                 {
-                    const unsigned char v = charset_texture.data
-                    [
-                        ( chr.srcy + yi ) * charset_texture.w + chr.srcx + xi
-                    ];
-
-                    // Skip transparent.
-                    if ( v == 0x00 )
-                    {
-                        continue;
-                    }
-
-                    const unsigned int sx = chr.x + xi;
-                    rawsprite.data[ dw * sy + sx ] = v;
+                    look_ahead = 0;
+                    break;
                 }
+
+                if ( letters[ ib ].type == GraphicCharType::NEWLINE )
+                {
+                    look_ahead = 0;
+                }
+                else if ( letters[ ib ].type == GraphicCharType::WHITESPACE )
+                {
+                    look_ahead = 0;
+                }
+                else if ( xb >= lnend )
+                {
+                    lx = ( int )( charx );
+                    line_character_counts[ line_count ] = line_character;
+                    endswithnewline[ line_count ] = 0;
+                    ++line_count;
+                    line_widths[ line_count ] = 0;
+                    line_character = 0;
+                    look_ahead = 0;
+                }
+                else if ( ib >= lettercount )
+                {
+                    look_ahead = 0;
+                    break;
+                }
+                xb += letters[ ib ].w;
+                ++ib;
+            }
+
+            while ( i < ib )
+            {
+                if ( letters[ i ].type == GraphicCharType::NEWLINE || lx >= lnend )
+                {
+                    lx = ( int )( charx );
+                    line_character_counts[ line_count ] = line_character;
+                    endswithnewline[ line_count ] = letters[ i ].type == GraphicCharType::NEWLINE;
+                    ++line_count;
+                    line_widths[ line_count ] = 0;
+                    line_character = 0;
+                }
+                else
+                {
+                    lines[ line_count ][ line_character ] = letters[ i ];
+                    line_widths[ line_count ] += letters[ i ].w;
+                    ++line_character;
+                    lx += letters[ i ].w;
+                }
+                ++i;
+            }
+        }
+        line_character_counts[ line_count ] = line_character;
+        ++line_count;
+
+        int finalcharcount = 0;
+        float maxh[ line_count ];
+
+        for ( int l = 0; l < line_count; ++l )
+        {
+            finalcharcount += line_character_counts[ l ];
+
+            maxh[ l ] = 8.0f;
+            for ( int c = 0; c < line_character_counts[ l ]; ++c )
+            {
+                if ( lines[ l ][ c ].h > maxh[ l ] )
+                {
+                    maxh[ l ] = lines[ l ][ c ].h;
+                }
+            }
+
+            // Sometimes the previous loop keeps whitespace @ the end o’ lines.
+            // Since this messes with x alignment, remove these.
+            if ( lines[ l ][ line_character_counts[ l ] - 1 ].type == GraphicCharType::WHITESPACE )
+            {
+                --line_character_counts[ l ];
+                line_widths[ l ] -= lines[ l ][ line_character_counts[ l ] - 1 ].w;
             }
         }
 
+        GraphicChar chars[ finalcharcount ];
+        int count = 0;
+        // Final loop: we have all the info we need now to set x & y positions.
+        int dy = ( valign == BSL::Valign::MIDDLE )
+            ? chary + static_cast<int> ( ( charh - ( line_count * 8 ) ) / 2.0 )
+            : ( valign == BSL::Valign::BOTTOM )
+                ? chary + charh - ( line_count * 8 )
+                : chary;
+        for ( int l = 0; l < line_count; ++l )
+        {
+            int dx = ( align == BSL::Align::CENTER )
+                ? charx + static_cast<int> ( ( charw - line_widths[ l ] ) / 2 )
+                : ( align == BSL::Align::RIGHT )
+                    ? lnend - line_widths[ l ]
+                    : charx;
+
+            // Add justified spacing if set to justified & not an endline.
+            float letterspace = align == BSL::Align::JUSTIFIED && line_character_counts[ l ] > 0 && l < line_count - 1 && !endswithnewline[ l ]
+                ? ( charw - line_widths[ l ] ) / ( float )( line_character_counts[ l ] - 1 )
+                : 0.0f;
+
+            for ( int c = 0; c < line_character_counts[ l ]; ++c )
+            {
+                // Just in case o’ character index misalignment, just copy o’er whole characters.
+                if ( lines[ l ][ c ].type != GraphicCharType::WHITESPACE ) {
+                    chars[ count ].srcx = lines[ l ][ c ].x;
+                    chars[ count ].srcy = lines[ l ][ c ].y;
+                    chars[ count ].w = lines[ l ][ c ].w;
+                    chars[ count ].h = lines[ l ][ c ].h;
+                    chars[ count ].x = dx;
+                    chars[ count ].y = dy + static_cast<int> ( ( maxh[ l ] - lines[ l ][ c ].h ) / 2.0 );
+                    ++count;
+                }
+                if ( lines[ l ][ c ].w > 0 ) {
+                    dx += ( lines[ l ][ c ].w + letterspace );
+                }
+            }
+            dy += maxh[ l ];
+        }
+
+        RawGraphic g;
+        g.type = GraphicType::TEXT;
+        g.abs = GetArg( "abs", args, true );
+        g.layer = GetArg( "layer", args, BSL::Layer::FG_1 );
+        g.opacity = GetArg( "opacity", args, 1.0f );
+        g.data.text.char_count = count;
+        g.data.text.chars = chars;
+        g.data.text.shadow = GetArg( "shadow", args, false );
+        g.data.text.color1 = g.data.text.color2 = GetArg( "color", args, 0xFF );
         BSL::Layer layer = BSL::Layer::BG_1;
-        return addGraphic( state, layer, g );
+        return { addGraphic( state, layer, g ) };
     };
 
     int addGraphicSpriteRaw
@@ -1439,5 +1640,17 @@ namespace BSL::GFX
 
         max_graphics = new_max_graphics;
         return true;
+    };
+
+    static int GetCharacterSize( const char * s )
+    {
+        const int code = ( int )( *s );
+        return ( code & ( 1 << 7 ) )
+            ? ( code & ( 1 << 5 ) )
+                ? ( code & ( 1 << 4 ) )
+                    ? 4
+                    : 3
+                : 2
+            : 1;
     };
 }
