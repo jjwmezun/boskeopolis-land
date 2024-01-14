@@ -89,7 +89,8 @@ namespace BSL::GFX
         SPRITE,
         TILEMAP,
         TEXT,
-        SPRITE_RAW
+        SPRITE_RAW,
+        SPRITE_RAW_NO_TRANSPARENCY
     };
 
     struct Texture
@@ -235,17 +236,13 @@ namespace BSL::GFX
         0,
         nullptr
     };
+    static std::vector<float> times;
 
     static void FramebufferSizeCallback( GLFWwindow * window, int width, int height );
     static unsigned int GenerateShaderProgram( const Shader * shaders, int shadersnum );
     static void setMVP( unsigned int shader );
     static RawGraphic & getGraphic( unsigned int id );
-    static unsigned int addGraphic
-    (
-        unsigned int state,
-        BSL::Layer layer,
-        RawGraphic graphic
-    );
+    static unsigned int addGraphic( RawGraphic graphic );
     static void changeGraphicLayer( unsigned int id, unsigned int layer );
     static unsigned int getStateLayerIndex( unsigned int layer );
     static bool growGraphics();
@@ -275,6 +272,16 @@ namespace BSL::GFX
     void Sprite::setSrcX( int v )
     {
         getGraphic( id_ ).data.sprite.srcx = v;
+    };
+
+    void RawSprite::setSrcX( int v )
+    {
+        getGraphic( id_ ).data.rawsprite.srcx = v;
+    };
+
+    void RawSprite::setSrcY( int v )
+    {
+        getGraphic( id_ ).data.rawsprite.srcy = v;
     };
 
     void Tilemap::setY( int v )
@@ -603,6 +610,12 @@ namespace BSL::GFX
 
     void close()
     {
+        float sum = 0.0f;
+        for ( auto n : times )
+        {
+            sum += n;
+        }
+        printf( "Average Render Time: %f\n", sum / times.size() );
         glfwTerminate();
     };
 
@@ -611,6 +624,7 @@ namespace BSL::GFX
         const float fps = 60.0 / dt;
         memset( gl_texture_data, 0xFF, BSL::WINDOW_WIDTH_PIXELS * BSL::WINDOW_HEIGHT_PIXELS );
 
+        double start = getTime();
         for ( unsigned int i = 0; i < graphics_count; ++i )
         {
             switch ( graphics[ i ].type )
@@ -912,13 +926,56 @@ namespace BSL::GFX
                             }
 
                             const unsigned int sx = x + xi;
-                            gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] = v;
+                            const int diff = ( ( int )( v ) - ( int )( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] ) ) * graphics[ i ].opacity;
+                            gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] += diff;
                         }
+                    }
+                }
+                break;
+                case ( GraphicType::SPRITE_RAW_NO_TRANSPARENCY ):
+                {
+                    const int cx = graphics[ i ].abs ? graphics[ i ].data.rawsprite.x : graphics[ i ].data.rawsprite.x - camera.x;
+                    const int cy = graphics[ i ].abs ? graphics[ i ].data.rawsprite.y : graphics[ i ].data.rawsprite.y - camera.y;
+                    const unsigned int x = cx < 0 ? 0 : cx;
+                    const unsigned int y = cy < 0 ? 0 : cy;
+                    int w = graphics[ i ].data.rawsprite.w < graphics[ i ].data.rawsprite.dataw ? graphics[ i ].data.rawsprite.w : graphics[ i ].data.rawsprite.dataw;
+                    int h = graphics[ i ].data.rawsprite.h < graphics[ i ].data.rawsprite.datah ? graphics[ i ].data.rawsprite.h : graphics[ i ].data.rawsprite.datah;
+                    if ( cx < 0 )
+                    {
+                        w += cx;
+                    }
+                    const int right = w + ( int )( x );
+                    if ( right > ( int )( BSL::WINDOW_WIDTH_PIXELS ) )
+                    {
+                        w -= right - BSL::WINDOW_WIDTH_PIXELS;
+                    }
+                    if ( cy < 0 )
+                    {
+                        h += cy;
+                    }
+                    const int bottom = h + ( int )( y );
+                    if ( bottom > ( int )( BSL::WINDOW_HEIGHT_PIXELS ) )
+                    {
+                        h -= bottom - BSL::WINDOW_HEIGHT_PIXELS;
+                    }
+
+                    if ( w < 0 || h < 0 )
+                    {
+                        continue;
+                    } 
+
+                    for ( unsigned int yi = 0; yi < h; ++yi )
+                    {
+                        const unsigned int sy = y + yi;
+                        const unsigned int sx = ( graphics[ i ].data.rawsprite.srcy + yi ) * graphics[ i ].data.rawsprite.dataw + graphics[ i ].data.rawsprite.srcx;
+                        memcpy( &gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + x ], &graphics[ i ].data.rawsprite.data[ sx ], w );
                     }
                 }
                 break;
             }
         }
+        times.push_back( getTime() - start );
+
         unsigned char v = fps < 60.0f ? 0x80 : 0x00;
         for ( unsigned int i = 0; i < 8; ++i )
         {
@@ -1016,6 +1073,7 @@ namespace BSL::GFX
         RawGraphic g;
         g.type = GraphicType::RECT;
         g.abs = BSL::GetArg( "abs", args, false );
+        g.layer = GetArg( "layer", args, BSL::Layer::BG_1 );
         g.opacity = BSL::GetArg( "opacity", args, 1.0f );
         g.data.rect.coords.x = x;
         g.data.rect.coords.y = y;
@@ -1023,8 +1081,7 @@ namespace BSL::GFX
         g.data.rect.coords.h = h;
         g.data.rect.color1 = color1;
         g.data.rect.color2 = color2;
-        BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::BG_1 );
-        return { addGraphic( state, layer, g ) };
+        return { addGraphic( g ) };
     };
 
     Sprite addGraphicSprite
@@ -1040,6 +1097,7 @@ namespace BSL::GFX
         RawGraphic g;
         g.type = GraphicType::SPRITE;
         g.abs = BSL::GetArg( "abs", args, false );
+        g.layer = GetArg( "layer", args, BSL::Layer::SPRITES_1 );
         g.opacity = BSL::GetArg( "opacity", args, 1.0f );
         g.data.sprite.texture = texture;
         g.data.sprite.srcx = BSL::GetArg( "srcx", args, 0u );
@@ -1050,8 +1108,7 @@ namespace BSL::GFX
         g.data.sprite.y = y;
         g.data.sprite.flipx = BSL::GetArg( "flipx", args, false );
         g.data.sprite.flipy = BSL::GetArg( "flipy", args, false );
-        BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::SPRITES_1 );
-        return { addGraphic( state, layer, g ) };
+        return { addGraphic( g ) };
     };
 
     Tilemap addGraphicTilemap
@@ -1068,6 +1125,7 @@ namespace BSL::GFX
         RawGraphic g;
         g.type = GraphicType::TILEMAP;
         g.abs = BSL::GetArg( "abs", args, false );
+        g.layer = GetArg( "layer", args, BSL::Layer::BG_1 );
         g.opacity = 1.0f;
         g.data.tilemap.texture = texture;
         g.data.tilemap.tiles = static_cast<Tile *> ( malloc( w * h * sizeof( Tile ) ) );
@@ -1076,8 +1134,7 @@ namespace BSL::GFX
         g.data.tilemap.h = h;
         g.data.tilemap.x = x;
         g.data.tilemap.y = y;
-        BSL::Layer layer = BSL::GetArg( "layer", args, BSL::Layer::BLOCKS_1 );
-        return { addGraphic( state, layer, g ) };
+        return { addGraphic( g ) };
     };
 
     void setPalette( unsigned char p )
@@ -1326,39 +1383,162 @@ namespace BSL::GFX
         g.data.text.chars = chars;
         g.data.text.shadow = GetArg( "shadow", args, false );
         g.data.text.color1 = g.data.text.color2 = GetArg( "color", args, 0xFF );
-        BSL::Layer layer = BSL::Layer::BG_1;
-        return { addGraphic( state, layer, g ) };
+        return { addGraphic( g ) };
     };
 
-    int addGraphicSpriteRaw
+
+    Menu addGraphicMenu
     (
-        uint_fast8_t abs,
-        unsigned char * data,
-        unsigned int dataw,
-        unsigned int datah,
-        unsigned int srcx,
-        unsigned int srcy,
         unsigned int w,
         unsigned int h,
         int x,
-        int y
+        int y,
+        BSL::ArgList args
     )
     {
         RawGraphic g;
         g.type = GraphicType::SPRITE_RAW;
-        g.abs = abs;
+        g.abs = true;
+        g.layer = GetArg( "layer", args, BSL::Layer::FG_1 );
+        g.opacity = 1.0f;
+        const unsigned char color = GetArg( "bgcolor", args, 0xFF );
+        auto & data = g.data.rawsprite;
+        data.w = data.dataw = w - 4;
+        data.h = data.datah = h - 4;
+        const size_t size = data.dataw * data.datah;
+        data.data = static_cast<unsigned char *> ( malloc( size ) );
+        memset( data.data, color, size );
+
+        static constexpr unsigned char MENU_TOP_LEFT[ 6 * 6 ] =
+        {
+            0x00, 0x01, 0x01, 0x01, 0x01, 0x01,
+            0x01, 0x01, 0x80, 0x80, 0x80, 0x80,
+            0x01, 0x80, 0x80, 0x50, 0x50, 0x50,
+            0x01, 0x80, 0x50, 0x50, 0x01, 0x01,
+            0x01, 0x80, 0x50, 0x01, 0x01, 0x01,
+            0x01, 0x80, 0x50, 0x01, 0x01, 0x01,
+        };
+
+        static constexpr unsigned char MENU_TOP_RIGHT[ 6 * 6 ] =
+        {
+            0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
+            0x80, 0x80, 0x80, 0x01, 0x01, 0x01,
+            0x50, 0x50, 0x80, 0x30, 0x01, 0x01,
+            0x01, 0x50, 0x50, 0x30, 0x01, 0x01,
+            0x01, 0x01, 0x50, 0x30, 0x01, 0x01,
+            0x01, 0x01, 0x50, 0x30, 0x01, 0x01,
+        };
+
+        static constexpr unsigned char MENU_BOTTOM_LEFT[ 6 * 6 ] =
+        {
+            0x01, 0x80, 0x50, 0x01, 0x01, 0x01,
+            0x01, 0x80, 0x50, 0x50, 0x01, 0x01,
+            0x01, 0x30, 0x80, 0x50, 0x50, 0x50,
+            0x01, 0x01, 0x30, 0x30, 0x30, 0x30,
+            0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+            0x00, 0x01, 0x01, 0x01, 0x01, 0x01,
+        };
+
+        static constexpr unsigned char MENU_BOTTOM_RIGHT[ 6 * 6 ] =
+        {
+            0x01, 0x01, 0x50, 0x30, 0x01, 0x01,
+            0x01, 0x50, 0x50, 0x30, 0x01, 0x01,
+            0x50, 0x50, 0x30, 0x30, 0x01, 0x01,
+            0x30, 0x30, 0x30, 0x01, 0x01, 0x01,
+            0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+            0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
+        };
+
+        static constexpr unsigned char MENU_LEFT_SIDE[ 5 ] = { 0x01, 0x80, 0x050, 0x01, 0x01 };
+        static constexpr unsigned char MENU_RIGHT_SIDE[ 5 ] = { 0x01, 0x80, 0x050, 0x01, 0x01 };
+
+        #define COORDS( x, y ) ( &data.data[ ( data.dataw * ( y ) ) + ( x ) ] )
+
+        // Generate corners.
+        const unsigned rightx = data.w - 6;
+        const unsigned bottomy = data.h - 6;
+        for ( unsigned int y = 0; y < 6; ++y )
+        {
+            memcpy( COORDS( 0, y ), &MENU_TOP_LEFT[ 6 * y ], 6 );
+            memcpy( COORDS( rightx, y ), &MENU_TOP_RIGHT[ 6 * y ], 6 );
+            memcpy( COORDS( 0, bottomy + y ), &MENU_BOTTOM_LEFT[ 6 * y ], 6 );
+            memcpy( COORDS( rightx, bottomy + y ), &MENU_BOTTOM_RIGHT[ 6 * y ], 6 );
+        }
+
+        // Generate top center.
+        memset( COORDS( 6, 0 ), 0x01, data.dataw - 12 ); // Set 1st row to black
+        memset( COORDS( 6, 1 ), 0x80, data.dataw - 12 ); // Set 2nd row to highlight
+        memset( COORDS( 6, 2 ), 0x50, data.dataw - 12 ); // Set 3rd row to main
+        memset( COORDS( 6, 3 ), 0x01, data.dataw - 12 ); // Set 4th row to black
+        memset( COORDS( 6, 4 ), 0x01, data.dataw - 12 ); // Set 5th row to black
+
+        // Generate bottom center.
+        memset( COORDS( 6, data.h - 5 ), 0x01, data.dataw - 12 ); // Set 1st row to black
+        memset( COORDS( 6, data.h - 4 ), 0x50, data.dataw - 12 ); // Set 2nd row to main
+        memset( COORDS( 6, data.h - 3 ), 0x30, data.dataw - 12 ); // Set 3rd row to shadow
+        memset( COORDS( 6, data.h - 2 ), 0x01, data.dataw - 12 ); // Set 4th row to black
+        memset( COORDS( 6, data.h - 1 ), 0x01, data.dataw - 12 ); // Set 5th row to black
+
+        // Generate left & right middle.
+        for ( unsigned int y = 6; y < data.datah - 6; ++y )
+        {
+            memcpy( COORDS( 0, y ), MENU_LEFT_SIDE, 5 );
+            memcpy( COORDS( data.dataw - 5, y ), MENU_LEFT_SIDE, 5 );
+        }
+
+        #undef COORDS
+
+        data.srcx = 0;
+        data.srcy = 0;
+        data.x = x + 2;
+        data.y = y + 2;
+        return { addGraphic( g ) };
+    };
+
+    RawSprite addGraphicSpriteRaw
+    (
+        const unsigned char * data,
+        unsigned int dataw,
+        unsigned int datah,
+        unsigned int w,
+        unsigned int h,
+        int x,
+        int y,
+        BSL::ArgList args
+    )
+    {
+        RawGraphic g;
+        g.abs = GetArg( "abs", args, true );
+        g.layer = GetArg( "layer", args, BSL::Layer::SPRITES_1 );
+        g.opacity = GetArg( "opacity", args, 1.0f );
+
+        // Check if graphic uses transparency in any way.
+        bool has_transparency = g.opacity != 1.0f;
+        if ( !has_transparency )
+        {
+            for ( unsigned int i = 0; i < dataw * datah; ++i )
+            {
+                if ( data[ i ] == 0x00 )
+                {
+                    has_transparency = true;
+                }
+            }
+        }
+
+        // If graphic uses no transparency, set it to optimized no transparency type.
+        g.type = has_transparency ? GraphicType::SPRITE_RAW : GraphicType::SPRITE_RAW_NO_TRANSPARENCY;
+
         g.data.rawsprite.data = ( unsigned char * )( malloc( dataw * datah ) );
         memcpy( g.data.rawsprite.data, data, dataw * datah );
         g.data.rawsprite.dataw = dataw;
         g.data.rawsprite.datah = datah;
-        g.data.rawsprite.srcx = srcx;
-        g.data.rawsprite.srcy = srcy;
+        g.data.rawsprite.srcx = GetArg( "srcx", args, 0u );
+        g.data.rawsprite.srcy = GetArg( "srcy", args, 0u );
         g.data.rawsprite.w = w;
         g.data.rawsprite.h = h;
         g.data.rawsprite.x = x;
         g.data.rawsprite.y = y;
-        BSL::Layer layer = BSL::Layer::BG_1;
-        return addGraphic( state, layer, g );
+        return { addGraphic( g ) };
     };
 
     unsigned int loadFileAsTexture( const char * filename )
@@ -1521,12 +1701,7 @@ namespace BSL::GFX
         //return graphics[ id ];
     };
 
-    static unsigned int addGraphic
-    (
-        unsigned int state,
-        BSL::Layer layer,
-        RawGraphic graphic
-    )
+    static unsigned int addGraphic( RawGraphic graphic )
     {
         if ( graphics_count >= max_graphics )
         {
@@ -1538,7 +1713,7 @@ namespace BSL::GFX
         }
 
         // Find last graphic of current layer.
-        unsigned int layern = static_cast<unsigned int> ( layer );
+        unsigned int layern = static_cast<unsigned int> ( graphic.layer );
         const unsigned int pp = getStateLayerIndex( layern );
         const unsigned int p = layer_pos[ pp ];
 

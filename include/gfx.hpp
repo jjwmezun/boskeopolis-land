@@ -34,6 +34,12 @@ namespace BSL::GFX
         void setSrcX( int v );
     };
 
+    struct RawSprite : public Graphic
+    {
+        void setSrcX( int v );
+        void setSrcY( int v );
+    };
+
     struct Tilemap
     {
         void setY( int v );
@@ -47,10 +53,14 @@ namespace BSL::GFX
 
     struct RectGradient : public Graphic
     {
-
     };
 
     struct Text : Graphic
+    {
+
+    };
+
+    struct Menu : public Graphic
     {
 
     };
@@ -106,23 +116,30 @@ namespace BSL::GFX
         BSL::ArgList args = {}
     );
 
-    int addGraphicSpriteRaw
+    RawSprite addGraphicSpriteRaw
     (
-        uint_fast8_t abs,
-        unsigned char * data,
+        const unsigned char * data,
         unsigned int dataw,
         unsigned int datah,
-        unsigned int srcx,
-        unsigned int srcy,
         unsigned int w,
         unsigned int h,
         int x,
-        int y
+        int y,
+        BSL::ArgList args = {}
     );
 
     Text addGraphicText
     (
         const char * text,
+        BSL::ArgList args = {}
+    );
+
+    Menu addGraphicMenu
+    (
+        unsigned int w,
+        unsigned int h,
+        int x,
+        int y,
         BSL::ArgList args = {}
     );
 

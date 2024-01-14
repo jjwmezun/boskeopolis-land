@@ -12,6 +12,7 @@ add_executable(BoskeopolisLand
     layer.cpp
     log.cpp
     main.cpp
+    utility.cpp
 )
 set_property(TARGET BoskeopolisLand PROPERTY CXX_STANDARD 23)
 find_package(OpenGL REQUIRED)
