@@ -31,13 +31,14 @@ namespace BSL::GFX
     {
         void setX( int v );
         void setY( int v );
-        void setSrcX( int v );
+        void setSrcX( unsigned int v );
     };
 
     struct RawSprite : public Graphic
     {
-        void setSrcX( int v );
-        void setSrcY( int v );
+        void setY( int v );
+        void setSrcX( unsigned int v );
+        void setSrcY( unsigned int v );
     };
 
     struct Tilemap
@@ -111,8 +112,6 @@ namespace BSL::GFX
         Tile * tiles,
         unsigned int w,
         unsigned int h,
-        int x,
-        int y,
         BSL::ArgList args = {}
     );
 
@@ -145,6 +144,8 @@ namespace BSL::GFX
 
     unsigned int loadFileAsTexture( const char * filename );
 
+    unsigned int getCameraX();
+    unsigned int getCameraY();
     void setCameraX( unsigned int v );
     void setCameraY( unsigned int v );
 }

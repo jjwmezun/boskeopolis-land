@@ -269,17 +269,22 @@ namespace BSL::GFX
         getGraphic( id_ ).data.sprite.y = v;
     };
 
-    void Sprite::setSrcX( int v )
+    void Sprite::setSrcX( unsigned int v )
     {
         getGraphic( id_ ).data.sprite.srcx = v;
     };
+    
+    void RawSprite::setY( int v )
+    {
+        getGraphic( id_ ).data.rawsprite.y = v;
+    };
 
-    void RawSprite::setSrcX( int v )
+    void RawSprite::setSrcX( unsigned int v )
     {
         getGraphic( id_ ).data.rawsprite.srcx = v;
     };
 
-    void RawSprite::setSrcY( int v )
+    void RawSprite::setSrcY( unsigned int v )
     {
         getGraphic( id_ ).data.rawsprite.srcy = v;
     };
@@ -1117,23 +1122,21 @@ namespace BSL::GFX
         Tile * tiles,
         unsigned int w,
         unsigned int h,
-        int x,
-        int y,
         BSL::ArgList args
     )
     {
         RawGraphic g;
         g.type = GraphicType::TILEMAP;
         g.abs = BSL::GetArg( "abs", args, false );
-        g.layer = GetArg( "layer", args, BSL::Layer::BG_1 );
+        g.layer = GetArg( "layer", args, BSL::Layer::BLOCKS_1 );
         g.opacity = 1.0f;
         g.data.tilemap.texture = texture;
         g.data.tilemap.tiles = static_cast<Tile *> ( malloc( w * h * sizeof( Tile ) ) );
         memcpy( g.data.tilemap.tiles, tiles, w * h * sizeof( Tile ) );
         g.data.tilemap.w = w;
         g.data.tilemap.h = h;
-        g.data.tilemap.x = x;
-        g.data.tilemap.y = y;
+        g.data.tilemap.x = GetArg( "x", args, 0 );
+        g.data.tilemap.y = GetArg( "y", args, 0 );
         return { addGraphic( g ) };
     };
 
@@ -1566,6 +1569,16 @@ namespace BSL::GFX
         }
 
         return texture_count++;
+    };
+
+    unsigned int getCameraX()
+    {
+        return camera.x;
+    };
+
+    unsigned int getCameraY()
+    {
+        return camera.y;
     };
 
     void setCameraX( unsigned int v )

@@ -9,8 +9,15 @@ namespace BSL::Game
     static constexpr unsigned int WATERTILEH = 4;
     static constexpr unsigned int WATERW = WINDOW_WIDTH_PIXELS + WATERTILEW;
     static constexpr unsigned int WATERH = WATERTILEH;
-    static constexpr unsigned int WATERROWS = ( WINDOW_HEIGHT_PIXELS - 7 * 8 ) / 4 + 1;
+    static constexpr unsigned int WATERROWS = ( WINDOW_HEIGHT_PIXELS - 7 * 8 ) / 4 + 3;
     static constexpr unsigned int BGGFXCOUNT = 4;
+    static constexpr float CAMERA_RIGHT_EDGE = WINDOW_WIDTH_PIXELS * 0.667f;
+    static constexpr float CAMERA_LEFT_EDGE = WINDOW_WIDTH_PIXELS * 0.333f;
+    static constexpr float OWWINDOWH = 248.0f;
+    static constexpr float CAMERA_BOTTOM_EDGE = OWWINDOWH * 0.667f;
+    static constexpr float CAMERA_TOP_EDGE = OWWINDOWH * 0.333f;
+    static constexpr unsigned int OWMAPW = 64;
+    static constexpr unsigned int OWMAPH = 36;
 
     enum class StateType
     {
@@ -55,8 +62,30 @@ namespace BSL::Game
                 float vy;
                 float x;
                 float y;
+
+                constexpr inline float getCenterX()
+                {
+                    return x + 8.0f;
+                }
+
+                constexpr inline float getCenterY()
+                {
+                    return y + 8.0f;
+                }
             }
             autumn;
+            struct
+            {
+                float x;
+                float y;
+            }
+            camera;
+            struct
+            {
+                unsigned int w;
+                unsigned int h;
+            }
+            map;
         }
         overworld;
         struct
@@ -297,6 +326,41 @@ namespace BSL::Game
                         );
                     }
 
+                    // Generate tilemap.
+                    states_[ 0 ].data.overworld.map.w = OWMAPW;
+                    states_[ 0 ].data.overworld.map.h = OWMAPH;
+                    unsigned int tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
+                    BSL::GFX::Tile tilemap[ OWMAPW * OWMAPH ];
+                    for ( unsigned int i = 0; i < OWMAPW * OWMAPH; ++i )
+                    {
+                        if
+                        (
+                            i % OWMAPW == 0          ||  // Left edge
+                            i % OWMAPW == OWMAPW - 1 ||  // Right edge
+                            i < OWMAPW               ||  // Top edge
+                            i > OWMAPW * OWMAPH - OWMAPW // Bottom edge
+                        )
+                        {
+                            tilemap[ i ].set = true;
+                            tilemap[ i ].x = 0x02;
+                        }
+                        else
+                        {
+                            tilemap[ i ].set = false;
+                            tilemap[ i ].x = 0x00;
+                        }
+                        tilemap[ i ].y = 0x00;
+                        tilemap[ i ].animation = 0x01;
+                    }
+                    tilemap[ 131 ].set = true;
+                    BSL::GFX::addGraphicTilemap
+                    (
+                        tilemap_texture,
+                        tilemap,
+                        OWMAPW,
+                        OWMAPH
+                    );
+
                     // Generate o’erworld windows.
                     BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, 40, 0, WINDOW_HEIGHT_PIXELS - 40 );
                     BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS - 40, 0, 0, { { "bgcolor", 0x00 } } );
@@ -311,18 +375,7 @@ namespace BSL::Game
                         }
                     );
 
-                    /*
-                    states_[ 0 ].type = StateType::LEVEL;
-                    unsigned int t = BSL::GFX::loadFileAsTexture( "sprites/autumn.png" );
-                    states_[ 0 ].data.level.sprite = BSL::GFX::addGraphicSprite
-                    (
-                        t,
-                        0,
-                        0,
-                        16,
-                        26
-                    );
-                    */
+                    // Generate fade-in state.
                     BSL::GFX::setState( 1 );
                     states_[ 1 ].type = StateType::FADE_IN;
                     states_[ 1 ].data.fade.speed = 0.0f;
@@ -341,6 +394,7 @@ namespace BSL::Game
 
                 static constexpr float OVERWORLD_WATER_ACC = 1.0f / 8.0f;
 
+                // Update BG animation.
                 data.bg.x += OVERWORLD_WATER_ACC * dt;
                 while ( data.bg.x > 16.0f )
                 {
@@ -368,13 +422,19 @@ namespace BSL::Game
                 {
                     data.waterxeven += 8.0f;
                 }
+                const unsigned int camera_adjust_x = static_cast<unsigned int>( data.camera.x ) % 8;
+                const unsigned int camera_adjust_y = static_cast<unsigned int>( data.camera.y ) % 8;
+                const unsigned int waterxodd = ( static_cast<unsigned int> ( data.waterxodd ) + camera_adjust_x ) % 8;
+                const unsigned int waterxeven = ( static_cast<unsigned int> ( data.waterxeven ) + camera_adjust_x ) % 8;
                 for ( unsigned int i = 0; i < WATERROWS; i += 2 )
                 {
-                    data.water[ i ].setSrcX( data.waterxodd );
+                    data.water[ i ].setSrcX( waterxodd );
+                    data.water[ i ].setY( WATERTILEH * i + camera_adjust_y );
                 }
                 for ( unsigned int i = 1; i < WATERROWS; i += 2 )
                 {
-                    data.water[ i ].setSrcX( data.waterxeven );
+                    data.water[ i ].setSrcX( waterxeven );
+                    data.water[ i ].setY( WATERTILEH * i + camera_adjust_y );
                 }
 
                 // Update Autumn.
@@ -452,6 +512,42 @@ namespace BSL::Game
 
                 // Autumn animation.
                 data.autumn.gfx.setSrcX( ( static_cast<unsigned int> ( data.waterxodd ) % 2 ) * 16 );
+
+                // Update camera.
+                if ( data.autumn.getCenterX() > data.camera.x + CAMERA_RIGHT_EDGE )
+                {
+                    data.camera.x = data.autumn.getCenterX() - CAMERA_RIGHT_EDGE;
+                    if ( data.camera.x > data.map.w * BLOCK_SIZE - WINDOW_WIDTH_PIXELS )
+                    {
+                        data.camera.x = data.map.w * BLOCK_SIZE - WINDOW_WIDTH_PIXELS;
+                    }
+                }
+                else if ( data.autumn.getCenterX() < data.camera.x + CAMERA_LEFT_EDGE )
+                {
+                    data.camera.x = data.autumn.getCenterX() - CAMERA_LEFT_EDGE;
+                    if ( data.camera.x < 0.0f )
+                    {
+                        data.camera.x = 0.0f;
+                    }
+                }
+                if ( data.autumn.getCenterY() > data.camera.y + CAMERA_BOTTOM_EDGE )
+                {
+                    data.camera.y = data.autumn.getCenterY() - CAMERA_BOTTOM_EDGE;
+                    if ( data.camera.y > data.map.h * BLOCK_SIZE - OWWINDOWH )
+                    {
+                        data.camera.y = data.map.h * BLOCK_SIZE - OWWINDOWH;
+                    }
+                }
+                else if ( data.autumn.getCenterY() < data.camera.y + CAMERA_TOP_EDGE )
+                {
+                    data.camera.y = data.autumn.getCenterY() - CAMERA_TOP_EDGE;
+                    if ( data.camera.y < 0.0f )
+                    {
+                        data.camera.y = 0.0f;
+                    }
+                }
+                BSL::GFX::setCameraX( static_cast<unsigned int> ( data.camera.x ) );
+                BSL::GFX::setCameraY( static_cast<unsigned int> ( data.camera.y ) );
             }
             break;
             case ( StateType::TITLE ):

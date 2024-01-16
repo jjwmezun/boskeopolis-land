@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 project(BoskeopolisLand)
+set(OpenGL_GL_PREFERENCE "GLVND")
 add_executable(BoskeopolisLand
     controls.cpp
     game.cpp
