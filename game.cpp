@@ -2,6 +2,7 @@
 #include <cstring>
 #include "game.hpp"
 #include "gfx.hpp"
+#include "json.hpp"
 
 namespace BSL::Game
 {
@@ -16,8 +17,6 @@ namespace BSL::Game
     static constexpr float OWWINDOWH = 248.0f;
     static constexpr float CAMERA_BOTTOM_EDGE = OWWINDOWH * 0.667f;
     static constexpr float CAMERA_TOP_EDGE = OWWINDOWH * 0.333f;
-    static constexpr unsigned int OWMAPW = 64;
-    static constexpr unsigned int OWMAPH = 36;
 
     enum class StateType
     {
@@ -72,6 +71,26 @@ namespace BSL::Game
                 {
                     return y + 8.0f;
                 }
+
+                constexpr inline float getLeftBoundary()
+                {
+                    return x + 5.0f;
+                }
+
+                constexpr inline float getRightBoundary()
+                {
+                    return x + 11.0f;
+                }
+
+                constexpr inline float getTopBoundary()
+                {
+                    return y + 4.0f;
+                }
+
+                constexpr inline float getBottomBoundary()
+                {
+                    return y + 12.0f;
+                }
             }
             autumn;
             struct
@@ -84,6 +103,7 @@ namespace BSL::Game
             {
                 unsigned int w;
                 unsigned int h;
+                uint_fast8_t * collision;
             }
             map;
         }
@@ -168,15 +188,7 @@ namespace BSL::Game
                     BSL::GFX::setState( 0 );
                     memset( &states_[ 0 ], 0, sizeof( GameState ) ); // Clear state.
                     states_[ 0 ].type = StateType::OVERWORLD;
-                    unsigned int autumn_texture = BSL::GFX::loadFileAsTexture( "sprites/autumn-overworld.png" );
-                    states_[ 0 ].data.overworld.autumn.gfx = BSL::GFX::addGraphicSprite
-                    (
-                        autumn_texture,
-                        0,
-                        0,
-                        16,
-                        16
-                    );
+                    auto & data = states_[ 0 ].data.overworld;
 
                     // Generate O’erworld BG
                     static constexpr unsigned int OWBGTILEW = 16;
@@ -214,7 +226,7 @@ namespace BSL::Game
                         }
                     }
 
-                    states_[ 0 ].data.overworld.bg.gfx[ 0 ] = BSL::GFX::addGraphicSpriteRaw
+                    data.bg.gfx[ 0 ] = BSL::GFX::addGraphicSpriteRaw
                     (
                         top_pixels,
                         OWBGTOPW,
@@ -237,7 +249,7 @@ namespace BSL::Game
                         }
                     }
 
-                    states_[ 0 ].data.overworld.bg.gfx[ 1 ] = BSL::GFX::addGraphicSpriteRaw
+                    data.bg.gfx[ 1 ] = BSL::GFX::addGraphicSpriteRaw
                     (
                         bottom_pixels,
                         OWBGBOTTOMW,
@@ -262,7 +274,7 @@ namespace BSL::Game
                         }
                     }
 
-                    states_[ 0 ].data.overworld.bg.gfx[ 2 ] = BSL::GFX::addGraphicSpriteRaw
+                    data.bg.gfx[ 2 ] = BSL::GFX::addGraphicSpriteRaw
                     (
                         left_pixels,
                         OWBGSIDEW,
@@ -282,7 +294,7 @@ namespace BSL::Game
                         memcpy( &right_pixels[ OWBGSIDEW * y + 3 ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) ], OWBGTILEW );
                     }
 
-                    states_[ 0 ].data.overworld.bg.gfx[ 3 ] = BSL::GFX::addGraphicSpriteRaw
+                    data.bg.gfx[ 3 ] = BSL::GFX::addGraphicSpriteRaw
                     (
                         right_pixels,
                         OWBGSIDEW,
@@ -313,7 +325,7 @@ namespace BSL::Game
                     // Generate graphics for each row o’ tiles.
                     for ( unsigned i = 0; i < WATERROWS; ++i )
                     {
-                        states_[ 0 ].data.overworld.water[ i ] = BSL::GFX::addGraphicSpriteRaw
+                        data.water[ i ] = BSL::GFX::addGraphicSpriteRaw
                         (
                             water,
                             WATERW,
@@ -327,38 +339,134 @@ namespace BSL::Game
                     }
 
                     // Generate tilemap.
-                    states_[ 0 ].data.overworld.map.w = OWMAPW;
-                    states_[ 0 ].data.overworld.map.h = OWMAPH;
-                    unsigned int tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
-                    BSL::GFX::Tile tilemap[ OWMAPW * OWMAPH ];
-                    for ( unsigned int i = 0; i < OWMAPW * OWMAPH; ++i )
+                    JSON json { "assets/maps/ow-0.json" };
+                    data.map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
+                    data.map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
+                    data.map.collision = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
+                    BSL::GFX::Tile spritetiles[ data.map.w * data.map.h ];
+                    for ( unsigned int i = 0; i < data.map.w * data.map.h; ++i )
                     {
-                        if
-                        (
-                            i % OWMAPW == 0          ||  // Left edge
-                            i % OWMAPW == OWMAPW - 1 ||  // Right edge
-                            i < OWMAPW               ||  // Top edge
-                            i > OWMAPW * OWMAPH - OWMAPW // Bottom edge
-                        )
-                        {
-                            tilemap[ i ].set = true;
-                            tilemap[ i ].x = 0x02;
-                        }
-                        else
-                        {
-                            tilemap[ i ].set = false;
-                            tilemap[ i ].x = 0x00;
-                        }
-                        tilemap[ i ].y = 0x00;
-                        tilemap[ i ].animation = 0x01;
+                        memset( spritetiles, 0x00, data.map.w * data.map.h * sizeof( BSL::GFX::Tile ) );
                     }
-                    tilemap[ 131 ].set = true;
+
+                    JSONArray layers = json.getArray( "layers" );
+                    layers.forEach
+                    (
+                        [ & ]( const JSONItem layeritem )
+                        {
+                            const JSONObject layer = layeritem.asObject();
+                            const JSONArray & layerdata = layer.getArray( "data" );
+                            const JSONArray props = layer.getArray( "properties" );
+                            props.forEach
+                            (
+                                [ & ]( const JSONItem propitem )
+                                {
+                                    const JSONObject propobj = propitem.asObject();
+                                    const std::string name = propobj.getString( "name" );
+                                    if ( name == "type" )
+                                    {
+                                        const std::string value = propobj.getString( "value" );
+                                        if ( value == "tile" )
+                                        {
+                                            BSL::GFX::Tile tilemap[ data.map.w * data.map.h ];
+                                            unsigned int i = 0;
+                                            layerdata.forEach
+                                            (
+                                                [ & ]( const JSONItem dataitem )
+                                                {
+                                                    const unsigned int tilen = dataitem.asInt();
+                                                    tilemap[ i ].set = tilen > 256;
+                                                    tilemap[ i ].x = ( tilen - 257 ) % 16;
+                                                    tilemap[ i ].y = static_cast<uint_fast8_t> ( ( tilen - 257 ) / 16.0 );
+                                                    tilemap[ i ].animation = 0;
+                                                    tilemap[ i ].frame = 0;
+                                                    ++i;
+                                                }
+                                            );
+
+                                            const unsigned int tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
+                                            BSL::GFX::addGraphicTilemap
+                                            (
+                                                tilemap_texture,
+                                                tilemap,
+                                                data.map.w,
+                                                data.map.h
+                                            );
+                                        }
+                                        else if ( value == "collision" )
+                                        {
+                                            unsigned int i = 0;
+                                            layerdata.forEach
+                                            (
+                                                [ & ]( const JSONItem dataitem )
+                                                {
+                                                    const uint_fast8_t dataval = static_cast<uint_fast8_t> ( dataitem.asInt() );
+                                                    if ( dataval > 0 )
+                                                    {
+                                                        data.map.collision[ i ] = dataval;
+                                                    }
+                                                    ++i;
+                                                }
+                                            );
+                                        }
+                                        else if ( value == "sprite" )
+                                        {
+                                            unsigned int i = 0;
+                                            layerdata.forEach
+                                            (
+                                                [ & ]( const JSONItem dataitem )
+                                                {
+                                                    const unsigned int dataval = static_cast<unsigned int> ( dataitem.asInt() );
+                                                    switch ( dataval )
+                                                    {
+                                                        // Player
+                                                        case ( 4353 ):
+                                                        {
+                                                            const unsigned int x = i % data.map.w;
+                                                            const unsigned int y = static_cast<unsigned int>( i / data.map.w );
+                                                            data.autumn.x = static_cast<float> ( x * 16 );
+                                                            data.autumn.y = static_cast<float> ( y * 16 );
+                                                        }
+                                                        break;
+                                                        default:
+                                                        {
+                                                            if ( dataval >= 4369 && dataval < 4369 + 256 )
+                                                            {
+                                                                const uint_fast8_t leveln = static_cast<uint_fast8_t> ( dataval - 4369 );
+                                                                spritetiles[ i ].set = true;
+                                                                spritetiles[ i ].x = 2;
+                                                                spritetiles[ i ].animation = 12;
+                                                            }
+                                                        }
+                                                        break;
+                                                    }
+                                                    ++i;
+                                                }
+                                            );
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                    );
+
+                    const unsigned int sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
                     BSL::GFX::addGraphicTilemap
                     (
-                        tilemap_texture,
-                        tilemap,
-                        OWMAPW,
-                        OWMAPH
+                        sprite_texture,
+                        spritetiles,
+                        data.map.w,
+                        data.map.h
+                    );
+
+                    // Generate player sprite.
+                    data.autumn.gfx = BSL::GFX::addGraphicSprite
+                    (
+                        sprite_texture,
+                        static_cast<int> ( data.autumn.x ),
+                        static_cast<int> ( data.autumn.y ),
+                        16,
+                        16
                     );
 
                     // Generate o’erworld windows.
@@ -439,7 +547,7 @@ namespace BSL::Game
 
                 // Update Autumn.
                 static constexpr float OVERWORLD_AUTUMN_ACC = 0.25f;
-                static constexpr float OVERWORLD_AUTUMN_MAX_SPEED = 4.0f;
+                static constexpr float OVERWORLD_AUTUMN_MAX_SPEED = 2.0f;
                 static constexpr float OVERWORLD_AUTUMN_HANDLING = 0.25f;
 
                 // Autumn X movement.
@@ -472,9 +580,7 @@ namespace BSL::Game
                     data.autumn.vx = -OVERWORLD_AUTUMN_MAX_SPEED;
                 }
 
-                data.autumn.x += data.autumn.vx * dt;
 
-                data.autumn.gfx.setX( data.autumn.x );
 
                 // Autumn Y movement.
                 if ( BSL::Controls::heldDown() )
@@ -506,9 +612,84 @@ namespace BSL::Game
                     data.autumn.vy = -OVERWORLD_AUTUMN_MAX_SPEED;
                 }
 
-                data.autumn.y += data.autumn.vy * dt;
+                // Collision
+                if ( data.autumn.x + data.autumn.vx * dt < 0.0f )
+                {
+                    data.autumn.x = 0.0f;
+                    data.autumn.vx = 0.0f;
+                }
+                else if ( data.autumn.x + BLOCK_SIZE + data.autumn.vx * dt >data.map.w * BLOCK_SIZE )
+                {
+                    data.autumn.x =data.map.w * BLOCK_SIZE - BLOCK_SIZE;
+                    data.autumn.vx = 0.0f;
+                }
 
+                if ( data.autumn.y + data.autumn.vy * dt < 0.0f )
+                {
+                    data.autumn.y = 0.0f;
+                    data.autumn.vy = 0.0f;
+                }
+                else if ( data.autumn.y + BLOCK_SIZE + data.autumn.vy * dt >data.map.h * BLOCK_SIZE )
+                {
+                    data.autumn.y =data.map.h * BLOCK_SIZE - BLOCK_SIZE;
+                    data.autumn.vy = 0.0f;
+                }
+
+                const auto loopcount = std::max( static_cast<unsigned int> ( dt ), 1u );
+                const float dti = dt / static_cast<float> ( loopcount );
+                for ( unsigned int i = 0; i < loopcount; ++i )
+                {
+                    data.autumn.x += data.autumn.vx * dti;
+                    data.autumn.y += data.autumn.vy * dti;
+
+                    const unsigned int topy = static_cast<unsigned int> ( data.autumn.getTopBoundary() / 16.0 );
+                    const unsigned int bottomy = static_cast<unsigned int> ( data.autumn.getBottomBoundary() / 16.0 );
+                    const unsigned int yx = static_cast<unsigned int> ( ( data.autumn.x + 8.0 ) / 16.0 );
+                    const unsigned int toplefti = topy *data.map.w + yx;
+                    const unsigned int toprighti = topy *data.map.w + yx;
+                    const unsigned int bottomlefti = bottomy *data.map.w + yx;
+                    const unsigned int bottomrighti = bottomy *data.map.w + yx;
+                    if ( data.map.collision[ toplefti ] == 0x01 || data.map.collision[ toprighti ] == 0x01 )
+                    {
+                        data.autumn.y += ( static_cast<float> ( topy + 1 ) * 16.0f ) - data.autumn.getTopBoundary();
+                        data.autumn.vy *= -0.25f;
+                    }
+                    else if ( data.map.collision[ bottomlefti ] == 0x01 || data.map.collision[ bottomrighti ] == 0x01 )
+                    {
+                        data.autumn.y -= data.autumn.getBottomBoundary() - ( static_cast<float> ( bottomy ) * 16.0f );
+                        data.autumn.vy *= -0.25f;
+                    }
+                    const unsigned int leftx = static_cast<unsigned int> ( data.autumn.getLeftBoundary() / 16.0 );
+                    const unsigned int rightx = static_cast<unsigned int> ( data.autumn.getRightBoundary() / 16.0 );
+                    const unsigned int topyx = static_cast<unsigned int> ( ( data.autumn.getTopBoundary() + 3.0 ) / 16.0 );
+                    const unsigned int bottomyx = static_cast<unsigned int> ( ( data.autumn.getBottomBoundary() - 3.0 ) / 16.0 );
+                    const unsigned int righttopi = topyx *data.map.w + rightx;
+                    const unsigned int rightbottomi = bottomyx *data.map.w + rightx;
+                    const unsigned int lefttopi = topyx *data.map.w + leftx;
+                    const unsigned int leftbottomi = bottomyx *data.map.w + leftx;
+                    if ( data.map.collision[ righttopi ] == 0x01 || data.map.collision[ rightbottomi ] == 0x01 )
+                    {
+                        data.autumn.x -= data.autumn.getRightBoundary() - ( static_cast<float> ( rightx ) * 16.0f );
+                        data.autumn.vx *= -0.25f;
+                    }
+                    else if ( data.map.collision[ lefttopi ] == 0x01 || data.map.collision[ leftbottomi ] == 0x01 )
+                    {
+                        data.autumn.x += ( static_cast<float> ( leftx + 1 ) * 16.0f ) - data.autumn.getLeftBoundary();
+                        data.autumn.vx *= -0.25f;
+                    }
+                }
+
+                data.autumn.gfx.setX( data.autumn.x );
                 data.autumn.gfx.setY( data.autumn.y );
+
+                const unsigned int centerx = static_cast<unsigned int> ( data.autumn.getCenterX() / 16.0 );
+                const unsigned int centery = static_cast<unsigned int> ( data.autumn.getCenterY() / 16.0 );
+                const unsigned int centeri = centery *data.map.w + centerx;
+                const uint_fast8_t centerval = data.map.collision[ centeri ];
+                if ( centerval >= 0x02 )
+                {
+                    const unsigned int level = centerval - 0x01;
+                }
 
                 // Autumn animation.
                 data.autumn.gfx.setSrcX( ( static_cast<unsigned int> ( data.waterxodd ) % 2 ) * 16 );

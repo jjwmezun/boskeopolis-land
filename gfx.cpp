@@ -1333,7 +1333,7 @@ namespace BSL::GFX
             }
         }
 
-        GraphicChar chars[ finalcharcount ];
+        GraphicChar * chars = static_cast<GraphicChar *> ( calloc( finalcharcount, sizeof( GraphicChar ) ) );
         int count = 0;
         // Final loop: we have all the info we need now to set x & y positions.
         int dy = ( valign == BSL::Valign::MIDDLE )
