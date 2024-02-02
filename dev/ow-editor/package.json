@@ -1,0 +1,34 @@
+{
+  "name": "boskeopolis-land-ow-editor",
+  "version": "0.1.0",
+  "description": "OW editor for Boskeopolis Land",
+  "main": "webpack.mix.js",
+  "scripts": {
+    "mix": "mix",
+    "watch": "mix watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "../.git"
+  },
+  "author": "J. J. W. Mezun",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@dnd-kit/core": "^6.1.0",
+    "file-saver": "^2.0.5",
+    "react-dom": "^18.2.0",
+    "styled-components": "^6.1.8"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.22.5",
+    "babel-preset-react": "^6.24.1",
+    "laravel-mix": "^6.0.49",
+    "react": "^18.2.0",
+    "sprintf-js": "^1.1.2",
+    "webpack-mix": "^3.0.0"
+  }
+}
