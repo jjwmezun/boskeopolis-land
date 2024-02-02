@@ -3,6 +3,7 @@
 #include "game.hpp"
 #include "gfx.hpp"
 #include "json.hpp"
+#include <vector>
 
 namespace BSL::Game
 {
@@ -18,10 +19,17 @@ namespace BSL::Game
     static constexpr float CAMERA_BOTTOM_EDGE = OWWINDOWH * 0.667f;
     static constexpr float CAMERA_TOP_EDGE = OWWINDOWH * 0.333f;
 
+    struct Warp
+    {
+        uint_fast8_t map;
+        uint_fast8_t x;
+        uint_fast8_t y;
+    };
+
     enum class StateType
     {
         FADE_IN,
-        FADE_TO_LEVEL,
+        FADE_TO_OW,
         TITLE,
         OVERWORLD,
         LEVEL
@@ -35,6 +43,13 @@ namespace BSL::Game
             float opacity;
         }
         fade;
+        struct
+        {
+            float speed;
+            float opacity;
+            Warp warp;
+        }
+        fadetoow;
         struct {
             BSL::GFX::RectGradient bg;
             BSL::GFX::Text title;
@@ -104,6 +119,8 @@ namespace BSL::Game
                 unsigned int w;
                 unsigned int h;
                 uint_fast8_t * collision;
+                Warp * warps;
+                uint_fast8_t warpcount;
             }
             map;
         }
@@ -125,6 +142,9 @@ namespace BSL::Game
     static uint_fast8_t state_count;
 
     static void closeState( unsigned int n );
+    static void fadeToOW( Warp warp );
+    static void clearState();
+    static void destroyState( uint_fast8_t staten );
 
     void init()
     {
@@ -164,15 +184,18 @@ namespace BSL::Game
 
                 if ( fade.opacity >= 1.0f )
                 {
-                    fade.opacity = 1.0f;
+                    BSL::GFX::setCanvasOpacity( 1.0f );
                     popState();
                 }
-                BSL::GFX::setCanvasOpacity( fade.opacity );
+                else
+                {
+                    BSL::GFX::setCanvasOpacity( fade.opacity );
+                }
             }
             break;
-            case ( StateType::FADE_TO_LEVEL ):
+            case ( StateType::FADE_TO_OW ):
             {
-                auto & fade = current_state.data.fade;
+                auto & fade = current_state.data.fadetoow;
                 fade.speed += 0.001f * dt;
                 if ( fade.speed > 0.05f )
                 {
@@ -184,9 +207,12 @@ namespace BSL::Game
                 {
                     fade.opacity = 0.0f;
                     BSL::GFX::setCanvasOpacity( fade.opacity );
-                    BSL::GFX::clearGraphics();
-                    BSL::GFX::setState( 0 );
-                    memset( &states_[ 0 ], 0, sizeof( GameState ) ); // Clear state.
+
+                    // Save map.
+                    const Warp inwarp = fade.warp;
+
+                    clearState();
+
                     states_[ 0 ].type = StateType::OVERWORLD;
                     auto & data = states_[ 0 ].data.overworld;
 
@@ -339,7 +365,8 @@ namespace BSL::Game
                     }
 
                     // Generate tilemap.
-                    JSON json { "assets/maps/ow-0.json" };
+                    std::vector<Warp> tempwarps;
+                    JSON json { "assets/maps/ow-" + std::to_string( inwarp.map ) + ".json" };
                     data.map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
                     data.map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
                     data.map.collision = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
@@ -355,7 +382,6 @@ namespace BSL::Game
                         [ & ]( const JSONItem layeritem )
                         {
                             const JSONObject layer = layeritem.asObject();
-                            const JSONArray & layerdata = layer.getArray( "data" );
                             const JSONArray props = layer.getArray( "properties" );
                             props.forEach
                             (
@@ -368,6 +394,7 @@ namespace BSL::Game
                                         const std::string value = propobj.getString( "value" );
                                         if ( value == "tile" )
                                         {
+                                            const JSONArray & layerdata = layer.getArray( "data" );
                                             BSL::GFX::Tile tilemap[ data.map.w * data.map.h ];
                                             unsigned int i = 0;
                                             layerdata.forEach
@@ -395,6 +422,7 @@ namespace BSL::Game
                                         }
                                         else if ( value == "collision" )
                                         {
+                                            const JSONArray & layerdata = layer.getArray( "data" );
                                             unsigned int i = 0;
                                             layerdata.forEach
                                             (
@@ -411,6 +439,7 @@ namespace BSL::Game
                                         }
                                         else if ( value == "sprite" )
                                         {
+                                            const JSONArray & layerdata = layer.getArray( "data" );
                                             unsigned int i = 0;
                                             layerdata.forEach
                                             (
@@ -422,10 +451,13 @@ namespace BSL::Game
                                                         // Player
                                                         case ( 4353 ):
                                                         {
-                                                            const unsigned int x = i % data.map.w;
-                                                            const unsigned int y = static_cast<unsigned int>( i / data.map.w );
-                                                            data.autumn.x = static_cast<float> ( x * 16 );
-                                                            data.autumn.y = static_cast<float> ( y * 16 );
+                                                            if ( inwarp.x == 0 && inwarp.y == 0 )
+                                                            {
+                                                                const unsigned int x = i % data.map.w;
+                                                                const unsigned int y = static_cast<unsigned int>( i / data.map.w );
+                                                                data.autumn.x = static_cast<float> ( x * 16 );
+                                                                data.autumn.y = static_cast<float> ( y * 16 );
+                                                            }
                                                         }
                                                         break;
                                                         default:
@@ -444,11 +476,70 @@ namespace BSL::Game
                                                 }
                                             );
                                         }
+                                        else if ( value == "warp" )
+                                        {
+                                            const JSONArray objects = layer.getArray( "objects" );
+                                            objects.forEach
+                                            (
+                                                [ & ]( const JSONItem objectitem )
+                                                {
+                                                    const JSONObject obj = objectitem.asObject();
+                                                    const JSONArray props = obj.getArray( "properties" );
+                                                    uint_fast8_t x = 0;
+                                                    uint_fast8_t y = 0;
+                                                    if ( obj.hasInt( "x" ) )
+                                                    {
+                                                        x = static_cast<uint_fast8_t> ( obj.getInt( "x" ) / 16.0 );
+                                                    }
+                                                    else if ( obj.hasFloat( "x" ) )
+                                                    {
+                                                        x = static_cast<uint_fast8_t> ( obj.getFloat( "x" ) / 16.0 );
+                                                    }
+                                                    if ( obj.hasInt( "y" ) )
+                                                    {
+                                                        y = static_cast<uint_fast8_t> ( obj.getInt( "y" ) / 16.0 );
+                                                    }
+                                                    else if ( obj.hasFloat( "y" ) )
+                                                    {
+                                                        y = static_cast<uint_fast8_t> ( obj.getFloat( "y" ) / 16.0 );
+                                                    }
+                                                    uint_fast16_t i = y * data.map.w + x;
+                                                    data.map.collision[ i ] = static_cast<uint_fast8_t> ( tempwarps.size() + 16 );
+                                                    Warp warp = { 0, 0, 0 };
+                                                    props.forEach
+                                                    (
+                                                        [ & ]( const JSONItem propitem )
+                                                        {
+                                                            const JSONObject propobj = propitem.asObject();
+                                                            const std::string name = propobj.getString( "name" );
+                                                            if ( name == "map" )
+                                                            {
+                                                                warp.map = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
+                                                            }
+                                                            else if ( name == "x" )
+                                                            {
+                                                                warp.x = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
+                                                            }
+                                                            else if ( name == "y" )
+                                                            {
+                                                                warp.y = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
+                                                            }
+                                                        }
+                                                    );
+                                                    tempwarps.push_back( warp );
+                                                }
+                                            );
+                                        }
                                     }
                                 }
                             );
                         }
                     );
+
+                    data.map.warpcount = tempwarps.size();
+                    const size_t warpssize = data.map.warpcount * sizeof( Warp );
+                    data.map.warps = static_cast<Warp *> ( malloc( warpssize ) );
+                    memcpy( data.map.warps, &tempwarps[ 0 ], warpssize );
 
                     const unsigned int sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
                     BSL::GFX::addGraphicTilemap
@@ -460,6 +551,11 @@ namespace BSL::Game
                     );
 
                     // Generate player sprite.
+                    if ( inwarp.x != 0 || inwarp.y != 0 )
+                    {
+                        data.autumn.x = static_cast<float> ( inwarp.x * 16 );
+                        data.autumn.y = static_cast<float> ( inwarp.y * 16 );
+                    }
                     data.autumn.gfx = BSL::GFX::addGraphicSprite
                     (
                         sprite_texture,
@@ -679,16 +775,19 @@ namespace BSL::Game
                     }
                 }
 
+                // Update final position.
                 data.autumn.gfx.setX( data.autumn.x );
                 data.autumn.gfx.setY( data.autumn.y );
 
+                // Special collision.
                 const unsigned int centerx = static_cast<unsigned int> ( data.autumn.getCenterX() / 16.0 );
                 const unsigned int centery = static_cast<unsigned int> ( data.autumn.getCenterY() / 16.0 );
-                const unsigned int centeri = centery *data.map.w + centerx;
+                const unsigned int centeri = centery * data.map.w + centerx;
                 const uint_fast8_t centerval = data.map.collision[ centeri ];
-                if ( centerval >= 0x02 )
+                if ( centerval >= 16 && centerval < 32 )
                 {
-                    const unsigned int level = centerval - 0x01;
+                    const uint_fast8_t warpn = centerval - 16;
+                    fadeToOW( data.map.warps[ warpn ] );
                 }
 
                 // Autumn animation.
@@ -735,11 +834,7 @@ namespace BSL::Game
             {
                 if ( BSL::Controls::heldConfirm() )
                 {
-                    BSL::GFX::setState( state_count );
-                    states_[ state_count ].type = StateType::FADE_TO_LEVEL;
-                    states_[ state_count ].data.fade.speed = 0.0f;
-                    states_[ state_count ].data.fade.opacity = 1.0f;
-                    ++state_count;
+                    fadeToOW( { 0, 0, 0 } );
                 }
             }
             break;
@@ -748,6 +843,40 @@ namespace BSL::Game
 
     void popState()
     {
+        BSL::GFX::clearStateGraphics();
+        destroyState( state_count - 1 );
+        memset( &states_[ state_count - 1 ], 0, sizeof( GameState ) ); // Clear current state.
         BSL::GFX::setState( --state_count );
+    };
+
+    static void fadeToOW( Warp warp )
+    {
+        BSL::GFX::setState( state_count );
+        states_[ state_count ].type = StateType::FADE_TO_OW;
+        states_[ state_count ].data.fadetoow.speed = 0.0f;
+        states_[ state_count ].data.fadetoow.opacity = 1.0f;
+        states_[ state_count ].data.fadetoow.warp = warp;
+        ++state_count;
+    };
+
+    static void clearState()
+    {
+        BSL::GFX::clearGraphics();
+        BSL::GFX::setState( 0 );
+        destroyState( 0 );
+        memset( states_, 0, sizeof( GameState ) * MAX_STATES ); // Clear all states.
+    };
+
+    static void destroyState( uint_fast8_t staten )
+    {
+        switch ( states_[ staten ].type )
+        {
+            case ( StateType::OVERWORLD ):
+            {
+                free( states_[ staten ].data.overworld.map.collision );
+                free( states_[ staten ].data.overworld.map.warps );
+            }
+            break;
+        }
     };
 }

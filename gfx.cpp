@@ -246,6 +246,7 @@ namespace BSL::GFX
     static void changeGraphicLayer( unsigned int id, unsigned int layer );
     static unsigned int getStateLayerIndex( unsigned int layer );
     static bool growGraphics();
+    static void destroyGraphic( RawGraphic & graphic );
     static int GetCharacterSize( const char * s );
 
     void Graphic::setLayer( BSL::Layer layer )
@@ -1162,7 +1163,7 @@ namespace BSL::GFX
         // Destroy specific graphic objects.
         for ( unsigned int i = 0; i < graphics_count; ++i )
         {
-            //DestroyGraphic( &graphics[ i ] );
+            destroyGraphic( graphics[ i ] );
         }
 
         // Reset maps to null values ( since 0 is a valid value, we use -1 ).
@@ -1177,6 +1178,11 @@ namespace BSL::GFX
         }
 
         graphics_count = 0;
+    };
+
+    void clearStateGraphics()
+    {
+        // TODO: Delete graphics only in current state.
     };
 
     Text addGraphicText
@@ -1711,7 +1717,6 @@ namespace BSL::GFX
     static RawGraphic & getGraphic( unsigned int id )
     {
         return graphics[ gfx_ptrs_id_to_pos[ id ] ];
-        //return graphics[ id ];
     };
 
     static unsigned int addGraphic( RawGraphic graphic )
@@ -1892,6 +1897,29 @@ namespace BSL::GFX
 
         max_graphics = new_max_graphics;
         return true;
+    };
+
+    static void destroyGraphic( RawGraphic & graphic )
+    {
+        switch ( graphic.type )
+        {
+            case ( GraphicType::TILEMAP ):
+            {
+                free( graphic.data.tilemap.tiles );
+            }
+            break;
+            case ( GraphicType::SPRITE_RAW ):
+            case ( GraphicType::SPRITE_RAW_NO_TRANSPARENCY ):
+            {
+                free( graphic.data.rawsprite.data );
+            }
+            break;
+            case ( GraphicType::TEXT ):
+            {
+                free( graphic.data.text.chars );
+            }
+            break;
+        }
     };
 
     static int GetCharacterSize( const char * s )

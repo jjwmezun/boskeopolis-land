@@ -19,6 +19,7 @@ namespace BSL::GFX
     void setCanvasOpacity( float o );
     void setState( uint_fast8_t s );
     void clearGraphics();
+    void clearStateGraphics();
 
     struct Graphic
     {
