@@ -18,6 +18,18 @@ namespace BSL::Game
     static constexpr float OWWINDOWH = 248.0f;
     static constexpr float CAMERA_BOTTOM_EDGE = OWWINDOWH * 0.667f;
     static constexpr float CAMERA_TOP_EDGE = OWWINDOWH * 0.333f;
+    static constexpr unsigned int OWLEVELOPEN_OPTIONCOUNT = 2;
+    static constexpr int OWLVOPEN_MENUX = static_cast<int> ( ( WINDOW_WIDTH_PIXELS - 160 ) / 2.0 );
+    static constexpr int OWLVOPEN_MENUY = static_cast<int> ( ( WINDOW_HEIGHT_PIXELS - 32 ) / 2.0 );
+
+    struct OWLevel
+    {
+        char * name;
+        uint_fast16_t gemscore;
+        uint_fast16_t timescore;
+        uint_fast8_t cycle;
+        uint_fast8_t theme;
+    };
 
     struct Warp
     {
@@ -32,7 +44,8 @@ namespace BSL::Game
         FADE_TO_OW,
         TITLE,
         OVERWORLD,
-        LEVEL
+        LEVEL,
+        OW_LEVEL_OPEN
     };
 
     union GameStateData
@@ -119,12 +132,31 @@ namespace BSL::Game
                 unsigned int w;
                 unsigned int h;
                 uint_fast8_t * collision;
+                uint_fast8_t * levels;
                 Warp * warps;
                 uint_fast8_t warpcount;
             }
             map;
+            struct
+            {
+                BSL::GFX::Text lvname;
+            }
+            ui;
+            uint_fast8_t prev_level;
+            uint_fast8_t current_level;
         }
         overworld;
+        struct
+        {
+            uint_fast8_t selection;
+            struct
+            {
+                GFX::Rect selection;
+                GFX::Text optiontext[ OWLEVELOPEN_OPTIONCOUNT ];
+            }
+            gfx;
+        }
+        owlevelopen;
         struct
         {
             BSL::GFX::Sprite sprite;
@@ -140,14 +172,21 @@ namespace BSL::Game
 
     static GameState states_[ MAX_STATES ];
     static uint_fast8_t state_count;
+    static OWLevel * levels;
+    static size_t levelcount;
 
     static void closeState( unsigned int n );
     static void fadeToOW( Warp warp );
     static void clearState();
     static void destroyState( uint_fast8_t staten );
+    static void loadOWLevels();
+    static void pushOWLevelOpenMenu();
+    static void updateOWAnimation( auto & data, float dt );
+    static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection );
 
     void init()
     {
+        loadOWLevels();
         state_count = 2;
         BSL::GFX::setState( 0 );
         states_[ 0 ].type = StateType::TITLE;
@@ -370,6 +409,7 @@ namespace BSL::Game
                     data.map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
                     data.map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
                     data.map.collision = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
+                    data.map.levels = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
                     BSL::GFX::Tile spritetiles[ data.map.w * data.map.h ];
                     for ( unsigned int i = 0; i < data.map.w * data.map.h; ++i )
                     {
@@ -462,9 +502,11 @@ namespace BSL::Game
                                                         break;
                                                         default:
                                                         {
-                                                            if ( dataval >= 4369 && dataval < 4369 + 256 )
+                                                            // Levels
+                                                            if ( dataval >= 4369 && dataval < 4369 + 255 )
                                                             {
-                                                                const uint_fast8_t leveln = static_cast<uint_fast8_t> ( dataval - 4369 );
+                                                                const uint_fast8_t leveln = static_cast<uint_fast8_t> ( dataval - 4368 );
+                                                                data.map.levels[ i ] = leveln;
                                                                 spritetiles[ i ].set = true;
                                                                 spritetiles[ i ].x = 2;
                                                                 spritetiles[ i ].animation = 12;
@@ -569,13 +611,15 @@ namespace BSL::Game
                     BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, 40, 0, WINDOW_HEIGHT_PIXELS - 40 );
                     BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS - 40, 0, 0, { { "bgcolor", 0x00 } } );
 
-                    BSL::GFX::addGraphicText
+                    // Generate UI level name.
+                    data.ui.lvname = BSL::GFX::addGraphicText
                     (
-                        "Wasabi Woods",
+                        "Missing Level",
                         {
                             { "x", 8 },
                             { "y", 256 },
-                            { "color", 0x01 }
+                            { "color", 0x01 },
+                            { "opacity", 0.0f }
                         }
                     );
 
@@ -595,51 +639,6 @@ namespace BSL::Game
             case ( StateType::OVERWORLD ):
             {
                 auto & data = current_state.data.overworld;
-
-                static constexpr float OVERWORLD_WATER_ACC = 1.0f / 8.0f;
-
-                // Update BG animation.
-                data.bg.x += OVERWORLD_WATER_ACC * dt;
-                while ( data.bg.x > 16.0f )
-                {
-                    data.bg.x -= 16.0f;
-                }
-                data.bg.y += OVERWORLD_WATER_ACC * dt;
-                while ( data.bg.y > 16.0f )
-                {
-                    data.bg.y -= 16.0f;
-                }
-                for ( unsigned int i = 0; i < BGGFXCOUNT; ++i )
-                {
-                    data.bg.gfx[ i ].setSrcX( data.bg.x );
-                    data.bg.gfx[ i ].setSrcY( data.bg.y );
-                }
-
-                // Update water animation.
-                data.waterxodd += OVERWORLD_WATER_ACC * dt;
-                while ( data.waterxodd > 8.0f )
-                {
-                    data.waterxodd -= 8.0f;
-                }
-                data.waterxeven -= OVERWORLD_WATER_ACC * dt;
-                while ( data.waterxeven < 0.0f )
-                {
-                    data.waterxeven += 8.0f;
-                }
-                const unsigned int camera_adjust_x = static_cast<unsigned int>( data.camera.x ) % 8;
-                const unsigned int camera_adjust_y = static_cast<unsigned int>( data.camera.y ) % 8;
-                const unsigned int waterxodd = ( static_cast<unsigned int> ( data.waterxodd ) + camera_adjust_x ) % 8;
-                const unsigned int waterxeven = ( static_cast<unsigned int> ( data.waterxeven ) + camera_adjust_x ) % 8;
-                for ( unsigned int i = 0; i < WATERROWS; i += 2 )
-                {
-                    data.water[ i ].setSrcX( waterxodd );
-                    data.water[ i ].setY( WATERTILEH * i + camera_adjust_y );
-                }
-                for ( unsigned int i = 1; i < WATERROWS; i += 2 )
-                {
-                    data.water[ i ].setSrcX( waterxeven );
-                    data.water[ i ].setY( WATERTILEH * i + camera_adjust_y );
-                }
 
                 // Update Autumn.
                 static constexpr float OVERWORLD_AUTUMN_ACC = 0.25f;
@@ -779,7 +778,7 @@ namespace BSL::Game
                 data.autumn.gfx.setX( data.autumn.x );
                 data.autumn.gfx.setY( data.autumn.y );
 
-                // Special collision.
+                // Warp collision.
                 const unsigned int centerx = static_cast<unsigned int> ( data.autumn.getCenterX() / 16.0 );
                 const unsigned int centery = static_cast<unsigned int> ( data.autumn.getCenterY() / 16.0 );
                 const unsigned int centeri = centery * data.map.w + centerx;
@@ -790,8 +789,35 @@ namespace BSL::Game
                     fadeToOW( data.map.warps[ warpn ] );
                 }
 
-                // Autumn animation.
-                data.autumn.gfx.setSrcX( ( static_cast<unsigned int> ( data.waterxodd ) % 2 ) * 16 );
+                // Level collision.
+                const uint_fast8_t lvval = data.map.levels[ centeri ];
+                if ( lvval > 0 && lvval <= levelcount )
+                {
+                    data.ui.lvname.setOpacity( 1.0f );
+                    const OWLevel & lv = levels[ lvval - 1 ];
+                    data.current_level = lvval;
+                    if ( data.prev_level != data.current_level )
+                    {
+                        data.ui.lvname.changeText
+                        (
+                            lv.name,
+                            {
+                                { "x", 8 },
+                                { "y", 256 },
+                            }
+                        );
+                        data.prev_level = data.current_level;
+                    }
+                    if ( BSL::Controls::heldConfirm() )
+                    {
+                        pushOWLevelOpenMenu();
+                    }
+                }
+                else
+                {
+                    data.current_level = 0;
+                    data.ui.lvname.setOpacity( 0.0f );
+                }
 
                 // Update camera.
                 if ( data.autumn.getCenterX() > data.camera.x + CAMERA_RIGHT_EDGE )
@@ -828,6 +854,8 @@ namespace BSL::Game
                 }
                 BSL::GFX::setCameraX( static_cast<unsigned int> ( data.camera.x ) );
                 BSL::GFX::setCameraY( static_cast<unsigned int> ( data.camera.y ) );
+
+                updateOWAnimation( data, dt );
             }
             break;
             case ( StateType::TITLE ):
@@ -835,6 +863,36 @@ namespace BSL::Game
                 if ( BSL::Controls::heldConfirm() )
                 {
                     fadeToOW( { 0, 0, 0 } );
+                }
+            }
+            break;
+            case ( StateType::OW_LEVEL_OPEN ):
+            {
+                auto & prevstate = states_[ state_count - 2 ].data.overworld;
+                auto & data = current_state.data.owlevelopen;
+                updateOWAnimation( prevstate, dt );
+                if ( BSL::Controls::heldCancel() )
+                {
+                    updateOWLevelOpenGFX( data, 1 );
+                    popState();
+                }
+                else if ( BSL::Controls::pressedConfirm() )
+                {
+                    printf( "START LEVEL\n" );
+                }
+                else if ( BSL::Controls::heldDown() )
+                {
+                    if ( data.selection < OWLEVELOPEN_OPTIONCOUNT - 1 )
+                    {
+                        updateOWLevelOpenGFX( data, data.selection + 1 );
+                    }
+                }
+                else if ( BSL::Controls::heldUp() )
+                {
+                    if ( data.selection > 0 )
+                    {
+                        updateOWLevelOpenGFX( data, data.selection - 1 );
+                    }
                 }
             }
             break;
@@ -874,9 +932,146 @@ namespace BSL::Game
             case ( StateType::OVERWORLD ):
             {
                 free( states_[ staten ].data.overworld.map.collision );
+                free( states_[ staten ].data.overworld.map.levels );
                 free( states_[ staten ].data.overworld.map.warps );
             }
             break;
         }
+    };
+
+    static void loadOWLevels()
+    {
+        const JSON json { "assets/levels/list.json" };
+        const JSONArray list = json.getArray( "list" );
+        levelcount = list.getLength();
+        levels = static_cast<OWLevel *> ( calloc( levelcount, sizeof( OWLevel ) ) );
+        list.forEach
+        (
+            [&] ( const JSONItem item, unsigned int i )
+            {
+                const JSONObject obj = item.asObject();
+                const std::string name = obj.getString( "name" );
+                levels[ i ].name = static_cast<char *> ( malloc( name.size() + 1 ) );
+                strcpy( levels[ i ].name, name.c_str() );
+                levels[ i ].gemscore = static_cast<uint_fast16_t> ( obj.getInt( "gemscore" ) );
+                levels[ i ].timescore = static_cast<uint_fast16_t> ( obj.getInt( "timescore" ) );
+                levels[ i ].cycle = static_cast<uint_fast8_t> ( obj.getInt( "cycle" ) );
+                levels[ i ].theme = static_cast<uint_fast8_t> ( obj.getInt( "theme" ) );
+            }
+        );
+    };
+
+    static void pushOWLevelOpenMenu()
+    {
+        BSL::GFX::setState( state_count + 1 );
+        states_[ state_count ].type = StateType::OW_LEVEL_OPEN;
+        auto & data = states_[ state_count ].data.owlevelopen;
+        data.selection = 0;
+        BSL::GFX::addGraphicMenu
+        (
+            160,
+            32,
+            OWLVOPEN_MENUX,
+            OWLVOPEN_MENUY
+        );
+        data.gfx.selection = BSL::GFX::addGraphicRect
+        (
+            OWLVOPEN_MENUX + 5,
+            OWLVOPEN_MENUY + 5,
+            149,
+            11,
+            1,
+            {
+                { "abs", true },
+                { "layer", Layer::AFTER_FG_2 }
+            }
+        );
+        data.gfx.optiontext[ 0 ] = BSL::GFX::addGraphicText
+        (
+            "Play Level",
+            {
+                { "x", OWLVOPEN_MENUX + 8 },
+                { "y", OWLVOPEN_MENUY + 8 },
+                { "color", 0xFF },
+                { "layer", Layer::AFTER_FG_2 }
+            }
+        );
+        data.gfx.optiontext[ 1 ] = BSL::GFX::addGraphicText
+        (
+            "Cancel",
+            {
+                { "x", OWLVOPEN_MENUX + 8 },
+                { "y", OWLVOPEN_MENUY + 16 },
+                { "color", 0x01 },
+                { "layer", Layer::AFTER_FG_2 }
+            }
+        );
+        ++state_count;
+    };
+
+    static void updateOWAnimation( auto & data, float dt )
+    {
+        static constexpr float OVERWORLD_WATER_ACC = 1.0f / 8.0f;
+
+        // Update BG animation.
+        data.bg.x += OVERWORLD_WATER_ACC * dt;
+        while ( data.bg.x > 16.0f )
+        {
+            data.bg.x -= 16.0f;
+        }
+        data.bg.y += OVERWORLD_WATER_ACC * dt;
+        while ( data.bg.y > 16.0f )
+        {
+            data.bg.y -= 16.0f;
+        }
+        for ( unsigned int i = 0; i < BGGFXCOUNT; ++i )
+        {
+            data.bg.gfx[ i ].setSrcX( data.bg.x );
+            data.bg.gfx[ i ].setSrcY( data.bg.y );
+        }
+
+        // Update water animation.
+        data.waterxodd += OVERWORLD_WATER_ACC * dt;
+        while ( data.waterxodd > 8.0f )
+        {
+            data.waterxodd -= 8.0f;
+        }
+        data.waterxeven -= OVERWORLD_WATER_ACC * dt;
+        while ( data.waterxeven < 0.0f )
+        {
+            data.waterxeven += 8.0f;
+        }
+        const unsigned int camera_adjust_x = static_cast<unsigned int>( data.camera.x ) % 8;
+        const unsigned int camera_adjust_y = static_cast<unsigned int>( data.camera.y ) % 8;
+        const unsigned int waterxodd = ( static_cast<unsigned int> ( data.waterxodd ) + camera_adjust_x ) % 8;
+        const unsigned int waterxeven = ( static_cast<unsigned int> ( data.waterxeven ) + camera_adjust_x ) % 8;
+        for ( unsigned int i = 0; i < WATERROWS; i += 2 )
+        {
+            data.water[ i ].setSrcX( waterxodd );
+            data.water[ i ].setY( WATERTILEH * i + camera_adjust_y );
+        }
+        for ( unsigned int i = 1; i < WATERROWS; i += 2 )
+        {
+            data.water[ i ].setSrcX( waterxeven );
+            data.water[ i ].setY( WATERTILEH * i + camera_adjust_y );
+        }
+
+        // Autumn animation.
+        data.autumn.gfx.setSrcX( ( static_cast<unsigned int> ( data.waterxodd ) % 2 ) * 16 );
+    };
+
+    static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection )
+    {
+        // Remove highlight from prev selection text.
+        data.gfx.optiontext[ data.selection ].setColor( 0x01 );
+
+        // Update selection.
+        data.selection = selection;
+
+        // Move selection bar bg.
+        data.gfx.selection.setY( OWLVOPEN_MENUY + 5 + ( 11 * data.selection ) );
+
+        // Set highlight for new selection text.
+        data.gfx.optiontext[ data.selection ].setColor( 0xFF );
     };
 }

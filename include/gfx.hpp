@@ -20,6 +20,7 @@ namespace BSL::GFX
     void setState( uint_fast8_t s );
     void clearGraphics();
     void clearStateGraphics();
+    void removeGraphic( unsigned int id );
 
     struct Graphic
     {
@@ -50,7 +51,7 @@ namespace BSL::GFX
 
     struct Rect : public Graphic
     {
-
+        void setY( int v );
     };
 
     struct RectGradient : public Graphic
@@ -59,7 +60,8 @@ namespace BSL::GFX
 
     struct Text : Graphic
     {
-
+        void changeText( const char * text, BSL::ArgList args );
+        void setColor( uint_fast8_t color );
     };
 
     struct Menu : public Graphic

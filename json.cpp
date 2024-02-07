@@ -14,6 +14,19 @@ namespace BSL
         }
     };
 
+    void JSONArray::forEach( const std::function<void( JSONItem, unsigned int )> & callable ) const
+    {
+        for ( unsigned int i = 0; i < length_; ++i )
+        {
+            callable( { values_[ i ] }, i );
+        }
+    };
+
+    unsigned int JSONArray::getLength() const
+    {
+        return length_;
+    };
+
     int JSONItem::asInt() const
     {
         if ( value_->type != json_integer )

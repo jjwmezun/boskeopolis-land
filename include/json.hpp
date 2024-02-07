@@ -23,6 +23,8 @@ namespace BSL
                 values_ ( values )
             {};
             void forEach( const std::function<void( JSONItem )> & callable ) const;
+            void forEach( const std::function<void( JSONItem, unsigned int )> & callable ) const;
+            unsigned int getLength() const;
 
         private:
             unsigned int length_;
