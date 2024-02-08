@@ -39,7 +39,6 @@ int main( int argc, char ** argv )
 
             BSL::Game::update( dt );
             BSL::GFX::update( dt );
-            BSL::Controls::update();
             prev_time = current_time;
         }
     }

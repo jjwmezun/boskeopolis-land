@@ -10,7 +10,6 @@ namespace BSL::Controls
     int heldRight();
     int heldDown();
     int heldLeft();
-    int pressedConfirm();
     void init();
     void close();
 }

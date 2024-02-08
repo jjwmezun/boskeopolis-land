@@ -41,12 +41,23 @@ namespace BSL::Game
     enum class StateType
     {
         FADE_IN,
-        FADE_TO_OW,
+        FADE_TO,
         TITLE,
         OVERWORLD,
         LEVEL,
-        OW_LEVEL_OPEN
+        OW_LEVEL_OPEN,
+        LV_MESSAGE
     };
+
+    union FadeToArgs
+    {
+        struct
+        {
+            Warp warp;
+        }
+        ow;
+    }
+    args;
 
     union GameStateData
     {
@@ -60,9 +71,10 @@ namespace BSL::Game
         {
             float speed;
             float opacity;
-            Warp warp;
+            void ( * constructor )();
+            FadeToArgs args;
         }
-        fadetoow;
+        fadeto;
         struct {
             BSL::GFX::RectGradient bg;
             BSL::GFX::Text title;
@@ -148,6 +160,7 @@ namespace BSL::Game
         overworld;
         struct
         {
+            bool confirmlock;
             uint_fast8_t selection;
             struct
             {
@@ -159,7 +172,20 @@ namespace BSL::Game
         owlevelopen;
         struct
         {
-            BSL::GFX::Sprite sprite;
+            bool confirmlock;
+        }
+        lvmessage;
+        struct
+        {
+            struct
+            {
+                float x;
+                float y;
+                float vy;
+                float accy;
+                BSL::GFX::Sprite gfx;
+            }
+            player;
         }
         level;
     };
@@ -176,6 +202,7 @@ namespace BSL::Game
     static size_t levelcount;
 
     static void closeState( unsigned int n );
+    static void fadeTo( void ( * constructor )(), FadeToArgs args );
     static void fadeToOW( Warp warp );
     static void clearState();
     static void destroyState( uint_fast8_t staten );
@@ -183,11 +210,14 @@ namespace BSL::Game
     static void pushOWLevelOpenMenu();
     static void updateOWAnimation( auto & data, float dt );
     static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection );
+    static void pushLvMessageState();
+    static void pushFadeIn();
+    static void changeToOW();
+    static void changeToLevel();
 
     void init()
     {
         loadOWLevels();
-        state_count = 2;
         BSL::GFX::setState( 0 );
         states_[ 0 ].type = StateType::TITLE;
         states_[ 0 ].data.title.bg = BSL::GFX::addGraphicRectGradient( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS, 32, 200 );
@@ -200,10 +230,8 @@ namespace BSL::Game
                 { "shadow", true }
             }
         );
-        BSL::GFX::setState( 1 );
-        states_[ 1 ].type = StateType::FADE_IN;
-        states_[ 1 ].data.fade.speed = 0.0f;
-        states_[ 1 ].data.fade.opacity = 0.0f;
+        state_count = 1;
+        pushFadeIn();
     };
 
     void update( float dt )
@@ -232,9 +260,9 @@ namespace BSL::Game
                 }
             }
             break;
-            case ( StateType::FADE_TO_OW ):
+            case ( StateType::FADE_TO ):
             {
-                auto & fade = current_state.data.fadetoow;
+                auto & fade = current_state.data.fadeto;
                 fade.speed += 0.001f * dt;
                 if ( fade.speed > 0.05f )
                 {
@@ -246,389 +274,7 @@ namespace BSL::Game
                 {
                     fade.opacity = 0.0f;
                     BSL::GFX::setCanvasOpacity( fade.opacity );
-
-                    // Save map.
-                    const Warp inwarp = fade.warp;
-
-                    clearState();
-
-                    states_[ 0 ].type = StateType::OVERWORLD;
-                    auto & data = states_[ 0 ].data.overworld;
-
-                    // Generate O’erworld BG
-                    static constexpr unsigned int OWBGTILEW = 16;
-                    static constexpr unsigned int OWBGTILEH = 16;
-                    static constexpr unsigned char OVERWORLD_BGTILE[ OWBGTILEW * OWBGTILEH ] =
-                    {
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30,
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30,
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30,
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30,
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30,
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
-                        0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
-                        0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
-
-                        0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
-                        0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
-                        0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
-                        0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50,
-                        0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50,
-                        0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50,
-                        0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50,
-                        0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50
-                    };
-
-                    // BG top
-                    static constexpr unsigned int OWBGTOPW = WINDOW_WIDTH_PIXELS + 16;
-                    static constexpr unsigned int OWBGTOPH = OWBGTILEH + 1;
-                    unsigned char top_pixels[ OWBGTOPW * OWBGTOPH ];
-                    for ( unsigned int y = 0; y < OWBGTOPH; ++y )
-                    {
-                        for ( unsigned int x = 0; x < OWBGTOPW; x += OWBGTILEW )
-                        {
-                            memcpy( &top_pixels[ OWBGTOPW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( y % OWBGTILEH ) ], OWBGTILEW );
-                        }
-                    }
-
-                    data.bg.gfx[ 0 ] = BSL::GFX::addGraphicSpriteRaw
-                    (
-                        top_pixels,
-                        OWBGTOPW,
-                        OWBGTOPH,
-                        WINDOW_WIDTH_PIXELS,
-                        2,
-                        0,
-                        0
-                    );
-
-                    // BG bottom
-                    static constexpr unsigned int OWBGBOTTOMW = WINDOW_WIDTH_PIXELS + 16;
-                    static constexpr unsigned int OWBGBOTTOMH = OWBGTILEH * 6;
-                    unsigned char bottom_pixels[ OWBGBOTTOMW * OWBGBOTTOMH ];
-                    for ( unsigned int y = 0; y < OWBGBOTTOMH; ++y )
-                    {
-                        for ( unsigned int x = 0; x < OWBGBOTTOMW; x += OWBGTILEW )
-                        {
-                            memcpy( &bottom_pixels[ OWBGBOTTOMW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 6 ) % OWBGTILEH ) ], OWBGTILEW );
-                        }
-                    }
-
-                    data.bg.gfx[ 1 ] = BSL::GFX::addGraphicSpriteRaw
-                    (
-                        bottom_pixels,
-                        OWBGBOTTOMW,
-                        OWBGBOTTOMH,
-                        WINDOW_WIDTH_PIXELS,
-                        42,
-                        0,
-                        WINDOW_HEIGHT_PIXELS - 40 - 2
-                    );
-
-                    // BG left
-                    static constexpr unsigned int OWBGSIDEW = OWBGTILEW + 3;
-                    static constexpr unsigned int OWBGSIDEH = 260;
-                    unsigned char left_pixels[ OWBGSIDEW * OWBGSIDEH ];
-                    for ( unsigned int y = 0; y < OWBGSIDEH; ++y )
-                    {
-                        for ( unsigned int x = 0; x < OWBGSIDEW; x += OWBGTILEW )
-                        {
-                            // Don't write data beyond width o’ data.
-                            const size_t size = std::min( OWBGSIDEW - x, OWBGTILEW );
-                            memcpy( &left_pixels[ OWBGSIDEW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) ], size );
-                        }
-                    }
-
-                    data.bg.gfx[ 2 ] = BSL::GFX::addGraphicSpriteRaw
-                    (
-                        left_pixels,
-                        OWBGSIDEW,
-                        OWBGSIDEH,
-                        3,
-                        244,
-                        0,
-                        2
-                    );
-
-                    // BG right
-                    unsigned char right_pixels[ OWBGSIDEW * OWBGSIDEH ];
-                    for ( unsigned int y = 0; y < OWBGSIDEH; ++y )
-                    {
-                        // Offset by 13 pixels to keep aligned with other BG graphics.
-                        memcpy( &right_pixels[ OWBGSIDEW * y ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) + 13 ], 3 );
-                        memcpy( &right_pixels[ OWBGSIDEW * y + 3 ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) ], OWBGTILEW );
-                    }
-
-                    data.bg.gfx[ 3 ] = BSL::GFX::addGraphicSpriteRaw
-                    (
-                        right_pixels,
-                        OWBGSIDEW,
-                        OWBGSIDEH,
-                        3,
-                        244,
-                        WINDOW_WIDTH_PIXELS - 3,
-                        2
-                    );
-
-                    // Generate water
-                    static constexpr unsigned char watertile[ WATERTILEW * WATERTILEH ] =
-                    {
-                        0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1,
-                        0xA1, 0xA1, 0xA1, 0xFF, 0xFF, 0xA1, 0xA1, 0xA1,
-                        0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xA1, 0xA1,
-                        0xFF, 0xFF, 0xA1, 0xA1, 0xA1, 0xFF, 0xFF, 0xFF,
-                    };
-                    // Fill up single row o’ water tiles across screen width.
-                    unsigned char water[ WATERW * WATERH ];
-                    for ( unsigned int y = 0; y < WATERH; ++y )
-                    {
-                        for ( unsigned int x = 0; x < WATERW; x += WATERTILEW )
-                        {
-                            memcpy( &water[ WATERW * y + x ], &watertile[ WATERTILEW * y ], WATERTILEW );
-                        }
-                    }
-                    // Generate graphics for each row o’ tiles.
-                    for ( unsigned i = 0; i < WATERROWS; ++i )
-                    {
-                        data.water[ i ] = BSL::GFX::addGraphicSpriteRaw
-                        (
-                            water,
-                            WATERW,
-                            WATERH,
-                            WINDOW_WIDTH_PIXELS - 14,
-                            WATERH,
-                            7,
-                            WATERTILEH * i + 7,
-                            { { "layer", BSL::Layer::BG_1 } }
-                        );
-                    }
-
-                    // Generate tilemap.
-                    std::vector<Warp> tempwarps;
-                    JSON json { "assets/maps/ow-" + std::to_string( inwarp.map ) + ".json" };
-                    data.map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
-                    data.map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
-                    data.map.collision = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
-                    data.map.levels = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
-                    BSL::GFX::Tile spritetiles[ data.map.w * data.map.h ];
-                    for ( unsigned int i = 0; i < data.map.w * data.map.h; ++i )
-                    {
-                        memset( spritetiles, 0x00, data.map.w * data.map.h * sizeof( BSL::GFX::Tile ) );
-                    }
-
-                    JSONArray layers = json.getArray( "layers" );
-                    layers.forEach
-                    (
-                        [ & ]( const JSONItem layeritem )
-                        {
-                            const JSONObject layer = layeritem.asObject();
-                            const JSONArray props = layer.getArray( "properties" );
-                            props.forEach
-                            (
-                                [ & ]( const JSONItem propitem )
-                                {
-                                    const JSONObject propobj = propitem.asObject();
-                                    const std::string name = propobj.getString( "name" );
-                                    if ( name == "type" )
-                                    {
-                                        const std::string value = propobj.getString( "value" );
-                                        if ( value == "tile" )
-                                        {
-                                            const JSONArray & layerdata = layer.getArray( "data" );
-                                            BSL::GFX::Tile tilemap[ data.map.w * data.map.h ];
-                                            unsigned int i = 0;
-                                            layerdata.forEach
-                                            (
-                                                [ & ]( const JSONItem dataitem )
-                                                {
-                                                    const unsigned int tilen = dataitem.asInt();
-                                                    tilemap[ i ].set = tilen > 256;
-                                                    tilemap[ i ].x = ( tilen - 257 ) % 16;
-                                                    tilemap[ i ].y = static_cast<uint_fast8_t> ( ( tilen - 257 ) / 16.0 );
-                                                    tilemap[ i ].animation = 0;
-                                                    tilemap[ i ].frame = 0;
-                                                    ++i;
-                                                }
-                                            );
-
-                                            const unsigned int tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
-                                            BSL::GFX::addGraphicTilemap
-                                            (
-                                                tilemap_texture,
-                                                tilemap,
-                                                data.map.w,
-                                                data.map.h
-                                            );
-                                        }
-                                        else if ( value == "collision" )
-                                        {
-                                            const JSONArray & layerdata = layer.getArray( "data" );
-                                            unsigned int i = 0;
-                                            layerdata.forEach
-                                            (
-                                                [ & ]( const JSONItem dataitem )
-                                                {
-                                                    const uint_fast8_t dataval = static_cast<uint_fast8_t> ( dataitem.asInt() );
-                                                    if ( dataval > 0 )
-                                                    {
-                                                        data.map.collision[ i ] = dataval;
-                                                    }
-                                                    ++i;
-                                                }
-                                            );
-                                        }
-                                        else if ( value == "sprite" )
-                                        {
-                                            const JSONArray & layerdata = layer.getArray( "data" );
-                                            unsigned int i = 0;
-                                            layerdata.forEach
-                                            (
-                                                [ & ]( const JSONItem dataitem )
-                                                {
-                                                    const unsigned int dataval = static_cast<unsigned int> ( dataitem.asInt() );
-                                                    switch ( dataval )
-                                                    {
-                                                        // Player
-                                                        case ( 4353 ):
-                                                        {
-                                                            if ( inwarp.x == 0 && inwarp.y == 0 )
-                                                            {
-                                                                const unsigned int x = i % data.map.w;
-                                                                const unsigned int y = static_cast<unsigned int>( i / data.map.w );
-                                                                data.autumn.x = static_cast<float> ( x * 16 );
-                                                                data.autumn.y = static_cast<float> ( y * 16 );
-                                                            }
-                                                        }
-                                                        break;
-                                                        default:
-                                                        {
-                                                            // Levels
-                                                            if ( dataval >= 4369 && dataval < 4369 + 255 )
-                                                            {
-                                                                const uint_fast8_t leveln = static_cast<uint_fast8_t> ( dataval - 4368 );
-                                                                data.map.levels[ i ] = leveln;
-                                                                spritetiles[ i ].set = true;
-                                                                spritetiles[ i ].x = 2;
-                                                                spritetiles[ i ].animation = 12;
-                                                            }
-                                                        }
-                                                        break;
-                                                    }
-                                                    ++i;
-                                                }
-                                            );
-                                        }
-                                        else if ( value == "warp" )
-                                        {
-                                            const JSONArray objects = layer.getArray( "objects" );
-                                            objects.forEach
-                                            (
-                                                [ & ]( const JSONItem objectitem )
-                                                {
-                                                    const JSONObject obj = objectitem.asObject();
-                                                    const JSONArray props = obj.getArray( "properties" );
-                                                    uint_fast8_t x = 0;
-                                                    uint_fast8_t y = 0;
-                                                    if ( obj.hasInt( "x" ) )
-                                                    {
-                                                        x = static_cast<uint_fast8_t> ( obj.getInt( "x" ) / 16.0 );
-                                                    }
-                                                    else if ( obj.hasFloat( "x" ) )
-                                                    {
-                                                        x = static_cast<uint_fast8_t> ( obj.getFloat( "x" ) / 16.0 );
-                                                    }
-                                                    if ( obj.hasInt( "y" ) )
-                                                    {
-                                                        y = static_cast<uint_fast8_t> ( obj.getInt( "y" ) / 16.0 );
-                                                    }
-                                                    else if ( obj.hasFloat( "y" ) )
-                                                    {
-                                                        y = static_cast<uint_fast8_t> ( obj.getFloat( "y" ) / 16.0 );
-                                                    }
-                                                    uint_fast16_t i = y * data.map.w + x;
-                                                    data.map.collision[ i ] = static_cast<uint_fast8_t> ( tempwarps.size() + 16 );
-                                                    Warp warp = { 0, 0, 0 };
-                                                    props.forEach
-                                                    (
-                                                        [ & ]( const JSONItem propitem )
-                                                        {
-                                                            const JSONObject propobj = propitem.asObject();
-                                                            const std::string name = propobj.getString( "name" );
-                                                            if ( name == "map" )
-                                                            {
-                                                                warp.map = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
-                                                            }
-                                                            else if ( name == "x" )
-                                                            {
-                                                                warp.x = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
-                                                            }
-                                                            else if ( name == "y" )
-                                                            {
-                                                                warp.y = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
-                                                            }
-                                                        }
-                                                    );
-                                                    tempwarps.push_back( warp );
-                                                }
-                                            );
-                                        }
-                                    }
-                                }
-                            );
-                        }
-                    );
-
-                    data.map.warpcount = tempwarps.size();
-                    const size_t warpssize = data.map.warpcount * sizeof( Warp );
-                    data.map.warps = static_cast<Warp *> ( malloc( warpssize ) );
-                    memcpy( data.map.warps, &tempwarps[ 0 ], warpssize );
-
-                    const unsigned int sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
-                    BSL::GFX::addGraphicTilemap
-                    (
-                        sprite_texture,
-                        spritetiles,
-                        data.map.w,
-                        data.map.h
-                    );
-
-                    // Generate player sprite.
-                    if ( inwarp.x != 0 || inwarp.y != 0 )
-                    {
-                        data.autumn.x = static_cast<float> ( inwarp.x * 16 );
-                        data.autumn.y = static_cast<float> ( inwarp.y * 16 );
-                    }
-                    data.autumn.gfx = BSL::GFX::addGraphicSprite
-                    (
-                        sprite_texture,
-                        static_cast<int> ( data.autumn.x ),
-                        static_cast<int> ( data.autumn.y ),
-                        16,
-                        16
-                    );
-
-                    // Generate o’erworld windows.
-                    BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, 40, 0, WINDOW_HEIGHT_PIXELS - 40 );
-                    BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS - 40, 0, 0, { { "bgcolor", 0x00 } } );
-
-                    // Generate UI level name.
-                    data.ui.lvname = BSL::GFX::addGraphicText
-                    (
-                        "Missing Level",
-                        {
-                            { "x", 8 },
-                            { "y", 256 },
-                            { "color", 0x01 },
-                            { "opacity", 0.0f }
-                        }
-                    );
-
-                    // Generate fade-in state.
-                    BSL::GFX::setState( 1 );
-                    states_[ 1 ].type = StateType::FADE_IN;
-                    states_[ 1 ].data.fade.speed = 0.0f;
-                    states_[ 1 ].data.fade.opacity = 0.0f;
-                    state_count = 2;
+                    fade.constructor();
                 }
                 else
                 {
@@ -871,14 +517,21 @@ namespace BSL::Game
                 auto & prevstate = states_[ state_count - 2 ].data.overworld;
                 auto & data = current_state.data.owlevelopen;
                 updateOWAnimation( prevstate, dt );
+
+                if ( !BSL::Controls::heldConfirm() )
+                {
+                    data.confirmlock = false;
+                }
+
                 if ( BSL::Controls::heldCancel() )
                 {
                     updateOWLevelOpenGFX( data, 1 );
                     popState();
                 }
-                else if ( BSL::Controls::pressedConfirm() )
+                else if ( !data.confirmlock && BSL::Controls::heldConfirm() )
                 {
-                    printf( "START LEVEL\n" );
+                    FadeToArgs args;
+                    fadeTo( &pushLvMessageState, args );
                 }
                 else if ( BSL::Controls::heldDown() )
                 {
@@ -896,6 +549,33 @@ namespace BSL::Game
                 }
             }
             break;
+            case ( StateType::LV_MESSAGE ):
+            {
+                if ( !Controls::heldConfirm() )
+                {
+                    current_state.data.lvmessage.confirmlock = false;
+                }
+                if ( !current_state.data.lvmessage.confirmlock && Controls::heldConfirm() )
+                {
+                    FadeToArgs args;
+                    fadeTo( &changeToLevel, args );
+                }
+            }
+            break;
+            case ( StateType::LEVEL ):
+            {
+                static constexpr float LV_PLAYER_MAX_GRAVITY = 6.0f;
+                auto & data = current_state.data.level;
+                data.player.accy = 0.1f;
+                data.player.vy += data.player.accy * dt;
+                if ( data.player.vy > LV_PLAYER_MAX_GRAVITY )
+                {
+                    data.player.vy = LV_PLAYER_MAX_GRAVITY;
+                }
+                data.player.y += data.player.vy * dt;
+                data.player.gfx.setY( static_cast<int> ( data.player.y ) );
+            }
+            break;
         }
     };
 
@@ -907,22 +587,34 @@ namespace BSL::Game
         BSL::GFX::setState( --state_count );
     };
 
-    static void fadeToOW( Warp warp )
+    static void fadeTo( void ( * constructor )(), FadeToArgs args )
     {
         BSL::GFX::setState( state_count );
-        states_[ state_count ].type = StateType::FADE_TO_OW;
-        states_[ state_count ].data.fadetoow.speed = 0.0f;
-        states_[ state_count ].data.fadetoow.opacity = 1.0f;
-        states_[ state_count ].data.fadetoow.warp = warp;
+        states_[ state_count ].type = StateType::FADE_TO;
+        states_[ state_count ].data.fadeto.speed = 0.0f;
+        states_[ state_count ].data.fadeto.opacity = 1.0f;
+        states_[ state_count ].data.fadeto.args = args;
+        states_[ state_count ].data.fadeto.constructor = constructor;
         ++state_count;
+    };
+
+    static void fadeToOW( Warp warp )
+    {
+        FadeToArgs args;
+        args.ow.warp = warp;
+        fadeTo( &changeToOW, args );
     };
 
     static void clearState()
     {
         BSL::GFX::clearGraphics();
         BSL::GFX::setState( 0 );
-        destroyState( 0 );
+        for ( uint_fast8_t i = 0; i < state_count; ++i )
+        {
+            destroyState( i );
+        }
         memset( states_, 0, sizeof( GameState ) * MAX_STATES ); // Clear all states.
+        state_count = 0;
     };
 
     static void destroyState( uint_fast8_t staten )
@@ -963,7 +655,7 @@ namespace BSL::Game
 
     static void pushOWLevelOpenMenu()
     {
-        BSL::GFX::setState( state_count + 1 );
+        BSL::GFX::setState( state_count );
         states_[ state_count ].type = StateType::OW_LEVEL_OPEN;
         auto & data = states_[ state_count ].data.owlevelopen;
         data.selection = 0;
@@ -1006,6 +698,7 @@ namespace BSL::Game
                 { "layer", Layer::AFTER_FG_2 }
             }
         );
+        data.confirmlock = true;
         ++state_count;
     };
 
@@ -1073,5 +766,448 @@ namespace BSL::Game
 
         // Set highlight for new selection text.
         data.gfx.optiontext[ data.selection ].setColor( 0xFF );
+    };
+
+    static void pushLvMessageState()
+    {
+        clearState();
+        BSL::GFX::setState( state_count );
+        states_[ state_count ].type = StateType::LV_MESSAGE;
+        auto & data = states_[ state_count ].data.lvmessage;
+        BSL::GFX::addGraphicRect
+        (
+            0,
+            0,
+            WINDOW_WIDTH_PIXELS,
+            WINDOW_HEIGHT_PIXELS,
+            32,
+            {
+                { "abs", true }
+            }
+        );
+        BSL::GFX::addGraphicText
+        (
+            "¡Collect the Keycane!",
+            {
+                { "align", Align::CENTER },
+                { "valign", Valign::MIDDLE },
+                { "shadow", true }
+            }
+        );
+        ++state_count;
+
+        pushFadeIn();
+    };
+
+    static void pushFadeIn()
+    {
+        BSL::GFX::setState( state_count );
+        states_[ state_count ].type = StateType::FADE_IN;
+        states_[ state_count ].data.fade.speed = 0.0f;
+        states_[ state_count ].data.fade.opacity = 0.0f;
+        ++state_count;
+    };
+
+    static void changeToOW()
+    {
+        auto & args = states_[ state_count - 1 ].data.fadeto.args.ow;
+
+        // Save map.
+        const Warp inwarp = args.warp;
+
+        clearState();
+
+        states_[ 0 ].type = StateType::OVERWORLD;
+        auto & data = states_[ 0 ].data.overworld;
+
+        // Generate O’erworld BG
+        static constexpr unsigned int OWBGTILEW = 16;
+        static constexpr unsigned int OWBGTILEH = 16;
+        static constexpr unsigned char OVERWORLD_BGTILE[ OWBGTILEW * OWBGTILEH ] =
+        {
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+
+            0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x30, 0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x50, 0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+            0x50, 0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50,
+            0x50, 0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50,
+            0x50, 0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50,
+            0x50, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50,
+            0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x50, 0x50, 0x50, 0x50, 0x50
+        };
+
+        // BG top
+        static constexpr unsigned int OWBGTOPW = WINDOW_WIDTH_PIXELS + 16;
+        static constexpr unsigned int OWBGTOPH = OWBGTILEH + 1;
+        unsigned char top_pixels[ OWBGTOPW * OWBGTOPH ];
+        for ( unsigned int y = 0; y < OWBGTOPH; ++y )
+        {
+            for ( unsigned int x = 0; x < OWBGTOPW; x += OWBGTILEW )
+            {
+                memcpy( &top_pixels[ OWBGTOPW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( y % OWBGTILEH ) ], OWBGTILEW );
+            }
+        }
+
+        data.bg.gfx[ 0 ] = BSL::GFX::addGraphicSpriteRaw
+        (
+            top_pixels,
+            OWBGTOPW,
+            OWBGTOPH,
+            WINDOW_WIDTH_PIXELS,
+            2,
+            0,
+            0
+        );
+
+        // BG bottom
+        static constexpr unsigned int OWBGBOTTOMW = WINDOW_WIDTH_PIXELS + 16;
+        static constexpr unsigned int OWBGBOTTOMH = OWBGTILEH * 6;
+        unsigned char bottom_pixels[ OWBGBOTTOMW * OWBGBOTTOMH ];
+        for ( unsigned int y = 0; y < OWBGBOTTOMH; ++y )
+        {
+            for ( unsigned int x = 0; x < OWBGBOTTOMW; x += OWBGTILEW )
+            {
+                memcpy( &bottom_pixels[ OWBGBOTTOMW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 6 ) % OWBGTILEH ) ], OWBGTILEW );
+            }
+        }
+
+        data.bg.gfx[ 1 ] = BSL::GFX::addGraphicSpriteRaw
+        (
+            bottom_pixels,
+            OWBGBOTTOMW,
+            OWBGBOTTOMH,
+            WINDOW_WIDTH_PIXELS,
+            42,
+            0,
+            WINDOW_HEIGHT_PIXELS - 40 - 2
+        );
+
+        // BG left
+        static constexpr unsigned int OWBGSIDEW = OWBGTILEW + 3;
+        static constexpr unsigned int OWBGSIDEH = 260;
+        unsigned char left_pixels[ OWBGSIDEW * OWBGSIDEH ];
+        for ( unsigned int y = 0; y < OWBGSIDEH; ++y )
+        {
+            for ( unsigned int x = 0; x < OWBGSIDEW; x += OWBGTILEW )
+            {
+                // Don't write data beyond width o’ data.
+                const size_t size = std::min( OWBGSIDEW - x, OWBGTILEW );
+                memcpy( &left_pixels[ OWBGSIDEW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) ], size );
+            }
+        }
+
+        data.bg.gfx[ 2 ] = BSL::GFX::addGraphicSpriteRaw
+        (
+            left_pixels,
+            OWBGSIDEW,
+            OWBGSIDEH,
+            3,
+            244,
+            0,
+            2
+        );
+
+        // BG right
+        unsigned char right_pixels[ OWBGSIDEW * OWBGSIDEH ];
+        for ( unsigned int y = 0; y < OWBGSIDEH; ++y )
+        {
+            // Offset by 13 pixels to keep aligned with other BG graphics.
+            memcpy( &right_pixels[ OWBGSIDEW * y ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) + 13 ], 3 );
+            memcpy( &right_pixels[ OWBGSIDEW * y + 3 ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) ], OWBGTILEW );
+        }
+
+        data.bg.gfx[ 3 ] = BSL::GFX::addGraphicSpriteRaw
+        (
+            right_pixels,
+            OWBGSIDEW,
+            OWBGSIDEH,
+            3,
+            244,
+            WINDOW_WIDTH_PIXELS - 3,
+            2
+        );
+
+        // Generate water
+        static constexpr unsigned char watertile[ WATERTILEW * WATERTILEH ] =
+        {
+            0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1,
+            0xA1, 0xA1, 0xA1, 0xFF, 0xFF, 0xA1, 0xA1, 0xA1,
+            0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xA1, 0xA1,
+            0xFF, 0xFF, 0xA1, 0xA1, 0xA1, 0xFF, 0xFF, 0xFF,
+        };
+        // Fill up single row o’ water tiles across screen width.
+        unsigned char water[ WATERW * WATERH ];
+        for ( unsigned int y = 0; y < WATERH; ++y )
+        {
+            for ( unsigned int x = 0; x < WATERW; x += WATERTILEW )
+            {
+                memcpy( &water[ WATERW * y + x ], &watertile[ WATERTILEW * y ], WATERTILEW );
+            }
+        }
+        // Generate graphics for each row o’ tiles.
+        for ( unsigned i = 0; i < WATERROWS; ++i )
+        {
+            data.water[ i ] = BSL::GFX::addGraphicSpriteRaw
+            (
+                water,
+                WATERW,
+                WATERH,
+                WINDOW_WIDTH_PIXELS - 14,
+                WATERH,
+                7,
+                WATERTILEH * i + 7,
+                { { "layer", BSL::Layer::BG_1 } }
+            );
+        }
+
+        // Generate tilemap.
+        std::vector<Warp> tempwarps;
+        JSON json { "assets/maps/ow-" + std::to_string( inwarp.map ) + ".json" };
+        data.map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
+        data.map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
+        data.map.collision = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
+        data.map.levels = static_cast<uint_fast8_t *> ( calloc( data.map.w * data.map.h, sizeof( uint_fast8_t ) ) );
+        BSL::GFX::Tile spritetiles[ data.map.w * data.map.h ];
+        for ( unsigned int i = 0; i < data.map.w * data.map.h; ++i )
+        {
+            memset( spritetiles, 0x00, data.map.w * data.map.h * sizeof( BSL::GFX::Tile ) );
+        }
+
+        JSONArray layers = json.getArray( "layers" );
+        layers.forEach
+        (
+            [ & ]( const JSONItem layeritem )
+            {
+                const JSONObject layer = layeritem.asObject();
+                const JSONArray props = layer.getArray( "properties" );
+                props.forEach
+                (
+                    [ & ]( const JSONItem propitem )
+                    {
+                        const JSONObject propobj = propitem.asObject();
+                        const std::string name = propobj.getString( "name" );
+                        if ( name == "type" )
+                        {
+                            const std::string value = propobj.getString( "value" );
+                            if ( value == "tile" )
+                            {
+                                const JSONArray & layerdata = layer.getArray( "data" );
+                                BSL::GFX::Tile tilemap[ data.map.w * data.map.h ];
+                                unsigned int i = 0;
+                                layerdata.forEach
+                                (
+                                    [ & ]( const JSONItem dataitem )
+                                    {
+                                        const unsigned int tilen = dataitem.asInt();
+                                        tilemap[ i ].set = tilen > 256;
+                                        tilemap[ i ].x = ( tilen - 257 ) % 16;
+                                        tilemap[ i ].y = static_cast<uint_fast8_t> ( ( tilen - 257 ) / 16.0 );
+                                        tilemap[ i ].animation = 0;
+                                        tilemap[ i ].frame = 0;
+                                        ++i;
+                                    }
+                                );
+
+                                const unsigned int tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
+                                BSL::GFX::addGraphicTilemap
+                                (
+                                    tilemap_texture,
+                                    tilemap,
+                                    data.map.w,
+                                    data.map.h
+                                );
+                            }
+                            else if ( value == "collision" )
+                            {
+                                const JSONArray & layerdata = layer.getArray( "data" );
+                                unsigned int i = 0;
+                                layerdata.forEach
+                                (
+                                    [ & ]( const JSONItem dataitem )
+                                    {
+                                        const uint_fast8_t dataval = static_cast<uint_fast8_t> ( dataitem.asInt() );
+                                        if ( dataval > 0 )
+                                        {
+                                            data.map.collision[ i ] = dataval;
+                                        }
+                                        ++i;
+                                    }
+                                );
+                            }
+                            else if ( value == "sprite" )
+                            {
+                                const JSONArray & layerdata = layer.getArray( "data" );
+                                unsigned int i = 0;
+                                layerdata.forEach
+                                (
+                                    [ & ]( const JSONItem dataitem )
+                                    {
+                                        const unsigned int dataval = static_cast<unsigned int> ( dataitem.asInt() );
+                                        switch ( dataval )
+                                        {
+                                            // Player
+                                            case ( 4353 ):
+                                            {
+                                                if ( inwarp.x == 0 && inwarp.y == 0 )
+                                                {
+                                                    const unsigned int x = i % data.map.w;
+                                                    const unsigned int y = static_cast<unsigned int>( i / data.map.w );
+                                                    data.autumn.x = static_cast<float> ( x * 16 );
+                                                    data.autumn.y = static_cast<float> ( y * 16 );
+                                                }
+                                            }
+                                            break;
+                                            default:
+                                            {
+                                                // Levels
+                                                if ( dataval >= 4369 && dataval < 4369 + 255 )
+                                                {
+                                                    const uint_fast8_t leveln = static_cast<uint_fast8_t> ( dataval - 4368 );
+                                                    data.map.levels[ i ] = leveln;
+                                                    spritetiles[ i ].set = true;
+                                                    spritetiles[ i ].x = 2;
+                                                    spritetiles[ i ].animation = 12;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                        ++i;
+                                    }
+                                );
+                            }
+                            else if ( value == "warp" )
+                            {
+                                const JSONArray objects = layer.getArray( "objects" );
+                                objects.forEach
+                                (
+                                    [ & ]( const JSONItem objectitem )
+                                    {
+                                        const JSONObject obj = objectitem.asObject();
+                                        const JSONArray props = obj.getArray( "properties" );
+                                        uint_fast8_t x = 0;
+                                        uint_fast8_t y = 0;
+                                        if ( obj.hasInt( "x" ) )
+                                        {
+                                            x = static_cast<uint_fast8_t> ( obj.getInt( "x" ) / 16.0 );
+                                        }
+                                        else if ( obj.hasFloat( "x" ) )
+                                        {
+                                            x = static_cast<uint_fast8_t> ( obj.getFloat( "x" ) / 16.0 );
+                                        }
+                                        if ( obj.hasInt( "y" ) )
+                                        {
+                                            y = static_cast<uint_fast8_t> ( obj.getInt( "y" ) / 16.0 );
+                                        }
+                                        else if ( obj.hasFloat( "y" ) )
+                                        {
+                                            y = static_cast<uint_fast8_t> ( obj.getFloat( "y" ) / 16.0 );
+                                        }
+                                        uint_fast16_t i = y * data.map.w + x;
+                                        data.map.collision[ i ] = static_cast<uint_fast8_t> ( tempwarps.size() + 16 );
+                                        Warp warp = { 0, 0, 0 };
+                                        props.forEach
+                                        (
+                                            [ & ]( const JSONItem propitem )
+                                            {
+                                                const JSONObject propobj = propitem.asObject();
+                                                const std::string name = propobj.getString( "name" );
+                                                if ( name == "map" )
+                                                {
+                                                    warp.map = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
+                                                }
+                                                else if ( name == "x" )
+                                                {
+                                                    warp.x = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
+                                                }
+                                                else if ( name == "y" )
+                                                {
+                                                    warp.y = static_cast<uint_fast8_t> ( propobj.getInt( "value" ) );
+                                                }
+                                            }
+                                        );
+                                        tempwarps.push_back( warp );
+                                    }
+                                );
+                            }
+                        }
+                    }
+                );
+            }
+        );
+
+        data.map.warpcount = tempwarps.size();
+        const size_t warpssize = data.map.warpcount * sizeof( Warp );
+        data.map.warps = static_cast<Warp *> ( malloc( warpssize ) );
+        memcpy( data.map.warps, &tempwarps[ 0 ], warpssize );
+
+        const unsigned int sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
+        BSL::GFX::addGraphicTilemap
+        (
+            sprite_texture,
+            spritetiles,
+            data.map.w,
+            data.map.h
+        );
+
+        // Generate player sprite.
+        if ( inwarp.x != 0 || inwarp.y != 0 )
+        {
+            data.autumn.x = static_cast<float> ( inwarp.x * 16 );
+            data.autumn.y = static_cast<float> ( inwarp.y * 16 );
+        }
+        data.autumn.gfx = BSL::GFX::addGraphicSprite
+        (
+            sprite_texture,
+            static_cast<int> ( data.autumn.x ),
+            static_cast<int> ( data.autumn.y ),
+            16,
+            16
+        );
+
+        // Generate o’erworld windows.
+        BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, 40, 0, WINDOW_HEIGHT_PIXELS - 40 );
+        BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS - 40, 0, 0, { { "bgcolor", 0x00 } } );
+
+        // Generate UI level name.
+        data.ui.lvname = BSL::GFX::addGraphicText
+        (
+            "Missing Level",
+            {
+                { "x", 8 },
+                { "y", 256 },
+                { "color", 0x01 },
+                { "opacity", 0.0f }
+            }
+        );
+        ++state_count;
+
+        pushFadeIn();
+    };
+
+    static void changeToLevel()
+    {
+        clearState();
+        states_[ 0 ].type = StateType::LEVEL;
+        auto & data = states_[ 0 ].data.level;
+        unsigned int player_texture = GFX::loadFileAsTexture( "sprites/autumn.png" );
+        data.player.y = -26.0f;
+        data.player.gfx = GFX::addGraphicSprite
+        (
+            player_texture,
+            200,
+            static_cast<int> ( data.player.y ),
+            16,
+            26
+        );
+        ++state_count;
+        pushFadeIn();
     };
 }

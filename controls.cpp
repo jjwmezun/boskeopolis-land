@@ -123,10 +123,7 @@ namespace BSL::Controls
     static int key_input_size;
     static int input_key_size;
     static int input_keys_start;
-    static int pressed_keys_start;
     static int held_keys_start;
-    static int pressed_start;
-    static int pressed_size;
     static int held_start;
     static int * keydata;
     static int key_to_glfw_map[] =
@@ -259,11 +256,8 @@ namespace BSL::Controls
 
     // Static Functions
     static int held( int id );
-    static int pressed( int id );
     static int * GetHeld( int id );
-    static int * GetPressed( int id );
     static int * GetHeldKeys( int input );
-    static int * GetPressedKeys( int input );
     static int * GetInputKeys( int input );
     static int * GetKeyInputs( int key );
     static void HandleInput( void * window, int key, int scancode, int action, int mods );
@@ -271,16 +265,6 @@ namespace BSL::Controls
 
 
     // Public Functions
-    void update()
-    {
-        memset( &keydata[ pressed_keys_start ], 0, pressed_size );
-    };
-
-    int pressedConfirm()
-    {
-        return pressed( 4 );
-    };
-
     int heldConfirm()
     {
         return held( 4 );
@@ -373,12 +357,6 @@ namespace BSL::Controls
         // * List o’ keys held for each input ( list o’ lists )
         //       -> MAX_INPUTS * inner list length.
         //          We don’t need counts, as these are only e’er referenced from inputs & ne’er looped thru.
-        // * List o’ keys pressed for each input ( list o’ lists )
-        //       -> MAX_INPUTS * inner list length.
-        // * List o’ inputs pressed ( 1D list )
-        //       -> MAX_INPUTS
-        //          This is needed for inputs pressed, regardless o’ efficiency, as we need to test if that particular
-        //          input has already been pressed before.
         // * List o’ inputs held ( 1D list )
         //       -> MAX_INPUTS
         //          Tho this value can be found thru the previous held_keys list, it’s mo’ efficient to only loop thru &
@@ -390,13 +368,8 @@ namespace BSL::Controls
         input_key_size = 1 + keys_per_input;
         const int input_keys_size = input_key_size * max_inputs;
         held_keys_start = input_keys_start + input_keys_size;
-        const int pressed_keys_count = keys_per_input * max_inputs;
-        pressed_keys_start = held_keys_start + pressed_keys_count;
-        pressed_start = pressed_keys_start + pressed_keys_count;
-        const int pressed_count = max_inputs;
-        pressed_size = ( pressed_keys_count + pressed_count ) * sizeof( int );
-        held_start = pressed_start + pressed_count;
-        const int total_size = key_inputs_size + input_keys_size + input_keys_size + pressed_keys_count + pressed_keys_count + pressed_count;
+        held_start = keys_per_input * max_inputs;
+        const int total_size = key_inputs_size + input_keys_size + input_keys_size;
         keydata = ( int * )( calloc( total_size, sizeof( int ) ) );
 
         // Loop thru given list o’ key/input pairs & set KeyInputs & InputKeys,
@@ -433,34 +406,14 @@ namespace BSL::Controls
         return GetHeld( id )[ 0 ];
     };
 
-    static int pressed( int id )
-    {
-        if ( id >= max_inputs )
-        {
-            BSL::log( "pressed Error: invalid id #%d.", id );
-            return 0;
-        }
-        return GetPressed( id )[ 0 ];
-    };
-
     static int * GetHeld( int id )
     {
         return &keydata[ held_start + id ];
     };
 
-    static int * GetPressed( int id )
-    {
-        return &keydata[ pressed_start + id ];
-    };
-
     static int * GetHeldKeys( int input )
     {
         return &keydata[ held_keys_start + ( keys_per_input * input ) ];
-    };
-
-    static int * GetPressedKeys( int input )
-    {
-        return &keydata[ pressed_keys_start + ( keys_per_input * input ) ];
     };
 
     static int * GetInputKeys( int input )
@@ -491,7 +444,6 @@ namespace BSL::Controls
                 {
                     const int input = inputs[ 1 + i ];
                     GetHeld( input )[ 0 ] = 1;
-                    GetPressed( input )[ 0 ] = 1;
                     const int * input_keys = GetInputKeys( input );
                     const int input_keys_count = input_keys[ 0 ];
                     // While we can settle for just setting the 1D held list to 1, since if any key for an input is
@@ -501,7 +453,6 @@ namespace BSL::Controls
                     {
                         if ( input_keys[ j + 1 ] == key )
                         {
-                            GetPressedKeys( input )[ j ] = 1;
                             GetHeldKeys( input )[ j ] = 1;
                         }
                     }
@@ -517,23 +468,20 @@ namespace BSL::Controls
                     const int input = inputs[ 1 + i ];
                     // Unlike the press code, we need this for later, so keep pointer.
                     int * held = GetHeld( input );
-                    int * pressed = GetPressed( input );
-                    *held = *pressed = 0;
+                    *held = 0;
                     const int * input_keys = GetInputKeys( input );
                     const int input_keys_count = input_keys[ 0 ];
                     for ( int j = 0; j < input_keys_count; ++j )
                     {
                         // Unlike the press code, we need this for later, so keep pointer.
                         int * heldkeys = &GetHeldKeys( input )[ j ];
-                        int * pressedkeys = &GetPressedKeys( input )[ j ];
                         if ( input_keys[ j + 1 ] == key )
                         {
-                            *heldkeys = *pressedkeys = 0;
+                            *heldkeys = 0;
                         }
                         // This is a simple & efficient way to say that if any o’ the keys for this input are held, still
                         // consider it held.
                         held[ 0 ] = held[ 0 ] || *heldkeys;
-                        pressed[ 0 ] = pressed[ 0 ] || *pressedkeys;
                     }
                 }
             }
