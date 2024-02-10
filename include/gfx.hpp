@@ -8,6 +8,15 @@ namespace BSL::GFX
 {
     typedef void ( * input_handle_t )( void *, int, int, int, int );
 
+    struct RGBColor
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
+    };
+
+    static constexpr unsigned int COLORS_PER_PALETTE = 256;
+
     int init();
     void close();
     void update( float dt );
@@ -15,12 +24,12 @@ namespace BSL::GFX
     void handleEvents();
     double getTime();
     void registerInputHandler( input_handle_t handler );
-    void setPalette( unsigned char p );
     void setCanvasOpacity( float o );
     void setState( uint_fast8_t s );
     void clearGraphics();
     void clearStateGraphics();
     void removeGraphic( unsigned int id );
+    void setPalette( RGBColor * palette );
 
     struct Graphic
     {

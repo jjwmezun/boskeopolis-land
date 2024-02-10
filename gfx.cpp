@@ -180,7 +180,6 @@ namespace BSL::GFX
     {
         GLint texture;
         GLint palette_texture;
-        GLfloat palette_no;
         GLfloat canvas_opacity;
     } uniforms;
     static unsigned int max_graphics = 100;
@@ -199,8 +198,7 @@ namespace BSL::GFX
     static float animation_timer = 0.0f;
     static unsigned int animation_counter = 0;
     static std::unordered_map<std::string, GraphicCharTemplate> charset;
-    static Texture palette_texture;
-    static float palette;
+    static RGBColor palette_texture[ COLORS_PER_PALETTE ];
     static struct
     {
         GLint x;
@@ -318,6 +316,11 @@ namespace BSL::GFX
         getGraphic( id_ ).data.text.color1 = getGraphic( id_ ).data.text.color2 = color;
     };
 
+    void setPalette( RGBColor * palette )
+    {
+        memcpy( palette_texture, palette, sizeof( RGBColor ) * COLORS_PER_PALETTE );
+    };
+
     int init()
     {
         glfwInit();
@@ -372,20 +375,10 @@ namespace BSL::GFX
             gfx_ptrs_id_to_pos[ i ] = gfx_ptrs_pos_to_id[ i ] = state_for_gfx[ i ] = layer_for_gfx[ i ] = -1;
         }
 
-        // Load palette texture.
-        std::string palette_filename = std::string( "assets/palettes/main.png" );
-        palette_texture.data = stbi_load
-        (
-            palette_filename.c_str(),
-            ( int * )( &palette_texture.w ),
-            ( int * )( &palette_texture.h ),
-            nullptr, STBI_rgb_alpha
-        );
-
-        if ( !palette_texture.data )
+        // Init palette texture.
+        for ( uint_fast16_t i = 0; i < COLORS_PER_PALETTE; ++i )
         {
-            BSL::log( "GFX Init Error: could not load palette data from “%s”.", palette_filename.c_str() );
-            return -1;
+            palette_texture[ i ].r = palette_texture[ i ].g = palette_texture[ i ].b = i;
         }
 
         glActiveTexture( GL_TEXTURE0 );
@@ -398,7 +391,7 @@ namespace BSL::GFX
 
         glActiveTexture( GL_TEXTURE1 );
         glBindTexture( GL_TEXTURE_2D, gl_textures[ 1 ] );
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, ( unsigned int )( palette_texture.w ), ( unsigned int )( palette_texture.h ), 0, GL_RGBA, GL_UNSIGNED_BYTE, palette_texture.data );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, COLORS_PER_PALETTE, 1u, 0, GL_RGB, GL_UNSIGNED_BYTE, palette_texture );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
@@ -500,7 +493,6 @@ namespace BSL::GFX
         glUseProgram( main_shader );
         uniforms.texture = glGetUniformLocation( main_shader, "texture_data" );
         uniforms.palette_texture = glGetUniformLocation( main_shader, "palette_data" );
-        uniforms.palette_no = glGetUniformLocation( main_shader, "palette_no" );
         uniforms.canvas_opacity = glGetUniformLocation( main_shader, "canvas_opacity" );
         setMVP( main_shader );
 
@@ -1021,10 +1013,9 @@ namespace BSL::GFX
         glBindTexture( GL_TEXTURE_2D, gl_textures[ 0 ] );
         glUniform1i( uniforms.texture, 0 );
         glActiveTexture( GL_TEXTURE1 );
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, palette_texture.w, palette_texture.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, palette_texture.data );
+        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, COLORS_PER_PALETTE, 1u, 0, GL_RGB, GL_UNSIGNED_BYTE, palette_texture );
         glBindTexture( GL_TEXTURE_2D, gl_textures[ 1 ] );
         glUniform1i( uniforms.palette_texture, 1 );
-        glUniform1f( uniforms.palette_no, palette );
         glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
 
         glViewport( border_viewport.x, border_viewport.y, border_viewport.w, border_viewport.h );
@@ -1162,11 +1153,6 @@ namespace BSL::GFX
         g.data.tilemap.x = GetArg( "x", args, 0 );
         g.data.tilemap.y = GetArg( "y", args, 0 );
         return { addGraphic( g ) };
-    };
-
-    void setPalette( unsigned char p )
-    {
-        palette = static_cast<float> ( static_cast<double> ( p ) / 256.0 );
     };
 
     void setCanvasOpacity( float o )

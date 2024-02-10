@@ -156,6 +156,9 @@ namespace BSL::Game
             ui;
             uint_fast8_t prev_level;
             uint_fast8_t current_level;
+            uint_fast16_t current_pal;
+            float palette_animation;
+            GFX::RGBColor palettes[ 360 ][ GFX::COLORS_PER_PALETTE ];
         }
         overworld;
         struct
@@ -502,6 +505,18 @@ namespace BSL::Game
                 BSL::GFX::setCameraY( static_cast<unsigned int> ( data.camera.y ) );
 
                 updateOWAnimation( data, dt );
+
+                data.palette_animation += dt;
+                while ( data.palette_animation >= 0.5f )
+                {
+                    data.palette_animation -= 0.5f;
+                    ++data.current_pal;
+                    if ( data.current_pal >= 360 )
+                    {
+                        data.current_pal = 0;
+                    }
+                    GFX::setPalette( &data.palettes[ data.current_pal ][ 0 ] );
+                }
             }
             break;
             case ( StateType::TITLE ):
@@ -1187,6 +1202,68 @@ namespace BSL::Game
                 { "opacity", 0.0f }
             }
         );
+
+        // Init palette.
+        const float s = 0.5f;
+        for ( uint_fast16_t h = 0; h < 360; ++h )
+        {
+            const float hrel = h / 60.0;
+            const uint_fast8_t type = static_cast<uint_fast8_t>( hrel );
+            const float ff = hrel - type;
+            for ( uint_fast16_t v = 0; v < 256; ++v )
+            {
+                const float p = v * (1.0 - s);
+                const float q = v * (1.0 - (s * ff));
+                const float t = v * (1.0 - (s * (1.0 - ff)));
+                switch ( type )
+                {
+                    case ( 0 ):
+                    {
+                        data.palettes[ h ][ v ].r = v;
+                        data.palettes[ h ][ v ].g = t;
+                        data.palettes[ h ][ v ].b = p;
+                    }
+                    break;
+                    case ( 1 ):
+                    {
+                        data.palettes[ h ][ v ].r = q;
+                        data.palettes[ h ][ v ].g = v;
+                        data.palettes[ h ][ v ].b = p;
+                    }
+                    break;
+                    case ( 2 ):
+                    {
+                        data.palettes[ h ][ v ].r = p;
+                        data.palettes[ h ][ v ].g = v;
+                        data.palettes[ h ][ v ].b = t;
+                    }
+                    break;
+                    case ( 3 ):
+                    {
+                        data.palettes[ h ][ v ].r = p;
+                        data.palettes[ h ][ v ].g = q;
+                        data.palettes[ h ][ v ].b = v;
+                    }
+                    break;
+                    case ( 4 ):
+                    {
+                        data.palettes[ h ][ v ].r = t;
+                        data.palettes[ h ][ v ].g = p;
+                        data.palettes[ h ][ v ].b = v;
+                    }
+                    break;
+                    default:
+                    {
+                        data.palettes[ h ][ v ].r = v;
+                        data.palettes[ h ][ v ].g = p;
+                        data.palettes[ h ][ v ].b = q;
+                    }
+                    break;
+                }
+            }
+        }
+        GFX::setPalette( &data.palettes[ data.current_pal ][ 0 ] );
+
         ++state_count;
 
         pushFadeIn();
