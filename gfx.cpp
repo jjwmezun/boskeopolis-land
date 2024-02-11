@@ -2,6 +2,7 @@
 #include <cglm/call.h>
 #include "config.hpp"
 #include <cstdio>
+#include <filesystem>
 #include "gfx.hpp"
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
@@ -30,6 +31,12 @@ namespace BSL::GFX
     static constexpr unsigned int VERTEX_SIZE = 4;
     static constexpr unsigned int GL_TEXTURE_COUNT = 3;
     static constexpr unsigned int MAX_TEXTURES = 1000;
+
+    struct Palette
+    {
+        uint_fast16_t rows;
+        RGBColor * data;
+    };
 
     enum class GraphicCharType
     {
@@ -198,7 +205,7 @@ namespace BSL::GFX
     static float animation_timer = 0.0f;
     static unsigned int animation_counter = 0;
     static std::unordered_map<std::string, GraphicCharTemplate> charset;
-    static RGBColor palette_texture[ COLORS_PER_PALETTE ];
+    static RGBColor * palette_texture = nullptr;
     static struct
     {
         GLint x;
@@ -235,6 +242,7 @@ namespace BSL::GFX
         nullptr
     };
     static std::vector<float> times;
+    static std::unordered_map<std::string, Palette> palettes;
 
     static void FramebufferSizeCallback( GLFWwindow * window, int width, int height );
     static unsigned int GenerateShaderProgram( const Shader * shaders, int shadersnum );
@@ -316,9 +324,14 @@ namespace BSL::GFX
         getGraphic( id_ ).data.text.color1 = getGraphic( id_ ).data.text.color2 = color;
     };
 
-    void setPalette( RGBColor * palette )
+    void setPalette( const std::string & palname )
     {
-        memcpy( palette_texture, palette, sizeof( RGBColor ) * COLORS_PER_PALETTE );
+        auto it = palettes.find( palname );
+        if ( it == palettes.end() )
+        {
+            throw std::runtime_error( "setPalette error: ¡Palette " + palname + " doesn’t exist!" );
+        }
+        palette_texture = it->second.data;
     };
 
     int init()
@@ -376,9 +389,34 @@ namespace BSL::GFX
         }
 
         // Init palette texture.
+        RGBColor * p = static_cast<RGBColor *> ( malloc( COLORS_PER_PALETTE * sizeof( RGBColor ) ) );
         for ( uint_fast16_t i = 0; i < COLORS_PER_PALETTE; ++i )
         {
-            palette_texture[ i ].r = palette_texture[ i ].g = palette_texture[ i ].b = i;
+            p[ i ].r = p[ i ].g = p[ i ].b = ( i == COLORS_PER_PALETTE - 1 ) ? 255 : i * 32;
+        }
+        palettes.insert( { "grayscale", { 1, p } } );
+        palette_texture = p;
+
+        // Gather map o’ all palettes in palettes directory.
+        const std::filesystem::path paldir { "assets/palettes/" };
+        for ( const auto & file : std::filesystem::directory_iterator{ paldir } )
+        {
+            const std::string path = std::string( file.path().c_str() );
+            int w;
+            int h;
+            RGBColor * p = ( RGBColor * )( stbi_load
+            (
+                path.c_str(),
+                &w,
+                &h,
+                nullptr, STBI_rgb
+            ) );
+            if ( w != 9 )
+            {
+                throw std::runtime_error( "¡Palette " + path + " must be 9 pixels wide!" );
+            }
+            std::string name = path.substr( 16, path.size() - 16 - 4 );
+            palettes.insert( { name, { static_cast<uint_fast16_t>( h ), p } } );
         }
 
         glActiveTexture( GL_TEXTURE0 );
@@ -467,7 +505,7 @@ namespace BSL::GFX
             },
             {
                 ShaderType::FRAGMENT,
-                "#version 330 core\nout vec4 final_color;\n\nin vec2 out_position;\n\nin vec2 texture_coords;\n\nuniform sampler2D texture_data;\nuniform sampler2D palette_data;\nuniform float palette_no;\nuniform float canvas_opacity;\nvoid main()\n{\n    float color = ( texture( texture_data, texture_coords ).r * 256.0 - 1.0 ) / 256.0;\n    final_color = vec4( texture( palette_data, vec2( color, palette_no ) ).rgb, canvas_opacity );\n}"
+                "#version 330 core\nout vec4 final_color;\n\nin vec2 out_position;\n\nin vec2 texture_coords;\n\nuniform sampler2D texture_data;\nuniform sampler2D palette_data;\nuniform float palette_no;\nuniform float canvas_opacity;\nvoid main()\n{\n    float color = ( texture( texture_data, texture_coords ).r * 255.0 ) / 256.0;\n    final_color = vec4( texture( palette_data, vec2( color, palette_no ) ).rgb, canvas_opacity );\n}"
             }
         };
         Shader border_shaders[] =
@@ -1274,45 +1312,45 @@ namespace BSL::GFX
         static constexpr unsigned char MENU_TOP_LEFT[ 6 * 6 ] =
         {
             0x00, 0x01, 0x01, 0x01, 0x01, 0x01,
-            0x01, 0x01, 0x80, 0x80, 0x80, 0x80,
-            0x01, 0x80, 0x80, 0x50, 0x50, 0x50,
-            0x01, 0x80, 0x50, 0x50, 0x01, 0x01,
-            0x01, 0x80, 0x50, 0x01, 0x01, 0x01,
-            0x01, 0x80, 0x50, 0x01, 0x01, 0x01,
+            0x01, 0x01, 0xC0, 0xC0, 0xC0, 0xC0,
+            0x01, 0xC0, 0xC0, 0x80, 0x80, 0x80,
+            0x01, 0xC0, 0x80, 0x80, 0x01, 0x01,
+            0x01, 0xC0, 0x80, 0x01, 0x01, 0x01,
+            0x01, 0xC0, 0x80, 0x01, 0x01, 0x01,
         };
 
         static constexpr unsigned char MENU_TOP_RIGHT[ 6 * 6 ] =
         {
             0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
-            0x80, 0x80, 0x80, 0x01, 0x01, 0x01,
-            0x50, 0x50, 0x80, 0x30, 0x01, 0x01,
-            0x01, 0x50, 0x50, 0x30, 0x01, 0x01,
-            0x01, 0x01, 0x50, 0x30, 0x01, 0x01,
-            0x01, 0x01, 0x50, 0x30, 0x01, 0x01,
+            0xC0, 0xC0, 0xC0, 0x01, 0x01, 0x01,
+            0x80, 0x80, 0xC0, 0x40, 0x01, 0x01,
+            0x01, 0x80, 0x80, 0x40, 0x01, 0x01,
+            0x01, 0x01, 0x80, 0x40, 0x01, 0x01,
+            0x01, 0x01, 0x80, 0x40, 0x01, 0x01,
         };
 
         static constexpr unsigned char MENU_BOTTOM_LEFT[ 6 * 6 ] =
         {
-            0x01, 0x80, 0x50, 0x01, 0x01, 0x01,
-            0x01, 0x80, 0x50, 0x50, 0x01, 0x01,
-            0x01, 0x30, 0x80, 0x50, 0x50, 0x50,
-            0x01, 0x01, 0x30, 0x30, 0x30, 0x30,
+            0x01, 0xC0, 0x80, 0x01, 0x01, 0x01,
+            0x01, 0xC0, 0x80, 0x80, 0x01, 0x01,
+            0x01, 0x40, 0xC0, 0x80, 0x80, 0x80,
+            0x01, 0x01, 0x40, 0x40, 0x40, 0x40,
             0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
             0x00, 0x01, 0x01, 0x01, 0x01, 0x01,
         };
 
         static constexpr unsigned char MENU_BOTTOM_RIGHT[ 6 * 6 ] =
         {
-            0x01, 0x01, 0x50, 0x30, 0x01, 0x01,
-            0x01, 0x50, 0x50, 0x30, 0x01, 0x01,
-            0x50, 0x50, 0x30, 0x30, 0x01, 0x01,
-            0x30, 0x30, 0x30, 0x01, 0x01, 0x01,
+            0x01, 0x01, 0x80, 0x40, 0x01, 0x01,
+            0x01, 0x80, 0x80, 0x40, 0x01, 0x01,
+            0x80, 0x80, 0x40, 0x40, 0x01, 0x01,
+            0x40, 0x40, 0x40, 0x01, 0x01, 0x01,
             0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
             0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
         };
 
-        static constexpr unsigned char MENU_LEFT_SIDE[ 5 ] = { 0x01, 0x80, 0x050, 0x01, 0x01 };
-        static constexpr unsigned char MENU_RIGHT_SIDE[ 5 ] = { 0x01, 0x80, 0x050, 0x01, 0x01 };
+        static constexpr unsigned char MENU_LEFT_SIDE[ 5 ] = { 0x01, 0xC0, 0x80, 0x01, 0x01 };
+        static constexpr unsigned char MENU_RIGHT_SIDE[ 5 ] = { 0x01, 0x80, 0x40, 0x01, 0x01 };
 
         #define COORDS( x, y ) ( &data.data[ ( data.dataw * ( y ) ) + ( x ) ] )
 
@@ -1329,15 +1367,15 @@ namespace BSL::GFX
 
         // Generate top center.
         memset( COORDS( 6, 0 ), 0x01, data.dataw - 12 ); // Set 1st row to black
-        memset( COORDS( 6, 1 ), 0x80, data.dataw - 12 ); // Set 2nd row to highlight
-        memset( COORDS( 6, 2 ), 0x50, data.dataw - 12 ); // Set 3rd row to main
+        memset( COORDS( 6, 1 ), 0xC0, data.dataw - 12 ); // Set 2nd row to highlight
+        memset( COORDS( 6, 2 ), 0x80, data.dataw - 12 ); // Set 3rd row to main
         memset( COORDS( 6, 3 ), 0x01, data.dataw - 12 ); // Set 4th row to black
         memset( COORDS( 6, 4 ), 0x01, data.dataw - 12 ); // Set 5th row to black
 
         // Generate bottom center.
         memset( COORDS( 6, data.h - 5 ), 0x01, data.dataw - 12 ); // Set 1st row to black
-        memset( COORDS( 6, data.h - 4 ), 0x50, data.dataw - 12 ); // Set 2nd row to main
-        memset( COORDS( 6, data.h - 3 ), 0x30, data.dataw - 12 ); // Set 3rd row to shadow
+        memset( COORDS( 6, data.h - 4 ), 0x80, data.dataw - 12 ); // Set 2nd row to main
+        memset( COORDS( 6, data.h - 3 ), 0x40, data.dataw - 12 ); // Set 3rd row to shadow
         memset( COORDS( 6, data.h - 2 ), 0x01, data.dataw - 12 ); // Set 4th row to black
         memset( COORDS( 6, data.h - 1 ), 0x01, data.dataw - 12 ); // Set 5th row to black
 
@@ -1345,7 +1383,7 @@ namespace BSL::GFX
         for ( unsigned int y = 6; y < data.datah - 6; ++y )
         {
             memcpy( COORDS( 0, y ), MENU_LEFT_SIDE, 5 );
-            memcpy( COORDS( data.dataw - 5, y ), MENU_LEFT_SIDE, 5 );
+            memcpy( COORDS( data.dataw - 5, y ), MENU_RIGHT_SIDE, 5 );
         }
 
         #undef COORDS

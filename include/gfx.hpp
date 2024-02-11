@@ -15,7 +15,7 @@ namespace BSL::GFX
         unsigned char b;
     };
 
-    static constexpr unsigned int COLORS_PER_PALETTE = 256;
+    static constexpr unsigned int COLORS_PER_PALETTE = 9;
 
     int init();
     void close();
@@ -29,7 +29,7 @@ namespace BSL::GFX
     void clearGraphics();
     void clearStateGraphics();
     void removeGraphic( unsigned int id );
-    void setPalette( RGBColor * palette );
+    void setPalette( const std::string & palname );
 
     struct Graphic
     {
