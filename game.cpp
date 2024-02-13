@@ -793,7 +793,7 @@ namespace BSL::Game
             0,
             WINDOW_WIDTH_PIXELS,
             WINDOW_HEIGHT_PIXELS,
-            32,
+            192,
             {
                 { "abs", true }
             }
@@ -808,6 +808,8 @@ namespace BSL::Game
             }
         );
         ++state_count;
+
+        GFX::setPalette( "sunny" );
 
         pushFadeIn();
     };
