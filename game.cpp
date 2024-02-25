@@ -3,6 +3,7 @@
 #include "game.hpp"
 #include "gfx.hpp"
 #include "json.hpp"
+#include <stdexcept>
 #include <vector>
 
 namespace BSL::Game
@@ -27,8 +28,6 @@ namespace BSL::Game
         char * name;
         uint_fast16_t gemscore;
         uint_fast16_t timescore;
-        uint_fast8_t cycle;
-        uint_fast8_t theme;
     };
 
     struct Warp
@@ -152,6 +151,8 @@ namespace BSL::Game
             struct
             {
                 BSL::GFX::Text lvname;
+                BSL::GFX::Counter gemscore;
+                BSL::GFX::Timer timescore;
             }
             ui;
             uint_fast8_t prev_level;
@@ -437,13 +438,20 @@ namespace BSL::Game
 
                 // Level collision.
                 const uint_fast8_t lvval = data.map.levels[ centeri ];
+
+                // Only show if a valid level.
                 if ( lvval > 0 && lvval <= levelcount )
                 {
                     data.ui.lvname.setOpacity( 1.0f );
+                    data.ui.gemscore.setOpacity( 1.0f );
+                    data.ui.timescore.setOpacity( 1.0f );
                     const OWLevel & lv = levels[ lvval - 1 ];
                     data.current_level = lvval;
+
+                    // Update level GFX if touching a different level.
                     if ( data.prev_level != data.current_level )
                     {
+                        // Update level name.
                         data.ui.lvname.changeText
                         (
                             lv.name,
@@ -452,17 +460,29 @@ namespace BSL::Game
                                 { "y", 256 },
                             }
                         );
+
+                        // Update gem score.
+                        data.ui.gemscore.changeNumber( lv.gemscore );
+
+                        // Update time score.
+                        data.ui.timescore.changeSeconds( lv.timescore );
+
                         data.prev_level = data.current_level;
                     }
+
+                    // Open level menu on confirmation.
                     if ( BSL::Controls::heldConfirm() )
                     {
                         pushOWLevelOpenMenu();
                     }
                 }
+                // If not a valid level, hide.
                 else
                 {
                     data.current_level = 0;
                     data.ui.lvname.setOpacity( 0.0f );
+                    data.ui.gemscore.setOpacity( 0.0f );
+                    data.ui.timescore.setOpacity( 0.0f );
                 }
 
                 // Update camera.
@@ -655,13 +675,46 @@ namespace BSL::Game
             [&] ( const JSONItem item, unsigned int i )
             {
                 const JSONObject obj = item.asObject();
-                const std::string name = obj.getString( "name" );
+                const uint_fast8_t cycle = static_cast<uint_fast8_t> ( obj.getInt( "cycle" ) );
+                const uint_fast8_t theme = static_cast<uint_fast8_t> ( obj.getInt( "theme" ) );
+
+                if ( cycle > 9 || cycle < 1 )
+                {
+                    throw std::runtime_error( "Error loading level list. Cycles should ne’er be greater than 9 or less than 1." );
+                }
+
+                if ( theme > 16 || theme < 1 )
+                {
+                    throw std::runtime_error( "Error loading level list. Themes should ne’er be greater than 16 or less than 1." );
+                }
+
+                static constexpr char hextable[ 16 ] =
+                {
+                    '0',
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5',
+                    '6',
+                    '7',
+                    '8',
+                    '9',
+                    'A',
+                    'B',
+                    'C',
+                    'D',
+                    'E',
+                    'F'
+                };
+                const char theme_str[ 1 ] = { hextable[ theme - 1 ] };
+
+                // Follow pattern: B-2: [name] for 12th theme o’ 2nd cycle.
+                const std::string name = std::string( theme_str ) + "-" + std::to_string( cycle ) + ": " + obj.getString( "name" );
                 levels[ i ].name = static_cast<char *> ( malloc( name.size() + 1 ) );
                 strcpy( levels[ i ].name, name.c_str() );
                 levels[ i ].gemscore = static_cast<uint_fast16_t> ( obj.getInt( "gemscore" ) );
                 levels[ i ].timescore = static_cast<uint_fast16_t> ( obj.getInt( "timescore" ) );
-                levels[ i ].cycle = static_cast<uint_fast8_t> ( obj.getInt( "cycle" ) );
-                levels[ i ].theme = static_cast<uint_fast8_t> ( obj.getInt( "theme" ) );
             }
         );
     };
@@ -1200,6 +1253,44 @@ namespace BSL::Game
                 { "y", 256 },
                 { "color", 0x01 },
                 { "opacity", 0.0f }
+            }
+        );
+
+        // Add UI GFX for total ₧ counter.
+        BSL::GFX::addGraphicCounter
+        (
+            8420,
+            9,
+            {
+                { "x", 8 },
+                { "y", 256 + 16 },
+                { "color", 0x01 },
+                { "prefix", "₧" }
+            }
+        );
+
+        // Add UI GFX for level gem score.
+        data.ui.gemscore = BSL::GFX::addGraphicCounter
+        (
+            0,
+            5,
+            {
+                { "x", 456 },
+                { "y", 256 },
+                { "color", 0x01 },
+                { "prefix", "₧" }
+            }
+        );
+
+        // Add UI GFX for level time score.
+        data.ui.timescore = BSL::GFX::addGraphicTimer
+        (
+            255,
+            {
+                { "x", 464 },
+                { "y", 264 },
+                { "color", 0x01 },
+                { "prefix", "🕑" }
             }
         );
 

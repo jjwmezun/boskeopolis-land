@@ -31,6 +31,20 @@ namespace BSL::GFX
     static constexpr unsigned int VERTEX_SIZE = 4;
     static constexpr unsigned int GL_TEXTURE_COUNT = 3;
     static constexpr unsigned int MAX_TEXTURES = 1000;
+    static constexpr uint_fast8_t SECONDS_DIGITS = 2;
+
+    struct Time
+    {
+        static constexpr double MAX_MINUTES = 9.0;
+
+        constexpr Time( uint_fast16_t total_seconds ) :
+            seconds ( total_seconds % 60 ),
+            minutes ( std::min( MAX_MINUTES, std::floor( total_seconds / 60 ) ) )
+        {};
+
+        const uint_fast8_t seconds;
+        const uint_fast8_t minutes;
+    };
 
     struct Palette
     {
@@ -107,6 +121,15 @@ namespace BSL::GFX
         unsigned char * data;
     };
 
+    struct TextGraphic
+    {
+        unsigned int char_count;
+        GraphicChar * chars;
+        bool shadow;
+        uint_fast8_t color1;
+        uint_fast8_t color2;
+    };
+
     struct RawGraphic
     {
         bool abs;
@@ -152,15 +175,19 @@ namespace BSL::GFX
                 int y;
             }
             tilemap;
+            TextGraphic text;
             struct
             {
-                unsigned int char_count;
-                GraphicChar * chars;
-                bool shadow;
-                uint_fast8_t color1;
-                uint_fast8_t color2;
-            }
-            text;
+                TextGraphic text;
+                uint_fast32_t max;
+                int_fast32_t min;
+                uint_fast8_t prefix_offset;
+            } counter;
+            struct
+            {
+                TextGraphic text;
+                uint_fast8_t prefix_offset;
+            } timer;
             struct
             {
                 unsigned char * data;
@@ -253,13 +280,18 @@ namespace BSL::GFX
     static unsigned int getStateLayerIndex( unsigned int state, unsigned int layer );
     static bool growGraphics();
     static void destroyGraphic( RawGraphic & graphic );
-    static int GetCharacterSize( const char * s );
+    static uint_fast8_t getCharacterSize( const char * s );
     static void generateText
     (
         const char * text,
         BSL::ArgList args,
         RawGraphic & g
     );
+    static GraphicChar generateCharBlock( const GraphicCharTemplate & chartemp, int_fast32_t x, int_fast32_t y );
+    static constexpr uint_fast8_t getDigit( int_fast32_t n, uint_fast8_t d );
+    static GraphicCharTemplate findCharacter( const std::string & letter );
+    static void updateDigitCharBlockTemplate( GraphicChar & c, const GraphicCharTemplate & chartemp );
+    static std::vector<GraphicChar> generateCharListWithPrefix( const ArgList & args, int_fast32_t & x, int_fast32_t y );
 
     void Graphic::setLayer( BSL::Layer layer )
     {
@@ -322,6 +354,50 @@ namespace BSL::GFX
     void Text::setColor( uint_fast8_t color )
     {
         getGraphic( id_ ).data.text.color1 = getGraphic( id_ ).data.text.color2 = color;
+    };
+
+    void Counter::changeNumber( int_fast32_t n )
+    {
+        auto & counter = getGraphic( id_ ).data.counter;
+
+        // Check that new # is within bounds.
+        n = std::max( std::min( static_cast<int_fast32_t> ( counter.max ), n ), counter.min );
+
+        const bool isnegative = n < 0;
+
+        // If negative, skip 1st char, as it should be “-”.
+        const uint_fast8_t start = ( isnegative ? counter.text.char_count - 1 : counter.text.char_count ) - counter.prefix_offset;
+
+        // If is negative, make sure 1st char is “-”.
+        if ( isnegative )
+        {
+            updateDigitCharBlockTemplate( counter.text.chars[ counter.prefix_offset ], findCharacter( "-" ) );
+        }
+
+        // Go thru digits replacing chars.
+        for ( uint_fast8_t i = start; i > 0; --i )
+        {
+            const uint_fast8_t digit = getDigit( std::abs( n ), i );
+            const uint_fast8_t di = counter.text.char_count - i;
+            updateDigitCharBlockTemplate( counter.text.chars[ di ], findCharacter( std::to_string( digit ) ) );
+        }
+    };
+
+    void Timer::changeSeconds( uint_fast16_t seconds )
+    {
+        auto & timer = getGraphic( id_ ).data.timer;
+        const Time time { seconds };
+
+        // Update minutes digit ( 1st char after prefix ).
+        updateDigitCharBlockTemplate( timer.text.chars[ timer.prefix_offset ], findCharacter( std::to_string( time.minutes ) ) );
+
+        // Update seconds digits.
+        for ( uint_fast8_t i = SECONDS_DIGITS; i > 0; --i )
+        {
+            const uint_fast8_t digit = getDigit( std::abs( time.seconds ), i );
+            const uint_fast8_t di = timer.text.char_count - i;
+            updateDigitCharBlockTemplate( timer.text.chars[ di ], findCharacter( std::to_string( digit ) ) );
+        }
     };
 
     void setPalette( const std::string & palname )
@@ -1286,6 +1362,115 @@ namespace BSL::GFX
         return { addGraphic( g ) };
     };
 
+    Counter addGraphicCounter
+    (
+        int_fast32_t num,
+        uint_fast8_t digits,
+        BSL::ArgList args
+    )
+    {
+        int_fast32_t x = GetArg( "x", args, 0 );
+        int_fast32_t y = GetArg( "y", args, 0 );
+
+        // Max should fill all digits with 9s, which is 10^d - 1 ( e.g. 5 digits is 99999 or 10^5 - 1 or 100000 - 1 ).
+        const uint_fast32_t maxnum = std::pow( 10, digits ) - 1;
+
+        // Min should fill all digits but 1st with 9s, which is -( 10^( d-1 ) ) ( e.g. 5 digits is -9999 or -( 100000 - 1 ) ).
+        const int_fast32_t minnum = -( std::pow( 10, digits - 1 ) - 1 );
+
+        // Make sure num stays within max & min.
+        num = std::max( std::min( static_cast<int_fast32_t> ( maxnum ), num ), minnum );
+
+        const bool isnegative = num < 0;
+
+        // If negative, skip 1st char, as it should be “-”.
+        const uint_fast8_t start = isnegative ? digits - 1 : digits;
+
+        // Add prefix @ beginning.
+        auto charlist = generateCharListWithPrefix( args, x, y );
+        const uint_fast8_t prefix_offset = charlist.size();
+
+        // If negative, add “-” to start o’ charlist.
+        if ( isnegative )
+        {
+            charlist.emplace_back( generateCharBlock( findCharacter( "-" ), x, y ) );
+            x += 8;
+        }
+
+        // Go thru digits, adding corresponding chars to charlist.
+        for ( uint_fast8_t i = start; i > 0; --i )
+        {
+            const uint_fast8_t digit = getDigit( std::abs( num ), i );
+            charlist.push_back( generateCharBlock( findCharacter( std::to_string( digit ) ), x, y ) );
+            x += 8;
+        }
+
+        RawGraphic g;
+
+        // Set this to TEXT type so render function renders it just like text.
+        g.type = GraphicType::TEXT;
+
+        g.data.counter.text.char_count = charlist.size();
+        g.data.counter.text.chars = static_cast<GraphicChar *> ( calloc( g.data.counter.text.char_count, sizeof( GraphicChar ) ) );
+        memcpy( g.data.counter.text.chars, &charlist[ 0 ], sizeof( GraphicChar ) * g.data.counter.text.char_count );
+        g.abs = GetArg( "abs", args, true );
+        g.layer = GetArg( "layer", args, BSL::Layer::FG_1 );
+        g.opacity = GetArg( "opacity", args, 1.0f );
+        g.data.counter.text.shadow = GetArg( "shadow", args, false );
+        g.data.counter.text.color1 = g.data.counter.text.color2 = GetArg( "color", args, 0xFF );
+        g.data.counter.max = maxnum;
+        g.data.counter.min = minnum;
+        g.data.counter.prefix_offset = prefix_offset;
+        return { addGraphic( g ) };
+    };
+
+    Timer addGraphicTimer
+    (
+        uint_fast16_t seconds,
+        BSL::ArgList args
+    )
+    {
+        int_fast32_t x = GetArg( "x", args, 0 );
+        int_fast32_t y = GetArg( "y", args, 0 );
+
+        // Add prefix @ beginning.
+        auto charlist = generateCharListWithPrefix( args, x, y );
+        const uint_fast8_t prefix_offset = charlist.size();
+
+        const Time time { seconds };
+
+        // Add minute digit char to charlist.
+        charlist.push_back( generateCharBlock( findCharacter( std::to_string( time.minutes ) ), x, y ) );
+        x += 8;
+
+        // Add time colon to charlist.
+        charlist.push_back( generateCharBlock( findCharacter( ":" ), x, y ) );
+        x += 8;
+
+        // Go thru seconds digits, adding corresponding chars to charlist.
+        for ( uint_fast8_t i = SECONDS_DIGITS; i > 0; --i )
+        {
+            const uint_fast8_t digit = getDigit( std::abs( time.seconds ), i );
+            charlist.push_back( generateCharBlock( findCharacter( std::to_string( digit ) ), x, y ) );
+            x += 8;
+        }
+
+        RawGraphic g;
+
+        // Set this to TEXT type so render function renders it just like text.
+        g.type = GraphicType::TEXT;
+
+        g.data.timer.text.char_count = charlist.size();
+        g.data.timer.text.chars = static_cast<GraphicChar *> ( calloc( g.data.timer.text.char_count, sizeof( GraphicChar ) ) );
+        memcpy( g.data.timer.text.chars, &charlist[ 0 ], sizeof( GraphicChar ) * g.data.timer.text.char_count );
+        g.abs = GetArg( "abs", args, true );
+        g.layer = GetArg( "layer", args, BSL::Layer::FG_1 );
+        g.opacity = GetArg( "opacity", args, 1.0f );
+        g.data.timer.text.shadow = GetArg( "shadow", args, false );
+        g.data.timer.text.color1 = g.data.timer.text.color2 = GetArg( "color", args, 0xFF );
+        g.data.timer.prefix_offset = prefix_offset;
+        return { addGraphic( g ) };
+    };
 
     Menu addGraphicMenu
     (
@@ -1813,9 +1998,9 @@ namespace BSL::GFX
         }
     };
 
-    static int GetCharacterSize( const char * s )
+    static uint_fast8_t getCharacterSize( const char * s )
     {
-        const int code = ( int )( *s );
+        const uint_fast8_t code = static_cast<uint_fast8_t> ( *s );
         return ( code & ( 1 << 7 ) )
             ? ( code & ( 1 << 5 ) )
                 ? ( code & ( 1 << 4 ) )
@@ -1855,24 +2040,14 @@ namespace BSL::GFX
         int lettercount = 0;
         while ( *string )
         {
-            const int charlen = GetCharacterSize( string );
+            const auto charlen = getCharacterSize( string );
 
             // Generate letter string
             char letter[ charlen + 1 ];
             strncpy( letter, string, charlen );
             letter[ charlen ] = 0;
-            std::string letstr = std::string( letter );
 
-            // Find character
-            auto it = charmap.find( std::string( letter ) );
-            if ( it != charmap.end() )
-            {
-                letters[ lettercount ] = it->second;
-            }
-            else
-            {
-                letters[ lettercount ] = fallback;
-            }
+            letters[ lettercount ] = findCharacter( std::string( letter ) );
 
             ++lettercount;
             string += charlen;
@@ -2005,16 +2180,12 @@ namespace BSL::GFX
             {
                 // Just in case o’ character index misalignment, just copy o’er whole characters.
                 if ( lines[ l ][ c ].type != GraphicCharType::WHITESPACE ) {
-                    chars[ count ].srcx = lines[ l ][ c ].x;
-                    chars[ count ].srcy = lines[ l ][ c ].y;
-                    chars[ count ].w = lines[ l ][ c ].w;
-                    chars[ count ].h = lines[ l ][ c ].h;
-                    chars[ count ].x = dx;
-                    chars[ count ].y = dy + static_cast<int> ( ( maxh[ l ] - lines[ l ][ c ].h ) / 2.0 );
-                    chars[ count ].pixel_count = lines[ l ][ c ].pixel_count;
-                    chars[ count ].pixels = lines[ l ][ c ].pixels;
-                    chars[ count ].shadow_count = lines[ l ][ c ].shadow_count;
-                    chars[ count ].shadow = lines[ l ][ c ].shadow;
+                    chars[ count ] = generateCharBlock
+                    (
+                        lines[ l ][ c ],
+                        dx,
+                        dy + static_cast<int> ( ( maxh[ l ] - lines[ l ][ c ].h ) / 2.0 )
+                    );
                     ++count;
                 }
                 if ( lines[ l ][ c ].w > 0 ) {
@@ -2025,5 +2196,77 @@ namespace BSL::GFX
         }
         g.data.text.char_count = count;
         g.data.text.chars = chars;
-    }
+    };
+
+    static GraphicChar generateCharBlock( const GraphicCharTemplate & chartemp, int_fast32_t x, int_fast32_t y )
+    {
+        GraphicChar c;
+        c.srcx = chartemp.x;
+        c.srcy = chartemp.y;
+        c.w = chartemp.w;
+        c.h = chartemp.h;
+        c.x = x;
+        c.y = y;
+        c.pixel_count = chartemp.pixel_count;
+        c.pixels = chartemp.pixels;
+        c.shadow_count = chartemp.shadow_count;
+        c.shadow = chartemp.shadow;
+        return c;
+    };
+
+    static void updateDigitCharBlockTemplate( GraphicChar & c, const GraphicCharTemplate & chartemp )
+    {
+        // Replaces graphic char data with template data.
+        // Note that this function assumes that the character width, height & x & y positions DON’T change.
+        c.srcx = chartemp.x;
+        c.srcy = chartemp.y;
+        c.pixel_count = chartemp.pixel_count;
+        c.pixels = chartemp.pixels;
+        c.shadow_count = chartemp.shadow_count;
+        c.shadow = chartemp.shadow;
+    };
+
+    static constexpr uint_fast8_t getDigit( int_fast32_t n, uint_fast8_t d )
+    {
+        const double a = static_cast<double> ( n % static_cast<int_fast32_t> ( std::pow( 10.0, static_cast<double> ( d ) ) ) );
+        return d > 1
+            ? static_cast<uint_fast8_t> ( std::floor( a / pow( 10.0, static_cast<double> ( d - 1 ) ) ) )
+            : static_cast<uint_fast8_t> ( a );
+    };
+
+    static GraphicCharTemplate findCharacter( const std::string & letter )
+    {
+        auto it = charmap.find( std::string( letter ) );
+        return ( it != charmap.end() )
+            ? it->second
+            : fallback;
+    };
+
+    static std::vector<GraphicChar> generateCharListWithPrefix( const ArgList & args, int_fast32_t & x, int_fast32_t y )
+    {
+        std::vector<GraphicChar> charlist {};
+        const std::string prefix = GetArg( "prefix", args, std::string( "" ) );
+        const char * prefixptr = prefix.c_str();
+        while ( *prefixptr )
+        {
+            // Count how many bytes are in letter.
+            const auto charlen = getCharacterSize( prefixptr );
+
+            // Generate letter substring
+            char letter[ charlen + 1 ];
+            strncpy( letter, prefixptr, charlen );
+            letter[ charlen ] = 0;
+
+            // Add character block to charlist.
+            auto c = findCharacter( std::string( letter ) );
+            charlist.emplace_back( generateCharBlock( c, x, y ) );
+
+            // Move to the right o’ the size o’ the substring.
+            x += c.w;
+
+            prefixptr += charlen;
+        }
+
+        return charlist;
+    };
 }

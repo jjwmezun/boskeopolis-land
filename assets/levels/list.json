@@ -2,7 +2,7 @@
     "list":
     [
         {
-            "name": "1st We Take Manhattan…",
+            "name": "1st We Take Manhattan...",
             "gemscore": 40000,
             "timescore": 25,
             "cycle": 1,
@@ -10,10 +10,10 @@
         },
         {
             "name": "Wasabi Woods",
-            "gemscore": 40000,
-            "timescore": 25,
+            "gemscore": -4000,
+            "timescore": 344,
             "cycle": 1,
-            "theme": 1
+            "theme": 2
         }
     ]
 }

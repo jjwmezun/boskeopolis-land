@@ -73,6 +73,16 @@ namespace BSL::GFX
         void setColor( uint_fast8_t color );
     };
 
+    struct Counter : Graphic
+    {
+        void changeNumber( int_fast32_t n );
+    };
+
+    struct Timer : Graphic
+    {
+        void changeSeconds( uint_fast16_t seconds );
+    };
+
     struct Menu : public Graphic
     {
 
@@ -142,6 +152,19 @@ namespace BSL::GFX
     Text addGraphicText
     (
         const char * text,
+        BSL::ArgList args = {}
+    );
+
+    Counter addGraphicCounter
+    (
+        int_fast32_t num,
+        uint_fast8_t digits,
+        BSL::ArgList args = {}
+    );
+
+    Timer addGraphicTimer
+    (
+        uint_fast16_t seconds,
         BSL::ArgList args = {}
     );
 
