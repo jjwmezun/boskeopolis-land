@@ -60,6 +60,9 @@ namespace BSL
             bool hasBool( const std::string & name ) const;
             bool hasString( const std::string & name ) const;
             bool hasObject( const std::string & name ) const;
+            int getIntOptional( const std::string & name, int fallback ) const;
+            bool getBoolOptional( const std::string & name, bool fallback ) const;
+            float getFloatOptional( const std::string & name, float fallback ) const;
             std::string getStringOptional( const std::string & name, const std::string & fallback ) const;
 
         private:

@@ -111,7 +111,8 @@ namespace BSL::GFX
         TILEMAP,
         TEXT,
         SPRITE_RAW,
-        SPRITE_RAW_NO_TRANSPARENCY
+        SPRITE_RAW_NO_TRANSPARENCY,
+        WALLPAPER
     };
 
     struct Texture
@@ -201,6 +202,17 @@ namespace BSL::GFX
                 int y;
             }
             rawsprite;
+            struct
+            {
+                bool repeatx;
+                bool repeaty;
+                uint_fast16_t texture;
+                int_fast32_t offsetx;
+                int_fast32_t offsety;
+                float scrollx;
+                float scrolly;
+            }
+            wallpaper;
         }
         data;
     };
@@ -225,8 +237,8 @@ namespace BSL::GFX
     static unsigned int texture_count = 0;
     static struct
     {
-        unsigned int x;
-        unsigned int y;
+        uint_fast32_t x;
+        uint_fast32_t y;
     } camera;
     static std::unordered_map<std::string, unsigned int> texture_map;
     static float animation_timer = 0.0f;
@@ -1117,6 +1129,58 @@ namespace BSL::GFX
                     }
                 }
                 break;
+                case ( GraphicType::WALLPAPER ):
+                {
+                    const auto & wallpaper = graphics[ i ].data.wallpaper;
+                    const Texture & texture = textures[ wallpaper.texture ];
+
+                    const int_fast32_t offsetx = wallpaper.offsetx
+                        - static_cast<int_fast32_t> ( std::round( camera.x * wallpaper.scrollx ) );
+                    const int_fast32_t offsety = wallpaper.offsety
+                        - static_cast<int_fast32_t> ( std::round( camera.y * wallpaper.scrolly ) );
+
+                    // If set to repeat, cover whole window.
+                    // Otherwise, go to end o’ texture, but don’t go past edges o’ screen.
+                    const uint_fast16_t w = wallpaper.repeatx
+                        ? WINDOW_WIDTH_PIXELS
+                        : std::min
+                        (
+                            std::max( static_cast<int_fast32_t> ( 0 ), static_cast<int_fast32_t> ( texture.w ) + offsetx ),
+                            static_cast<int_fast16_t> ( WINDOW_WIDTH_PIXELS )
+                        );
+                    const uint_fast16_t h = wallpaper.repeaty
+                        ? WINDOW_HEIGHT_PIXELS
+                        : std::min
+                        (
+                            std::max( static_cast<int_fast32_t> ( 0 ), static_cast<int_fast16_t> ( texture.h ) + offsety ),
+                            static_cast<int_fast16_t> ( WINDOW_HEIGHT_PIXELS )
+                        );
+                    const uint_fast16_t startx = wallpaper.repeatx ? 0 : std::max( static_cast<int_fast16_t> ( 0 ), offsetx );
+                    const uint_fast16_t starty = wallpaper.repeaty ? 0 : std::max( static_cast<int_fast16_t> ( 0 ), offsety );
+
+                    for ( uint_fast16_t y = starty; y < h; ++y )
+                    {
+                        for ( uint_fast16_t x = startx; x < w; ++x )
+                        {
+                            const uint_fast16_t tx = ( static_cast<int_fast32_t> ( x ) - offsetx ) % texture.w;
+                            const uint_fast16_t ty = ( static_cast<int_fast32_t> ( y ) - offsety ) % texture.h;
+                            const uint_fast16_t ti = ty * texture.w + tx;
+                            const uint_fast16_t wi = y * WINDOW_WIDTH_PIXELS + x;
+
+                            const unsigned char v = texture.data[ ti ];
+
+                            // Skip blank pixels.
+                            if ( v == 0x00 )
+                            {
+                                continue;
+                            }
+
+                            const int diff = ( static_cast<int_fast16_t> ( v ) - static_cast<int_fast16_t> ( gl_texture_data[ wi ] ) ) * graphics[ i ].opacity;
+                            gl_texture_data[ wi ] += diff;
+                        }
+                    }
+                }
+                break;
             }
         }
         times.push_back( getTime() - start );
@@ -1587,6 +1651,26 @@ namespace BSL::GFX
         data.srcy = 0;
         data.x = x + 2;
         data.y = y + 2;
+        return { addGraphic( g ) };
+    };
+
+    Wallpaper addGraphicWallpaper
+    (
+        uint_fast16_t texture,
+        BSL::ArgList args
+    )
+    {
+        RawGraphic g;
+        g.type = GraphicType::WALLPAPER;
+        g.layer = GetArg( "layer", args, BSL::Layer::BG_1 );
+        g.opacity = 1.0f;
+        g.data.wallpaper.texture = texture;
+        g.data.wallpaper.repeatx = GetArg( "repeatx", args, false );
+        g.data.wallpaper.repeaty = GetArg( "repeaty", args, false );
+        g.data.wallpaper.scrollx = GetArg( "scrollx", args, 0.0f );
+        g.data.wallpaper.scrolly = GetArg( "scrolly", args, 0.0f );
+        g.data.wallpaper.offsetx = GetArg( "offsetx", args, 0 );
+        g.data.wallpaper.offsety = GetArg( "offsety", args, 0 );
         return { addGraphic( g ) };
     };
 

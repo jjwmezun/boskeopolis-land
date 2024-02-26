@@ -90,6 +90,11 @@ namespace BSL::GFX
 
     };
 
+    struct Wallpaper : public Graphic
+    {
+
+    };
+
     struct Tile
     {
         bool set;
@@ -176,6 +181,12 @@ namespace BSL::GFX
         unsigned int h,
         int x,
         int y,
+        BSL::ArgList args = {}
+    );
+
+    Wallpaper addGraphicWallpaper
+    (
+        uint_fast16_t texture,
         BSL::ArgList args = {}
     );
 

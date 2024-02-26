@@ -122,6 +122,57 @@ namespace BSL
         throw std::runtime_error( "JSON file missing “" + name + "”." );
     };
 
+    int JSONObject::getIntOptional( const std::string & name, int fallback ) const
+    {
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_integer )
+                {
+                    throw std::runtime_error( "JSON value “" + name + "” is not an integer." );
+                }
+                return entry.value->u.integer;
+            }
+        }
+        return fallback;
+    };
+
+    bool JSONObject::getBoolOptional( const std::string & name, bool fallback ) const
+    {
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_boolean )
+                {
+                    throw std::runtime_error( "JSON value “" + name + "” is not a boolean, but is a " + std::to_string( entry.value->type ) + "." );
+                }
+                return entry.value->u.boolean;
+            }
+        }
+        return fallback;
+    };
+
+    float JSONObject::getFloatOptional( const std::string & name, float fallback ) const
+    {
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_double )
+                {
+                    throw std::runtime_error( "JSON value “" + name + "” is not a float, but is a " + std::to_string( entry.value->type ) + "." );
+                }
+                return entry.value->u.dbl;
+            }
+        }
+        return fallback;
+    };
+
     std::string JSONObject::getStringOptional( const std::string & name, const std::string & fallback ) const
     {
         for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )

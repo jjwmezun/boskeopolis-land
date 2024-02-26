@@ -4,6 +4,7 @@
 #include "json.hpp"
 #include "level.hpp"
 #include "level_table.hpp"
+#include <regex>
 #include <stdexcept>
 #include <string>
 
@@ -168,6 +169,29 @@ namespace BSL
                             {
                                 collision[ i ] = tilen;
                             }
+                        }
+                    );
+                }
+                else if ( typestring == "image" )
+                {
+                    const std::string src = std::regex_replace( layerobj.getString( "image" ), std::regex( "../graphics/" ), "" );
+                    const uint_fast16_t texture = BSL::GFX::loadFileAsTexture( src.c_str() );
+                    const bool repeatx = layerobj.getBoolOptional( "repeatx", false );
+                    const bool repeaty = layerobj.getBoolOptional( "repeaty", false );
+                    const float scrollx = layerobj.getFloatOptional( "parallaxx", 1.0f );
+                    const float scrolly = layerobj.getFloatOptional( "parallaxy", 1.0f );
+                    const int offsetx = layerobj.getIntOptional( "offsetx", 0 );
+                    const int offsety = layerobj.getIntOptional( "offsety", 0 );
+                    BSL::GFX::addGraphicWallpaper
+                    (
+                        texture,
+                        {
+                            { "repeatx", repeatx },
+                            { "repeaty", repeaty },
+                            { "scrollx", scrollx },
+                            { "scrolly", scrolly },
+                            { "offsetx", offsetx },
+                            { "offsety", offsety }
                         }
                     );
                 }
