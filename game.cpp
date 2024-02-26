@@ -3,6 +3,8 @@
 #include "game.hpp"
 #include "gfx.hpp"
 #include "json.hpp"
+#include "level.hpp"
+#include "level_table.hpp"
 #include <stdexcept>
 #include <vector>
 
@@ -14,21 +16,14 @@ namespace BSL::Game
     static constexpr unsigned int WATERH = WATERTILEH;
     static constexpr unsigned int WATERROWS = ( WINDOW_HEIGHT_PIXELS - 7 * 8 ) / 4 + 3;
     static constexpr unsigned int BGGFXCOUNT = 4;
+    static constexpr float OWWINDOWH = 248.0f;
     static constexpr float CAMERA_RIGHT_EDGE = WINDOW_WIDTH_PIXELS * 0.667f;
     static constexpr float CAMERA_LEFT_EDGE = WINDOW_WIDTH_PIXELS * 0.333f;
-    static constexpr float OWWINDOWH = 248.0f;
     static constexpr float CAMERA_BOTTOM_EDGE = OWWINDOWH * 0.667f;
     static constexpr float CAMERA_TOP_EDGE = OWWINDOWH * 0.333f;
     static constexpr unsigned int OWLEVELOPEN_OPTIONCOUNT = 2;
     static constexpr int OWLVOPEN_MENUX = static_cast<int> ( ( WINDOW_WIDTH_PIXELS - 160 ) / 2.0 );
     static constexpr int OWLVOPEN_MENUY = static_cast<int> ( ( WINDOW_HEIGHT_PIXELS - 32 ) / 2.0 );
-
-    struct OWLevel
-    {
-        char * name;
-        uint_fast16_t gemscore;
-        uint_fast16_t timescore;
-    };
 
     struct Warp
     {
@@ -55,6 +50,11 @@ namespace BSL::Game
             Warp warp;
         }
         ow;
+        struct
+        {
+            uint_fast8_t levelid;
+        }
+        level;
     }
     args;
 
@@ -162,6 +162,7 @@ namespace BSL::Game
         struct
         {
             bool confirmlock;
+            uint_fast8_t levelid;
             uint_fast8_t selection;
             struct
             {
@@ -174,21 +175,10 @@ namespace BSL::Game
         struct
         {
             bool confirmlock;
+            uint_fast8_t levelid;
         }
         lvmessage;
-        struct
-        {
-            struct
-            {
-                float x;
-                float y;
-                float vy;
-                float accy;
-                BSL::GFX::Sprite gfx;
-            }
-            player;
-        }
-        level;
+        Level level;
     };
 
     struct GameState
@@ -199,16 +189,13 @@ namespace BSL::Game
 
     static GameState states_[ MAX_STATES ];
     static uint_fast8_t state_count;
-    static OWLevel * levels;
-    static size_t levelcount;
 
     static void closeState( unsigned int n );
     static void fadeTo( void ( * constructor )(), FadeToArgs args );
     static void fadeToOW( Warp warp );
     static void clearState();
     static void destroyState( uint_fast8_t staten );
-    static void loadOWLevels();
-    static void pushOWLevelOpenMenu();
+    static void pushOWLevelOpenMenu( uint_fast8_t levelid );
     static void updateOWAnimation( auto & data, float dt );
     static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection );
     static void pushLvMessageState();
@@ -218,7 +205,7 @@ namespace BSL::Game
 
     void init()
     {
-        loadOWLevels();
+        BSL::loadLevelDataTable();
         BSL::GFX::setState( 0 );
         states_[ 0 ].type = StateType::TITLE;
         states_[ 0 ].data.title.bg = BSL::GFX::addGraphicRectGradient( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS, 0, 255 );
@@ -440,12 +427,12 @@ namespace BSL::Game
                 const uint_fast8_t lvval = data.map.levels[ centeri ];
 
                 // Only show if a valid level.
-                if ( lvval > 0 && lvval <= levelcount )
+                if ( lvval > 0 && lvval <= level_table.size() )
                 {
                     data.ui.lvname.setOpacity( 1.0f );
                     data.ui.gemscore.setOpacity( 1.0f );
                     data.ui.timescore.setOpacity( 1.0f );
-                    const OWLevel & lv = levels[ lvval - 1 ];
+                    const BSL::LevelData & lv = level_table[ lvval - 1 ];
                     data.current_level = lvval;
 
                     // Update level GFX if touching a different level.
@@ -454,7 +441,7 @@ namespace BSL::Game
                         // Update level name.
                         data.ui.lvname.changeText
                         (
-                            lv.name,
+                            lv.name.c_str(),
                             {
                                 { "x", 8 },
                                 { "y", 256 },
@@ -473,7 +460,7 @@ namespace BSL::Game
                     // Open level menu on confirmation.
                     if ( BSL::Controls::heldConfirm() )
                     {
-                        pushOWLevelOpenMenu();
+                        pushOWLevelOpenMenu( lvval - 1 );
                     }
                 }
                 // If not a valid level, hide.
@@ -564,6 +551,7 @@ namespace BSL::Game
                 else if ( !data.confirmlock && BSL::Controls::heldConfirm() )
                 {
                     FadeToArgs args;
+                    args.level.levelid = data.levelid;
                     fadeTo( &pushLvMessageState, args );
                 }
                 else if ( BSL::Controls::heldDown() )
@@ -584,29 +572,23 @@ namespace BSL::Game
             break;
             case ( StateType::LV_MESSAGE ):
             {
+                auto & data = current_state.data.lvmessage;
                 if ( !Controls::heldConfirm() )
                 {
-                    current_state.data.lvmessage.confirmlock = false;
+                    data.confirmlock = false;
                 }
-                if ( !current_state.data.lvmessage.confirmlock && Controls::heldConfirm() )
+                if ( !data.confirmlock && Controls::heldConfirm() )
                 {
                     FadeToArgs args;
+                    args.level.levelid = data.levelid;
                     fadeTo( &changeToLevel, args );
                 }
             }
             break;
             case ( StateType::LEVEL ):
             {
-                static constexpr float LV_PLAYER_MAX_GRAVITY = 6.0f;
                 auto & data = current_state.data.level;
-                data.player.accy = 0.1f;
-                data.player.vy += data.player.accy * dt;
-                if ( data.player.vy > LV_PLAYER_MAX_GRAVITY )
-                {
-                    data.player.vy = LV_PLAYER_MAX_GRAVITY;
-                }
-                data.player.y += data.player.vy * dt;
-                data.player.gfx.setY( static_cast<int> ( data.player.y ) );
+                data.update( dt );
             }
             break;
         }
@@ -664,66 +646,12 @@ namespace BSL::Game
         }
     };
 
-    static void loadOWLevels()
-    {
-        const JSON json { "assets/levels/list.json" };
-        const JSONArray list = json.getArray( "list" );
-        levelcount = list.getLength();
-        levels = static_cast<OWLevel *> ( calloc( levelcount, sizeof( OWLevel ) ) );
-        list.forEach
-        (
-            [&] ( const JSONItem item, unsigned int i )
-            {
-                const JSONObject obj = item.asObject();
-                const uint_fast8_t cycle = static_cast<uint_fast8_t> ( obj.getInt( "cycle" ) );
-                const uint_fast8_t theme = static_cast<uint_fast8_t> ( obj.getInt( "theme" ) );
-
-                if ( cycle > 9 || cycle < 1 )
-                {
-                    throw std::runtime_error( "Error loading level list. Cycles should ne’er be greater than 9 or less than 1." );
-                }
-
-                if ( theme > 16 || theme < 1 )
-                {
-                    throw std::runtime_error( "Error loading level list. Themes should ne’er be greater than 16 or less than 1." );
-                }
-
-                static constexpr char hextable[ 16 ] =
-                {
-                    '0',
-                    '1',
-                    '2',
-                    '3',
-                    '4',
-                    '5',
-                    '6',
-                    '7',
-                    '8',
-                    '9',
-                    'A',
-                    'B',
-                    'C',
-                    'D',
-                    'E',
-                    'F'
-                };
-                const char theme_str[ 1 ] = { hextable[ theme - 1 ] };
-
-                // Follow pattern: B-2: [name] for 12th theme o’ 2nd cycle.
-                const std::string name = std::string( theme_str ) + "-" + std::to_string( cycle ) + ": " + obj.getString( "name" );
-                levels[ i ].name = static_cast<char *> ( malloc( name.size() + 1 ) );
-                strcpy( levels[ i ].name, name.c_str() );
-                levels[ i ].gemscore = static_cast<uint_fast16_t> ( obj.getInt( "gemscore" ) );
-                levels[ i ].timescore = static_cast<uint_fast16_t> ( obj.getInt( "timescore" ) );
-            }
-        );
-    };
-
-    static void pushOWLevelOpenMenu()
+    static void pushOWLevelOpenMenu( uint_fast8_t levelid )
     {
         BSL::GFX::setState( state_count );
         states_[ state_count ].type = StateType::OW_LEVEL_OPEN;
         auto & data = states_[ state_count ].data.owlevelopen;
+        data.levelid = levelid;
         data.selection = 0;
         BSL::GFX::addGraphicMenu
         (
@@ -836,10 +764,13 @@ namespace BSL::Game
 
     static void pushLvMessageState()
     {
+        const uint_fast8_t levelid = states_[ state_count - 1 ].data.fadeto.args.level.levelid;
+
         clearState();
         BSL::GFX::setState( state_count );
         states_[ state_count ].type = StateType::LV_MESSAGE;
         auto & data = states_[ state_count ].data.lvmessage;
+        data.levelid = levelid;
         BSL::GFX::addGraphicRect
         (
             0,
@@ -853,7 +784,7 @@ namespace BSL::Game
         );
         BSL::GFX::addGraphicText
         (
-            "¡Collect the Keycane!",
+            level_table[ levelid ].goal.message,
             {
                 { "align", Align::CENTER },
                 { "valign", Valign::MIDDLE },
@@ -1365,19 +1296,12 @@ namespace BSL::Game
 
     static void changeToLevel()
     {
+        const uint_fast8_t levelid = states_[ state_count - 1 ].data.fadeto.args.level.levelid;
+
         clearState();
         states_[ 0 ].type = StateType::LEVEL;
         auto & data = states_[ 0 ].data.level;
-        unsigned int player_texture = GFX::loadFileAsTexture( "sprites/autumn.png" );
-        data.player.y = -26.0f;
-        data.player.gfx = GFX::addGraphicSprite
-        (
-            player_texture,
-            200,
-            static_cast<int> ( data.player.y ),
-            16,
-            26
-        );
+        data.init( levelid );
         ++state_count;
         pushFadeIn();
     };

@@ -6,14 +6,66 @@
             "gemscore": 40000,
             "timescore": 25,
             "cycle": 1,
-            "theme": 1
+            "theme": 1,
+            "entrancex": 37,
+            "entrancey": 31,
+            "camera_x": 30,
+            "maps":
+            [
+                "city-1-1",
+                "city-1-2"
+            ],
+            "goal":
+            {
+                "message": "1 night, when Autumn woke from troubled dreams, she found herself transformed into a paper plane."
+            }
+        },
+        {
+            "name": "All in All You’re Just ’Nother ₧ in the Wall",
+            "maps":
+            [
+                "attic-2"
+            ],
+            "entrancex": 32,
+            "entrancey": 59,
+            "gemscore": 50000,
+            "timescore": 120,
+            "goal":
+            {
+                "type": "collect",
+                "amount": 50000
+            },
+            "cycle": 1,
+            "theme": 2
         },
         {
             "name": "Wasabi Woods",
             "gemscore": -4000,
             "timescore": 344,
             "cycle": 1,
-            "theme": 2
+            "theme": 2,
+            "maps":
+            [
+                "woods-1"
+            ]
+        },
+        {
+            "name": "An Orange Clockwork",
+            "maps":
+            [
+                "factory-6"
+            ],
+            "entrancex": 5,
+            "entrancey": 77,
+            "gemscore": 45000,
+            "timescore": 45,
+            "cycle": 4,
+            "theme": 13,
+            "goal":
+            {
+                "type": "timed",
+                "time_limit": 60
+            }
         }
     ]
 }

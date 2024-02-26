@@ -42,7 +42,9 @@ namespace BSL::GFX
     {
         void setX( int v );
         void setY( int v );
-        void setSrcX( unsigned int v );
+        void setSrcX( uint_fast16_t v );
+        void setSrcY( uint_fast16_t v );
+        void setFlipX( bool v );
     };
 
     struct RawSprite : public Graphic

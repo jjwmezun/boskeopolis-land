@@ -10,6 +10,8 @@ namespace BSL::Controls
     int heldRight();
     int heldDown();
     int heldLeft();
+    int heldJump();
+    int heldRun();
     void init();
     void close();
 }

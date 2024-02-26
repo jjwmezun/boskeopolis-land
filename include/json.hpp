@@ -16,18 +16,18 @@ namespace BSL
         public:
             inline JSONArray
             (
-                unsigned int length,
+                uint_fast16_t length,
                 struct _json_value ** values
             ) :
                 length_ ( length ),
                 values_ ( values )
             {};
             void forEach( const std::function<void( JSONItem )> & callable ) const;
-            void forEach( const std::function<void( JSONItem, unsigned int )> & callable ) const;
-            unsigned int getLength() const;
+            void forEach( const std::function<void( JSONItem, uint_fast16_t )> & callable ) const;
+            uint_fast16_t getLength() const;
 
         private:
-            unsigned int length_;
+            uint_fast16_t length_;
             struct _json_value ** values_;
     };
 
@@ -52,11 +52,15 @@ namespace BSL
             bool getBool( const std::string & name ) const;
             std::string getString( const std::string & name ) const;
             JSONArray getArray( const std::string & name ) const;
+            JSONObject getObject( const std::string & name ) const;
+            JSONItem getItem( const std::string & name ) const;
             bool hasArray( const std::string & name ) const;
             bool hasInt( const std::string & name ) const;
             bool hasFloat( const std::string & name ) const;
             bool hasBool( const std::string & name ) const;
             bool hasString( const std::string & name ) const;
+            bool hasObject( const std::string & name ) const;
+            std::string getStringOptional( const std::string & name, const std::string & fallback ) const;
 
         private:
             const json_value * data_;

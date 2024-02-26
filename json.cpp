@@ -8,21 +8,21 @@ namespace BSL
 {
     void JSONArray::forEach( const std::function<void( JSONItem )> & callable ) const
     {
-        for ( unsigned int i = 0; i < length_; ++i )
+        for ( uint_fast16_t i = 0; i < length_; ++i )
         {
             callable( { values_[ i ] } );
         }
     };
 
-    void JSONArray::forEach( const std::function<void( JSONItem, unsigned int )> & callable ) const
+    void JSONArray::forEach( const std::function<void( JSONItem, uint_fast16_t )> & callable ) const
     {
-        for ( unsigned int i = 0; i < length_; ++i )
+        for ( uint_fast16_t i = 0; i < length_; ++i )
         {
             callable( { values_[ i ] }, i );
         }
     };
 
-    unsigned int JSONArray::getLength() const
+    uint_fast16_t JSONArray::getLength() const
     {
         return length_;
     };
@@ -56,7 +56,7 @@ namespace BSL
 
     int JSONObject::getInt( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
@@ -73,7 +73,7 @@ namespace BSL
 
     float JSONObject::getFloat( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
@@ -90,7 +90,7 @@ namespace BSL
 
     bool JSONObject::getBool( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
@@ -107,7 +107,7 @@ namespace BSL
 
     std::string JSONObject::getString( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
@@ -122,9 +122,26 @@ namespace BSL
         throw std::runtime_error( "JSON file missing “" + name + "”." );
     };
 
+    std::string JSONObject::getStringOptional( const std::string & name, const std::string & fallback ) const
+    {
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_string )
+                {
+                    throw std::runtime_error( "JSON file missing “" + name + "”." );
+                }
+                return std::string( entry.value->u.string.ptr );
+            }
+        }
+        return fallback;
+    };
+
     JSONArray JSONObject::getArray( const std::string & name ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )
@@ -134,6 +151,36 @@ namespace BSL
                     throw std::runtime_error( "JSON file missing “" + name + "”." );
                 }
                 return { entry.value->u.array.length, entry.value->u.array.values };
+            }
+        }
+        throw std::runtime_error( "JSON file missing “" + name + "”." );
+    };
+
+    JSONObject JSONObject::getObject( const std::string & name ) const
+    {
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                if ( entry.value->type != json_object )
+                {
+                    throw std::runtime_error( "JSON file missing “" + name + "”." );
+                }
+                return { entry.value };
+            }
+        }
+        throw std::runtime_error( "JSON file missing “" + name + "”." );
+    };
+
+    JSONItem JSONObject::getItem( const std::string & name ) const
+    {
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
+        {
+            const json_object_entry entry = data_->u.object.values[ i ];
+            if ( std::strcmp( name.c_str(), entry.name ) == 0 )
+            {
+                return { entry.value };
             }
         }
         throw std::runtime_error( "JSON file missing “" + name + "”." );
@@ -164,9 +211,14 @@ namespace BSL
         return hasType( name, json_string );
     };
 
+    bool JSONObject::hasObject( const std::string & name ) const
+    {
+        return hasType( name, json_object );
+    };
+
     bool JSONObject::hasType( const std::string & name, json_type type ) const
     {
-        for ( unsigned int i = 0; i < data_->u.object.length; ++i )
+        for ( uint_fast16_t i = 0; i < data_->u.object.length; ++i )
         {
             const json_object_entry entry = data_->u.object.values[ i ];
             if ( std::strcmp( name.c_str(), entry.name ) == 0 )

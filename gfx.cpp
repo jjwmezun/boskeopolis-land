@@ -319,9 +319,19 @@ namespace BSL::GFX
         getGraphic( id_ ).data.sprite.y = v;
     };
 
-    void Sprite::setSrcX( unsigned int v )
+    void Sprite::setSrcX( uint_fast16_t v )
     {
         getGraphic( id_ ).data.sprite.srcx = v;
+    };
+
+    void Sprite::setSrcY( uint_fast16_t v )
+    {
+        getGraphic( id_ ).data.sprite.srcy = v;
+    };
+
+    void Sprite::setFlipX( bool v )
+    {
+        getGraphic( id_ ).data.sprite.flipx = v;
     };
     
     void RawSprite::setY( int v )

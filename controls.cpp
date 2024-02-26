@@ -295,6 +295,16 @@ namespace BSL::Controls
         return held( 3 );
     };
 
+    int heldJump()
+    {
+        return held( 6 );
+    };
+
+    int heldRun()
+    {
+        return held( 7 );
+    };
+
     void init()
     {
         KeyPair inputs[] =
@@ -304,9 +314,11 @@ namespace BSL::Controls
             { 2, KEY_DOWN },
             { 3, KEY_LEFT },
             { 4, KEY_Z },
-            { 5, KEY_X }
+            { 5, KEY_X },
+            { 6, KEY_Z },
+            { 7, KEY_X }
         };
-        unsigned int num_o_inputs = 6;
+        unsigned int num_o_inputs = 8;
 
         BSL::GFX::registerInputHandler( HandleInput );
 

@@ -11,6 +11,8 @@ add_executable(BoskeopolisLand
     json.c
     json.cpp
     layer.cpp
+    level.cpp
+    level_table.cpp
     log.cpp
     main.cpp
     utility.cpp
