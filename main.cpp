@@ -2,6 +2,8 @@
 #include "controls.hpp"
 #include "game.hpp"
 #include "gfx.hpp"
+#include "level_table.hpp"
+#include "object_factory.hpp"
 
 #include <cstdio>
 
@@ -15,6 +17,8 @@ int main( int argc, char ** argv )
 {
     BSL::GFX::init();
     BSL::Controls::init();
+    BSL::loadLevelDataTable();
+    BSL::ObjectFactory::init();
     BSL::Game::init();
 
     double prev_time = BSL::GFX::getTime();

@@ -1,6 +1,9 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include "level_inventory.hpp"
+#include "object.hpp"
+
 namespace BSL
 {
     static constexpr float MAX_SPEED = 2.0f;
@@ -82,6 +85,9 @@ namespace BSL
         }
         camera;
         uint_fast8_t * collision;
+        BSL::GFX::Tilemap object_gfx;
+        Object * objects;
+        LevelInventory inventory;
 
         void init( uint_fast8_t levelid );
         void update( float dt );

@@ -205,7 +205,6 @@ namespace BSL::Game
 
     void init()
     {
-        BSL::loadLevelDataTable();
         BSL::GFX::setState( 0 );
         states_[ 0 ].type = StateType::TITLE;
         states_[ 0 ].data.title.bg = BSL::GFX::addGraphicRectGradient( 0, 0, WINDOW_WIDTH_PIXELS, WINDOW_HEIGHT_PIXELS, 0, 255 );

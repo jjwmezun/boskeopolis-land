@@ -361,6 +361,11 @@ namespace BSL::GFX
         getGraphic( id_ ).data.rawsprite.srcy = v;
     };
 
+    void Tilemap::removeTile( uint_fast32_t i )
+    {
+        getGraphic( id_ ).data.tilemap.tiles[ i ].set = false;
+    };
+
     void Tilemap::setY( int v )
     {
         getGraphic( id_ ).data.tilemap.y = v;

@@ -1,9 +1,11 @@
 #include "config.hpp"
 #include "controls.hpp"
+#include "dict.hpp"
 #include "gfx.hpp"
 #include "json.hpp"
 #include "level.hpp"
 #include "level_table.hpp"
+#include "object_factory.hpp"
 #include <regex>
 #include <stdexcept>
 #include <string>
@@ -22,29 +24,6 @@ namespace BSL
     static constexpr float JUMP_MAX = 4.75f;
     static constexpr float autumn_walk_frames[ 4 ] = { 0.0f, 16.0f, 0.0f, 32.0f };
 
-    template <typename A>
-    struct Dict
-    {
-        void add( const std::string & key, A value )
-        {
-            values_.push_back( { key, value } );
-        }
-
-        A get( const std::string & key ) const
-        {
-            for ( auto & value : values_ )
-            {
-                if ( value.first == key )
-                {
-                    return value.second;
-                }
-            }
-            throw std::runtime_error( "Could not find Dict entry for key “" + key + "”." );
-        }
-
-        std::vector<std::pair<std::string, A>> values_;
-    };
-
     void Level::init( uint_fast8_t levelid )
     {
         // Init map.
@@ -57,6 +36,13 @@ namespace BSL
 
         // Init collision table.
         collision = static_cast<uint_fast8_t *> ( calloc( map.w * map.h, sizeof( uint_fast8_t ) ) );
+
+        // Generate empty list o’ tiles for objects.
+        BSL::GFX::Tile object_tilemap[ map.w * map.h ];
+        memset( object_tilemap, 0, map.w * map.h * sizeof( BSL::GFX::Tile ) );
+
+        // Init empty objects table.
+        objects = static_cast<Object *> ( calloc( map.w * map.h, sizeof( Object ) ) );
 
         // Get layer data.
         const JSONArray layers = json.getArray( "layers" );
@@ -153,6 +139,61 @@ namespace BSL
                         );
                     }
                 }
+                else if ( typestring == "object" )
+                {
+                    // Get list o’ tile indices.
+                    const JSONArray tile_index_list = layerobj.getArray( "data" );
+
+                    // Make sure tile index list length fills whole map.
+                    if ( tile_index_list.getLength() != map.w * map.h )
+                    {
+                        throw std::runtime_error( "Map “" + mapslug + "” tile layer poorly formed: size o’ tiles different from map height x map width." );
+                    }
+
+                    // Go thru each tile index, check if there is a valid object,
+                    // & generate graphics & object from valid object IDs.
+                    tile_index_list.forEach
+                    (
+                        [ & ]( const JSONItem dataitem, uint_fast16_t i )
+                        {
+                            // Get index #.
+                            const uint_fast16_t tilen = dataitem.asInt();
+
+                            // Throw error if non-object included in object layer.
+                            if ( tilen > 0 && tilen < 8193 || tilen > 16384 )
+                            {
+                                throw std::runtime_error( "Object ID “" + std::to_string( tilen ) + "” out o’ range." );
+                            }
+
+                            // Skip if it’s an empty tile.
+                            if ( tilen == 0 )
+                            {
+                                return;
+                            }
+
+                            const uint_fast16_t realtilen = tilen - 8193;
+                            const auto objtemp_container = ObjectFactory::get( realtilen );
+
+                            // Throw error if object template doesn’t exist.
+                            if ( !objtemp_container.has_value() )
+                            {
+                                throw std::runtime_error( "Invalid object #" + std::to_string( realtilen ) + " ( tile index " + std::to_string( tilen ) + " ) found in map." );
+                            }
+
+                            const auto objtemp = objtemp_container.value();
+
+                            // Add graphics info to tile.
+                            object_tilemap[ i ].set = true;
+                            object_tilemap[ i ].x = objtemp.tile.x;
+                            object_tilemap[ i ].y = objtemp.tile.y;
+                            object_tilemap[ i ].animation = objtemp.tile.animation;
+
+                            // Add object.
+                            objects[ i ].type = objtemp.type;
+                            objects[ i ].data = objtemp.data;
+                        }
+                    );
+                }
                 else if ( typestring == "collision" )
                 {
                     const JSONArray tiledata = layerobj.getArray( "data" );
@@ -199,6 +240,17 @@ namespace BSL
             }
         );
 
+        // Create graphic layer for objects.
+        const uint_fast16_t objects_texture = BSL::GFX::loadFileAsTexture( "tilesets/objects.png" );
+        object_gfx = BSL::GFX::addGraphicTilemap
+        (
+            objects_texture,
+            object_tilemap,
+            map.w,
+            map.h
+        );
+
+        // Init player.
         uint_fast16_t player_texture = GFX::loadFileAsTexture( "sprites/autumn.png" );
         player.x = 50.0f;
         player.y = -26.0f;
@@ -211,6 +263,9 @@ namespace BSL
             16,
             26
         );
+
+        // Init inventory.
+        inventory.init();
     }
 
     void Level::update( float dt )
@@ -313,7 +368,37 @@ namespace BSL
         }
 
 
-        // Collision
+        // Object collision
+        const uint_fast32_t otopy = static_cast<uint_fast32_t> ( ( player.y + 2.0 ) / 16.0 );
+        const uint_fast32_t obottomy = static_cast<uint_fast32_t> ( ( player.y + 23.0 ) / 16.0 );
+        const uint_fast32_t oleftx = static_cast<uint_fast32_t> ( ( player.x + 2.0 ) / 16.0 );
+        const uint_fast32_t orightx = static_cast<uint_fast32_t> ( ( player.x + 14.0 ) / 16.0 );
+        const uint_fast32_t oilist[ 4 ] =
+        {
+            otopy * map.w + oleftx,
+            otopy * map.w + orightx,
+            obottomy * map.w + oleftx,
+            obottomy * map.w + orightx,
+        };
+        for ( uint_fast8_t i; i < 4; ++i )
+        {
+            const uint_fast32_t & oi = oilist[ i ];
+            switch ( objects[ oi ].type )
+            {
+                case ( ObjectType::MONEY ):
+                {
+                    // Get money.
+                    inventory.addMoney( objects[ oi ].data.money.amount );
+
+                    // Remove object.
+                    objects[ oi ].type = ObjectType::__NULL;
+                    object_gfx.removeTile( oi );
+                }
+                break;
+            }
+        }
+
+        // Main collision
         if ( player.x + player.vx * dt < 0.0f )
         {
             player.x = 0.0f;
@@ -458,5 +543,9 @@ namespace BSL
         }
         BSL::GFX::setCameraX( static_cast<uint_fast32_t> ( camera.x ) );
         BSL::GFX::setCameraY( static_cast<uint_fast32_t> ( camera.y ) );
+
+
+        // Update inventory.
+        inventory.update( dt );
     };
 };

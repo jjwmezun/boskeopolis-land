@@ -56,6 +56,7 @@ namespace BSL::GFX
 
     struct Tilemap
     {
+        void removeTile( uint_fast32_t i );
         void setY( int v );
         unsigned int id_;
     };

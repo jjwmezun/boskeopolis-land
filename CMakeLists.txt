@@ -12,9 +12,11 @@ add_executable(BoskeopolisLand
     json.cpp
     layer.cpp
     level.cpp
+    level_inventory.cpp
     level_table.cpp
     log.cpp
     main.cpp
+    object_factory.cpp
     utility.cpp
 )
 set_property(TARGET BoskeopolisLand PROPERTY CXX_STANDARD 23)
