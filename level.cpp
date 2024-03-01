@@ -76,6 +76,12 @@ namespace BSL
                     }
                     BSL::GFX::Tile universal_tilemap[ tiledata.getLength() ];
                     BSL::GFX::Tile specific_tilemap[ tiledata.getLength() ];
+
+                    // Zero out tilemaps so they don’t keep tiles from previous loops or have junk data.
+                    const size_t tilemapsize = tiledata.getLength() * sizeof( BSL::GFX::Tile );
+                    memset( universal_tilemap, 0x00, tilemapsize );
+                    memset( specific_tilemap, 0x00, tilemapsize );
+
                     bool uses_universal = false;
                     bool uses_specific_tileset = false;
                     tiledata.forEach
@@ -87,6 +93,11 @@ namespace BSL
                             if ( tilen < 24577 && tilen > 0 )
                             {
                                 throw std::runtime_error( "Invalid tile # “" + std::to_string( tilen ) + "” used for tile layer on map “" + mapslug + "”." );
+                            }
+
+                            if ( tilen == 0 )
+                            {
+                                return;
                             }
 
                             const bool notuniversal = tilen > 32768;
@@ -115,6 +126,19 @@ namespace BSL
                         }
                     );
 
+                    float scrollx = 1.0f;
+                    float scrolly = 1.0f;
+                    int offsetx = 0;
+                    int offsety = 0;
+                    if ( layerobj.hasFloat( "parallaxx" ) )
+                    {
+                        scrollx = layerobj.getFloat( "parallaxx" );
+                    }
+                    if ( layerobj.hasFloat( "parallaxy" ) )
+                    {
+                        scrollx = layerobj.getFloat( "parallaxy" );
+                    }
+
                     if ( uses_universal )
                     {
                         const uint_fast16_t universal_texture = BSL::GFX::loadFileAsTexture( "tilesets/universal.png" );
@@ -123,7 +147,13 @@ namespace BSL
                             universal_texture,
                             universal_tilemap,
                             map.w,
-                            map.h
+                            map.h,
+                            {
+                                { "scrollx", scrollx },
+                                { "scrolly", scrolly },
+                                { "offsetx", offsetx },
+                                { "offsety", offsety },
+                            }
                         );
                     }
 
@@ -135,7 +165,13 @@ namespace BSL
                             specific_texture,
                             specific_tilemap,
                             map.w,
-                            map.h
+                            map.h,
+                            {
+                                { "scrollx", scrollx },
+                                { "scrolly", scrolly },
+                                { "offsetx", offsetx },
+                                { "offsety", offsety },
+                            }
                         );
                     }
                 }

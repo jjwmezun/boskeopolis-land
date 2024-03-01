@@ -36,6 +36,15 @@ namespace BSL
         return value_->u.integer;
     };
 
+    float JSONItem::asFloat() const
+    {
+        if ( value_->type != json_double )
+        {
+            throw std::runtime_error( "JSON Item not expected type float." );
+        }
+        return value_->u.dbl;
+    };
+
     std::string JSONItem::asString() const
     {
         if ( value_->type != json_string )

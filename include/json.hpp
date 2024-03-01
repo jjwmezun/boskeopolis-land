@@ -36,6 +36,7 @@ namespace BSL
         public:
             inline JSONItem( const json_value * value ) : value_ ( value ) {};
             int asInt() const;
+            float asFloat() const;
             std::string asString() const;
             JSONObject asObject() const;
 

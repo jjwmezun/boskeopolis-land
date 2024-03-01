@@ -168,12 +168,19 @@ namespace BSL::GFX
             sprite;
             struct
             {
-                unsigned int texture;
+                bool repeatx;
+                bool repeaty;
+                uint_fast8_t tilesize;
+                uint_fast16_t texture;
+                uint_fast16_t w;
+                uint_fast16_t h;
+                int_fast32_t x;
+                int_fast32_t y;
+                int_fast32_t offsetx;
+                int_fast32_t offsety;
+                float scrollx;
+                float scrolly;
                 Tile * tiles;
-                unsigned int w;
-                unsigned int h;
-                int x;
-                int y;
             }
             tilemap;
             TextGraphic text;
@@ -964,77 +971,74 @@ namespace BSL::GFX
                 {
                     const auto & tilemap = graphics[ i ].data.tilemap;
                     const Texture & texture = textures[ tilemap.texture ];
-                    for ( unsigned int y = 0; y < tilemap.h; ++y )
+
+                    const int_fast32_t offsetx = tilemap.offsetx
+                        - static_cast<int_fast32_t> ( std::round( camera.x * tilemap.scrollx ) );
+                    const int_fast32_t offsety = tilemap.offsety
+                        - static_cast<int_fast32_t> ( std::round( camera.y * tilemap.scrolly ) );
+
+                    // Calculate where to start rendering, both for screen destination & texture source.
+                    // Make sure they ne’er go below 0.
+                    const uint_fast32_t dest_startx = tilemap.repeatx ? 0 : std::max( static_cast<int_fast32_t> ( 0 ), offsetx );
+                    const uint_fast32_t src_block_startx = static_cast<uint_fast32_t> ( std::max( 0.0, static_cast<double> ( ( -offsetx ) / tilemap.tilesize ) ) );
+                    const uint_fast32_t dest_starty = tilemap.repeaty ? 0 : std::max( static_cast<int_fast32_t> ( 0 ), offsety );
+                    const uint_fast32_t src_block_starty = static_cast<uint_fast32_t> ( std::max( 0.0, static_cast<double> ( ( -offsety ) / tilemap.tilesize ) ) );
+
+                    // Calculate where to stop rendering & keep within window boundaries.
+                    const uint_fast32_t dest_endx = tilemap.repeatx
+                        ? WINDOW_WIDTH_PIXELS
+                        : std::min
+                        (
+                            std::max( static_cast<int_fast32_t> ( 0 ), static_cast<int_fast32_t> ( tilemap.w * tilemap.tilesize ) + offsetx ),
+                            static_cast<int_fast16_t> ( WINDOW_WIDTH_PIXELS )
+                        );
+                    const uint_fast32_t dest_endy = tilemap.repeaty
+                        ? WINDOW_HEIGHT_PIXELS
+                        : std::min
+                        (
+                            std::max( static_cast<int_fast32_t> ( 0 ), static_cast<int_fast32_t> ( tilemap.h * tilemap.tilesize ) + offsety ),
+                            static_cast<int_fast16_t> ( WINDOW_HEIGHT_PIXELS )
+                        );
+
+                    // Loop o’er all pixels to render.
+                    for ( uint_fast32_t y = dest_starty; y < dest_endy; ++y )
                     {
-                        for ( unsigned int x = 0; x < tilemap.w; ++x )
+                        const uint_fast32_t srcy = static_cast<unsigned int> ( std::floor( std::max( static_cast<int_fast32_t> ( 0 ), static_cast<int_fast32_t> ( y ) - offsety ) / tilemap.tilesize ) ) % tilemap.h;
+                        const uint_fast32_t srcy_offset = srcy * tilemap.w;
+                        const uint_fast32_t src_pixel_y_offset = ( static_cast<int_fast32_t> ( y ) - offsety ) % tilemap.tilesize;
+                        for ( uint_fast32_t x = dest_startx; x < dest_endx; ++x )
                         {
-                            const unsigned int n = y * tilemap.w + x;
-
-                            // Skip tiles not set.
-                            if ( !tilemap.tiles[ n ].set )
+                            const uint_fast32_t srcx = static_cast<unsigned int> ( std::floor( std::max( static_cast<int_fast32_t> ( 0 ), static_cast<int_fast32_t> ( x ) - offsetx ) / tilemap.tilesize ) ) % tilemap.w;
+                            const uint_fast32_t srci = srcy_offset + srcx;
+                            if ( !tilemap.tiles[ srci ].set )
                             {
                                 continue;
                             }
 
-                            const unsigned int xp = x * 16 + tilemap.x;
-                            const unsigned int yp = y * 16 + tilemap.y;
-                            const int cx = graphics[ i ].abs ? xp : xp - camera.x;
-                            const int cy = graphics[ i ].abs ? yp : yp - camera.y;
-                            const int xsub = cx < 0 ? cx : 0;
-                            const int ysub = cy < 0 ? cy : 0;
-                            const unsigned int fx = cx < 0 ? 0 : cx;
-                            const unsigned int fy = cy < 0 ? 0 : cy;
-                            int w = 16;
-                            int h = 16;
-                            if ( cx < 0 )
-                            {
-                                w += cx;
-                            }
-                            const int right = w + ( int )( fx );
-                            if ( right > ( int )( BSL::WINDOW_WIDTH_PIXELS ) )
-                            {
-                                w -= right - BSL::WINDOW_WIDTH_PIXELS;
-                            }
-                            if ( cy < 0 )
-                            {
-                                h += cy;
-                            }
-                            const int bottom = h + ( int )( fy );
-                            if ( bottom > ( int )( BSL::WINDOW_HEIGHT_PIXELS ) )
-                            {
-                                h -= bottom - BSL::WINDOW_HEIGHT_PIXELS;
-                            }
+                            // If animated, offset block x by animation frame.
+                            const uint_fast32_t block_pixel_x = 
+                                tilemap.tiles[ srci ].animation > 0
+                                ? tilemap.tiles[ srci ].x + ( animation_counter % tilemap.tiles[ srci ].animation )
+                                : tilemap.tiles[ srci ].x;
 
-                            if ( w < 0 || h < 0 )
+                            const uint_fast32_t src_pixel_x = ( block_pixel_x * tilemap.tilesize ) + ( ( static_cast<int_fast32_t> ( x ) - offsetx ) % tilemap.tilesize );
+                            const uint_fast32_t src_pixel_y = ( tilemap.tiles[ srci ].y * tilemap.tilesize ) + src_pixel_y_offset;
+                            const uint_fast32_t src_pixel_i = src_pixel_y * texture.w + src_pixel_x;
+                            const unsigned char v = texture.data[ src_pixel_i ];
+
+                            // Skip blank pixels.
+                            if ( v == 0x00 )
                             {
                                 continue;
                             }
 
-                            const unsigned int srcx = 
-                                tilemap.tiles[ n ].animation > 0
-                                ? tilemap.tiles[ n ].x + ( animation_counter % tilemap.tiles[ n ].animation )
-                                : tilemap.tiles[ n ].x;
-                            for ( unsigned int yi = 0; yi < h; ++yi )
-                            {
-                                const unsigned int sy = fy + yi;
-                                for ( unsigned int xi = 0; xi < w; ++xi )
-                                {
-                                    const unsigned char v = texture.data
-                                    [
-                                        ( ( tilemap.tiles[ n ].y * 16 ) - ysub + yi ) * texture.w + ( srcx * 16 ) - xsub + xi
-                                    ];
+                            const uint_fast32_t wi = y * WINDOW_WIDTH_PIXELS + x;
 
-                                    // Skip transparent.
-                                    if ( v == 0x00 )
-                                    {
-                                        continue;
-                                    }
-
-                                    const unsigned int sx = fx + xi;
-                                    const int diff = ( ( int )( v ) - ( int )( gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] ) ) * graphics[ i ].opacity;
-                                    gl_texture_data[ BSL::WINDOW_WIDTH_PIXELS * sy + sx ] += diff;
-                                }
-                            }
+                            // Add difference ’tween new & current pixel based on opacity.
+                            // Opacity = 0: don’t add any diff ( show current pixel, so new pixel has no affect — is invisible ).
+                            // Opacity = 1: add full diff ( o’erride current pixel with new pixel completely so current pixel doesn’t show @ all, fully opaque ).
+                            const int_fast32_t diff = ( static_cast<int_fast32_t> ( v ) - static_cast<int_fast32_t> ( gl_texture_data[ wi ] ) ) * graphics[ i ].opacity;
+                            gl_texture_data[ wi ] += diff;
                         }
                     }
                 }
@@ -1337,6 +1341,7 @@ namespace BSL::GFX
         g.type = GraphicType::TILEMAP;
         g.abs = BSL::GetArg( "abs", args, false );
         g.layer = GetArg( "layer", args, BSL::Layer::BLOCKS_1 );
+        g.opacity = GetArg( "opacity", args, 1.0f );
         g.opacity = 1.0f;
         g.data.tilemap.texture = texture;
         g.data.tilemap.tiles = static_cast<Tile *> ( malloc( w * h * sizeof( Tile ) ) );
@@ -1345,6 +1350,13 @@ namespace BSL::GFX
         g.data.tilemap.h = h;
         g.data.tilemap.x = GetArg( "x", args, 0 );
         g.data.tilemap.y = GetArg( "y", args, 0 );
+        g.data.tilemap.repeatx = GetArg( "repeatx", args, false );
+        g.data.tilemap.repeaty = GetArg( "repeaty", args, false );
+        g.data.tilemap.scrollx = GetArg( "scrollx", args, 1.0f );
+        g.data.tilemap.scrolly = GetArg( "scrolly", args, 1.0f );
+        g.data.tilemap.offsetx = GetArg( "offsetx", args, 0 );
+        g.data.tilemap.offsety = GetArg( "offsety", args, 0 );
+        g.data.tilemap.tilesize = GetArg( "tileset", args, 16 );
         return { addGraphic( g ) };
     };
 
