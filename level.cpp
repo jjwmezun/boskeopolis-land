@@ -1,3 +1,4 @@
+#include <cmath>
 #include "config.hpp"
 #include "controls.hpp"
 #include "dict.hpp"
@@ -16,13 +17,6 @@ namespace BSL
     static constexpr float CAMERA_LEFT_EDGE = WINDOW_WIDTH_PIXELS * 0.333f;
     static constexpr float CAMERA_BOTTOM_EDGE = WINDOW_HEIGHT_PIXELS * 0.667f;
     static constexpr float CAMERA_TOP_EDGE = WINDOW_HEIGHT_PIXELS * 0.333f;
-    static constexpr float START_SPEED = 0.15f;
-    static constexpr float FALL_SPEED = 0.5f;
-    static constexpr float GRAVITY = 6.0f;
-    static constexpr float JUMP_ACC = 0.2f;
-    static constexpr float JUMP_INIT = 2.0f;
-    static constexpr float JUMP_MAX = 4.75f;
-    static constexpr float autumn_walk_frames[ 4 ] = { 0.0f, 16.0f, 0.0f, 32.0f };
 
     void Level::init( uint_fast8_t levelid )
     {
@@ -43,6 +37,9 @@ namespace BSL
 
         // Init empty objects table.
         objects = static_cast<Object *> ( calloc( map.w * map.h, sizeof( Object ) ) );
+
+        // Init sprites list.
+        sprites.init( 16 );
 
         // Get layer data.
         const JSONArray layers = json.getArray( "layers" );
@@ -249,6 +246,41 @@ namespace BSL
                         }
                     );
                 }
+                else if ( typestring == "sprite" )
+                {
+                    const JSONArray indices = layerobj.getArray( "data" );
+                    if ( indices.getLength() != map.w * map.h )
+                    {
+                        throw std::runtime_error( "Map “" + mapslug + "” tile layer poorly formed: size o’ tiles different from map height x map width." );
+                    }
+                    indices.forEach
+                    (
+                        [ & ]( const JSONItem dataitem, uint_fast16_t i )
+                        {
+                            const uint_fast16_t index = dataitem.asInt();
+
+                            // Skip blank indices.
+                            if ( index == 0 )
+                            {
+                                return;
+                            }
+
+                            const uint_fast16_t x = i % map.w;
+                            const uint_fast16_t y = std::floor( i / map.w );
+                            const uint_fast16_t relative_index = index - 16384;
+                            if ( relative_index == 1 )
+                            {
+                                player.x = x * BLOCK_SIZE;
+                                player.y = y * BLOCK_SIZE;
+                            }
+                            else
+                            {
+                                Sprite & sprite = sprites.pushEmptyGet();
+                                sprite.init( relative_index, x, y );
+                            }
+                        }
+                    );
+                }
                 else if ( typestring == "image" )
                 {
                     const std::string src = std::regex_replace( layerobj.getString( "image" ), std::regex( "../graphics/" ), "" );
@@ -287,18 +319,7 @@ namespace BSL
         );
 
         // Init player.
-        uint_fast16_t player_texture = GFX::loadFileAsTexture( "sprites/autumn.png" );
-        player.x = 50.0f;
-        player.y = -26.0f;
-        player.vx = 0.0f;
-        player.gfx = GFX::addGraphicSprite
-        (
-            player_texture,
-            200,
-            static_cast<int_fast32_t> ( player.y ),
-            16,
-            26
-        );
+        player.init();
 
         // Init inventory.
         inventory.init();
@@ -306,243 +327,7 @@ namespace BSL
 
     void Level::update( float dt )
     {
-        // Check if running.
-        const float start_speed = Controls::heldRun() ? START_SPEED * 2.0f : START_SPEED;
-        const float max_speed = Controls::heldRun() ? MAX_SPEED * 2.0f : MAX_SPEED;
-
-        // Autumn Y movement.
-        // Falling & Jumping
-        const bool going_fast = player.isGoingFast();
-        const float gravity = BSL::Controls::heldJump() ? GRAVITY / 1.5f : GRAVITY;
-        const float max_jump = going_fast ? JUMP_MAX * 1.1f : JUMP_MAX;
-        const bool can_start_jump = player.jump_padding > 0.0f &&
-            !player.jump_lock &&
-            BSL::Controls::heldJump();
-
-        // Continue jump.
-        if ( player.is_jumping )
-        {
-            if ( BSL::Controls::heldJump() )
-            {
-                player.accy = -JUMP_ACC;
-            }
-            else
-            {
-                player.is_jumping = false;
-                player.accy = 0.0f;
-            }
-        }
-        // Start jump.
-        else if ( can_start_jump )
-        {
-            player.is_jumping = true;
-            player.vy = -JUMP_INIT;
-            player.accy = -JUMP_ACC;
-        }
-        // Else, fall.
-        else
-        {
-            player.accy = FALL_SPEED;
-        }
-
-        // Update player y speed.
-        player.vy += player.accy * dt;
-        if ( player.vy > gravity )
-        {
-            player.vy = gravity;
-        }
-        else if ( player.vy < -max_jump )
-        {
-            player.vy = -max_jump;
-            player.is_jumping = false;
-            player.accy = 0.0f;
-        }
-
-        // Reset on ground.
-        player.on_ground = false;
-
-        // Update jump padding.
-        player.jump_padding = std::max( 0.0f, player.jump_padding - 1.0f * dt);
-
-        // Update jump lock.
-        player.jump_lock = Controls::heldJump();
-
-
-        // Update Autumn.
-        static constexpr float PLAYER_HANDLING = 0.25f;
-
-        // Autumn X movement.
-        if ( BSL::Controls::heldRight() )
-        {
-            player.accx = start_speed;
-            player.gfx.setFlipX( true );
-        }
-        else if ( BSL::Controls::heldLeft() )
-        {
-            player.accx = -start_speed;
-            player.gfx.setFlipX( false );
-        }
-        else
-        {
-            player.accx = 0.0f;
-        }
-
-        player.vx += player.accx * dt;
-
-        if ( player.accx == 0.0f )
-        {
-            player.vx /= ( 1.0f + PLAYER_HANDLING * dt );
-        }
-
-        if ( player.vx > max_speed )
-        {
-            player.vx = max_speed;
-        }
-        else if ( player.vx < -max_speed )
-        {
-            player.vx = -max_speed;
-        }
-
-
-        // Object collision
-        const uint_fast32_t otopy = static_cast<uint_fast32_t> ( ( player.y + 2.0 ) / 16.0 );
-        const uint_fast32_t obottomy = static_cast<uint_fast32_t> ( ( player.y + 23.0 ) / 16.0 );
-        const uint_fast32_t oleftx = static_cast<uint_fast32_t> ( ( player.x + 2.0 ) / 16.0 );
-        const uint_fast32_t orightx = static_cast<uint_fast32_t> ( ( player.x + 14.0 ) / 16.0 );
-        const uint_fast32_t oilist[ 4 ] =
-        {
-            otopy * map.w + oleftx,
-            otopy * map.w + orightx,
-            obottomy * map.w + oleftx,
-            obottomy * map.w + orightx,
-        };
-        for ( uint_fast8_t i; i < 4; ++i )
-        {
-            const uint_fast32_t & oi = oilist[ i ];
-            switch ( objects[ oi ].type )
-            {
-                case ( ObjectType::MONEY ):
-                {
-                    // Get money.
-                    inventory.addMoney( objects[ oi ].data.money.amount );
-
-                    // Remove object.
-                    objects[ oi ].type = ObjectType::__NULL;
-                    object_gfx.removeTile( oi );
-                }
-                break;
-            }
-        }
-
-        // Main collision
-        if ( player.x + player.vx * dt < 0.0f )
-        {
-            player.x = 0.0f;
-            player.vx = 0.0f;
-        }
-        else if ( player.x + BLOCK_SIZE + player.vx * dt > map.w * BLOCK_SIZE )
-        {
-            player.x = map.w * BLOCK_SIZE - BLOCK_SIZE;
-            player.vx = 0.0f;
-        }
-
-        if ( player.y + player.vy * dt < 0.0f )
-        {
-            player.y = 0.0f;
-            player.vy = 0.0f;
-        }
-        else if ( player.y + BLOCK_SIZE + player.vy * dt > map.h * BLOCK_SIZE )
-        {
-            player.y = map.h * BLOCK_SIZE - BLOCK_SIZE;
-            player.vy = 0.0f;
-        }
-
-        const uint_fast8_t loopcount = std::max( static_cast<uint_fast8_t> ( dt ), static_cast<uint_fast8_t> ( 1 ) );
-        const float dti = dt / static_cast<float> ( loopcount );
-        for ( uint_fast8_t i = 0; i < loopcount; ++i )
-        {
-            player.x += player.vx * dti;
-            player.y += player.vy * dti;
-
-            const uint_fast32_t topy = static_cast<uint_fast32_t> ( player.getTopBoundary() / 16.0 );
-            const uint_fast32_t bottomy = static_cast<uint_fast32_t> ( player.getBottomBoundary() / 16.0 );
-            const uint_fast32_t yx = static_cast<uint_fast32_t> ( ( player.x + 8.0 ) / 16.0 );
-            const uint_fast32_t yxl = static_cast<uint_fast32_t> ( ( player.x + 2.0 ) / 16.0 );
-            const uint_fast32_t yxr = static_cast<uint_fast32_t> ( ( player.x + 14.0 ) / 16.0 );
-            const uint_fast32_t toplefti = topy * map.w + yx;
-            const uint_fast32_t toprighti = topy * map.w + yx;
-            const uint_fast32_t bottomlefti = bottomy * map.w + yxl;
-            const uint_fast32_t bottomrighti = bottomy * map.w + yxr;
-            if ( collision[ toplefti ] == 0x01 || collision[ toprighti ] == 0x01 )
-            {
-                player.y += ( static_cast<float> ( topy + 1 ) * 16.0f ) - player.getTopBoundary();
-                player.vy *= -0.25f;
-                player.accy = 0.0f;
-                player.is_jumping = false;
-            }
-            else if ( collision[ bottomlefti ] == 0x01 || collision[ bottomrighti ] == 0x01 )
-            {
-                player.y = ( static_cast<float> ( bottomy ) * 16.0f ) - 24.0f;
-                player.vy = 0;
-                player.accy = 0.0f;
-                player.on_ground = true;
-                player.jump_padding = player.isGoingFast() ? 8.0f : 2.0f;
-            }
-            const uint_fast32_t leftx = static_cast<uint_fast32_t> ( player.getLeftBoundary() / 16.0 );
-            const uint_fast32_t rightx = static_cast<uint_fast32_t> ( player.getRightBoundary() / 16.0 );
-            const uint_fast32_t topyx = static_cast<uint_fast32_t> ( ( player.getTopBoundary() + 3.0 ) / 16.0 );
-            const uint_fast32_t bottomyx = static_cast<uint_fast32_t> ( ( player.getBottomBoundary() - 3.0 ) / 16.0 );
-            const uint_fast32_t righttopi = topyx * map.w + rightx;
-            const uint_fast32_t rightbottomi = bottomyx * map.w + rightx;
-            const uint_fast32_t lefttopi = topyx * map.w + leftx;
-            const uint_fast32_t leftbottomi = bottomyx * map.w + leftx;
-            if ( collision[ righttopi ] == 0x01 || collision[ rightbottomi ] == 0x01 )
-            {
-                player.x -= player.getRightBoundary() - ( static_cast<float> ( rightx ) * 16.0f );
-                player.vx *= -0.25f;
-            }
-            else if ( collision[ lefttopi ] == 0x01 || collision[ leftbottomi ] == 0x01 )
-            {
-                player.x += ( static_cast<float> ( leftx + 1 ) * 16.0f ) - player.getLeftBoundary();
-                player.vx *= -0.25f;
-            }
-        }
-
-        // Update final position.
-        player.gfx.setX( player.x );
-        player.gfx.setY( player.y );
-
-
-        // Update animation.
-        if ( !player.on_ground )
-        {
-            player.gfx.setSrcX( 48.0f );
-            player.gfx.setSrcY( 0.0f );
-        }
-        else
-        {
-            // Update walking animation if not stopped.
-            if ( std::abs( player.accx ) > 0.01f )
-            {
-                if ( ( player.walk_timer += dt ) >= 8.0f )
-                {
-                    player.walk_timer -= 8.0f;
-                    ++player.walk_frame;
-                    if ( player.walk_frame > 3 )
-                    {
-                        player.walk_frame = 0;
-                    }
-                }
-                player.gfx.setSrcX( autumn_walk_frames[ player.walk_frame ] );
-                player.gfx.setSrcY( 0.0f );
-            }
-            else
-            {
-                player.gfx.setSrcX( 0.0f );
-                player.gfx.setSrcY( 0.0f );
-            }
-        }
-
+        player.update( dt, *this );
 
         // Update camera.
         if ( player.getCenterX() > camera.x + CAMERA_RIGHT_EDGE )
@@ -579,6 +364,13 @@ namespace BSL
         }
         BSL::GFX::setCameraX( static_cast<uint_fast32_t> ( camera.x ) );
         BSL::GFX::setCameraY( static_cast<uint_fast32_t> ( camera.y ) );
+
+
+        // Update sprites.
+        for ( uint_fast16_t i = 0; i < sprites.count; ++i )
+        {
+            sprites.data[ i ].update( dt, *this );
+        }
 
 
         // Update inventory.

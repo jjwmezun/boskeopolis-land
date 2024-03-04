@@ -17,6 +17,10 @@ add_executable(BoskeopolisLand
     log.cpp
     main.cpp
     object_factory.cpp
+    sprite.cpp
+    sprites/apple.cpp
+    sprites/crab.cpp
+    sprites/player.cpp
     utility.cpp
 )
 set_property(TARGET BoskeopolisLand PROPERTY CXX_STANDARD 23)

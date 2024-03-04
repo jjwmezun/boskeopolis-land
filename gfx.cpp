@@ -352,6 +352,11 @@ namespace BSL::GFX
     {
         getGraphic( id_ ).data.sprite.flipx = v;
     };
+
+    void Sprite::toggleFlipX()
+    {
+        getGraphic( id_ ).data.sprite.flipx = !getGraphic( id_ ).data.sprite.flipx;
+    };
     
     void RawSprite::setY( int v )
     {

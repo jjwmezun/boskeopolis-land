@@ -45,6 +45,7 @@ namespace BSL::GFX
         void setSrcX( uint_fast16_t v );
         void setSrcY( uint_fast16_t v );
         void setFlipX( bool v );
+        void toggleFlipX();
     };
 
     struct RawSprite : public Graphic

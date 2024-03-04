@@ -12,10 +12,23 @@ namespace BSL
             pts,
             5,
             {
-                { "x", 8 + 4 },
+                { "x", 8 + 4 + 32 },
                 { "y", 256 + 4 },
                 { "color", 0x01 },
                 { "prefix", "₧" }
+            }
+        );
+
+        prev_hp = hp = 30.0f;
+        hp_gfx = BSL::GFX::addGraphicCounter
+        (
+            static_cast<int_fast32_t> ( hp ),
+            2,
+            {
+                { "x", 8 + 4 },
+                { "y", 256 + 4 },
+                { "color", 0x01 },
+                { "prefix", "♥" }
             }
         );
     };
@@ -32,6 +45,12 @@ namespace BSL
             }
             pts_gfx.changeNumber( static_cast<int_fast32_t> ( pts_shown ) );
         }
+
+        if ( hp != prev_hp )
+        {
+            hp_gfx.changeNumber( static_cast<int_fast32_t> ( hp ) );
+            prev_hp = hp;
+        }
     };
 
     void LevelInventory::addMoney( uint_fast32_t amount )
@@ -40,6 +59,15 @@ namespace BSL
         if ( pts > 99999 )
         {
             pts = 99999;
+        }
+    };
+
+    void LevelInventory::hurt( float amount )
+    {
+        hp -= amount;
+        if ( hp < 0.0f )
+        {
+            hp = 0.0f;
         }
     };
 };
