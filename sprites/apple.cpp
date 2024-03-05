@@ -43,6 +43,17 @@ namespace BSL
         auto & apple = sprite.data.apple;
         auto & player = level.player;
 
+        // Don’t update if offscreen.
+        if (
+            apple.coords.x > level.camera.x + WINDOW_WIDTH_PIXELS ||
+            apple.coords.right() < level.camera.x ||
+            apple.coords.y > level.camera.y + WINDOW_HEIGHT_PIXELS ||
+            apple.coords.bottom() < level.camera.y
+        )
+        {
+            return;
+        }
+
         // Handle Y movement.
         apple.accy = FALL_SPEED;
         apple.vy += apple.accy * dt;
@@ -139,11 +150,13 @@ namespace BSL
                 && player.y < apple.coords.bottom() && player.bottom() > ( apple.coords.y + 2.0f )
             )
             {
-                if ( player.y < apple.coords.y + 8.0f )
+                // If you land on it, it gets defeated & player bounces off it.
+                if ( player.vy > 0.0f )
                 {
                     apple.alive = false;
                     player.bounce();
                 }
+                // Otherwise, the player gets hurt.
                 else
                 {
                     player.hurt( level, dt * 1.5f );

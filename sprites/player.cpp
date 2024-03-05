@@ -140,7 +140,7 @@ namespace BSL
             obottomy * level.map.w + oleftx,
             obottomy * level.map.w + orightx,
         };
-        for ( uint_fast8_t i; i < 4; ++i )
+        for ( uint_fast8_t i = 0; i < 4; ++i )
         {
             const uint_fast32_t & oi = oilist[ i ];
             switch ( level.objects[ oi ].type )
