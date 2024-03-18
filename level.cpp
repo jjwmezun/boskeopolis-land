@@ -339,8 +339,51 @@ namespace BSL
         updateCamera();
     }
 
+    void Level::destroy()
+    {
+        for ( uint_fast8_t i = 0; i < mapcount; ++i )
+        {
+            Map & map = maps[ i ];
+            free( map.collision );
+            free( map.sprites );
+            free( map.objects );
+
+            map.tiles.forEach
+            (
+                [&] ( auto & layer )
+                {
+                    free( layer.tiles );
+                }
+            );
+            map.tiles.close();
+
+            map.images.forEach
+            (
+                [&] ( auto & layer )
+                {
+                    free( layer.src );
+                }
+            );
+            map.images.close();
+            map.warps.close();
+        }
+
+        free( maps );
+        free( objects );
+        sprites.close();
+    };
+
     void Level::update( float dt )
     {
+        if ( BSL::Controls::heldMenu() )
+        {
+            BSL::Game::pushLevelPauseState();
+
+            player.jump_lock = true; // Make sure player doesn’t jump after leaving menu.
+
+            return; // If pausing, abort rest o’ update.
+        }
+
         player.update( dt, *this );
 
         updateCamera();

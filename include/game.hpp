@@ -32,7 +32,9 @@ namespace BSL::Game
     void popState();
     void fadeTo( void ( * constructor )(), FadeToArgs args );
     void pushFadeIn();
+    void pushLevelPauseState();
     FadeToArgs getLastFadeToArgs();
+    void fadeToOW( OWWarp warp );
 }
 
 #endif // GAME_H

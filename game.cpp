@@ -4,6 +4,7 @@
 #include "gfx.hpp"
 #include "json.hpp"
 #include "level.hpp"
+#include "level_pause.hpp"
 #include "level_table.hpp"
 #include <stdexcept>
 #include <vector>
@@ -33,7 +34,8 @@ namespace BSL::Game
         OVERWORLD,
         LEVEL,
         OW_LEVEL_OPEN,
-        LV_MESSAGE
+        LV_MESSAGE,
+        LV_PAUSE
     };
 
     union GameStateData
@@ -157,6 +159,7 @@ namespace BSL::Game
         }
         lvmessage;
         Level level;
+        LevelPause levelpause;
     };
 
     struct GameState
@@ -169,10 +172,10 @@ namespace BSL::Game
     static uint_fast8_t state_count;
 
     static void closeState( unsigned int n );
-    static void fadeToOW( OWWarp warp );
     static void clearState();
     static void destroyState( uint_fast8_t staten );
     static void pushOWLevelOpenMenu( uint_fast8_t levelid );
+    static void updateOWCamera( auto & data );
     static void updateOWAnimation( auto & data, float dt );
     static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection );
     static void pushLvMessageState();
@@ -447,42 +450,7 @@ namespace BSL::Game
                     data.ui.timescore.setOpacity( 0.0f );
                 }
 
-                // Update camera.
-                if ( data.autumn.getCenterX() > data.camera.x + CAMERA_RIGHT_EDGE )
-                {
-                    data.camera.x = data.autumn.getCenterX() - CAMERA_RIGHT_EDGE;
-                    if ( data.camera.x > data.map.w * BLOCK_SIZE - WINDOW_WIDTH_PIXELS )
-                    {
-                        data.camera.x = data.map.w * BLOCK_SIZE - WINDOW_WIDTH_PIXELS;
-                    }
-                }
-                else if ( data.autumn.getCenterX() < data.camera.x + CAMERA_LEFT_EDGE )
-                {
-                    data.camera.x = data.autumn.getCenterX() - CAMERA_LEFT_EDGE;
-                    if ( data.camera.x < 0.0f )
-                    {
-                        data.camera.x = 0.0f;
-                    }
-                }
-                if ( data.autumn.getCenterY() > data.camera.y + CAMERA_BOTTOM_EDGE )
-                {
-                    data.camera.y = data.autumn.getCenterY() - CAMERA_BOTTOM_EDGE;
-                    if ( data.camera.y > data.map.h * BLOCK_SIZE - OWWINDOWH )
-                    {
-                        data.camera.y = data.map.h * BLOCK_SIZE - OWWINDOWH;
-                    }
-                }
-                else if ( data.autumn.getCenterY() < data.camera.y + CAMERA_TOP_EDGE )
-                {
-                    data.camera.y = data.autumn.getCenterY() - CAMERA_TOP_EDGE;
-                    if ( data.camera.y < 0.0f )
-                    {
-                        data.camera.y = 0.0f;
-                    }
-                }
-                BSL::GFX::setCameraX( static_cast<unsigned int> ( data.camera.x ) );
-                BSL::GFX::setCameraY( static_cast<unsigned int> ( data.camera.y ) );
-
+                updateOWCamera( data );
                 updateOWAnimation( data, dt );
 
                 /*
@@ -562,8 +530,12 @@ namespace BSL::Game
             break;
             case ( StateType::LEVEL ):
             {
-                auto & data = current_state.data.level;
-                data.update( dt );
+                current_state.data.level.update( dt );
+            }
+            break;
+            case ( StateType::LV_PAUSE ):
+            {
+                current_state.data.levelpause.update( dt );
             }
             break;
         }
@@ -597,12 +569,20 @@ namespace BSL::Game
         ++state_count;
     };
 
+    void pushLevelPauseState()
+    {
+        BSL::GFX::setState( state_count );
+        states_[ state_count ].type = StateType::LV_PAUSE;
+        states_[ state_count ].data.levelpause.init();
+        ++state_count;
+    };
+
     FadeToArgs getLastFadeToArgs()
     {
         return states_[ state_count - 1 ].data.fadeto.args;
     };
 
-    static void fadeToOW( OWWarp warp )
+    void fadeToOW( OWWarp warp )
     {
         FadeToArgs args;
         args.ow.warp = warp;
@@ -630,6 +610,11 @@ namespace BSL::Game
                 free( states_[ staten ].data.overworld.map.collision );
                 free( states_[ staten ].data.overworld.map.levels );
                 free( states_[ staten ].data.overworld.map.warps );
+            }
+            break;
+            case ( StateType::LEVEL ):
+            {
+                states_[ staten ].data.level.destroy();
             }
             break;
         }
@@ -683,6 +668,44 @@ namespace BSL::Game
         );
         data.confirmlock = true;
         ++state_count;
+    };
+
+    static void updateOWCamera( auto & data )
+    {
+        if ( data.autumn.getCenterX() > data.camera.x + CAMERA_RIGHT_EDGE )
+        {
+            data.camera.x = data.autumn.getCenterX() - CAMERA_RIGHT_EDGE;
+            if ( data.camera.x > data.map.w * BLOCK_SIZE - WINDOW_WIDTH_PIXELS )
+            {
+                data.camera.x = data.map.w * BLOCK_SIZE - WINDOW_WIDTH_PIXELS;
+            }
+        }
+        else if ( data.autumn.getCenterX() < data.camera.x + CAMERA_LEFT_EDGE )
+        {
+            data.camera.x = data.autumn.getCenterX() - CAMERA_LEFT_EDGE;
+            if ( data.camera.x < 0.0f )
+            {
+                data.camera.x = 0.0f;
+            }
+        }
+        if ( data.autumn.getCenterY() > data.camera.y + CAMERA_BOTTOM_EDGE )
+        {
+            data.camera.y = data.autumn.getCenterY() - CAMERA_BOTTOM_EDGE;
+            if ( data.camera.y > data.map.h * BLOCK_SIZE - OWWINDOWH )
+            {
+                data.camera.y = data.map.h * BLOCK_SIZE - OWWINDOWH;
+            }
+        }
+        else if ( data.autumn.getCenterY() < data.camera.y + CAMERA_TOP_EDGE )
+        {
+            data.camera.y = data.autumn.getCenterY() - CAMERA_TOP_EDGE;
+            if ( data.camera.y < 0.0f )
+            {
+                data.camera.y = 0.0f;
+            }
+        }
+        BSL::GFX::setCameraX( static_cast<unsigned int> ( data.camera.x ) );
+        BSL::GFX::setCameraY( static_cast<unsigned int> ( data.camera.y ) );
     };
 
     static void updateOWAnimation( auto & data, float dt )
@@ -1150,6 +1173,9 @@ namespace BSL::Game
             16,
             16
         );
+
+        // Make sure camera is set to correct position.
+        updateOWCamera( data );
 
         // Generate o’erworld windows.
         BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, 40, 0, WINDOW_HEIGHT_PIXELS - 40 );

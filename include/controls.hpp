@@ -6,6 +6,7 @@ namespace BSL::Controls
     void update();
     int heldConfirm();
     int heldCancel();
+    int heldMenu();
     int heldUp();
     int heldRight();
     int heldDown();

@@ -74,6 +74,7 @@ namespace BSL
         const LevelWarp * current_warp;
 
         void init( uint_fast8_t levelid );
+        void destroy();
         void update( float dt );
         void updateCamera();
         void generateLevelData();

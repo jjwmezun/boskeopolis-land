@@ -275,6 +275,11 @@ namespace BSL::Controls
         return held( 5 );
     };
 
+    int heldMenu()
+    {
+        return held( 8 );
+    };
+
     int heldUp()
     {
         return held( 0 );
@@ -316,9 +321,10 @@ namespace BSL::Controls
             { 4, KEY_Z },
             { 5, KEY_X },
             { 6, KEY_Z },
-            { 7, KEY_X }
+            { 7, KEY_X },
+            { 8, KEY_C }
         };
-        unsigned int num_o_inputs = 8;
+        unsigned int num_o_inputs = 9;
 
         BSL::GFX::registerInputHandler( HandleInput );
 
