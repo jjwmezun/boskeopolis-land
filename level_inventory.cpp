@@ -6,6 +6,12 @@ namespace BSL
     void LevelInventory::init()
     {
         pts = pts_shown = 0;
+        prev_hp = hp = 30.0f;
+        resetGFX();
+    };
+
+    void LevelInventory::resetGFX()
+    {
         BSL::GFX::addGraphicMenu( WINDOW_WIDTH_PIXELS, 40, 0, WINDOW_HEIGHT_PIXELS - 40 );
         pts_gfx = BSL::GFX::addGraphicCounter
         (
@@ -19,7 +25,6 @@ namespace BSL
             }
         );
 
-        prev_hp = hp = 30.0f;
         hp_gfx = BSL::GFX::addGraphicCounter
         (
             static_cast<int_fast32_t> ( hp ),

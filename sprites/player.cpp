@@ -17,6 +17,11 @@ namespace BSL
     void PlayerSprite::init()
     {
         hp = 20.0f;
+        resetGFX();
+    };
+
+    void PlayerSprite::resetGFX()
+    {
         uint_fast16_t player_texture = GFX::loadFileAsTexture( "sprites/autumn.png" );
         gfx = GFX::addGraphicSprite
         (
@@ -128,21 +133,35 @@ namespace BSL
         }
 
 
-        // Object collision
+        // Object & other collision.
         const uint_fast32_t otopy = static_cast<uint_fast32_t> ( ( y + 2.0 ) / 16.0 );
         const uint_fast32_t obottomy = static_cast<uint_fast32_t> ( ( y + 23.0 ) / 16.0 );
         const uint_fast32_t oleftx = static_cast<uint_fast32_t> ( ( x + 2.0 ) / 16.0 );
         const uint_fast32_t orightx = static_cast<uint_fast32_t> ( ( x + 14.0 ) / 16.0 );
         const uint_fast32_t oilist[ 4 ] =
         {
-            otopy * level.map.w + oleftx,
-            otopy * level.map.w + orightx,
-            obottomy * level.map.w + oleftx,
-            obottomy * level.map.w + orightx,
+            otopy * level.width + oleftx,
+            otopy * level.width + orightx,
+            obottomy * level.width + oleftx,
+            obottomy * level.width + orightx,
         };
         for ( uint_fast8_t i = 0; i < 4; ++i )
         {
             const uint_fast32_t & oi = oilist[ i ];
+
+            switch ( level.collision[ oi ] )
+            {
+                case ( 0x04 ):
+                {
+                    level.warp();
+
+                    // Interrupt update & prevent multiple warps.
+                    return;
+                }
+                break;
+            }
+
+            // Object collision.
             switch ( level.objects[ oi ].type )
             {
                 case ( ObjectType::MONEY ):
@@ -153,6 +172,7 @@ namespace BSL
                     // Remove object.
                     level.objects[ oi ].type = ObjectType::__NULL;
                     level.object_gfx.removeTile( oi );
+                    level.maps[ level.current_map ].objects[ oi ] = 0;
                 }
                 break;
             }
@@ -164,9 +184,9 @@ namespace BSL
             x = 0.0f;
             vx = 0.0f;
         }
-        else if ( x + BLOCK_SIZE + vx * dt > level.map.w * BLOCK_SIZE )
+        else if ( x + BLOCK_SIZE + vx * dt > level.width * BLOCK_SIZE )
         {
-            x = level.map.w * BLOCK_SIZE - BLOCK_SIZE;
+            x = level.width * BLOCK_SIZE - BLOCK_SIZE;
             vx = 0.0f;
         }
 
@@ -184,10 +204,10 @@ namespace BSL
             const uint_fast32_t yx = static_cast<uint_fast32_t> ( ( x + 8.0 ) / 16.0 );
             const uint_fast32_t yxl = static_cast<uint_fast32_t> ( ( x + 2.0 ) / 16.0 );
             const uint_fast32_t yxr = static_cast<uint_fast32_t> ( ( x + 14.0 ) / 16.0 );
-            const uint_fast32_t toplefti = topy * level.map.w + yx;
-            const uint_fast32_t toprighti = topy * level.map.w + yx;
-            const uint_fast32_t bottomlefti = bottomy * level.map.w + yxl;
-            const uint_fast32_t bottomrighti = bottomy * level.map.w + yxr;
+            const uint_fast32_t toplefti = topy * level.width + yx;
+            const uint_fast32_t toprighti = topy * level.width + yx;
+            const uint_fast32_t bottomlefti = bottomy * level.width + yxl;
+            const uint_fast32_t bottomrighti = bottomy * level.width + yxr;
             if ( level.collision[ toplefti ] == 0x01 || level.collision[ toprighti ] == 0x01 )
             {
                 y += ( static_cast<float> ( topy + 1 ) * 16.0f ) - getTopBoundary();
@@ -207,10 +227,10 @@ namespace BSL
             const uint_fast32_t rightx = static_cast<uint_fast32_t> ( getRightBoundary() / 16.0 );
             const uint_fast32_t topyx = static_cast<uint_fast32_t> ( ( getTopBoundary() + 3.0 ) / 16.0 );
             const uint_fast32_t bottomyx = static_cast<uint_fast32_t> ( ( getBottomBoundary() - 3.0 ) / 16.0 );
-            const uint_fast32_t righttopi = topyx * level.map.w + rightx;
-            const uint_fast32_t rightbottomi = bottomyx * level.map.w + rightx;
-            const uint_fast32_t lefttopi = topyx * level.map.w + leftx;
-            const uint_fast32_t leftbottomi = bottomyx * level.map.w + leftx;
+            const uint_fast32_t righttopi = topyx * level.width + rightx;
+            const uint_fast32_t rightbottomi = bottomyx * level.width + rightx;
+            const uint_fast32_t lefttopi = topyx * level.width + leftx;
+            const uint_fast32_t leftbottomi = bottomyx * level.width + leftx;
             if ( level.collision[ righttopi ] == 0x01 || level.collision[ rightbottomi ] == 0x01 )
             {
                 x -= getRightBoundary() - ( static_cast<float> ( rightx ) * 16.0f );

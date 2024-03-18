@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include <cstdint>
+#include <functional>
 
 template <typename A>
 struct List
@@ -67,6 +68,22 @@ struct List
 
             // Set data to use new space.
             data = new_data;
+        }
+    };
+
+    void forEach( const std::function<void( A & )> & callable )
+    {
+        for ( uint_fast16_t i = 0; i < count; ++i )
+        {
+            callable( data[ i ] );
+        }
+    };
+
+    void forEach( const std::function<void( const A & )> & callable ) const
+    {
+        for ( uint_fast16_t i = 0; i < count; ++i )
+        {
+            callable( data[ i ] );
         }
     };
 

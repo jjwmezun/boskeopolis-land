@@ -83,9 +83,9 @@ namespace BSL
                 apple.coords.x = 0.0f;
                 apple.vx = 0.0f;
             }
-            else if ( apple.coords.right() + apple.vx * dt > level.map.w * BLOCK_SIZE )
+            else if ( apple.coords.right() + apple.vx * dt > level.width * BLOCK_SIZE )
             {
-                apple.coords.x = level.map.w * BLOCK_SIZE - apple.coords.w;
+                apple.coords.x = level.width * BLOCK_SIZE - apple.coords.w;
                 apple.vx = 0.0f;
             }
 
@@ -100,8 +100,8 @@ namespace BSL
                 const uint_fast32_t bottomy = static_cast<uint_fast32_t> ( ( apple.coords.y + 15.0 ) / 16.0 );
                 const uint_fast32_t yxl = static_cast<uint_fast32_t> ( ( apple.coords.x + 2.0 ) / 16.0 );
                 const uint_fast32_t yxr = static_cast<uint_fast32_t> ( ( apple.coords.x + 14.0 ) / 16.0 );
-                const uint_fast32_t bottomlefti = bottomy * level.map.w + yxl;
-                const uint_fast32_t bottomrighti = bottomy * level.map.w + yxr;
+                const uint_fast32_t bottomlefti = bottomy * level.width + yxl;
+                const uint_fast32_t bottomrighti = bottomy * level.width + yxr;
                 if ( level.collision[ bottomlefti ] == 0x01 || level.collision[ bottomrighti ] == 0x01 )
                 {
                     apple.coords.y = ( static_cast<float> ( bottomy ) * 16.0f ) - 15.0f;
@@ -113,10 +113,10 @@ namespace BSL
                 const uint_fast32_t rightx = static_cast<uint_fast32_t> ( apple.coords.right() / 16.0 );
                 const uint_fast32_t topyx = static_cast<uint_fast32_t> ( apple.coords.y / 16.0 );
                 const uint_fast32_t bottomyx = static_cast<uint_fast32_t> ( ( apple.coords.y + 14.0 ) / 16.0 );
-                const uint_fast32_t righttopi = topyx * level.map.w + rightx;
-                const uint_fast32_t rightbottomi = bottomyx * level.map.w + rightx;
-                const uint_fast32_t lefttopi = topyx * level.map.w + leftx;
-                const uint_fast32_t leftbottomi = bottomyx * level.map.w + leftx;
+                const uint_fast32_t righttopi = topyx * level.width + rightx;
+                const uint_fast32_t rightbottomi = bottomyx * level.width + rightx;
+                const uint_fast32_t lefttopi = topyx * level.width + leftx;
+                const uint_fast32_t leftbottomi = bottomyx * level.width + leftx;
                 if ( level.collision[ righttopi ] == 0x01 || level.collision[ rightbottomi ] == 0x01 )
                 {
                     apple.coords.x -= apple.coords.right() - ( static_cast<float> ( rightx ) * 16.0f );

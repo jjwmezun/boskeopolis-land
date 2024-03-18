@@ -73,6 +73,7 @@ namespace BSL
         };
 
         void init();
+        void resetGFX();
         void update( float dt, Level & level );
         void hurt( Level & level, float amount );
         void bounce();

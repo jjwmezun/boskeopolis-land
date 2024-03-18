@@ -16,6 +16,7 @@ namespace BSL
         float prev_hp;
 
         void init();
+        void resetGFX();
         void update( float dt );
         void addMoney( uint_fast32_t amount );
         void hurt( float amount );

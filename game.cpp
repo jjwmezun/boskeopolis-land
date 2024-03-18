@@ -25,13 +25,6 @@ namespace BSL::Game
     static constexpr int OWLVOPEN_MENUX = static_cast<int> ( ( WINDOW_WIDTH_PIXELS - 160 ) / 2.0 );
     static constexpr int OWLVOPEN_MENUY = static_cast<int> ( ( WINDOW_HEIGHT_PIXELS - 32 ) / 2.0 );
 
-    struct Warp
-    {
-        uint_fast8_t map;
-        uint_fast8_t x;
-        uint_fast8_t y;
-    };
-
     enum class StateType
     {
         FADE_IN,
@@ -42,21 +35,6 @@ namespace BSL::Game
         OW_LEVEL_OPEN,
         LV_MESSAGE
     };
-
-    union FadeToArgs
-    {
-        struct
-        {
-            Warp warp;
-        }
-        ow;
-        struct
-        {
-            uint_fast8_t levelid;
-        }
-        level;
-    }
-    args;
 
     union GameStateData
     {
@@ -144,7 +122,7 @@ namespace BSL::Game
                 unsigned int h;
                 uint_fast8_t * collision;
                 uint_fast8_t * levels;
-                Warp * warps;
+                OWWarp * warps;
                 uint_fast8_t warpcount;
             }
             map;
@@ -191,15 +169,13 @@ namespace BSL::Game
     static uint_fast8_t state_count;
 
     static void closeState( unsigned int n );
-    static void fadeTo( void ( * constructor )(), FadeToArgs args );
-    static void fadeToOW( Warp warp );
+    static void fadeToOW( OWWarp warp );
     static void clearState();
     static void destroyState( uint_fast8_t staten );
     static void pushOWLevelOpenMenu( uint_fast8_t levelid );
     static void updateOWAnimation( auto & data, float dt );
     static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection );
     static void pushLvMessageState();
-    static void pushFadeIn();
     static void changeToOW();
     static void changeToLevel();
 
@@ -598,10 +574,10 @@ namespace BSL::Game
         BSL::GFX::clearStateGraphics();
         destroyState( state_count - 1 );
         memset( &states_[ state_count - 1 ], 0, sizeof( GameState ) ); // Clear current state.
-        BSL::GFX::setState( --state_count );
+        BSL::GFX::setState( --state_count - 1 );
     };
 
-    static void fadeTo( void ( * constructor )(), FadeToArgs args )
+    void fadeTo( void ( * constructor )(), FadeToArgs args )
     {
         BSL::GFX::setState( state_count );
         states_[ state_count ].type = StateType::FADE_TO;
@@ -612,7 +588,21 @@ namespace BSL::Game
         ++state_count;
     };
 
-    static void fadeToOW( Warp warp )
+    void pushFadeIn()
+    {
+        BSL::GFX::setState( state_count );
+        states_[ state_count ].type = StateType::FADE_IN;
+        states_[ state_count ].data.fade.speed = 0.0f;
+        states_[ state_count ].data.fade.opacity = 0.0f;
+        ++state_count;
+    };
+
+    FadeToArgs getLastFadeToArgs()
+    {
+        return states_[ state_count - 1 ].data.fadeto.args;
+    };
+
+    static void fadeToOW( OWWarp warp )
     {
         FadeToArgs args;
         args.ow.warp = warp;
@@ -797,21 +787,12 @@ namespace BSL::Game
         pushFadeIn();
     };
 
-    static void pushFadeIn()
-    {
-        BSL::GFX::setState( state_count );
-        states_[ state_count ].type = StateType::FADE_IN;
-        states_[ state_count ].data.fade.speed = 0.0f;
-        states_[ state_count ].data.fade.opacity = 0.0f;
-        ++state_count;
-    };
-
     static void changeToOW()
     {
         auto & args = states_[ state_count - 1 ].data.fadeto.args.ow;
 
         // Save map.
-        const Warp inwarp = args.warp;
+        const OWWarp inwarp = args.warp;
 
         clearState();
 
@@ -967,7 +948,7 @@ namespace BSL::Game
         }
 
         // Generate tilemap.
-        std::vector<Warp> tempwarps;
+        std::vector<OWWarp> tempwarps;
         JSON json { "assets/maps/ow-" + std::to_string( inwarp.map ) + ".json" };
         data.map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
         data.map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
@@ -1110,7 +1091,7 @@ namespace BSL::Game
                                         }
                                         uint_fast16_t i = y * data.map.w + x;
                                         data.map.collision[ i ] = static_cast<uint_fast8_t> ( tempwarps.size() + 16 );
-                                        Warp warp = { 0, 0, 0 };
+                                        OWWarp warp = { 0, 0, 0 };
                                         props.forEach
                                         (
                                             [ & ]( const JSONItem propitem )
@@ -1142,8 +1123,8 @@ namespace BSL::Game
         );
 
         data.map.warpcount = tempwarps.size();
-        const size_t warpssize = data.map.warpcount * sizeof( Warp );
-        data.map.warps = static_cast<Warp *> ( malloc( warpssize ) );
+        const size_t warpssize = data.map.warpcount * sizeof( OWWarp );
+        data.map.warps = static_cast<OWWarp *> ( malloc( warpssize ) );
         memcpy( data.map.warps, &tempwarps[ 0 ], warpssize );
 
         const unsigned int sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
