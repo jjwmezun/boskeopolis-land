@@ -35,6 +35,7 @@ namespace BSL::Game
     void pushLevelPauseState();
     FadeToArgs getLastFadeToArgs();
     void fadeToOW( OWWarp warp );
+    void pushLvMessageState();
 }
 
 #endif // GAME_H

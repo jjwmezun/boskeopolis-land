@@ -6,6 +6,7 @@
 #include "level.hpp"
 #include "level_pause.hpp"
 #include "level_table.hpp"
+#include "ow_level_menu.hpp"
 #include <stdexcept>
 #include <vector>
 
@@ -139,19 +140,7 @@ namespace BSL::Game
             uint_fast8_t current_level;
         }
         overworld;
-        struct
-        {
-            bool confirmlock;
-            uint_fast8_t levelid;
-            uint_fast8_t selection;
-            struct
-            {
-                GFX::Rect selection;
-                GFX::Text optiontext[ OWLEVELOPEN_OPTIONCOUNT ];
-            }
-            gfx;
-        }
-        owlevelopen;
+        OWLevelMenu owlevelmenu;
         struct
         {
             bool confirmlock;
@@ -178,7 +167,6 @@ namespace BSL::Game
     static void updateOWCamera( auto & data );
     static void updateOWAnimation( auto & data, float dt );
     static void updateOWLevelOpenGFX( auto & data, uint_fast8_t selection );
-    static void pushLvMessageState();
     static void changeToOW();
     static void changeToLevel();
 
@@ -477,40 +465,7 @@ namespace BSL::Game
             break;
             case ( StateType::OW_LEVEL_OPEN ):
             {
-                auto & prevstate = states_[ state_count - 2 ].data.overworld;
-                auto & data = current_state.data.owlevelopen;
-                updateOWAnimation( prevstate, dt );
-
-                if ( !BSL::Controls::heldConfirm() )
-                {
-                    data.confirmlock = false;
-                }
-
-                if ( BSL::Controls::heldCancel() )
-                {
-                    updateOWLevelOpenGFX( data, 1 );
-                    popState();
-                }
-                else if ( !data.confirmlock && BSL::Controls::heldConfirm() )
-                {
-                    FadeToArgs args;
-                    args.level.levelid = data.levelid;
-                    fadeTo( &pushLvMessageState, args );
-                }
-                else if ( BSL::Controls::heldDown() )
-                {
-                    if ( data.selection < OWLEVELOPEN_OPTIONCOUNT - 1 )
-                    {
-                        updateOWLevelOpenGFX( data, data.selection + 1 );
-                    }
-                }
-                else if ( BSL::Controls::heldUp() )
-                {
-                    if ( data.selection > 0 )
-                    {
-                        updateOWLevelOpenGFX( data, data.selection - 1 );
-                    }
-                }
+                current_state.data.owlevelmenu.update( dt );
             }
             break;
             case ( StateType::LV_MESSAGE ):
@@ -589,6 +544,42 @@ namespace BSL::Game
         fadeTo( &changeToOW, args );
     };
 
+    void pushLvMessageState()
+    {
+        const uint_fast8_t levelid = states_[ state_count - 1 ].data.fadeto.args.level.levelid;
+
+        clearState();
+        BSL::GFX::setState( state_count );
+        states_[ state_count ].type = StateType::LV_MESSAGE;
+        auto & data = states_[ state_count ].data.lvmessage;
+        data.levelid = levelid;
+        BSL::GFX::addGraphicRect
+        (
+            0,
+            0,
+            WINDOW_WIDTH_PIXELS,
+            WINDOW_HEIGHT_PIXELS,
+            192,
+            {
+                { "abs", true }
+            }
+        );
+        BSL::GFX::addGraphicText
+        (
+            level_table[ levelid ].goal.message,
+            {
+                { "align", Align::CENTER },
+                { "valign", Valign::MIDDLE },
+                { "shadow", true }
+            }
+        );
+        ++state_count;
+
+        GFX::setPalette( "sunny" );
+
+        pushFadeIn();
+    };
+
     static void clearState()
     {
         BSL::GFX::clearGraphics();
@@ -624,49 +615,7 @@ namespace BSL::Game
     {
         BSL::GFX::setState( state_count );
         states_[ state_count ].type = StateType::OW_LEVEL_OPEN;
-        auto & data = states_[ state_count ].data.owlevelopen;
-        data.levelid = levelid;
-        data.selection = 0;
-        BSL::GFX::addGraphicMenu
-        (
-            160,
-            32,
-            OWLVOPEN_MENUX,
-            OWLVOPEN_MENUY
-        );
-        data.gfx.selection = BSL::GFX::addGraphicRect
-        (
-            OWLVOPEN_MENUX + 5,
-            OWLVOPEN_MENUY + 5,
-            149,
-            11,
-            1,
-            {
-                { "abs", true },
-                { "layer", Layer::AFTER_FG_2 }
-            }
-        );
-        data.gfx.optiontext[ 0 ] = BSL::GFX::addGraphicText
-        (
-            "Play Level",
-            {
-                { "x", OWLVOPEN_MENUX + 8 },
-                { "y", OWLVOPEN_MENUY + 8 },
-                { "color", 0xFF },
-                { "layer", Layer::AFTER_FG_2 }
-            }
-        );
-        data.gfx.optiontext[ 1 ] = BSL::GFX::addGraphicText
-        (
-            "Cancel",
-            {
-                { "x", OWLVOPEN_MENUX + 8 },
-                { "y", OWLVOPEN_MENUY + 16 },
-                { "color", 0x01 },
-                { "layer", Layer::AFTER_FG_2 }
-            }
-        );
-        data.confirmlock = true;
+        states_[ state_count ].data.owlevelmenu.init( levelid );
         ++state_count;
     };
 
@@ -772,42 +721,6 @@ namespace BSL::Game
 
         // Set highlight for new selection text.
         data.gfx.optiontext[ data.selection ].setColor( 0xFF );
-    };
-
-    static void pushLvMessageState()
-    {
-        const uint_fast8_t levelid = states_[ state_count - 1 ].data.fadeto.args.level.levelid;
-
-        clearState();
-        BSL::GFX::setState( state_count );
-        states_[ state_count ].type = StateType::LV_MESSAGE;
-        auto & data = states_[ state_count ].data.lvmessage;
-        data.levelid = levelid;
-        BSL::GFX::addGraphicRect
-        (
-            0,
-            0,
-            WINDOW_WIDTH_PIXELS,
-            WINDOW_HEIGHT_PIXELS,
-            192,
-            {
-                { "abs", true }
-            }
-        );
-        BSL::GFX::addGraphicText
-        (
-            level_table[ levelid ].goal.message,
-            {
-                { "align", Align::CENTER },
-                { "valign", Valign::MIDDLE },
-                { "shadow", true }
-            }
-        );
-        ++state_count;
-
-        GFX::setPalette( "sunny" );
-
-        pushFadeIn();
     };
 
     static void changeToOW()
