@@ -18,6 +18,7 @@ add_executable(BoskeopolisLand
     log.cpp
     main.cpp
     object_factory.cpp
+    overworld.cpp
     ow_level_menu.cpp
     sprite.cpp
     sprites/apple.cpp

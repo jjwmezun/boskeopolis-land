@@ -2,16 +2,10 @@
 #define GAME_H
 
 #include "config.hpp"
+#include "ow_warp.hpp"
 
 namespace BSL::Game
 {
-    struct OWWarp
-    {
-        uint_fast8_t map;
-        uint_fast8_t x;
-        uint_fast8_t y;
-    };
-
     union FadeToArgs
     {
         struct
@@ -36,6 +30,7 @@ namespace BSL::Game
     FadeToArgs getLastFadeToArgs();
     void fadeToOW( OWWarp warp );
     void pushLvMessageState();
+    void pushOWLevelOpenMenu( uint_fast8_t levelid );
 }
 
 #endif // GAME_H
