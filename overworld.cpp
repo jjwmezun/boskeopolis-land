@@ -11,8 +11,8 @@ namespace BSL
     void Overworld::init( OWWarp inwarp )
     {
         // Generate O’erworld BG
-        static constexpr unsigned int OWBGTILEW = 16;
-        static constexpr unsigned int OWBGTILEH = 16;
+        static constexpr uint_fast8_t OWBGTILEW = 16;
+        static constexpr uint_fast8_t OWBGTILEH = 16;
         static constexpr unsigned char OVERWORLD_BGTILE[ OWBGTILEW * OWBGTILEH ] =
         {
             0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80, 0x80, 0x40,
@@ -35,12 +35,12 @@ namespace BSL
         };
 
         // BG top
-        static constexpr unsigned int OWBGTOPW = WINDOW_WIDTH_PIXELS + 16;
-        static constexpr unsigned int OWBGTOPH = OWBGTILEH + 1;
+        static constexpr uint_fast16_t OWBGTOPW = WINDOW_WIDTH_PIXELS + 16;
+        static constexpr uint_fast16_t OWBGTOPH = OWBGTILEH + 1;
         unsigned char top_pixels[ OWBGTOPW * OWBGTOPH ];
-        for ( unsigned int y = 0; y < OWBGTOPH; ++y )
+        for ( uint_fast16_t y = 0; y < OWBGTOPH; ++y )
         {
-            for ( unsigned int x = 0; x < OWBGTOPW; x += OWBGTILEW )
+            for ( uint_fast16_t x = 0; x < OWBGTOPW; x += OWBGTILEW )
             {
                 memcpy( &top_pixels[ OWBGTOPW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( y % OWBGTILEH ) ], OWBGTILEW );
             }
@@ -58,12 +58,12 @@ namespace BSL
         );
 
         // BG bottom
-        static constexpr unsigned int OWBGBOTTOMW = WINDOW_WIDTH_PIXELS + 16;
-        static constexpr unsigned int OWBGBOTTOMH = OWBGTILEH * 6;
+        static constexpr uint_fast16_t OWBGBOTTOMW = WINDOW_WIDTH_PIXELS + 16;
+        static constexpr uint_fast16_t OWBGBOTTOMH = OWBGTILEH * 6;
         unsigned char bottom_pixels[ OWBGBOTTOMW * OWBGBOTTOMH ];
-        for ( unsigned int y = 0; y < OWBGBOTTOMH; ++y )
+        for ( uint_fast16_t y = 0; y < OWBGBOTTOMH; ++y )
         {
-            for ( unsigned int x = 0; x < OWBGBOTTOMW; x += OWBGTILEW )
+            for ( uint_fast16_t x = 0; x < OWBGBOTTOMW; x += OWBGTILEW )
             {
                 memcpy( &bottom_pixels[ OWBGBOTTOMW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 6 ) % OWBGTILEH ) ], OWBGTILEW );
             }
@@ -81,15 +81,15 @@ namespace BSL
         );
 
         // BG left
-        static constexpr unsigned int OWBGSIDEW = OWBGTILEW + 3;
-        static constexpr unsigned int OWBGSIDEH = 260;
+        static constexpr uint_fast16_t OWBGSIDEW = OWBGTILEW + 3;
+        static constexpr uint_fast16_t OWBGSIDEH = 260;
         unsigned char left_pixels[ OWBGSIDEW * OWBGSIDEH ];
-        for ( unsigned int y = 0; y < OWBGSIDEH; ++y )
+        for ( uint_fast16_t y = 0; y < OWBGSIDEH; ++y )
         {
-            for ( unsigned int x = 0; x < OWBGSIDEW; x += OWBGTILEW )
+            for ( uint_fast16_t x = 0; x < OWBGSIDEW; x += OWBGTILEW )
             {
                 // Don't write data beyond width o’ 
-                const size_t size = std::min( OWBGSIDEW - x, OWBGTILEW );
+                const size_t size = std::min( OWBGSIDEW - x, static_cast<uint_fast16_t>( OWBGTILEW ) );
                 memcpy( &left_pixels[ OWBGSIDEW * y + x ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) ], size );
             }
         }
@@ -107,7 +107,7 @@ namespace BSL
 
         // BG right
         unsigned char right_pixels[ OWBGSIDEW * OWBGSIDEH ];
-        for ( unsigned int y = 0; y < OWBGSIDEH; ++y )
+        for ( uint_fast16_t y = 0; y < OWBGSIDEH; ++y )
         {
             // Offset by 13 pixels to keep aligned with other BG graphics.
             memcpy( &right_pixels[ OWBGSIDEW * y ], &OVERWORLD_BGTILE[ OWBGTILEW * ( ( y + 2 ) % OWBGTILEH ) + 13 ], 3 );
@@ -135,9 +135,9 @@ namespace BSL
         };
         // Fill up single row o’ water tiles across screen width.
         unsigned char watergfx[ WATERW * WATERH ];
-        for ( unsigned int y = 0; y < WATERH; ++y )
+        for ( uint_fast16_t y = 0; y < WATERH; ++y )
         {
-            for ( unsigned int x = 0; x < WATERW; x += WATERTILEW )
+            for ( uint_fast16_t x = 0; x < WATERW; x += WATERTILEW )
             {
                 memcpy( &watergfx[ WATERW * y + x ], &watertile[ WATERTILEW * y ], WATERTILEW );
             }
@@ -161,12 +161,12 @@ namespace BSL
         // Generate tilemap.
         std::vector<OWWarp> tempwarps;
         JSON json { "assets/maps/ow-" + std::to_string( inwarp.map ) + ".json" };
-        map.w = static_cast<unsigned int> ( json.getInt( "width" ) );
-        map.h = static_cast<unsigned int> ( json.getInt( "height" ) );
+        map.w = static_cast<uint_fast16_t> ( json.getInt( "width" ) );
+        map.h = static_cast<uint_fast16_t> ( json.getInt( "height" ) );
         map.collision = static_cast<uint_fast8_t *> ( calloc( map.w * map.h, sizeof( uint_fast8_t ) ) );
         map.levels = static_cast<uint_fast8_t *> ( calloc( map.w * map.h, sizeof( uint_fast8_t ) ) );
         BSL::GFX::Tile spritetiles[ map.w * map.h ];
-        for ( unsigned int i = 0; i < map.w * map.h; ++i )
+        for ( uint_fast16_t i = 0; i < map.w * map.h; ++i )
         {
             memset( spritetiles, 0x00, map.w * map.h * sizeof( BSL::GFX::Tile ) );
         }
@@ -191,12 +191,12 @@ namespace BSL
                             {
                                 const JSONArray & layerdata = layer.getArray( "data" );
                                 BSL::GFX::Tile tilemap[ map.w * map.h ];
-                                unsigned int i = 0;
+                                uint_fast16_t i = 0;
                                 layerdata.forEach
                                 (
                                     [ & ]( const JSONItem dataitem )
                                     {
-                                        const unsigned int tilen = dataitem.asInt();
+                                        const uint_fast16_t tilen = dataitem.asInt();
                                         tilemap[ i ].set = tilen > 256;
                                         tilemap[ i ].x = ( tilen - 257 ) % 16;
                                         tilemap[ i ].y = static_cast<uint_fast8_t> ( ( tilen - 257 ) / 16.0 );
@@ -206,7 +206,7 @@ namespace BSL
                                     }
                                 );
 
-                                const unsigned int tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
+                                const uint_fast16_t tilemap_texture = BSL::GFX::loadFileAsTexture( "tilesets/ow.png" );
                                 BSL::GFX::addGraphicTilemap
                                 (
                                     tilemap_texture,
@@ -218,7 +218,7 @@ namespace BSL
                             else if ( value == "collision" )
                             {
                                 const JSONArray & layerdata = layer.getArray( "data" );
-                                unsigned int i = 0;
+                                uint_fast16_t i = 0;
                                 layerdata.forEach
                                 (
                                     [ & ]( const JSONItem dataitem )
@@ -235,12 +235,12 @@ namespace BSL
                             else if ( value == "sprite" )
                             {
                                 const JSONArray & layerdata = layer.getArray( "data" );
-                                unsigned int i = 0;
+                                uint_fast16_t i = 0;
                                 layerdata.forEach
                                 (
                                     [ & ]( const JSONItem dataitem )
                                     {
-                                        const unsigned int dataval = static_cast<unsigned int> ( dataitem.asInt() );
+                                        const uint_fast16_t dataval = static_cast<uint_fast16_t> ( dataitem.asInt() );
                                         switch ( dataval )
                                         {
                                             // Player
@@ -248,8 +248,8 @@ namespace BSL
                                             {
                                                 if ( inwarp.x == 0 && inwarp.y == 0 )
                                                 {
-                                                    const unsigned int x = i % map.w;
-                                                    const unsigned int y = static_cast<unsigned int>( i / map.w );
+                                                    const uint_fast16_t x = i % map.w;
+                                                    const uint_fast16_t y = static_cast<uint_fast16_t>( i / map.w );
                                                     autumn.x = static_cast<float> ( x * 16 );
                                                     autumn.y = static_cast<float> ( y * 16 );
                                                 }
@@ -338,7 +338,7 @@ namespace BSL
         map.warps = static_cast<OWWarp *> ( malloc( warpssize ) );
         memcpy( map.warps, &tempwarps[ 0 ], warpssize );
 
-        const unsigned int sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
+        const uint_fast16_t sprite_texture = BSL::GFX::loadFileAsTexture( "sprites/ow.png" );
         BSL::GFX::addGraphicTilemap
         (
             sprite_texture,
@@ -481,7 +481,12 @@ namespace BSL
         }
         GFX::setPalette( &palettes[ current_pal ][ 0 ] );
         */
+
+        // Init palette.
         GFX::setPalette( "owred" );
+
+        // Init lock.
+        levelselectlock = true;
     };
 
     void Overworld::destroy()
@@ -583,20 +588,20 @@ namespace BSL
             autumn.vy = 0.0f;
         }
 
-        const auto loopcount = std::max( static_cast<unsigned int> ( dt ), 1u );
+        const auto loopcount = std::max( static_cast<uint_fast16_t> ( dt ), static_cast<uint_fast16_t> ( 1 ) );
         const float dti = dt / static_cast<float> ( loopcount );
-        for ( unsigned int i = 0; i < loopcount; ++i )
+        for ( uint_fast16_t i = 0; i < loopcount; ++i )
         {
             autumn.x += autumn.vx * dti;
             autumn.y += autumn.vy * dti;
 
-            const unsigned int topy = static_cast<unsigned int> ( autumn.getTopBoundary() / 16.0 );
-            const unsigned int bottomy = static_cast<unsigned int> ( autumn.getBottomBoundary() / 16.0 );
-            const unsigned int yx = static_cast<unsigned int> ( ( autumn.x + 8.0 ) / 16.0 );
-            const unsigned int toplefti = topy *map.w + yx;
-            const unsigned int toprighti = topy *map.w + yx;
-            const unsigned int bottomlefti = bottomy *map.w + yx;
-            const unsigned int bottomrighti = bottomy *map.w + yx;
+            const uint_fast16_t topy = static_cast<uint_fast16_t> ( autumn.getTopBoundary() / 16.0 );
+            const uint_fast16_t bottomy = static_cast<uint_fast16_t> ( autumn.getBottomBoundary() / 16.0 );
+            const uint_fast16_t yx = static_cast<uint_fast16_t> ( ( autumn.x + 8.0 ) / 16.0 );
+            const uint_fast16_t toplefti = topy *map.w + yx;
+            const uint_fast16_t toprighti = topy *map.w + yx;
+            const uint_fast16_t bottomlefti = bottomy *map.w + yx;
+            const uint_fast16_t bottomrighti = bottomy *map.w + yx;
             if ( map.collision[ toplefti ] == 0x01 || map.collision[ toprighti ] == 0x01 )
             {
                 autumn.y += ( static_cast<float> ( topy + 1 ) * 16.0f ) - autumn.getTopBoundary();
@@ -607,14 +612,14 @@ namespace BSL
                 autumn.y -= autumn.getBottomBoundary() - ( static_cast<float> ( bottomy ) * 16.0f );
                 autumn.vy *= -0.25f;
             }
-            const unsigned int leftx = static_cast<unsigned int> ( autumn.getLeftBoundary() / 16.0 );
-            const unsigned int rightx = static_cast<unsigned int> ( autumn.getRightBoundary() / 16.0 );
-            const unsigned int topyx = static_cast<unsigned int> ( ( autumn.getTopBoundary() + 3.0 ) / 16.0 );
-            const unsigned int bottomyx = static_cast<unsigned int> ( ( autumn.getBottomBoundary() - 3.0 ) / 16.0 );
-            const unsigned int righttopi = topyx *map.w + rightx;
-            const unsigned int rightbottomi = bottomyx *map.w + rightx;
-            const unsigned int lefttopi = topyx *map.w + leftx;
-            const unsigned int leftbottomi = bottomyx *map.w + leftx;
+            const uint_fast16_t leftx = static_cast<uint_fast16_t> ( autumn.getLeftBoundary() / 16.0 );
+            const uint_fast16_t rightx = static_cast<uint_fast16_t> ( autumn.getRightBoundary() / 16.0 );
+            const uint_fast16_t topyx = static_cast<uint_fast16_t> ( ( autumn.getTopBoundary() + 3.0 ) / 16.0 );
+            const uint_fast16_t bottomyx = static_cast<uint_fast16_t> ( ( autumn.getBottomBoundary() - 3.0 ) / 16.0 );
+            const uint_fast16_t righttopi = topyx *map.w + rightx;
+            const uint_fast16_t rightbottomi = bottomyx *map.w + rightx;
+            const uint_fast16_t lefttopi = topyx *map.w + leftx;
+            const uint_fast16_t leftbottomi = bottomyx *map.w + leftx;
             if ( map.collision[ righttopi ] == 0x01 || map.collision[ rightbottomi ] == 0x01 )
             {
                 autumn.x -= autumn.getRightBoundary() - ( static_cast<float> ( rightx ) * 16.0f );
@@ -632,9 +637,9 @@ namespace BSL
         autumn.gfx.setY( autumn.y );
 
         // Warp collision.
-        const unsigned int centerx = static_cast<unsigned int> ( autumn.getCenterX() / 16.0 );
-        const unsigned int centery = static_cast<unsigned int> ( autumn.getCenterY() / 16.0 );
-        const unsigned int centeri = centery * map.w + centerx;
+        const uint_fast16_t centerx = static_cast<uint_fast16_t> ( autumn.getCenterX() / 16.0 );
+        const uint_fast16_t centery = static_cast<uint_fast16_t> ( autumn.getCenterY() / 16.0 );
+        const uint_fast16_t centeri = centery * map.w + centerx;
         const uint_fast8_t centerval = map.collision[ centeri ];
         if ( centerval >= 16 && centerval < 32 )
         {
@@ -677,7 +682,7 @@ namespace BSL
             }
 
             // Open level menu on confirmation.
-            if ( BSL::Controls::heldConfirm() )
+            if ( !levelselectlock && BSL::Controls::heldConfirm() )
             {
                 BSL::Game::pushOWLevelOpenMenu( lvval - 1 );
             }
@@ -691,8 +696,11 @@ namespace BSL
             ui.timescore.setOpacity( 0.0f );
         }
 
+        // Update level select lock.
+        levelselectlock = BSL::Controls::heldConfirm();
+
         updateCamera();
-        updateOWAnimation( dt );
+        updateAnimation( dt );
 
         /*
         palette_animation += dt;
@@ -742,11 +750,11 @@ namespace BSL
                 camera.y = 0.0f;
             }
         }
-        BSL::GFX::setCameraX( static_cast<unsigned int> ( camera.x ) );
-        BSL::GFX::setCameraY( static_cast<unsigned int> ( camera.y ) );
+        BSL::GFX::setCameraX( static_cast<uint_fast16_t> ( camera.x ) );
+        BSL::GFX::setCameraY( static_cast<uint_fast16_t> ( camera.y ) );
     };
 
-    void Overworld::updateOWAnimation( float dt )
+    void Overworld::updateAnimation( float dt )
     {
         static constexpr float OVERWORLD_WATER_ACC = 1.0f / 8.0f;
 
@@ -761,7 +769,7 @@ namespace BSL
         {
             bg.y -= 16.0f;
         }
-        for ( unsigned int i = 0; i < BGGFXCOUNT; ++i )
+        for ( uint_fast8_t i = 0; i < BGGFXCOUNT; ++i )
         {
             bg.gfx[ i ].setSrcX( bg.x );
             bg.gfx[ i ].setSrcY( bg.y );
@@ -778,22 +786,22 @@ namespace BSL
         {
             waterxeven += 8.0f;
         }
-        const unsigned int camera_adjust_x = static_cast<unsigned int>( camera.x ) % 8;
-        const unsigned int camera_adjust_y = static_cast<unsigned int>( camera.y ) % 8;
-        const unsigned int waterxodd = ( static_cast<unsigned int> ( waterxodd ) + camera_adjust_x ) % 8;
-        const unsigned int waterxeven = ( static_cast<unsigned int> ( waterxeven ) + camera_adjust_x ) % 8;
-        for ( unsigned int i = 0; i < WATERROWS; i += 2 )
+        const uint_fast16_t camera_adjust_x = static_cast<uint_fast16_t>( camera.x ) % 8;
+        const uint_fast16_t camera_adjust_y = static_cast<uint_fast16_t>( camera.y ) % 8;
+        const uint_fast16_t relwaterxodd = ( static_cast<uint_fast16_t> ( waterxodd ) + camera_adjust_x ) % 8;
+        const uint_fast16_t relwaterxeven = ( static_cast<uint_fast16_t> ( waterxeven ) + camera_adjust_x ) % 8;
+        for ( uint_fast16_t i = 0; i < WATERROWS; i += 2 )
         {
-            water[ i ].setSrcX( waterxodd );
+            water[ i ].setSrcX( relwaterxodd );
             water[ i ].setY( WATERTILEH * i + camera_adjust_y );
         }
-        for ( unsigned int i = 1; i < WATERROWS; i += 2 )
+        for ( uint_fast16_t i = 1; i < WATERROWS; i += 2 )
         {
-            water[ i ].setSrcX( waterxeven );
+            water[ i ].setSrcX( relwaterxeven );
             water[ i ].setY( WATERTILEH * i + camera_adjust_y );
         }
 
         // Autumn animation.
-        autumn.gfx.setSrcX( ( static_cast<unsigned int> ( waterxodd ) % 2 ) * 16 );
+        autumn.gfx.setSrcX( ( static_cast<uint_fast16_t> ( relwaterxodd ) % 2 ) * 16 );
     };
 }

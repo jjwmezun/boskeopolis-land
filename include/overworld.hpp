@@ -7,20 +7,17 @@
 
 namespace BSL
 {
-    static constexpr unsigned int WATERTILEW = 8;
-    static constexpr unsigned int WATERTILEH = 4;
-    static constexpr unsigned int WATERW = WINDOW_WIDTH_PIXELS + WATERTILEW;
-    static constexpr unsigned int WATERH = WATERTILEH;
-    static constexpr unsigned int WATERROWS = ( WINDOW_HEIGHT_PIXELS - 7 * 8 ) / 4 + 3;
-    static constexpr unsigned int BGGFXCOUNT = 4;
+    static constexpr uint_fast8_t WATERTILEW = 8;
+    static constexpr uint_fast8_t WATERTILEH = 4;
+    static constexpr uint_fast16_t WATERW = WINDOW_WIDTH_PIXELS + WATERTILEW;
+    static constexpr uint_fast16_t WATERH = WATERTILEH;
+    static constexpr uint_fast16_t WATERROWS = ( WINDOW_HEIGHT_PIXELS - 7 * 8 ) / 4 + 3;
+    static constexpr uint_fast8_t BGGFXCOUNT = 4;
     static constexpr float OWWINDOWH = 248.0f;
     static constexpr float CAMERA_RIGHT_EDGE = WINDOW_WIDTH_PIXELS * 0.667f;
     static constexpr float CAMERA_LEFT_EDGE = WINDOW_WIDTH_PIXELS * 0.333f;
     static constexpr float CAMERA_BOTTOM_EDGE = OWWINDOWH * 0.667f;
     static constexpr float CAMERA_TOP_EDGE = OWWINDOWH * 0.333f;
-    static constexpr unsigned int OWLEVELOPEN_OPTIONCOUNT = 2;
-    static constexpr int OWLVOPEN_MENUX = static_cast<int> ( ( WINDOW_WIDTH_PIXELS - 160 ) / 2.0 );
-    static constexpr int OWLVOPEN_MENUY = static_cast<int> ( ( WINDOW_HEIGHT_PIXELS - 32 ) / 2.0 );
 
     struct Overworld
     {
@@ -83,8 +80,8 @@ namespace BSL
         camera;
         struct
         {
-            unsigned int w;
-            unsigned int h;
+            uint_fast16_t w;
+            uint_fast16_t h;
             uint_fast8_t * collision;
             uint_fast8_t * levels;
             OWWarp * warps;
@@ -100,12 +97,13 @@ namespace BSL
         ui;
         uint_fast8_t prev_level;
         uint_fast8_t current_level;
+        bool levelselectlock;
 
         void init( OWWarp inwarp );
         void destroy();
         void update( float dt );
         void updateCamera();
-        void updateOWAnimation( float dt );
+        void updateAnimation( float dt );
     };
 }
 
